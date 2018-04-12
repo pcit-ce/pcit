@@ -1,0 +1,13 @@
+{
+  "oauth": [
+    "gitee",
+    "coding",
+    "github"
+  ],
+  "webhooks": [
+    "gitee",
+    "coding",
+    "github"
+  ],
+  "queue": ""
+}
