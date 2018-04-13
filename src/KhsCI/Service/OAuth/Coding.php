@@ -74,21 +74,33 @@ class Coding implements OAuth
         return $curl->$method($url);
     }
 
-    public static function getUserInfo($accessToken)
+    public static function getUserInfo(string $accessToken, bool $raw = false)
     {
         $url = '/api/account/current_user?access_token='.$accessToken;
 
-        return $json = self::http('get', $url);
+        $json = self::http('get', $url);
+
+        if ($raw) {
+            return $json;
+        }
+
+        $obj = json_decode($json)->data;
+
+        return [
+            'uid' => $obj->id,
+            'name' => $obj->global_key,
+            'pic' => $obj->avatar,
+        ];
     }
 
-    public static function getProjects(string $accessToken)
+    public static function getProjects(string $accessToken, int $page = 1, bool $raw = false)
     {
         $url = '/api/user/projects?access_token='.$accessToken;
 
         return $json = self::http('get', $url);
     }
 
-    public static function getWebhooks($accessToken, $username, $project)
+    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw)
     {
         $url = '/api/user/'.$username.'/project/'.$project.'/git/hooks?access_token='.$accessToken;
 

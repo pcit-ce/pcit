@@ -8,6 +8,6 @@ class TestController
 {
     public function test(): void
     {
-        header('Location:/index.html');
+        var_dump($_SESSION);
     }
 }

@@ -14,5 +14,9 @@ interface OAuth
 
     public function getAccessToken(string $code, ?string $state);
 
-    public static function getProjects(string $accessToken);
+    public static function getUserInfo(string $accessToken, bool $raw = false);
+
+    public static function getProjects(string $accessToken, int $page = 1, bool $raw = false);
+
+    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw);
 }

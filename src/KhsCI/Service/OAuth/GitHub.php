@@ -94,15 +94,46 @@ class GitHub implements OAuth
 
         true === $json && $accessToken = json_decode($accessToken)->access_token;
         var_dump($accessToken);
+
         return $accessToken;
     }
 
-    public static function getProjects(string $accessToken, int $page = 1)
+    private static function http(string $method, string $url, string $accessToken)
     {
-        $curl = new Curl;
+        $curl = new Curl();
+
         $curl->setHeader('Authorization', 'token '.$accessToken);
+
+        return $curl->$method($url);
+    }
+
+    public static function getUserInfo(string $accessToken, bool $raw = false)
+    {
+        $url = 'https://api.github.com/user';
+
+        $json = self::http('get', $url, $accessToken);
+
+        if ($raw) {
+            return $json;
+        }
+
+        $obj = json_decode($json);
+
+        return [
+            'uid' => $obj->id,
+            'name' => $obj->login,
+            'pic' => $obj->avatar_url,
+        ];
+    }
+
+    public static function getProjects(string $accessToken, int $page = 1, bool $raw = false)
+    {
         $url = 'https://api.github.com/user/repos?page='.$page;
 
-        return $curl->get($url);
+        return self::http('get', $url, $accessToken);
+    }
+
+    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw): void
+    {
     }
 }
