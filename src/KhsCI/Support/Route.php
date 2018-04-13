@@ -2,15 +2,19 @@
 
 namespace KhsCI\Support;
 
-use Exception;
-
+/**
+ * Class Route
+ *
+ * @method static get($url, $action)
+ * @method static post($url, $action)
+ */
 class Route
 {
     public static $obj = [];
 
     public static $method = [];
 
-    private static function getUrl()
+    private static function getUrl($targetUrl, $action)
     {
         $queryString = $_SERVER['QUERY_STRING'];
 
@@ -22,29 +26,9 @@ class Route
             $url = $_SERVER['REQUEST_URI'];
         }
 
-        return $url = trim($url, '/');
-    }
+        $url = trim($url, '/');
 
-    private static function getMethod($type)
-    {
-        return strtoupper($type) === $_SERVER['REQUEST_METHOD'];
-    }
-
-    /**
-     * @param $url
-     * @param $action
-     * @return string
-     * @throws Exception
-     */
-    public static function get($url, $action)
-    {
-        // 请求方法不匹配
-
-        if (!self::getMethod('get')) {
-            return 'not found';
-        }
-
-        if ($url === self::getUrl()) {
+        if ($targetUrl === $url) {
             // url 一致
 
             $array = explode('@', $action);
@@ -71,8 +55,24 @@ class Route
         return null;
     }
 
-    public static function post()
+    private static function getMethod($type)
     {
+        return strtoupper($type) === $_SERVER['REQUEST_METHOD'];
+    }
 
+    /**
+     * @param $name
+     * @param $arg
+     * @return string
+     */
+    public static function __callStatic($name, $arg)
+    {
+        // 请求方法不匹配
+
+        if (!self::getMethod($name)) {
+            return 'not found';
+        }
+
+        return self::getUrl($arg[0], $arg[1]);
     }
 }

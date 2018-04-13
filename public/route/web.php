@@ -9,6 +9,8 @@ try {
 
     Route::get('oauth/coding', 'Users\OAuthCodingController@getAccessToken');
 
+    Route::post('webhooks/add', 'Webhooks\CodingController@add');
+
     Route::get('seo/baidu/xzh', '');
 
     Route::post('queue');

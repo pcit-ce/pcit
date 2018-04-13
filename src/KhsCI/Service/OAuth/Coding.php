@@ -53,24 +53,39 @@ class Coding implements OAuth
         return $json;
     }
 
-    public static function getUserInfo()
+    private static function http($method, $url, $data = [])
     {
-
+        $url = 'https://coding.net'.$url;
+        $curl = new Curl();
+        return $curl->$method($url);
     }
 
-    public static function getProjects()
+    public static function getUserInfo($accessToken)
     {
+        $url = '/api/account/current_user?access_token='.$accessToken;
 
+        return $json = self::http('get', $url);
     }
 
-    public static function getWebhooks()
+    public static function getProjects($accessToken)
     {
+        $url = '/api/user/projects?access_token='.$accessToken;
 
+        return $json = self::http('get', $url);
     }
 
-    public static function setWebhooks()
+    public static function getWebhooks($accessToken, $username, $project)
     {
+        $url = '/api/user/'.$username.'/project/'.$project.'/git/hooks?access_token='.$accessToken;
 
+        return $json = self::http('get', $url);
+    }
+
+    public static function setWebhooks($accessToken, $username, $project)
+    {
+        $url = '/api/user/'.$username.'/project/'.$project.'/git/hook/{hook_id}?access_token='.$accessToken;
+
+        $json = self::http('get', $url);
     }
 
 
