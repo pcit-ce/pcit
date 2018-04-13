@@ -8,5 +8,5 @@ interface OAuth
 {
     public function getLoginUrl();
 
-    public function getAccessToken();
+    public function getAccessToken(string $code);
 }

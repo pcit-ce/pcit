@@ -25,7 +25,7 @@ class Route
         return $url = trim($url, '/');
     }
 
-    private static function getMethond($type)
+    private static function getMethod($type)
     {
         return strtoupper($type) === $_SERVER['REQUEST_METHOD'];
     }
@@ -40,7 +40,7 @@ class Route
     {
         // 请求方法不匹配
 
-        if (!self::getMethond('get')) {
+        if (!self::getMethod('get')) {
             return 'not found';
         }
 
@@ -57,7 +57,7 @@ class Route
 
                 $obj = new $obj;
 
-                if (!$method) {
+                if ($method) {
                     $obj->$method();
                 }
                 // 处理完毕，退出

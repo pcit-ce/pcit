@@ -32,15 +32,14 @@ class Coding implements OAuth
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->uri,
                 'response_type' => 'code',
-                'scope' => $this->scope,
+                //'scope' => $this->scope,
             ]);
 
         header('location:'.$url);
     }
 
-    public function getAccessToken()
+    public function getAccessToken(string $code)
     {
-        $code = $_GET['code'];
         $json = $this->curl->post($this::POST_URL.http_build_query([
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,
@@ -50,6 +49,28 @@ class Coding implements OAuth
             )
         );
 
-        echo $json;
+        return $json;
     }
+
+    public function getUserInfo()
+    {
+
+    }
+
+    public function getProjects()
+    {
+
+    }
+
+    public function getWebhooks()
+    {
+
+    }
+
+    public function setWebhooks()
+    {
+
+    }
+
+
 }
