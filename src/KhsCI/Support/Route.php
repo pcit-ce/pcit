@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Support;
 
 /**
- * Class Route
+ * Class Route.
  *
  * @method static get($url, $action)
  * @method static post($url, $action)
@@ -18,10 +20,9 @@ class Route
     {
         $queryString = $_SERVER['QUERY_STRING'];
 
-        if ((bool)$queryString) {
+        if ((bool) $queryString) {
             $url = $_SERVER['REQUEST_URI'];
             $url = (explode('?', $url))[0];
-
         } else {
             $url = $_SERVER['REQUEST_URI'];
         }
@@ -38,15 +39,13 @@ class Route
             $method = $array[1] ?? false;
 
             if (true === class_exists($obj) && method_exists($obj, $method)) {
-
-                $obj = new $obj;
+                $obj = new $obj();
 
                 if ($method) {
                     $obj->$method();
                 }
                 // 处理完毕，退出
                 exit(0);
-
             } else {
                 self::$obj[] = $obj;
                 self::$method[] = $method;
@@ -63,6 +62,7 @@ class Route
     /**
      * @param $name
      * @param $arg
+     *
      * @return string
      */
     public static function __callStatic($name, $arg)

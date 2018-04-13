@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\controllers\Users;
 
 use KhsCI\KhsCI;
@@ -15,22 +17,21 @@ class OAuthCodingController
         $this->khsci = new KhsCI();
     }
 
-    public function getLoginUrl()
+    public function getLoginUrl(): void
     {
-        $this->khsci->OAuthCoding->getLoginUrl();
+        $this->khsci->OAuthCoding->getLoginUrl(null);
     }
 
     /**
      * @throws \Exception
      */
-    public function getAccessToken()
+    public function getAccessToken(): void
     {
         $code = $_GET['code'] ?? false;
 
         if ($code) {
-
             $access_token = $_SESSION['coding']['access_token']
-                ?? (json_decode($this->khsci->OAuthCoding->getAccessToken($code)))->access_token
+                ?? (json_decode($this->khsci->OAuthCoding->getAccessToken($code, null)))->access_token
                 ?? false;
 
             $_SESSION['coding']['access_token'] = $access_token;
@@ -43,7 +44,7 @@ class OAuthCodingController
             $json = json_decode(Coding::getProjects($access_token))->data ?? false;
             $num = $json->totalRow ?? false;
 
-            for ($i = 0; $i < $num; $i++) {
+            for ($i = 0; $i < $num; ++$i) {
                 $list = ($json->list)[$i];
                 $array[] = $list->owner_user_name.'/'.$list->name;
             }
@@ -53,7 +54,6 @@ class OAuthCodingController
             echo '<hr>';
 
             var_dump($array ?? []);
-
         } else {
             throw new Exception('code not found');
         }

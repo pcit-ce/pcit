@@ -17,17 +17,30 @@ class Coding implements OAuth
     private $uri;
     private $scope;
 
-    public function __construct($config, Curl $curl, $scope = null)
+    public function __construct($config, Curl $curl)
     {
         $this->clientId = $config['client_id'];
         $this->clientSecret = $config['client_secret'];
         $this->uri = $config['callback_url'];
-        $all_scope = 'user,user:email,notification,social,social:message,project,project:members,project:task,project:file,project:depot,project:key';
-        $this->scope = $scope ?? $all_scope;
+        $all_scope = [
+            'user',
+            'user:email',
+            'notification',
+            'social',
+            'social:message',
+            'project',
+            'project:members',
+            'project:task',
+            'project:file',
+            'project:depot',
+            'project:key',
+        ];
+        $this->scope = $scope ?? implode(',', $all_scope);
+
         $this->curl = $curl;
     }
 
-    public function getLoginUrl(): void
+    public function getLoginUrl(?string $state): void
     {
         $url = $this::URL.http_build_query([
                 'client_id' => $this->clientId,
@@ -39,7 +52,7 @@ class Coding implements OAuth
         header('location:'.$url);
     }
 
-    public function getAccessToken(string $code)
+    public function getAccessToken(string $code, ?string $state)
     {
         $json = $this->curl->post($this::POST_URL.http_build_query([
                     'client_id' => $this->clientId,
@@ -57,6 +70,7 @@ class Coding implements OAuth
     {
         $url = 'https://coding.net'.$url;
         $curl = new Curl();
+
         return $curl->$method($url);
     }
 
@@ -85,8 +99,6 @@ class Coding implements OAuth
     {
         $url = '/api/user/'.$username.'/project/'.$project.'/git/hook/{hook_id}?access_token='.$accessToken;
 
-        $json = self::http('get', $url);
+        return $json = self::http('get', $url);
     }
-
-
 }

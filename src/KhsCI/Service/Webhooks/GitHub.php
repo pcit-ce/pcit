@@ -18,6 +18,7 @@ class GitHub
 
     /**
      * @return array
+     *
      * @throws Exception
      */
     public function check()
@@ -42,14 +43,13 @@ class GitHub
     /**
      * @throws Exception
      */
-    public function deploy()
+    public function deploy(): void
     {
         $content = $this->check();
         file_put_contents(sys_get_temp_dir().DIRECTORY_SEPARATOR.session_create_id(), $content['content']);
     }
 
-    public function setRepo($repo, $branch, $path, $script)
+    public function setRepo($repo, $branch, $path, $script): void
     {
-
     }
 }

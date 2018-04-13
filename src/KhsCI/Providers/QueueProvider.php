@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service;
 
 use Pimple\Container;
@@ -7,10 +9,9 @@ use Pimple\ServiceProviderInterface;
 
 class QueueProvider implements ServiceProviderInterface
 {
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
-        $pimple['Queue'] = function ($app) {
-
+        $pimple['Queue'] = function ($app): void {
         };
     }
 }

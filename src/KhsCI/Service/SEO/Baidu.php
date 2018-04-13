@@ -22,6 +22,7 @@ class Baidu
 
     /**
      * @param string $xml
+     *
      * @return array
      */
     private function xmlToUrlArray(string $xml)
@@ -30,7 +31,7 @@ class Baidu
         $i = -1;
         $urls = [];
         foreach ($obj->children() as $k => $v) {
-            $i += 1;
+            ++$i;
             $urls[$i] = "$v->loc";
         }
 
@@ -38,11 +39,14 @@ class Baidu
     }
 
     /**
-     * 历史链接提交
+     * 历史链接提交.
      *
-     * @link https://ziyuan.baidu.com/xzh/commit/method
+     * @see https://ziyuan.baidu.com/xzh/commit/method
+     *
      * @param string $siteMap
+     *
      * @return array|mixed
+     *
      * @throws \Curl\Error\CurlError
      */
     public function history(string $siteMap = 'https://www.khs1994.com/sitemap.xml')
@@ -54,9 +58,12 @@ class Baidu
     }
 
     /**
-     * 当天产生内容提交
+     * 当天产生内容提交.
+     *
      * @param string $siteMap
+     *
      * @return array|mixed
+     *
      * @throws \Curl\Error\CurlError
      */
     public function realtime($siteMap = 'https://www.khs1994.com/sitemap.xml')
@@ -68,22 +75,29 @@ class Baidu
     }
 
     /**
-     * 原创内容提交（内容产生后 1 小时之内提交）
+     * 原创内容提交（内容产生后 1 小时之内提交）.
+     *
      * @param string $siteMap
+     *
      * @return array|mixed
+     *
      * @throws \Curl\Error\CurlError
      */
     public function original($siteMap = 'https://www.khs1994.com/sitemap.xml')
     {
         $this->type = 'realtime,original';
         $urls = $this->xmlToUrlArray($siteMap);
+
         return $this->push($urls);
     }
 
     /**
-     * 参数为包含 urls 的数组
+     * 参数为包含 urls 的数组.
+     *
      * @param array $urls
+     *
      * @return array|mixed
+     *
      * @throws \Curl\Error\CurlError
      */
     public function push(array $urls)

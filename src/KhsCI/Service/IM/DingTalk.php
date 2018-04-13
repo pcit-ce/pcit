@@ -6,6 +6,4 @@ namespace KhsCI\Service\IM;
 
 class DingTalk
 {
-
 }
-

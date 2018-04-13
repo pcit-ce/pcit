@@ -6,5 +6,4 @@ namespace KhsCI\Service\IM;
 
 class QQ
 {
-
 }
