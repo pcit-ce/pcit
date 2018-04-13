@@ -51,7 +51,6 @@ class Route
                 self::$method[] = $method;
             }
         }// url 不一致
-        return null;
     }
 
     private static function getMethod($type)

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\controllers\Users;
 
-use KhsCI\KhsCI;
 use Exception;
+use KhsCI\KhsCI;
 use KhsCI\Service\OAuth\Coding;
 
 class OAuthCodingController
@@ -41,7 +41,7 @@ class OAuthCodingController
             $json = json_decode(Coding::getProjects((string) $access_token))->data ?? false;
             $num = $json->totalRow ?? false;
 
-            for ($i = 0; $i < $num; ++$i) {
+            for ($i = 0; $i < $num; $i++) {
                 $list = ($json->list)[$i];
                 $array[] = $list->owner_user_name.'/'.$list->name;
             }

@@ -15,7 +15,7 @@ class Wechat
 
         $code = $data['code'];
         $time = $data['messages']['time'];
-        if (10 == strlen($time)) {
+        if (10 === strlen($time)) {
             $time = date('Y-m-d H:i:s', $time);
         }
         $type = $data['messages']['type'];

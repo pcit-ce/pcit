@@ -31,7 +31,7 @@ class Baidu
         $i = -1;
         $urls = [];
         foreach ($obj->children() as $k => $v) {
-            ++$i;
+            $i++;
             $urls[$i] = "$v->loc";
         }
 
@@ -45,9 +45,9 @@ class Baidu
      *
      * @param string $siteMap
      *
-     * @return array|mixed
-     *
      * @throws \Curl\Error\CurlError
+     *
+     * @return array|mixed
      */
     public function history(string $siteMap = 'https://www.khs1994.com/sitemap.xml')
     {
@@ -62,9 +62,9 @@ class Baidu
      *
      * @param string $siteMap
      *
-     * @return array|mixed
-     *
      * @throws \Curl\Error\CurlError
+     *
+     * @return array|mixed
      */
     public function realtime($siteMap = 'https://www.khs1994.com/sitemap.xml')
     {
@@ -79,9 +79,9 @@ class Baidu
      *
      * @param string $siteMap
      *
-     * @return array|mixed
-     *
      * @throws \Curl\Error\CurlError
+     *
+     * @return array|mixed
      */
     public function original($siteMap = 'https://www.khs1994.com/sitemap.xml')
     {
@@ -96,9 +96,9 @@ class Baidu
      *
      * @param array $urls
      *
-     * @return array|mixed
-     *
      * @throws \Curl\Error\CurlError
+     *
+     * @return array|mixed
      */
     public function push(array $urls)
     {

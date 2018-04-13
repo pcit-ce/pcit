@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Webhooks;
 
-use KhsCI\Support\HTTP;
 use Exception;
+use KhsCI\Support\HTTP;
 
 class GitHub
 {
@@ -17,9 +17,9 @@ class GitHub
     }
 
     /**
-     * @return array
-     *
      * @throws Exception
+     *
+     * @return array
      */
     public function check()
     {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace KhsCI\Providers;
 
 use Curl\Curl;
-use KhsCI\Service\SEO\Baidu;
 use Pimple\Container;
+use KhsCI\Service\SEO\Baidu;
 use Pimple\ServiceProviderInterface;
 
 class SEOProvider implements ServiceProviderInterface

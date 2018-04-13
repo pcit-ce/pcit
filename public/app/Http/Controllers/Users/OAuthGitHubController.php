@@ -49,10 +49,10 @@ class OAuthGitHubController
         echo 'Welcome '.$userInfoArray['name'].'<img src='.$userInfoArray['pic'].'><hr>';
 
         $array = [];
-        for ($page = 1; $page <= 100; ++$page) {
+        for ($page = 1; $page <= 100; $page++) {
             $json = GitHub::getProjects((string) $accessToken, $page);
             if ($obj = json_decode($json)) {
-                for ($i = 0; $i < 30; ++$i) {
+                for ($i = 0; $i < 30; $i++) {
                     $obj_repo = $obj[$i] ?? false;
 
                     if (false === $obj_repo) {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace KhsCI;
 
 use Exception;
-use KhsCI\Support\Config;
 use Pimple\Container;
+use KhsCI\Support\Config;
 
 /**
  * 核心方法 注入类（依赖），之后通过调用属性或方法，获取类.
@@ -84,9 +84,9 @@ class KhsCI extends Container
      * @param $name
      * @param $arguments
      *
-     * @return mixed
-     *
      * @throws Exception
+     *
+     * @return mixed
      */
     public function __call($name, $arguments)
     {
