@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
@@ -24,13 +26,13 @@ class Coding implements OAuth
         $this->curl = $curl;
     }
 
-    public function getLoginUrl()
+    public function getLoginUrl(): void
     {
         $url = $this::URL.http_build_query([
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->uri,
                 'response_type' => 'code',
-                'scope' => $this->scope
+                'scope' => $this->scope,
             ]);
 
         header('location:'.$url);
@@ -44,7 +46,7 @@ class Coding implements OAuth
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,
                     'grant_type' => 'authorization_code',
-                    'code' => $code
+                    'code' => $code,
                 ]
             )
         );

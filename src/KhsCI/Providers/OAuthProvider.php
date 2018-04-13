@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Providers;
 
 use Curl\Curl;
@@ -7,9 +9,9 @@ use KhsCI\Service\OAuth\Coding;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class OauthProvider implements ServiceProviderInterface
+class OAuthProvider implements ServiceProviderInterface
 {
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         $pimple['OAuthCoding'] = function ($app) {
             return new Coding($app['config']['coding'], new Curl());
@@ -22,7 +24,5 @@ class OauthProvider implements ServiceProviderInterface
         $pimple['OAuthGitHub'] = function ($app) {
             return new Coding($app['config']['github'], new Curl());
         };
-
     }
-
 }

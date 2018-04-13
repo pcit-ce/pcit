@@ -17,6 +17,8 @@ use Pimple\Container;
  * $a = $container['a'];
  *
  * @property \KhsCI\Service\OAuth\Coding $OAuthCoding
+ * @property \KhsCI\Service\OAuth\GitHub $OAuthGitHub
+ * @property \KhsCI\Service\OAuth\Gitee  $OAuthGitee
  */
 class KhsCI extends Container
 {
@@ -30,14 +32,14 @@ class KhsCI extends Container
     /**
      * 注册服务提供器.
      */
-    private function registerProviders()
+    private function registerProviders(): void
     {
-        /**
+        /*
          * 取得服务提供器数组.
          */
 
         foreach ($this->providers as $k) {
-            $this->register(new $k);
+            $this->register(new $k());
         }
     }
 
@@ -78,5 +80,20 @@ class KhsCI extends Container
 
     /**
      * 通过调用方法，获取对象
+     *
+     * @param $name
+     * @param $arguments
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
+    public function __call($name, $arguments)
+    {
+        if (isset($this[$name])) {
+            return $this[$name];
+        }
+
+        throw new Exception('Not found');
+    }
 }
