@@ -90,6 +90,19 @@ class GitHub implements OAuth
 
         true !== $json && $this->curl->setHeader('Accept', 'application/xml');
 
-        return $this->curl->post($url);
+        $accessToken = $this->curl->post($url);
+
+        true === $json && $accessToken = json_decode($accessToken)->access_token;
+        var_dump($accessToken);
+        return $accessToken;
+    }
+
+    public static function getProjects(string $accessToken, int $page = 1)
+    {
+        $curl = new Curl;
+        $curl->setHeader('Authorization', 'token '.$accessToken);
+        $url = 'https://api.github.com/user/repos?page='.$page;
+
+        return $curl->get($url);
     }
 }

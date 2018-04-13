@@ -13,4 +13,6 @@ interface OAuth
     public function getLoginUrl(?string $state);
 
     public function getAccessToken(string $code, ?string $state);
+
+    public static function getProjects(string $accessToken);
 }

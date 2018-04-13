@@ -81,7 +81,7 @@ class Coding implements OAuth
         return $json = self::http('get', $url);
     }
 
-    public static function getProjects($accessToken)
+    public static function getProjects(string $accessToken)
     {
         $url = '/api/user/projects?access_token='.$accessToken;
 

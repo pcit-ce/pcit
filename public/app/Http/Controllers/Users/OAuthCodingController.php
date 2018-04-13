@@ -31,17 +31,17 @@ class OAuthCodingController
 
         if ($code) {
             $access_token = $_SESSION['coding']['access_token']
-                ?? (json_decode($this->khsci->OAuthCoding->getAccessToken($code, null)))->access_token
+                ?? (json_decode($this->khsci->OAuthCoding->getAccessToken((string)$code, null)))->access_token
                 ?? false;
 
-            $_SESSION['coding']['access_token'] = $access_token;
+            false !== $access_token && $_SESSION['coding']['access_token'] = $access_token;
 
             $json = json_decode(Coding::getUserInfo($access_token))->data ?? false;
             $uid = $json->id ?? false;
             $name = $json->global_key ?? false;
             $pic = $json->avatar ?? false;
 
-            $json = json_decode(Coding::getProjects($access_token))->data ?? false;
+            $json = json_decode(Coding::getProjects((string)$access_token))->data ?? false;
             $num = $json->totalRow ?? false;
 
             for ($i = 0; $i < $num; ++$i) {
