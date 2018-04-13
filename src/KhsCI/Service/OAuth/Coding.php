@@ -10,7 +10,6 @@ class Coding implements OAuth
     const URL = 'https://coding.net/oauth_authorize.html?';
     const POST_URL = 'https://coding.net/api/oauth/access_token';
 
-    private $config;
     private $curl;
     private $clientId;
     private $clientSecret;
@@ -18,7 +17,9 @@ class Coding implements OAuth
 
     public function __construct($config, Curl $curl)
     {
-        $this->config = $config;
+        $this->clientId = $config[''];
+        $this->clientSecret = $config[''];
+        $this->uri = $config[''];
         $this->curl = $curl;
     }
 

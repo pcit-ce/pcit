@@ -15,4 +15,9 @@ class Config
     {
         return $this->config[$name] ?? [];
     }
+
+    public static function makeOAuthCodingArray($clientId, $clientSecret, $uri)
+    {
+        return [];
+    }
 }

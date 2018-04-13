@@ -22,6 +22,7 @@
     "php": ">=7.1",
     "pimple/pimple": "~3.0",
     "doctrine/cache": "^1.6",
+    "vlucas/phpdotenv": "*",
     "khs1994/curl": "dev-master",
     "ext-json": "*"
   },

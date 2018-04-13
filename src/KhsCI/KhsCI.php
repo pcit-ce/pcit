@@ -17,7 +17,7 @@ use Pimple\Container;
  * $a = $container['a'];
  *
  * @property string OauthCoding
- *     method getAccessToken()
+ * method getAccessToken()
  */
 class KhsCI extends Container
 {
