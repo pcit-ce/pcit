@@ -9,7 +9,7 @@ use Curl\Curl;
 class Coding implements OAuth
 {
     const URL = 'https://coding.net/oauth_authorize.html?';
-    const POST_URL = 'https://coding.net/api/oauth/access_token';
+    const POST_URL = 'https://coding.net/api/oauth/access_token?';
 
     private $curl;
     private $clientId;
@@ -41,7 +41,6 @@ class Coding implements OAuth
     public function getAccessToken()
     {
         $code = $_GET['code'];
-
         $json = $this->curl->post($this::POST_URL.http_build_query([
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,

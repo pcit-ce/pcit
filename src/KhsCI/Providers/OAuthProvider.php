@@ -13,16 +13,18 @@ class OAuthProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
-        $pimple['OAuthCoding'] = function ($app) {
-            return new Coding($app['config']['coding'], new Curl());
+        $curl = new Curl;
+
+        $pimple['OAuthCoding'] = function ($app) use ($curl) {
+            return new Coding($app['config']['coding'], $curl);
         };
 
-        $pimple['OAuthGitee'] = function ($app) {
-            return new Coding($app['config']['gitee'], new Curl());
+        $pimple['OAuthGitee'] = function ($app) use ($curl) {
+            return new Coding($app['config']['gitee'], $curl);
         };
 
-        $pimple['OAuthGitHub'] = function ($app) {
-            return new Coding($app['config']['github'], new Curl());
+        $pimple['OAuthGitHub'] = function ($app) use ($curl) {
+            return new Coding($app['config']['github'], $curl);
         };
     }
 }

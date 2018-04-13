@@ -1,14 +1,13 @@
 <?php
 
 declare(strict_types=1);
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 use KhsCI\KhsCI;
 
-$env = new Dotenv\Dotenv(__DIR__);
-$env->load();
+$env = new Dotenv\Dotenv(__DIR__.'/../', '.env'.'.'.getenv('APP_ENV'));
 
-//\KhsCI\Support\Config::makeOAuthCodingArray();
+$env->load();
 
 $config = [
     'coding' => [
@@ -30,6 +29,10 @@ $config = [
 
 $khsci = new KhsCI($config);
 
+if ($_GET['code']) {
+    echo $khsci->OAuthCoding->getAccessToken();
+    exit(1);
+}
+
 $khsci->OAuthCoding->getLoginUrl();
 
-$khsci->OAuthCoding->getAccessToken();

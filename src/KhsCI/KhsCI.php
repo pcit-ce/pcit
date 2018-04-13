@@ -37,7 +37,6 @@ class KhsCI extends Container
         /*
          * 取得服务提供器数组.
          */
-
         foreach ($this->providers as $k) {
             $this->register(new $k());
         }
