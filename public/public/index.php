@@ -23,3 +23,5 @@ spl_autoload_register(function ($class) {
  *  Route
  */
 require_once __DIR__.'/../route/web.php';
+
+//header('Location: https://ci2.khs1994.com/index.html');

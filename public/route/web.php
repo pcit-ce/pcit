@@ -3,6 +3,8 @@
 use KhsCI\Support\Route;
 
 try {
+    Route::get('test', 'Test\TestController@test');
+
     Route::get('oauth/coding/login', 'Users\OAuthCodingController@getLoginUrl');
 
     Route::get('oauth/coding', 'Users\OAuthCodingController@getAccessToken');
@@ -17,6 +19,8 @@ try {
 }
 
 // 路由控制器填写错误
+
+echo "not found <hr>";
 
 var_dump(Route::$obj);
 

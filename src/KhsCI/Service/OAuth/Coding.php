@@ -17,12 +17,13 @@ class Coding implements OAuth
     private $uri;
     private $scope;
 
-    public function __construct($config, Curl $curl)
+    public function __construct($config, Curl $curl, $scope = null)
     {
         $this->clientId = $config['client_id'];
         $this->clientSecret = $config['client_secret'];
         $this->uri = $config['callback_url'];
-        $this->scope = $config['scope'] ?? 'user';
+        $all_scope = 'user,user:email,notification,social,social:message,project,project:members,project:task,project:file,project:depot,project:key';
+        $this->scope = $scope ?? $all_scope;
         $this->curl = $curl;
     }
 
@@ -32,7 +33,7 @@ class Coding implements OAuth
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->uri,
                 'response_type' => 'code',
-                //'scope' => $this->scope,
+                'scope' => $this->scope,
             ]);
 
         header('location:'.$url);
@@ -52,22 +53,22 @@ class Coding implements OAuth
         return $json;
     }
 
-    public function getUserInfo()
+    public static function getUserInfo()
     {
 
     }
 
-    public function getProjects()
+    public static function getProjects()
     {
 
     }
 
-    public function getWebhooks()
+    public static function getWebhooks()
     {
 
     }
 
-    public function setWebhooks()
+    public static function setWebhooks()
     {
 
     }

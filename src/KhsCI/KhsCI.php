@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KhsCI;
 
 use Exception;
+use KhsCI\Support\Config;
 use Pimple\Container;
 
 /**
@@ -42,13 +43,13 @@ class KhsCI extends Container
         }
     }
 
-    public function __construct(array $config = [])
+    public function __construct()
     {
         parent::__construct();
         /*
          * 在容器中注入类
          */
-        $this['config'] = $config;
+        $this['config'] = Config::config();
 
         /*
          * 注册服务提供器

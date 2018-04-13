@@ -6,20 +6,24 @@ namespace KhsCI\Support;
 
 class Config
 {
-    protected $config;
-
-    public function __construct(array $config = [])
+    public static function config()
     {
-        $this->config = $config;
-    }
-
-    public function get($name)
-    {
-        return $this->config[$name] ?? [];
-    }
-
-    public static function makeOAuthCodingArray($clientId, $clientSecret, $uri)
-    {
-        return [];
+        return $config = [
+            'coding' => [
+                'client_id' => getenv('CODING_CLIENT_ID'),
+                'client_secret' => getenv('CODING_CLIENT_SECRET'),
+                'callback_url' => getenv('CODING_CALLBACK_URL'),
+            ],
+            'gitee' => [
+                'client_id' => getenv('GITEE_CLIENT_ID'),
+                'client_secret' => getenv('GITEE_CLIENT_SECRET'),
+                'callback_url' => getenv('GITEE_CALLBACK_URL'),
+            ],
+            'github' => [
+                'client_id' => getenv('GITHUB_CLIENT_ID'),
+                'client_secret' => getenv('GITHUB_CLIENT_SECRET'),
+                'callback_url' => getenv('GITHUB_CALLBACK_URL'),
+            ],
+        ];
     }
 }
