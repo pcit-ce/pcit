@@ -50,6 +50,6 @@ class Coding implements OAuth
             )
         );
 
-        return $json;
+        echo $json;
     }
 }
