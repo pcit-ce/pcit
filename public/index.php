@@ -4,10 +4,8 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use KhsCI\KhsCI;
 
-$dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
-
-//$khsci = new KhsCI();
+$env = new Dotenv\Dotenv(__DIR__);
+$env->load();
 
 //\KhsCI\Support\Config::makeOAuthCodingArray();
 
@@ -29,6 +27,8 @@ $config = [
     ],
 ];
 
-var_dump($config);
+$khsci = new KhsCI($config);
 
-//$khsci->OauthCoding->getAccessToken();
+$khsci->OAuthCoding->getLoginUrl();
+
+$khsci->OAuthCoding->getAccessToken();

@@ -3,7 +3,6 @@
 namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
-use KhsCI\Support\Config;
 
 class Coding implements OAuth
 {
@@ -14,12 +13,14 @@ class Coding implements OAuth
     private $clientId;
     private $clientSecret;
     private $uri;
+    private $scope;
 
     public function __construct($config, Curl $curl)
     {
-        $this->clientId = $config[''];
-        $this->clientSecret = $config[''];
-        $this->uri = $config[''];
+        $this->clientId = $config['client_id'];
+        $this->clientSecret = $config['client_secret'];
+        $this->uri = $config['callback_url'];
+        $this->scope = $config['scope'] ?? 'user';
         $this->curl = $curl;
     }
 
@@ -29,6 +30,7 @@ class Coding implements OAuth
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->uri,
                 'response_type' => 'code',
+                'scope' => $this->scope
             ]);
 
         header('location:'.$url);

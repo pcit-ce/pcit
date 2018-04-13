@@ -16,8 +16,7 @@ use Pimple\Container;
  *
  * $a = $container['a'];
  *
- * @property string OauthCoding
- * method getAccessToken()
+ * @property \KhsCI\Service\OAuth\Coding $OAuthCoding
  */
 class KhsCI extends Container
 {
@@ -25,7 +24,7 @@ class KhsCI extends Container
      * 服务提供器数组.
      */
     protected $providers = [
-        Providers\OauthProvider::class,
+        Providers\OAuthProvider::class,
     ];
 
     /**
@@ -36,8 +35,8 @@ class KhsCI extends Container
         /**
          * 取得服务提供器数组.
          */
-        $array = array_merge($this->providers, $this['config']->get('providers', []));
-        foreach ($array as $k) {
+
+        foreach ($this->providers as $k) {
             $this->register(new $k);
         }
     }
@@ -48,12 +47,7 @@ class KhsCI extends Container
         /*
          * 在容器中注入类
          */
-        $this['config'] = new Support\Config($config);
-
-        /*
-         * 注册一个服务提供者
-         */
-        $this->register(new Providers\BBBProvider);
+        $this['config'] = $config;
 
         /*
          * 注册服务提供器
@@ -65,7 +59,6 @@ class KhsCI extends Container
      * 通过调用属性，获取对象
      *
      * @param $name
-     * @param $arguments
      *
      * @throws Exception
      *
@@ -86,8 +79,4 @@ class KhsCI extends Container
     /**
      * 通过调用方法，获取对象
      */
-    public function bbb()
-    {
-        return $this['bbb'];
-    }
 }
