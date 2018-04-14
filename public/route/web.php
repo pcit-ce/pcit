@@ -2,14 +2,29 @@
 
 declare(strict_types=1);
 
+use KhsCI\Support\Response;
 use KhsCI\Support\Route;
 
 try {
+    Route::get('test2', function () {
+        return 1;
+    });
+
     Route::get('test', 'Test\TestController@test');
 
-    Route::get('oauth', 'Users\LoginController@index');
+    /*Test end*/
+
+    Route::get('api', 'API\APIController');
+
+    Route::get('status', 'StatusController');
+
+    Route::get('about', 'AboutController');
+
+    Route::get('team', 'TeamController');
 
     /* OAuth login*/
+
+    Route::get('oauth', 'Users\LoginController@index');
 
     Route::get('oauth/coding/login', 'Users\OAuthCodingController@getLoginUrl');
 
@@ -45,7 +60,18 @@ try {
 
     /*IM*/
 } catch (Exception $e) {
-    echo $e->getMessage();
+    $code = $e->getCode();
+
+    if ($code === 0) {
+        $code = 500;
+    }
+
+    Response::json([
+        "code" => $code,
+        "message" => $e->getMessage() ?? 500,
+        "api_url" => getenv('CI_HOST')."/api",
+    ]);
+
     exit(1);
 }
 

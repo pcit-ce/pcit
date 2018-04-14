@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
+use Exception;
+use KhsCI\Support\Response;
 
 class GitHub implements OAuth
 {
@@ -65,7 +67,7 @@ class GitHub implements OAuth
                 'allow_signup' => 'true',
             ]);
 
-        header('Location:'.$url);
+        Response::redirect($url);
     }
 
     /**
@@ -74,6 +76,7 @@ class GitHub implements OAuth
      * @param bool        $json
      *
      * @return mixed
+     * @throws Exception
      */
     public function getAccessToken(string $code, ?string $state, bool $json = true)
     {
@@ -92,10 +95,12 @@ class GitHub implements OAuth
 
         $accessToken = $this->curl->post($url);
 
-        true === $json && $accessToken = json_decode($accessToken)->access_token;
-        var_dump($accessToken);
+        true === $json && $accessToken = json_decode($accessToken)->access_token ?? false;
+        if ($accessToken) {
+            return $accessToken;
+        }
 
-        return $accessToken;
+        throw new Exception('access_token not fount');
     }
 
     private static function http(string $method, string $url, string $accessToken)
