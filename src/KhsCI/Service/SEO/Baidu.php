@@ -9,8 +9,11 @@ use Curl\Curl;
 class Baidu
 {
     private $appid;
+
     private $token;
+
     private $type;
+
     private $curl;
 
     public function __construct($config, Curl $curl)
@@ -31,7 +34,7 @@ class Baidu
         $i = -1;
         $urls = [];
         foreach ($obj->children() as $k => $v) {
-            $i++;
+            ++$i;
             $urls[$i] = "$v->loc";
         }
 

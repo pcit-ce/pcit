@@ -17,6 +17,8 @@ return PhpCsFixer\Config::create()
     ->setRules([
       '@Symfony' => true,
       '@Symfony:risky'=>true,
+      'array_syntax' => array('syntax' => 'short'),
+      'ordered_imports' => true,
       'full_opening_tag' => false,
       'declare_strict_types' => true, // @PHP70Migration:risky, @PHP71Migration:risky
       'ternary_to_null_coalescing' => true, // @PHP70Migration, @PHP71Migration

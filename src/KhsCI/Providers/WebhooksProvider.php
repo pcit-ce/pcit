@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
-use Pimple\Container;
 use KhsCI\Service\Webhooks\Coding;
+use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 class WebhooksProvider implements ServiceProviderInterface

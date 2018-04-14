@@ -2,15 +2,18 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\Route;
 use KhsCI\Support\Response;
+use KhsCI\Support\Route;
 
 try {
-    Route::get('test2', function () {
+    //Route::get('user/{id}', 'Test\TestController@test');
+    Route::get('test', function () {
         return 1;
     });
 
-    Route::get('test', 'Test\TestController@test');
+    Route::get('test2', 'Test\TestController@test');
+
+    Route::get('test3', 'Test\TestController');
 
     /*Test end*/
 
@@ -59,6 +62,14 @@ try {
     /*Queue*/
 
     /*IM*/
+
+    /*Profile*/
+
+    Route::get('profile/coding/{user}', 'Profile\CodingController');
+
+    Route::get('profile/gitee/{user}', 'Profile\GiteeController');
+
+    Route::get('profile/github/{user}', 'Profile\GitHubController');
 } catch (Exception $e) {
     $code = $e->getCode();
 

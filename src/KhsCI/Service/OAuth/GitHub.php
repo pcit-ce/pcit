@@ -11,12 +11,17 @@ use KhsCI\Support\Response;
 class GitHub implements OAuth
 {
     const URL = 'https://github.com/login/oauth/authorize?';
+
     const POST_URL = 'https://github.com/login/oauth/access_token?';
 
     private $clientId;
+
     private $clientSecret;
+
     private $callbackUrl;
+
     private $scope;
+
     private $curl;
 
     public function __construct($config, Curl $curl)

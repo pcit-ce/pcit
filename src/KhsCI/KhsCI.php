@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace KhsCI;
 
 use Exception;
-use Pimple\Container;
 use KhsCI\Support\Config;
+use Pimple\Container;
 
 /**
  * 核心方法 注入类（依赖），之后通过调用属性或方法，获取类.
