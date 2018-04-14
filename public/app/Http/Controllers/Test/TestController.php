@@ -8,7 +8,7 @@ use KhsCI\Support\Session;
 
 class TestController
 {
-    public function __invoke()
+    public function __invoke(): void
     {
         Session::put('user.name', 1);
         Session::get('user.name');

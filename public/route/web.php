@@ -70,7 +70,6 @@ try {
     Route::get('profile/gitee/{user}', 'Profile\GiteeController');
 
     Route::get('profile/github/{user}', 'Profile\GitHubController');
-
 } catch (Exception $e) {
     $code = $e->getCode();
 

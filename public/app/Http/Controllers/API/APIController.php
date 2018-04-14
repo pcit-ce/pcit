@@ -29,7 +29,7 @@ class APIController
                     'main' => $host.'/{git_type}/{user}/{repo}/builds',
                     'id' => $host.'/{git_type}/{user}/{repo}/builds/{id}',
                 ],
-                'pull_requests' => $host.'/{git_type}/{user}/{repo}/pull_request',
+                'pull_requests' => $host.'/{git_type}/{user}/{repo}/pull_requests',
                 'settings' => $host.'/{git_type}/{user}/{repo}/settings',
                 'requests' => $host.'/{git_type}/{user}/{repo}/requests',
                 'caches' => $host.'/{git_type}/{user}/{repo}/caches',
