@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-session_start();
-
 function open_error(): void
 {
     ini_set('display_errors', 'on');

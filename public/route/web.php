@@ -6,11 +6,13 @@ use KhsCI\Support\Route;
 use KhsCI\Support\Response;
 
 try {
-    Route::get('test2', function () {
+    Route::get('test', function () {
         return 1;
     });
 
-    Route::get('test', 'Test\TestController@test');
+    Route::get('test2', 'Test\TestController@test');
+
+    Route::get('test3', 'Test\TestController');
 
     /*Test end*/
 

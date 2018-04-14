@@ -12,13 +12,13 @@ class APIController
     {
         $host = getenv('CI_HOST');
         Response::json(['oauth' => [
-            'gitee' => $host.'/oauth/gitee/login',
             'coding' => $host.'/oauth/coding/login',
+            'gitee' => $host.'/oauth/gitee/login',
             'github' => $host.'/oauth/github/login',
         ],
             'webhooks' => [
-                'gitee' => $host.'/webhooks/gitee',
                 'coding' => $host.'/webhooks/coding',
+                'gitee' => $host.'/webhooks/gitee',
                 'github' => $host.'/webhooks/github',
             ],
             'repo' => [
@@ -32,14 +32,19 @@ class APIController
                 'settings' => $host.'/{git_type}/{user}/{repo}/settings',
                 'caches' => $host.'/{git_type}/{user}/{repo}/caches',
             ],
-            'queue' => '',
+            'queue' => [
+                'coding' => '',
+                'gitee' => '',
+                'github' => '',
+            ],
+            'profile' => $host.'/profile/{user_org}',
             'dashboard' => $host.'/dashboard',
             'api' => $host.'/api',
             'about' => $host.'/about',
-            'feedback' => 'https://github.com/khs1994-php/khsci/issues',
             'team' => $host.'/team',
             'blog' => $host.'/blog',
             'status' => $host.'/status',
+            'feedback' => 'https://github.com/khs1994-php/khsci/issues',
         ]);
     }
 
