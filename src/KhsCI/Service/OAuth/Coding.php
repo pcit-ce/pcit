@@ -11,12 +11,17 @@ use KhsCI\Support\Response;
 class Coding implements OAuth
 {
     const URL = 'https://coding.net/oauth_authorize.html?';
+
     const POST_URL = 'https://coding.net/api/oauth/access_token?';
 
     private $curl;
+
     private $clientId;
+
     private $clientSecret;
+
     private $uri;
+
     private $scope;
 
     public function __construct($config, Curl $curl)
