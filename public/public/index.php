@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 session_start();
 
+function open_error()
+{
+
+    ini_set('display_errors', 1);
+    ini_set('error_reporting', E_ALL);
+}
+
 require_once __DIR__.'/../../vendor/autoload.php';
 
 /**
@@ -16,7 +23,13 @@ $env->load();
 /*
  *  SPL Autoload
  */
+
+$debug = getenv('CI_DEBUG') ?? false;
+
+true === $debug && open_error();
+
 spl_autoload_register(function ($class): void {
+    $file = __DIR__.'/../'.str_replace('\\App\\', '\\app\\', $class);
     $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
     require_once $file.'.php';
 });
