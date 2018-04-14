@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Tests;
 
-class KhsiCITest extends KhsCITestCase
+class KhsCITest extends KhsCITestCase
 {
     public function example()
     {
