@@ -70,6 +70,12 @@ try {
     Route::get('profile/gitee/{user}', 'Profile\GiteeController');
 
     Route::get('profile/github/{user}', 'Profile\GitHubController');
+
+    /*Sync Repo*/
+
+    Route::post('sync/coding', 'Sync\CodingController');
+    Route::post('sync/gitee', 'Sync\GiteeController');
+    Route::post('sync/github', 'Sync\GithubController');
 } catch (Exception $e) {
     $code = $e->getCode();
 

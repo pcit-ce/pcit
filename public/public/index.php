@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-function open_error(): void
-{
-    ini_set('display_errors', 'on');
-    ini_set('error_reporting', '32767');
-}
-
 require_once __DIR__.'/../../vendor/autoload.php';
 
 /**
@@ -23,7 +17,7 @@ $env->load();
 
 $debug = getenv('CI_DEBUG') ?? false;
 
-true === $debug && open_error();
+true === $debug && ini_set('display_errors', 'on') && ini_set('error_reporting', '32767');
 
 spl_autoload_register(function ($class): void {
     $class = str_replace('App\\Http', 'app\\Http', $class);
