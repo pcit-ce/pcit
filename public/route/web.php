@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\Response;
 use KhsCI\Support\Route;
+use KhsCI\Support\Response;
 
 try {
     Route::get('test2', function () {

@@ -45,7 +45,7 @@ class OAuthCodingController
         $json = json_decode(Coding::getProjects((string) $access_token))->data ?? false;
         $num = $json->totalRow ?? false;
 
-        for ($i = 0; $i < $num; ++$i) {
+        for ($i = 0; $i < $num; $i++) {
             $list = ($json->list)[$i];
             $array[] = $list->owner_user_name.'/'.$list->name;
         }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
-use Closure;
 use Error;
+use Closure;
 use Exception;
 
 /**

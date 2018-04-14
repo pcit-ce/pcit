@@ -80,9 +80,9 @@ class Coding implements OAuth
      * @param string $accessToken
      * @param bool   $raw
      *
-     * @return array
-     *
      * @throws Exception
+     *
+     * @return array
      */
     public static function getUserInfo(string $accessToken, bool $raw = false)
     {
