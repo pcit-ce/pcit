@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
+namespace App\Http\Controllers;
 
 class Controller
 {
     public function __construct()
     {
-
     }
 }

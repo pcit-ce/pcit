@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
-use Closure;
 use Error;
+use Closure;
 use Exception;
 
 /**
@@ -24,12 +24,12 @@ class Route
      * @param $targetUrl
      * @param $action
      */
-    private static function exec($targetUrl, $action)
+    private static function exec($targetUrl, $action): void
     {
         // ?a=1&b=2
         $queryString = $_SERVER['QUERY_STRING'];
 
-        if ((bool)$queryString) {
+        if ((bool) $queryString) {
             $url = $_SERVER['REQUEST_URI'];
             // 使用 ? 分隔 url
             $url = (explode('?', $url))[0];
@@ -40,7 +40,6 @@ class Route
         $url = trim($url, '/');
 
         if ($targetUrl === $url) {
-
             if ($action instanceof Closure) {
                 echo $action();
                 exit(0);
@@ -56,7 +55,7 @@ class Route
                 $obj = new $obj();
 
                 try {
-                    if ($method === '__invoke') {
+                    if ('__invoke' === $method) {
                         $obj();
                     } elseif ($method) {
                         $obj->$method();
@@ -86,7 +85,7 @@ class Route
      *
      * @throws Exception
      */
-    public static function __callStatic($name, $arg)
+    public static function __callStatic($name, $arg): void
     {
         // 请求方法不匹配
         // var_dump($name);

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\Response;
 use KhsCI\Support\Route;
+use KhsCI\Support\Response;
 
 try {
     Route::get('test2', function () {
@@ -62,14 +62,14 @@ try {
 } catch (Exception $e) {
     $code = $e->getCode();
 
-    if ($code === 0) {
+    if (0 === $code) {
         $code = 500;
     }
 
     Response::json([
-        "code" => $code,
-        "message" => $e->getMessage() ?? 500,
-        "api_url" => getenv('CI_HOST')."/api",
+        'code' => $code,
+        'message' => $e->getMessage() ?? 500,
+        'api_url' => getenv('CI_HOST').'/api',
     ]);
 
     exit(1);

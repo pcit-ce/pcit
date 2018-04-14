@@ -75,8 +75,9 @@ class GitHub implements OAuth
      * @param null|string $state
      * @param bool        $json
      *
-     * @return mixed
      * @throws Exception
+     *
+     * @return mixed
      */
     public function getAccessToken(string $code, ?string $state, bool $json = true)
     {
