@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 session_start();
 
-function open_error()
+function open_error(): void
 {
     ini_set('display_errors', 'on');
     ini_set('error_reporting', '32767');

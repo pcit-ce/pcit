@@ -29,33 +29,33 @@ class OAuthGitHubController
     /**
      * @throws Exception
      */
-    public function getAccessToken()
+    public function getAccessToken(): void
     {
-        $code = $_GET['code'];
+        $code = $_GET['code'] ?? false;
         $getState = $_GET['state'] ?? 404;
 
         $state = $_SESSION['github']['state'] ?? false;
 
-        if ($state !== $getState) {
-            throw new Exception('state not same');
+        if ($state !== $getState or false === $code) {
+            throw new Exception('state not same or code not found');
             return;
         }
 
         $accessToken = $_SESSION['github']['access_token']
-            ?? $this->khsci->OAuthGitHub->getAccessToken($code, (string)$state)
+            ?? $this->khsci->OAuthGitHub->getAccessToken((string) $code, (string) $state)
             ?? false;
 
         false !== $accessToken && $_SESSION['github']['access_token'] = $accessToken;
 
-        $userInfoArray = GitHub::getUserInfo((string)$accessToken);
+        $userInfoArray = GitHub::getUserInfo((string) $accessToken);
 
         echo 'Welcome '.$userInfoArray['name'].'<img src='.$userInfoArray['pic'].'><hr>';
 
         $array = [];
-        for ($page = 1; $page <= 100; $page++) {
-            $json = GitHub::getProjects((string)$accessToken, $page);
+        for ($page = 1; $page <= 100; ++$page) {
+            $json = GitHub::getProjects((string) $accessToken, $page);
             if ($obj = json_decode($json)) {
-                for ($i = 0; $i < 30; $i++) {
+                for ($i = 0; $i < 30; ++$i) {
                     $obj_repo = $obj[$i] ?? false;
 
                     if (false === $obj_repo) {

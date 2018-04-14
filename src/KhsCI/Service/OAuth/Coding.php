@@ -79,7 +79,9 @@ class Coding implements OAuth
     /**
      * @param string $accessToken
      * @param bool   $raw
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function getUserInfo(string $accessToken, bool $raw = false)

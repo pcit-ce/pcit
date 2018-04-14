@@ -43,9 +43,14 @@ class KhsCI extends Container
         }
     }
 
-    public function __construct()
+    /**
+     * KhsCI constructor.
+     *
+     * @param array $config
+     */
+    public function __construct(array $config = [])
     {
-        parent::__construct();
+        parent::__construct($config);
         /*
          * 在容器中注入类
          */
