@@ -6,7 +6,7 @@ namespace KhsCI\Service\Queue;
 
 class Exec
 {
-    public function exec($repo, $branch, $path)
+    public function exec($repo, $branch, $path): void
     {
         chdir($path);
         // remote origin not exists

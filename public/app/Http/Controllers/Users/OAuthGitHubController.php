@@ -51,9 +51,11 @@ class OAuthGitHubController
 
         $userInfoArray = GitHub::getUserInfo((string) $accessToken);
 
+        $uid = $userInfoArray['uid'];
         $name = $userInfoArray['name'];
         $pic = $userInfoArray['pic'];
 
+        Session::put('github.uid', $uid);
         Session::put('github.name', $name);
         Session::put('github.pic', $pic);
 

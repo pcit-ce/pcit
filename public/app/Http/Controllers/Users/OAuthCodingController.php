@@ -44,10 +44,11 @@ class OAuthCodingController
 
         $userInfoArray = Coding::getUserInfo((string) $access_token);
 
+        $uid = $userInfoArray['uid'];
         $name = $userInfoArray['name'];
-
         $pic = $userInfoArray['pic'];
 
+        Session::put('coding.uid', $uid);
         Session::put('coding.user', $name);
         Session::put('coding.pic', $pic);
 

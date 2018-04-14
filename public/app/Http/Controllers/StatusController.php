@@ -10,6 +10,9 @@ class StatusController
 {
     public function __invoke(): void
     {
-        Response::redirect('https://status.khs1994.com');
+        Response::json([
+            'code' => 0,
+            'status' => 'https://status.khs1994.com',
+        ]);
     }
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
-function open_error()
+function open_error(): void
 {
     ini_set('display_errors', 'on');
     ini_set('error_reporting', '32767');
 }
 
-/**
+/*
  * read .env.* file.
  */
 try {
