@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
+use Exception;
+use KhsCI\Support\Response;
 
 class Coding implements OAuth
 {
@@ -49,7 +51,7 @@ class Coding implements OAuth
                 'scope' => $this->scope,
             ]);
 
-        header('location:'.$url);
+        Response::redirect($url);
     }
 
     public function getAccessToken(string $code, ?string $state)
@@ -74,6 +76,12 @@ class Coding implements OAuth
         return $curl->$method($url);
     }
 
+    /**
+     * @param string $accessToken
+     * @param bool   $raw
+     * @return array
+     * @throws Exception
+     */
     public static function getUserInfo(string $accessToken, bool $raw = false)
     {
         $url = '/api/account/current_user?access_token='.$accessToken;
@@ -84,13 +92,17 @@ class Coding implements OAuth
             return $json;
         }
 
-        $obj = json_decode($json)->data;
+        $obj = json_decode($json)->data ?? false;
 
-        return [
-            'uid' => $obj->id,
-            'name' => $obj->global_key,
-            'pic' => $obj->avatar,
-        ];
+        if ($obj) {
+            return [
+                'uid' => $obj->id,
+                'name' => $obj->global_key,
+                'pic' => $obj->avatar,
+            ];
+        }
+
+        throw new Exception('access_token not found');
     }
 
     public static function getProjects(string $accessToken, int $page = 1, bool $raw = false)

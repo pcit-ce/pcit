@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use KhsCI\Support\Response;
 
 class TeamController
 {
     public function __invoke()
     {
-        header('location: https://github.com/khs1994-php/khsci/graphs/contributors');
+        Response::redirect('https://github.com/khs1994-php/khsci/graphs/contributors');
     }
 }

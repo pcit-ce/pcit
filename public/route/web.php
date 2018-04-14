@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use KhsCI\Support\Response;
 use KhsCI\Support\Route;
 
 try {
@@ -59,7 +60,18 @@ try {
 
     /*IM*/
 } catch (Exception $e) {
-    echo $e->getMessage();
+    $code = $e->getCode();
+
+    if ($code === 0) {
+        $code = 500;
+    }
+
+    Response::json([
+        "code" => $code,
+        "message" => $e->getMessage() ?? 500,
+        "api_url" => getenv('CI_HOST')."/api",
+    ]);
+
     exit(1);
 }
 

@@ -31,14 +31,14 @@ class OAuthCodingController
 
         if ($code) {
             $access_token = $_SESSION['coding']['access_token']
-                ?? (json_decode($this->khsci->OAuthCoding->getAccessToken((string) $code, null)))->access_token
+                ?? (json_decode($this->khsci->OAuthCoding->getAccessToken((string)$code, null)))->access_token
                 ?? false;
 
             false !== $access_token && $_SESSION['coding']['access_token'] = $access_token;
 
-            $userInfoArray = Coding::getUserInfo((string) $access_token);
+            $userInfoArray = Coding::getUserInfo((string)$access_token);
 
-            $json = json_decode(Coding::getProjects((string) $access_token))->data ?? false;
+            $json = json_decode(Coding::getProjects((string)$access_token))->data ?? false;
             $num = $json->totalRow ?? false;
 
             for ($i = 0; $i < $num; $i++) {
@@ -50,6 +50,7 @@ class OAuthCodingController
 
             var_dump($array ?? []);
         } else {
+
             throw new Exception('code not found');
         }
     }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use KhsCI\Support\Response;
+
 class StatusController
 {
     public function __invoke()
     {
-        header('location: https://status.khs1994.com');
+        Response::redirect('https://status.khs1994.com');
     }
 }

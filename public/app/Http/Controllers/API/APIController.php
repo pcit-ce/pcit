@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\API;
 
+use KhsCI\Support\Response;
+
 class APIController
 {
     public function __invoke()
     {
-        header('content-type:application/json');
         $host = getenv('CI_HOST');
-        echo json_encode([
-            "oauth" => [
-                "gitee" => $host.'/oauth/gitee/login',
-                "coding" => $host.'/oauth/coding/login',
-                "github" => $host.'/oauth/github/login',
-            ],
+        Response::json(["oauth" => [
+            "gitee" => $host.'/oauth/gitee/login',
+            "coding" => $host.'/oauth/coding/login',
+            "github" => $host.'/oauth/github/login',
+        ],
             "webhooks" => [
                 "gitee" => $host.'/webhooks/gitee',
                 "coding" => $host.'/webhooks/coding',
