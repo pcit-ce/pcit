@@ -20,6 +20,40 @@ class Route
 
     public static $method = [];
 
+    private static function make($action, ...$arg)
+    {
+        if ($action instanceof Closure) {
+            echo $action();
+            exit(0);
+        }
+
+        $array = explode('@', $action);
+
+        $obj = 'App\\Http\\Controllers'.'\\'.$array[0];
+        // 没有 @ 说明是 __invoke() 方法
+        $method = $array[1] ?? '__invoke';
+
+        if (true === class_exists($obj)) {
+            $obj = new $obj();
+
+            try {
+                if ('__invoke' === $method) {
+                    $obj(...$arg);
+                } elseif ($method) {
+                    $obj->$method(...$arg);
+                }
+            } catch (Error $e) {
+                // 捕获类方法不存在错误
+                echo $e->getMessage();
+            }
+            // 处理完毕，退出
+            exit(0);
+        } else {
+            self::$obj[] = $obj;
+            self::$method[] = $method;
+        }
+    }
+
     /**
      * @param $targetUrl
      * @param $action
@@ -39,42 +73,34 @@ class Route
 
         $url = trim($url, '/');
 
-        if ($targetUrl === $url) {
-            if ($action instanceof Closure) {
-                echo $action();
-                exit(0);
-            }
+        $targetUrlArray = explode('/', $targetUrl);
 
-            $array = explode('@', $action);
+        $offset = preg_grep('/{*}/', $targetUrlArray);
 
-            $obj = 'App\\Http\\Controllers'.'\\'.$array[0];
-            // 没有 @ 说明是 __invoke() 方法
-            $method = $array[1] ?? '__invoke';
+        $array = [];
 
-            if (true === class_exists($obj)) {
-                $obj = new $obj();
-
-                try {
-                    if ('__invoke' === $method) {
-                        $obj();
-                    } elseif ($method) {
-                        $obj->$method();
-                    }
-                } catch (Error $e) {
-                    // 捕获类方法不存在错误
-                    echo $e->getMessage();
-                }
-
-                // 处理完毕，退出
+        if ($offset === []) {
+            if ($targetUrl === $url) {// 传统 url
+                self::make($action);
                 exit(0);
             } else {
-                self::$obj[] = $obj;
-                self::$method[] = $method;
+                return;
             }
-        }// url 不一致
+        } else { // 有 {id}
+
+            $urlArray = explode('/', $url);
+
+            if (count($targetUrlArray) === count($urlArray)) {
+                foreach ($offset as $k => $v) {
+                    $array[] = $urlArray[$k];
+                }
+
+                self::make($action, ...$array);
+            }
+        }
     }
 
-    private static function getMethod($type)
+    private static function checkMethod($type)
     {
         return strtoupper($type) === $_SERVER['REQUEST_METHOD'];
     }
@@ -87,11 +113,8 @@ class Route
      */
     public static function __callStatic($name, $arg): void
     {
-        //echo '1<hr>';
-        // 请求方法不匹配
-        // var_dump($name);
-        if (!self::getMethod($name)) {
-            throw new Exception('not found');
+        if (!self::checkMethod($name)) {
+            return;
         }
 
         self::exec($arg[0], $arg[1]);

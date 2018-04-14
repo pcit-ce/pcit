@@ -11,11 +11,12 @@ class APIController
     public function __invoke(): void
     {
         $host = getenv('CI_HOST');
-        Response::json(['oauth' => [
-            'coding' => $host.'/oauth/coding/login',
-            'gitee' => $host.'/oauth/gitee/login',
-            'github' => $host.'/oauth/github/login',
-        ],
+        Response::json([
+            'oauth' => [
+                'coding' => $host.'/oauth/coding/login',
+                'gitee' => $host.'/oauth/gitee/login',
+                'github' => $host.'/oauth/github/login',
+            ],
             'webhooks' => [
                 'coding' => $host.'/webhooks/coding',
                 'gitee' => $host.'/webhooks/gitee',
@@ -28,8 +29,9 @@ class APIController
                     'main' => $host.'/{git_type}/{user}/{repo}/builds',
                     'id' => $host.'/{git_type}/{user}/{repo}/builds/{id}',
                 ],
-                'pull_requests' => $host.'/{git_type}/{user}/{repo}/builds',
+                'pull_requests' => $host.'/{git_type}/{user}/{repo}/pull_request',
                 'settings' => $host.'/{git_type}/{user}/{repo}/settings',
+                'requests' => $host.'/{git_type}/{user}/{repo}/requests',
                 'caches' => $host.'/{git_type}/{user}/{repo}/caches',
             ],
             'queue' => [
@@ -37,7 +39,11 @@ class APIController
                 'gitee' => '',
                 'github' => '',
             ],
-            'profile' => $host.'/profile/{user_org}',
+            'profile' => [
+                'coding' => $host.'/profile/coding/{user_org}',
+                'gitee' => $host.'/profile/gitee/{user_org}',
+                'github' => $host.'/profile/github/{user_org}',
+            ],
             'dashboard' => $host.'/dashboard',
             'api' => $host.'/api',
             'about' => $host.'/about',

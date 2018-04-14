@@ -6,6 +6,7 @@ use KhsCI\Support\Route;
 use KhsCI\Support\Response;
 
 try {
+    //Route::get('user/{id}', 'Test\TestController@test');
     Route::get('test', function () {
         return 1;
     });
@@ -61,6 +62,15 @@ try {
     /*Queue*/
 
     /*IM*/
+
+    /*Profile*/
+
+    Route::get('profile/coding/{user}', 'Profile\CodingController');
+
+    Route::get('profile/gitee/{user}', 'Profile\GiteeController');
+
+    Route::get('profile/github/{user}', 'Profile\GitHubController');
+
 } catch (Exception $e) {
     $code = $e->getCode();
 
