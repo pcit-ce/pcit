@@ -6,9 +6,8 @@ session_start();
 
 function open_error()
 {
-
-    ini_set('display_errors', 1);
-    ini_set('error_reporting', E_ALL);
+    ini_set('display_errors', 'on');
+    ini_set('error_reporting', '32767');
 }
 
 require_once __DIR__.'/../../vendor/autoload.php';
@@ -29,7 +28,7 @@ $debug = getenv('CI_DEBUG') ?? false;
 true === $debug && open_error();
 
 spl_autoload_register(function ($class): void {
-    $file = __DIR__.'/../'.str_replace('\\App\\', '\\app\\', $class);
+    $class = str_replace('App\\Http', 'app\\Http', $class);
     $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
     require_once $file.'.php';
 });
