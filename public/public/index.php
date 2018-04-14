@@ -4,21 +4,33 @@ declare(strict_types=1);
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
+function open_error()
+{
+    ini_set('display_errors', 'on');
+    ini_set('error_reporting', '32767');
+}
+
 /**
  * read .env.* file.
  */
-$env = new Dotenv\Dotenv(__DIR__.'/../', '.env'.'.'.getenv('APP_ENV'));
+try {
+    $env = new Dotenv\Dotenv(__DIR__.'/../', '.env'.'.'.getenv('APP_ENV'));
+    $env->load();
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit(1);
+}
 
-$env->load();
+/*
+ * Open Debug?
+ */
+$debug = getenv('CI_DEBUG') ?? false;
+
+'true' === $debug && open_error();
 
 /*
  *  SPL Autoload
  */
-
-$debug = getenv('CI_DEBUG') ?? false;
-
-true === $debug && ini_set('display_errors', 'on') && ini_set('error_reporting', '32767');
-
 spl_autoload_register(function ($class): void {
     $class = str_replace('App\\Http', 'app\\Http', $class);
     $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
@@ -30,4 +42,4 @@ spl_autoload_register(function ($class): void {
  */
 require_once __DIR__.'/../route/web.php';
 
-//header('Location: https://ci2.khs1994.com/index.html');
+//\KhsCI\Support\Response::redirect(getenv('CI_HOST').'/index.html');
