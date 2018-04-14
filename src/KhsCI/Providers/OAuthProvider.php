@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace KhsCI\Providers;
 
 use Curl\Curl;
-use Pimple\Container;
-use KhsCI\Service\OAuth\Gitee;
 use KhsCI\Service\OAuth\Coding;
+use KhsCI\Service\OAuth\Gitee;
 use KhsCI\Service\OAuth\GitHub;
+use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 class OAuthProvider implements ServiceProviderInterface

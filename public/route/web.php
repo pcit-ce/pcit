@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\Route;
 use KhsCI\Support\Response;
+use KhsCI\Support\Route;
 
 try {
     //Route::get('user/{id}', 'Test\TestController@test');
