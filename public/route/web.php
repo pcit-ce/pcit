@@ -5,11 +5,25 @@ declare(strict_types=1);
 use KhsCI\Support\Route;
 
 try {
+    Route::get('test2', function () {
+        return 1;
+    });
+
     Route::get('test', 'Test\TestController@test');
 
-    Route::get('oauth', 'Users\LoginController@index');
+    /*Test end*/
+
+    Route::get('api', 'API\APIController');
+
+    Route::get('status', 'StatusController');
+
+    Route::get('about', 'AboutController');
+
+    Route::get('team', 'TeamController');
 
     /* OAuth login*/
+
+    Route::get('oauth', 'Users\LoginController@index');
 
     Route::get('oauth/coding/login', 'Users\OAuthCodingController@getLoginUrl');
 
