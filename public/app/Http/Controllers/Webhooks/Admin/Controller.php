@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks\Admin;
 
 use Exception;
+use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class Controller
@@ -58,11 +59,27 @@ class Controller
 
         $obj = self::getObj();
 
-        echo $obj::getWebhooks($access_token, ...$arg);
+        $json = $obj::getWebhooks($access_token, true, ...$arg);
+
+        Response::json(json_decode($json, true));
+
     }
 
     public static function add(...$arg): void
     {
+        $data = file_get_contents('php://input');
+
+        $gitType = $arg[0];
+
+        unset($arg[0]);
+
+        self::$gitType = $gitType;
+
+        $access_token = self::checkAccessToken();
+
+        $obj = self::getObj();
+
+        echo $obj::setWebhooks($access_token, $data, ...$arg);
     }
 
     /**
@@ -81,7 +98,7 @@ class Controller
         $access_token = self::checkAccessToken();
 
         $obj = self::getObj();
-        var_dump(...$arg);
+
         echo $obj::unsetWebhooks($access_token, ...$arg);
     }
 }

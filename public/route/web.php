@@ -44,7 +44,7 @@ try {
 
     /*Admin webhooks: list create delete*/
 
-    Route::post('webhooks/create/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@add');
+    Route::post('webhooks/create/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@add');
 
     Route::get('webhooks/list/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@list');
 

@@ -1,0 +1,10 @@
+{
+  "issues_events": true,
+  "merge_requests_events":true,
+  "note_events": true,
+  "project_id": true,
+  "push_events": true,
+  "tag_push_events": true,
+  "url": "https://ci.khs1994.com",
+  "password": "string"
+}

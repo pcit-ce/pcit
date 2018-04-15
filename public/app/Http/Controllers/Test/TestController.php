@@ -20,6 +20,6 @@ class TestController
 
     public function test(): void
     {
-        echo 1;
+        var_dump($_SERVER);
     }
 }
