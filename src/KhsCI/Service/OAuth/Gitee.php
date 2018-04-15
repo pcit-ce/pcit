@@ -6,8 +6,10 @@ namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
 
-class Gitee implements OAuth
+class Gitee extends GitHub implements OAuth
 {
+    const API_URL = 'http://gitee.com/api/v5';
+
     const URL = 'https://gitee.com/oauth/authorize?';
 
     const POST_URL = 'https://gitee.com/oauth/token?';
@@ -22,16 +24,15 @@ class Gitee implements OAuth
 
     public function __construct($config, Curl $curl)
     {
-        $this->curl = $curl;
-
         $this->clientId = $config['client_id'];
         $this->clientSecret = $config['client_secret'];
         $this->callbackUrl = $config['callback_url'];
+        $this->curl = $curl;
     }
 
     public function getLoginUrl(?string $state)
     {
-        $url = self::URL.http_build_query([
+        $url = static::URL.http_build_query([
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->callbackUrl,
                 'response_type' => 'code',
@@ -61,17 +62,5 @@ class Gitee implements OAuth
         $accessToken = json_decode($json)->access_token;
 
         return $accessToken;
-    }
-
-    public static function getUserInfo(string $accessToken, bool $raw = false): void
-    {
-    }
-
-    public static function getProjects(string $accessToken, int $page = 1, bool $raw = false): void
-    {
-    }
-
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false): void
-    {
     }
 }

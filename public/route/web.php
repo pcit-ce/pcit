@@ -6,7 +6,7 @@ use KhsCI\Support\Response;
 use KhsCI\Support\Route;
 
 try {
-    //Route::get('user/{id}', 'Test\TestController@test');
+
     Route::get('test', function () {
         return 1;
     });
@@ -14,6 +14,8 @@ try {
     Route::get('test2', 'Test\TestController@test');
 
     Route::get('test3', 'Test\TestController');
+
+    Route::get('test4', 'Test\TestController@notExistsMethod');
 
     /*Test end*/
 
@@ -41,19 +43,23 @@ try {
 
     Route::get('oauth/gitee', 'Users\OAuthGiteeController@getAccessToken');
 
-    /*Webhooks*/
+    /*Admin webhooks: list create delete*/
 
-    Route::post('webhooks/github/add', 'Webhooks\gitHubController@add');
+    Route::post('webhooks/create/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@add');
 
-    Route::get('webhooks/github', 'Webhooks\GitHubController@receive');
+    Route::get('webhooks/list/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@list');
 
-    Route::post('webhooks/gitee/add', 'Webhooks\GiteeController@add');
+    Route::delete('webhooks/delete/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@delete');
 
-    Route::get('webhooks/gitee', 'Webhooks\GiteeController@receive');
+    /*Webhooks: receive git webhooks*/
 
-    Route::post('webhooks/coding/add', 'Webhooks\CondigController@add');
+    Route::get('webhooks/github', 'Webhooks\GitHubController');
 
-    Route::get('webhooks/coding', 'Webhooks\CodingController@receive');
+    Route::get('webhooks/gitee', 'Webhooks\GiteeController');
+
+    Route::get('webhooks/coding', 'Webhooks\CodingController');
+
+    // 获取所有接收到的 webhooks -> requests
 
     /*SEO*/
 
@@ -88,6 +94,8 @@ try {
         'message' => $e->getMessage() ?? 500,
         'api_url' => getenv('CI_HOST').'/api',
     ]);
+
+    exit(1);
 } finally {
     // 路由控制器填写错误
 

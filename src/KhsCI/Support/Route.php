@@ -13,6 +13,7 @@ use Exception;
  *
  * @method static get($url, $action)
  * @method static post($url, $action)
+ * @method static delete($url, $action)
  */
 class Route
 {
@@ -63,7 +64,7 @@ class Route
         // ?a=1&b=2
         $queryString = $_SERVER['QUERY_STRING'];
 
-        if ((bool) $queryString) {
+        if ((bool)$queryString) {
             $url = $_SERVER['REQUEST_URI'];
             // 使用 ? 分隔 url
             $url = (explode('?', $url))[0];

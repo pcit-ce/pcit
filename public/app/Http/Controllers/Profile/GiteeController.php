@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-class GiteeController
+class GiteeController extends GitHubController
 {
-    public function __invoke(): void
+    const TYPE = 'gitee';
+
+    public function __invoke(...$arg): void
     {
+        parent::__invoke(...$arg);
     }
 }
