@@ -14,6 +14,7 @@ class GitHubController
 
     /**
      * @param mixed ...$arg
+     *
      * @throws ErrorException
      */
     public function __invoke(...$arg): void
@@ -33,17 +34,14 @@ class GitHubController
         $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
 
         for ($page = 1; $page <= 3; ++$page) {
-
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (ErrorException $e) {
                 throw new ErrorException($e->getMessage(), $e->getCode());
             }
 
             if ($obj = json_decode($json)) {
-
                 for ($i = 0; $i < 30; ++$i) {
-
                     $obj_repo = $obj[$i] ?? false;
 
                     if (false === $obj_repo) {
@@ -56,7 +54,6 @@ class GitHubController
 
                     $array[$id] = $full_name;
                 }
-
             } else {
                 break;
             }

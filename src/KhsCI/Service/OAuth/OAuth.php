@@ -12,6 +12,7 @@ interface OAuth
 
     /**
      * @param null|string $state
+     *
      * @return mixed
      */
     public function getLoginUrl(?string $state);
@@ -20,46 +21,52 @@ interface OAuth
      * @param string      $code
      * @param null|string $state
      * @param bool        $raw
+     *
      * @return mixed
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false);
 
     /**
-     * 获取用户基本信息
+     * 获取用户基本信息.
      *
      * @param string $accessToken
      * @param bool   $raw
+     *
      * @return mixed
      */
     public static function getUserInfo(string $accessToken, bool $raw = false);
 
     /**
-     * 获取项目列表
+     * 获取项目列表.
      *
      * @param string $accessToken
      * @param int    $page
      * @param bool   $raw
+     *
      * @return mixed
      */
     public static function getProjects(string $accessToken, int $page = 1, bool $raw = false);
 
     /**
-     * 获取 Webhooks 设置
+     * 获取 Webhooks 设置.
      *
      * @param string $accessToken
      * @param string $username
      * @param string $repo
      * @param bool   $raw
+     *
      * @return mixed
      */
     public static function getWebhooks(string $accessToken, string $username, string $repo, bool $raw = false);
 
     /**
-     * 配置 Webhooks
+     * 配置 Webhooks.
+     *
      * @param string $accessToken
      * @param string $username
      * @param string $repo
      * @param array  $data
+     *
      * @return mixed
      */
     public static function setWebhooks(string $accessToken, string $username, string $repo, array $data);

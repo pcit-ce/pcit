@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Webhooks\Admin;
 
 use Exception;
@@ -7,11 +9,11 @@ use KhsCI\Support\Session;
 
 class Controller
 {
-
     private static $gitType;
 
     /**
      * @return bool|null
+     *
      * @throws Exception
      */
     private static function checkAccessToken()
@@ -30,7 +32,7 @@ class Controller
      */
     private static function getObj()
     {
-        if (self::$gitType === 'github') {
+        if ('github' === self::$gitType) {
             $obj = 'KhsCI\\Service\\OAuth\\GitHub';
         } else {
             $obj = 'KhsCI\\Service\\OAuth\\'.ucfirst(self::$gitType);
@@ -41,9 +43,10 @@ class Controller
 
     /**
      * @param mixed ...$arg
+     *
      * @throws Exception
      */
-    public static function list(...$arg)
+    public static function list(...$arg): void
     {
         $gitType = $arg[0];
 
@@ -58,16 +61,16 @@ class Controller
         echo $obj::getWebhooks($access_token, ...$arg);
     }
 
-    public static function add(...$arg)
+    public static function add(...$arg): void
     {
-
     }
 
     /**
      * @param mixed ...$arg
+     *
      * @throws Exception
      */
-    public static function delete(...$arg)
+    public static function delete(...$arg): void
     {
         $gitType = $arg[0];
 

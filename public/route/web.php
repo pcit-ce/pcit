@@ -6,7 +6,6 @@ use KhsCI\Support\Response;
 use KhsCI\Support\Route;
 
 try {
-
     Route::get('test', function () {
         return 1;
     });

@@ -157,7 +157,7 @@ class GitHub implements OAuth
         return self::http('get', $url, $accessToken);
     }
 
-    public static function setWebhooks(string $accessToken, string $username, string $repo, array $data)
+    public static function setWebhooks(string $accessToken, string $username, string $repo, array $data): void
     {
         $url = '/repos/'.$username.'/'.$repo.'/hooks';
     }

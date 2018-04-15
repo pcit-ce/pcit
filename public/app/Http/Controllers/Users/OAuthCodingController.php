@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\controllers\Users;
 
+use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Response;
-use Exception;
 
 class OAuthCodingController
 {

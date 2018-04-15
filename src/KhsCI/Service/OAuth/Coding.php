@@ -27,6 +27,7 @@ class Coding implements OAuth
 
     /**
      * Coding constructor.
+     *
      * @param      $config
      * @param Curl $curl
      */
@@ -55,6 +56,7 @@ class Coding implements OAuth
 
     /**
      * @param null|string $state
+     *
      * @return mixed|string
      */
     public function getLoginUrl(?string $state)
@@ -73,6 +75,7 @@ class Coding implements OAuth
      * @param string      $code
      * @param null|string $state
      * @param bool        $raw
+     *
      * @return mixed
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false)
@@ -101,6 +104,7 @@ class Coding implements OAuth
      * @param       $method
      * @param       $url
      * @param array $data
+     *
      * @return mixed
      */
     private static function http($method, $url, $data = [])
@@ -147,6 +151,7 @@ class Coding implements OAuth
      * @param string $accessToken
      * @param int    $page
      * @param bool   $raw
+     *
      * @return mixed
      */
     public static function getProjects(string $accessToken, int $page = 1, bool $raw = false)
@@ -161,6 +166,7 @@ class Coding implements OAuth
      * @param string $username
      * @param string $project
      * @param bool   $raw
+     *
      * @return mixed
      */
     public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false)
@@ -175,6 +181,7 @@ class Coding implements OAuth
      * @param string $username
      * @param string $repo
      * @param array  $data
+     *
      * @return mixed
      */
     public static function setWebhooks(string $accessToken, string $username, string $repo, array $data)
@@ -184,10 +191,7 @@ class Coding implements OAuth
         return $json = self::http('post', $url);
     }
 
-    public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id)
+    public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id): void
     {
-
     }
-
-
 }
