@@ -9,6 +9,8 @@ use Exception;
 
 class Coding implements OAuth
 {
+    const API_URL = 'https://coding.net/api';
+
     const URL = 'https://coding.net/oauth_authorize.html?';
 
     const POST_URL = 'https://coding.net/api/oauth/access_token?';
@@ -23,6 +25,11 @@ class Coding implements OAuth
 
     private $scope;
 
+    /**
+     * Coding constructor.
+     * @param      $config
+     * @param Curl $curl
+     */
     public function __construct($config, Curl $curl)
     {
         $this->clientId = $config['client_id'];
@@ -46,6 +53,10 @@ class Coding implements OAuth
         $this->curl = $curl;
     }
 
+    /**
+     * @param null|string $state
+     * @return mixed|string
+     */
     public function getLoginUrl(?string $state)
     {
         $url = $this::URL.http_build_query([
@@ -58,6 +69,12 @@ class Coding implements OAuth
         return $url;
     }
 
+    /**
+     * @param string      $code
+     * @param null|string $state
+     * @param bool        $raw
+     * @return mixed
+     */
     public function getAccessToken(string $code, ?string $state, bool $raw = false)
     {
         $json = $this->curl->post($this::POST_URL.http_build_query([
@@ -80,9 +97,16 @@ class Coding implements OAuth
         return $accessToken;
     }
 
+    /**
+     * @param       $method
+     * @param       $url
+     * @param array $data
+     * @return mixed
+     */
     private static function http($method, $url, $data = [])
     {
-        $url = 'https://coding.net'.$url;
+        $url = static::API_URL.$url;
+
         $curl = new Curl();
 
         return $curl->$method($url);
@@ -98,7 +122,7 @@ class Coding implements OAuth
      */
     public static function getUserInfo(string $accessToken, bool $raw = false)
     {
-        $url = '/api/account/current_user?access_token='.$accessToken;
+        $url = '/account/current_user?access_token='.$accessToken;
 
         $json = self::http('get', $url);
 
@@ -119,24 +143,51 @@ class Coding implements OAuth
         throw new Exception('access_token not found');
     }
 
+    /**
+     * @param string $accessToken
+     * @param int    $page
+     * @param bool   $raw
+     * @return mixed
+     */
     public static function getProjects(string $accessToken, int $page = 1, bool $raw = false)
     {
-        $url = '/api/user/projects?access_token='.$accessToken;
+        $url = '/user/projects?access_token='.$accessToken;
 
         return $json = self::http('get', $url);
     }
 
+    /**
+     * @param string $accessToken
+     * @param string $username
+     * @param string $project
+     * @param bool   $raw
+     * @return mixed
+     */
     public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false)
     {
-        $url = '/api/user/'.$username.'/project/'.$project.'/git/hooks?access_token='.$accessToken;
+        $url = '/user/'.$username.'/project/'.$project.'/git/hooks?access_token='.$accessToken;
 
         return $json = self::http('get', $url);
     }
 
-    public static function setWebhooks($accessToken, $username, $project)
+    /**
+     * @param string $accessToken
+     * @param string $username
+     * @param string $repo
+     * @param array  $data
+     * @return mixed
+     */
+    public static function setWebhooks(string $accessToken, string $username, string $repo, array $data)
     {
-        $url = '/api/user/'.$username.'/project/'.$project.'/git/hook/{hook_id}?access_token='.$accessToken;
+        $url = '/user/'.$username.'/project/'.$repo.'/git/hook/{hook_id}?access_token='.$accessToken;
 
-        return $json = self::http('get', $url);
+        return $json = self::http('post', $url);
     }
+
+    public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id)
+    {
+
+    }
+
+
 }

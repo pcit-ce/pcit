@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\controllers\Users;
 
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\Coding;
 use KhsCI\Support\Response;
+use Exception;
 
 class OAuthCodingController
 {
@@ -27,7 +27,7 @@ class OAuthCodingController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getAccessToken(): void
     {

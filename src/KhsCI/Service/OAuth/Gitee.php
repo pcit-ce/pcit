@@ -63,18 +63,4 @@ class Gitee extends GitHub implements OAuth
 
         return $accessToken;
     }
-
-    public static function getUserInfo(string $accessToken, bool $raw = false)
-    {
-        return parent::getUserInfo($accessToken, $raw);
-    }
-
-    public static function getProjects(string $accessToken, int $page = 1, bool $raw = false)
-    {
-        return parent::getProjects($accessToken, $page, $raw);
-    }
-
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false): void
-    {
-    }
 }

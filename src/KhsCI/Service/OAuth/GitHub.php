@@ -113,7 +113,7 @@ class GitHub implements OAuth
         throw new Exception('access_token not fount');
     }
 
-    protected static function http(string $method, string $url, string $accessToken, array $data = [])
+    protected static function http(string $method, string $url, string $accessToken, ...$data)
     {
         $url = static::API_URL.$url;
 
@@ -150,8 +150,22 @@ class GitHub implements OAuth
         return static::http('get', $url, $accessToken);
     }
 
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false): void
+    public static function getWebhooks(string $accessToken, string $username, string $repo, bool $raw = false)
     {
+        $url = '/repos/'.$username.'/'.$repo.'/hooks';
 
+        return self::http('get', $url, $accessToken);
+    }
+
+    public static function setWebhooks(string $accessToken, string $username, string $repo, array $data)
+    {
+        $url = '/repos/'.$username.'/'.$repo.'/hooks';
+    }
+
+    public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id)
+    {
+        $url = sprintf('/repos/%s/%s/hooks/%s', $username, $repo, $id);
+
+        return static::http('delete', $url, $accessToken);
     }
 }

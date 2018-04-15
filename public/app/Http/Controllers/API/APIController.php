@@ -17,7 +17,12 @@ class APIController
                 'gitee' => $host.'/oauth/gitee/login',
                 'github' => $host.'/oauth/github/login',
             ],
-            'webhooks' => [
+            'webhoks@admin' => [
+                'add@post' => $host.'/webhooks/add/{git_type}/{user}/{repo}',
+                'list@get' => $host.'/webhooks/list/{git_type}/{user}/{repo}',
+                'delete@delete' => $host.'/webhooks/delete/{git_type}/{user}/{repo}',
+            ],
+            'webhooks@receive' => [
                 'coding' => $host.'/webhooks/coding',
                 'gitee' => $host.'/webhooks/gitee',
                 'github' => $host.'/webhooks/github',
