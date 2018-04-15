@@ -9,6 +9,8 @@ use Exception;
 
 class GitHub implements OAuth
 {
+    const API_URL = 'https://api.github.com';
+
     const URL = 'https://github.com/login/oauth/authorize?';
 
     const POST_URL = 'https://github.com/login/oauth/access_token?';
@@ -63,7 +65,7 @@ class GitHub implements OAuth
 
     public function getLoginUrl(?string $state)
     {
-        $url = self::URL.http_build_query([
+        $url = static::URL.http_build_query([
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->callbackUrl,
                 'scope' => $this->scope,
@@ -85,7 +87,7 @@ class GitHub implements OAuth
      */
     public function getAccessToken(string $code, ?string $state, bool $json = true)
     {
-        $url = self::POST_URL.http_build_query([
+        $url = static::POST_URL.http_build_query([
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,
                     'code' => $code,
@@ -100,7 +102,10 @@ class GitHub implements OAuth
 
         $accessToken = $this->curl->post($url);
 
+        // {"access_token":"47bb","token_type":"bearer","scope":"admin:gpg_key,admin:org"}
+
         true === $json && $accessToken = json_decode($accessToken)->access_token ?? false;
+
         if ($accessToken) {
             return $accessToken;
         }
@@ -108,8 +113,10 @@ class GitHub implements OAuth
         throw new Exception('access_token not fount');
     }
 
-    private static function http(string $method, string $url, string $accessToken)
+    protected static function http(string $method, string $url, string $accessToken, array $data = [])
     {
+        $url = static::API_URL.$url;
+
         $curl = new Curl();
 
         $curl->setHeader('Authorization', 'token '.$accessToken);
@@ -119,9 +126,9 @@ class GitHub implements OAuth
 
     public static function getUserInfo(string $accessToken, bool $raw = false)
     {
-        $url = 'https://api.github.com/user';
+        $url = '/user';
 
-        $json = self::http('get', $url, $accessToken);
+        $json = static::http('get', $url, $accessToken);
 
         if ($raw) {
             return $json;
@@ -138,12 +145,13 @@ class GitHub implements OAuth
 
     public static function getProjects(string $accessToken, int $page = 1, bool $raw = false)
     {
-        $url = 'https://api.github.com/user/repos?page='.$page;
+        $url = '/user/repos?page='.$page;
 
-        return self::http('get', $url, $accessToken);
+        return static::http('get', $url, $accessToken);
     }
 
     public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false): void
     {
+
     }
 }

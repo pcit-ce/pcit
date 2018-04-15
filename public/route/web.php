@@ -15,6 +15,8 @@ try {
 
     Route::get('test3', 'Test\TestController');
 
+    Route::get('test4', 'Test\TestController@notExistsMethod');
+
     /*Test end*/
 
     Route::get('api', 'API\APIController');
@@ -88,6 +90,8 @@ try {
         'message' => $e->getMessage() ?? 500,
         'api_url' => getenv('CI_HOST').'/api',
     ]);
+
+    exit(1);
 } finally {
     // 路由控制器填写错误
 
