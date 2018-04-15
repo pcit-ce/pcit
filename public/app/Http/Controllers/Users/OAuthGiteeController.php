@@ -6,11 +6,10 @@ namespace App\Http\controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\Coding;
 use KhsCI\Support\Response;
-use KhsCI\Support\Session;
 
-class OAuthCodingController
+
+class OAuthGiteeController
 {
     use OAuthTrait;
 
@@ -21,18 +20,18 @@ class OAuthCodingController
         $this->ci = new KhsCI();
     }
 
-    public function getLoginUrl(): void
+    public function getLoginUrl()
     {
-        $url = $this->ci->OAuthCoding->getLoginUrl(null);
+        $url = $this->ci->OAuthGitee->getLoginUrl(null);
 
         Response::redirect($url);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getAccessToken(): void
+    public function getAccessToken()
     {
-        $this->getAccessTokenCommon('coding', null);
+        $this->getAccessTokenCommon('gitee', null);
     }
 }

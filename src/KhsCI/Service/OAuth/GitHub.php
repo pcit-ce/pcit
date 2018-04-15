@@ -6,7 +6,6 @@ namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
-use KhsCI\Support\Response;
 
 class GitHub implements OAuth
 {
@@ -62,7 +61,7 @@ class GitHub implements OAuth
         $this->curl = $curl;
     }
 
-    public function getLoginUrl(?string $state): void
+    public function getLoginUrl(?string $state)
     {
         $url = self::URL.http_build_query([
                 'client_id' => $this->clientId,
@@ -72,7 +71,7 @@ class GitHub implements OAuth
                 'allow_signup' => 'true',
             ]);
 
-        Response::redirect($url);
+        return $url;
     }
 
     /**
@@ -144,7 +143,7 @@ class GitHub implements OAuth
         return self::http('get', $url, $accessToken);
     }
 
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw): void
+    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false): void
     {
     }
 }

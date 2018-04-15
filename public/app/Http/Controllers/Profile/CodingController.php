@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Profile;
 
 use KhsCI\Service\OAuth\Coding;
+use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class CodingController
 {
     public function __invoke(...$arg): void
     {
-        echo $arg[0];
-        var_dump(Session::all());
+        $uid = Session::get('coding.uid');
+        $username = Session::get('coding.username');
+        $arg[0] === $username && $username = $arg[0];
+        $pic = Session::get('coding.pic');
         $access_token = Session::get('coding.access_token');
+
         $json = json_decode(Coding::getProjects((string) $access_token))->data ?? false;
         $num = $json->totalRow ?? false;
         $array = [];
@@ -22,6 +26,12 @@ class CodingController
             $array[] = $list->owner_user_name.'/'.$list->name;
         }
 
-        var_dump($array);
+        Response::json([
+            'code' => 0,
+            'uid' => $uid,
+            'username' => $arg[0],
+            'pic' => $pic,
+            'repos' => $array,
+        ]);
     }
 }

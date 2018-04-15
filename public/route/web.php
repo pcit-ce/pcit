@@ -70,7 +70,13 @@ try {
     Route::get('profile/gitee/{user}', 'Profile\GiteeController');
 
     Route::get('profile/github/{user}', 'Profile\GitHubController');
-} catch (Exception $e) {
+
+    /*Sync Repo*/
+
+    Route::post('sync/coding', 'Sync\CodingController');
+    Route::post('sync/gitee', 'Sync\GiteeController');
+    Route::post('sync/github', 'Sync\GithubController');
+} catch (Exception | Error $e) {
     $code = $e->getCode();
 
     if (0 === $code) {
@@ -83,13 +89,14 @@ try {
         'api_url' => getenv('CI_HOST').'/api',
     ]);
 
-    exit(1);
+} finally {
+
+    // 路由控制器填写错误
+
+    Response::json([
+        'code' => 404,
+        'obj' => Route::$obj ?? null,
+        'method' => Route::$method ?? null,
+        'message' => 'not found route',
+    ]);
 }
-
-// 路由控制器填写错误
-
-echo 'not found <hr>';
-
-var_dump(Route::$obj);
-
-var_dump(Route::$method);

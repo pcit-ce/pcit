@@ -34,6 +34,11 @@ class APIController
                 'requests' => $host.'/{git_type}/{user}/{repo}/requests',
                 'caches' => $host.'/{git_type}/{user}/{repo}/caches',
             ],
+            'sync@post' => [
+                'coding' => $host.'/sync/coding',
+                'gitee' => $host.'/sync/gitee',
+                'github' => $host.'/sync/github',
+            ],
             'queue' => [
                 'coding' => '',
                 'gitee' => '',

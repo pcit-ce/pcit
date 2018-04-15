@@ -44,7 +44,7 @@ class Route
                 }
             } catch (Error $e) {
                 // 捕获类方法不存在错误
-                echo $e->getMessage();
+                throw new Error($e->getMessage(), $e->getCode());
             }
             // 处理完毕，退出
             exit(0);
@@ -63,7 +63,7 @@ class Route
         // ?a=1&b=2
         $queryString = $_SERVER['QUERY_STRING'];
 
-        if ((bool) $queryString) {
+        if ((bool)$queryString) {
             $url = $_SERVER['REQUEST_URI'];
             // 使用 ? 分隔 url
             $url = (explode('?', $url))[0];
@@ -83,7 +83,6 @@ class Route
         if ($offset === []) {
             if ($targetUrl === $url) {// 传统 url
                 self::make($action);
-                exit(0);
             } else {
                 return;
             }

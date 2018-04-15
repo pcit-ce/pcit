@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Profile;
 
 use KhsCI\Service\OAuth\GitHub;
+use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class GitHubController
 {
     public function __invoke(...$arg): void
     {
-        echo $arg[0];
-
+        $uid = Session::get('github.uid');
+        $username = Session::get('github.username');
+        $arg[0] === $username && $username = $arg[0];
+        $pic = Session::get('github.pic');
         $accessToken = Session::get('github.access_token');
 
         $array = [];
@@ -39,6 +42,12 @@ class GitHubController
             }
         }
 
-        var_dump($array);
+        Response::json([
+            'code' => 0,
+            'uid' => $uid,
+            'username' => $arg[0],
+            'pic' => $pic,
+            'repos' => $array,
+        ]);
     }
 }

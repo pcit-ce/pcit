@@ -12,11 +12,11 @@ interface OAuth
 
     public function getLoginUrl(?string $state);
 
-    public function getAccessToken(string $code, ?string $state);
+    public function getAccessToken(string $code, ?string $state, bool $raw = false);
 
     public static function getUserInfo(string $accessToken, bool $raw = false);
 
     public static function getProjects(string $accessToken, int $page = 1, bool $raw = false);
 
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw);
+    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false);
 }

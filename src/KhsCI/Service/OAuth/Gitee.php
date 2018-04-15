@@ -8,16 +8,60 @@ use Curl\Curl;
 
 class Gitee implements OAuth
 {
+    const URL = 'https://gitee.com/oauth/authorize?';
+
+    const POST_URL = 'https://gitee.com/oauth/token?';
+
+    public $clientId;
+
+    public $clientSecret;
+
+    public $callbackUrl;
+
+    public $curl;
+
+
     public function __construct($config, Curl $curl)
     {
+        $this->curl = $curl;
+
+        $this->clientId = $config['client_id'];
+        $this->clientSecret = $config['client_secret'];
+        $this->callbackUrl = $config['callback_url'];
     }
 
-    public function getLoginUrl(?string $state): void
+    public function getLoginUrl(?string $state)
     {
+        $url = self::URL.http_build_query([
+                'client_id' => $this->clientId,
+                'redirect_uri' => $this->callbackUrl,
+                'response_type' => 'code'
+            ]);
+
+        return $url;
     }
 
-    public function getAccessToken(string $code, ?string $state): void
+    public function getAccessToken(string $code, ?string $state, bool $raw = false)
     {
+        $url = self::POST_URL.http_build_query([
+                'code' => $code,
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'redirect_uri' => $this->callbackUrl,
+                'grant_type' => 'authorization_code',
+            ]);
+
+        $json = $this->curl->post($url);
+
+        // {"access_token":"52b","token_type":"bearer","expires_in":86400,"refresh_token":"c31e9","scope":"user_info projects pull_requests issues notes keys hook groups gists","created_at":1523757514}
+
+        if (true === $raw) {
+            return $json;
+        }
+
+        $accessToken = json_decode($json)->access_token;
+
+        return $accessToken;
     }
 
     public static function getUserInfo(string $accessToken, bool $raw = false): void
@@ -28,7 +72,7 @@ class Gitee implements OAuth
     {
     }
 
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw): void
+    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false): void
     {
     }
 }
