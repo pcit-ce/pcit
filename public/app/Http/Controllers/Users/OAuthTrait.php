@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\controllers\Users;
 
 use Error;
@@ -12,7 +14,9 @@ trait OAuthTrait
     /**
      * @param string      $type
      * @param null|string $state
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function getAccessTokenCommon(string $type, ?string $state)
@@ -30,14 +34,14 @@ trait OAuthTrait
             $method = 'OAuth'.ucfirst($type);
 
             $access_token = Session::get($type.'.access_token')
-                ?? $this->ci->$method->getAccessToken((string)$code, $state)
+                ?? $this->ci->$method->getAccessToken((string) $code, $state)
                 ?? false;
 
             $typeLower = strtolower($type);
 
             false !== $access_token && Session::put($typeLower.'.access_token', $access_token);
 
-            $userInfoArray = $obj::getUserInfo((string)$access_token);
+            $userInfoArray = $obj::getUserInfo((string) $access_token);
         } catch (Error $e) {
             return $e->getMessage();
         }

@@ -20,7 +20,6 @@ class Gitee implements OAuth
 
     public $curl;
 
-
     public function __construct($config, Curl $curl)
     {
         $this->curl = $curl;
@@ -35,7 +34,7 @@ class Gitee implements OAuth
         $url = self::URL.http_build_query([
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->callbackUrl,
-                'response_type' => 'code'
+                'response_type' => 'code',
             ]);
 
         return $url;

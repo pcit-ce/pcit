@@ -88,9 +88,7 @@ try {
         'message' => $e->getMessage() ?? 500,
         'api_url' => getenv('CI_HOST').'/api',
     ]);
-
 } finally {
-
     // 路由控制器填写错误
 
     Response::json([

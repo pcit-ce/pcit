@@ -6,8 +6,7 @@ namespace App\Http\Controllers\Profile;
 
 class GiteeController
 {
-    public function __invoke()
+    public function __invoke(): void
     {
-
     }
 }

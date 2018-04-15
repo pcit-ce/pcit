@@ -21,7 +21,7 @@ class OAuthGitHubController
         $this->ci = new KhsCI();
     }
 
-    public function getLoginUrl()
+    public function getLoginUrl(): void
     {
         $state = session_create_id();
 

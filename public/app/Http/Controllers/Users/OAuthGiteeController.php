@@ -8,7 +8,6 @@ use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Response;
 
-
 class OAuthGiteeController
 {
     use OAuthTrait;
@@ -20,7 +19,7 @@ class OAuthGiteeController
         $this->ci = new KhsCI();
     }
 
-    public function getLoginUrl()
+    public function getLoginUrl(): void
     {
         $url = $this->ci->OAuthGitee->getLoginUrl(null);
 
@@ -30,7 +29,7 @@ class OAuthGiteeController
     /**
      * @throws Exception
      */
-    public function getAccessToken()
+    public function getAccessToken(): void
     {
         $this->getAccessTokenCommon('gitee', null);
     }
