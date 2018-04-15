@@ -12,20 +12,24 @@ use KhsCI\Support\Session;
 
 class OAuthGitHubController
 {
-    private $khsci;
+    private $ci;
+
+    use OAuthTrait;
 
     public function __construct()
     {
-        $this->khsci = new KhsCI();
+        $this->ci = new KhsCI();
     }
 
-    public function getLoginUrl(): void
+    public function getLoginUrl()
     {
         $state = session_create_id();
 
         Session::put('github.state', $state);
 
-        $this->khsci->OAuthGitHub->getLoginUrl($state);
+        $url = $this->ci->OAuthGitHub->getLoginUrl($state);
+
+        Response::redirect($url);
     }
 
     /**
@@ -33,32 +37,8 @@ class OAuthGitHubController
      */
     public function getAccessToken(): void
     {
-        $code = $_GET['code'] ?? false;
-        $getState = $_GET['state'] ?? 404;
+        $state = Session::get('github.state');
 
-        $state = Session::get('github.state') ?? false;
-
-        if ($state !== $getState or false === $code) {
-            throw new Exception('state not same or code not found');
-            return;
-        }
-
-        $accessToken = Session::get('github.access_token')
-            ?? $this->khsci->OAuthGitHub->getAccessToken((string) $code, (string) $state)
-            ?? false;
-
-        false !== $accessToken && Session::put('github.access_token', $accessToken);
-
-        $userInfoArray = GitHub::getUserInfo((string) $accessToken);
-
-        $uid = $userInfoArray['uid'];
-        $name = $userInfoArray['name'];
-        $pic = $userInfoArray['pic'];
-
-        Session::put('github.uid', $uid);
-        Session::put('github.name', $name);
-        Session::put('github.pic', $pic);
-
-        Response::redirect(getenv('CI_HOST').'/profile/github/'.$name);
+        $this->getAccessTokenCommon('gitHub', $state);
     }
 }

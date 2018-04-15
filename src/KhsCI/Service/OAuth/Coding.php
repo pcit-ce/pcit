@@ -6,7 +6,6 @@ namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
-use KhsCI\Support\Response;
 
 class Coding implements OAuth
 {
@@ -20,7 +19,7 @@ class Coding implements OAuth
 
     private $clientSecret;
 
-    private $uri;
+    private $callbackUrl;
 
     private $scope;
 
@@ -28,7 +27,7 @@ class Coding implements OAuth
     {
         $this->clientId = $config['client_id'];
         $this->clientSecret = $config['client_secret'];
-        $this->uri = $config['callback_url'];
+        $this->callbackUrl = $config['callback_url'];
         $all_scope = [
             'user',
             'user:email',
@@ -47,19 +46,19 @@ class Coding implements OAuth
         $this->curl = $curl;
     }
 
-    public function getLoginUrl(?string $state): void
+    public function getLoginUrl(?string $state)
     {
         $url = $this::URL.http_build_query([
                 'client_id' => $this->clientId,
-                'redirect_uri' => $this->uri,
+                'redirect_uri' => $this->callbackUrl,
                 'response_type' => 'code',
                 'scope' => $this->scope,
             ]);
 
-        Response::redirect($url);
+        return $url;
     }
 
-    public function getAccessToken(string $code, ?string $state)
+    public function getAccessToken(string $code, ?string $state, bool $raw = false)
     {
         $json = $this->curl->post($this::POST_URL.http_build_query([
                     'client_id' => $this->clientId,
@@ -70,7 +69,15 @@ class Coding implements OAuth
             )
         );
 
-        return $json;
+        if (true === $raw) {
+            return $json;
+        }
+
+        // {"access_token":"f2d0","refresh_token":"45924","expires_in":"692804"}
+
+        $accessToken = json_decode($json)->access_token;
+
+        return $accessToken;
     }
 
     private static function http($method, $url, $data = [])
@@ -119,7 +126,7 @@ class Coding implements OAuth
         return $json = self::http('get', $url);
     }
 
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw)
+    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false)
     {
         $url = '/api/user/'.$username.'/project/'.$project.'/git/hooks?access_token='.$accessToken;
 

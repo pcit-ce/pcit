@@ -41,5 +41,3 @@ spl_autoload_register(function ($class): void {
  *  Route.
  */
 require_once __DIR__.'/../route/web.php';
-
-//\KhsCI\Support\Response::redirect(getenv('CI_HOST').'/index.html');
