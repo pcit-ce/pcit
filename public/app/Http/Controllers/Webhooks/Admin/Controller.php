@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks\Admin;
 
 use Exception;
+use KhsCI\Support\Request;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
@@ -19,7 +20,9 @@ class Controller
      */
     private static function checkAccessToken()
     {
-        $access_token = Session::get(self::$gitType.'.access_token') ?? false;
+        $access_token = (explode(' ', Request::header('Authorization')))[1]
+            ?? Session::get(self::$gitType.'.access_token')
+            ?? false;
 
         if (false === $access_token) {
             throw new Exception('access_token not found || Requires authentication || 401 Unauthorized', 401);

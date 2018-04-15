@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Test;
 
+use KhsCI\Support\Request;
 use KhsCI\Support\Session;
 
 class TestController
@@ -20,6 +21,7 @@ class TestController
 
     public function test(): void
     {
-        var_dump($_SERVER);
+        var_dump(Request::header());
+        var_dump(Request::header());
     }
 }
