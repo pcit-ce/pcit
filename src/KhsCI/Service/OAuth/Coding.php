@@ -72,9 +72,9 @@ class Coding implements OAuth
     }
 
     /**
-     * @param string $code
+     * @param string      $code
      * @param null|string $state
-     * @param bool $raw
+     * @param bool        $raw
      *
      * @return mixed
      */
@@ -118,7 +118,7 @@ class Coding implements OAuth
 
     /**
      * @param string $accessToken
-     * @param bool $raw
+     * @param bool   $raw
      *
      * @throws Exception
      *
@@ -149,8 +149,8 @@ class Coding implements OAuth
 
     /**
      * @param string $accessToken
-     * @param int $page
-     * @param bool $raw
+     * @param int    $page
+     * @param bool   $raw
      *
      * @return mixed
      */
@@ -163,11 +163,12 @@ class Coding implements OAuth
 
     /**
      * @param string $accessToken
-     * @param bool $raw
-     *
+     * @param bool   $raw
      * @param string $username
      * @param string $project
+     *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function getWebhooks(string $accessToken, bool $raw = false, string $username, string $project)
@@ -189,7 +190,6 @@ class Coding implements OAuth
         }
 
         throw new Exception('Project Not Found', 404);
-
     }
 
     /**

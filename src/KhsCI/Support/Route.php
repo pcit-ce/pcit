@@ -21,9 +21,8 @@ class Route
 
     public static $method = [];
 
-    private static function return($response)
+    private static function return($response): void
     {
-
         if (is_array($response)) {
             header('content-type: application/json');
             echo json_encode($response);
@@ -35,6 +34,7 @@ class Route
     /**
      * @param $action
      * @param mixed ...$arg
+     *
      * @throws Exception
      */
     private static function make($action, ...$arg): void
@@ -82,6 +82,7 @@ class Route
     /**
      * @param $targetUrl
      * @param $action
+     *
      * @throws Exception
      */
     private static function exec($targetUrl, $action): void
@@ -89,7 +90,7 @@ class Route
         // ?a=1&b=2
         $queryString = $_SERVER['QUERY_STRING'];
 
-        if ((bool)$queryString) {
+        if ((bool) $queryString) {
             $url = $_SERVER['REQUEST_URI'];
             // 使用 ? 分隔 url
             $url = (explode('?', $url))[0];
@@ -141,6 +142,7 @@ class Route
     /**
      * @param $name
      * @param $arg
+     *
      * @throws Exception
      */
     public static function __callStatic($name, $arg): void

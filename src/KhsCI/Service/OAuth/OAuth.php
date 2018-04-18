@@ -73,12 +73,13 @@ interface OAuth
     public static function setWebhooks(string $accessToken, $data, string $username, string $repo, string $id);
 
     /**
-     * 删除 webhooks
+     * 删除 webhooks.
      *
      * @param string $accessToken
      * @param string $username
      * @param string $repo
      * @param string $id
+     *
      * @return mixed
      */
     public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id);

@@ -22,5 +22,4 @@ class Request
 
         return $headers;
     }
-
 }

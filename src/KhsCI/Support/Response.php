@@ -42,10 +42,10 @@ class Response
     /**
      * @param $data
      */
-    public static function return200(array $data)
+    public static function return200(array $data): void
     {
         $code = [
-            'code' => 200
+            'code' => 200,
         ];
 
         self::json(array_merge($code, $data));

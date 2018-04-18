@@ -73,12 +73,20 @@ class Controller
 
     /**
      * @param mixed ...$arg
+     *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function add(...$arg)
     {
         $data = file_get_contents('php://input');
+
+        $obj = json_decode($data);
+
+        if ((!$data) or (!is_object($obj)) or 0 !== json_last_error()) {
+            throw new Exception('Invalid request, must include JSON', 422);
+        }
 
         $gitType = $arg[0];
 
@@ -95,7 +103,9 @@ class Controller
 
     /**
      * @param mixed ...$arg
+     *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function delete(...$arg)

@@ -35,7 +35,7 @@ class GitHubController
 
         for ($page = 1; $page <= 3; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (ErrorException $e) {
                 throw new ErrorException($e->getMessage(), $e->getCode());
             }

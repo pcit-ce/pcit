@@ -77,9 +77,9 @@ class GitHub implements OAuth
     }
 
     /**
-     * @param string $code
+     * @param string      $code
      * @param null|string $state
-     * @param bool $json
+     * @param bool        $json
      *
      * @throws Exception
      *
@@ -118,7 +118,8 @@ class GitHub implements OAuth
      * @param string $url
      * @param string $accessToken
      * @param        $data
-     * @param array $header
+     * @param array  $header
+     *
      * @return mixed
      */
     protected static function http(string $method, string $url, string $accessToken, $data = null, array $header = [])
@@ -166,10 +167,12 @@ class GitHub implements OAuth
 
     /**
      * @param string $accessToken
-     * @param bool $raw
+     * @param bool   $raw
      * @param string $username
      * @param string $repo
+     *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function getWebhooks(string $accessToken, bool $raw = false, string $username, string $repo)
@@ -184,18 +187,37 @@ class GitHub implements OAuth
 
         $obj = json_decode($json);
 
-        if ($obj->message ?? false) {
+        if (null === $obj or $obj->message ?? false) {
             throw new Exception('Project Not Found', 404);
         }
 
         return $json;
     }
 
+    /**
+     * @param string $accessToken
+     * @param $data
+     * @param string      $username
+     * @param string      $repo
+     * @param null|string $id
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
     public static function setWebhooks(string $accessToken, $data, string $username, string $repo, ?string $id)
     {
         $url = '/repos/'.$username.'/'.$repo.'/hooks';
 
-        return self::http('post', $url, $accessToken, $data, ['content-type' => 'application/json']);
+        $json = self::http('post', $url, $accessToken, $data, ['content-type' => 'application/json']);
+
+        json_decode($json);
+
+        if (0 !== json_last_error()) {
+            throw new Exception('Project Not Found', 404);
+        }
+
+        return $json;
     }
 
     public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id)

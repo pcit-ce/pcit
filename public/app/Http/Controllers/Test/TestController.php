@@ -20,7 +20,6 @@ class TestController
 
     public function test(): void
     {
-
     }
 
     public function test5()

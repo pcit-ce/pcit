@@ -12,7 +12,7 @@ try {
 
     Route::get('test2', 'Test\TestController@test');
 
-    Route::get('test3', 'Test\TestController2');
+    Route::get('test3', 'Test\TestController');
 
     Route::get('test4', 'Test\TestController@notExistsMethod');
 
@@ -83,9 +83,7 @@ try {
     Route::post('sync/coding', 'Sync\CodingController');
     Route::post('sync/gitee', 'Sync\GiteeController');
     Route::post('sync/github', 'Sync\GithubController');
-
 } catch (Exception | Error  $e) {
-
     Response::json([
         'code' => $e->getCode(),
         'message' => $e->getMessage() ?? 500,
@@ -97,7 +95,7 @@ try {
 
 // 路由控制器填写错误
 
-if (true === $debug) {
+if ('true' === $debug) {
     Response::json([
         'code' => 404,
         'obj' => Route::$obj ?? null,
@@ -112,6 +110,3 @@ if (true === $debug) {
         'api_url' => getenv('CI_HOST').'/api',
     ]);
 }
-
-
-
