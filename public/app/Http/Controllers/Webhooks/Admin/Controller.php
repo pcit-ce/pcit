@@ -20,7 +20,9 @@ class Controller
      */
     private static function checkAccessToken()
     {
-        $access_token = (explode(' ', Request::header('Authorization')))[1]
+        $header = Request::header('Authorization') ?? '';
+
+        $access_token = (explode(' ', $header))[1]
             ?? Session::get(self::$gitType.'.access_token')
             ?? false;
 
@@ -52,6 +54,8 @@ class Controller
      */
     public static function list(...$arg): void
     {
+        $raw = false;
+
         $gitType = $arg[0];
 
         unset($arg[0]);
@@ -62,13 +66,17 @@ class Controller
 
         $obj = self::getObj();
 
-        $json = $obj::getWebhooks($access_token, true, ...$arg);
+        $json = $obj::getWebhooks($access_token, $raw, ...$arg);
 
         Response::json(json_decode($json, true));
-
     }
 
-    public static function add(...$arg): void
+    /**
+     * @param mixed ...$arg
+     * @return mixed
+     * @throws Exception
+     */
+    public static function add(...$arg)
     {
         $data = file_get_contents('php://input');
 
@@ -82,15 +90,15 @@ class Controller
 
         $obj = self::getObj();
 
-        echo $obj::setWebhooks($access_token, $data, ...$arg);
+        return $obj::setWebhooks($access_token, $data, ...$arg);
     }
 
     /**
      * @param mixed ...$arg
-     *
+     * @return mixed
      * @throws Exception
      */
-    public static function delete(...$arg): void
+    public static function delete(...$arg)
     {
         $gitType = $arg[0];
 
@@ -102,6 +110,6 @@ class Controller
 
         $obj = self::getObj();
 
-        echo $obj::unsetWebhooks($access_token, ...$arg);
+        return $obj::unsetWebhooks($access_token, ...$arg);
     }
 }

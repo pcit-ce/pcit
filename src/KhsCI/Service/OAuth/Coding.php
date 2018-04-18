@@ -72,9 +72,9 @@ class Coding implements OAuth
     }
 
     /**
-     * @param string      $code
+     * @param string $code
      * @param null|string $state
-     * @param bool        $raw
+     * @param bool $raw
      *
      * @return mixed
      */
@@ -118,7 +118,7 @@ class Coding implements OAuth
 
     /**
      * @param string $accessToken
-     * @param bool   $raw
+     * @param bool $raw
      *
      * @throws Exception
      *
@@ -149,8 +149,8 @@ class Coding implements OAuth
 
     /**
      * @param string $accessToken
-     * @param int    $page
-     * @param bool   $raw
+     * @param int $page
+     * @param bool $raw
      *
      * @return mixed
      */
@@ -163,17 +163,33 @@ class Coding implements OAuth
 
     /**
      * @param string $accessToken
+     * @param bool $raw
+     *
      * @param string $username
      * @param string $project
-     * @param bool   $raw
-     *
      * @return mixed
+     * @throws Exception
      */
     public static function getWebhooks(string $accessToken, bool $raw = false, string $username, string $project)
     {
         $url = '/user/'.$username.'/project/'.$project.'/git/hooks?access_token='.$accessToken;
 
-        return $json = self::http('get', $url);
+        $json = self::http('get', $url);
+
+        if (true === $raw) {
+            return $json;
+        }
+
+        $obj = json_decode($json);
+
+        $code = $obj->code;
+
+        if (0 === $code) {
+            return json_encode($obj->data);
+        }
+
+        throw new Exception('Project Not Found', 404);
+
     }
 
     /**

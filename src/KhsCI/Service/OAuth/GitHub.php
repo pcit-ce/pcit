@@ -77,9 +77,9 @@ class GitHub implements OAuth
     }
 
     /**
-     * @param string      $code
+     * @param string $code
      * @param null|string $state
-     * @param bool        $json
+     * @param bool $json
      *
      * @throws Exception
      *
@@ -118,7 +118,7 @@ class GitHub implements OAuth
      * @param string $url
      * @param string $accessToken
      * @param        $data
-     * @param array  $header
+     * @param array $header
      * @return mixed
      */
     protected static function http(string $method, string $url, string $accessToken, $data = null, array $header = [])
@@ -164,11 +164,31 @@ class GitHub implements OAuth
         return static::http('get', $url, $accessToken);
     }
 
+    /**
+     * @param string $accessToken
+     * @param bool $raw
+     * @param string $username
+     * @param string $repo
+     * @return mixed
+     * @throws Exception
+     */
     public static function getWebhooks(string $accessToken, bool $raw = false, string $username, string $repo)
     {
         $url = '/repos/'.$username.'/'.$repo.'/hooks';
 
-        return self::http('get', $url, $accessToken);
+        $json = self::http('get', $url, $accessToken);
+
+        if (true === $raw) {
+            return $json;
+        }
+
+        $obj = json_decode($json);
+
+        if ($obj->message ?? false) {
+            throw new Exception('Project Not Found', 404);
+        }
+
+        return $json;
     }
 
     public static function setWebhooks(string $accessToken, $data, string $username, string $repo, ?string $id)

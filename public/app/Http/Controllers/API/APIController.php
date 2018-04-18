@@ -12,6 +12,9 @@ class APIController
     {
         $host = getenv('CI_HOST');
         Response::json([
+            'tests' => [
+                'route not found' => $host.'/not_exists_url',
+            ],
             'oauth' => [
                 'coding' => $host.'/oauth/coding/login',
                 'gitee' => $host.'/oauth/gitee/login',

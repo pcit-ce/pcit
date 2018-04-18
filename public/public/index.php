@@ -34,10 +34,15 @@ $debug = getenv('CI_DEBUG') ?? false;
 spl_autoload_register(function ($class): void {
     $class = str_replace('App\\Http', 'app\\Http', $class);
     $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
-    require_once $file.'.php';
+    $file = $file.'.php';
+
+    if (file_exists($file)) {
+        require_once $file;
+    }
 });
 
 /**
  *  Route.
  */
 require_once __DIR__.'/../route/web.php';
+
