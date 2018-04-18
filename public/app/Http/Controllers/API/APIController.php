@@ -12,15 +12,30 @@ class APIController
     {
         $host = getenv('CI_HOST');
         Response::json([
+            'tests' => [
+                'route not found' => $host.'/not_exists_url',
+            ],
             'oauth' => [
                 'coding' => $host.'/oauth/coding/login',
                 'gitee' => $host.'/oauth/gitee/login',
                 'github' => $host.'/oauth/github/login',
             ],
             'webhoks@admin' => [
-                'add@post' => $host.'/webhooks/add/{git_type}/{user}/{repo}',
-                'list@get' => $host.'/webhooks/list/{git_type}/{user}/{repo}',
-                'delete@delete' => $host.'/webhooks/delete/{git_type}/{user}/{repo}',
+                'list@get' => [
+                    'coding' => $host.'/webhooks/list/coding/{user}/{repo}',
+                    'gitee' => $host.'/webhooks/list/gitee/{user}/{repo}',
+                    'github' => $host.'/webhooks/list/github/{user}/{repo}',
+                ],
+                'cteate@post' => [
+                    'coding' => $host.'/webhooks/create/coding/{user}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/create/gitee/{user}/{repo}/{id}',
+                    'github' => $host.'/webhooks/create/github/{user}/{repo}/{id}',
+                ],
+                'delete@delete' => [
+                    'coding' => $host.'/webhooks/delete/coding/{user}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/delete/gitee/{user}/{repo}/{id}',
+                    'github' => $host.'/webhooks/delete/github/{user}/{repo}/{id}',
+                ],
             ],
             'webhooks@receive' => [
                 'coding' => $host.'/webhooks/coding',

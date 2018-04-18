@@ -16,6 +16,8 @@ try {
 
     Route::get('test4', 'Test\TestController@notExistsMethod');
 
+    Route::get('test5', 'Test\TestController@test5');
+
     /*Test end*/
 
     Route::get('api', 'API\APIController');
@@ -44,7 +46,7 @@ try {
 
     /*Admin webhooks: list create delete*/
 
-    Route::post('webhooks/create/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@add');
+    Route::post('webhooks/create/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@add');
 
     Route::get('webhooks/list/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@list');
 
@@ -81,27 +83,30 @@ try {
     Route::post('sync/coding', 'Sync\CodingController');
     Route::post('sync/gitee', 'Sync\GiteeController');
     Route::post('sync/github', 'Sync\GithubController');
-} catch (Exception | Error $e) {
-    $code = $e->getCode();
-
-    if (0 === $code) {
-        $code = 500;
-    }
-
+} catch (Exception | Error  $e) {
     Response::json([
-        'code' => $code,
+        'code' => $e->getCode(),
         'message' => $e->getMessage() ?? 500,
         'api_url' => getenv('CI_HOST').'/api',
     ]);
 
-    exit(1);
-} finally {
-    // 路由控制器填写错误
+    exit;
+}
 
+// 路由控制器填写错误
+
+if ('true' === $debug) {
     Response::json([
         'code' => 404,
         'obj' => Route::$obj ?? null,
         'method' => Route::$method ?? null,
-        'message' => 'not found route',
+        'message' => 'Route Not Found',
+        'api_url' => getenv('CI_HOST').'/api',
+    ]);
+} else {
+    Response::json([
+        'code' => 404,
+        'message' => 'Not Found',
+        'api_url' => getenv('CI_HOST').'/api',
     ]);
 }

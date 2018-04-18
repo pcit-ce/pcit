@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks\Admin;
 
 use Exception;
+use KhsCI\Support\Request;
+use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class Controller
@@ -18,7 +20,11 @@ class Controller
      */
     private static function checkAccessToken()
     {
-        $access_token = Session::get(self::$gitType.'.access_token') ?? false;
+        $header = Request::header('Authorization') ?? '';
+
+        $access_token = (explode(' ', $header))[1]
+            ?? Session::get(self::$gitType.'.access_token')
+            ?? false;
 
         if (false === $access_token) {
             throw new Exception('access_token not found || Requires authentication || 401 Unauthorized', 401);
@@ -48,6 +54,8 @@ class Controller
      */
     public static function list(...$arg): void
     {
+        $raw = false;
+
         $gitType = $arg[0];
 
         unset($arg[0]);
@@ -58,19 +66,49 @@ class Controller
 
         $obj = self::getObj();
 
-        echo $obj::getWebhooks($access_token, ...$arg);
-    }
+        $json = $obj::getWebhooks($access_token, $raw, ...$arg);
 
-    public static function add(...$arg): void
-    {
+        Response::json(json_decode($json, true));
     }
 
     /**
      * @param mixed ...$arg
      *
+     * @return mixed
+     *
      * @throws Exception
      */
-    public static function delete(...$arg): void
+    public static function add(...$arg)
+    {
+        $data = file_get_contents('php://input');
+
+        $obj = json_decode($data);
+
+        if ((!$data) or (!is_object($obj)) or 0 !== json_last_error()) {
+            throw new Exception('Invalid request, must include JSON', 422);
+        }
+
+        $gitType = $arg[0];
+
+        unset($arg[0]);
+
+        self::$gitType = $gitType;
+
+        $access_token = self::checkAccessToken();
+
+        $obj = self::getObj();
+
+        return $obj::setWebhooks($access_token, $data, ...$arg);
+    }
+
+    /**
+     * @param mixed ...$arg
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function delete(...$arg)
     {
         $gitType = $arg[0];
 
@@ -81,7 +119,7 @@ class Controller
         $access_token = self::checkAccessToken();
 
         $obj = self::getObj();
-        var_dump(...$arg);
-        echo $obj::unsetWebhooks($access_token, ...$arg);
+
+        return $obj::unsetWebhooks($access_token, ...$arg);
     }
 }

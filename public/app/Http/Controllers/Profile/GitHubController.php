@@ -59,8 +59,7 @@ class GitHubController
             }
         }
 
-        Response::json([
-            'code' => 0,
+        Response::return200([
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,

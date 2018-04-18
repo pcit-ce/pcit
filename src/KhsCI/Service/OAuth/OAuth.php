@@ -57,19 +57,30 @@ interface OAuth
      *
      * @return mixed
      */
-    public static function getWebhooks(string $accessToken, string $username, string $repo, bool $raw = false);
+    public static function getWebhooks(string $accessToken, bool $raw = false, string $username, string $repo);
 
     /**
      * 配置 Webhooks.
      *
      * @param string $accessToken
+     * @param        $data
      * @param string $username
      * @param string $repo
-     * @param array  $data
+     * @param string $id
      *
      * @return mixed
      */
-    public static function setWebhooks(string $accessToken, string $username, string $repo, array $data);
+    public static function setWebhooks(string $accessToken, $data, string $username, string $repo, string $id);
 
+    /**
+     * 删除 webhooks.
+     *
+     * @param string $accessToken
+     * @param string $username
+     * @param string $repo
+     * @param string $id
+     *
+     * @return mixed
+     */
     public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id);
 }

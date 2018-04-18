@@ -21,6 +21,22 @@ class Route
 
     public static $method = [];
 
+    private static function return($response): void
+    {
+        if (is_array($response)) {
+            header('content-type: application/json');
+            echo json_encode($response);
+        } elseif (is_string($response) or is_int($response)) {
+            echo $response;
+        }
+    }
+
+    /**
+     * @param $action
+     * @param mixed ...$arg
+     *
+     * @throws Exception
+     */
     private static function make($action, ...$arg): void
     {
         if ($action instanceof Closure) {
@@ -39,14 +55,22 @@ class Route
 
             try {
                 if ('__invoke' === $method) {
-                    $obj(...$arg);
-                } elseif ($method) {
-                    $obj->$method(...$arg);
+                    $response = $obj(...$arg);
+                } else {
+                    $response = $obj->$method(...$arg);
                 }
-            } catch (Error $e) {
+                self::return($response);
+            } catch (Error | Exception $e) {
                 // 捕获类方法不存在错误
-                throw new Error($e->getMessage(), $e->getCode());
+                $code = $e->getCode();
+
+                if (0 === $code) {
+                    $code = 404;
+                }
+
+                throw new Error($e->getMessage(), $code);
             }
+
             // 处理完毕，退出
             exit(0);
         } else {
@@ -58,6 +82,8 @@ class Route
     /**
      * @param $targetUrl
      * @param $action
+     *
+     * @throws Exception
      */
     private static function exec($targetUrl, $action): void
     {

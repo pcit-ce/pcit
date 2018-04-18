@@ -163,35 +163,57 @@ class Coding implements OAuth
 
     /**
      * @param string $accessToken
+     * @param bool   $raw
      * @param string $username
      * @param string $project
-     * @param bool   $raw
      *
      * @return mixed
+     *
+     * @throws Exception
      */
-    public static function getWebhooks(string $accessToken, string $username, string $project, bool $raw = false)
+    public static function getWebhooks(string $accessToken, bool $raw = false, string $username, string $project)
     {
         $url = '/user/'.$username.'/project/'.$project.'/git/hooks?access_token='.$accessToken;
 
-        return $json = self::http('get', $url);
+        $json = self::http('get', $url);
+
+        if (true === $raw) {
+            return $json;
+        }
+
+        $obj = json_decode($json);
+
+        $code = $obj->code;
+
+        if (0 === $code) {
+            return json_encode($obj->data);
+        }
+
+        throw new Exception('Project Not Found', 404);
     }
 
     /**
      * @param string $accessToken
+     * @param        $data
      * @param string $username
      * @param string $repo
-     * @param array  $data
+     * @param string $id
      *
      * @return mixed
      */
-    public static function setWebhooks(string $accessToken, string $username, string $repo, array $data)
+    public static function setWebhooks(string $accessToken, $data, string $username, string $repo, string $id)
     {
-        $url = '/user/'.$username.'/project/'.$repo.'/git/hook/{hook_id}?access_token='.$accessToken;
+        $url = '/user/'.$username.'/project/'.$repo.'/git/hook/'.$id.'?access_token='.$accessToken;
+
+        var_dump($url);
 
         return $json = self::http('post', $url);
     }
 
-    public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id): void
+    public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id)
     {
+        $url = sprintf('/user/%s/project/%s/git/hook/%s', $username, $repo, $id);
+
+        return self::http('delete', $url);
     }
 }

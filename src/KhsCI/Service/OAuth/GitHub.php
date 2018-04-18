@@ -113,7 +113,16 @@ class GitHub implements OAuth
         throw new Exception('access_token not fount');
     }
 
-    protected static function http(string $method, string $url, string $accessToken, ...$data)
+    /**
+     * @param string $method
+     * @param string $url
+     * @param string $accessToken
+     * @param        $data
+     * @param array  $header
+     *
+     * @return mixed
+     */
+    protected static function http(string $method, string $url, string $accessToken, $data = null, array $header = [])
     {
         $url = static::API_URL.$url;
 
@@ -121,7 +130,13 @@ class GitHub implements OAuth
 
         $curl->setHeader('Authorization', 'token '.$accessToken);
 
-        return $curl->$method($url);
+        if ($header) {
+            foreach ($header as $k => $v) {
+                $curl->setHeader($k, $v);
+            }
+        }
+
+        return $curl->$method($url, $data);
     }
 
     public static function getUserInfo(string $accessToken, bool $raw = false)
@@ -150,16 +165,59 @@ class GitHub implements OAuth
         return static::http('get', $url, $accessToken);
     }
 
-    public static function getWebhooks(string $accessToken, string $username, string $repo, bool $raw = false)
+    /**
+     * @param string $accessToken
+     * @param bool   $raw
+     * @param string $username
+     * @param string $repo
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function getWebhooks(string $accessToken, bool $raw = false, string $username, string $repo)
     {
         $url = '/repos/'.$username.'/'.$repo.'/hooks';
 
-        return self::http('get', $url, $accessToken);
+        $json = self::http('get', $url, $accessToken);
+
+        if (true === $raw) {
+            return $json;
+        }
+
+        $obj = json_decode($json);
+
+        if (null === $obj or $obj->message ?? false) {
+            throw new Exception('Project Not Found', 404);
+        }
+
+        return $json;
     }
 
-    public static function setWebhooks(string $accessToken, string $username, string $repo, array $data): void
+    /**
+     * @param string $accessToken
+     * @param $data
+     * @param string      $username
+     * @param string      $repo
+     * @param null|string $id
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function setWebhooks(string $accessToken, $data, string $username, string $repo, ?string $id)
     {
         $url = '/repos/'.$username.'/'.$repo.'/hooks';
+
+        $json = self::http('post', $url, $accessToken, $data, ['content-type' => 'application/json']);
+
+        json_decode($json);
+
+        if (0 !== json_last_error()) {
+            throw new Exception('Project Not Found', 404);
+        }
+
+        return $json;
     }
 
     public static function unsetWebhooks(string $accessToken, string $username, string $repo, string $id)

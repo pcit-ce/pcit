@@ -20,6 +20,10 @@ class TestController
 
     public function test(): void
     {
-        echo 1;
+    }
+
+    public function test5()
+    {
+        return 100;
     }
 }
