@@ -9,6 +9,7 @@ class APIController
     public function __invoke()
     {
         $host = getenv('CI_HOST');
+
         return [
             'tests' => [
                 'route not found' => $host.'/not_exists_url',

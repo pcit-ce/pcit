@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Webhooks\Admin;
 
 use Exception;
 use KhsCI\Support\Request;
-use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class Controller

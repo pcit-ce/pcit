@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+ob_start();
+
 $start_time = microtime(true);
 
 use KhsCI\Support\Response;
@@ -57,19 +59,18 @@ spl_autoload_register(function ($class): void {
     }
 });
 
-/**
+/*
  *  Route.
  */
 try {
     require_once __DIR__.'/../route/web.php';
 } catch (Exception | Error $e) {
     if ('Finish' === $e->getMessage()) {
-
         $output = Route::$output;
 
         switch (gettype($output)) {
             case 'array':
-                Response::json($output,$start_time);
+                Response::json($output, $start_time);
                 break;
             case 'integer':
                 echo $output;
