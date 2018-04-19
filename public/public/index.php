@@ -71,12 +71,15 @@ try {
         switch (gettype($output)) {
             case 'array':
                 Response::json($output, $start_time);
+
                 break;
             case 'integer':
                 echo $output;
+
                 break;
             case 'string':
                 echo $output;
+
                 break;
         }
         exit;

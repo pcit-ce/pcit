@@ -33,6 +33,7 @@ class Route
     {
         if ($action instanceof Closure) {
             self::$output = $action();
+
             throw new Exception('Finish', 200);
         }
 
