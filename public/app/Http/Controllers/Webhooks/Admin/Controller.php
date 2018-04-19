@@ -52,7 +52,7 @@ class Controller
      *
      * @throws Exception
      */
-    public static function list(...$arg): void
+    public static function list(...$arg)
     {
         $raw = false;
 
@@ -68,7 +68,7 @@ class Controller
 
         $json = $obj::getWebhooks($access_token, $raw, ...$arg);
 
-        Response::json(json_decode($json, true));
+        return json_decode($json, true);
     }
 
     /**

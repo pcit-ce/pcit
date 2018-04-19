@@ -15,9 +15,10 @@ class GitHubController
     /**
      * @param mixed ...$arg
      *
+     * @return array
      * @throws ErrorException
      */
-    public function __invoke(...$arg): void
+    public function __invoke(...$arg)
     {
         $type = static::TYPE;
 
@@ -35,7 +36,7 @@ class GitHubController
 
         for ($page = 1; $page <= 3; ++$page) {
             try {
-                $json = $objClass::getProjects((string) $accessToken, $page);
+                $json = $objClass::getProjects((string)$accessToken, $page);
             } catch (ErrorException $e) {
                 throw new ErrorException($e->getMessage(), $e->getCode());
             }
@@ -59,11 +60,12 @@ class GitHubController
             }
         }
 
-        Response::return200([
+        return [
+            'code' => 200,
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,
             'repos' => $array,
-        ]);
+        ];
     }
 }

@@ -15,14 +15,16 @@ class Response
 
     /**
      * @param array $array
+     * @param float $time
      */
-    public static function json(array $array): void
+    public static function json(array $array, float $time): void
     {
         header('content-type: application/json;charset=utf-8');
-
+        $time = microtime(true) - $time;
+        header("X-Runtime-rack: $time");
         $code = $array['code'] ?? 200;
 
-        if (in_array($code, self::HTTP_CODE)) {
+        if (in_array($code, self::HTTP_CODE, true)) {
             http_response_code($code);
         }
 
@@ -37,17 +39,5 @@ class Response
         header('Location:'.$url);
         http_response_code(301);
         exit;
-    }
-
-    /**
-     * @param $data
-     */
-    public static function return200(array $data): void
-    {
-        $code = [
-            'code' => 200,
-        ];
-
-        self::json(array_merge($code, $data));
     }
 }

@@ -21,15 +21,7 @@ class Route
 
     public static $method = [];
 
-    private static function return($response): void
-    {
-        if (is_array($response)) {
-            header('content-type: application/json');
-            echo json_encode($response);
-        } elseif (is_string($response) or is_int($response)) {
-            echo $response;
-        }
-    }
+    public static $output = null;
 
     /**
      * @param $action
@@ -40,8 +32,8 @@ class Route
     private static function make($action, ...$arg): void
     {
         if ($action instanceof Closure) {
-            echo $action();
-            exit(0);
+            self::$output = $action();
+            throw new Exception('Finish', 200);
         }
 
         $array = explode('@', $action);
@@ -59,7 +51,7 @@ class Route
                 } else {
                     $response = $obj->$method(...$arg);
                 }
-                self::return($response);
+                self::$output = $response;
             } catch (Error | Exception $e) {
                 // 捕获类方法不存在错误
                 $code = $e->getCode();
@@ -72,7 +64,7 @@ class Route
             }
 
             // 处理完毕，退出
-            exit(0);
+            throw new Exception('Finish', 200);
         } else {
             self::$obj[] = $obj;
             self::$method[] = $method;
@@ -90,7 +82,7 @@ class Route
         // ?a=1&b=2
         $queryString = $_SERVER['QUERY_STRING'];
 
-        if ((bool) $queryString) {
+        if ((bool)$queryString) {
             $url = $_SERVER['REQUEST_URI'];
             // 使用 ? 分隔 url
             $url = (explode('?', $url))[0];

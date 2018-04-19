@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API;
 
-use KhsCI\Support\Response;
-
 class APIController
 {
-    public function __invoke(): void
+    public function __invoke()
     {
         $host = getenv('CI_HOST');
-        Response::json([
+        return [
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
             ],
@@ -76,7 +74,7 @@ class APIController
             'blog' => $host.'/blog',
             'status' => $host.'/status',
             'feedback' => 'https://github.com/khs1994-php/khsci/issues',
-        ]);
+        ];
     }
 
     public function __call($name, $arguments): void

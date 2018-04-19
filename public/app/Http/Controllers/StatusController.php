@@ -8,11 +8,11 @@ use KhsCI\Support\Response;
 
 class StatusController
 {
-    public function __invoke(): void
+    public function __invoke()
     {
-        Response::json([
-            'code' => 0,
+        return [
+            'code' => 200,
             'status' => 'https://status.khs1994.com',
-        ]);
+        ];
     }
 }

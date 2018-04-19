@@ -8,11 +8,11 @@ use KhsCI\Support\Response;
 
 class AboutController
 {
-    public function __invoke(): void
+    public function __invoke()
     {
-        Response::json([
-            'code' => 0,
+        return [
+            'code' => 200,
             'about' => 'The goal of KhsCI is to build CI/CD System by PHP Powered by Docker and Kubernetes',
-        ]);
+        ];
     }
 }
