@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-use ErrorException;
-use KhsCI\Support\Response;
+use Error;
+use Exception;
 use KhsCI\Support\Session;
 
 class GitHubController
@@ -15,9 +15,11 @@ class GitHubController
     /**
      * @param mixed ...$arg
      *
-     * @throws ErrorException
+     * @return array
+     *
+     * @throws Exception
      */
-    public function __invoke(...$arg): void
+    public function __invoke(...$arg)
     {
         $type = static::TYPE;
 
@@ -36,8 +38,8 @@ class GitHubController
         for ($page = 1; $page <= 3; ++$page) {
             try {
                 $json = $objClass::getProjects((string) $accessToken, $page);
-            } catch (ErrorException $e) {
-                throw new ErrorException($e->getMessage(), $e->getCode());
+            } catch (Error | Exception $e) {
+                throw new Exception($e->getMessage(), $e->getCode());
             }
 
             if ($obj = json_decode($json)) {
@@ -59,11 +61,12 @@ class GitHubController
             }
         }
 
-        Response::return200([
+        return [
+            'code' => 200,
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,
             'repos' => $array,
-        ]);
+        ];
     }
 }

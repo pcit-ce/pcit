@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Profile;
 
 use KhsCI\Service\OAuth\Coding;
-use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class CodingController
 {
-    public function __invoke(...$arg): void
+    /**
+     * @param mixed ...$arg
+     *
+     * @return array
+     */
+    public function __invoke(...$arg)
     {
         $uid = Session::get('coding.uid');
         $username = Session::get('coding.username');
@@ -26,11 +30,12 @@ class CodingController
             $array[] = $list->owner_user_name.'/'.$list->name;
         }
 
-        Response::return200([
+        return [
+            'code' => 200,
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,
             'repos' => $array,
-        ]);
+        ];
     }
 }

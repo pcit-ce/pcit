@@ -8,8 +8,8 @@ class GiteeController extends GitHubController
 {
     const TYPE = 'gitee';
 
-    public function __invoke(...$arg): void
+    public function __invoke(...$arg)
     {
-        parent::__invoke(...$arg);
+        return parent::__invoke(...$arg);
     }
 }
