@@ -50,6 +50,8 @@ Route::get('webhooks/list/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@
 
 Route::delete('webhooks/delete/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@delete');
 
+Route::delete('webhooks/close/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@close');
+
 /*Webhooks: receive git webhooks*/
 
 Route::get('webhooks/github', 'Webhooks\GitHubController');

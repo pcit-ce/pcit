@@ -1,8 +1,5 @@
 /**
-
   用户表
-
-
  */
 
 CREATE TABLE `user` (

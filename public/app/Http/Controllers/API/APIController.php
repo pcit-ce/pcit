@@ -11,6 +11,7 @@ class APIController
         $host = getenv('CI_HOST');
 
         return [
+            'login' => $host.'/login',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
             ],
@@ -34,6 +35,11 @@ class APIController
                     'coding' => $host.'/webhooks/delete/coding/{user}/{repo}/{id}',
                     'gitee' => $host.'/webhooks/delete/gitee/{user}/{repo}/{id}',
                     'github' => $host.'/webhooks/delete/github/{user}/{repo}/{id}',
+                ],
+                'close@delete' => [
+                    'coding' => $host.'/webhooks/close/coding/{user}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/close/gitee/{user}/{repo}/{id}',
+                    'github' => $host.'/webhooks/close/github/{user}/{repo}/{id}',
                 ],
             ],
             'webhooks@receive' => [

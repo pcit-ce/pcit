@@ -13,31 +13,24 @@ class GitHubController
     const TYPE = 'gitHub';
 
     /**
-     * @param mixed ...$arg
+     * 获取用户项目列表
      *
+     * @param $accessToken
      * @return array
      *
      * @throws Exception
      */
-    public function __invoke(...$arg)
+    public function getProject($accessToken)
     {
         $type = static::TYPE;
-
-        $typeLower = strtolower($type);
-
-        $uid = Session::get($typeLower.'.uid');
-        $username = Session::get($typeLower.'.username');
-        $arg[0] === $username && $username = $arg[0];
-        $pic = Session::get($typeLower.'.pic');
-        $accessToken = Session::get($typeLower.'.access_token');
 
         $array = [];
 
         $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
 
-        for ($page = 1; $page <= 3; ++$page) {
+        for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string) $accessToken, $page);
+                $json = $objClass::getProjects((string)$accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -61,11 +54,92 @@ class GitHubController
             }
         }
 
+        return $array;
+    }
+
+    /**
+     * @param mixed ...$arg
+     * @return array
+     * @throws Exception
+     */
+    public function __invoke(...$arg)
+    {
+        $redis = new \Redis();
+
+        $type = static::TYPE;
+        $typeLower = strtolower($type);
+
+        $accessToken = Session::get($typeLower.'.access_token');
+
+        $uid = Session::get($typeLower.'.uid');
+        $username = Session::get($typeLower.'.username');
+        $arg[0] === $username && $username = $arg[0];
+        $pic = Session::get($typeLower.'.pic');
+
+        $redis->connect(getenv('REDIS_HOST'));
+
+        $ajax = $_GET['ajax'] ?? false;
+
+        // ?ajax=true $ajax=true
+        // cache
+
+        if (!($ajax)) {
+            require __DIR__.'/../../../../public/profile/index.html';
+            exit;
+        }
+
+        $sync = false;
+        $cache = true;
+
+        $array = [];
+
+        if ($redis->get($uid.'_username')) {
+            $cacheArray = $redis->hGetAll($uid.'_repo');
+            foreach ($cacheArray as $k => $status) {
+                // $k = explode('/', $k, 2);
+                $array[$k] = $status;
+            }
+        } else {
+            $sync = true;
+        }
+
+        if ($_GET['sync'] ?? false or $sync) {
+
+            $array = static::getProject($accessToken);
+            $redis->set($uid.'_uid', $uid);
+            $redis->set($uid.'_username', $username);
+
+            foreach ($array as $id => $repo) {
+                $repoArray = explode('/', $repo);
+
+                $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
+
+                $url = getenv('CI_HOST').'/webhooks/'.$typeLower;
+
+                $status = $objClass::getWebhooksStatus($accessToken, $url, $repoArray[0], $repoArray[1]);
+
+                $redis->hSet($uid.'_repo', $repo, $status);
+            }
+
+            $array = [];
+
+            $cache = false;
+
+            $cacheArray = $redis->hGetAll($uid.'_repo');
+
+            foreach ($cacheArray as $k => $status) {
+                //$k = explode('/', $k, 2);
+                $array[$k] = $status;
+            }
+        }
+
         return [
             'code' => 200,
+            'git_type' => $typeLower,
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,
+            'cache' => $cache,
             'repos' => $array,
         ];
     }

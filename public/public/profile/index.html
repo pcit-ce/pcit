@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+  <title>Title</title>
+</head>
+<body>
+<div id="userinfo">
+  <p id="username"></p>
+  <button id="sync">Sync</button>
+</div>
+<br>
+<hr>
+<br>
+<div id="repos">
+
+</div>
+
+<script>
+
+  function list(data) {
+
+    $("#username").text("Welcome " + data.username).addClass(data.type);
+
+    git_type = data.git_type;
+
+    $("title").text(data.username + " - Profile - KhsCI");
+
+    $.each(data.repos, function (repo, status) {
+
+      let button = $("<button></button>");
+
+      button.attr("onclick", 'open_or_close(this)');
+
+      if (status === (1).toString()) {
+        button.text('Close');
+        button.css('color', 'green');
+      } else {
+        button.text('Open');
+        button.css('color', 'red');
+      }
+
+      console.log(repo);
+      console.log(status);
+
+      // <p id="username/repo">username/repo</p>
+      let p = $("<a></a>").text(repo);
+
+      p.attr("id", repo);
+      p.attr('href', "https://ci2.khs1994.com/" + git_type + '/' + repo);
+      p.attr('target', '_blank');
+      button.attr("id", repo);
+      button.css('text-align', 'right');
+      p.css('display', 'inline');
+
+      let settings = $("<a></a>");
+
+      settings.text('Setting');
+      settings.attr('href', "https://ci2.khs1994.com/" + git_type + "/" + repo + "/settings");
+      settings.attr('target', '_blank');
+      $("#repos").append(button).append(settings).append(p).append('<br>');
+    })
+  }
+
+  function sync() {
+    $.ajax({
+      type: "GET",
+      url: "?ajax=true&sync=true",
+      success: function (data) {
+        $("#repos").empty();
+        list(data);
+
+      }
+    })
+  }
+
+  $(document).ready(function () {
+
+    $.ajax({
+      type: "GET",
+      url: "?ajax=true",
+      success: function (data) {
+        list(data);
+      }
+    });
+  });
+
+  $("#sync").click(sync);
+
+  function open_or_close(id) {
+    let repo = id.getAttribute('id');
+    let status = id.innerHTML;
+    if ('Open' === status) {
+
+      let url = "https://ci2.khs1994.com/webhooks/" + git_type;
+
+      let open = '{"issues_events": true, \
+      "merge_requests_events": true,\
+      "note_events": true,\
+      "project_id": true,\
+      "push_events": true,\
+      "tag_push_events": true,\
+      "url":' + '"' + url + '", "password":"string"}';
+
+      $.ajax({
+        type: "POST",
+        url: "https://ci2.khs1994.com/webhooks/create/" + git_type + "/" + repo + "/199412",
+        data: open,
+        dataType: "json",
+        contentType: 'application/json;charset=utf-8',
+        success: function (data) {
+          id.innerHTML = 'Close';
+          id.style.color = 'Green';
+        }
+      })
+    } else {
+
+      $.ajax({
+        type: "delete",
+        url: "https://ci2.khs1994.com/webhooks/close/" + git_type + "/" + repo + "/199412",
+        success: function (data) {
+          id.innerHTML = 'Open';
+          id.style.color = 'Red';
+        }
+      });
+
+    }
+  }
+
+</script>
+</body>
+</html>
