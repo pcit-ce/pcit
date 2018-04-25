@@ -49,6 +49,7 @@ class Controller
     /**
      * @param mixed ...$arg
      *
+     * @return mixed
      * @throws Exception
      */
     public static function list(...$arg)

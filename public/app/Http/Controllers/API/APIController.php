@@ -11,6 +11,7 @@ class APIController
         $host = getenv('CI_HOST');
 
         return [
+            'login' => $host.'/login',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
             ],

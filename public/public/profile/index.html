@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <title>Title</title>
+</head>
+<body>
+<div id="userinfo">
+  <p id="username"></p>
+  <button id="sync">Sync</button>
+</div>
+<div id="repos">
+
+</div>
+
+<script>
+
+  function list(data) {
+
+    $("#username").text("Welcome " + data.username);
+    $("title").text(data.username + " - Profile - KhsCI");
+
+    $.each(data.repos, function (k, v) {
+
+      let button = $("<button></button>");
+
+      button.attr("onclick", 'open_or_close(this)');
+
+      if (v === (1).toString()) {
+        button.text('Close');
+        button.css('color', 'green');
+      } else {
+        button.text('Open');
+        button.css('color', 'red');
+      }
+
+      console.log(k);
+      console.log(v);
+
+      // <p id="username/repo">username/repo</p>
+      let p = $("<p></p>").text(k);
+
+      p.attr("id", k);
+      button.attr("id", k);
+      button.css('text-align', 'right');
+      $("#repos").append(p);
+      p.append(button);
+    })
+
+  }
+
+  $(document).ready(function () {
+
+    $.ajax({
+      type: "GET",
+      url: "?ajax=true",
+      success: function (data) {
+        list(data);
+      }
+    });
+  });
+
+  $("#sync").click(function () {
+    $.ajax({
+      type: "GET",
+      url: "?ajax=true&sync=true",
+      success: function (data) {
+        $("#repos").empty();
+        list(data);
+
+      }
+    })
+  });
+
+  function open_or_close(id) {
+    let repo = id.getAttribute('id');
+    let status = id.innerHTML;
+    if ('Open' === status) {
+
+      var open = '{"issues_events": true, \
+      "merge_requests_events": true,\
+      "note_events": true,\
+      "project_id": true,\
+      "push_events": true,\
+      "tag_push_events": true,\
+      "url": "https://ci2.khs1994.com/webhooks/gitee","password": "string"\
+    }';
+
+      $.ajax({
+        type: "POST",
+        url: "https://ci2.khs1994.com/webhooks/create/" + "gitee" + "/" + repo + "/199412",
+        data: open,
+        dataType: "json",
+        contentType: 'application/json;charset=utf-8',
+        success: function (data) {
+          alert(id.innerHTML);
+          id.innerHTML = 'Close';
+          id.style.color = 'Green';
+
+        }
+      })
+    } else {
+
+    }
+  }
+
+
+</script>
+</body>
+</html>
