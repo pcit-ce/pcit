@@ -47,6 +47,8 @@ class Controller
     }
 
     /**
+     * 获取 Webhooks 列表
+     *
      * @param mixed ...$arg
      *
      * @return mixed
@@ -72,6 +74,8 @@ class Controller
     }
 
     /**
+     * 增加 Webhooks，增加之前必须先判断是否已存在
+     *
      * @param mixed ...$arg
      *
      * @return mixed
@@ -88,6 +92,8 @@ class Controller
             throw new Exception('Invalid request, must include JSON', 422);
         }
 
+        $webhooksUrl = $obj->url;
+
         $gitType = $arg[0];
 
         unset($arg[0]);
@@ -98,10 +104,28 @@ class Controller
 
         $obj = self::getObj();
 
+        $getWebhooksStatus = $obj::getWebhooksStatus($access_token, $webhooksUrl, ...$arg);
+
+        if (1 === $getWebhooksStatus) {
+            $redis = new \Redis();
+
+            $redis->connect(getenv('REDIS_HOST'));
+
+            $uid = Session::get($gitType.'.uid');
+
+            $redis->hSet($uid.'_repo', $arg[1].'/'.$arg[2], 1);
+
+            $redis->close();
+
+            throw new Exception('Webhooks already exists', 304);
+        }
+
         return $obj::setWebhooks($access_token, $data, ...$arg);
     }
 
     /**
+     * 删除 Webhooks
+     *
      * @param mixed ...$arg
      *
      * @return mixed
@@ -121,5 +145,34 @@ class Controller
         $obj = self::getObj();
 
         return $obj::unsetWebhooks($access_token, ...$arg);
+    }
+
+    /**
+     * 停止构建，暂时不主动删除 Webhooks
+     *
+     * @param array $arg
+     * @return array
+     */
+    public static function close(...$arg)
+    {
+        $gitType = $arg[0];
+
+        unset($arg[0]);
+
+        self::$gitType = $gitType;
+
+        $redis = new \Redis();
+
+        $redis->connect(getenv('REDIS_HOST'));
+
+        $uid = Session::get($gitType.'.uid');
+
+        $redis->hSet($uid.'_repo', $arg[1].'/'.$arg[2], 0);
+
+        $redis->close();
+
+        return [
+            "code" => 200,
+        ];
     }
 }

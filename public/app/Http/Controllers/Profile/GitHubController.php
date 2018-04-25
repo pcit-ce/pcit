@@ -13,33 +13,6 @@ class GitHubController
     const TYPE = 'gitHub';
 
     /**
-     * 获取 Webhooks 状态
-     *
-     * @param $accessToken
-     * @param $username
-     * @param $repo
-     * @return mixed
-     */
-    public function getStatus($accessToken, $username, $repo)
-    {
-        $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst(static::TYPE);
-
-        $array = json_decode($objClass::getWebhooks($accessToken, false, $username, $repo));
-
-        if ($array) {
-            foreach ($array as $k) {
-                if ($k->url === getenv('CI_HOST').'/webhooks/'.strtolower(static::TYPE)) {
-                    return 1;
-                    break;
-                }
-            }
-            return 0;
-        } else {
-            return 0;
-        }
-    }
-
-    /**
      * 获取用户项目列表
      *
      * @param $accessToken
@@ -123,22 +96,29 @@ class GitHubController
         if ($redis->get($uid.'_username')) {
             $cacheArray = $redis->hGetAll($uid.'_repo');
             foreach ($cacheArray as $k => $status) {
-                $k = explode('/', $k, 2);
-                $array[$k[1]] = $status;
+                // $k = explode('/', $k, 2);
+                $array[$k] = $status;
             }
         } else {
-            $sync = false;
+            $sync = true;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
+
             $array = static::getProject($accessToken);
             $redis->set($uid.'_uid', $uid);
             $redis->set($uid.'_username', $username);
 
             foreach ($array as $id => $repo) {
                 $repoArray = explode('/', $repo);
-                $status = $this->getStatus($accessToken, $repoArray[0], $repoArray[1]);
-                $redis->hSet($uid.'_repo', $id.'/'.$repo, $status);
+
+                $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
+
+                $url = getenv('CI_HOST').'/webhooks/'.$typeLower;
+
+                $status = $objClass::getWebhooksStatus($accessToken, $url, $repoArray[0], $repoArray[1]);
+
+                $redis->hSet($uid.'_repo', $repo, $status);
             }
 
             $array = [];
@@ -148,13 +128,14 @@ class GitHubController
             $cacheArray = $redis->hGetAll($uid.'_repo');
 
             foreach ($cacheArray as $k => $status) {
-                $k = explode('/', $k, 2);
-                $array[$k[1]] = $status;
+                //$k = explode('/', $k, 2);
+                $array[$k] = $status;
             }
         }
 
         return [
             'code' => 200,
+            'git_type' => $typeLower,
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,

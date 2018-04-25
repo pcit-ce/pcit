@@ -36,6 +36,11 @@ class APIController
                     'gitee' => $host.'/webhooks/delete/gitee/{user}/{repo}/{id}',
                     'github' => $host.'/webhooks/delete/github/{user}/{repo}/{id}',
                 ],
+                'close@delete' => [
+                    'coding' => $host.'/webhooks/close/coding/{user}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/close/gitee/{user}/{repo}/{id}',
+                    'github' => $host.'/webhooks/close/github/{user}/{repo}/{id}',
+                ],
             ],
             'webhooks@receive' => [
                 'coding' => $host.'/webhooks/coding',

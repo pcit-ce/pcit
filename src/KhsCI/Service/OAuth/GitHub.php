@@ -77,9 +77,9 @@ class GitHub implements OAuth
     }
 
     /**
-     * @param string      $code
+     * @param string $code
      * @param null|string $state
-     * @param bool        $json
+     * @param bool $json
      *
      * @throws Exception
      *
@@ -118,7 +118,7 @@ class GitHub implements OAuth
      * @param string $url
      * @param string $accessToken
      * @param        $data
-     * @param array  $header
+     * @param array $header
      *
      * @return mixed
      */
@@ -127,6 +127,10 @@ class GitHub implements OAuth
         $url = static::API_URL.$url;
 
         $curl = new Curl();
+
+        set_time_limit(0);
+
+        $curl->setTimeout(100);
 
         $curl->setHeader('Authorization', 'token '.$accessToken);
 
@@ -167,7 +171,7 @@ class GitHub implements OAuth
 
     /**
      * @param string $accessToken
-     * @param bool   $raw
+     * @param bool $raw
      * @param string $username
      * @param string $repo
      *
@@ -196,9 +200,35 @@ class GitHub implements OAuth
 
     /**
      * @param string $accessToken
+     * @param string $username
+     * @param string $repo
+     * @param string $url
+     * @return int
+     * @throws Exception
+     */
+    public static function getWebhooksStatus(string $accessToken, string $url, string $username, string $repo)
+    {
+        $json = self::getWebhooks($accessToken, false, $username, $repo);
+
+        $array = json_decode($json);
+
+        if ($array) {
+            foreach ($array as $k) {
+                if ($url === $k->url) {
+                    return 1;
+                    break;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param string $accessToken
      * @param $data
-     * @param string      $username
-     * @param string      $repo
+     * @param string $username
+     * @param string $repo
      * @param null|string $id
      *
      * @return mixed
