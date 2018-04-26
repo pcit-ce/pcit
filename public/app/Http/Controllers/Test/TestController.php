@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Test;
 
-use KhsCI\Support\Cache;
-use KhsCI\Support\DB;
-use KhsCI\Support\Env;
 use KhsCI\Support\Session;
 
 class TestController
@@ -25,8 +22,7 @@ class TestController
     {
     }
 
-    public function test5()
+    public function test5(): void
     {
-
     }
 }

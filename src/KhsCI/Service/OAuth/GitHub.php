@@ -79,9 +79,9 @@ class GitHub implements OAuth
     }
 
     /**
-     * @param string $code
+     * @param string      $code
      * @param null|string $state
-     * @param bool $json
+     * @param bool        $json
      *
      * @throws Exception
      *
@@ -120,7 +120,7 @@ class GitHub implements OAuth
      * @param string $url
      * @param string $accessToken
      * @param        $data
-     * @param array $header
+     * @param array  $header
      *
      * @return mixed
      */
@@ -174,7 +174,7 @@ class GitHub implements OAuth
 
     /**
      * @param string $accessToken
-     * @param bool $raw
+     * @param bool   $raw
      * @param string $username
      * @param string $repo
      *
@@ -206,13 +206,15 @@ class GitHub implements OAuth
      * @param string $username
      * @param string $repo
      * @param string $url
+     *
      * @return int
+     *
      * @throws Exception
      */
     public static function getWebhooksStatus(string $accessToken, string $url, string $username, string $repo)
     {
         if ('github' === static::TYPE) {
-            /**
+            /*
              * GitHub 不能添加重复 webhooks ,这里跳过判断
              */
             return 0;
@@ -237,8 +239,8 @@ class GitHub implements OAuth
     /**
      * @param string $accessToken
      * @param $data
-     * @param string $username
-     * @param string $repo
+     * @param string      $username
+     * @param string      $repo
      * @param null|string $id
      *
      * @return mixed

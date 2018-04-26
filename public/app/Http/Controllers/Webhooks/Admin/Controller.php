@@ -15,9 +15,10 @@ class Controller
     private static $gitType;
 
     /**
-     * 设置 Git 类型
+     * 设置 Git 类型.
      *
      * @param mixed ...$arg
+     *
      * @return array
      */
     private static function setGitType(...$arg)
@@ -30,7 +31,7 @@ class Controller
     }
 
     /**
-     * 检查 AccessToken
+     * 检查 AccessToken.
      *
      * @return bool|null
      *
@@ -52,7 +53,7 @@ class Controller
     }
 
     /**
-     * 获取类
+     * 获取类.
      *
      * @return string
      */
@@ -68,11 +69,12 @@ class Controller
     }
 
     /**
-     * 获取 Webhooks 列表
+     * 获取 Webhooks 列表.
      *
      * @param mixed ...$arg
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function list(...$arg)
@@ -91,7 +93,7 @@ class Controller
     }
 
     /**
-     * 增加 Webhooks，增加之前必须先判断是否已存在，GitHub 除外
+     * 增加 Webhooks，增加之前必须先判断是否已存在，GitHub 除外.
      *
      * @param mixed ...$arg
      *
@@ -143,7 +145,7 @@ class Controller
     }
 
     /**
-     * 删除 Webhooks
+     * 删除 Webhooks.
      *
      * @param mixed ...$arg
      *
@@ -163,9 +165,10 @@ class Controller
     }
 
     /**
-     * 停止构建，暂时不主动删除 Webhooks
+     * 停止构建，暂时不主动删除 Webhooks.
      *
      * @param array $arg
+     *
      * @return array
      */
     public static function close(...$arg)
@@ -179,7 +182,7 @@ class Controller
         $redis->hSet($uid.'_repo', $arg[1].'/'.$arg[2], 0);
 
         return [
-            "code" => 200,
+            'code' => 200,
         ];
     }
 
@@ -204,8 +207,6 @@ class Controller
   "type_task": true
 }
 EOF;
-
-
     }
 
     public static function giteeJson()
@@ -249,6 +250,5 @@ EOF;
   }
 }
 EOF;
-
     }
 }

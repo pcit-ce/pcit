@@ -15,9 +15,10 @@ class GitHubController
     const TYPE = 'gitHub';
 
     /**
-     * 获取用户项目列表
+     * 获取用户项目列表.
      *
      * @param $accessToken
+     *
      * @return array
      *
      * @throws Exception
@@ -32,7 +33,7 @@ class GitHubController
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -60,12 +61,14 @@ class GitHubController
     }
 
     /**
-     * @param string $uid
-     * @param string $username
-     * @param string $email
-     * @param string $pic
+     * @param string      $uid
+     * @param string      $username
+     * @param string      $email
+     * @param string      $pic
      * @param string|null $accessToken
+     *
      * @return array
+     *
      * @throws Exception
      */
     public function syncProject(string $uid,
@@ -137,7 +140,9 @@ EOF;
 
     /**
      * @param mixed ...$arg
+     *
      * @return array
+     *
      * @throws Exception
      */
     public function __invoke(...$arg)
@@ -182,7 +187,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
+            $array = $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
             $cache = false;
             $code = 200;
         }

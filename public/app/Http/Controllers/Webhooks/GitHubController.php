@@ -8,6 +8,6 @@ class GitHubController
 {
     public function __invoke(): void
     {
-        file_put_contents('C:/1', file_get_contents("php://input"));
+        file_put_contents('C:/1', file_get_contents('php://input'));
     }
 }
