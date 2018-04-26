@@ -158,6 +158,7 @@ class GitHub implements OAuth
         return [
             'uid' => $obj->id,
             'name' => $obj->login,
+            'email'=>$obj->email,
             'pic' => $obj->avatar_url,
         ];
     }

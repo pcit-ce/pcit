@@ -54,11 +54,11 @@ Route::delete('webhooks/close/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Co
 
 /*Webhooks: receive git webhooks*/
 
-Route::get('webhooks/github', 'Webhooks\GitHubController');
+Route::post('webhooks/github', 'Webhooks\GitHubController');
 
-Route::get('webhooks/gitee', 'Webhooks\GiteeController');
+Route::post('webhooks/gitee', 'Webhooks\GiteeController');
 
-Route::get('webhooks/coding', 'Webhooks\CodingController');
+Route::post('webhooks/coding', 'Webhooks\CodingController');
 
 // 获取所有接收到的 webhooks -> requests
 

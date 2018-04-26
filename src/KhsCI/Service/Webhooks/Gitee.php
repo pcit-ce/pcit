@@ -6,4 +6,8 @@ namespace KhsCI\Service\Webhooks;
 
 class Gitee
 {
+    public function __invoke()
+    {
+
+    }
 }
