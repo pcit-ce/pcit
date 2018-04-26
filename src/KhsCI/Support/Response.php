@@ -8,10 +8,11 @@ class Response
 {
     const HTTP_CODE = [
         200,
+        304,
         401,
         404,
+        422,
         500,
-        304,
     ];
 
     /**

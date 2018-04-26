@@ -19,6 +19,8 @@
 
 <script>
 
+  let ci_host = "https://" + document.location.host + "/";
+
   function list(data) {
 
     $("#username").text("Welcome " + data.username).addClass(data.type);
@@ -48,7 +50,7 @@
       let p = $("<a></a>").text(repo);
 
       p.attr("id", repo);
-      p.attr('href', "https://ci2.khs1994.com/" + git_type + '/' + repo);
+      p.attr('href', ci_host + git_type + '/' + repo);
       p.attr('target', '_blank');
       button.attr("id", repo);
       button.css('text-align', 'right');
@@ -57,7 +59,7 @@
       let settings = $("<a></a>");
 
       settings.text('Setting');
-      settings.attr('href', "https://ci2.khs1994.com/" + git_type + "/" + repo + "/settings");
+      settings.attr('href', ci_host + git_type + "/" + repo + "/settings");
       settings.attr('target', '_blank');
       $("#repos").append(button).append(settings).append(p).append('<br>');
     })
@@ -93,20 +95,9 @@
     let status = id.innerHTML;
     if ('Open' === status) {
 
-      let url = "https://ci2.khs1994.com/webhooks/" + git_type;
-
-      let open = '{"issues_events": true, \
-      "merge_requests_events": true,\
-      "note_events": true,\
-      "project_id": true,\
-      "push_events": true,\
-      "tag_push_events": true,\
-      "url":' + '"' + url + '", "password":"string"}';
-
       $.ajax({
         type: "POST",
-        url: "https://ci2.khs1994.com/webhooks/create/" + git_type + "/" + repo + "/199412",
-        data: open,
+        url: ci_host + "webhooks/create/" + git_type + "/" + repo + "/199412",
         dataType: "json",
         contentType: 'application/json;charset=utf-8',
         success: function (data) {
@@ -118,7 +109,7 @@
 
       $.ajax({
         type: "delete",
-        url: "https://ci2.khs1994.com/webhooks/close/" + git_type + "/" + repo + "/199412",
+        url: ci_host + "/webhooks/close/" + git_type + "/" + repo + "/199412",
         success: function (data) {
           id.innerHTML = 'Open';
           id.style.color = 'Red';

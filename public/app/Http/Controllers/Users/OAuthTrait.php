@@ -12,7 +12,7 @@ use KhsCI\Support\Session;
 trait OAuthTrait
 {
     /**
-     * @param string      $type
+     * @param string $type
      * @param null|string $state
      *
      * @return string
@@ -34,14 +34,14 @@ trait OAuthTrait
             $method = 'OAuth'.ucfirst($type);
 
             $access_token = Session::get($type.'.access_token')
-                ?? $this->ci->$method->getAccessToken((string) $code, $state)
+                ?? $this->ci->$method->getAccessToken((string)$code, $state)
                 ?? false;
 
             $typeLower = strtolower($type);
 
             false !== $access_token && Session::put($typeLower.'.access_token', $access_token);
 
-            $userInfoArray = $obj::getUserInfo((string) $access_token);
+            $userInfoArray = $obj::getUserInfo((string)$access_token);
         } catch (Error $e) {
             return $e->getMessage();
         }
@@ -49,10 +49,12 @@ trait OAuthTrait
         $uid = $userInfoArray['uid'];
         $name = $userInfoArray['name'];
         $pic = $userInfoArray['pic'];
+        $email = $userInfoArray['email'];
 
         Session::put($typeLower.'.uid', $uid);
         Session::put($typeLower.'.username', $name);
         Session::put($typeLower.'.pic', $pic);
+        Session::put($typeLower.'.email', $email);
 
         Response::redirect(getenv('CI_HOST').'/profile/'.$typeLower.'/'.$name);
     }

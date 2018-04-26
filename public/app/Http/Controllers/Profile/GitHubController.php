@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Profile;
 
 use Error;
 use Exception;
+use KhsCI\Support\Cache;
+use KhsCI\Support\DB;
 use KhsCI\Support\Session;
 
 class GitHubController
@@ -58,19 +60,94 @@ class GitHubController
     }
 
     /**
+     * @param string $uid
+     * @param string $username
+     * @param string $email
+     * @param string $pic
+     * @param string|null $accessToken
+     * @return array
+     * @throws Exception
+     */
+    public function syncProject(string $uid,
+                                string $username,
+                                string $email,
+                                string $pic,
+                                string $accessToken = null)
+    {
+        $type = static::TYPE;
+        $typeLower = strtolower($type);
+
+        if (!$accessToken) {
+            $accessToken = Session::get($typeLower.'.access_token');
+        }
+
+        $array = static::getProject($accessToken);
+
+        $redis = Cache::connect();
+        $redis->set($uid.'_uid', $uid);
+        $redis->set($uid.'_username', $username);
+        $redis->set($uid.'_email', $email);
+
+        // 与 Git 同步时更新数据库
+
+        $pdo = DB::connect();
+
+        $sql = <<<EOF
+DELETE FROM user WHERE 'username'=$username AND 'git_type'=$typeLower;
+
+INSERT user VALUES(null,'$typeLower','$uid','$username','$email','$pic','$accessToken');
+
+EOF;
+        $pdo->exec($sql);
+
+        foreach ($array as $id => $repoFullName) {
+            $repoArray = explode('/', $repoFullName);
+
+            $repoPrefix = $repoArray[0];
+            $repoName = $repoArray[1];
+
+            $status = 0;
+
+            $redis->hSet($uid.'_repo', $repoFullName, $status);
+
+            $time = time();
+
+            $sql = <<<EOF
+
+DELETE FROM repo WHERE rid=$id;
+
+INSERT repo VALUES(null,'$typeLower','$id','$username','$repoPrefix','$repoName','$repoFullName','$status',$time);
+
+EOF;
+
+            $pdo->exec($sql);
+        }
+
+        $array = [];
+
+        $cacheArray = $redis->hGetAll($uid.'_repo');
+
+        foreach ($cacheArray as $k => $status) {
+            //$k = explode('/', $k, 2);
+            $array[$k] = $status;
+        }
+
+        return $array;
+    }
+
+    /**
      * @param mixed ...$arg
      * @return array
      * @throws Exception
      */
     public function __invoke(...$arg)
     {
-        $redis = new \Redis();
+        $redis = Cache::connect();
 
         $type = static::TYPE;
         $typeLower = strtolower($type);
 
-        $accessToken = Session::get($typeLower.'.access_token');
-
+        $email = Session::get($typeLower.'.email');
         $uid = Session::get($typeLower.'.uid');
         $username = Session::get($typeLower.'.username');
         $arg[0] === $username && $username = $arg[0];
@@ -90,6 +167,7 @@ class GitHubController
 
         $sync = false;
         $cache = true;
+        $code = 200;
 
         $array = [];
 
@@ -104,37 +182,13 @@ class GitHubController
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-
-            $array = static::getProject($accessToken);
-            $redis->set($uid.'_uid', $uid);
-            $redis->set($uid.'_username', $username);
-
-            foreach ($array as $id => $repo) {
-                $repoArray = explode('/', $repo);
-
-                $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
-
-                $url = getenv('CI_HOST').'/webhooks/'.$typeLower;
-
-                $status = $objClass::getWebhooksStatus($accessToken, $url, $repoArray[0], $repoArray[1]);
-
-                $redis->hSet($uid.'_repo', $repo, $status);
-            }
-
-            $array = [];
-
+            $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
             $cache = false;
-
-            $cacheArray = $redis->hGetAll($uid.'_repo');
-
-            foreach ($cacheArray as $k => $status) {
-                //$k = explode('/', $k, 2);
-                $array[$k] = $status;
-            }
+            $code = 200;
         }
 
         return [
-            'code' => 200,
+            'code' => $code,
             'git_type' => $typeLower,
             'uid' => $uid,
             'username' => $arg[0],
