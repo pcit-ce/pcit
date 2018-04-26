@@ -44,13 +44,15 @@ Route::get('oauth/gitee', 'Users\OAuthGiteeController@getAccessToken');
 
 /*Admin webhooks: list create delete*/
 
-Route::post('webhooks/create/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@add');
+Route::post('webhooks/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@add');
 
-Route::get('webhooks/list/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@list');
+Route::get('webhooks/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@list');
 
-Route::delete('webhooks/delete/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@delete');
+Route::delete('webhooks/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@delete');
 
-Route::delete('webhooks/close/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@close');
+Route::post('webhooks/{git_type}/{user}/{repo}/{id}/activate', 'Webhooks\Admin\Controller@activate');
+
+Route::delete('webhooks/{git_type}/{user}/{repo}/{id}/deactivate', 'Webhooks\Admin\Controller@deactivate');
 
 /*Webhooks: receive git webhooks*/
 

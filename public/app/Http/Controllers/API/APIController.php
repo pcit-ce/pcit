@@ -22,24 +22,29 @@ class APIController
             ],
             'webhoks@admin' => [
                 'list@get' => [
-                    'coding' => $host.'/webhooks/list/coding/{user}/{repo}',
-                    'gitee' => $host.'/webhooks/list/gitee/{user}/{repo}',
-                    'github' => $host.'/webhooks/list/github/{user}/{repo}',
+                    'coding' => $host.'/webhooks/coding/{user}/{repo}',
+                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}',
+                    'github' => $host.'/webhooks/github/{user}/{repo}',
                 ],
                 'cteate@post' => [
-                    'coding' => $host.'/webhooks/create/coding/{user}/{repo}/{id}',
-                    'gitee' => $host.'/webhooks/create/gitee/{user}/{repo}/{id}',
-                    'github' => $host.'/webhooks/create/github/{user}/{repo}/{id}',
+                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}',
+                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}',
                 ],
                 'delete@delete' => [
-                    'coding' => $host.'/webhooks/delete/coding/{user}/{repo}/{id}',
-                    'gitee' => $host.'/webhooks/delete/gitee/{user}/{repo}/{id}',
-                    'github' => $host.'/webhooks/delete/github/{user}/{repo}/{id}',
+                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}',
+                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}',
                 ],
-                'close@delete' => [
-                    'coding' => $host.'/webhooks/close/coding/{user}/{repo}/{id}',
-                    'gitee' => $host.'/webhooks/close/gitee/{user}/{repo}/{id}',
-                    'github' => $host.'/webhooks/close/github/{user}/{repo}/{id}',
+                'activate@post' => [
+                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}/activate',
+                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}/activate',
+                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}/activate',
+                ],
+                'deactivate@post' => [
+                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}/deactivate',
+                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}/deactivate',
+                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}/deactivate',
                 ],
             ],
             'webhooks@receive' => [
