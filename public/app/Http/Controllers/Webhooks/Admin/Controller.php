@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks\Admin;
 
 use Exception;
+use KhsCI\Support\Cache;
+use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 use KhsCI\Support\Session;
 
@@ -13,6 +15,23 @@ class Controller
     private static $gitType;
 
     /**
+     * 设置 Git 类型
+     *
+     * @param mixed ...$arg
+     * @return array
+     */
+    private static function setGitType(...$arg)
+    {
+        $gitType = $arg[0];
+        self::$gitType = $gitType;
+        unset($arg[0]);
+
+        return $arg;
+    }
+
+    /**
+     * 检查 AccessToken
+     *
      * @return bool|null
      *
      * @throws Exception
@@ -33,6 +52,8 @@ class Controller
     }
 
     /**
+     * 获取类
+     *
      * @return string
      */
     private static function getObj()
@@ -58,11 +79,7 @@ class Controller
     {
         $raw = false;
 
-        $gitType = $arg[0];
-
-        unset($arg[0]);
-
-        self::$gitType = $gitType;
+        $arg = self::setGitType(...$arg);
 
         $access_token = self::checkAccessToken();
 
@@ -74,7 +91,7 @@ class Controller
     }
 
     /**
-     * 增加 Webhooks，增加之前必须先判断是否已存在
+     * 增加 Webhooks，增加之前必须先判断是否已存在，GitHub 除外
      *
      * @param mixed ...$arg
      *
@@ -84,21 +101,25 @@ class Controller
      */
     public static function add(...$arg)
     {
-        $data = file_get_contents('php://input');
+        $arg = self::setGitType(...$arg);
 
-        $obj = json_decode($data);
+        $gitType = self::$gitType;
 
-        if ((!$data) or (!is_object($obj)) or 0 !== json_last_error()) {
+        $method = $gitType.'Json';
+
+        try {
+            $data = self::$method();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
+
+        $dataObj = json_decode($data);
+
+        if ((!$data) or (!is_object($dataObj)) or 0 !== json_last_error()) {
             throw new Exception('Invalid request, must include JSON', 422);
         }
 
-        $webhooksUrl = $obj->url;
-
-        $gitType = $arg[0];
-
-        unset($arg[0]);
-
-        self::$gitType = $gitType;
+        $webhooksUrl = Env::get('CI_HOST').'/webhooks/'.$gitType;
 
         $access_token = self::checkAccessToken();
 
@@ -107,9 +128,7 @@ class Controller
         $getWebhooksStatus = $obj::getWebhooksStatus($access_token, $webhooksUrl, ...$arg);
 
         if (1 === $getWebhooksStatus) {
-            $redis = new \Redis();
-
-            $redis->connect(getenv('REDIS_HOST'));
+            $redis = Cache::connect();
 
             $uid = Session::get($gitType.'.uid');
 
@@ -117,7 +136,7 @@ class Controller
 
             $redis->close();
 
-            throw new Exception('Webhooks already exists', 304);
+            throw new Exception('Hook already exists on this repository', 422);
         }
 
         return $obj::setWebhooks($access_token, $data, ...$arg);
@@ -134,11 +153,7 @@ class Controller
      */
     public static function delete(...$arg)
     {
-        $gitType = $arg[0];
-
-        unset($arg[0]);
-
-        self::$gitType = $gitType;
+        $arg = self::setGitType(...$arg);
 
         $access_token = self::checkAccessToken();
 
@@ -155,24 +170,85 @@ class Controller
      */
     public static function close(...$arg)
     {
-        $gitType = $arg[0];
-
-        unset($arg[0]);
-
-        self::$gitType = $gitType;
-
-        $redis = new \Redis();
-
-        $redis->connect(getenv('REDIS_HOST'));
+        $arg = self::setGitType(...$arg);
+        $gitType = self::$gitType;
 
         $uid = Session::get($gitType.'.uid');
 
+        $redis = Cache::connect();
         $redis->hSet($uid.'_repo', $arg[1].'/'.$arg[2], 0);
-
-        $redis->close();
 
         return [
             "code" => 200,
         ];
+    }
+
+    public static function codingJson()
+    {
+        $url = Env::get('CI_HOST').'/webhooks/coding';
+
+        $token = Env::get('WEBHOOKS_TOKEN', md5('khsci'));
+
+        return <<<EOF
+{
+  "hook_url": "$url",
+  "token": "$token",
+  "type_push": true,
+  "type_mr_pr": true,
+  "type_topic": true,
+  "type_member": true,
+  "type_comment": true,
+  "type_document": true,
+  "type_watch": true,
+  "type_star": true,
+  "type_task": true
+}
+EOF;
+
+
+    }
+
+    public static function giteeJson()
+    {
+        $url = Env::get('CI_HOST').'/webhooks/gitee';
+
+        $token = Env::get('WEBHOOKS_TOKEN', md5('khsci'));
+
+        return <<<EOF
+{
+  "issues_events": true,
+  "merge_requests_events":true,
+  "note_events": true,
+  "project_id": true,
+  "push_events": true,
+  "tag_push_events": true,
+  "url": "$url",
+  "password": "$token"
+}
+EOF;
+    }
+
+    public static function githubJson()
+    {
+        $url = Env::get('CI_HOST').'/webhooks/github';
+
+        $token = Env::get('WEBHOOKS_TOKEN', md5('khsci'));
+
+        return <<<EOF
+{
+  "name": "web",
+  "active": true,
+  "events": [
+    "*"
+  ],
+  "config": {
+    "url": "$url",
+    "content_type": "json",
+    "secret": "$token",
+    "insecure_ssl": "0"
+  }
+}
+EOF;
+
     }
 }

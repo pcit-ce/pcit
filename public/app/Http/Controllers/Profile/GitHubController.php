@@ -95,7 +95,7 @@ class GitHubController
         $sql = <<<EOF
 DELETE FROM user WHERE 'username'=$username AND 'git_type'=$typeLower;
 
-INSERT user VALUES(null,"$typeLower","$uid","$username","$email","$pic","$accessToken");
+INSERT user VALUES(null,'$typeLower','$uid','$username','$email','$pic','$accessToken');
 
 EOF;
         $pdo->exec($sql);
@@ -103,14 +103,8 @@ EOF;
         foreach ($array as $id => $repoFullName) {
             $repoArray = explode('/', $repoFullName);
 
-            $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
-
-            $url = getenv('CI_HOST').'/webhooks/'.$typeLower;
-
             $repoPrefix = $repoArray[0];
             $repoName = $repoArray[1];
-
-            //$status = $objClass::getWebhooksStatus($accessToken, $url, $repoPrefix, $repoName);
 
             $status = 0;
 
@@ -122,7 +116,7 @@ EOF;
 
 DELETE FROM repo WHERE rid=$id;
 
-INSERT repo VALUES(null,"$typeLower","$id","$username","$repoPrefix","$repoName","$repoFullName","$status",$time);
+INSERT repo VALUES(null,'$typeLower','$id','$username','$repoPrefix','$repoName','$repoFullName','$status',$time);
 
 EOF;
 
@@ -173,6 +167,7 @@ EOF;
 
         $sync = false;
         $cache = true;
+        $code = 200;
 
         $array = [];
 
@@ -189,10 +184,11 @@ EOF;
         if ($_GET['sync'] ?? false or $sync) {
             $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
             $cache = false;
+            $code = 200;
         }
 
         return [
-            'code' => 200,
+            'code' => $code,
             'git_type' => $typeLower,
             'uid' => $uid,
             'username' => $arg[0],

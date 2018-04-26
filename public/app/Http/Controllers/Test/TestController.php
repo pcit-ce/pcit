@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Test;
 
 use KhsCI\Support\Cache;
 use KhsCI\Support\DB;
+use KhsCI\Support\Env;
 use KhsCI\Support\Session;
 
 class TestController

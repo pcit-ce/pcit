@@ -8,6 +8,8 @@ use Curl\Curl;
 
 class Gitee extends GitHub implements OAuth
 {
+    const TYPE = 'gitee';
+
     const API_URL = 'https://gitee.com/api/v5';
 
     const URL = 'https://gitee.com/oauth/authorize?';

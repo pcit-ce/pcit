@@ -9,6 +9,8 @@ use Exception;
 
 class GitHub implements OAuth
 {
+    const TYPE = 'github';
+
     const API_URL = 'https://api.github.com';
 
     const URL = 'https://github.com/login/oauth/authorize?';
@@ -158,7 +160,7 @@ class GitHub implements OAuth
         return [
             'uid' => $obj->id,
             'name' => $obj->login,
-            'email'=>$obj->email,
+            'email' => $obj->email,
             'pic' => $obj->avatar_url,
         ];
     }
@@ -209,6 +211,13 @@ class GitHub implements OAuth
      */
     public static function getWebhooksStatus(string $accessToken, string $url, string $username, string $repo)
     {
+        if ('github' === static::TYPE) {
+            /**
+             * GitHub 不能添加重复 webhooks ,这里跳过判断
+             */
+            return 0;
+        }
+
         $json = self::getWebhooks($accessToken, false, $username, $repo);
 
         $array = json_decode($json);
@@ -242,7 +251,11 @@ class GitHub implements OAuth
 
         $json = self::http('post', $url, $accessToken, $data, ['content-type' => 'application/json']);
 
-        json_decode($json);
+        $obj = json_decode($json);
+
+        if ($obj->message ?? false) {
+            throw new Exception('Hook already exists on this repository', 422);
+        }
 
         if (0 !== json_last_error()) {
             throw new Exception('Project Not Found', 404);

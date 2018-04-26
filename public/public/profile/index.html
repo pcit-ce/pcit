@@ -95,20 +95,9 @@
     let status = id.innerHTML;
     if ('Open' === status) {
 
-      let url = ci_host + "/webhooks/" + git_type;
-
-      let open = '{"issues_events": true, \
-      "merge_requests_events": true,\
-      "note_events": true,\
-      "project_id": true,\
-      "push_events": true,\
-      "tag_push_events": true,\
-      "url":' + '"' + url + '", "password":"string"}';
-
       $.ajax({
         type: "POST",
         url: ci_host + "webhooks/create/" + git_type + "/" + repo + "/199412",
-        data: open,
         dataType: "json",
         contentType: 'application/json;charset=utf-8',
         success: function (data) {
