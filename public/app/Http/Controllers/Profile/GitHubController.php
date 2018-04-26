@@ -15,6 +15,64 @@ class GitHubController
     const TYPE = 'gitHub';
 
     /**
+     * 获取 SQL 语句执行结果.
+     *
+     * @param $sql
+     */
+    private function getDBOutput($sql)
+    {
+        $pdo = DB::connect();
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute();
+
+        $output = $stmt->fetchAll();
+
+        if (!$output) {
+            return null;
+        }
+
+        foreach ($output as $k) {
+            $id = $k[0];
+        }
+
+        return $id;
+    }
+
+    /**
+     * 查看用户是否已存在.
+     *
+     * @param $username
+     */
+    private function getUserStatus($username)
+    {
+        $typeLower = strtolower(static::TYPE);
+
+        $sql = <<<EOF
+SELECT id FROM user WHERE username='$username' AND git_type='$typeLower';
+EOF;
+
+        return self::getDBOutput($sql);
+    }
+
+    /**
+     * 查看 REPO 是否存在.
+     *
+     * @param $repo
+     */
+    private function getRepoStatus($repo)
+    {
+        $typeLower = strtolower(static::TYPE);
+
+        $sql = <<<EOF
+SELECT id FROM repo WHERE git_type='$typeLower' AND repo_full_name='$repo';
+EOF;
+
+        return self::getDBOutput($sql);
+    }
+
+    /**
      * 获取用户项目列表.
      *
      * @param $accessToken
@@ -61,6 +119,8 @@ class GitHubController
     }
 
     /**
+     * 与 Git 同步.
+     *
      * @param string      $uid
      * @param string      $username
      * @param string      $email
@@ -91,39 +151,100 @@ class GitHubController
         $redis->set($uid.'_username', $username);
         $redis->set($uid.'_email', $email);
 
-        // 与 Git 同步时更新数据库
+        // 先检查用户是否存在
+        $output = self::getUserStatus($username);
+
+        if ($output) {
+            $sql = <<<EOF
+UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id='$output';
+EOF;
+        } else {
+            $sql = <<<'EOF'
+INSERT user VALUES(null,?,?,?,?,?,?);
+EOF;
+        }
 
         $pdo = DB::connect();
+        $stmt = $pdo->prepare($sql);
 
-        $sql = <<<EOF
-DELETE FROM user WHERE 'username'=$username AND 'git_type'=$typeLower;
+        $stmt->bindParam(1, $typeLower);
+        $stmt->bindParam(2, $uid);
+        $stmt->bindParam(3, $username);
+        $stmt->bindParam(4, $email);
+        $stmt->bindParam(5, $pic);
+        $stmt->bindParam(6, $accessToken);
 
-INSERT user VALUES(null,'$typeLower','$uid','$username','$email','$pic','$accessToken');
+        $stmt->execute();
 
-EOF;
-        $pdo->exec($sql);
-
-        foreach ($array as $id => $repoFullName) {
+        foreach ($array as $rid => $repoFullName) {
             $repoArray = explode('/', $repoFullName);
 
             $repoPrefix = $repoArray[0];
             $repoName = $repoArray[1];
 
-            $status = 0;
+            $webhooksStatus = 0;
+            $buildActivate = 0;
 
-            $redis->hSet($uid.'_repo', $repoFullName, $status);
+            $sql = <<<EOF
+select webhooks_status from repo where rid='$rid' AND git_type='$typeLower';
+EOF;
+            $output = self::getDBOutput($sql);
+
+            if (1 === $output) {
+                $webhooksStatus = 1;
+            }
+
+            $sql = <<<EOF
+select build_activate from repo where rid='$rid' AND git_type='$typeLower';
+EOF;
+
+            $output = self::getDBOutput($sql);
+
+            if (1 === $output) {
+                $buildActivate = 1;
+            }
+
+            $redis->hSet($uid.'_repo', $repoFullName, $webhooksStatus);
 
             $time = time();
 
             $sql = <<<EOF
+SELECT id FROM repo WHERE git_type='$typeLower' AND repo_full_name='$repoFullName';
+EOF;
+            $output = self::getDBOutput($sql);
 
-DELETE FROM repo WHERE rid=$id;
-
-INSERT repo VALUES(null,'$typeLower','$id','$username','$repoPrefix','$repoName','$repoFullName','$status',$time);
+            if ($output) {
+                $sql = <<<EOF
+UPDATE repo set git_type=?,
+                rid=?,
+                username=?,
+                repo_prefix=?,
+                repo_name=?,
+                repo_full_name=?,
+                webhooks_status=?,
+                build_activate=?,
+                last_sync=? WHERE id='$output';
+EOF;
+            } else {
+                $sql = <<<'EOF'
+INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?);
 
 EOF;
+            }
 
-            $pdo->exec($sql);
+            $stmt = $pdo->prepare($sql);
+
+            $stmt->bindParam(1, $typeLower);
+            $stmt->bindParam(2, $rid);
+            $stmt->bindParam(3, $username);
+            $stmt->bindParam(4, $repoPrefix);
+            $stmt->bindParam(5, $repoName);
+            $stmt->bindParam(6, $repoFullName);
+            $stmt->bindParam(7, $webhooksStatus);
+            $stmt->bindParam(8, $buildActivate);
+            $stmt->bindParam(9, $time);
+
+            $stmt->execute();
         }
 
         $array = [];

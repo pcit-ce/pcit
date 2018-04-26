@@ -97,7 +97,7 @@
 
       $.ajax({
         type: "POST",
-        url: ci_host + "webhooks/create/" + git_type + "/" + repo + "/199412",
+        url: ci_host + "webhooks/" + git_type + "/" + repo + "/199412/activate",
         dataType: "json",
         contentType: 'application/json;charset=utf-8',
         success: function (data) {
@@ -109,7 +109,7 @@
 
       $.ajax({
         type: "delete",
-        url: ci_host + "/webhooks/close/" + git_type + "/" + repo + "/199412",
+        url: ci_host + "/webhooks/" + git_type + "/" + repo + "/199412/deactivate",
         success: function (data) {
           id.innerHTML = 'Open';
           id.style.color = 'Red';

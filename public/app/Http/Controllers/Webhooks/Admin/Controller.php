@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Webhooks\Admin;
 
 use Exception;
 use KhsCI\Support\Cache;
+use KhsCI\Support\CIConst;
+use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 use KhsCI\Support\Session;
@@ -130,18 +132,39 @@ class Controller
         $getWebhooksStatus = $obj::getWebhooksStatus($access_token, $webhooksUrl, ...$arg);
 
         if (1 === $getWebhooksStatus) {
-            $redis = Cache::connect();
+            $pdo = DB::connect();
+            $sql = <<<EOF
+UPDATE repo set webhooks_status=1 WHERE git_type='$gitType' AND repo_full_name='$arg[1]/$arg[2]';
+EOF;
 
-            $uid = Session::get($gitType.'.uid');
+            $pdo->exec($sql);
 
-            $redis->hSet($uid.'_repo', $arg[1].'/'.$arg[2], 1);
-
-            $redis->close();
-
-            throw new Exception('Hook already exists on this repository', 422);
+            return ['code' => 200, 'message' => 'Hook already exists on this repository'];
         }
 
-        return $obj::setWebhooks($access_token, $data, ...$arg);
+        try {
+            $json = $obj::setWebhooks($access_token, $data, ...$arg);
+        } catch (Exception $e) {
+            if (422 === $e->getCode()) {
+                $pdo = DB::connect();
+                $sql = <<<EOF
+UPDATE repo set webhooks_status=1 WHERE git_type='$gitType' AND repo_full_name='$arg[1]/$arg[2]';
+EOF;
+
+                $pdo->exec($sql);
+
+                return ['code' => 200, 'message' => 'Hook already exists on this repository'];
+            } else {
+                return [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                ];
+            }
+        }
+
+        return array_merge([
+            'code' => 200,
+        ], json_decode($json, true));
     }
 
     /**
@@ -165,21 +188,66 @@ class Controller
     }
 
     /**
+     * 设置 Webhooks 状态缓存.
+     *
+     * @param int   $status
+     * @param mixed ...$arg
+     */
+    private static function setBuildStatusCache(int $status = 0, ...$arg)
+    {
+        $gitType = self::$gitType;
+        $uid = Session::get($gitType.'.uid');
+        $redis = Cache::connect();
+
+        $repoFullName = $arg[0].'/'.$arg[1];
+        $redis->hSet($uid.'_repo', $repoFullName, $status);
+
+        $pdo = DB::connect();
+
+        $sql = <<<EOF
+UPDATE repo set build_activate = $status WHERE git_type='$gitType' AND repo_full_name='$repoFullName' ; 
+EOF;
+        $pdo->exec($sql);
+    }
+
+    /**
+     * 开启构建.
+     *
+     * @param mixed ...$arg
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public static function activate(...$arg)
+    {
+        $arg = self::setGitType(...$arg);
+        /*
+         * 首先保证 Webhooks 已设置
+         */
+        self::add(self::$gitType, ...$arg);
+        /*
+         * 更新缓存 + 更新数据库
+         */
+        self::setBuildStatusCache(CIConst::BUILD_ACTIVATE, ...$arg);
+
+        return [
+            'code' => 200,
+        ];
+    }
+
+    /**
      * 停止构建，暂时不主动删除 Webhooks.
      *
      * @param array $arg
      *
      * @return array
      */
-    public static function close(...$arg)
+    public static function deactivate(...$arg)
     {
         $arg = self::setGitType(...$arg);
-        $gitType = self::$gitType;
 
-        $uid = Session::get($gitType.'.uid');
-
-        $redis = Cache::connect();
-        $redis->hSet($uid.'_repo', $arg[1].'/'.$arg[2], 0);
+        self::setBuildStatusCache(CIConst::BUILD_DEACTIVATE, ...$arg);
 
         return [
             'code' => 200,
