@@ -228,6 +228,7 @@ class GitHub implements OAuth
             foreach ($array as $k) {
                 if ($url === $k->url) {
                     return 1;
+
                     break;
                 }
             }

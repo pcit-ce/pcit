@@ -15,10 +15,9 @@ class GitHubController
     const TYPE = 'gitHub';
 
     /**
-     * 获取 SQL 语句执行结果
+     * 获取 SQL 语句执行结果.
      *
      * @param $sql
-     * @return null
      */
     private function getDBOutput($sql)
     {
@@ -42,10 +41,9 @@ class GitHubController
     }
 
     /**
-     * 查看用户是否已存在
+     * 查看用户是否已存在.
      *
      * @param $username
-     * @return null
      */
     private function getUserStatus($username)
     {
@@ -54,15 +52,14 @@ class GitHubController
         $sql = <<<EOF
 SELECT id FROM user WHERE username='$username' AND git_type='$typeLower';
 EOF;
-        return self::getDBOutput($sql);
 
+        return self::getDBOutput($sql);
     }
 
     /**
-     * 查看 REPO 是否存在
+     * 查看 REPO 是否存在.
      *
      * @param $repo
-     * @return null
      */
     private function getRepoStatus($repo)
     {
@@ -73,7 +70,6 @@ SELECT id FROM repo WHERE git_type='$typeLower' AND repo_full_name='$repo';
 EOF;
 
         return self::getDBOutput($sql);
-
     }
 
     /**
@@ -95,7 +91,7 @@ EOF;
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -123,12 +119,12 @@ EOF;
     }
 
     /**
-     * 与 Git 同步
+     * 与 Git 同步.
      *
-     * @param string $uid
-     * @param string $username
-     * @param string $email
-     * @param string $pic
+     * @param string      $uid
+     * @param string      $username
+     * @param string      $email
+     * @param string      $pic
      * @param string|null $accessToken
      *
      * @return array
@@ -163,7 +159,7 @@ EOF;
 UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id='$output';
 EOF;
         } else {
-            $sql = <<<EOF
+            $sql = <<<'EOF'
 INSERT user VALUES(null,?,?,?,?,?,?);
 EOF;
         }
@@ -229,9 +225,8 @@ UPDATE repo set git_type=?,
                 build_activate=?,
                 last_sync=? WHERE id='$output';
 EOF;
-
             } else {
-                $sql = <<<EOF
+                $sql = <<<'EOF'
 INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?);
 
 EOF;
@@ -250,7 +245,6 @@ EOF;
             $stmt->bindParam(9, $time);
 
             $stmt->execute();
-
         }
 
         $array = [];
@@ -314,7 +308,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
+            $array = $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
             $cache = false;
             $code = 200;
         }
