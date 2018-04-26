@@ -132,7 +132,6 @@ class Controller
         $getWebhooksStatus = $obj::getWebhooksStatus($access_token, $webhooksUrl, ...$arg);
 
         if (1 === $getWebhooksStatus) {
-
             $pdo = DB::connect();
             $sql = <<<EOF
 UPDATE repo set webhooks_status=1 WHERE git_type='$gitType' AND repo_full_name='$arg[1]/$arg[2]';
@@ -140,7 +139,7 @@ EOF;
 
             $pdo->exec($sql);
 
-            return ['code' => 200, "message" => "Hook already exists on this repository"];
+            return ['code' => 200, 'message' => 'Hook already exists on this repository'];
         }
 
         try {
@@ -154,7 +153,7 @@ EOF;
 
                 $pdo->exec($sql);
 
-                return ['code' => 200, "message" => "Hook already exists on this repository"];
+                return ['code' => 200, 'message' => 'Hook already exists on this repository'];
             } else {
                 return [
                     'code' => $e->getCode(),
@@ -189,9 +188,9 @@ EOF;
     }
 
     /**
-     * 设置 Webhooks 状态缓存
+     * 设置 Webhooks 状态缓存.
      *
-     * @param int $status
+     * @param int   $status
      * @param mixed ...$arg
      */
     private static function setBuildStatusCache(int $status = 0, ...$arg)
@@ -212,20 +211,22 @@ EOF;
     }
 
     /**
-     * 开启构建
+     * 开启构建.
      *
      * @param mixed ...$arg
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function activate(...$arg)
     {
         $arg = self::setGitType(...$arg);
-        /**
+        /*
          * 首先保证 Webhooks 已设置
          */
         self::add(self::$gitType, ...$arg);
-        /**
+        /*
          * 更新缓存 + 更新数据库
          */
         self::setBuildStatusCache(CIConst::BUILD_ACTIVATE, ...$arg);
