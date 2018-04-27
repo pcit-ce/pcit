@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Webhooks;
 
+use Exception;
+use KhsCI\Service\Webhooks\GitHub;
+
 class GitHubController
 {
-    public function __invoke(): void
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function __invoke()
     {
-        file_put_contents('C:/1', file_get_contents('php://input'));
+        $github = new GitHub();
+
+        return $github();
     }
 }

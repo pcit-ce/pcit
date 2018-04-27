@@ -21,7 +21,9 @@ CREATE TABLE `builds` (
   `repo_full_name` VARCHAR(200),
   `create_time`    BIGINT UNSIGNED,
   `end_time`       BIGINT UNSIGNED,
-  `build_activate` VARCHAR(20), /* canceled | passed | errored | failed */
-  `open`           INT UNSIGNED, /* 是否开启构建 0-> 关闭 1 -> 开启 */
+  `build_status`   VARCHAR(20), /* canceled | passed | errored | failed | skip */
+  `build_activate` INT UNSIGNED, /* 是否开启构建 0-> 关闭 1 -> 开启 */
+  `star`           INT UNSIGNED,
+  `request_raw`    JSON,
   KEY (`id`)
 );

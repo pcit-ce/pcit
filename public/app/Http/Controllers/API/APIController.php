@@ -63,6 +63,8 @@ class APIController
                 'settings' => $host.'/{git_type}/{user}/{repo}/settings',
                 'requests' => $host.'/{git_type}/{user}/{repo}/requests',
                 'caches' => $host.'/{git_type}/{user}/{repo}/caches',
+                'star@post' => $host.'/{git_type}/{user}/{repo}/star',
+                'unstar@delete' => $host.'/{git_type}/{user}/{repo}/unstar',
             ],
             'sync@post' => [
                 'coding' => $host.'/sync/coding',

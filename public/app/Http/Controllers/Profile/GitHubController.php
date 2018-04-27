@@ -18,6 +18,7 @@ class GitHubController
      * 获取 SQL 语句执行结果.
      *
      * @param $sql
+     * @return null
      */
     private function getDBOutput($sql)
     {
@@ -44,13 +45,14 @@ class GitHubController
      * 查看用户是否已存在.
      *
      * @param $username
+     * @return null
      */
     private function getUserStatus($username)
     {
-        $typeLower = strtolower(static::TYPE);
+        $gitTypeLower = strtolower(static::TYPE);
 
         $sql = <<<EOF
-SELECT id FROM user WHERE username='$username' AND git_type='$typeLower';
+SELECT id FROM user WHERE username='$username' AND git_type='$gitTypeLower';
 EOF;
 
         return self::getDBOutput($sql);
@@ -60,13 +62,14 @@ EOF;
      * 查看 REPO 是否存在.
      *
      * @param $repo
+     * @return null
      */
     private function getRepoStatus($repo)
     {
-        $typeLower = strtolower(static::TYPE);
+        $gitTypeLower = strtolower(static::TYPE);
 
         $sql = <<<EOF
-SELECT id FROM repo WHERE git_type='$typeLower' AND repo_full_name='$repo';
+SELECT id FROM repo WHERE git_type='$gitTypeLower' AND repo_full_name='$repo';
 EOF;
 
         return self::getDBOutput($sql);
@@ -81,13 +84,13 @@ EOF;
      *
      * @throws Exception
      */
-    public function getProject($accessToken)
+    private function getProject($accessToken)
     {
-        $type = static::TYPE;
+        $gitType = static::TYPE;
 
         $array = [];
 
-        $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
+        $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst($gitType);
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
@@ -131,18 +134,15 @@ EOF;
      *
      * @throws Exception
      */
-    public function syncProject(string $uid,
+    private function syncProject(string $uid,
                                 string $username,
                                 string $email,
                                 string $pic,
                                 string $accessToken = null)
     {
-        $type = static::TYPE;
-        $typeLower = strtolower($type);
+        $typeLower = strtolower(static::TYPE);
 
-        if (!$accessToken) {
-            $accessToken = Session::get($typeLower.'.access_token');
-        }
+        $accessToken = $accessToken ?? Session::get($typeLower.'.access_token');
 
         $array = static::getProject($accessToken);
 
@@ -165,6 +165,7 @@ EOF;
         }
 
         $pdo = DB::connect();
+
         $stmt = $pdo->prepare($sql);
 
         $stmt->bindParam(1, $typeLower);
@@ -208,10 +209,7 @@ EOF;
 
             $time = time();
 
-            $sql = <<<EOF
-SELECT id FROM repo WHERE git_type='$typeLower' AND repo_full_name='$repoFullName';
-EOF;
-            $output = self::getDBOutput($sql);
+            $output=self::getRepoStatus($repoFullName);
 
             if ($output) {
                 $sql = <<<EOF
@@ -252,7 +250,6 @@ EOF;
         $cacheArray = $redis->hGetAll($uid.'_repo');
 
         foreach ($cacheArray as $k => $status) {
-            //$k = explode('/', $k, 2);
             $array[$k] = $status;
         }
 
@@ -268,17 +265,17 @@ EOF;
      */
     public function __invoke(...$arg)
     {
-        $redis = Cache::connect();
+        $gitTypeLower = strtolower(static::TYPE);
 
-        $type = static::TYPE;
-        $typeLower = strtolower($type);
+        $email = Session::get($gitTypeLower.'.email');
+        $uid = Session::get($gitTypeLower.'.uid');
+        $username = Session::get($gitTypeLower.'.username');
 
-        $email = Session::get($typeLower.'.email');
-        $uid = Session::get($typeLower.'.uid');
-        $username = Session::get($typeLower.'.username');
         $arg[0] === $username && $username = $arg[0];
-        $pic = Session::get($typeLower.'.pic');
 
+        $pic = Session::get($gitTypeLower.'.pic');
+
+        $redis = Cache::connect();
         $redis->connect(getenv('REDIS_HOST'));
 
         $ajax = $_GET['ajax'] ?? false;
@@ -293,14 +290,12 @@ EOF;
 
         $sync = false;
         $cache = true;
-        $code = 200;
 
         $array = [];
 
         if ($redis->get($uid.'_username')) {
             $cacheArray = $redis->hGetAll($uid.'_repo');
             foreach ($cacheArray as $k => $status) {
-                // $k = explode('/', $k, 2);
                 $array[$k] = $status;
             }
         } else {
@@ -310,12 +305,11 @@ EOF;
         if ($_GET['sync'] ?? false or $sync) {
             $array = $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
             $cache = false;
-            $code = 200;
         }
 
         return [
-            'code' => $code,
-            'git_type' => $typeLower,
+            'code' => 200,
+            'git_type' => $gitTypeLower,
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,

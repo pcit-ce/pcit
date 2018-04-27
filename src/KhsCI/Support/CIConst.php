@@ -12,6 +12,8 @@ class CIConst
 
     const BUILD_STATUS_FAILED = 'failed';
 
+    const BUILD_STATUS_SKIP = 'skip';
+
     const BUILD_ACTIVATE = 1;
 
     const BUILD_DEACTIVATE = 0;
