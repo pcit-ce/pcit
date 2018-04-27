@@ -29,7 +29,7 @@ class GitHub
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
-        //return $this->$type($content);
+        // return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {
@@ -43,25 +43,26 @@ class GitHub
     }
 
     /**
-     * @param $sql
+     * @param string $sql
+     * @param array $data
      * @return string
      * @throws Exception
      */
-    public function insertDB($sql)
+    public function insertDB(string $sql, array $data)
     {
         $pdo = DB::connect();
 
-        $pdo->exec($sql);
+        $stmt = $pdo->prepare($sql);
 
-        if ('00000' === $pdo->errorCode()) {
+        $stmt->execute($data);
+
+        if ('00000' === $stmt->errorCode()) {
             return $pdo->lastInsertId();
         }
 
-        $error_message = $pdo->errorInfo();
+        $error_message = $stmt->errorInfo();
 
-        $error_message = $error_message[2];
-
-        throw new Exception($error_message, (int)$pdo->errorCode());
+        throw new Exception($error_message[2] ?? '', 500);
     }
 
     /**
@@ -78,20 +79,17 @@ class GitHub
         $event_time = time();
 
         $sql = <<<EOF
-INSERT builds(git_type,
-              event_type,
-              rid,
-              event_time,
-              request_raw
-              ) VALUES(
-              'github',
-              'ping',
-              '$rid',
-              $event_time,
-              '$content'
-              );
+INSERT builds(
+
+git_type,event_type,rid,event_time,request_raw
+
+) VALUES(?,?,?,?,?);
 EOF;
-        return $this->insertDB($sql);
+        $data = [
+            'github', 'ping', $rid, $event_time, $content
+        ];
+
+        return $this->insertDB($sql, $data);
     }
 
     /**
@@ -127,18 +125,21 @@ EOF;
 
         $rid = $obj->repository->id;
 
-
         $sql = <<<EOF
-INSERT builds(git_type,event_type,ref,branch,tag_name,compare,commit_id,
+INSERT builds(
+
+git_type,event_type,ref,branch,tag_name,compare,commit_id,
 commit_message,committer_name,committer_email,committer_username,
 rid,event_time,request_raw
-) VALUES(
-'github','push','$ref','$branch','null','$compare','$commit_id',
-'$commit_message','$committer_name','$committer_email','$committer_username',
-$rid,$commit_timestamp,'$content'
-);
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
-        return $this->insertDB($sql);
+        $data = [
+            'github', 'push', $ref, $branch, null, $compare, $commit_id,
+            $commit_message, $committer_name, $committer_email, $committer_username,
+            $rid, $commit_timestamp, $content
+        ];
+        return $this->insertDB($sql, $data);
     }
 
     /**
@@ -149,9 +150,17 @@ EOF;
     public function status($content)
     {
         $sql = <<<EOF
-INSERT builds(request_raw) VALUES('$content');
+INSERT builds(
+
+event_type,
+request_raw
+
+) VALUES(?,?);
 EOF;
-        return $this->insertDB($sql);
+        $data = [
+            __METHOD__, $content
+        ];
+        return $this->insertDB($sql, $data);
     }
 
     /**
@@ -161,10 +170,52 @@ EOF;
      */
     public function issues($content)
     {
+        $obj = json_decode($content);
+        /**
+         * opened
+         */
+        $action = $obj->action;
         $sql = <<<EOF
-INSERT builds(request_raw) VALUES('$content');
+INSERT builds(
+
+event_type,
+request_raw
+
+) VALUES(?,?);
 EOF;
-        return $this->insertDB($sql);
+        $data = [
+            __METHOD__, $content
+        ];
+        return $this->insertDB($sql, $data);
+    }
+
+    /**
+     * @param $content
+     * @return string
+     * @throws Exception
+     */
+    public function issue_comment($content)
+    {
+        $obj = json_decode($content);
+
+        /**
+         * created
+         */
+        $action = $obj->action;
+
+        $sql = <<<EOF
+INSERT builds(
+
+event_type,
+request_raw
+
+) VALUES(?,?);
+EOF;
+        $data = [
+            __METHOD__, $content
+        ];
+
+        return $this->insertDB($sql, $data);
     }
 
     /**
@@ -174,9 +225,23 @@ EOF;
      */
     public function pull_request($content)
     {
+        $obj = json_decode($content);
+
+        /**
+         * review_requested
+         * assigned
+         * labeled
+         * synchronize
+         */
+        $action = $obj->action;
+
         $sql = <<<EOF
-INSERT builds(request_raw) VALUES('$content');
+INSERT builds(
+
+request_raw
+
+) VALUES(?);
 EOF;
-        return $this->insertDB($sql);
+        return self::insertDB($sql, [$content]);
     }
 }
