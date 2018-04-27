@@ -94,6 +94,11 @@ EOF;
         return $this->insertDB($sql);
     }
 
+    /**
+     * @param $content
+     * @return string
+     * @throws Exception
+     */
     public function push($content)
     {
         $obj = json_decode($content);
@@ -136,7 +141,38 @@ EOF;
         return $this->insertDB($sql);
     }
 
+    /**
+     * @param $content
+     * @return string
+     * @throws Exception
+     */
     public function status($content)
+    {
+        $sql = <<<EOF
+INSERT builds(request_raw) VALUES('$content');
+EOF;
+        return $this->insertDB($sql);
+    }
+
+    /**
+     * @param $content
+     * @return string
+     * @throws Exception
+     */
+    public function issues($content)
+    {
+        $sql = <<<EOF
+INSERT builds(request_raw) VALUES('$content');
+EOF;
+        return $this->insertDB($sql);
+    }
+
+    /**
+     * @param $content
+     * @return string
+     * @throws Exception
+     */
+    public function pull_request($content)
     {
         $sql = <<<EOF
 INSERT builds(request_raw) VALUES('$content');

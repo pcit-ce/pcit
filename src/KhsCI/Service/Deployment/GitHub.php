@@ -1,6 +1,6 @@
 <?php
 
-namespace KhsCI\Service\Deployments;
+namespace KhsCI\Service\Deployment;
 
 use KhsCI\Support\HTTP;
 
@@ -10,7 +10,7 @@ use KhsCI\Support\HTTP;
  *
  * @see https://developer.github.com/v3/repos/deployments/
  */
-class GitHubController
+class GitHub
 {
     const API_URL = 'https://api.github.com';
 
