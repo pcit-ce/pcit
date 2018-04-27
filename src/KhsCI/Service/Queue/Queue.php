@@ -20,6 +20,7 @@ class Queue
         $sql = <<<EOF
 SELECT git_type,rid,commit_id,commit_message FROM builds WHERE build_status='$build_status_pending';
 EOF;
+
         $output = $pdo->query($sql);
 
         foreach ($output as $k) {
@@ -35,9 +36,10 @@ EOF;
 
             if ($skip) {
                 $build_status_skip = CIConst::BUILD_STATUS_SKIP;
-                $sql("UPDATE builds SET build_status=? WHERE git_type=? AND $commit_id=?");
+                $sql = "UPDATE builds SET build_status=? WHERE git_type=? AND commit_id=?";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([$build_status_skip, self::$gitType, $commit_id]);
+
                 continue;
             }
 
@@ -104,8 +106,8 @@ EOF;
      */
     private function skip(string $commit_message)
     {
-        $output = stripos('[skip ci]', $commit_message);
-        $output2 = stripos('[ci skip]', $commit_message);
+        $output = stripos($commit_message, '[skip ci]');
+        $output2 = stripos($commit_message, '[ci skip]');
 
         if ($output === false && $output2 === false) {
             return false;

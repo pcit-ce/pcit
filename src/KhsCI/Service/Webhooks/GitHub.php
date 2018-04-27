@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Webhooks;
 
+use App\Http\Controllers\Status\GitHubController;
 use Error;
 use Exception;
 use KhsCI\Support\CIConst;
@@ -140,7 +141,30 @@ EOF;
             $commit_message, $committer_name, $committer_email, $committer_username,
             $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content
         ];
-        return $this->insertDB($sql, $data);
+
+        $status = new GitHubController();
+
+        $lastId = $this->insertDB($sql, $data);
+
+        $pdo = DB::connect();
+
+        $sql = <<<EOF
+SELECT repo_full_name FROM repo WHERE git_type='github' AND rid=$rid;
+EOF;
+        $output = $pdo->query($sql);
+
+        foreach ($output as $k) {
+            $repo_full_name = $k[0];
+        }
+
+        $array = explode('/', $repo_full_name);
+        $github_status = CIConst::GITHUB_STATUS_PENDING;
+
+        $target_url = getenv('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
+
+        return $status->create($array[0], $array[1], $commit_id,
+            $github_status, $target_url,
+            'The analysis or builds is pending', 'continuous-integration/khsci/push');
     }
 
     /**
