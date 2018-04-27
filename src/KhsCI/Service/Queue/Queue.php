@@ -24,7 +24,6 @@ EOF;
         $output = $pdo->query($sql);
 
         foreach ($output as $k) {
-
             $git_type = $k[0];
             $rid = $k[1];
             self::$gitType = $git_type;
@@ -36,7 +35,7 @@ EOF;
 
             if ($skip) {
                 $build_status_skip = CIConst::BUILD_STATUS_SKIP;
-                $sql = "UPDATE builds SET build_status=? WHERE git_type=? AND commit_id=?";
+                $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND commit_id=?';
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([$build_status_skip, self::$gitType, $commit_id]);
 
@@ -55,9 +54,10 @@ EOF;
     }
 
     /**
-     * 检查是否启用了构建
+     * 检查是否启用了构建.
      *
      * @param $rid
+     *
      * @return bool
      */
     private function getRepoBuildActivateStatus($rid)
@@ -86,22 +86,24 @@ EOF;
     }
 
     /**
-     * 执行构建
+     * 执行构建.
+     *
      * @param $rid
      * @param $commit_id
      */
-    private function run($rid, $commit_id)
+    private function run($rid, $commit_id): void
     {
-        echo "running....";
+        echo 'running....';
         CIConst::BUILD_STATUS_ERRORED;
         CIConst::BUILD_STATUS_FAILED;
         CIConst::BUILD_STATUS_PASSED;
     }
 
     /**
-     * 检查 commit 信息跳过构建
+     * 检查 commit 信息跳过构建.
      *
      * @param $commit_message
+     *
      * @return bool
      */
     private function skip(string $commit_message)
@@ -109,19 +111,18 @@ EOF;
         $output = stripos($commit_message, '[skip ci]');
         $output2 = stripos($commit_message, '[ci skip]');
 
-        if ($output === false && $output2 === false) {
+        if (false === $output && false === $output2) {
             return false;
         }
 
         return true;
-
     }
 
     /**
      * @param $rid
      * @param int $lastId
      */
-    private function inactive($rid, int $lastId = 0)
+    private function inactive($rid, int $lastId = 0): void
     {
         $pdo = DB::connect();
 

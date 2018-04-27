@@ -18,7 +18,6 @@ class GitHubController
      * 获取 SQL 语句执行结果.
      *
      * @param $sql
-     * @return null
      */
     private function getDBOutput($sql)
     {
@@ -45,7 +44,6 @@ class GitHubController
      * 查看用户是否已存在.
      *
      * @param $username
-     * @return null
      */
     private function getUserStatus($username)
     {
@@ -62,7 +60,6 @@ EOF;
      * 查看 REPO 是否存在.
      *
      * @param $repo
-     * @return null
      */
     private function getRepoStatus($repo)
     {
@@ -94,7 +91,7 @@ EOF;
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -124,10 +121,10 @@ EOF;
     /**
      * 与 Git 同步.
      *
-     * @param string $uid
-     * @param string $username
-     * @param string $email
-     * @param string $pic
+     * @param string      $uid
+     * @param string      $username
+     * @param string      $email
+     * @param string      $pic
      * @param string|null $accessToken
      *
      * @return array
@@ -298,7 +295,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
+            $array = $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
             $cache = false;
         }
 

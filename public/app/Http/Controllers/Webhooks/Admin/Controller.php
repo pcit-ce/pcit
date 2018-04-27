@@ -194,7 +194,7 @@ EOF;
      * @param int   $status
      * @param mixed ...$arg
      */
-    private static function setBuildStatusCache(int $status = 0, ...$arg)
+    private static function setBuildStatusCache(int $status = 0, ...$arg): void
     {
         $gitType = self::$gitType;
         $uid = Session::get($gitType.'.uid');

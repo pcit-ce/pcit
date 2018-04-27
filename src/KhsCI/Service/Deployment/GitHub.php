@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Deployment;
 
 use KhsCI\Support\HTTP;
 
 /**
- *
  * 展示 CI 状态
  *
  * @see https://developer.github.com/v3/repos/deployments/
@@ -30,10 +31,11 @@ class GitHub
     /**
      * List deployments.
      *
-     * @param string $sha The SHA that was recorded at creation time. Default: <code>none<code>
-     * @param string $ref The name of the ref. This can be a branch, tag, or SHA. Default: <code>none<code>
-     * @param string $task The name of the task for the deployment (e.g., <code>deploy<code> or <code>deploy:migrations<code>). Default: <code>none<code>
+     * @param string $sha         The SHA that was recorded at creation time. Default: <code>none<code>
+     * @param string $ref         The name of the ref. This can be a branch, tag, or SHA. Default: <code>none<code>
+     * @param string $task        The name of the task for the deployment (e.g., <code>deploy<code> or <code>deploy:migrations<code>). Default: <code>none<code>
      * @param string $environment The name of the environment that was deployed to (e.g., <code>staging<code> or <code>production<code>). Default: <code>none<code>
+     *
      * @return mixed
      */
     public function list(string $sha, string $ref, string $task, string $environment)
@@ -48,11 +50,11 @@ class GitHub
         $url = implode('/', $this->urlCommon);
 
         return HTTP::get($url.'?'.$queryParameters, null);
-
     }
 
     /**
      * @param string $id
+     *
      * @return mixed
      */
     public function getSingleInfo(string $id)
@@ -67,17 +69,17 @@ class GitHub
     }
 
     /**
-     * Create a deployment
+     * Create a deployment.
      *
-     * @param string $ref
-     * @param string $task
-     * @param bool $auto_merge
-     * @param array|null $required_contexts
+     * @param string      $ref
+     * @param string      $task
+     * @param bool        $auto_merge
+     * @param array|null  $required_contexts
      * @param string|null $payload
-     * @param string $environment
+     * @param string      $environment
      * @param string|null $description
-     * @param bool|null $transient_environment
-     * @param bool|null $production_environment
+     * @param bool|null   $transient_environment
+     * @param bool|null   $production_environment
      */
     public function create(string $ref,
                            string $task = 'deploy',
@@ -88,10 +90,7 @@ class GitHub
                            string $description = null,
                            bool $transient_environment = null,
                            bool $production_environment = null
-
-    )
-    {
-
+    ): void {
         $array = [
             'ref' => $ref,
             'task' => $task,
@@ -111,15 +110,14 @@ class GitHub
         HTTP::post($url, json_encode($array));
     }
 
-    public function update()
+    public function update(): void
     {
-
     }
 
     /**
      * @param string $id
      */
-    public function getStatus(string $id)
+    public function getStatus(string $id): void
     {
         $urlCommon = $this->urlCommon;
 
@@ -133,6 +131,7 @@ class GitHub
     /**
      * @param string $id
      * @param string $statusId
+     *
      * @return mixed
      */
     public function getSingleStatus(string $id, string $statusId)
@@ -147,13 +146,13 @@ class GitHub
     }
 
     /**
-     * @param string $id
-     * @param string $state
+     * @param string      $id
+     * @param string      $state
      * @param string|null $target_url
      * @param string|null $log_url
      * @param string|null $description
      * @param string|null $environment_url
-     * @param bool $auto_inactive
+     * @param bool        $auto_inactive
      */
     public function createStatus(string $id,
                                  string $state,
@@ -161,9 +160,7 @@ class GitHub
                                  string $log_url = null,
                                  string $description = null,
                                  string $environment_url = null,
-                                 bool $auto_inactive = true)
+                                 bool $auto_inactive = true): void
     {
-
     }
-
 }

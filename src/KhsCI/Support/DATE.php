@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace KhsCI\Support;
-
 
 class DATE
 {
@@ -40,7 +40,5 @@ class DATE
         }
 
         return mktime($hour, $minute, $second, $month, $day, $year);
-
-
     }
 }

@@ -46,8 +46,10 @@ class GitHub
 
     /**
      * @param string $sql
-     * @param array $data
+     * @param array  $data
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function insertDB(string $sql, array $data)
@@ -69,7 +71,9 @@ class GitHub
 
     /**
      * @param $content
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function ping($content)
@@ -88,7 +92,7 @@ git_type,event_type,rid,event_time,request_raw
 ) VALUES(?,?,?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $rid, $event_time, $content
+            'github', __FUNCTION__, $rid, $event_time, $content,
         ];
 
         return $this->insertDB($sql, $data);
@@ -96,7 +100,9 @@ EOF;
 
     /**
      * @param $content
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function push($content)
@@ -139,7 +145,7 @@ EOF;
         $data = [
             'github', __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
-            $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content
+            $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content,
         ];
 
         $status = new GitHubController();
@@ -168,7 +174,9 @@ EOF;
 
     /**
      * @param $content
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function status($content)
@@ -181,21 +189,24 @@ git_type,event_type,request_raw
 ) VALUES(?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $content
+            'github', __FUNCTION__, $content,
         ];
+
         return $this->insertDB($sql, $data);
     }
 
     /**
      * @param $content
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function issues($content)
     {
         $obj = json_decode($content);
         /**
-         * opened
+         * opened.
          */
         $action = $obj->action;
         $sql = <<<EOF
@@ -206,14 +217,17 @@ git_type,event_type,request_raw
 ) VALUES(?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $content
+            'github', __FUNCTION__, $content,
         ];
+
         return $this->insertDB($sql, $data);
     }
 
     /**
      * @param $content
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function issue_comment($content)
@@ -221,7 +235,7 @@ EOF;
         $obj = json_decode($content);
 
         /**
-         * created
+         * created.
          */
         $action = $obj->action;
 
@@ -233,7 +247,7 @@ git_type,event_type,request_raw
 ) VALUES(?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $content
+            'github', __FUNCTION__, $content,
         ];
 
         return $this->insertDB($sql, $data);
@@ -241,7 +255,9 @@ EOF;
 
     /**
      * @param $content
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function pull_request($content)
@@ -252,7 +268,7 @@ EOF;
          * review_requested
          * assigned
          * labeled
-         * synchronize
+         * synchronize.
          */
         $action = $obj->action;
 
@@ -264,15 +280,17 @@ git_type,event_type,request_raw
 ) VALUES(?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $content
+            'github', __FUNCTION__, $content,
         ];
+
         return self::insertDB($sql, $data);
     }
 
     /**
-     * Do Nothing
+     * Do Nothing.
      *
      * @param $content
+     *
      * @return array
      */
     public function watch($content)
@@ -280,8 +298,7 @@ EOF;
         $obj = json_decode($content);
 
         /**
-         * started
-         *
+         * started.
          */
         $action = $obj->action;
 
@@ -291,9 +308,10 @@ EOF;
     }
 
     /**
-     * Do Nothing
+     * Do Nothing.
      *
      * @param $content
+     *
      * @return array
      */
     public function fork($content)
@@ -303,7 +321,7 @@ EOF;
         $forkee = $obj->forkee;
 
         return [
-            "code" => 200
+            'code' => 200,
         ];
     }
 }

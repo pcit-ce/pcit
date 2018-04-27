@@ -12,7 +12,7 @@ class APIController
 
         return [
             'login' => $host.'/login',
-            'queue' => $host."/queue",
+            'queue' => $host.'/queue',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
             ],
@@ -84,7 +84,7 @@ class APIController
             'deployment@github' => [
                 'list@get' => $host.'/deployment/list',
                 'create@post' => $host.'/deployment/create',
-                'createStatus@post' => $host.'/deployment/create/status'
+                'createStatus@post' => $host.'/deployment/create/status',
             ],
             'dashboard' => $host.'/dashboard',
             'api' => $host.'/api',

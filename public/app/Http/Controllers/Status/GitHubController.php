@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Status;
 
 use KhsCI\Service\Status\GitHub;
 use KhsCI\Support\DB;
-use KhsCI\Support\Session;
 
 class GitHubController
 {
@@ -20,6 +21,7 @@ class GitHubController
 
     /**
      * @param mixed ...$arg
+     *
      * @return mixed
      */
     public function list(...$arg)
@@ -35,6 +37,7 @@ class GitHubController
      * @param $target_url
      * @param $description
      * @param $context
+     *
      * @return mixed
      */
     public function create($login_username, $repo_full_name, $commit_sha, $state, $target_url, $description, $context)

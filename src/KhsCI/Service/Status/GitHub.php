@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Status;
 
 use KhsCI\Support\HTTP;
@@ -18,6 +20,7 @@ class GitHub
      * @param $username
      * @param $repo
      * @param $ref
+     *
      * @return mixed
      */
     public function list($username, $repo, $ref)
@@ -38,6 +41,7 @@ class GitHub
      * @param string $target_url
      * @param string $description
      * @param string $context
+     *
      * @return mixed
      */
     public function create(string $username,

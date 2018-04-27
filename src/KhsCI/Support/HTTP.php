@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Support;
 
 use Curl\Curl;
@@ -26,5 +28,4 @@ class HTTP
 
         return $curl->delete($url, $header);
     }
-
 }
