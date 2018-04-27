@@ -133,7 +133,7 @@ git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
 committer_name,committer_email,committer_username,
 rid,event_time,build_status,request_raw
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $data = [
             'github', __FUNCTION__, $ref, $branch, null, $compare, $commit_id,

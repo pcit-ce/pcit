@@ -94,7 +94,7 @@ EOF;
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string) $accessToken, $page);
+                $json = $objClass::getProjects((string)$accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -124,10 +124,10 @@ EOF;
     /**
      * 与 Git 同步.
      *
-     * @param string      $uid
-     * @param string      $username
-     * @param string      $email
-     * @param string      $pic
+     * @param string $uid
+     * @param string $username
+     * @param string $email
+     * @param string $pic
      * @param string|null $accessToken
      *
      * @return array
@@ -135,10 +135,10 @@ EOF;
      * @throws Exception
      */
     private function syncProject(string $uid,
-                                string $username,
-                                string $email,
-                                string $pic,
-                                string $accessToken = null)
+                                 string $username,
+                                 string $email,
+                                 string $pic,
+                                 string $accessToken = null)
     {
         $typeLower = strtolower(static::TYPE);
 
@@ -168,20 +168,12 @@ EOF;
 
         $stmt = $pdo->prepare($sql);
 
-        $stmt->bindParam(1, $typeLower);
-        $stmt->bindParam(2, $uid);
-        $stmt->bindParam(3, $username);
-        $stmt->bindParam(4, $email);
-        $stmt->bindParam(5, $pic);
-        $stmt->bindParam(6, $accessToken);
-
-        $stmt->execute();
+        $stmt->execute([$typeLower, $uid, $username, $email, $pic, $accessToken]);
 
         foreach ($array as $rid => $repoFullName) {
             $repoArray = explode('/', $repoFullName);
 
-            $repoPrefix = $repoArray[0];
-            $repoName = $repoArray[1];
+            list($repoPrefix, $repoName) = $repoArray;
 
             $webhooksStatus = 0;
             $buildActivate = 0;
@@ -209,7 +201,7 @@ EOF;
 
             $time = time();
 
-            $output=self::getRepoStatus($repoFullName);
+            $output = self::getRepoStatus($repoFullName);
 
             if ($output) {
                 $sql = <<<EOF
@@ -225,12 +217,14 @@ UPDATE repo set git_type=?,
 EOF;
             } else {
                 $sql = <<<'EOF'
-INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?);
+INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
             }
 
             $stmt = $pdo->prepare($sql);
+
+            $star = 0;
 
             $stmt->bindParam(1, $typeLower);
             $stmt->bindParam(2, $rid);
@@ -240,7 +234,8 @@ EOF;
             $stmt->bindParam(6, $repoFullName);
             $stmt->bindParam(7, $webhooksStatus);
             $stmt->bindParam(8, $buildActivate);
-            $stmt->bindParam(9, $time);
+            $stmt->bindParam(9, $star);
+            $stmt->bindParam(10, $time);
 
             $stmt->execute();
         }
@@ -303,7 +298,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $array = $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
+            $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
             $cache = false;
         }
 

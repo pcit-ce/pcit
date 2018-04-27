@@ -70,6 +70,10 @@ Route::get('seo/baidu/xzh', '');
 
 /*Queue*/
 
+Route::post('queue', 'Queue\QueueController');
+
+Route::get('queue', 'Queue\QueueController');
+
 /*IM*/
 
 /*Profile*/

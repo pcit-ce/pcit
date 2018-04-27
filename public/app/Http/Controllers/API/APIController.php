@@ -12,6 +12,7 @@ class APIController
 
         return [
             'login' => $host.'/login',
+            'queue' => $host."/queue",
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
             ],
@@ -70,11 +71,6 @@ class APIController
                 'coding' => $host.'/sync/coding',
                 'gitee' => $host.'/sync/gitee',
                 'github' => $host.'/sync/github',
-            ],
-            'queue' => [
-                'coding' => '',
-                'gitee' => '',
-                'github' => '',
             ],
             'profile' => [
                 'coding' => $host.'/profile/coding/{username}',

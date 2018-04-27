@@ -16,6 +16,8 @@ class CIConst
 
     const BUILD_STATUS_SKIP = 'skip';
 
+    const BUILD_STATUS_INACTIVE = 'inactive';
+
     const BUILD_ACTIVATE = 1;
 
     const BUILD_DEACTIVATE = 0;

@@ -42,7 +42,7 @@ class Controller
      */
     private static function checkAccessToken()
     {
-        $header = Request::header('Authorization') ?? '';
+        $header = Request::getHeader('Authorization') ?? '';
 
         $access_token = (explode(' ', $header))[1]
             ?? Session::get(self::$gitType.'.access_token')
