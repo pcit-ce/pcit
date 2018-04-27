@@ -86,7 +86,7 @@ git_type,event_type,rid,event_time,request_raw
 ) VALUES(?,?,?,?,?);
 EOF;
         $data = [
-            'github', 'ping', $rid, $event_time, $content
+            'github', __FUNCTION__, $rid, $event_time, $content
         ];
 
         return $this->insertDB($sql, $data);
@@ -128,14 +128,14 @@ EOF;
         $sql = <<<EOF
 INSERT builds(
 
-git_type,event_type,ref,branch,tag_name,compare,commit_id,
-commit_message,committer_name,committer_email,committer_username,
+git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
+committer_name,committer_email,committer_username,
 rid,event_time,request_raw
 
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $data = [
-            'github', 'push', $ref, $branch, null, $compare, $commit_id,
+            'github', __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
             $rid, $commit_timestamp, $content
         ];
@@ -152,13 +152,12 @@ EOF;
         $sql = <<<EOF
 INSERT builds(
 
-event_type,
-request_raw
+git_type,event_type,request_raw
 
-) VALUES(?,?);
+) VALUES(?,?,?);
 EOF;
         $data = [
-            __METHOD__, $content
+            'github', __FUNCTION__, $content
         ];
         return $this->insertDB($sql, $data);
     }
@@ -178,13 +177,12 @@ EOF;
         $sql = <<<EOF
 INSERT builds(
 
-event_type,
-request_raw
+git_type,event_type,request_raw
 
-) VALUES(?,?);
+) VALUES(?,?,?);
 EOF;
         $data = [
-            __METHOD__, $content
+            'github', __FUNCTION__, $content
         ];
         return $this->insertDB($sql, $data);
     }
@@ -206,13 +204,12 @@ EOF;
         $sql = <<<EOF
 INSERT builds(
 
-event_type,
-request_raw
+git_type,event_type,request_raw
 
-) VALUES(?,?);
+) VALUES(?,?,?);
 EOF;
         $data = [
-            __METHOD__, $content
+            'github', __FUNCTION__, $content
         ];
 
         return $this->insertDB($sql, $data);
@@ -238,10 +235,13 @@ EOF;
         $sql = <<<EOF
 INSERT builds(
 
-request_raw
+git_type,event_type,request_raw
 
-) VALUES(?);
+) VALUES(?,?,?);
 EOF;
-        return self::insertDB($sql, [$content]);
+        $data = [
+            'github', __METHOD__, $content
+        ];
+        return self::insertDB($sql, $data);
     }
 }
