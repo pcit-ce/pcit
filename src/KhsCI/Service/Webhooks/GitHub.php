@@ -149,7 +149,7 @@ EOF;
         $pdo = DB::connect();
 
         $sql = <<<EOF
-SELECT repo_full_name FROM repo WHERE git_type='github' AND rid=$rid;
+SELECT repo_full_name FROM repo WHERE git_type='github' AND rid='$rid';
 EOF;
         $output = $pdo->query($sql);
 
@@ -157,12 +157,11 @@ EOF;
             $repo_full_name = $k[0];
         }
 
-        $array = explode('/', $repo_full_name);
         $github_status = CIConst::GITHUB_STATUS_PENDING;
 
         $target_url = getenv('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
 
-        return $status->create($array[0], $array[1], $commit_id,
+        return $status->create('khs1994', $repo_full_name, $commit_id,
             $github_status, $target_url,
             'The analysis or builds is pending', 'continuous-integration/khsci/push');
     }
