@@ -6,7 +6,7 @@ namespace KhsCI\Support;
 
 class Request
 {
-    public static function header($header = null, $default = null)
+    public static function getAllHeaders()
     {
         $headers = [];
 
@@ -16,8 +16,15 @@ class Request
             }
         }
 
+        return $headers;
+    }
+
+    public static function getHeader($header = null, $default = null)
+    {
+        $headers = self::getAllHeaders();
+
         if ($header) {
-            return $headers[$header] ?? $default;
+            return $headers["$header"] ?? $default;
         }
 
         return $headers;

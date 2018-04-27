@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Webhooks\Admin;
 
+use Error;
 use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CIConst;
@@ -113,7 +114,7 @@ class Controller
 
         try {
             $data = self::$method();
-        } catch (Exception $e) {
+        } catch (Exception | Error $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         }
 
