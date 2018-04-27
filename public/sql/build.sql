@@ -26,8 +26,7 @@ CREATE TABLE `builds` (
   `event_time`         BIGINT UNSIGNED,
   `create_time`        BIGINT UNSIGNED,
   `end_time`           BIGINT UNSIGNED,
-  `build_status`       VARCHAR(20), /* canceled | passed | errored | failed | skip */
-  `build_activate`     INT UNSIGNED, /* 是否开启构建 0-> 关闭 1 -> 开启 */
+  `build_status`       VARCHAR(20), /* pending | canceled | passed | errored | failed | skip | inactive */
   `request_raw`        JSON,
   KEY (`id`)
 );

@@ -44,15 +44,15 @@ Route::get('oauth/gitee', 'Users\OAuthGiteeController@getAccessToken');
 
 /*Admin webhooks: list create delete*/
 
-Route::post('webhooks/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@add');
+Route::post('webhooks/{git_type}/{username}/{repo}/{id}', 'Webhooks\Admin\Controller@add');
 
-Route::get('webhooks/{git_type}/{user}/{repo}', 'Webhooks\Admin\Controller@list');
+Route::get('webhooks/{git_type}/{username}/{repo}', 'Webhooks\Admin\Controller@list');
 
-Route::delete('webhooks/{git_type}/{user}/{repo}/{id}', 'Webhooks\Admin\Controller@delete');
+Route::delete('webhooks/{git_type}/{username}/{repo}/{id}', 'Webhooks\Admin\Controller@delete');
 
-Route::post('webhooks/{git_type}/{user}/{repo}/{id}/activate', 'Webhooks\Admin\Controller@activate');
+Route::post('webhooks/{git_type}/{username}/{repo}/{id}/activate', 'Webhooks\Admin\Controller@activate');
 
-Route::delete('webhooks/{git_type}/{user}/{repo}/{id}/deactivate', 'Webhooks\Admin\Controller@deactivate');
+Route::delete('webhooks/{git_type}/{username}/{repo}/{id}/deactivate', 'Webhooks\Admin\Controller@deactivate');
 
 /*Webhooks: receive git webhooks*/
 
@@ -70,18 +70,27 @@ Route::get('seo/baidu/xzh', '');
 
 /*Queue*/
 
+Route::post('queue', 'Queue\QueueController');
+
+Route::get('queue', 'Queue\QueueController');
+
 /*IM*/
 
 /*Profile*/
 
-Route::get('profile/coding/{user}', 'Profile\CodingController');
+Route::get('profile/coding/{username}', 'Profile\CodingController');
 
-Route::get('profile/gitee/{user}', 'Profile\GiteeController');
+Route::get('profile/gitee/{username}', 'Profile\GiteeController');
 
-Route::get('profile/github/{user}', 'Profile\GitHubController');
+Route::get('profile/github/{username}', 'Profile\GitHubController');
 
 /*Sync Repo*/
 
 Route::post('sync/coding', 'Sync\CodingController');
 Route::post('sync/gitee', 'Sync\GiteeController');
 Route::post('sync/github', 'Sync\GithubController');
+
+/*Status*/
+
+Route::get('status/github/{username}/{repo}/{ref}', 'Status\GithubController@list');
+Route::post('status/github/{username}/{repo}/{commit_sha}', 'Status\GitHubController@create');

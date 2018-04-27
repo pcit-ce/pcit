@@ -12,6 +12,7 @@ class APIController
 
         return [
             'login' => $host.'/login',
+            'queue' => $host."/queue",
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
             ],
@@ -22,29 +23,29 @@ class APIController
             ],
             'webhoks@admin' => [
                 'list@get' => [
-                    'coding' => $host.'/webhooks/coding/{user}/{repo}',
-                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}',
-                    'github' => $host.'/webhooks/github/{user}/{repo}',
+                    'coding' => $host.'/webhooks/coding/{username}/{repo}',
+                    'gitee' => $host.'/webhooks/gitee/{username}/{repo}',
+                    'github' => $host.'/webhooks/github/{username}/{repo}',
                 ],
                 'cteate@post' => [
-                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}',
-                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}',
-                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}',
+                    'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}',
+                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}',
                 ],
                 'delete@delete' => [
-                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}',
-                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}',
-                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}',
+                    'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}',
+                    'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}',
+                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}',
                 ],
                 'activate@post' => [
-                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}/activate',
-                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}/activate',
-                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}/activate',
+                    'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}/activate',
+                    'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}/activate',
+                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}/activate',
                 ],
                 'deactivate@post' => [
-                    'coding' => $host.'/webhooks/coding/{user}/{repo}/{id}/deactivate',
-                    'gitee' => $host.'/webhooks/gitee/{user}/{repo}/{id}/deactivate',
-                    'github' => $host.'/webhooks/github/{user}/{repo}/{id}/deactivate',
+                    'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}/deactivate',
+                    'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}/deactivate',
+                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}/deactivate',
                 ],
             ],
             'webhooks@receive' => [
@@ -53,33 +54,37 @@ class APIController
                 'github' => $host.'/webhooks/github',
             ],
             'repo' => [
-                'main' => $host.'/{git_type}/{user}/{repo}',
-                'branches' => $host.'/{git_type}/{user}/{repo}/branches',
+                'main' => $host.'/{git_type}/{username}/{repo}',
+                'branches' => $host.'/{git_type}/{username}/{repo}/branches',
                 'builds' => [
-                    'main' => $host.'/{git_type}/{user}/{repo}/builds',
-                    'id' => $host.'/{git_type}/{user}/{repo}/builds/{id}',
+                    'main' => $host.'/{git_type}/{username}/{repo}/builds',
+                    'id' => $host.'/{git_type}/{username}/{repo}/builds/{id}',
                 ],
-                'pull_requests' => $host.'/{git_type}/{user}/{repo}/pull_requests',
-                'settings' => $host.'/{git_type}/{user}/{repo}/settings',
-                'requests' => $host.'/{git_type}/{user}/{repo}/requests',
-                'caches' => $host.'/{git_type}/{user}/{repo}/caches',
-                'star@post' => $host.'/{git_type}/{user}/{repo}/star',
-                'unstar@delete' => $host.'/{git_type}/{user}/{repo}/unstar',
+                'pull_requests' => $host.'/{git_type}/{username}/{repo}/pull_requests',
+                'settings' => $host.'/{git_type}/{username}/{repo}/settings',
+                'requests' => $host.'/{git_type}/{username}/{repo}/requests',
+                'caches' => $host.'/{git_type}/{username}/{repo}/caches',
+                'star@post' => $host.'/{git_type}/{username}/{repo}/star',
+                'unstar@delete' => $host.'/{git_type}/{username}/{repo}/unstar',
             ],
             'sync@post' => [
                 'coding' => $host.'/sync/coding',
                 'gitee' => $host.'/sync/gitee',
                 'github' => $host.'/sync/github',
             ],
-            'queue' => [
-                'coding' => '',
-                'gitee' => '',
-                'github' => '',
-            ],
             'profile' => [
-                'coding' => $host.'/profile/coding/{user_org}',
-                'gitee' => $host.'/profile/gitee/{user_org}',
-                'github' => $host.'/profile/github/{user_org}',
+                'coding' => $host.'/profile/coding/{username}',
+                'gitee' => $host.'/profile/gitee/{username}',
+                'github' => $host.'/profile/github/{username}',
+            ],
+            'statuses@github' => [
+                'list@get' => $host.'/status/github/{username}/{repo}/{ref}',
+                'create@post' => $host.'/status/github/{username}/{repo}/{commit_sha}',
+            ],
+            'deployment@github' => [
+                'list@get' => $host.'/deployment/list',
+                'create@post' => $host.'/deployment/create',
+                'createStatus@post' => $host.'/deployment/create/status'
             ],
             'dashboard' => $host.'/dashboard',
             'api' => $host.'/api',
