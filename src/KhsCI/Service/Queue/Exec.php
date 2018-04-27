@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Queue;
 
+use KhsCI\Support\CIConst;
+use KhsCI\Support\DB;
+
 class Exec
 {
-    public function exec($repo, $branch, $path): void
+    public function exec(): void
     {
-        chdir($path);
-        // remote origin not exists
+        $pdo = DB::connect();
 
-        popen(sprintf('git remote get-url origin || git remote set-url %s', $repo), 'r');
+        $build_status_pending = CIConst::BUILD_STATUS_PENDING;
 
-        // remote origin exists
+        $sql = <<<EOF
+SELECT git_type,rid,commit_id FROM builds WHERE build_activate=1 AND build_status='$build_status_pending';
+EOF;
 
-        popen(sprintf('git remote get-url origin && git remote set-url %s', $repo), 'r');
-
-        popen(sprintf('git fetch origin %s ; git reset --hard origin/%s', $branch, $branch), 'r');
     }
 }

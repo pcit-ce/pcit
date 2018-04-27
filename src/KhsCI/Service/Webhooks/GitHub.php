@@ -6,6 +6,7 @@ namespace KhsCI\Service\Webhooks;
 
 use Error;
 use Exception;
+use KhsCI\Support\CIConst;
 use KhsCI\Support\DATE;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
@@ -130,14 +131,14 @@ INSERT builds(
 
 git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
 committer_name,committer_email,committer_username,
-rid,event_time,request_raw
+rid,event_time,build_status,request_raw
 
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $data = [
             'github', __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
-            $rid, $commit_timestamp, $content
+            $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content
         ];
         return $this->insertDB($sql, $data);
     }
@@ -240,8 +241,46 @@ git_type,event_type,request_raw
 ) VALUES(?,?,?);
 EOF;
         $data = [
-            'github', __METHOD__, $content
+            'github', __FUNCTION__, $content
         ];
         return self::insertDB($sql, $data);
+    }
+
+    /**
+     * Do Nothing
+     *
+     * @param $content
+     * @return array
+     */
+    public function watch($content)
+    {
+        $obj = json_decode($content);
+
+        /**
+         * started
+         *
+         */
+        $action = $obj->action;
+
+        return [
+            'code' => 200,
+        ];
+    }
+
+    /**
+     * Do Nothing
+     *
+     * @param $content
+     * @return array
+     */
+    public function fork($content)
+    {
+        $obj = json_decode($content);
+
+        $forkee = $obj->forkee;
+
+        return [
+            "code" => 200
+        ];
     }
 }
