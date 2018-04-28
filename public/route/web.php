@@ -93,4 +93,21 @@ Route::post('sync/github', 'Sync\GithubController');
 /*Status*/
 
 Route::get('status/github/{username}/{repo}/{ref}', 'Status\GithubController@list');
-Route::post('status/github/{username}/{repo}/{commit_sha}', 'Status\GitHubController@create');
+Route::get('combined_status/github/{username}/{repo}/{commit_sha}', 'Status\GitHubController@listcombinedStatus');
+
+/* Builds */
+
+Route::get('{git_type}/{username}/{repo}', 'Builds\ListController');
+Route::post('{git_type}/{username}/{repo}', 'Builds\ListController@post');
+Route::get('{git_type}/{username}/{repo}/branches', 'Builds\ListController');
+Route::post('{git_type}/{username}/{repo}/branches', 'Builds\ListController@post');
+Route::get('{git_type}/{username}/{repo}/builds', 'Builds\ListController');
+Route::get('{git_type}/{username}/{repo}/pull_requests', 'Builds\ListController');
+Route::get('{git_type}/{username}/{repo}/settings', 'Builds\ListController');
+Route::get('{git_type}/{username}/{repo}/requests', 'Builds\ListController');
+Route::get('{git_type}/{username}/{repo}/caches', 'Builds\ListController');
+
+/* Star */
+
+Route::post('{git_type}/{username}/{repo}/star', 'Builds\ListController');
+Route::delete('{git_type}/{username}/{repo}/star', 'Builds\ListController');

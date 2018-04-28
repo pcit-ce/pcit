@@ -17,13 +17,12 @@ class GitHub
     const API_URL = 'https://api.github.com';
 
     /**
-     * @param $username
-     * @param $repo
-     * @param $ref
-     *
+     * @param string $username
+     * @param string $repo
+     * @param string $ref
      * @return mixed
      */
-    public function list($username, $repo, $ref)
+    public function list(string $username, string $repo, string $ref)
     {
         $url = [self::API_URL, 'repos', $username, $repo, 'commits', $ref, 'statuses'];
 
@@ -67,5 +66,22 @@ class GitHub
         var_dump($url);
 
         return HTTP::post($url, $data, ['Authorization' => 'token '.$accessToken]);
+    }
+
+    /**
+     * 获取某分支的组合状态信息
+     *
+     * @param $username
+     * @param $repo
+     * @param $ref
+     * @return mixed
+     */
+    public function listCombinedStatus($username, $repo, $ref)
+    {
+        $url = [self::API_URL, 'repos', $username, $repo, 'commits', $ref, 'status'];
+
+        $url = implode('/', $url);
+
+        return json_decode(HTTP::get($url), true);
     }
 }
