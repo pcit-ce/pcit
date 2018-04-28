@@ -56,12 +56,18 @@ class APIController
             ],
             'repo' => [
                 'main' => $host.'/{git_type}/{username}/{repo}',
-                'branches' => $host.'/{git_type}/{username}/{repo}/branches',
+                'branches' => [
+                    'main' => $host.'/{git_type}/{username}/{repo}/branches',
+                    'status' => $host.'/{git_type}/{username}/{repo}/{branch}/status',
+                ],
                 'builds' => [
                     'main' => $host.'/{git_type}/{username}/{repo}/builds',
                     'id' => $host.'/{git_type}/{username}/{repo}/builds/{id}',
                 ],
-                'pull_requests' => $host.'/{git_type}/{username}/{repo}/pull_requests',
+                'pull_requests' => [
+                    'main' => $host.'/{git_type}/{username}/{repo}/pull_requests',
+                    'id' => $host.'/{git_type}/{username}/{repo}/pull_requests/{id}',
+                ],
                 'settings' => $host.'/{git_type}/{username}/{repo}/settings',
                 'requests' => $host.'/{git_type}/{username}/{repo}/requests',
                 'caches' => $host.'/{git_type}/{username}/{repo}/caches',
@@ -81,6 +87,14 @@ class APIController
             'statuses@github' => [
                 'list@get' => $host.'/status/github/{username}/{repo}/{ref}',
                 'combinedStatus@get' => $host.'/combined_status/github/{username}/{repo}/{ref}',
+            ],
+            'ico' => [
+                'canceled' => $host.'/ico/canceled',
+                'errored' => $host.'/ico/errored',
+                'failing' => $host.'/ico/failing',
+                'passing' => $host.'/ico/passing',
+                'pending' => $host.'/ico/pending',
+
             ],
             'deployment@github' => [
                 'list@get' => $host.'/deployment/list',

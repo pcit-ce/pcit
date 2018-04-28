@@ -33,8 +33,7 @@ trait OAuthTrait
         try {
             $method = 'OAuth'.ucfirst($type);
 
-            $access_token = Session::get($type.'.access_token')
-                ?? $this->ci->$method->getAccessToken((string) $code, $state)
+            $access_token = $this->ci->$method->getAccessToken((string) $code, $state)
                 ?? false;
 
             $typeLower = strtolower($type);

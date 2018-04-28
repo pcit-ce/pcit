@@ -19,6 +19,7 @@ class GitHubController
      *
      * @param $username
      *
+     * @return null | int
      * @throws Exception
      */
     private function getUserStatus($username)
@@ -43,6 +44,7 @@ class GitHubController
      *
      * @param $repo
      *
+     * @return null | int
      * @throws Exception
      */
     private function getRepoStatus($repo)
@@ -81,7 +83,7 @@ class GitHubController
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string) $accessToken, $page);
+                $json = $objClass::getProjects((string)$accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -109,6 +111,30 @@ class GitHubController
     }
 
     /**
+     * @param $uid
+     * @param $username
+     * @param $email
+     * @param $pic
+     * @param $accessToken
+     *
+     * @throws Exception
+     */
+    private function updateUserInfo($uid, $username, $email, $pic, $accessToken)
+    {
+        $gitTypeLower = strtolower(static::TYPE);
+
+        $user_key_id = self::getUserStatus($username);
+
+        if ($user_key_id) {
+            $sql = 'UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
+            DB::update($sql, [$gitTypeLower, $uid, $username, $email, $pic, $accessToken, $user_key_id]);
+        } else {
+            $sql = 'INSERT user VALUES(null,?,?,?,?,?,?)';
+            DB::insert($sql, [$gitTypeLower, $uid, $username, $email, $pic, $accessToken]);
+        }
+    }
+
+    /**
      * 与 Git 同步.
      *
      * @param string      $uid
@@ -123,11 +149,9 @@ class GitHubController
                                  string $username,
                                  string $email,
                                  string $pic,
-                                 string $accessToken = null): void
+                                 string $accessToken): void
     {
-        $typeLower = strtolower(static::TYPE);
-
-        $accessToken = $accessToken ?? Session::get($typeLower.'.access_token');
+        $gitTypeLower = strtolower(static::TYPE);
 
         $array = static::getProject($accessToken);
 
@@ -141,15 +165,7 @@ class GitHubController
          *
          * 先检查用户是否存在
          */
-        $user_key_id = self::getUserStatus($username);
-
-        if ($user_key_id) {
-            $sql = 'UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
-            DB::update($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken, $user_key_id]);
-        } else {
-            $sql = 'INSERT user VALUES(null,?,?,?,?,?,?)';
-            DB::insert($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken]);
-        }
+        self::updateUserInfo($uid, $username, $email, $pic, $accessToken);
 
         foreach ($array as $rid => $repoFullName) {
             $repoArray = explode('/', $repoFullName);
@@ -168,7 +184,7 @@ class GitHubController
             $time = time();
 
             $repoDataArray = [
-                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName,
+                $gitTypeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName,
                 $webhooksStatus, $buildActivate, $star, $time,
             ];
 
@@ -184,7 +200,7 @@ class GitHubController
              */
             $sql = 'SELECT webhooks_status,build_activate FROM repo WHERE rid=? AND git_type=?';
 
-            $output = DB::select($sql, [$rid, $typeLower]);
+            $output = DB::select($sql, [$rid, $gitTypeLower]);
 
             if ($output) {
                 foreach ($output as $k) {
@@ -201,7 +217,7 @@ class GitHubController
 UPDATE repo set git_type=?,rid=?,username=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
 EOF;
             DB::update($sql, [
-                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName, $time, $repo_key_id,
+                $gitTypeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName, $time, $repo_key_id,
             ]);
 
             $redis->hSet($uid.'_repo', $repoFullName, $open_or_close);
@@ -223,8 +239,11 @@ EOF;
         $uid = Session::get($gitTypeLower.'.uid');
         $username = Session::get($gitTypeLower.'.username');
         $pic = Session::get($gitTypeLower.'.pic');
+        $accessToken = Session::get($gitTypeLower.'.access_token');
 
         $arg[0] === $username && $username = $arg[0];
+
+        self::updateUserInfo($uid, $username, $email, $pic, $accessToken);
 
         $ajax = $_GET['ajax'] ?? false;
 
@@ -247,7 +266,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
+            $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken);
             $sync = true;
         }
 

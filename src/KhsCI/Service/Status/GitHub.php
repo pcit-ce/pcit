@@ -64,8 +64,6 @@ class GitHub
             'context' => $context,
         ]);
 
-        var_dump($url);
-
         return HTTP::post($url, $data, ['Authorization' => 'token '.$accessToken]);
     }
 
