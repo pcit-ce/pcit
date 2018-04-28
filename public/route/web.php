@@ -99,15 +99,34 @@ Route::get('combined_status/github/{username}/{repo}/{commit_sha}', 'Status\GitH
 
 Route::get('{git_type}/{username}/{repo}', 'Builds\ListController');
 Route::post('{git_type}/{username}/{repo}', 'Builds\ListController@post');
+
 Route::get('{git_type}/{username}/{repo}/branches', 'Builds\ListController');
+Route::get('{git_type}/{username}/{repo}/{branch}/status', 'Builds\ShowStatusController');
 Route::post('{git_type}/{username}/{repo}/branches', 'Builds\ListController@post');
+
 Route::get('{git_type}/{username}/{repo}/builds', 'Builds\ListController');
+
+Route::get('{git_type}/{username}/{repo}/builds/{id}', 'Builds\ListController');
+
 Route::get('{git_type}/{username}/{repo}/pull_requests', 'Builds\ListController');
+
+Route::get('{git_type}/{username}/{repo}/pull_requests/{id}', 'Builds\ListController');
+
 Route::get('{git_type}/{username}/{repo}/settings', 'Builds\ListController');
+
 Route::get('{git_type}/{username}/{repo}/requests', 'Builds\ListController');
+
 Route::get('{git_type}/{username}/{repo}/caches', 'Builds\ListController');
 
 /* Star */
 
 Route::post('{git_type}/{username}/{repo}/star', 'Builds\ListController');
 Route::delete('{git_type}/{username}/{repo}/star', 'Builds\ListController');
+
+/* ICO */
+
+Route::get('ico/canceled', 'Status\ShowStatusController@canceled');
+Route::get('ico/errored', 'Status\ShowStatusController@errored');
+Route::get('ico/failing', 'Status\ShowStatusController@failing');
+Route::get('ico/passing', 'Status\ShowStatusController@passing');
+Route::get('ico/pending', 'Status\ShowStatusController@pending');
