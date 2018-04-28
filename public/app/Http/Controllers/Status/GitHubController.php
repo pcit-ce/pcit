@@ -66,4 +66,9 @@ EOF;
             $description,
             $context);
     }
+
+    public function listCombinedStatus(...$arg)
+    {
+        return $this->status->listCombinedStatus(...$arg);
+    }
 }

@@ -13,6 +13,7 @@ class APIController
         return [
             'login' => $host.'/login',
             'queue' => $host.'/queue',
+            'beta' => $host.'/beta',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
             ],
@@ -79,7 +80,7 @@ class APIController
             ],
             'statuses@github' => [
                 'list@get' => $host.'/status/github/{username}/{repo}/{ref}',
-                'create@post' => $host.'/status/github/{username}/{repo}/{commit_sha}',
+                'combinedStatus@get' => $host.'/combined_status/github/{username}/{repo}/{ref}'
             ],
             'deployment@github' => [
                 'list@get' => $host.'/deployment/list',

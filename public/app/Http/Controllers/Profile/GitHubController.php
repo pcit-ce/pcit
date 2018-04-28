@@ -15,61 +15,51 @@ class GitHubController
     const TYPE = 'gitHub';
 
     /**
-     * 获取 SQL 语句执行结果.
-     *
-     * @param $sql
-     */
-    private function getDBOutput($sql)
-    {
-        $pdo = DB::connect();
-
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->execute();
-
-        $output = $stmt->fetchAll();
-
-        if (!$output) {
-            return null;
-        }
-
-        foreach ($output as $k) {
-            $id = $k[0];
-        }
-
-        return $id;
-    }
-
-    /**
      * 查看用户是否已存在.
      *
      * @param $username
+     * @return null
+     * @throws Exception
      */
     private function getUserStatus($username)
     {
         $gitTypeLower = strtolower(static::TYPE);
 
-        $sql = <<<EOF
-SELECT id FROM user WHERE username='$username' AND git_type='$gitTypeLower';
-EOF;
+        $sql = "SELECT id FROM user WHERE username=? AND git_type=?";
 
-        return self::getDBOutput($sql);
+        $array = DB::select($sql, [$username, $gitTypeLower]);
+
+        if ($array) {
+            foreach ($array as $id) {
+                return $id['id'];
+            }
+        }
+
+        return null;
     }
 
     /**
      * 查看 REPO 是否存在.
      *
      * @param $repo
+     * @return null
+     * @throws Exception
      */
     private function getRepoStatus($repo)
     {
         $gitTypeLower = strtolower(static::TYPE);
 
-        $sql = <<<EOF
-SELECT id FROM repo WHERE git_type='$gitTypeLower' AND repo_full_name='$repo';
-EOF;
+        $sql = "SELECT id FROM repo WHERE git_type=? AND repo_full_name=?";
 
-        return self::getDBOutput($sql);
+        $array = DB::select($sql, [$gitTypeLower, $repo]);
+
+        if ($array) {
+            foreach ($array as $id) {
+                return $id['id'];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -91,7 +81,7 @@ EOF;
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string) $accessToken, $page);
+                $json = $objClass::getProjects((string)$accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -121,10 +111,10 @@ EOF;
     /**
      * 与 Git 同步.
      *
-     * @param string      $uid
-     * @param string      $username
-     * @param string      $email
-     * @param string      $pic
+     * @param string $uid
+     * @param string $username
+     * @param string $email
+     * @param string $pic
      * @param string|null $accessToken
      *
      * @return array
@@ -148,24 +138,24 @@ EOF;
         $redis->set($uid.'_username', $username);
         $redis->set($uid.'_email', $email);
 
-        // 先检查用户是否存在
-        $output = self::getUserStatus($username);
+        /**
+         * 用户相关
+         *
+         * 先检查用户是否存在
+         */
+        $id = self::getUserStatus($username);
 
-        if ($output) {
-            $sql = <<<EOF
-UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id='$output';
-EOF;
+        if ($id) {
+
+            $sql = "UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?";
+            DB::update($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken, $id]);
+
         } else {
-            $sql = <<<'EOF'
-INSERT user VALUES(null,?,?,?,?,?,?);
-EOF;
+
+            $sql = "INSERT user VALUES(null,?,?,?,?,?,?)";
+            DB::insert($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken]);
+
         }
-
-        $pdo = DB::connect();
-
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->execute([$typeLower, $uid, $username, $email, $pic, $accessToken]);
 
         foreach ($array as $rid => $repoFullName) {
             $repoArray = explode('/', $repoFullName);
@@ -175,32 +165,40 @@ EOF;
             $webhooksStatus = 0;
             $buildActivate = 0;
 
-            $sql = <<<EOF
-select webhooks_status from repo where rid='$rid' AND git_type='$typeLower';
-EOF;
-            $output = self::getDBOutput($sql);
+            $sql = "SELECT webhooks_status FROM repo WHERE rid=? AND git_type=?";
 
-            if (1 === $output) {
-                $webhooksStatus = 1;
+            $output = DB::select($sql, [$rid, $typeLower]);
+
+            if ($output) {
+                foreach ($output as $k) {
+                    $webhooksStatus = $k['webhooks_status'];
+                }
             }
 
-            $sql = <<<EOF
-select build_activate from repo where rid='$rid' AND git_type='$typeLower';
-EOF;
+            $sql = "SELECT build_activate FROM repo WHERE rid=? AND git_type=?";
 
-            $output = self::getDBOutput($sql);
+            $output = DB::select($sql, [$rid, $typeLower]);
 
-            if (1 === $output) {
-                $buildActivate = 1;
+            if ($output) {
+                foreach ($output as $k) {
+                    $buildActivate = $k['build_activate'];
+                }
             }
 
             $redis->hSet($uid.'_repo', $repoFullName, $webhooksStatus);
 
             $time = time();
 
-            $output = self::getRepoStatus($repoFullName);
+            $id = self::getRepoStatus($repoFullName);
 
-            if ($output) {
+            $star = 0;
+
+            $array = [
+                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName,
+                $webhooksStatus, $buildActivate, $star, $time
+            ];
+
+            if ($id) {
                 $sql = <<<EOF
 UPDATE repo set git_type=?,
                 rid=?,
@@ -210,31 +208,14 @@ UPDATE repo set git_type=?,
                 repo_full_name=?,
                 webhooks_status=?,
                 build_activate=?,
-                last_sync=? WHERE id='$output';
+                star=?,
+                last_sync=? WHERE id='$id';
 EOF;
+                DB::update($sql, $array);
             } else {
-                $sql = <<<'EOF'
-INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?);
-
-EOF;
+                $sql = "INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?)";
+                DB::insert($sql, $array);
             }
-
-            $stmt = $pdo->prepare($sql);
-
-            $star = 0;
-
-            $stmt->bindParam(1, $typeLower);
-            $stmt->bindParam(2, $rid);
-            $stmt->bindParam(3, $username);
-            $stmt->bindParam(4, $repoPrefix);
-            $stmt->bindParam(5, $repoName);
-            $stmt->bindParam(6, $repoFullName);
-            $stmt->bindParam(7, $webhooksStatus);
-            $stmt->bindParam(8, $buildActivate);
-            $stmt->bindParam(9, $star);
-            $stmt->bindParam(10, $time);
-
-            $stmt->execute();
         }
 
         $array = [];
@@ -262,13 +243,9 @@ EOF;
         $email = Session::get($gitTypeLower.'.email');
         $uid = Session::get($gitTypeLower.'.uid');
         $username = Session::get($gitTypeLower.'.username');
-
-        $arg[0] === $username && $username = $arg[0];
-
         $pic = Session::get($gitTypeLower.'.pic');
 
-        $redis = Cache::connect();
-        $redis->connect(getenv('REDIS_HOST'));
+        $arg[0] === $username && $username = $arg[0];
 
         $ajax = $_GET['ajax'] ?? false;
 
@@ -280,23 +257,22 @@ EOF;
             exit;
         }
 
-        $sync = false;
-        $cache = true;
-
+        $sync = true;
         $array = [];
+
+        $redis = Cache::connect();
 
         if ($redis->get($uid.'_username')) {
             $cacheArray = $redis->hGetAll($uid.'_repo');
             foreach ($cacheArray as $k => $status) {
                 $array[$k] = $status;
             }
-        } else {
-            $sync = true;
+            $sync = false;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $array = $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
-            $cache = false;
+            $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
+            $sync = true;
         }
 
         return [
@@ -305,7 +281,7 @@ EOF;
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,
-            'cache' => $cache,
+            'cache' => $sync === false,
             'repos' => $array,
         ];
     }

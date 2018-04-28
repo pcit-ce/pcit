@@ -7,12 +7,12 @@ namespace KhsCI\Support;
 class Env
 {
     /**
-     * @param string      $key
-     * @param string|null $default
+     * @param string $key
+     * @param $default
      *
      * @return array|false|string
      */
-    public static function get(string $key, string $default = null)
+    public static function get(string $key, $default = null)
     {
         try {
             $value = getenv($key);
