@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace KhsCI\Service\Webhooks;
 
 use App\Http\Controllers\Status\GitHubController;
+use Curl\Curl;
 use Error;
 use Exception;
+use KhsCI\Service\IM\Wechat;
 use KhsCI\Support\CIConst;
 use KhsCI\Support\DATE;
 use KhsCI\Support\DB;
@@ -45,31 +47,6 @@ class GitHub
     }
 
     /**
-     * @param string $sql
-     * @param array  $data
-     *
-     * @return string
-     *
-     * @throws Exception
-     */
-    public function insertDB(string $sql, array $data)
-    {
-        $pdo = DB::connect();
-
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->execute($data);
-
-        if ('00000' === $stmt->errorCode()) {
-            return $pdo->lastInsertId();
-        }
-
-        $error_message = $stmt->errorInfo();
-
-        throw new Exception($error_message[2] ?? '', 500);
-    }
-
-    /**
      * @param $content
      *
      * @return string
@@ -95,7 +72,7 @@ EOF;
             'github', __FUNCTION__, $rid, $event_time, $content,
         ];
 
-        return $this->insertDB($sql, $data);
+        return DB::insert($sql, $data);
     }
 
     /**
@@ -148,24 +125,29 @@ EOF;
             $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content,
         ];
 
+
         $status = new GitHubController();
 
-        $lastId = $this->insertDB($sql, $data);
+        $lastId = DB::insert($sql, $data);
 
-        $pdo = DB::connect();
+        $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
-        $sql = <<<EOF
-SELECT repo_full_name FROM repo WHERE git_type='github' AND rid='$rid';
-EOF;
-        $output = $pdo->query($sql);
+        $output = DB::select($sql, ['github', $rid]);
 
         foreach ($output as $k) {
-            $repo_full_name = $k[0];
+            $repo_full_name = $k['repo_full_name'];
         }
 
         $github_status = CIConst::GITHUB_STATUS_PENDING;
 
-        $target_url = getenv('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
+        $target_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
+
+        $curl = new Curl();
+
+        $data = Wechat::createTemplateContentArray(200, $commit_timestamp,
+            __FUNCTION__, $repo_full_name, $branch, $committer, $commit_message, $target_url);
+
+        Wechat::push(Env::get('WECHAT_TEMPLATE_ID'), ENV::get('WECHAT_USER_OPENID'), $curl, $data);
 
         return $status->create('khs1994', $repo_full_name, $commit_id,
             $github_status, $target_url,
@@ -192,7 +174,7 @@ EOF;
             'github', __FUNCTION__, $content,
         ];
 
-        return $this->insertDB($sql, $data);
+        return DB::insert($sql, $data);
     }
 
     /**
@@ -220,7 +202,7 @@ EOF;
             'github', __FUNCTION__, $content,
         ];
 
-        return $this->insertDB($sql, $data);
+        return DB::insert($sql, $data);
     }
 
     /**
@@ -250,7 +232,7 @@ EOF;
             'github', __FUNCTION__, $content,
         ];
 
-        return $this->insertDB($sql, $data);
+        return DB::insert($sql, $data);
     }
 
     /**
@@ -283,7 +265,7 @@ EOF;
             'github', __FUNCTION__, $content,
         ];
 
-        return self::insertDB($sql, $data);
+        return DB::insert($sql, $data);
     }
 
     /**
