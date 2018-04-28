@@ -105,7 +105,7 @@ class DB
      * @return int         返回受影响的记录条数
      * @throws Exception
      */
-    public static function update(string $sql, array $data)
+    public static function update(string $sql, array $data = [])
     {
         return self::common($sql, $data);
     }
@@ -118,7 +118,7 @@ class DB
      * @return int
      * @throws Exception
      */
-    public static function delete(string $sql, array $data)
+    public static function delete(string $sql, array $data = [])
     {
         return self::common($sql, $data);
     }
@@ -129,7 +129,7 @@ class DB
      * @return int
      * @throws Exception
      */
-    private static function common(string $sql, array $data)
+    private static function common(string $sql, array $data = [])
     {
         $pdo = self::connect();
 

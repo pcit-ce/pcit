@@ -117,15 +117,13 @@ class GitHubController
      * @param string $pic
      * @param string|null $accessToken
      *
-     * @return array
-     *
      * @throws Exception
      */
     private function syncProject(string $uid,
                                  string $username,
                                  string $email,
                                  string $pic,
-                                 string $accessToken = null)
+                                 string $accessToken = null): void
     {
         $typeLower = strtolower(static::TYPE);
 
@@ -143,18 +141,17 @@ class GitHubController
          *
          * 先检查用户是否存在
          */
-        $id = self::getUserStatus($username);
+        $user_key_id = self::getUserStatus($username);
 
-        if ($id) {
+        if ($user_key_id) {
 
             $sql = "UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?";
-            DB::update($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken, $id]);
+            DB::update($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken, $user_key_id]);
 
         } else {
 
             $sql = "INSERT user VALUES(null,?,?,?,?,?,?)";
             DB::insert($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken]);
-
         }
 
         foreach ($array as $rid => $repoFullName) {
@@ -162,71 +159,57 @@ class GitHubController
 
             list($repoPrefix, $repoName) = $repoArray;
 
+            /**
+             * repo 表是否存在 repo 数据
+             */
+
+            $repo_key_id = self::getRepoStatus($repoFullName);
+
             $webhooksStatus = 0;
             $buildActivate = 0;
+            $open_or_close = 0;
+            $star = 0;
+            $time = time();
 
-            $sql = "SELECT webhooks_status FROM repo WHERE rid=? AND git_type=?";
+            $repoDataArray = [
+                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName,
+                $webhooksStatus, $buildActivate, $star, $time
+            ];
+
+            if (!$repo_key_id) {
+                $sql = "INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?)";
+                DB::insert($sql, $repoDataArray);
+                $redis->hSet($uid.'_repo', $repoFullName, $open_or_close);
+                continue;
+            }
+
+            /**
+             * repo 表中存在 repo 数据
+             */
+            $sql = "SELECT webhooks_status,build_activate FROM repo WHERE rid=? AND git_type=?";
 
             $output = DB::select($sql, [$rid, $typeLower]);
 
             if ($output) {
                 foreach ($output as $k) {
                     $webhooksStatus = $k['webhooks_status'];
-                }
-            }
-
-            $sql = "SELECT build_activate FROM repo WHERE rid=? AND git_type=?";
-
-            $output = DB::select($sql, [$rid, $typeLower]);
-
-            if ($output) {
-                foreach ($output as $k) {
                     $buildActivate = $k['build_activate'];
                 }
             }
 
-            $redis->hSet($uid.'_repo', $repoFullName, $webhooksStatus);
-
-            $time = time();
-
-            $id = self::getRepoStatus($repoFullName);
-
-            $star = 0;
-
-            $array = [
-                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName,
-                $webhooksStatus, $buildActivate, $star, $time
-            ];
-
-            if ($id) {
-                $sql = <<<EOF
-UPDATE repo set git_type=?,
-                rid=?,
-                username=?,
-                repo_prefix=?,
-                repo_name=?,
-                repo_full_name=?,
-                webhooks_status=?,
-                build_activate=?,
-                star=?,
-                last_sync=? WHERE id='$id';
-EOF;
-                DB::update($sql, $array);
-            } else {
-                $sql = "INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?)";
-                DB::insert($sql, $array);
+            if ($webhooksStatus == 1 && $buildActivate == 1) {
+                $open_or_close = 1;
             }
+
+            $sql = <<<EOF
+UPDATE repo set git_type=?,rid=?,username=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
+EOF;
+            DB::update($sql, [
+                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName, $time, $repo_key_id
+            ]);
+
+            $redis->hSet($uid.'_repo', $repoFullName, $open_or_close);
         }
-
-        $array = [];
-
-        $cacheArray = $redis->hGetAll($uid.'_repo');
-
-        foreach ($cacheArray as $k => $status) {
-            $array[$k] = $status;
-        }
-
-        return $array;
     }
 
     /**
@@ -263,16 +246,19 @@ EOF;
         $redis = Cache::connect();
 
         if ($redis->get($uid.'_username')) {
-            $cacheArray = $redis->hGetAll($uid.'_repo');
-            foreach ($cacheArray as $k => $status) {
-                $array[$k] = $status;
-            }
+            // Redis 已存在数据
             $sync = false;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $array = $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
+            $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
             $sync = true;
+        }
+
+        $cacheArray = $redis->hGetAll($uid.'_repo');
+
+        foreach ($cacheArray as $k => $status) {
+            $array[$k] = $status;
         }
 
         return [
