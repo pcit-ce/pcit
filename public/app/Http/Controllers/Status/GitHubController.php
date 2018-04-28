@@ -39,20 +39,16 @@ class GitHubController
      * @param $context
      *
      * @return mixed
+     * @throws \Exception
      */
     public function create($login_username, $repo_full_name, $commit_sha, $state, $target_url, $description, $context)
     {
-        $sql = <<<EOF
-SELECT access_token FROM user WHERE username='$login_username' AND git_type='github';
-EOF;
+        $sql = 'SELECT access_token FROM user WHERE username=? AND git_type=?';
 
-        $pdo = DB::connect();
-
-        $output = $pdo->query($sql);
+        $output = DB::select($sql,[$login_username,'github']);
 
         foreach ($output as $k) {
-            var_dump($k);
-            $accessToken = $k[0];
+            $accessToken = $k['access_token'];
         }
 
         $array = explode('/', $repo_full_name);
