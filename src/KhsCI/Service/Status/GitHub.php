@@ -20,6 +20,7 @@ class GitHub
      * @param string $username
      * @param string $repo
      * @param string $ref
+     *
      * @return mixed
      */
     public function list(string $username, string $repo, string $ref)
@@ -69,11 +70,12 @@ class GitHub
     }
 
     /**
-     * 获取某分支的组合状态信息
+     * 获取某分支的组合状态信息.
      *
      * @param $username
      * @param $repo
      * @param $ref
+     *
      * @return mixed
      */
     public function listCombinedStatus($username, $repo, $ref)

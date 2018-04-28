@@ -133,7 +133,7 @@ class Controller
         $getWebhooksStatus = $obj::getWebhooksStatus($access_token, $webhooksUrl, ...$arg);
 
         if (1 === $getWebhooksStatus) {
-            $sql = "UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?";
+            $sql = 'UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?';
 
             DB::update($sql, [1, $gitType, '$arg[1]/$arg[2]']);
 
@@ -144,8 +144,7 @@ class Controller
             $json = $obj::setWebhooks($access_token, $data, ...$arg);
         } catch (Exception $e) {
             if (422 === $e->getCode()) {
-
-                $sql = "UPDATE repo SET webhooks_status=1 WHERE git_type=? AND repo_full_name=?";
+                $sql = 'UPDATE repo SET webhooks_status=1 WHERE git_type=? AND repo_full_name=?';
 
                 DB::update($sql, [$gitType, '$arg[1]/$arg[2]']);
 
@@ -186,8 +185,9 @@ class Controller
     /**
      * 设置 Webhooks 状态缓存.
      *
-     * @param int $status
+     * @param int   $status
      * @param mixed ...$arg
+     *
      * @throws Exception
      */
     private static function setBuildStatusCache(int $status = 0, ...$arg): void
@@ -198,7 +198,7 @@ class Controller
 
         $repoFullName = $arg[0].'/'.$arg[1];
 
-        $sql = "UPDATE repo SET build_activate = ? WHERE git_type=? AND repo_full_name=?";
+        $sql = 'UPDATE repo SET build_activate = ? WHERE git_type=? AND repo_full_name=?';
 
         DB::update($sql, [$status, $gitType, $repoFullName]);
 
@@ -235,6 +235,7 @@ class Controller
      * @param array $arg
      *
      * @return array
+     *
      * @throws Exception
      */
     public static function deactivate(...$arg)

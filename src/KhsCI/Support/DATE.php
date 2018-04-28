@@ -39,6 +39,6 @@ class DATE
             ];
         }
 
-        return mktime((int)$hour, (int)$minute, (int)$second, (int)$month, (int)$day, (int)$year);
+        return mktime((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $day, (int) $year);
     }
 }

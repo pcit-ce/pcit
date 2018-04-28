@@ -80,7 +80,7 @@ class APIController
             ],
             'statuses@github' => [
                 'list@get' => $host.'/status/github/{username}/{repo}/{ref}',
-                'combinedStatus@get' => $host.'/combined_status/github/{username}/{repo}/{ref}'
+                'combinedStatus@get' => $host.'/combined_status/github/{username}/{repo}/{ref}',
             ],
             'deployment@github' => [
                 'list@get' => $host.'/deployment/list',

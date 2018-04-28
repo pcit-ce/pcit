@@ -18,14 +18,14 @@ class GitHubController
      * 查看用户是否已存在.
      *
      * @param $username
-     * @return null
+     *
      * @throws Exception
      */
     private function getUserStatus($username)
     {
         $gitTypeLower = strtolower(static::TYPE);
 
-        $sql = "SELECT id FROM user WHERE username=? AND git_type=?";
+        $sql = 'SELECT id FROM user WHERE username=? AND git_type=?';
 
         $array = DB::select($sql, [$username, $gitTypeLower]);
 
@@ -42,14 +42,14 @@ class GitHubController
      * 查看 REPO 是否存在.
      *
      * @param $repo
-     * @return null
+     *
      * @throws Exception
      */
     private function getRepoStatus($repo)
     {
         $gitTypeLower = strtolower(static::TYPE);
 
-        $sql = "SELECT id FROM repo WHERE git_type=? AND repo_full_name=?";
+        $sql = 'SELECT id FROM repo WHERE git_type=? AND repo_full_name=?';
 
         $array = DB::select($sql, [$gitTypeLower, $repo]);
 
@@ -81,7 +81,7 @@ class GitHubController
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -111,10 +111,10 @@ class GitHubController
     /**
      * 与 Git 同步.
      *
-     * @param string $uid
-     * @param string $username
-     * @param string $email
-     * @param string $pic
+     * @param string      $uid
+     * @param string      $username
+     * @param string      $email
+     * @param string      $pic
      * @param string|null $accessToken
      *
      * @throws Exception
@@ -137,20 +137,17 @@ class GitHubController
         $redis->set($uid.'_email', $email);
 
         /**
-         * 用户相关
+         * 用户相关.
          *
          * 先检查用户是否存在
          */
         $user_key_id = self::getUserStatus($username);
 
         if ($user_key_id) {
-
-            $sql = "UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?";
+            $sql = 'UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
             DB::update($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken, $user_key_id]);
-
         } else {
-
-            $sql = "INSERT user VALUES(null,?,?,?,?,?,?)";
+            $sql = 'INSERT user VALUES(null,?,?,?,?,?,?)';
             DB::insert($sql, [$typeLower, $uid, $username, $email, $pic, $accessToken]);
         }
 
@@ -160,9 +157,8 @@ class GitHubController
             list($repoPrefix, $repoName) = $repoArray;
 
             /**
-             * repo 表是否存在 repo 数据
+             * repo 表是否存在 repo 数据.
              */
-
             $repo_key_id = self::getRepoStatus($repoFullName);
 
             $webhooksStatus = 0;
@@ -173,20 +169,20 @@ class GitHubController
 
             $repoDataArray = [
                 $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName,
-                $webhooksStatus, $buildActivate, $star, $time
+                $webhooksStatus, $buildActivate, $star, $time,
             ];
 
             if (!$repo_key_id) {
-                $sql = "INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?)";
+                $sql = 'INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?)';
                 DB::insert($sql, $repoDataArray);
                 $redis->hSet($uid.'_repo', $repoFullName, $open_or_close);
                 continue;
             }
 
             /**
-             * repo 表中存在 repo 数据
+             * repo 表中存在 repo 数据.
              */
-            $sql = "SELECT webhooks_status,build_activate FROM repo WHERE rid=? AND git_type=?";
+            $sql = 'SELECT webhooks_status,build_activate FROM repo WHERE rid=? AND git_type=?';
 
             $output = DB::select($sql, [$rid, $typeLower]);
 
@@ -197,7 +193,7 @@ class GitHubController
                 }
             }
 
-            if ($webhooksStatus == 1 && $buildActivate == 1) {
+            if (1 == $webhooksStatus && 1 == $buildActivate) {
                 $open_or_close = 1;
             }
 
@@ -205,7 +201,7 @@ class GitHubController
 UPDATE repo set git_type=?,rid=?,username=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
 EOF;
             DB::update($sql, [
-                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName, $time, $repo_key_id
+                $typeLower, $rid, $username, $repoPrefix, $repoName, $repoFullName, $time, $repo_key_id,
             ]);
 
             $redis->hSet($uid.'_repo', $repoFullName, $open_or_close);
@@ -251,7 +247,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic);
+            $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic);
             $sync = true;
         }
 
@@ -267,7 +263,7 @@ EOF;
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,
-            'cache' => $sync === false,
+            'cache' => false === $sync,
             'repos' => $array,
         ];
     }

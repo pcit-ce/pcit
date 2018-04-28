@@ -4,7 +4,15 @@
 
 CI Based Docker Powered by PHP
 
+## PHP CaaS
+
+**Powered By [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)**
+
 ## Installation
+
+* MySQL
+
+* Redis
 
 To Use khsci, simply:
 
@@ -26,10 +34,6 @@ $ composer require khs1994/khsci @dev
 require __DIR__.'/vendor/autoload.php';
 
 ```
-
-## PHP CaaS
-
-**Powered By [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)**
 
 ## CI/CD
 

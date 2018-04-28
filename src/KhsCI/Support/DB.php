@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 //declare(strict_types=1);
 
 namespace KhsCI\Support;
@@ -14,6 +15,7 @@ class DB
 
     /**
      * @return PDO
+     *
      * @throws Exception
      */
     public static function connect()
@@ -27,15 +29,12 @@ class DB
 
             $dsn = 'mysql:host='.$mysql_host.';port='.$mysql_port.';dbname='.$mysql_dbname;
             try {
-
                 $pdo = new PDO($dsn, $mysql_username, $mysql_password);
 
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                 self::$pdo = $pdo;
-
             } catch (PDOException $e) {
-
                 throw new Exception("Can't connect mysql server, mysql error code ".$e->getCode(), 500);
             }
         }
@@ -44,11 +43,13 @@ class DB
     }
 
     /**
-     * 执行原生 SELECT 语句
+     * 执行原生 SELECT 语句.
      *
      * @param string $sql
-     * @param array $data
+     * @param array  $data
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function select(string $sql, array $data = [])
@@ -63,7 +64,6 @@ class DB
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
             $output = $stmt->fetchAll();
-
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
         }
@@ -72,11 +72,13 @@ class DB
     }
 
     /**
-     * 执行原生 INSERT 语句
+     * 执行原生 INSERT 语句.
      *
      * @param string $sql
-     * @param array $data
+     * @param array  $data
+     *
      * @return string
+     *
      * @throws Exception
      */
     public static function insert(string $sql, array $data = [])
@@ -94,15 +96,16 @@ class DB
         }
 
         return $last;
-
     }
 
     /**
-     * 执行原生 UPDATE 语句
+     * 执行原生 UPDATE 语句.
      *
      * @param string $sql
-     * @param array $data
-     * @return int         返回受影响的记录条数
+     * @param array  $data
+     *
+     * @return int 返回受影响的记录条数
+     *
      * @throws Exception
      */
     public static function update(string $sql, array $data = [])
@@ -111,11 +114,13 @@ class DB
     }
 
     /**
-     * 执行原生 DELETE 语句
+     * 执行原生 DELETE 语句.
      *
      * @param string $sql
-     * @param array $data
+     * @param array  $data
+     *
      * @return int
+     *
      * @throws Exception
      */
     public static function delete(string $sql, array $data = [])
@@ -125,8 +130,10 @@ class DB
 
     /**
      * @param string $sql
-     * @param array $data
+     * @param array  $data
+     *
      * @return int
+     *
      * @throws Exception
      */
     private static function common(string $sql, array $data = [])
@@ -139,7 +146,6 @@ class DB
             $stmt->execute($data);
 
             $count = $stmt->rowCount();
-
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
         }
@@ -148,27 +154,24 @@ class DB
     }
 
     /**
-     * 执行普通语句
+     * 执行普通语句.
      *
      * @param string $sql
+     *
      * @throws Exception
      */
-    public static function statement(string $sql)
+    public static function statement(string $sql): void
     {
         $pdo = self::connect();
 
         $pdo->exec($sql);
     }
 
-    public static function createUser()
+    public static function createUser(): void
     {
-
     }
 
-    public static function deleteUser()
+    public static function deleteUser(): void
     {
-
     }
-
-
 }

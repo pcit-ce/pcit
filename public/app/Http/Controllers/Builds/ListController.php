@@ -10,7 +10,7 @@ class ListController
 {
     public function __invoke(...$arg): void
     {
-        require(__DIR__.'/../../../../public/builds/index.html');
+        require __DIR__.'/../../../../public/builds/index.html';
         exit;
     }
 
@@ -25,12 +25,12 @@ EOF;
         $pdo = DB::connect();
 
         $stmt = $pdo->query($sql);
-       // var_dump($gitType);
+        // var_dump($gitType);
         //var_dump($username);
         foreach ($stmt as $k) {
             var_dump($k);
         }
 
-        return "<pre>latest build log<pre>";
+        return '<pre>latest build log<pre>';
     }
 }
