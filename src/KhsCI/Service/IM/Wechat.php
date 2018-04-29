@@ -8,23 +8,58 @@ use Curl\Curl;
 
 class Wechat
 {
-    public function __construct($config, Curl $curl, $data)
+    /**
+     * @param $code
+     * @param $time
+     * @param $type
+     * @param $repo_name
+     * @param $branch
+     * @param $committer
+     * @param $info
+     * @param $url
+     *
+     * @return array
+     */
+    public static function createTemplateContentArray($code, $time, $type, $repo_name, $branch, $committer, $info, $url)
     {
-        $template_id = $config['template_id'];
-        $toUser = $config['user_id'];
+        return [
+            'code' => $code,
+            'url' => $url,
+            'messages' => [
+                'time' => $time,
+                'type' => $type,
+                'repo_name' => $repo_name,
+                'branch' => $branch,
+                'committer' => $committer,
+                'info' => $info
+            ],
+        ];
+    }
 
+    /**
+     * Wechat constructor.
+     *
+     * @param string $template_id
+     * @param string $wechat_user_id
+     * @param Curl   $curl
+     * @param array  $data
+     *
+     * @return array|mixed|string
+     */
+    public static function push(string $template_id, string $wechat_user_id, Curl $curl, array $data)
+    {
         $code = $data['code'];
         $time = $data['messages']['time'];
-        if (10 === strlen($time)) {
-            $time = date('Y-m-d H:i:s', $time);
-        }
         $type = $data['messages']['type'];
         $name = $data['messages']['repo_name'];
         $branch = $data['messages']['branch'];
         $committer = $data['messages']['committer'];
         $info = $data['messages']['info'];
         $url = $data['url'];
-        $data = ['touser' => $toUser,
+
+        $time = date('Y-m-d H:i:s', $time);
+
+        $data = ['touser' => $wechat_user_id,
             'template_id' => $template_id,
             'url' => $url,
             'data' => ['code' => ['value' => $code, 'color' => '#173177'],

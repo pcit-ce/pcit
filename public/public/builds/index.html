@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-  <title>Title</title>
+  <title>KhsCI - Builds</title>
 </head>
+<body>
 <div>
   <button id="current">Current</button>
   <button id="branches">Branches</button>
@@ -38,7 +39,7 @@
 
   query = git_type + '/' + username + '/' + repo;
 
-  baseTitle = query + ' - KhsCI';
+  baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
 
   /**
    * http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/

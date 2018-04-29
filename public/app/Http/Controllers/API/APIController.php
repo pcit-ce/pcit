@@ -11,6 +11,7 @@ class APIController
         $host = getenv('CI_HOST');
 
         return [
+            'homepage' => $host,
             'login' => $host.'/login',
             'queue' => $host.'/queue',
             'beta' => $host.'/beta',

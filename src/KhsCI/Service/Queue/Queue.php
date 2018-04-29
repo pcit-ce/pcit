@@ -11,24 +11,23 @@ class Queue
 {
     private static $gitType;
 
+    /**
+     * @throws \Exception
+     */
     public function __invoke(): void
     {
-        $pdo = DB::connect();
-
         $build_status_pending = CIConst::BUILD_STATUS_PENDING;
 
         $sql = <<<EOF
 SELECT git_type,rid,commit_id,commit_message FROM builds WHERE build_status='$build_status_pending';
 EOF;
 
-        $output = $pdo->query($sql);
+        $output = DB::select($sql);
 
         foreach ($output as $k) {
-            $git_type = $k[0];
-            $rid = $k[1];
+            list($git_type, $rid, $commit_id, $commit_message) = $k;
+
             self::$gitType = $git_type;
-            $commit_id = $k[2];
-            $commit_message = $k[3];
 
             // commit 信息跳过构建
             $skip = self::skip($commit_message);
@@ -36,8 +35,7 @@ EOF;
             if ($skip) {
                 $build_status_skip = CIConst::BUILD_STATUS_SKIP;
                 $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND commit_id=?';
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([$build_status_skip, self::$gitType, $commit_id]);
+                DB::update($sql, [$build_status_skip, self::$gitType, $commit_id]);
 
                 continue;
             }
@@ -59,6 +57,7 @@ EOF;
      * @param $rid
      *
      * @return bool
+     * @throws \Exception
      */
     private function getRepoBuildActivateStatus($rid)
     {
@@ -68,16 +67,13 @@ EOF;
 
         $gitType = self::$gitType;
 
-        $pdo = DB::connect();
-
         $sql = <<<EOF
 SELECT build_activate FROM repo WHERE rid=$rid AND git_type='$gitType';
 EOF;
-
-        $output = $pdo->query($sql);
+        $output = DB::select($sql);
 
         foreach ($output as $k) {
-            if (0 == $k[0]) {
+            if (0 == $k['build_activate']) {
                 return false;
             }
         }
@@ -119,13 +115,13 @@ EOF;
     }
 
     /**
-     * @param $rid
+     * @param     $rid
      * @param int $lastId
+     *
+     * @throws \Exception
      */
     private function inactive($rid, int $lastId = 0): void
     {
-        $pdo = DB::connect();
-
         $gitType = self::$gitType;
 
         $build_status_inactive = CIConst::BUILD_STATUS_INACTIVE;
@@ -133,6 +129,6 @@ EOF;
         $sql = <<<EOF
 UPDATE builds set build_status='$build_status_inactive' WHERE git_type='$gitType' AND rid='$rid' AND id>$lastId;
 EOF;
-        $pdo->exec($sql);
+        DB::update($sql);
     }
 }
