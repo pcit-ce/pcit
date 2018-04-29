@@ -24,6 +24,7 @@
     "doctrine/cache": "^1.6",
     "vlucas/phpdotenv": "*",
     "khs1994/curl": "dev-master",
+    "khs1994/docker":"dev-master",
     "ext-json": "*"
   },
   "require-dev": {

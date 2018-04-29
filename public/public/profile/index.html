@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-  <title>Title</title>
+  <title>KhsCI - Profile</title>
 </head>
 <body>
 <div id="userinfo">
@@ -27,7 +27,7 @@
 
     git_type = data.git_type;
 
-    $("title").text(data.username + " - Profile - KhsCI");
+    $("title").text(git_type + ' - ' + data.username + " - Profile - KhsCI");
 
     $.each(data.repos, function (repo, status) {
 
@@ -61,7 +61,7 @@
       settings.text('Setting');
       settings.attr('href', ci_host + git_type + "/" + repo + "/settings");
       settings.attr('target', '_blank');
-      $("#repos").append(button).append(settings).append(p).append('<br>');
+      $("#repos").append(button).append('&nbsp;&nbsp;').append(settings).append('&nbsp;&nbsp;').append(p).append('<br>');
     })
   }
 

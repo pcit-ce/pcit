@@ -132,10 +132,11 @@ class Controller
 
         $getWebhooksStatus = $obj::getWebhooksStatus($access_token, $webhooksUrl, ...$arg);
 
-        if (1 === $getWebhooksStatus) {
-            $sql = 'UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?';
+        $sql = 'UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?';
 
-            DB::update($sql, [1, $gitType, '$arg[1]/$arg[2]']);
+        if (1 === $getWebhooksStatus) {
+
+            DB::update($sql, [1, $gitType, "$arg[1]/$arg[2]"]);
 
             return ['code' => 200, 'message' => 'Success, But hook already exists on this repository'];
         }
@@ -144,9 +145,8 @@ class Controller
             $json = $obj::setWebhooks($access_token, $data, ...$arg);
         } catch (Exception $e) {
             if (422 === $e->getCode()) {
-                $sql = 'UPDATE repo SET webhooks_status=1 WHERE git_type=? AND repo_full_name=?';
 
-                DB::update($sql, [$gitType, '$arg[1]/$arg[2]']);
+                DB::update($sql, [1, $gitType, "$arg[1]/$arg[2]"]);
 
                 return ['code' => 200, 'message' => 'Success, But hook already exists on this repository'];
             } else {

@@ -17,7 +17,7 @@ CREATE TABLE `builds` (
   `tag_name`           VARCHAR(100),
   `compare`            VARCHAR(200),
   `commit_id`          VARCHAR(200),
-  `commit_message`     VARCHAR(100),
+  `commit_message`     LONGTEXT,
   `committer_name`     VARCHAR(100),
   `committer_email`    VARCHAR(100),
   `committer_username` VARCHAR(100),
