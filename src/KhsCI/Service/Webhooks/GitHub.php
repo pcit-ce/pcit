@@ -125,7 +125,6 @@ EOF;
             $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content,
         ];
 
-
         $status = new GitHubController();
 
         $lastId = DB::insert($sql, $data);
@@ -147,7 +146,11 @@ EOF;
         $data = Wechat::createTemplateContentArray(200, $commit_timestamp,
             __FUNCTION__, $repo_full_name, $branch, $committer, $commit_message, $target_url);
 
-        Wechat::push(Env::get('WECHAT_TEMPLATE_ID'), ENV::get('WECHAT_USER_OPENID'), $curl, $data);
+        /**
+         * 通知操作全部放入队列中
+         */
+
+        // Wechat::push(Env::get('WECHAT_TEMPLATE_ID'), ENV::get('WECHAT_USER_OPENID'), $curl, $data);
 
         return $status->create('khs1994', $repo_full_name, $commit_id,
             $github_status, $target_url,
