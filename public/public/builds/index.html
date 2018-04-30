@@ -6,6 +6,11 @@
   <title>KhsCI - Builds</title>
 </head>
 <body>
+<header>
+  This Is Header
+  <br>
+  <br>
+</header>
 <div>
   <button id="current">Current</button>
   <button id="branches">Branches</button>
@@ -20,7 +25,7 @@
   </select>
 
 </div>
-
+<br>
 <div id="display"></div>
 <script>
   url = location.href;
@@ -35,31 +40,70 @@
 
   repo = array[5];
 
-  type = array[6];
+  type_from_url = array[6];
 
   query = git_type + '/' + username + '/' + repo;
 
   baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
+
+  function display(id, data) {
+    switch (id) {
+      case 'builds':
+        alert(id);
+        break;
+      case 'branches':
+        //alert(data);
+        $("#display").empty();
+
+        $.each(data, function (branch, status) {
+
+          $("#display").append(branch);
+
+          $.each(status, function (id, status) {
+            id = id.replace('k', '');
+
+            let a_content = "<a href='builds/" + id + "' target='_blank'>" + status + "</a>";
+
+            $("#display").append('<br><br>' + a_content);
+
+          });
+
+          $("#display").append("<hr>");
+
+
+        });
+        break;
+    }
+  }
+
+  function display_title(id, data) {
+    switch (id) {
+      case "pull_requests":
+        title = 'Pull Requests - ' + baseTitle;
+        break;
+      case "builds":
+        title = 'Builds - ' + baseTitle;
+        break;
+      default:
+        title = baseTitle;
+    }
+
+    $("title").text(title);
+  }
 
   /**
    * http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
    */
   $("button").click(function () {
     let id = $(this).attr('id');
-    history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
 
-    switch (id) {
-      case "pull_requests":
-        title = 'Pull Requests - ' + baseTitle;
-        break;
-
-      default:
-        title = baseTitle;
+    if ('current' === id) {
+      history.replaceState(null, baseTitle, baseUrl + '/' + query);
+    } else {
+      history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
     }
 
-    if (id === 'builds') {
-      title = 'Builds - ' + baseTitle;
-    }
+    display_title(id);
 
     $("title").text(title);
 
@@ -67,7 +111,9 @@
       type: "POST",
       url: location.href,
       success: function (data) {
-        $("#display").text(data);
+
+        display(id, data);
+
       }
     })
 
@@ -82,9 +128,10 @@
     $.ajax({
       type: "post",
       url: location.href,
-
       success: function (data) {
-        $("#display").text(data);
+
+        display(id, data);
+
       }
     })
 
@@ -92,26 +139,16 @@
 
   $(document).ready(function () {
 
-    switch (type) {
-      case "builds":
-        title = 'Builds - ' + baseTitle;
-        break;
-      case "pull_requests":
-        title = 'Pull Requests - ' + baseTitle;
-        break;
-      default :
-        title = baseTitle;
-    }
-
-    $("title").text(title);
+    display_title(type_from_url);
 
     $.ajax({
+
       type: "POST",
       url: location.href,
       success: function (data) {
-        $("#display").text(data);
-
+        display(type_from_url, data);
       }
+
     })
 
   });

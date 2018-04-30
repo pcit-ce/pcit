@@ -14,23 +14,26 @@ class ListController
         exit;
     }
 
+    /**
+     * @param mixed ...$arg
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function post(...$arg)
     {
         list($gitType, $username, $repo) = $arg;
 
-        $sql = <<<EOF
-SELECT id FROM builds WHERE git_type='$gitType' AND username='$username';
-EOF;
+        $sql = "SELECT id FROM builds WHERE git_type=? AND username=";
 
-        $pdo = DB::connect();
+        $outputArray = DB::select($sql, [$gitType, $username]);
 
-        $stmt = $pdo->query($sql);
-        // var_dump($gitType);
-        //var_dump($username);
-        foreach ($stmt as $k) {
-            var_dump($k);
+        var_dump($outputArray);
+
+        foreach ($outputArray as $k) {
+            $last_build_id = $k['id'];
         }
 
-        return '<pre>latest build log<pre>';
+        return $last_build_id;
     }
 }

@@ -125,8 +125,6 @@ EOF;
             $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content,
         ];
 
-        $status = new GitHubController();
-
         $lastId = DB::insert($sql, $data);
 
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
@@ -141,16 +139,16 @@ EOF;
 
         $target_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
 
-        $curl = new Curl();
-
-        $data = Wechat::createTemplateContentArray(200, $commit_timestamp,
-            __FUNCTION__, $repo_full_name, $branch, $committer, $commit_message, $target_url);
+//        $data = Wechat::createTemplateContentArray(200, $commit_timestamp,
+//            __FUNCTION__, $repo_full_name, $branch, $committer, $commit_message, $target_url);
 
         /**
          * 通知操作全部放入队列中
          */
 
         // Wechat::push(Env::get('WECHAT_TEMPLATE_ID'), ENV::get('WECHAT_USER_OPENID'), $curl, $data);
+
+        $status = new GitHubController();
 
         return $status->create('khs1994', $repo_full_name, $commit_id,
             $github_status, $target_url,

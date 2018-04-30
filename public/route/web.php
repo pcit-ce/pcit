@@ -102,7 +102,7 @@ Route::post('{git_type}/{username}/{repo}', 'Builds\ListController@post');
 
 Route::get('{git_type}/{username}/{repo}/branches', 'Builds\ListController');
 Route::get('{git_type}/{username}/{repo}/{branch}/status', 'Builds\ShowStatusController');
-Route::post('{git_type}/{username}/{repo}/branches', 'Builds\ListController@post');
+Route::post('{git_type}/{username}/{repo}/branches', 'Builds\BranchesController@post');
 
 Route::get('{git_type}/{username}/{repo}/builds', 'Builds\ListController');
 
