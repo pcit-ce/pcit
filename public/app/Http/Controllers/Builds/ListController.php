@@ -36,4 +36,53 @@ class ListController
 
         return $last_build_id;
     }
+
+    /**
+     * List build Status
+     *
+     * @param mixed ...$args
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function list(...$args)
+    {
+        list($gitType, $username, $repo) = $args;
+
+        /**
+         * id
+         * branch
+         * committer
+         * commit_message
+         * build_status
+         * commit_id
+         * build_time = end_time - create_time
+         * now_time - end_time
+         */
+
+        $sql = <<<EOF
+SELECT id,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
+
+FROM builds WHERE git_type=? AND rid=
+
+(SELECT rid FROM repo WHERE git_type=? AND repo_full_name=?)
+
+ORDER BY id DESC 
+
+EOF;
+
+        $output = DB::select($sql, [$gitType, $gitType, "$username/$repo"]);
+
+        return $output;
+    }
+
+    /**
+     * Show build details
+     *
+     * @param mixed ...$args
+     */
+    public function getBuildDetails(...$args)
+    {
+        list($gitType, $username, $repo, $buildId) = $args;
+    }
 }

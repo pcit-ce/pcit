@@ -105,6 +105,7 @@ Route::get('{git_type}/{username}/{repo}/{branch}/status', 'Builds\ShowStatusCon
 Route::post('{git_type}/{username}/{repo}/branches', 'Builds\BranchesController@post');
 
 Route::get('{git_type}/{username}/{repo}/builds', 'Builds\ListController');
+Route::post('{git_type}/{username}/{repo}/builds', 'Builds\ListController@list');
 
 Route::get('{git_type}/{username}/{repo}/builds/{id}', 'Builds\ListController');
 

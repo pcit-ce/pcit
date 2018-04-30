@@ -47,13 +47,40 @@
   baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
 
   function display(id, data) {
+    $("#display").empty();
     switch (id) {
       case 'builds':
-        alert(id);
+        $.each(data, function (id, status) {
+
+          let build_id = status.id;
+          let branch = status.branch;
+          let committer_username = status.committer_username;
+          let commit_message = status.committer_message;
+          let commit_id = status.commit_id;
+          let build_status = status.build_status;
+          let create_time = status.create_time;
+          let end_time = status.end_time;
+
+          $("#display").append('<br><br>' + build_id
+            + '&nbsp;' + branch
+
+            + '&nbsp;' + committer_username
+
+            + '&nbsp;' + commit_message
+
+            + '&nbsp;' + commit_id
+
+            + '&nbsp;' + build_status
+
+            + '&nbsp;' + create_time
+
+            + '&nbsp;' + end_time
+          );
+
+        });
+
         break;
       case 'branches':
-        //alert(data);
-        $("#display").empty();
 
         $.each(data, function (branch, status) {
 
