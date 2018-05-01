@@ -15,6 +15,7 @@ CREATE TABLE `builds` (
   `ref`                VARCHAR(100),
   `branch`             VARCHAR(100),
   `tag_name`           VARCHAR(100),
+  `pull_id`            BIGINT,
   `compare`            VARCHAR(200),
   `commit_id`          VARCHAR(200),
   `commit_message`     LONGTEXT,

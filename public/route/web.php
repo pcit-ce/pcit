@@ -116,7 +116,7 @@ Route::get('{git_type}/{username}/{repo}/pull_requests/{id}', 'Builds\ListContro
 Route::get('{git_type}/{username}/{repo}/settings', 'Builds\ListController');
 
 Route::get('{git_type}/{username}/{repo}/requests', 'Builds\ListController');
-Route::post('{git_type}/{username}/{repo}/requests', 'Builds\RequestsController');
+Route::post('{git_type}/{username}/{repo}/requests', 'Builds\ListController@list');
 
 Route::get('{git_type}/{username}/{repo}/caches', 'Builds\ListController');
 

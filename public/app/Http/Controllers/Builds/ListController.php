@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use KhsCI\Support\Cache;
 use KhsCI\Support\DB;
 
 class ListController
@@ -24,17 +25,23 @@ class ListController
     {
         list($gitType, $username, $repo) = $arg;
 
-        $sql = "SELECT id FROM builds WHERE git_type=? AND username=";
+        $sql = "SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?";
 
-        $outputArray = DB::select($sql, [$gitType, $username]);
-
-        var_dump($outputArray);
+        $outputArray = DB::select($sql, [$gitType, $username, $repo]);
 
         foreach ($outputArray as $k) {
+            $rid = $k['rid'];
+        }
+
+        $sql = "SELECT id FROM builds WHERE rid=? ORDER BY id DESC LIMIT 1";
+
+        $output = DB::select($sql, [$rid]);
+
+        foreach ($output as $k) {
             $last_build_id = $k['id'];
         }
 
-        return $last_build_id;
+        return $this->getBuildDetails(null, null, null, $last_build_id);
     }
 
     /**
@@ -80,9 +87,18 @@ EOF;
      * Show build details
      *
      * @param mixed ...$args
+     *
+     * @return string
+     * @throws \Exception
      */
     public function getBuildDetails(...$args)
     {
         list($gitType, $username, $repo, $buildId) = $args;
+
+        $redis = Cache::connect();
+
+        $output = $redis->hget('build_log', $buildId);
+
+        return $output;
     }
 }

@@ -256,7 +256,6 @@ EOF;
         }
 
         $sync = true;
-        $array = [];
 
         $redis = Cache::connect();
 
@@ -272,9 +271,20 @@ EOF;
 
         $cacheArray = $redis->hGetAll($uid.'_repo');
 
+        $array_active = [];
+
+        $array = [];
+
         foreach ($cacheArray as $k => $status) {
+            if (1 == $status) {
+                $array_active[$k] = $status;
+                continue;
+            }
+
             $array[$k] = $status;
         }
+
+        $array = array_merge($array_active, $array);
 
         return [
             'code' => 200,

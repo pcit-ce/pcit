@@ -42,6 +42,10 @@
 
   type_from_url = array[6];
 
+  if (6 === array.length) {
+    type_from_url = 'current';
+  }
+
   query = git_type + '/' + username + '/' + repo;
 
   baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
@@ -49,6 +53,10 @@
   function display(id, data) {
     $("#display").empty();
     switch (id) {
+      case 'current':
+        $("#display").append("<pre>" + data + "</pre>");
+        break;
+
       case 'builds':
         $.each(data, function (id, status) {
 
@@ -173,6 +181,7 @@
       type: "POST",
       url: location.href,
       success: function (data) {
+
         display(type_from_url, data);
       }
 
