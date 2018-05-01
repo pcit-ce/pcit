@@ -38,7 +38,6 @@ EOF;
         ]);
 
         foreach ($output as $k) {
-
             $build_key_id = $k['id'];
             $git_type = $k['git_type'];
             $rid = $k['rid'];
@@ -63,23 +62,22 @@ EOF;
             $build_activated = self::getRepoBuildActivateStatus($rid);
 
             if ($build_activated) {
-
                 try {
                     self::run($build_key_id, $rid, $commit_id, $branch);
                 } catch (Exception $e) {
                     switch ($e->getMessage()) {
                         case CIConst::BUILD_STATUS_ERRORED:
-                            $sql = "UPDATE builds SET build_status =? WHERE id=?";
+                            $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-                            /**
+                            /*
                              * 更新数据库状态
                              */
                             DB::update($sql, [CIConst::BUILD_STATUS_ERRORED, $build_key_id]);
-                            /**
+                            /*
                              * 通知 GitHub commit Status
                              */
 
-                            /**
+                            /*
                              * 微信通知
                              */
                             break;
@@ -101,6 +99,7 @@ EOF;
      * @param $rid
      *
      * @return bool
+     *
      * @throws \Exception
      */
     private function getRepoBuildActivateStatus($rid)
@@ -131,7 +130,6 @@ EOF;
      * @param        $build_key_id
      * @param        $rid
      * @param string $commit_id
-     *
      * @param string $branch
      *
      * @throws Exception
@@ -142,7 +140,7 @@ EOF;
 
         $gitType = self::$gitType;
 
-        $sql = "SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?";
+        $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
         $output = DB::select($sql, [$gitType, $rid]);
 
@@ -156,18 +154,17 @@ EOF;
 
         $output = HTTP::get($url);
 
-        $yaml_obj = (object)yaml_parse($output);
+        $yaml_obj = (object) yaml_parse($output);
 
         // $output = json_encode($output);
 
         //var_dump($output);
 
         /**
-         * 变量命名尽量与 docker container run 的参数保持一致
+         * 变量命名尽量与 docker container run 的参数保持一致.
          *
          * 项目根目录
          */
-
         $workspace = $yaml_obj->workspace;
 
         $base_path = $workspace['base'] ?? null;
@@ -179,7 +176,7 @@ EOF;
         }
 
         /**
-         * --workdir
+         * --workdir.
          */
         $workdir = $base_path.'/'.$path;
 
@@ -232,7 +229,7 @@ EOF;
 
             $temp_file = $temp_dir.'/'.$unique_id;
 
-            for ($i = 0; $i < count($commands); $i++) {
+            for ($i = 0; $i < count($commands); ++$i) {
                 file_put_contents($temp_file, "echo + \"$commands[$i]\"\n\n", FILE_APPEND);
                 file_put_contents($temp_file, "$commands[$i]\n\n", FILE_APPEND);
             }
@@ -242,7 +239,7 @@ EOF;
             unlink($temp_file);
 
             $docker_container->setEnv([
-                "CI_SCRIPT" => $ci_script,
+                'CI_SCRIPT' => $ci_script,
             ]);
 
             $docker_container->setHostConfig(["$unique_id:$workdir"]);
@@ -269,19 +266,19 @@ EOF;
         echo 'running....';
 
         /**
-         * 插入数据库
+         * 插入数据库.
          */
-        $sql = "";
+        $sql = '';
 
         DB::select($sql);
-        /**
+        /*
          * 更新状态
          */
         CIConst::BUILD_STATUS_ERRORED;
         CIConst::BUILD_STATUS_FAILED;
         CIConst::BUILD_STATUS_PASSED;
 
-        /**
+        /*
          * 发送通知
          */
     }
@@ -327,10 +324,10 @@ EOF;
      * @param string            $image_name
      * @param Image             $docker_image
      * @param Container         $docker_container
-     *
      * @param string|array|null $cmd
      *
      * @return string
+     *
      * @throws Exception
      */
     private function docker_container_run(string $image_name,
@@ -352,7 +349,7 @@ EOF;
 
         $output = $docker_container->start($id);
 
-        if ((bool)$output) {
+        if ((bool) $output) {
             throw new Exception($output, 500);
         }
 
@@ -365,13 +362,13 @@ EOF;
      * @param string    $build_key_id
      *
      * @return array
+     *
      * @throws Exception
      */
     private function docker_container_logs(Container $docker_container, string $container_id, string $build_key_id)
     {
         $redis = Cache::connect();
         while (1) {
-
             $git_image_status_obj = json_decode($docker_container->inspect($container_id))->State;
 
             $status = $git_image_status_obj->Status;
@@ -389,16 +386,14 @@ EOF;
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
-                 * 0001-01-01T00:00:00Z
+                 * 0001-01-01T00:00:00Z.
                  */
-
                 $startedAt = $git_image_status_obj->StartedAt;
                 $finishedAt = $git_image_status_obj->FinishedAt;
 
                 /**
-                 * 将日志存入数据库
+                 * 将日志存入数据库.
                  */
-
                 $exitCode = $git_image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {

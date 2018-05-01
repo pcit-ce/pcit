@@ -95,7 +95,6 @@ class APIController
                 'failing' => $host.'/ico/failing',
                 'passing' => $host.'/ico/passing',
                 'pending' => $host.'/ico/pending',
-
             ],
             'deployment@github' => [
                 'list@get' => $host.'/deployment/list',

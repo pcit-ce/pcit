@@ -31,7 +31,7 @@ class Wechat
                 'repo_name' => $repo_name,
                 'branch' => $branch,
                 'committer' => $committer,
-                'info' => $info
+                'info' => $info,
             ],
         ];
     }

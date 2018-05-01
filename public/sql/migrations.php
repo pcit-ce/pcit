@@ -1,22 +1,23 @@
 <?php
 
+declare(strict_types=1);
 if ($argc < 4) {
     $array = array_filter(scandir(__DIR__), function ($k) {
         if (in_array($k, ['.', '..'])) {
             return false;
-        };
+        }
 
         return true;
     });
 
     var_dump($array);
 
-    echo "
+    echo '
 Usages:
 
 php migrations.php MYSQL_USER MYSQL_PASSWORD SQL_FILE
 
-";
+';
     exit;
 }
 

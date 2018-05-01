@@ -19,7 +19,6 @@ class GitHubController
      *
      * @param $username
      *
-     * @return null | int
      * @throws Exception
      */
     private function getUserStatus($username)
@@ -44,7 +43,6 @@ class GitHubController
      *
      * @param $repo
      *
-     * @return null | int
      * @throws Exception
      */
     private function getRepoStatus($repo)
@@ -83,7 +81,7 @@ class GitHubController
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -119,7 +117,7 @@ class GitHubController
      *
      * @throws Exception
      */
-    private function updateUserInfo($uid, $username, $email, $pic, $accessToken)
+    private function updateUserInfo($uid, $username, $email, $pic, $accessToken): void
     {
         $gitTypeLower = strtolower(static::TYPE);
 
@@ -160,7 +158,7 @@ class GitHubController
         $redis->set($uid.'_username', $username);
         $redis->set($uid.'_email', $email);
 
-        /**
+        /*
          * 用户相关.
          *
          * 先检查用户是否存在
@@ -265,7 +263,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken);
+            $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic, (string) $accessToken);
             $sync = true;
         }
 

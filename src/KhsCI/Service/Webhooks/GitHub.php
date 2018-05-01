@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace KhsCI\Service\Webhooks;
 
 use App\Http\Controllers\Status\GitHubController;
-use Curl\Curl;
 use Error;
 use Exception;
 use KhsCI\Service\IM\Wechat;
@@ -143,7 +142,7 @@ EOF;
 //            __FUNCTION__, $repo_full_name, $branch, $committer, $commit_message, $target_url);
 
         /**
-         * 通知操作全部放入队列中
+         * 通知操作全部放入队列中.
          */
 
         // Wechat::push(Env::get('WECHAT_TEMPLATE_ID'), ENV::get('WECHAT_USER_OPENID'), $curl, $data);

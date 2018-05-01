@@ -19,13 +19,14 @@ class ListController
      * @param mixed ...$arg
      *
      * @return string
+     *
      * @throws \Exception
      */
     public function post(...$arg)
     {
         list($gitType, $username, $repo) = $arg;
 
-        $sql = "SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?";
+        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
 
         $outputArray = DB::select($sql, [$gitType, $username, $repo]);
 
@@ -33,7 +34,7 @@ class ListController
             $rid = $k['rid'];
         }
 
-        $sql = "SELECT id FROM builds WHERE rid=? ORDER BY id DESC LIMIT 1";
+        $sql = 'SELECT id FROM builds WHERE rid=? ORDER BY id DESC LIMIT 1';
 
         $output = DB::select($sql, [$rid]);
 
@@ -45,11 +46,12 @@ class ListController
     }
 
     /**
-     * List build Status
+     * List build Status.
      *
      * @param mixed ...$args
      *
      * @return array
+     *
      * @throws \Exception
      */
     public function list(...$args)
@@ -64,9 +66,8 @@ class ListController
          * build_status
          * commit_id
          * build_time = end_time - create_time
-         * now_time - end_time
+         * now_time - end_time.
          */
-
         $sql = <<<EOF
 SELECT id,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
@@ -84,11 +85,12 @@ EOF;
     }
 
     /**
-     * Show build details
+     * Show build details.
      *
      * @param mixed ...$args
      *
      * @return string
+     *
      * @throws \Exception
      */
     public function getBuildDetails(...$args)
