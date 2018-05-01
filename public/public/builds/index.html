@@ -6,6 +6,11 @@
   <title>KhsCI - Builds</title>
 </head>
 <body>
+<header>
+  This Is Header
+  <br>
+  <br>
+</header>
 <div>
   <button id="current">Current</button>
   <button id="branches">Branches</button>
@@ -20,7 +25,7 @@
   </select>
 
 </div>
-
+<br>
 <div id="display"></div>
 <script>
   url = location.href;
@@ -35,31 +40,105 @@
 
   repo = array[5];
 
-  type = array[6];
+  type_from_url = array[6];
+
+  if (6 === array.length) {
+    type_from_url = 'current';
+  }
 
   query = git_type + '/' + username + '/' + repo;
 
   baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
+
+  function display(id, data) {
+    $("#display").empty();
+    switch (id) {
+      case 'current':
+        $("#display").append("<pre>" + data + "</pre>");
+        break;
+
+      case 'builds':
+        $.each(data, function (id, status) {
+
+          let build_id = status.id;
+          let branch = status.branch;
+          let committer_username = status.committer_username;
+          let commit_message = status.committer_message;
+          let commit_id = status.commit_id;
+          let build_status = status.build_status;
+          let create_time = status.create_time;
+          let end_time = status.end_time;
+
+          $("#display").append('<br><br>' + build_id
+            + '&nbsp;' + branch
+
+            + '&nbsp;' + committer_username
+
+            + '&nbsp;' + commit_message
+
+            + '&nbsp;' + commit_id
+
+            + '&nbsp;' + build_status
+
+            + '&nbsp;' + create_time
+
+            + '&nbsp;' + end_time
+          );
+
+        });
+
+        break;
+      case 'branches':
+
+        $.each(data, function (branch, status) {
+
+          $("#display").append(branch);
+
+          $.each(status, function (id, status) {
+            id = id.replace('k', '');
+
+            let a_content = "<a href='builds/" + id + "' target='_blank'>" + status + "</a>";
+
+            $("#display").append('<br><br>' + a_content);
+
+          });
+
+          $("#display").append("<hr>");
+
+
+        });
+        break;
+    }
+  }
+
+  function display_title(id, data) {
+    switch (id) {
+      case "pull_requests":
+        title = 'Pull Requests - ' + baseTitle;
+        break;
+      case "builds":
+        title = 'Builds - ' + baseTitle;
+        break;
+      default:
+        title = baseTitle;
+    }
+
+    $("title").text(title);
+  }
 
   /**
    * http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
    */
   $("button").click(function () {
     let id = $(this).attr('id');
-    history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
 
-    switch (id) {
-      case "pull_requests":
-        title = 'Pull Requests - ' + baseTitle;
-        break;
-
-      default:
-        title = baseTitle;
+    if ('current' === id) {
+      history.replaceState(null, baseTitle, baseUrl + '/' + query);
+    } else {
+      history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
     }
 
-    if (id === 'builds') {
-      title = 'Builds - ' + baseTitle;
-    }
+    display_title(id);
 
     $("title").text(title);
 
@@ -67,7 +146,9 @@
       type: "POST",
       url: location.href,
       success: function (data) {
-        $("#display").text(data);
+
+        display(id, data);
+
       }
     })
 
@@ -82,9 +163,10 @@
     $.ajax({
       type: "post",
       url: location.href,
-
       success: function (data) {
-        $("#display").text(data);
+
+        display(id, data);
+
       }
     })
 
@@ -92,26 +174,17 @@
 
   $(document).ready(function () {
 
-    switch (type) {
-      case "builds":
-        title = 'Builds - ' + baseTitle;
-        break;
-      case "pull_requests":
-        title = 'Pull Requests - ' + baseTitle;
-        break;
-      default :
-        title = baseTitle;
-    }
-
-    $("title").text(title);
+    display_title(type_from_url);
 
     $.ajax({
+
       type: "POST",
       url: location.href,
       success: function (data) {
-        $("#display").text(data);
 
+        display(type_from_url, data);
       }
+
     })
 
   });
