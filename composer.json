@@ -20,12 +20,13 @@
   },
   "require": {
     "php": ">=7.1",
-    "pimple/pimple": "~3.0",
+    "ext-json": "*",
     "doctrine/cache": "^1.6",
-    "vlucas/phpdotenv": "*",
     "khs1994/curl": "dev-master",
-    "khs1994/docker":"dev-master",
-    "ext-json": "*"
+    "khs1994/docker": "dev-master",
+    "pimple/pimple": "~3.0",
+    "symfony/console": "^3.4",
+    "vlucas/phpdotenv": "*"
   },
   "require-dev": {
     "ext-PDO": "*",

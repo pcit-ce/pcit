@@ -1,9 +1,3 @@
-/**
-
-Build 表
-
- */
-
 USE khsci;
 
 DROP TABLE IF EXISTS `builds`;
@@ -11,7 +5,7 @@ DROP TABLE IF EXISTS `builds`;
 CREATE TABLE `builds` (
   `id`                 BIGINT AUTO_INCREMENT,
   `git_type`           VARCHAR(20),
-  `event_type`         VARCHAR(20), /* push tag pr */
+  `event_type`         VARCHAR(20) COMMENT 'push tag pr',
   `ref`                VARCHAR(100),
   `branch`             VARCHAR(100),
   `tag_name`           VARCHAR(100),
@@ -27,7 +21,9 @@ CREATE TABLE `builds` (
   `event_time`         BIGINT UNSIGNED,
   `create_time`        BIGINT UNSIGNED,
   `end_time`           BIGINT UNSIGNED,
-  `build_status`       VARCHAR(20), /* pending | canceled | passed | errored | failed | skip | inactive */
+  `build_status`       VARCHAR(20) COMMENT 'pending | canceled | passed | errored | failed | skip | inactive',
   `request_raw`        JSON,
+  `config`             JSON,
+  `build_log`          TEXT,
   KEY (`id`)
 );

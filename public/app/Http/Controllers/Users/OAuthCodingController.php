@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\controllers\Users;
+namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
