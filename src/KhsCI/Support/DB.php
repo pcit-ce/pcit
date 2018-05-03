@@ -47,12 +47,13 @@ class DB
      *
      * @param string $sql
      * @param array  $data
+     * @param bool   $single
      *
-     * @return array
+     * @return array|string
      *
      * @throws Exception
      */
-    public static function select(string $sql, array $data = [])
+    public static function select(string $sql, array $data = [], bool $single = false)
     {
         $pdo = self::connect();
 
@@ -66,6 +67,12 @@ class DB
             $output = $stmt->fetchAll();
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
+        }
+
+        if ($single and 1 === count($output)) {
+            foreach ($output[0] as $k => $v) {
+                return $v;
+            }
         }
 
         return $output;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Status;
 
+use Exception;
 use KhsCI\Service\Status\GitHub;
 use KhsCI\Support\DB;
 
@@ -30,19 +31,25 @@ class GitHubController
     }
 
     /**
-     * @param $login_username
-     * @param $repo_full_name
-     * @param $commit_sha
-     * @param $state
-     * @param $target_url
-     * @param $description
-     * @param $context
+     * @param string $login_username
+     * @param string $repo_full_name
+     * @param string $commit_sha
+     * @param string $state
+     * @param string $target_url
+     * @param string $description
+     * @param string $context
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function create($login_username, $repo_full_name, $commit_sha, $state, $target_url, $description, $context)
+    public function create(string $login_username,
+                           string $repo_full_name,
+                           string $commit_sha,
+                           string $state,
+                           string $target_url,
+                           string $description,
+                           string $context)
     {
         $sql = 'SELECT access_token FROM user WHERE username=? AND git_type=?';
 
@@ -52,16 +59,18 @@ class GitHubController
             $accessToken = $k['access_token'];
         }
 
-        $array = explode('/', $repo_full_name);
+        list($username, $repo) = explode('/', $repo_full_name);
 
-        return $this->status->create($array[0],
-            $array[1],
+        return $this->status->create(
+            $username,
+            $repo,
             $commit_sha,
             $accessToken,
             $state,
             $target_url,
             $description,
-            $context);
+            $context
+        );
     }
 
     public function listCombinedStatus(...$arg)

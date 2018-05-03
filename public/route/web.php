@@ -102,6 +102,7 @@ Route::get('{git_type}/{username}/{repo}/builds', 'Builds\ListController');
 Route::post('{git_type}/{username}/{repo}/builds', 'Builds\ListController@list');
 
 Route::get('{git_type}/{username}/{repo}/builds/{id}', 'Builds\ListController');
+Route::post('{git_type}/{username}/{repo}/builds/{id}', 'Builds\ListController@getBuildDetails');
 
 Route::get('{git_type}/{username}/{repo}/pull_requests', 'Builds\ListController');
 

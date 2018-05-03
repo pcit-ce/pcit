@@ -40,6 +40,8 @@
 
   repo = array[5];
 
+  build_id = 'khsci';
+
   type_from_url = array[6];
 
   if (6 === array.length) {
@@ -59,35 +61,42 @@
         break;
 
       case 'builds':
-        $.each(data, function (id, status) {
+        let url = location.href;
 
-          let build_id = status.id;
-          let branch = status.branch;
-          let committer_username = status.committer_username;
-          let commit_message = status.committer_message;
-          let commit_id = status.commit_id;
-          let build_status = status.build_status;
-          let create_time = status.create_time;
-          let end_time = status.end_time;
+        let array = url.split('/');
+        if (8 === array.length) {
+          $("#display").append('<pre>' + data + '</pre>');
+        } else {
 
-          $("#display").append('<br><br>' + build_id
-            + '&nbsp;' + branch
+          $.each(data, function (id, status) {
 
-            + '&nbsp;' + committer_username
+            let build_id = status.id;
+            let branch = status.branch;
+            let committer_username = status.committer_username;
+            let commit_message = status.committer_message;
+            let commit_id = status.commit_id;
+            let build_status = status.build_status;
+            let create_time = status.create_time;
+            let end_time = status.end_time;
 
-            + '&nbsp;' + commit_message
+            $("#display").append('<br><br>' + build_id
+              + '&nbsp;' + branch
 
-            + '&nbsp;' + commit_id
+              + '&nbsp;' + committer_username
 
-            + '&nbsp;' + build_status
+              + '&nbsp;' + commit_message
 
-            + '&nbsp;' + create_time
+              + '&nbsp;' + commit_id
 
-            + '&nbsp;' + end_time
-          );
+              + '&nbsp;' + build_status
 
-        });
+              + '&nbsp;' + create_time
 
+              + '&nbsp;' + end_time
+            );
+
+          });
+        }
         break;
       case 'branches':
 
@@ -182,7 +191,6 @@
       type: "POST",
       url: location.href,
       success: function (data) {
-
         display(type_from_url, data);
       }
 

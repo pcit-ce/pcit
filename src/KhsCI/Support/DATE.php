@@ -11,11 +11,12 @@ class DATE
      * @param bool $returnArray
      *
      * @return array|false|int PRC timestamp
+     *
      * @throws \Exception
      */
     public static function parse(string $timestamp, bool $returnArray = false)
     {
-        /**
+        /*
          * 2018-05-02T04:15:49.011488700Z
          *
          * 2018-05-02T03:55:52Z
@@ -34,7 +35,7 @@ class DATE
                 return $time;
             }
 
-            return mktime((int)$hour, (int)$minute, (int)$second, (int)$month, (int)$day, (int)$year);
+            return mktime((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $day, (int) $year);
         }
 
         if (0 === $time['zone']) {
@@ -44,7 +45,7 @@ class DATE
                 return $time;
             }
 
-            return mktime((int)$hour, (int)$minute, (int)$second, (int)$month, (int)$day, (int)$year) + 8 * 60 * 60;
+            return mktime((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $day, (int) $year) + 8 * 60 * 60;
         }
 
         throw new \Exception('Only Support UTC or PRC', 500);

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CLI;
 
-use KhsCI\Service\Queue\Queue as QueueService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +15,7 @@ class Queue extends Command
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('queue');
         $this->setDescription('Run queue');
@@ -25,14 +26,11 @@ class Queue extends Command
      * @param OutputInterface $output
      *
      * @return int|null|void
+     *
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $queue = new QueueService();
-
-        $queue();
+        \App\Console\Queue::queue();
     }
-
-
 }
