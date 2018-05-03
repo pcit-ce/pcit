@@ -25,7 +25,7 @@ $cli = new Application('KhsCI CLI', 'v18.05');
 
 $cli->add(new CLI\Queue());
 
-$cli->add(new CLI\Migrations());
+$cli->add(new CLI\Migrate());
 
 try {
     $cli->run();

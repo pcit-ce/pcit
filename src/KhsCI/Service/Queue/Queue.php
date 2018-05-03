@@ -48,35 +48,32 @@ EOF;
             $branch = $k['branch'];
 
             self::$gitType = $git_type;
-
-            // commit 信息跳过构建
-            $skip = self::skip($commit_message);
-
-            if ($skip) {
-                $build_status_skip = CIConst::BUILD_STATUS_SKIP;
-                $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND commit_id=?';
-                DB::update($sql, [$build_status_skip, self::$gitType, $commit_id]);
-
-                continue;
-            }
-
-            // 是否启用构建
-            $build_activated = self::getRepoBuildActivateStatus($rid);
-
-            if (!$build_activated) {
-                self::inactive($rid);
-                continue;
-            }
-
             try {
+
+                // commit 信息跳过构建
+                self::skip($commit_message);
+
+                // 是否启用构建
+                self::getRepoBuildActivateStatus($rid);
 
                 self::run($build_key_id, $rid, $commit_id, $branch);
 
             } catch (Exception $e) {
                 switch ($e->getMessage()) {
+                    case CIConst::BUILD_STATUS_SKIP:
+                        $this->setBuildStatusSkip($build_key_id);
+                        break;
                     case CIConst::BUILD_STATUS_ERRORED:
                         $this->setBuildStatusErrored($build_key_id);
-                        exit;
+                        break;
+                    case CIConst::BUILD_STATUS_FAILED:
+                        $this->setBuildStatusFailed($build_key_id);
+                        break;
+                    case CIConst::BUILD_STATUS_PASSED:
+                        $this->setBuildStatusPassed($build_key_id);
+                        break;
+                    case CIConst::BUILD_STATUS_INACTIVE:
+                        $this->setBuildStatusInactive($build_key_id);
                         break;
                     default:
                         throw new Exception($e->getMessage(), 500);
@@ -90,11 +87,9 @@ EOF;
      *
      * @param $rid
      *
-     * @return bool
-     *
      * @throws \Exception
      */
-    private function getRepoBuildActivateStatus($rid)
+    private function getRepoBuildActivateStatus($rid): void
     {
         $gitType = self::$gitType;
 
@@ -104,11 +99,28 @@ EOF;
 
         foreach ($output as $k) {
             if (0 == $k['build_activate']) {
-                return false;
+                throw new Exception(CIConst::BUILD_STATUS_INACTIVE, 500);
             }
         }
+    }
 
-        return true;
+    /**
+     * 检查 commit 信息跳过构建.
+     *
+     * @param string $commit_message
+     *
+     * @throws Exception
+     */
+    private function skip(string $commit_message): void
+    {
+        $output = stripos($commit_message, '[skip ci]');
+        $output2 = stripos($commit_message, '[ci skip]');
+
+        if (false === $output && false === $output2) {
+            return;
+        }
+
+        throw new Exception(CIConst::BUILD_STATUS_SKIP, 500);
     }
 
     /**
@@ -130,6 +142,8 @@ EOF;
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
         $output = DB::select($sql, [$gitType, $rid]);
+
+        $repo_full_name = '';
 
         foreach ($output as $k) {
             $repo_full_name = $k['repo_full_name'];
@@ -192,7 +206,7 @@ EOF;
 
         $container_id = $this->docker_container_run('plugins/git', $docker_image, $docker_container);
 
-        $output = $this->docker_container_logs($docker_container, $container_id, $build_key_id);
+        $this->docker_container_logs($docker_container, $container_id, $build_key_id);
 
         $redis = Cache::connect();
 
@@ -200,12 +214,43 @@ EOF;
 
         $pipeline = $yaml_obj->pipeline;
 
+        $matrix = $yaml_obj->matrix;
+
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
-            $repo = $array['repo'] ?? null;
-            $tags = $array['tags'] ?? 'latest';
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
+
+            $arg = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $image, $output);
+
+            if ($arg) {
+                foreach ($output[0] as $k) {
+
+                    // ${XXX} -> md5('KHSCI')
+
+                    $var_secret = md5('KHSCI');
+
+                    $image = str_replace($k, $var_secret, $image);
+
+                    $array = explode('}', $k);
+
+                    $k = trim($array[0], '${');
+
+                    if (in_array($k, array_keys($matrix))) {
+                        $var = $matrix["$k"][0];
+                    }
+
+                    $image = str_replace($var_secret, $var, $image);
+                }
+            }
+
+            var_dump($image);
+
+            var_dump($event);
+
+//            if ($event and in_array('push', $event)) {
+//                continue;
+//            }
 
             $content = '\n';
 
@@ -237,8 +282,6 @@ EOF;
 
             $docker_container->setWorkingDir($workdir);
 
-            $image = 'khs1994/php-fpm:7.2.5-alpine3.7';
-
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
             $container_id = $this->docker_container_run($image, $docker_image, $docker_container, $cmd);
@@ -258,32 +301,9 @@ EOF;
 
         var_dump(__LINE__);
 
-        exit;
-
         $services = $yaml_obj->services;
 
-        $matrix = $yaml_obj->matrix;
-
         throw new Exception(CIConst::BUILD_STATUS_PASSED, 200);
-    }
-
-    /**
-     * 检查 commit 信息跳过构建.
-     *
-     * @param $commit_message
-     *
-     * @return bool
-     */
-    private function skip(string $commit_message)
-    {
-        $output = stripos($commit_message, '[skip ci]');
-        $output2 = stripos($commit_message, '[ci skip]');
-
-        if (false === $output && false === $output2) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -292,12 +312,13 @@ EOF;
      *
      * @throws Exception
      */
-    private function inactive($rid, int $lastId = 0): void
+    private function setBuildStatusInactive($rid, int $lastId = 0): void
     {
         $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND id>?';
 
         DB::update($sql, [CIConst::BUILD_STATUS_INACTIVE, self::$gitType, $rid, $lastId]);
     }
+
 
     /**
      * @param string $build_key_id
@@ -388,12 +409,10 @@ EOF;
 
         $output = json_decode($docker_container->create($image_name, null, $cmd));
 
-        $id = $output->Id;
+        $id = $output->Id ?? '';
 
-        $warnings = $output->Warnings;
-
-        if (null !== $warnings) {
-            throw new Exception($warnings, 500);
+        if ('' === $id) {
+            throw new Exception(CIConst::BUILD_STATUS_ERRORED, 500);
         }
 
         $output = $docker_container->start($id);
@@ -419,22 +438,25 @@ EOF;
         $redis = Cache::connect();
         $i = -1;
 
+        $startedAt = null;
+        $finishedAt = null;
+
         while (1) {
             $i = $i + 1;
 
-            $git_image_status_obj = json_decode($docker_container->inspect($container_id))->State;
+            $image_status_obj = json_decode($docker_container->inspect($container_id))->State;
 
-            $status = $git_image_status_obj->Status;
+            $status = $image_status_obj->Status;
 
-            $startedAt = $git_image_status_obj->StartedAt;
-            $startedAT = DATE::parse($startedAt);
+            $startedAt = $image_status_obj->StartedAt;
+            $startedAt = DATE::parse($startedAt);
 
             $first = false;
 
             if ('running' === $status) {
                 if (0 === $i) {
                     $first = true;
-                    $since_time = $startedAT - 5;
+                    $since_time = $startedAt - 5;
                     $until_time = $startedAt;
                 }
 
@@ -445,7 +467,7 @@ EOF;
 
                 sleep(6);
 
-                $git_image_log = $docker_container->logs(
+                $image_log = $docker_container->logs(
                     $container_id,
                     false,
                     true,
@@ -455,12 +477,12 @@ EOF;
                     true
                 );
 
-                echo $git_image_log;
+                echo $image_log;
 
                 continue;
             } else {
 
-                $git_image_log = $docker_container->logs(
+                $image_log = $docker_container->logs(
                     $container_id,
                     false,
                     true,
@@ -472,19 +494,29 @@ EOF;
 
                 $prev_docker_log = $redis->hget('build_log', $build_key_id);
 
-                $redis->hset('build_log', $build_key_id, $prev_docker_log.$git_image_log);
+                var_dump($prev_docker_log);
+
+                var_dump($image_log);
+
+                $output=$redis->hset('build_log', $build_key_id, $prev_docker_log.$image_log);
+
+                var_dump($output);
+
+                var_dump($build_key_id);
+
+                var_dump($redis->hGet('build_log', $build_key_id));
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
                  * 0001-01-01T00:00:00Z.
                  */
-                $startedAt = $git_image_status_obj->StartedAt;
-                $finishedAt = $git_image_status_obj->FinishedAt;
+                $startedAt = $image_status_obj->StartedAt;
+                $finishedAt = $image_status_obj->FinishedAt;
 
                 /**
                  * 将日志存入数据库.
                  */
-                $exitCode = $git_image_status_obj->ExitCode;
+                $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
                     throw new Exception(CIConst::BUILD_STATUS_ERRORED, 500);

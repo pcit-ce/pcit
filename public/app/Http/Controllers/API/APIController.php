@@ -13,10 +13,11 @@ class APIController
         return [
             'homepage' => $host,
             'login' => $host.'/login',
-            'queue' => $host.'/queue',
             'beta' => $host.'/beta',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
+                'test' => $host.'/test5',
+                'testSession' => $host.'/test3',
             ],
             'oauth' => [
                 'coding' => $host.'/oauth/coding/login',
