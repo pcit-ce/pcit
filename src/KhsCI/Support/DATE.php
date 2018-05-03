@@ -6,39 +6,47 @@ namespace KhsCI\Support;
 
 class DATE
 {
-    public static function parse($timestamp, $returnArray = false)
+    /**
+     * @param      $timestamp
+     * @param bool $returnArray
+     *
+     * @return array|false|int PRC timestamp
+     * @throws \Exception
+     */
+    public static function parse(string $timestamp, bool $returnArray = false)
     {
-        $array = explode('T', $timestamp);
+        /**
+         * 2018-05-02T04:15:49.011488700Z
+         *
+         * 2018-05-02T03:55:52Z
+         *
+         * 2018-05-02T12:02:20+08:00
+         */
 
-        $year_month_day = explode('-', $array[0]);
+        date_default_timezone_set('PRC');
 
-        $time = explode('+', $array[1]);
+        $time = date_parse($timestamp);
 
-        $hour_min_sen = explode(':', $time[0]);
+        if (28800 === $time['zone']) {
+            list($year, $month, $day, $hour, $minute, $second) = array_values($time);
 
-        $year = $year_month_day[0];
+            if ($returnArray) {
+                return $time;
+            }
 
-        $month = $year_month_day[1];
-
-        $day = $year_month_day[2];
-
-        $hour = $hour_min_sen[0];
-
-        $minute = $hour_min_sen[1];
-
-        $second = $hour_min_sen[2];
-
-        if ($returnArray) {
-            return [
-                'year' => $year,
-                'month' => $month,
-                'day' => $day,
-                'hour' => $hour,
-                'minute' => $minute,
-                'second' => $second,
-            ];
+            return mktime((int)$hour, (int)$minute, (int)$second, (int)$month, (int)$day, (int)$year);
         }
 
-        return mktime((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $day, (int) $year);
+        if (0 === $time['zone']) {
+            list($year, $month, $day, $hour, $minute, $second) = array_values($time);
+
+            if ($returnArray) {
+                return $time;
+            }
+
+            return mktime((int)$hour, (int)$minute, (int)$second, (int)$month, (int)$day, (int)$year) + 8 * 60 * 60;
+        }
+
+        throw new \Exception('Only Support UTC or PRC', 500);
     }
 }

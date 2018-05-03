@@ -10,7 +10,9 @@ use Docker\Image\Image;
 use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CIConst;
+use KhsCI\Support\DATE;
 use KhsCI\Support\DB;
+use KhsCI\Support\GIT;
 use KhsCI\Support\HTTP;
 
 class Queue
@@ -29,7 +31,7 @@ id,git_type,rid,commit_id,commit_message,branch
 
 FROM 
 
-builds WHERE build_status=? AND event_type=? ORDER BY id DESC;
+builds WHERE build_status=? AND event_type=? ORDER BY id DESC LIMIT 1;
 EOF;
 
         $output = DB::select($sql, [
@@ -61,35 +63,25 @@ EOF;
             // 是否启用构建
             $build_activated = self::getRepoBuildActivateStatus($rid);
 
-            if ($build_activated) {
-                try {
-                    self::run($build_key_id, $rid, $commit_id, $branch);
-                } catch (Exception $e) {
-                    switch ($e->getMessage()) {
-                        case CIConst::BUILD_STATUS_ERRORED:
-                            $sql = 'UPDATE builds SET build_status =? WHERE id=?';
-
-                            /*
-                             * 更新数据库状态
-                             */
-                            DB::update($sql, [CIConst::BUILD_STATUS_ERRORED, $build_key_id]);
-                            /*
-                             * 通知 GitHub commit Status
-                             */
-
-                            /*
-                             * 微信通知
-                             */
-                            break;
-                        default:
-                            echo $e->getMessage();
-                            exit;
-                    }
-                }
-            } else {
+            if (!$build_activated) {
                 self::inactive($rid);
+                continue;
             }
-            exit;
+
+            try {
+
+                self::run($build_key_id, $rid, $commit_id, $branch);
+
+            } catch (Exception $e) {
+                switch ($e->getMessage()) {
+                    case CIConst::BUILD_STATUS_ERRORED:
+                        $this->setBuildStatusErrored($build_key_id);
+                        exit;
+                        break;
+                    default:
+                        throw new Exception($e->getMessage(), 500);
+                }
+            }
         }
     }
 
@@ -104,16 +96,11 @@ EOF;
      */
     private function getRepoBuildActivateStatus($rid)
     {
-//        $redis = Cache::connect();
-//
-//        $redis->hExists(1, 2);
-
         $gitType = self::$gitType;
 
-        $sql = <<<EOF
-SELECT build_activate FROM repo WHERE rid=$rid AND git_type='$gitType';
-EOF;
-        $output = DB::select($sql);
+        $sql = 'SELECT build_activate FROM repo WHERE rid=? AND git_type=?';
+
+        $output = DB::select($sql, [$rid, $gitType]);
 
         foreach ($output as $k) {
             if (0 == $k['build_activate']) {
@@ -151,14 +138,17 @@ EOF;
         $base = $repo_full_name.'/'.$commit_id;
 
         $url = "https://raw.githubusercontent.com/$base/.drone.yml";
+        // $url = "https://ci2.khs1994.com:10000/.drone.yml";
 
         $output = HTTP::get($url);
 
-        $yaml_obj = (object) yaml_parse($output);
+        $yaml_obj = (object)yaml_parse($output);
 
-        // $output = json_encode($output);
+        $yaml_to_json = json_encode($output);
 
-        //var_dump($output);
+        $sql = "UPDATE builds SET config=? WHERE id=? ";
+
+        // DB::update($sql, [$yaml_to_json, $build_key_id]);
 
         /**
          * 变量命名尽量与 docker container run 的参数保持一致.
@@ -180,13 +170,7 @@ EOF;
          */
         $workdir = $base_path.'/'.$path;
 
-        switch ($gitType) {
-            case 'github':
-                $git_url = 'https://github.com/'.$repo_full_name;
-                break;
-            default:
-                throw new Exception('Not Found', 500);
-        }
+        $git_url = GIT::getUrl($gitType, $repo_full_name);
 
         $docker = Docker::docker(Docker::createOptionArray('127.0.0.1:2375'));
 
@@ -210,33 +194,38 @@ EOF;
 
         $output = $this->docker_container_logs($docker_container, $container_id, $build_key_id);
 
+        $redis = Cache::connect();
+
+        var_dump($redis->hGet('build_log', $build_key_id));
+
         $pipeline = $yaml_obj->pipeline;
 
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
-            // $repo = $array['repo'] ?? null;
-            // $tags = $array['tags'] ?? 'latest';
+            $repo = $array['repo'] ?? null;
+            $tags = $array['tags'] ?? 'latest';
             $commands = $array['commands'] ?? null;
-            // $event = $array['when']['event'] ?? null;
+            $event = $array['when']['event'] ?? null;
 
-            var_dump(count($commands));
-
-            $temp_dir = sys_get_temp_dir().'/'.'khsci';
-
-            if (!is_dir($temp_dir)) {
-                mkdir(sys_get_temp_dir().'/'.'khsci');
-            }
-
-            $temp_file = $temp_dir.'/'.$unique_id;
+            $content = '\n';
 
             for ($i = 0; $i < count($commands); ++$i) {
-                file_put_contents($temp_file, "echo + \"$commands[$i]\"\n\n", FILE_APPEND);
-                file_put_contents($temp_file, "$commands[$i]\n\n", FILE_APPEND);
+                $command = addslashes($commands[$i]);
+
+                $content .= 'echo $ '.str_replace('$', '\\\\$', $command).'\n\n';
+
+                $content .= 'echo;echo'.'\n\n';
+
+                $content .= str_replace('$$', '$', $command).'\n\n';
+
+                $content .= 'echo;echo'.'\n\n';
             }
 
-            $ci_script = base64_encode(file_get_contents($temp_file));
+            // var_dump($content);
 
-            unlink($temp_file);
+            // var_dump(stripcslashes($content));
+
+            $ci_script = base64_encode(stripcslashes($content));
 
             $docker_container->setEnv([
                 'CI_SCRIPT' => $ci_script,
@@ -252,35 +241,30 @@ EOF;
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
-            $id = $this->docker_container_run($image, $docker_image, $docker_container, $cmd);
+            $container_id = $this->docker_container_run($image, $docker_image, $docker_container, $cmd);
 
-            var_dump($id);
+            $output = $this->docker_container_logs($docker_container, $container_id, $build_key_id);
+
+            var_dump($output);
+
+            $redis = Cache::connect();
+
+            var_dump($redis->hGet('build_log', $build_key_id));
+
+            var_dump(__LINE__);
 
             exit;
         }
+
+        var_dump(__LINE__);
+
+        exit;
 
         $services = $yaml_obj->services;
 
         $matrix = $yaml_obj->matrix;
 
-        echo 'running....';
-
-        /**
-         * 插入数据库.
-         */
-        $sql = '';
-
-        DB::select($sql);
-        /*
-         * 更新状态
-         */
-        CIConst::BUILD_STATUS_ERRORED;
-        CIConst::BUILD_STATUS_FAILED;
-        CIConst::BUILD_STATUS_PASSED;
-
-        /*
-         * 发送通知
-         */
+        throw new Exception(CIConst::BUILD_STATUS_PASSED, 200);
     }
 
     /**
@@ -306,18 +290,83 @@ EOF;
      * @param     $rid
      * @param int $lastId
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function inactive($rid, int $lastId = 0): void
     {
-        $gitType = self::$gitType;
+        $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND id>?';
 
-        $build_status_inactive = CIConst::BUILD_STATUS_INACTIVE;
+        DB::update($sql, [CIConst::BUILD_STATUS_INACTIVE, self::$gitType, $rid, $lastId]);
+    }
 
-        $sql = <<<EOF
-UPDATE builds set build_status='$build_status_inactive' WHERE git_type='$gitType' AND rid='$rid' AND id>$lastId;
-EOF;
-        DB::update($sql);
+    /**
+     * @param string $build_key_id
+     *
+     * @throws Exception
+     */
+    private function setBuildStatusSkip(string $build_key_id)
+    {
+        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
+
+        DB::update($sql, [CIConst::BUILD_STATUS_SKIP, $build_key_id]);
+    }
+
+    /**
+     * @param string $build_key_id
+     *
+     * @throws Exception
+     */
+    private function setBuildStatusPending(string $build_key_id)
+    {
+        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
+
+        DB::update($sql, [CIConst::BUILD_STATUS_PENDING, $build_key_id]);
+    }
+
+    /**
+     * @param string $build_key_id
+     *
+     * @throws Exception
+     */
+    private function setBuildStatusErrored(string $build_key_id)
+    {
+        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
+
+        /*
+         * 更新数据库状态
+         */
+        DB::update($sql, [CIConst::BUILD_STATUS_ERRORED, $build_key_id]);
+        /*
+         * 通知 GitHub commit Status
+         */
+
+        /*
+         * 微信通知
+         */
+    }
+
+    /**
+     * @param string $build_key_id
+     *
+     * @throws Exception
+     */
+    private function setBuildStatusFailed(string $build_key_id)
+    {
+        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
+
+        DB::update($sql, [CIConst::BUILD_STATUS_FAILED, $build_key_id]);
+    }
+
+    /**
+     * @param string $build_key_id
+     *
+     * @throws Exception
+     */
+    private function setBuildStatusPassed(string $build_key_id)
+    {
+        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
+
+        DB::update($sql, [CIConst::BUILD_STATUS_PASSED, $build_key_id]);
     }
 
     /**
@@ -349,7 +398,7 @@ EOF;
 
         $output = $docker_container->start($id);
 
-        if ((bool) $output) {
+        if ((bool)$output) {
             throw new Exception($output, 500);
         }
 
@@ -368,21 +417,62 @@ EOF;
     private function docker_container_logs(Container $docker_container, string $container_id, string $build_key_id)
     {
         $redis = Cache::connect();
+        $i = -1;
+
         while (1) {
+            $i = $i + 1;
+
             $git_image_status_obj = json_decode($docker_container->inspect($container_id))->State;
 
             $status = $git_image_status_obj->Status;
 
-            $git_image_log = $docker_container->logs($container_id, false, true, true);
+            $startedAt = $git_image_status_obj->StartedAt;
+            $startedAT = DATE::parse($startedAt);
+
+            $first = false;
 
             if ('running' === $status) {
-                sleep(2);
-                $redis->hset('build_log', $build_key_id, $git_image_log);
-            } else {
-                var_dump($git_image_log);
-                var_dump($build_key_id);
+                if (0 === $i) {
+                    $first = true;
+                    $since_time = $startedAT - 5;
+                    $until_time = $startedAt;
+                }
 
-                $redis->hset('build_log', $build_key_id, $git_image_log);
+                if (!$first) {
+                    $since_time = $until_time;
+                    $until_time = $until_time + 5;
+                }
+
+                sleep(6);
+
+                $git_image_log = $docker_container->logs(
+                    $container_id,
+                    false,
+                    true,
+                    true,
+                    $since_time,
+                    $until_time,
+                    true
+                );
+
+                echo $git_image_log;
+
+                continue;
+            } else {
+
+                $git_image_log = $docker_container->logs(
+                    $container_id,
+                    false,
+                    true,
+                    true,
+                    0,
+                    0,
+                    true
+                );
+
+                $prev_docker_log = $redis->hget('build_log', $build_key_id);
+
+                $redis->hset('build_log', $build_key_id, $prev_docker_log.$git_image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z

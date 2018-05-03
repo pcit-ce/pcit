@@ -68,12 +68,6 @@ Route::post('webhooks/coding', 'Webhooks\CodingController');
 
 Route::get('seo/baidu/xzh', '');
 
-/*Queue*/
-
-Route::post('queue', 'Queue\QueueController');
-
-Route::get('queue', 'Queue\QueueController');
-
 /*IM*/
 
 /*Profile*/

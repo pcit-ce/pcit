@@ -29,5 +29,7 @@ CREATE TABLE `builds` (
   `end_time`           BIGINT UNSIGNED,
   `build_status`       VARCHAR(20), /* pending | canceled | passed | errored | failed | skip | inactive */
   `request_raw`        JSON,
+  `config`             JSON,
+  `build_log`          TEXT,
   KEY (`id`)
 );
