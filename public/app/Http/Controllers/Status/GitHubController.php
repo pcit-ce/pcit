@@ -60,14 +60,16 @@ class GitHubController
 
         list($username, $repo) = explode('/', $repo_full_name);
 
-        return $this->status->create($username,
+        return $this->status->create(
+            $username,
             $repo,
             $commit_sha,
             $accessToken,
             $state,
             $target_url,
             $description,
-            $context);
+            $context
+        );
     }
 
     public function listCombinedStatus(...$arg)

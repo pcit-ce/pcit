@@ -2,7 +2,6 @@
 
 namespace CLI;
 
-use KhsCI\Service\Queue\Queue as QueueService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,9 +28,7 @@ class Queue extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $queue = new QueueService();
-
-        $queue();
+        \App\Console\Queue::queue();
     }
 
 

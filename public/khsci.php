@@ -10,6 +10,14 @@ spl_autoload_register(function ($class) {
     require __DIR__.DIRECTORY_SEPARATOR.$class.'.php';
 });
 
+spl_autoload_register(function ($class) {
+    $class = str_replace('App\\Http', 'app\\Http', $class);
+    $class = str_replace('App\\Console', 'app\\Console', $class);
+    $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+
+    require __DIR__.DIRECTORY_SEPARATOR.$class.'.php';
+});
+
 use Symfony\Component\Console\Application;
 
 $env = new Dotenv\Dotenv(__DIR__, '.env'.'.'.getenv('APP_ENV'));
