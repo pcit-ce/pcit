@@ -61,19 +61,19 @@ EOF;
             } catch (Exception $e) {
                 switch ($e->getMessage()) {
                     case CIConst::BUILD_STATUS_SKIP:
-                        $this->setBuildStatusSkip($build_key_id);
-                        break;
-                    case CIConst::BUILD_STATUS_ERRORED:
-                        $this->setBuildStatusErrored($build_key_id);
-                        break;
-                    case CIConst::BUILD_STATUS_FAILED:
-                        $this->setBuildStatusFailed($build_key_id);
-                        break;
-                    case CIConst::BUILD_STATUS_PASSED:
-                        $this->setBuildStatusPassed($build_key_id);
+                        $this->setBuildStatusSkip($build_key_id, $commit_id);
                         break;
                     case CIConst::BUILD_STATUS_INACTIVE:
-                        $this->setBuildStatusInactive($build_key_id);
+                        $this->setBuildStatusInactive($build_key_id, $commit_id);
+                        break;
+                    case CIConst::BUILD_STATUS_ERRORED:
+                        $this->setBuildStatusErrored($build_key_id, $commit_id);
+                        break;
+                    case CIConst::BUILD_STATUS_FAILED:
+                        $this->setBuildStatusFailed($build_key_id, $commit_id);
+                        break;
+                    case CIConst::BUILD_STATUS_PASSED:
+                        $this->setBuildStatusPassed($build_key_id, $commit_id);
                         break;
                     default:
                         throw new Exception($e->getMessage(), 500);
@@ -124,6 +124,42 @@ EOF;
     }
 
     /**
+     * @param string $image
+     * @param array  $matrix
+     *
+     * @return array|mixed|string
+     */
+    private function getImage(string $image, array $matrix)
+    {
+        $arg = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $image, $output);
+
+        if ($arg) {
+            foreach ($output[0] as $k) {
+
+                // ${XXX} -> md5('KHSCI')
+
+                $var_secret = md5('KHSCI');
+
+                $image = str_replace($k, $var_secret, $image);
+
+                $array = explode('}', $k);
+
+                $k = trim($array[0], '${');
+
+                $var = '';
+
+                if (in_array($k, array_keys($matrix))) {
+                    $var = $matrix["$k"][0];
+                }
+
+                $image = str_replace($var_secret, $var, $image);
+            }
+        }
+
+        return $image;
+    }
+
+    /**
      * 执行构建.
      *
      * @param        $build_key_id
@@ -162,7 +198,7 @@ EOF;
 
         $sql = "UPDATE builds SET config=? WHERE id=? ";
 
-        // DB::update($sql, [$yaml_to_json, $build_key_id]);
+        DB::update($sql, [$yaml_to_json, $build_key_id]);
 
         /**
          * 变量命名尽量与 docker container run 的参数保持一致.
@@ -216,35 +252,14 @@ EOF;
 
         $matrix = $yaml_obj->matrix;
 
+        // $services = $yaml_obj->services;
+
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
+            $image = $this->getImage($image, $matrix);
 
-            $arg = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $image, $output);
-
-            if ($arg) {
-                foreach ($output[0] as $k) {
-
-                    // ${XXX} -> md5('KHSCI')
-
-                    $var_secret = md5('KHSCI');
-
-                    $image = str_replace($k, $var_secret, $image);
-
-                    $array = explode('}', $k);
-
-                    $k = trim($array[0], '${');
-
-                    if (in_array($k, array_keys($matrix))) {
-                        $var = $matrix["$k"][0];
-                    }
-
-                    $image = str_replace($var_secret, $var, $image);
-                }
-            }
-
-            var_dump($image);
 
             var_dump($event);
 
@@ -286,24 +301,12 @@ EOF;
 
             $container_id = $this->docker_container_run($image, $docker_image, $docker_container, $cmd);
 
-            $output = $this->docker_container_logs($docker_container, $container_id, $build_key_id);
+            $this->docker_container_logs($docker_container, $container_id, $build_key_id);
 
-            var_dump($output);
+            var_dump($build_key_id);
 
-            $redis = Cache::connect();
-
-            var_dump($redis->hGet('build_log', $build_key_id));
-
-            var_dump(__LINE__);
-
-            exit;
+            throw new Exception(CIConst::BUILD_STATUS_PASSED, 200);
         }
-
-        var_dump(__LINE__);
-
-        $services = $yaml_obj->services;
-
-        throw new Exception(CIConst::BUILD_STATUS_PASSED, 200);
     }
 
     /**
@@ -323,9 +326,11 @@ EOF;
     /**
      * @param string $build_key_id
      *
+     * @param string $commit_id
+     *
      * @throws Exception
      */
-    private function setBuildStatusSkip(string $build_key_id)
+    private function setBuildStatusSkip(string $build_key_id, string $commit_id)
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -335,9 +340,11 @@ EOF;
     /**
      * @param string $build_key_id
      *
+     * @param string $commit_id
+     *
      * @throws Exception
      */
-    private function setBuildStatusPending(string $build_key_id)
+    private function setBuildStatusPending(string $build_key_id, string $commit_id)
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -347,9 +354,11 @@ EOF;
     /**
      * @param string $build_key_id
      *
+     * @param string $commit_id
+     *
      * @throws Exception
      */
-    private function setBuildStatusErrored(string $build_key_id)
+    private function setBuildStatusErrored(string $build_key_id, string $commit_id)
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -369,9 +378,11 @@ EOF;
     /**
      * @param string $build_key_id
      *
+     * @param string $commit_id
+     *
      * @throws Exception
      */
-    private function setBuildStatusFailed(string $build_key_id)
+    private function setBuildStatusFailed(string $build_key_id, string $commit_id)
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -381,9 +392,11 @@ EOF;
     /**
      * @param string $build_key_id
      *
+     * @param string $commit_id
+     *
      * @throws Exception
      */
-    private function setBuildStatusPassed(string $build_key_id)
+    private function setBuildStatusPassed(string $build_key_id, string $commit_id)
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -494,17 +507,7 @@ EOF;
 
                 $prev_docker_log = $redis->hget('build_log', $build_key_id);
 
-                var_dump($prev_docker_log);
-
-                var_dump($image_log);
-
-                $output=$redis->hset('build_log', $build_key_id, $prev_docker_log.$image_log);
-
-                var_dump($output);
-
-                var_dump($build_key_id);
-
-                var_dump($redis->hGet('build_log', $build_key_id));
+                $redis->hset('build_log', $build_key_id, $prev_docker_log.$image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
