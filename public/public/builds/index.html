@@ -48,10 +48,6 @@
     type_from_url = 'current';
   }
 
-  if (8 === array.length) {
-    build_id = array[7];
-  }
-
   query = git_type + '/' + username + '/' + repo;
 
   baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
@@ -65,8 +61,10 @@
         break;
 
       case 'builds':
+        let url = location.href;
 
-        if ('khsci' !== build_id) {
+        let array = url.split('/');
+        if (8 === array.length) {
           $("#display").append('<pre>' + data + '</pre>');
         } else {
 

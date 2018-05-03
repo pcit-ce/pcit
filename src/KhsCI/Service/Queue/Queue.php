@@ -14,6 +14,8 @@ use KhsCI\Support\DATE;
 use KhsCI\Support\DB;
 use KhsCI\Support\GIT;
 use KhsCI\Support\HTTP;
+use KhsCI\Support\Log;
+
 
 class Queue
 {
@@ -67,7 +69,7 @@ EOF;
                         $this->setBuildStatusInactive($build_key_id, $commit_id);
                         break;
                     case CIConst::BUILD_STATUS_ERRORED:
-                        $this->setBuildStatusErrored($build_key_id, $commit_id);
+                        // $this->setBuildStatusErrored($build_key_id, $commit_id);
                         break;
                     case CIConst::BUILD_STATUS_FAILED:
                         $this->setBuildStatusFailed($build_key_id, $commit_id);
@@ -78,6 +80,9 @@ EOF;
                     default:
                         throw new Exception($e->getMessage(), 500);
                 }
+
+                Log::connect()->debug($build_key_id.$e->getMessage());
+
             }
         }
     }
@@ -173,17 +178,13 @@ EOF;
     {
         $unique_id = session_create_id();
 
+        Log::connect()->debug('Create Volume '.$unique_id);
+
         $gitType = self::$gitType;
 
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
-        $output = DB::select($sql, [$gitType, $rid]);
-
-        $repo_full_name = '';
-
-        foreach ($output as $k) {
-            $repo_full_name = $k['repo_full_name'];
-        }
+        $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
         $base = $repo_full_name.'/'.$commit_id;
 
@@ -194,7 +195,7 @@ EOF;
 
         $yaml_obj = (object)yaml_parse($output);
 
-        $yaml_to_json = json_encode($output);
+        $yaml_to_json = json_encode($yaml_obj);
 
         $sql = "UPDATE builds SET config=? WHERE id=? ";
 
@@ -242,11 +243,9 @@ EOF;
 
         $container_id = $this->docker_container_run('plugins/git', $docker_image, $docker_container);
 
+        Log::connect()->debug('Run Container '.$commit_id);
+
         $this->docker_container_logs($docker_container, $container_id, $build_key_id);
-
-        $redis = Cache::connect();
-
-        var_dump($redis->hGet('build_log', $build_key_id));
 
         $pipeline = $yaml_obj->pipeline;
 
@@ -260,12 +259,13 @@ EOF;
             $event = $array['when']['event'] ?? null;
             $image = $this->getImage($image, $matrix);
 
+            Log::connect()->debug('Run Container By Image '.$image);
 
-            var_dump($event);
-
-//            if ($event and in_array('push', $event)) {
-//                continue;
-//            }
+            if ($event) {
+                if (!in_array('push', $event)) {
+                    throw new Exception('Event error', 500);
+                }
+            }
 
             $content = '\n';
 
@@ -281,17 +281,13 @@ EOF;
                 $content .= 'echo;echo'.'\n\n';
             }
 
-            // var_dump($content);
-
-            // var_dump(stripcslashes($content));
-
             $ci_script = base64_encode(stripcslashes($content));
 
             $docker_container->setEnv([
                 'CI_SCRIPT' => $ci_script,
             ]);
 
-            $docker_container->setHostConfig(["$unique_id:$workdir"]);
+            $docker_container->setHostConfig(["$unique_id:$workdir", "tmp:/tmp"]);
 
             $docker_container->setEntrypoint(['/bin/sh', '-c']);
 
@@ -301,9 +297,9 @@ EOF;
 
             $container_id = $this->docker_container_run($image, $docker_image, $docker_container, $cmd);
 
-            $this->docker_container_logs($docker_container, $container_id, $build_key_id);
+            Log::connect()->debug('Run Container '.$container_id);
 
-            var_dump($build_key_id);
+            $this->docker_container_logs($docker_container, $container_id, $build_key_id);
 
             throw new Exception(CIConst::BUILD_STATUS_PASSED, 200);
         }
@@ -449,6 +445,14 @@ EOF;
     private function docker_container_logs(Container $docker_container, string $container_id, string $build_key_id)
     {
         $redis = Cache::connect();
+
+        if ('/bin/drone-git' === json_decode($docker_container->inspect($container_id))->Path) {
+
+            Log::connect()->debug('Drop prev logs');
+
+            $redis->hDel('build_log', $build_key_id);
+        }
+
         $i = -1;
 
         $startedAt = null;
@@ -469,16 +473,14 @@ EOF;
             if ('running' === $status) {
                 if (0 === $i) {
                     $first = true;
-                    $since_time = $startedAt - 5;
+                    $since_time = $startedAt;
                     $until_time = $startedAt;
                 }
 
                 if (!$first) {
                     $since_time = $until_time;
-                    $until_time = $until_time + 5;
+                    $until_time = $until_time + 1;
                 }
-
-                sleep(6);
 
                 $image_log = $docker_container->logs(
                     $container_id,
@@ -491,6 +493,8 @@ EOF;
                 );
 
                 echo $image_log;
+
+                sleep(1);
 
                 continue;
             } else {

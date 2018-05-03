@@ -28,7 +28,7 @@ class CIConst
 
     const BUILD_EVENT_TAG = 'tag';
 
-    const BUILD_EVENT_PR = 'pr';
+    const BUILD_EVENT_PR = 'pull_request';
 
     const BUILD_EVENT_ISSUE = 'issue';
 
