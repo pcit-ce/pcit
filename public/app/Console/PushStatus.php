@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console;
 
 use App\Http\Controllers\Status\GitHubController;
@@ -23,7 +25,7 @@ class PushStatus
                                 string $state,
                                 string $target_url,
                                 string $description,
-                                string $context)
+                                string $context): void
     {
         $status = new GitHubController();
         $status->create($login_username, $repo_full_name, $commit_id, $state, $target_url, $description, $context);

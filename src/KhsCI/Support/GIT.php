@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Support;
 
 use Exception;
@@ -11,6 +13,7 @@ class GIT
      * @param string $repo_full_name
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function getUrl(string $type, string $repo_full_name)
@@ -31,5 +34,4 @@ class GIT
 
         return $url;
     }
-
 }

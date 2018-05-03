@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Support;
 
 use Monolog\Handler\StreamHandler;
@@ -14,6 +16,7 @@ class Log
      * @param string|null $log_path
      *
      * @return Logger
+     *
      * @throws \Exception
      */
     public static function connect(string $name = 'khsci', string $log_path = null)

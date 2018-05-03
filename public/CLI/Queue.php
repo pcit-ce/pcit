@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CLI;
 
 use Symfony\Component\Console\Command\Command;
@@ -13,7 +15,7 @@ class Queue extends Command
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('queue');
         $this->setDescription('Run queue');
@@ -24,12 +26,11 @@ class Queue extends Command
      * @param OutputInterface $output
      *
      * @return int|null|void
+     *
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         \App\Console\Queue::queue();
     }
-
-
 }

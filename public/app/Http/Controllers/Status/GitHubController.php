@@ -40,6 +40,7 @@ class GitHubController
      * @param string $context
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function create(string $login_username,

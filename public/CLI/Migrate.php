@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CLI;
 
 use KhsCI\Support\DB;
@@ -9,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Migrate extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('migrate');
         $this->setDescription('Migrate database');
@@ -24,6 +26,7 @@ class Migrate extends Command
      * @param OutputInterface $output
      *
      * @return int|null|void
+     *
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -36,16 +39,16 @@ class Migrate extends Command
             } else {
                 var_dump($this->getSqlList());
             }
+
             return;
-        };
+        }
 
         if ($input->getOption('all')) {
-
             foreach ($this->getSqlList() as $file) {
                 DB::statement(file_get_contents(__DIR__.'/../sql/'.$file));
+
                 return;
             }
-
         }
     }
 

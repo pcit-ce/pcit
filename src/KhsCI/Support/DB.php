@@ -47,7 +47,6 @@ class DB
      *
      * @param string $sql
      * @param array  $data
-     *
      * @param bool   $single
      *
      * @return array|string

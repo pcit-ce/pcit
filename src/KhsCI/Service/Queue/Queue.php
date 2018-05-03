@@ -64,7 +64,6 @@ EOF;
      * 检查是否启用了构建.
      *
      * @param string $rid
-     *
      * @param string $build_key_id
      *
      * @throws Exception
@@ -78,7 +77,7 @@ EOF;
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 == $build_activate) {
-            throw new Exception(CIConst::BUILD_STATUS_INACTIVE, (int)$build_activate);
+            throw new Exception(CIConst::BUILD_STATUS_INACTIVE, (int) $build_activate);
         }
     }
 
@@ -86,7 +85,6 @@ EOF;
      * 检查 commit 信息跳过构建.
      *
      * @param string $commit_message
-     *
      * @param string $build_key_id
      *
      * @throws Exception
@@ -100,7 +98,7 @@ EOF;
             return;
         }
 
-        throw new Exception(CIConst::BUILD_STATUS_SKIP, (int)$build_key_id);
+        throw new Exception(CIConst::BUILD_STATUS_SKIP, (int) $build_key_id);
     }
 
     /**
@@ -115,7 +113,6 @@ EOF;
 
         if ($arg) {
             foreach ($output[0] as $k) {
-
                 // ${XXX} -> md5('KHSCI')
 
                 $var_secret = md5('KHSCI');
@@ -168,11 +165,11 @@ EOF;
 
         $output = HTTP::get($url);
 
-        $yaml_obj = (object)yaml_parse($output);
+        $yaml_obj = (object) yaml_parse($output);
 
         $yaml_to_json = json_encode($yaml_obj);
 
-        $sql = "UPDATE builds SET config=? WHERE id=? ";
+        $sql = 'UPDATE builds SET config=? WHERE id=? ';
 
         DB::update($sql, [$yaml_to_json, $build_key_id]);
 
@@ -259,7 +256,7 @@ EOF;
                 'CI_SCRIPT' => $ci_script,
             ]);
 
-            $docker_container->setHostConfig(["$unique_id:$workdir", "tmp:/tmp"]);
+            $docker_container->setHostConfig(["$unique_id:$workdir", 'tmp:/tmp']);
 
             $docker_container->setEntrypoint(['/bin/sh', '-c']);
 
@@ -273,7 +270,7 @@ EOF;
 
             $this->docker_container_logs($docker_container, $container_id, $build_key_id);
 
-            throw new Exception(CIConst::BUILD_STATUS_PASSED, (int)$build_key_id);
+            throw new Exception(CIConst::BUILD_STATUS_PASSED, (int) $build_key_id);
         }
     }
 
@@ -301,15 +298,15 @@ EOF;
         $id = $output->Id ?? '';
 
         if ('' === $id) {
-            throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int)$build_key_id);
+            throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int) $build_key_id);
         }
 
         $output = $docker_container->start($id);
 
-        if ((bool)$output) {
+        if ((bool) $output) {
             Log::connect()->debug('Start Container '.$id.' Error');
 
-            throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int)$build_key_id);
+            throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int) $build_key_id);
         }
 
         return $id;
@@ -329,7 +326,6 @@ EOF;
         $redis = Cache::connect();
 
         if ('/bin/drone-git' === json_decode($docker_container->inspect($container_id))->Path) {
-
             Log::connect()->debug('Drop prev logs');
 
             $redis->hDel('build_log', $build_key_id);
@@ -380,7 +376,6 @@ EOF;
 
                 continue;
             } else {
-
                 $image_log = $docker_container->logs(
                     $container_id,
                     false,
@@ -408,7 +403,7 @@ EOF;
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int)$build_key_id);
+                    throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int) $build_key_id);
                 }
 
                 break;
