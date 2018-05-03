@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\controllers\Users;
+namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\GitHub;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
