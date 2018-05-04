@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use Exception;
 use KhsCI\Support\Cache;
+use KhsCI\Support\CIConst;
 use KhsCI\Support\DB;
 
 class ListController
@@ -28,18 +30,17 @@ class ListController
 
         $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
 
-        $outputArray = DB::select($sql, [$gitType, $username, $repo]);
+        $rid = DB::select($sql, [$gitType, $username, $repo], true);
 
-        foreach ($outputArray as $k) {
-            $rid = $k['rid'];
-        }
+        $sql = 'SELECT id FROM builds WHERE rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
 
-        $sql = 'SELECT id FROM builds WHERE rid=? ORDER BY id DESC LIMIT 1';
+        $last_build_id = DB::select($sql, [
+            $rid, CIConst::BUILD_STATUS_PENDING, CIConst::BUILD_STATUS_SKIP, CIConst::BUILD_STATUS_INACTIVE
+        ], true
+        );
 
-        $output = DB::select($sql, [$rid]);
-
-        foreach ($output as $k) {
-            $last_build_id = $k['id'];
+        if (!$last_build_id) {
+            return [];
         }
 
         return $this->getBuildDetails(null, null, null, $last_build_id);
@@ -52,7 +53,7 @@ class ListController
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function list(...$args)
     {
@@ -69,9 +70,9 @@ class ListController
          * now_time - end_time.
          */
         $sql = <<<EOF
-SELECT id,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
+SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
-FROM builds WHERE git_type=? AND rid=
+FROM builds WHERE git_type=? AND event_type IN (?,?) AND rid=
 
 (SELECT rid FROM repo WHERE git_type=? AND repo_full_name=?)
 
@@ -79,7 +80,10 @@ ORDER BY id DESC
 
 EOF;
 
-        $output = DB::select($sql, [$gitType, $gitType, "$username/$repo"]);
+        $output = DB::select($sql, [
+                $gitType, CIConst::BUILD_EVENT_PUSH, CIConst::BUILD_EVENT_TAG, $gitType, "$username/$repo"
+            ]
+        );
 
         return $output;
     }
@@ -89,7 +93,7 @@ EOF;
      *
      * @param mixed ...$args
      *
-     * @return string
+     * @return string|array
      *
      * @throws \Exception
      */
@@ -99,8 +103,18 @@ EOF;
 
         $redis = Cache::connect();
 
-        $output = $redis->hget('build_log', $buildId);
+        $build_log = $redis->hget('build_log', $buildId);
 
-        return $output;
+        $sql = "SELECT build_status FROM builds WHERE id=?";
+
+        $output = DB::select($sql, [$buildId], true);
+
+        if ($build_log) {
+            return [
+                'status' => $output, 'data' => $build_log
+            ];
+        }
+
+        return ['status' => $output, 'data' => null];
     }
 }

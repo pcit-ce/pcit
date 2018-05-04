@@ -26,7 +26,9 @@
 
 </div>
 <br>
-<div id="display"></div>
+<div id="display">
+
+</div>
 <script>
   url = location.href;
 
@@ -56,8 +58,12 @@
     $("#display").empty();
     switch (id) {
       case 'current':
-        $("#display").append("<pre>" + data + "</pre>");
-        //$("#current").trigger('click');
+        if (0 === data.length) {
+          $("#display").append("Not Build Yet");
+        } else {
+          $("#display").append("<pre>" + data + "</pre>");
+          //$("#current").trigger('click');
+        }
         break;
 
       case 'builds':
@@ -65,11 +71,11 @@
 
         let array = url.split('/');
         if (8 === array.length) {
-          $("#display").append('<pre>' + data + '</pre>');
+          $("#display").append(data.status).append('<pre>' + data.data + '</pre>');
+
         } else {
-
           $.each(data, function (id, status) {
-
+            let event_type = status.event_type;
             let build_id = status.id;
             let branch = status.branch;
             let committer_username = status.committer_username;
@@ -79,21 +85,19 @@
             let create_time = status.create_time;
             let end_time = status.end_time;
 
-            $("#display").append('<br><br>' + build_id
-              + '&nbsp;' + branch
-
-              + '&nbsp;' + committer_username
-
-              + '&nbsp;' + commit_message
-
-              + '&nbsp;' + commit_id
-
-              + '&nbsp;' + build_status
-
-              + '&nbsp;' + create_time
-
-              + '&nbsp;' + end_time
-            );
+            $("#display").append(
+              "<tr>" +
+              "<td>" + build_id + "</td>" +
+              "<td>" + event_type + "</td>" +
+              "<td>" + branch + "</td>" +
+              "<td>" + committer_username + "</td>" +
+              "<td>" + commit_message + "</td>" +
+              "<td>" + commit_id + "</td>" +
+              "<td>" + build_status + "</td>" +
+              "<td>" + create_time + "</td>" +
+              "<td>" + end_time + "</td>" +
+              +"</tr>"
+            )
 
           });
         }
