@@ -7,7 +7,6 @@ namespace KhsCI\Service\Webhooks;
 use App\Http\Controllers\Status\GitHubController;
 use Error;
 use Exception;
-use KhsCI\Service\IM\Wechat;
 use KhsCI\Support\CIConst;
 use KhsCI\Support\DATE;
 use KhsCI\Support\DB;
@@ -42,17 +41,17 @@ class GitHub
             }
         }
 
-        throw new \Exception('', 402);
+        throw new Exception('', 402);
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      *
      * @throws Exception
      */
-    public function ping($content)
+    private function ping(string $content)
     {
         $obj = json_decode($content);
 
@@ -75,19 +74,25 @@ EOF;
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      *
      * @throws Exception
      */
-    public function push($content)
+    private function push(string $content)
     {
         $obj = json_decode($content);
 
         $ref = $obj->ref;
 
-        $branch = explode('/', $ref)[2];
+        $ref_array = explode('/', $ref);
+
+        if ('tags' === $ref_array[1]) {
+            return $this->tag($ref_array[2], $content);
+        }
+
+        $branch = $this->ref2branch($ref);
 
         $commit_id = $obj->after;
 
@@ -128,11 +133,7 @@ EOF;
 
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
-        $output = DB::select($sql, ['github', $rid]);
-
-        foreach ($output as $k) {
-            $repo_full_name = $k['repo_full_name'];
-        }
+        $repo_full_name = DB::select($sql, ['github', $rid], true);
 
         $github_status = CIConst::GITHUB_STATUS_PENDING;
 
@@ -149,19 +150,20 @@ EOF;
 
         $status = new GitHubController();
 
-        return $status->create('khs1994', $repo_full_name, $commit_id,
-            $github_status, $target_url,
-            'The analysis or builds is pending', 'continuous-integration/khsci/push');
+        return $status->create(
+            'khs1994', $repo_full_name, $commit_id, $github_status, $target_url,
+            'The analysis or builds is pending', 'continuous-integration/khsci/push'
+        );
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      *
      * @throws Exception
      */
-    public function status($content)
+    private function status(string $content)
     {
         $sql = <<<EOF
 INSERT builds(
@@ -170,21 +172,21 @@ git_type,event_type,request_raw
 
 ) VALUES(?,?,?);
 EOF;
-        $data = [
-            'github', __FUNCTION__, $content,
-        ];
 
-        return DB::insert($sql, $data);
+        return DB::insert($sql, [
+                'github', __FUNCTION__, $content,
+            ]
+        );
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      *
      * @throws Exception
      */
-    public function issues($content)
+    private function issues(string $content)
     {
         $obj = json_decode($content);
         /**
@@ -198,21 +200,21 @@ git_type,event_type,request_raw
 
 ) VALUES(?,?,?);
 EOF;
-        $data = [
-            'github', __FUNCTION__, $content,
-        ];
 
-        return DB::insert($sql, $data);
+        return DB::insert($sql, [
+                'github', __FUNCTION__, $content,
+            ]
+        );
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      *
      * @throws Exception
      */
-    public function issue_comment($content)
+    private function issue_comment(string $content)
     {
         $obj = json_decode($content);
 
@@ -228,23 +230,42 @@ git_type,event_type,request_raw
 
 ) VALUES(?,?,?);
 EOF;
-        $data = [
-            'github', __FUNCTION__, $content,
-        ];
 
-        return DB::insert($sql, $data);
+
+        return DB::insert($sql, [
+                'github', __FUNCTION__, $content,
+            ]
+        );
     }
 
     /**
-     * @param $content
+     * @param string $content
      *
      * @return string
      *
      * @throws Exception
      */
-    public function pull_request($content)
+    private function pull_request(string $content)
     {
         $obj = json_decode($content);
+
+        // $event_time = '';
+
+        $action = $obj->action;
+
+        $pull_request = $obj->pull_request;
+
+        $rid = $pull_request->base->repo->id;
+
+        $commit_message = $pull_request->title;
+
+        $commit_id = $pull_request->head->ref;
+
+        $committer_username = $pull_request->user->login;
+
+        $pull_request_id = $obj->number;
+
+        $branch = $pull_request->base->ref;
 
         /**
          * review_requested
@@ -252,20 +273,74 @@ EOF;
          * labeled
          * synchronize.
          */
-        $action = $obj->action;
 
         $sql = <<<EOF
 INSERT builds(
 
-git_type,event_type,request_raw
+git_type,event_type,request_raw,action,commit_id,commit_message,committer_username,
+pull_request_id,branch,rid,build_status
 
-) VALUES(?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?);
+
 EOF;
-        $data = [
-            'github', __FUNCTION__, $content,
-        ];
+        return DB::insert($sql,
+            ['github', __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
+                $pull_request_id, $branch, $rid, CIConst::BUILD_STATUS_PENDING
+            ]
+        );
+    }
 
-        return DB::insert($sql, $data);
+    /**
+     * @param string $tag
+     * @param string $content
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function tag(string $tag, string $content)
+    {
+        $obj = json_decode($content);
+
+        $ref = $obj->ref;
+
+        $branch = $this->ref2branch($obj->base_ref);
+
+        $head_commit = $obj->head_commit;
+
+        $commit_id = $head_commit->id;
+
+        $commit_message = $head_commit->message;
+
+        $committer = $head_commit->author;
+
+        $committer_username = $committer->username;
+
+        $committer_name = $committer->name;
+
+        $committer_email = $committer->email;
+
+        $event_time = DATE::parse($head_commit->timestamp);
+
+        $rid = $obj->repository->id;
+
+        $sql = <<<EOF
+INSERT builds(
+
+git_type,event_type,ref,branch,tag_name,commit_id,commit_message,committer_name,committer_email,
+committer_username,rid,event_time,build_status,request_raw
+
+) VALUES(
+?,?,?,?,?,?,?,?,?,?,?,?,?,?
+);
+EOF;
+
+        $last_id = DB::insert($sql, [
+            'github', __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
+            $committer_email, $committer_username, $rid, $event_time, CIConst::BUILD_STATUS_PENDING, $content
+        ]);
+
+        return $last_id;
+
     }
 
     /**
@@ -275,7 +350,7 @@ EOF;
      *
      * @return array
      */
-    public function watch($content)
+    private function watch($content)
     {
         $obj = json_decode($content);
 
@@ -296,7 +371,7 @@ EOF;
      *
      * @return array
      */
-    public function fork($content)
+    private function fork($content)
     {
         $obj = json_decode($content);
 
@@ -305,5 +380,27 @@ EOF;
         return [
             'code' => 200,
         ];
+    }
+
+    private function release($content)
+    {
+
+    }
+
+    private function create($content)
+    {
+
+    }
+
+    /**
+     * @param string $ref
+     *
+     * @return mixed
+     */
+    private function ref2branch(string $ref)
+    {
+        $ref_array = explode('/', $ref);
+
+        return $ref_array[2];
     }
 }
