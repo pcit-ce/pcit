@@ -20,9 +20,9 @@ class ListController
     /**
      * @param mixed ...$arg
      *
-     * @return string
+     * @return string|array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function post(...$arg)
     {
@@ -35,7 +35,7 @@ class ListController
         $sql = 'SELECT id FROM builds WHERE rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
 
         $last_build_id = DB::select($sql, [
-            $rid, CIConst::BUILD_STATUS_PENDING, CIConst::BUILD_STATUS_SKIP, CIConst::BUILD_STATUS_INACTIVE
+            $rid, CIConst::BUILD_STATUS_PENDING, CIConst::BUILD_STATUS_SKIP, CIConst::BUILD_STATUS_INACTIVE,
         ], true
         );
 
@@ -59,16 +59,6 @@ class ListController
     {
         list($gitType, $username, $repo) = $args;
 
-        /**
-         * id
-         * branch
-         * committer
-         * commit_message
-         * build_status
-         * commit_id
-         * build_time = end_time - create_time
-         * now_time - end_time.
-         */
         $sql = <<<EOF
 SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
@@ -81,7 +71,7 @@ ORDER BY id DESC
 EOF;
 
         $output = DB::select($sql, [
-                $gitType, CIConst::BUILD_EVENT_PUSH, CIConst::BUILD_EVENT_TAG, $gitType, "$username/$repo"
+                $gitType, CIConst::BUILD_EVENT_PUSH, CIConst::BUILD_EVENT_TAG, $gitType, "$username/$repo",
             ]
         );
 
@@ -95,7 +85,7 @@ EOF;
      *
      * @return string|array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getBuildDetails(...$args)
     {
@@ -105,13 +95,13 @@ EOF;
 
         $build_log = $redis->hget('build_log', $buildId);
 
-        $sql = "SELECT build_status FROM builds WHERE id=?";
+        $sql = 'SELECT build_status FROM builds WHERE id=?';
 
         $output = DB::select($sql, [$buildId], true);
 
         if ($build_log) {
             return [
-                'status' => $output, 'data' => $build_log
+                'status' => $output, 'data' => $build_log,
             ];
         }
 

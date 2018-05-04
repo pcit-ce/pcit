@@ -14,7 +14,7 @@ use Exception;
  * @method static passing()
  * @method static pending()
  */
-class ShowStatusController
+class ShowStatusByICOController
 {
     /**
      * @param string $k
