@@ -301,7 +301,16 @@ EOF;
   "name": "web",
   "active": true,
   "events": [
-    "*"
+    "deployment",
+    "issues",
+    "issue_comment",
+    "pull_request",
+    "pull_request_review",
+    "pull_request_review_comment",
+    "push",
+    "release",
+    "repository",
+    "repository_vulnerability_alert"
   ],
   "config": {
     "url": "$url",

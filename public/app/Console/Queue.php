@@ -24,24 +24,28 @@ class Queue
             $commit_id = '1';
 
             /**
-             * $e->getCode() is build key id
+             * $e->getCode() is build key id.
              */
-
             switch ($e->getMessage()) {
                 case CIConst::BUILD_STATUS_SKIP:
                     self::setBuildStatusSkip($e->getCode(), $commit_id);
+
                     break;
                 case CIConst::BUILD_STATUS_INACTIVE:
                     self::setBuildStatusInactive($e->getCode());
+
                     break;
                 case CIConst::BUILD_STATUS_ERRORED:
                     self::setBuildStatusErrored($e->getCode(), $commit_id);
+
                     break;
                 case CIConst::BUILD_STATUS_FAILED:
                     self::setBuildStatusFailed($e->getCode(), $commit_id);
+
                     break;
                 case CIConst::BUILD_STATUS_PASSED:
                     self::setBuildStatusPassed($e->getCode(), $commit_id);
+
                     break;
                 default:
                     throw new Exception($e->getMessage(), 500);

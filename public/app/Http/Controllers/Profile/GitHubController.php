@@ -19,6 +19,8 @@ class GitHubController
      *
      * @param $username
      *
+     * @return bool
+     *
      * @throws Exception
      */
     private function getUserStatus($username)
@@ -35,13 +37,15 @@ class GitHubController
             }
         }
 
-        return null;
+        return false;
     }
 
     /**
      * 查看 REPO 是否存在.
      *
      * @param $repo
+     *
+     * @return bool
      *
      * @throws Exception
      */
@@ -59,7 +63,7 @@ class GitHubController
             }
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -190,6 +194,7 @@ class GitHubController
                 $sql = 'INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?)';
                 DB::insert($sql, $repoDataArray);
                 $redis->hSet($uid.'_repo', $repoFullName, $open_or_close);
+
                 continue;
             }
 
@@ -207,11 +212,11 @@ class GitHubController
                 }
             }
 
-            if (1 == $webhooksStatus && 1 == $buildActivate) {
+            if (1 === (int) $webhooksStatus && 1 === (int) $buildActivate) {
                 $open_or_close = 1;
             }
 
-            $sql = <<<EOF
+            $sql = <<<'EOF'
 UPDATE repo set git_type=?,rid=?,username=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
 EOF;
             DB::update($sql, [
@@ -274,8 +279,9 @@ EOF;
         $array = [];
 
         foreach ($cacheArray as $k => $status) {
-            if (1 == $status) {
+            if (1 === (int) $status) {
                 $array_active[$k] = $status;
+
                 continue;
             }
 

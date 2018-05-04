@@ -21,11 +21,11 @@ class Queue
     private static $gitType;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __invoke(): void
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 SELECT 
 
 id,git_type,rid,commit_id,commit_message,branch 
@@ -76,7 +76,7 @@ EOF;
 
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
-        if (0 == $build_activate) {
+        if (0 === $build_activate) {
             throw new Exception(CIConst::BUILD_STATUS_INACTIVE, (int) $build_activate);
         }
     }
@@ -125,7 +125,7 @@ EOF;
 
                 $var = '';
 
-                if (in_array($k, array_keys($matrix))) {
+                if (in_array($k, array_keys($matrix), true)) {
                     $var = $matrix["$k"][0];
                 }
 
@@ -151,6 +151,7 @@ EOF;
         $unique_id = session_create_id();
 
         Log::connect()->debug('Create Volume '.$unique_id);
+        Log::connect()->debug('Create Network '.$unique_id);
 
         $gitType = self::$gitType;
 
@@ -199,16 +200,20 @@ EOF;
 
         $docker_container = $docker->container;
         $docker_image = $docker->image;
+        $docker_network = $docker->network;
 
-        $docker_container->setEnv([
-            'DRONE_REMOTE_URL' => $git_url,
-            'DRONE_WORKSPACE' => $workdir,
-            'DRONE_BUILD_EVENT' => 'push',
-            'DRONE_COMMIT_SHA' => $commit_id,
-            'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
-        ]);
+        $docker_network->create($unique_id);
 
-        $docker_container->setHostConfig(["$unique_id:$workdir"]);
+        $docker_container
+            ->setEnv([
+                    'DRONE_REMOTE_URL' => $git_url,
+                    'DRONE_WORKSPACE' => $workdir,
+                    'DRONE_BUILD_EVENT' => 'push',
+                    'DRONE_COMMIT_SHA' => $commit_id,
+                    'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
+                ]
+            )
+            ->setHostConfig(["$unique_id:$workdir"]);
 
         $container_id = $this->docker_container_run('plugins/git', $docker_image, $docker_container, $build_key_id);
 
@@ -231,7 +236,7 @@ EOF;
             Log::connect()->debug('Run Container By Image '.$image);
 
             if ($event) {
-                if (!in_array('push', $event)) {
+                if (!in_array('push', $event, true)) {
                     throw new Exception('Event error', $build_key_id);
                 }
             }
@@ -256,11 +261,10 @@ EOF;
                 'CI_SCRIPT' => $ci_script,
             ]);
 
-            $docker_container->setHostConfig(["$unique_id:$workdir", 'tmp:/tmp']);
-
-            $docker_container->setEntrypoint(['/bin/sh', '-c']);
-
-            $docker_container->setWorkingDir($workdir);
+            $docker_container
+                ->setHostConfig(["$unique_id:$workdir", 'tmp:/tmp'], $unique_id)
+                ->setEntrypoint(['/bin/sh', '-c'])
+                ->setWorkingDir($workdir);
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
@@ -293,23 +297,21 @@ EOF;
     {
         $docker_image->pull($image_name);
 
-        $output = json_decode($docker_container->create($image_name, null, $cmd));
-
-        $id = $output->Id ?? '';
-
-        if ('' === $id) {
+        try {
+            $container_id = $docker_container->create($image_name, null, $cmd);
+        } catch (Exception $e) {
             throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int) $build_key_id);
         }
 
-        $output = $docker_container->start($id);
+        $output = $docker_container->start($container_id);
 
         if ((bool) $output) {
-            Log::connect()->debug('Start Container '.$id.' Error');
+            Log::connect()->debug('Start Container '.$container_id.' Error');
 
             throw new Exception(CIConst::BUILD_STATUS_ERRORED, (int) $build_key_id);
         }
 
-        return $id;
+        return $container_id;
     }
 
     /**

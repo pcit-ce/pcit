@@ -59,7 +59,7 @@ class GitHub
 
         $event_time = time();
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,rid,event_time,request_raw
@@ -114,7 +114,7 @@ EOF;
 
         $rid = $obj->repository->id;
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
@@ -165,7 +165,7 @@ EOF;
      */
     private function status(string $content)
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw
@@ -193,7 +193,7 @@ EOF;
          * opened.
          */
         $action = $obj->action;
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw
@@ -223,14 +223,13 @@ EOF;
          */
         $action = $obj->action;
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw
 
 ) VALUES(?,?,?);
 EOF;
-
 
         return DB::insert($sql, [
                 'github', __FUNCTION__, $content,
@@ -273,8 +272,7 @@ EOF;
          * labeled
          * synchronize.
          */
-
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw,action,commit_id,commit_message,committer_username,
@@ -283,9 +281,10 @@ pull_request_id,branch,rid,build_status
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
+
         return DB::insert($sql,
             ['github', __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
-                $pull_request_id, $branch, $rid, CIConst::BUILD_STATUS_PENDING
+                $pull_request_id, $branch, $rid, CIConst::BUILD_STATUS_PENDING,
             ]
         );
     }
@@ -295,6 +294,7 @@ EOF;
      * @param string $content
      *
      * @return string
+     *
      * @throws Exception
      */
     private function tag(string $tag, string $content)
@@ -323,7 +323,7 @@ EOF;
 
         $rid = $obj->repository->id;
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,ref,branch,tag_name,commit_id,commit_message,committer_name,committer_email,
@@ -336,11 +336,10 @@ EOF;
 
         $last_id = DB::insert($sql, [
             'github', __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
-            $committer_email, $committer_username, $rid, $event_time, CIConst::BUILD_STATUS_PENDING, $content
+            $committer_email, $committer_username, $rid, $event_time, CIConst::BUILD_STATUS_PENDING, $content,
         ]);
 
         return $last_id;
-
     }
 
     /**
@@ -382,14 +381,12 @@ EOF;
         ];
     }
 
-    private function release($content)
+    private function release($content): void
     {
-
     }
 
-    private function create($content)
+    private function create($content): void
     {
-
     }
 
     /**

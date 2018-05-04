@@ -1,0 +1,13 @@
+{
+  "name": "web",
+  "active": true,
+  "events": [
+    "*"
+  ],
+  "config": {
+    "url": "http://example.com/webhook",
+    "content_type": "json",
+    "secret": "your_secret",
+    "insecure_ssl": "0"
+  }
+}

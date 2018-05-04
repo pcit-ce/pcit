@@ -122,8 +122,8 @@ Route::delete('{git_type}/{username}/{repo}/star', 'Builds\ListController');
 
 /* ICO */
 
-Route::get('ico/canceled', 'Status\ShowStatusController@canceled');
-Route::get('ico/errored', 'Status\ShowStatusController@errored');
-Route::get('ico/failing', 'Status\ShowStatusController@failing');
-Route::get('ico/passing', 'Status\ShowStatusController@passing');
-Route::get('ico/pending', 'Status\ShowStatusController@pending');
+Route::get('ico/canceled', 'Status\ShowStatusByICOController@canceled');
+Route::get('ico/errored', 'Status\ShowStatusByICOController@errored');
+Route::get('ico/failing', 'Status\ShowStatusByICOController@failing');
+Route::get('ico/passing', 'Status\ShowStatusByICOController@passing');
+Route::get('ico/pending', 'Status\ShowStatusByICOController@pending');

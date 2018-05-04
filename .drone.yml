@@ -1,3 +1,10 @@
+#
+# @see http://docs.drone.io
+# @see http://docs.drone.io/zh/
+# @see https://github.com/drone-plugins
+# @see http://plugins.drone.io/
+#
+
 workspace:
   base: /app
   path: .

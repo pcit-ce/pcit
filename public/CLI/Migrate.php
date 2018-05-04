@@ -34,7 +34,7 @@ class Migrate extends Command
         $sql_file = $input->getArgument('sql_file');
 
         if ($sql_file) {
-            if (in_array($sql_file, $this->getSqlList())) {
+            if (in_array($sql_file, $this->getSqlList(), true)) {
                 DB::statement(file_get_contents(__DIR__.'/../sql/'.$sql_file));
             } else {
                 var_dump($this->getSqlList());
@@ -57,7 +57,7 @@ class Migrate extends Command
         $array = scandir(__DIR__.'/../sql');
 
         $array = array_filter($array, function ($k) {
-            if (in_array($k, ['.', '..'])) {
+            if (in_array($k, ['.', '..'], true)) {
                 return false;
             }
 

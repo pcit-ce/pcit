@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use Exception;
 use KhsCI\Support\DB;
 
 class BranchesController
@@ -13,7 +14,7 @@ class BranchesController
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function post(...$args)
     {
