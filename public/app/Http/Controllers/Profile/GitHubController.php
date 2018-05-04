@@ -20,6 +20,7 @@ class GitHubController
      * @param $username
      *
      * @return bool
+     *
      * @throws Exception
      */
     private function getUserStatus($username)
@@ -45,6 +46,7 @@ class GitHubController
      * @param $repo
      *
      * @return bool
+     *
      * @throws Exception
      */
     private function getRepoStatus($repo)
@@ -83,7 +85,7 @@ class GitHubController
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $objClass::getProjects((string) $accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -192,6 +194,7 @@ class GitHubController
                 $sql = 'INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?)';
                 DB::insert($sql, $repoDataArray);
                 $redis->hSet($uid.'_repo', $repoFullName, $open_or_close);
+
                 continue;
             }
 
@@ -209,11 +212,11 @@ class GitHubController
                 }
             }
 
-            if (1 === (int)$webhooksStatus && 1 === (int)$buildActivate) {
+            if (1 === (int) $webhooksStatus && 1 === (int) $buildActivate) {
                 $open_or_close = 1;
             }
 
-            $sql = <<<EOF
+            $sql = <<<'EOF'
 UPDATE repo set git_type=?,rid=?,username=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
 EOF;
             DB::update($sql, [
@@ -265,7 +268,7 @@ EOF;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken);
+            $this->syncProject((string) $uid, (string) $username, (string) $email, (string) $pic, (string) $accessToken);
             $sync = true;
         }
 
@@ -276,8 +279,9 @@ EOF;
         $array = [];
 
         foreach ($cacheArray as $k => $status) {
-            if (1 === (int)$status) {
+            if (1 === (int) $status) {
                 $array_active[$k] = $status;
+
                 continue;
             }
 

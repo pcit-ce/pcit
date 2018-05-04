@@ -59,7 +59,7 @@ class GitHub
 
         $event_time = time();
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,rid,event_time,request_raw
@@ -114,7 +114,7 @@ EOF;
 
         $rid = $obj->repository->id;
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
@@ -165,7 +165,7 @@ EOF;
      */
     private function status(string $content)
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw
@@ -193,7 +193,7 @@ EOF;
          * opened.
          */
         $action = $obj->action;
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw
@@ -223,7 +223,7 @@ EOF;
          */
         $action = $obj->action;
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw
@@ -272,7 +272,7 @@ EOF;
          * labeled
          * synchronize.
          */
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,request_raw,action,commit_id,commit_message,committer_username,
@@ -323,7 +323,7 @@ EOF;
 
         $rid = $obj->repository->id;
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT builds(
 
 git_type,event_type,ref,branch,tag_name,commit_id,commit_message,committer_name,committer_email,

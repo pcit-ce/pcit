@@ -59,7 +59,7 @@ class ListController
     {
         list($gitType, $username, $repo) = $args;
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
 FROM builds WHERE git_type=? AND event_type IN (?,?) AND rid=
