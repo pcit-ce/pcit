@@ -25,7 +25,7 @@ class Queue
      */
     public function __invoke(): void
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 SELECT 
 
 id,git_type,rid,commit_id,commit_message,branch 
@@ -76,7 +76,7 @@ EOF;
 
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
-        if (0 == $build_activate) {
+        if (0 === $build_activate) {
             throw new Exception(CIConst::BUILD_STATUS_INACTIVE, (int) $build_activate);
         }
     }
@@ -125,7 +125,7 @@ EOF;
 
                 $var = '';
 
-                if (in_array($k, array_keys($matrix))) {
+                if (in_array($k, array_keys($matrix), true)) {
                     $var = $matrix["$k"][0];
                 }
 
@@ -236,7 +236,7 @@ EOF;
             Log::connect()->debug('Run Container By Image '.$image);
 
             if ($event) {
-                if (!in_array('push', $event)) {
+                if (!in_array('push', $event, true)) {
                     throw new Exception('Event error', $build_key_id);
                 }
             }

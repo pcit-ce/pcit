@@ -28,6 +28,7 @@ class DB
             $mysql_dbname = Env::get('MYSQL_DBNAME');
 
             $dsn = 'mysql:host='.$mysql_host.';port='.$mysql_port.';dbname='.$mysql_dbname;
+
             try {
                 $pdo = new PDO($dsn, $mysql_username, $mysql_password);
 
