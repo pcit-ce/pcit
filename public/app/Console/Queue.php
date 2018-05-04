@@ -21,7 +21,7 @@ class Queue
             $queue = new QueueService();
             $queue();
         } catch (Exception $e) {
-            $commit_id = 1;
+            $commit_id = '1';
 
             switch ($e->getMessage()) {
                 case CIConst::BUILD_STATUS_SKIP:
@@ -53,7 +53,7 @@ class Queue
      *
      * @throws Exception
      */
-    private static function setBuildStatusInactive($rid, int $lastId = 0): void
+    private static function setBuildStatusInactive(string $rid, int $lastId = 0): void
     {
         $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND id>?';
 
@@ -61,12 +61,12 @@ class Queue
     }
 
     /**
-     * @param string $build_key_id
+     * @param int    $build_key_id
      * @param string $commit_id
      *
      * @throws Exception
      */
-    private static function setBuildStatusSkip(string $build_key_id, string $commit_id): void
+    private static function setBuildStatusSkip(int $build_key_id, string $commit_id): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -74,12 +74,12 @@ class Queue
     }
 
     /**
-     * @param string $build_key_id
+     * @param int    $build_key_id
      * @param string $commit_id
      *
      * @throws Exception
      */
-    private static function setBuildStatusPending(string $build_key_id, string $commit_id): void
+    private static function setBuildStatusPending(int $build_key_id, string $commit_id): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -87,12 +87,12 @@ class Queue
     }
 
     /**
-     * @param string $build_key_id
+     * @param int    $build_key_id
      * @param string $commit_id
      *
      * @throws Exception
      */
-    private static function setBuildStatusErrored(string $build_key_id, string $commit_id): void
+    private static function setBuildStatusErrored(int $build_key_id, string $commit_id): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -110,12 +110,12 @@ class Queue
     }
 
     /**
-     * @param string $build_key_id
+     * @param int    $build_key_id
      * @param string $commit_id
      *
      * @throws Exception
      */
-    private static function setBuildStatusFailed(string $build_key_id, string $commit_id): void
+    private static function setBuildStatusFailed(int $build_key_id, string $commit_id): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
@@ -123,12 +123,12 @@ class Queue
     }
 
     /**
-     * @param string $build_key_id
+     * @param int    $build_key_id
      * @param string $commit_id
      *
      * @throws Exception
      */
-    private static function setBuildStatusPassed(string $build_key_id, string $commit_id): void
+    private static function setBuildStatusPassed(int $build_key_id, string $commit_id): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
