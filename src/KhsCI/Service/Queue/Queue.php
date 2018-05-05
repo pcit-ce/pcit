@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Queue;
 
+use Curl\Curl;
 use Docker\Container\Container;
 use Docker\Docker;
 use Exception;
@@ -12,6 +13,7 @@ use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
 use KhsCI\Support\DB;
+use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
@@ -214,7 +216,7 @@ EOF;
 
         $git_url = Git::getUrl($gitType, $repo_full_name);
 
-        $docker = Docker::docker(Docker::createOptionArray('127.0.0.1:2375'));
+        $docker = Docker::docker(Docker::createOptionArray(Env::get('DOCKER_HOST')));
 
         $docker_container = $docker->container;
         $docker_image = $docker->image;
@@ -259,15 +261,15 @@ EOF;
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
 
+            if ($event) {
+                if (!in_array('push', $event, true)) {
+                    continue;
+                }
+            }
+
             $image = $this->getImage($image, $config);
 
             Log::connect()->debug('Run Container By Image '.$image);
-
-            if ($event) {
-                if (!in_array('push', $event, true)) {
-                    throw new Exception('Event error', self::$build_key_id);
-                }
-            }
 
             $content = '\n';
 
@@ -284,6 +286,8 @@ EOF;
             }
 
             $ci_script = base64_encode(stripcslashes($content));
+
+            // $docker = new Docker(Docker::createOptionArray(Env::get('DOCKER_HOST')),new Curl);
 
             $docker_container = $docker->container;
 

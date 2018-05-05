@@ -24,6 +24,8 @@ class Queue
             $commit_id = '1';
             echo $e->getMessage();
 
+            exit;
+
             /**
              * $e->getCode() is build key id.
              */
