@@ -8,6 +8,7 @@ use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
 use Exception;
+use KhsCI\CIException;
 use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
@@ -38,16 +39,18 @@ class Queue
         $sql = <<<'EOF'
 SELECT 
 
-id,git_type,rid,commit_id,commit_message,branch 
+id,git_type,rid,commit_id,commit_message,branch,event_type
 
 FROM 
 
-builds WHERE build_status=? AND event_type=? ORDER BY id DESC LIMIT 1;
+builds WHERE build_status=? AND event_type IN (?,?,?) ORDER BY id DESC LIMIT 1;
 EOF;
 
         $output = DB::select($sql, [
             CI::BUILD_STATUS_PENDING,
             CI::BUILD_EVENT_PUSH,
+            CI::BUILD_EVENT_TAG,
+            CI::BUILD_EVENT_PR
         ]);
 
         foreach ($output as $k) {
@@ -57,6 +60,7 @@ EOF;
             $commit_id = $k['commit_id'];
             $commit_message = $k['commit_message'];
             $branch = $k['branch'];
+            $event_type = $k['event_type'];
 
             self::$gitType = $git_type;
 
@@ -68,7 +72,7 @@ EOF;
             // 是否启用构建
             self::getRepoBuildActivateStatus($rid);
 
-            self::run($rid, $commit_id, $branch);
+            self::run($rid, $commit_id, $branch, $event_type);
         }
     }
 
@@ -88,7 +92,7 @@ EOF;
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            throw new Exception(CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
+            throw new CIException(CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
         }
     }
 
@@ -108,7 +112,7 @@ EOF;
             return;
         }
 
-        throw new Exception(CI::BUILD_STATUS_SKIP, self::$build_key_id);
+        throw new CIException(CI::BUILD_STATUS_SKIP, self::$build_key_id);
     }
 
     /**
@@ -153,9 +157,11 @@ EOF;
      * @param string $commit_id
      * @param string $branch
      *
+     * @param string $event_type
+     *
      * @throws Exception
      */
-    private function run($rid, string $commit_id, string $branch): void
+    private function run($rid, string $commit_id, string $branch, string $event_type): void
     {
         $gitType = self::$gitType;
 
@@ -225,23 +231,19 @@ EOF;
         $docker_image->pull('plugins/git');
         $docker_network->create($unique_id);
 
-//        $this->runGit('plugins/git',
-//            [
-//                'DRONE_REMOTE_URL' => $git_url,
-//                'DRONE_WORKSPACE' => $workdir,
-//                'DRONE_BUILD_EVENT' => 'push',
-//                'DRONE_COMMIT_SHA' => $commit_id,
-//                'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
-//            ], $workdir, $unique_id, $docker_container
-//        );
+        $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
+
+        $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
 
         foreach ($matrix as $k => $config) {
 
-            $this->runService($services, $unique_id, $config, $docker);
-
-            exit;
+            // $this->runService($services, $unique_id, $config, $docker);
 
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
+
+            /**
+             * 停止所有容器
+             */
         }
     }
 
@@ -279,35 +281,20 @@ EOF;
 
             Log::connect()->debug('Run Container By Image '.$image);
 
-            $content = '\n';
-
-            $content .= 'echo Start Build in '.$image;
-
-            for ($i = 0; $i < count($commands); ++$i) {
-                $command = addslashes($commands[$i]);
-
-                $content .= 'echo $ '.str_replace('$', '\\\\$', $command).'\n\n';
-
-                $content .= 'echo;echo'.'\n\n';
-
-                $content .= str_replace('$$', '$', $command).'\n\n';
-
-                $content .= 'echo;echo'.'\n\n';
-            }
-
-            $ci_script = base64_encode(stripcslashes($content));
-
             $docker_container
                 ->setEnv([
-                    'CI_SCRIPT' => "",
+                    'CI_SCRIPT' => $this->parseCommand($image, $commands),
                 ])
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
+                ->setLabels(['com.khs1994.ci' => $unique_id])
                 ->setWorkingDir($work_dir);
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
-            var_dump($docker_image->pull($image));
+            $tag = explode(':', $image)[1] ?? 'latest';
+
+            $docker_image->pull($image, $tag);
 
             $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
 
@@ -318,7 +305,38 @@ EOF;
             exit;
         }
 
-        throw new Exception(CI::BUILD_STATUS_PASSED, self::$build_key_id);
+        throw new CIException(CI::BUILD_STATUS_PASSED, self::$build_key_id);
+    }
+
+    /**
+     * @param $image
+     * @param $commands
+     *
+     * @return string
+     */
+    private function parseCommand($image, $commands)
+    {
+        $content = '\n';
+
+        $content .= 'echo;echo\n\n';
+
+        $content .= 'echo Start Build in '.$image;
+
+        $content .= '\n\necho;echo\n\n';
+
+        for ($i = 0; $i < count($commands); ++$i) {
+            $command = addslashes($commands[$i]);
+
+            $content .= 'echo $ '.str_replace('$', '\\\\$', $command).'\n\n';
+
+            $content .= 'echo;echo\n\n';
+
+            $content .= str_replace('$$', '$', $command).'\n\n';
+
+            $content .= 'echo;echo\n\n';
+        }
+
+        return $ci_script = base64_encode(stripcslashes($content));
     }
 
     /**
@@ -393,7 +411,7 @@ EOF;
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
+                    throw new CIException(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
                 }
 
                 break;
@@ -404,6 +422,56 @@ EOF;
             'start' => $startedAt,
             'stop' => $finishedAt,
         ];
+    }
+
+    /**
+     * @param $event_type
+     * @param $workdir
+     * @param $commit_id
+     * @param $branch
+     *
+     * @return array
+     * @throws Exception
+     *
+     * @see https://github.com/drone-plugins/drone-git
+     */
+    private function getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch)
+    {
+        $git_url = Git::getUrl(self::$gitType, $repo_full_name);
+        switch ($event_type) {
+            case CI::BUILD_EVENT_PUSH:
+                $git_env = [
+                    'DRONE_REMOTE_URL' => $git_url,
+                    'DRONE_WORKSPACE' => $workdir,
+                    'DRONE_BUILD_EVENT' => 'push',
+                    'DRONE_COMMIT_SHA' => $commit_id,
+                    'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
+                ];
+                break;
+
+            case CI::BUILD_EVENT_PR:
+                $git_env = [
+                    'DRONE_REMOTE_URL' => '',
+                    'DRONE_WORKSPACE' => '',
+                    'DRONE_BUILD_EVENT' => 'pull_request',
+                    'DRONE_COMMIT_SHA' => '',
+                    'DRONE_COMMIT_REF' => '',
+                ];
+                break;
+
+            case  CI::BUILD_EVENT_TAG:
+                $git_env = [
+                    'DRONE_REMOTE_URL' => '',
+                    'DRONE_WORKSPACE' => '',
+                    'DRONE_BUILD_EVENT' => 'tag',
+                    'DRONE_COMMIT_SHA' => '',
+                    'DRONE_COMMIT_REF' => ''
+
+                ];
+                break;
+        }
+
+        return $git_env;
     }
 
     /**
@@ -421,6 +489,7 @@ EOF;
     {
         $docker_container
             ->setEnv($env)
+            ->setLabels(['com.khs1994.ci' => $unique_id])
             ->setHostConfig(["$unique_id:$work_dir"]);
 
         $container_id = $docker_container->start($docker_container->create($image));
@@ -484,6 +553,7 @@ EOF;
                 ->setEnv($env_array)
                 ->setEntrypoint($entrypoint)
                 ->setHostConfig(null, $unique_id)
+                ->setLabels(['com.khs1994.ci' => $unique_id])
                 ->create($image, null, $command);
 
             $docker_container->start($container_id);

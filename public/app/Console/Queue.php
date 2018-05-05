@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use Error;
 use Exception;
+use KhsCI\CIException;
 use KhsCI\Service\Queue\Queue as QueueService;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
@@ -20,11 +22,9 @@ class Queue
         try {
             $queue = new QueueService();
             $queue();
-        } catch (Exception $e) {
+        } catch (CIException $e) {
             $commit_id = '1';
             echo $e->getMessage();
-
-            exit;
 
             /**
              * $e->getCode() is build key id.
@@ -38,10 +38,6 @@ class Queue
                     self::setBuildStatusInactive($e->getCode());
 
                     break;
-                case CI::BUILD_STATUS_ERRORED:
-                    self::setBuildStatusErrored($e->getCode(), $commit_id);
-
-                    break;
                 case CI::BUILD_STATUS_FAILED:
                     self::setBuildStatusFailed($e->getCode(), $commit_id);
 
@@ -51,11 +47,16 @@ class Queue
 
                     break;
                 default:
-                    throw new Exception($e->getMessage(), 500);
+                    self::setBuildStatusErrored($e->getCode(), $commit_id);
             }
 
             Log::connect()->debug($e->getCode().$e->getMessage());
         }
+//        } catch (Exception | Error $e) {
+//            echo $e->getMessage();
+//            echo $e->getFile();
+//            echo $e->getLine();
+//        }
     }
 
     /**
