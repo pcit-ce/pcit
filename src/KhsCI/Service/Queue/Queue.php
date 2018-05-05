@@ -135,7 +135,7 @@ EOF;
                 $var = '';
 
                 if (in_array($k, array_keys($config), true)) {
-                    $var = $config["$k"][0];
+                    $var = $config["$k"];
                 }
 
                 $image = str_replace($var_secret, $var, $image);
@@ -304,9 +304,9 @@ EOF;
             Log::connect()->debug('Run Container '.$container_id);
 
             $this->docker_container_logs($docker_container, $container_id);
-
-            throw new Exception(CI::BUILD_STATUS_PASSED, self::$build_key_id);
         }
+
+        throw new Exception(CI::BUILD_STATUS_PASSED, self::$build_key_id);
     }
 
     /**

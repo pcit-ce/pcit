@@ -115,9 +115,22 @@
           $.each(status, function (id, status) {
             id = id.replace('k', '');
 
-            let a_content = "<a href='builds/" + id + "' target='_blank'>" + status + "</a>";
+            let nbsp = '&nbsp;&nbsp;';
 
-            $("#display").append('<br><br>' + a_content);
+            let a_content = "<a href='builds/" + id + "' target='_blank'>" +
+              id + nbsp +
+              status[0] + nbsp +
+
+              status[2] + nbsp +
+
+              status[3] + nbsp +
+
+              "</a>";
+
+            $("#display").append('<br><br>' + a_content + nbsp);
+
+            $("#display").append(
+              "<a href='" + status[4] + "' target='_black'>" + status[1] + "</a>");
 
           });
 
