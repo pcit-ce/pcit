@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Queue;
 
-use Curl\Curl;
 use Docker\Container\Container;
 use Docker\Docker;
+use Docker\Image\Image;
 use Exception;
 use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
@@ -172,7 +172,7 @@ EOF;
 
         $url = "https://raw.githubusercontent.com/$base/.drone.yml";
 
-        $url = "https://ci2.khs1994.com:10000/.drone.yml";
+        // $url = "https://ci2.khs1994.com:10000/.drone.yml";
 
         $yaml_obj = (object)yaml_parse(HTTP::get($url));
 
@@ -225,36 +225,44 @@ EOF;
         $docker_image->pull('plugins/git');
         $docker_network->create($unique_id);
 
-        $this->runGit('plugins/git',
-            [
-                'DRONE_REMOTE_URL' => $git_url,
-                'DRONE_WORKSPACE' => $workdir,
-                'DRONE_BUILD_EVENT' => 'push',
-                'DRONE_COMMIT_SHA' => $commit_id,
-                'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
-            ], $workdir, $unique_id, $docker_container
-        );
-
+//        $this->runGit('plugins/git',
+//            [
+//                'DRONE_REMOTE_URL' => $git_url,
+//                'DRONE_WORKSPACE' => $workdir,
+//                'DRONE_BUILD_EVENT' => 'push',
+//                'DRONE_COMMIT_SHA' => $commit_id,
+//                'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
+//            ], $workdir, $unique_id, $docker_container
+//        );
 
         foreach ($matrix as $k => $config) {
 
-            // $this->runService($services, $unique_id, $docker);
+            $this->runService($services, $unique_id, $config, $docker);
 
-            $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker);
+            exit;
+
+            $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
         }
     }
 
     /**
-     * @param array  $pipeline
+     * @param array     $pipeline
      *
-     * @param array  $config
-     * @param string $work_dir
-     * @param string $unique_id
-     * @param Docker $docker
+     * @param array     $config
+     * @param string    $work_dir
+     * @param string    $unique_id
+     * @param Container $docker_container
+     * @param Image     $docker_image
      *
      * @throws Exception
      */
-    private function runPipeline(array $pipeline, array $config, string $work_dir, string $unique_id, Docker $docker)
+    private function runPipeline(array $pipeline,
+                                 array $config,
+                                 string $work_dir,
+                                 string $unique_id,
+                                 Container $docker_container,
+                                 Image $docker_image
+    )
     {
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
@@ -289,15 +297,9 @@ EOF;
 
             $ci_script = base64_encode(stripcslashes($content));
 
-            $docker = new Docker(Docker::createOptionArray(Env::get('DOCKER_HOST')), new Curl);
-
-            $docker_container = $docker->container;
-
-            $docker_image = $docker->image;
-
             $docker_container
                 ->setEnv([
-                    'CI_SCRIPT' => $ci_script,
+                    'CI_SCRIPT' => "",
                 ])
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
@@ -305,7 +307,7 @@ EOF;
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
-            $docker_image->pull($image);
+            var_dump($docker_image->pull($image));
 
             $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
 
@@ -444,31 +446,47 @@ EOF;
      * 运行服务.
      *
      * @param array  $service
-     * @param Docker $docker
-     *
      * @param string $unique_id
+     *
+     * @param array  $config
+     * @param Docker $docker
      *
      * @throws Exception
      */
-    private function runService(array $service, string $unique_id, Docker $docker)
+    private function runService(array $service, string $unique_id, array $config, Docker $docker)
     {
         foreach ($service as $service_name => $array) {
-            foreach ($array as $k => $v) {
-                $image = $v['image'];
-                $env = $v['environment'] ?? null;
-                $entrypoint = $v['entrypoint'];
-                $command = $v['command'];
+            $image = $array['image'];
+            $env = $array['environment'] ?? null;
 
-                $docker_container = $docker->container;
+            $env_array = [];
 
-                $container_id = $docker_container
-                    ->setEnv($env)
-                    ->setEntrypoint($entrypoint)
-                    ->setHostConfig(null, $unique_id)
-                    ->create($image, null, $command);
-
-                $docker_container->start($container_id);
+            if ($env) {
+                foreach ($env as $k) {
+                    $array = explode('=', $k);
+                    $env_array[$array[0]] = $array[1];
+                }
             }
+
+            $entrypoint = $array['entrypoint'] ?? null;
+            $command = $array['command'] ?? null;
+
+            $image = $this->getImage($image, $config);
+
+            $docker_image = $docker->image;
+            $docker_container = $docker->container;
+
+            $tag = explode(':', $image)[1] ?? 'latest';
+
+            $docker_image->pull($image, $tag);
+
+            $container_id = $docker_container
+                ->setEnv($env_array)
+                ->setEntrypoint($entrypoint)
+                ->setHostConfig(null, $unique_id)
+                ->create($image, null, $command);
+
+            $docker_container->start($container_id);
         }
     }
 }
