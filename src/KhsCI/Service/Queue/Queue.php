@@ -6,7 +6,6 @@ namespace KhsCI\Service\Queue;
 
 use Docker\Container\Container;
 use Docker\Docker;
-use Docker\Image\Image;
 use Exception;
 use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
@@ -221,17 +220,19 @@ EOF;
         $docker_image = $docker->image;
         $docker_network = $docker->network;
 
+        $docker_image->pull('plugins/git');
         $docker_network->create($unique_id);
 
-        $this->runGit(
+        $this->runGit('plugins/git',
             [
                 'DRONE_REMOTE_URL' => $git_url,
                 'DRONE_WORKSPACE' => $workdir,
                 'DRONE_BUILD_EVENT' => 'push',
                 'DRONE_COMMIT_SHA' => $commit_id,
                 'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
-            ], $workdir, $unique_id, $docker_container, $docker_image
+            ], $workdir, $unique_id, $docker_container
         );
+
 
         foreach ($matrix as $k => $config) {
 
@@ -288,59 +289,28 @@ EOF;
 
             $docker_image = $docker->image;
 
-            $docker_container->setEnv([
-                'CI_SCRIPT' => $ci_script,
-            ]);
-
             $docker_container
+                ->setEnv([
+                    'CI_SCRIPT' => $ci_script,
+                ])
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
                 ->setWorkingDir($work_dir);
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
-            $container_id = $this->docker_container_run($image, $docker_image, $docker_container, $cmd);
+            $docker_image->pull($image);
+
+            $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
 
             Log::connect()->debug('Run Container '.$container_id);
 
             $this->docker_container_logs($docker_container, $container_id);
+
+            exit;
         }
 
         throw new Exception(CI::BUILD_STATUS_PASSED, self::$build_key_id);
-    }
-
-    /**
-     * @param string            $image_name
-     * @param Image             $docker_image
-     * @param Container         $docker_container
-     * @param string|array|null $cmd
-     *
-     * @return string
-     *
-     * @throws Exception
-     */
-    private function docker_container_run(string $image_name,
-                                          Image $docker_image,
-                                          Container $docker_container,
-                                          $cmd = null)
-    {
-        $docker_image->pull($image_name);
-
-        try {
-            $container_id = $docker_container->create($image_name, null, $cmd);
-        } catch (Exception $e) {
-            throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
-        }
-
-        $output = $docker_container->start($container_id);
-
-        if ((bool)$output) {
-            Log::connect()->debug('Start Container '.$container_id.' Error');
-
-            throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
-        }
-
-        return $container_id;
     }
 
     /**
@@ -365,39 +335,27 @@ EOF;
 
         $startedAt = null;
         $finishedAt = null;
+        $until_time = 0;
 
         while (1) {
             $i = $i + 1;
 
             $image_status_obj = json_decode($docker_container->inspect($container_id))->State;
-
             $status = $image_status_obj->Status;
-
-            $startedAt = $image_status_obj->StartedAt;
-            $startedAt = Date::parse($startedAt);
-
-            $first = false;
+            $startedAt = Date::parse($image_status_obj->StartedAt);
 
             if ('running' === $status) {
                 if (0 === $i) {
-                    $first = true;
                     $since_time = $startedAt;
                     $until_time = $startedAt;
-                }
-
-                if (!$first) {
+                } else {
                     $since_time = $until_time;
                     $until_time = $until_time + 1;
                 }
 
                 $image_log = $docker_container->logs(
-                    $container_id,
-                    false,
-                    true,
-                    true,
-                    $since_time,
-                    $until_time,
-                    true
+                    $container_id, false, true, true,
+                    $since_time, $until_time, true
                 );
 
                 echo $image_log;
@@ -407,13 +365,7 @@ EOF;
                 continue;
             } else {
                 $image_log = $docker_container->logs(
-                    $container_id,
-                    false,
-                    true,
-                    true,
-                    0,
-                    0,
-                    true
+                    $container_id, false, true, true, 0, 0, true
                 );
 
                 $prev_docker_log = $redis->hget('build_log', (string)self::$build_key_id);
@@ -447,21 +399,23 @@ EOF;
     }
 
     /**
+     * 运行 Git clone
+     *
+     * @param string    $image
      * @param array     $env
      * @param           $work_dir
      * @param           $unique_id
      * @param Container $docker_container
-     * @param Image     $docker_image
      *
      * @throws Exception
      */
-    private function runGit(array $env, $work_dir, $unique_id, Container $docker_container, Image $docker_image)
+    private function runGit(string $image, array $env, $work_dir, $unique_id, Container $docker_container)
     {
         $docker_container
             ->setEnv($env)
             ->setHostConfig(["$unique_id:$work_dir"]);
 
-        $container_id = $this->docker_container_run('plugins/git', $docker_image, $docker_container);
+        $container_id = $docker_container->start($docker_container->create($image));
 
         Log::connect()->debug('Run Container '.$container_id);
 
@@ -469,6 +423,8 @@ EOF;
     }
 
     /**
+     * 解析矩阵.
+     *
      * @param array $matrix
      *
      * @return array
@@ -479,6 +435,8 @@ EOF;
     }
 
     /**
+     * 运行服务.
+     *
      * @param array  $service
      * @param Docker $docker
      *
