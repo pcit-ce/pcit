@@ -69,13 +69,17 @@ git_type,event_type,rid,event_time,request_raw
 ) VALUES(?,?,?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $rid, $event_time, $content,
+            static::$git_type, __FUNCTION__, $rid, $event_time, $content,
         ];
 
         return DB::insert($sql, $data);
     }
 
     /**
+     * push
+     *
+     * 1. 首次推送到新分支，head_commit 为空
+     *
      * @param string $content
      *
      * @return string
@@ -87,6 +91,8 @@ EOF;
         $obj = json_decode($content);
 
         $ref = $obj->ref;
+
+        $rid = $obj->repository->id;
 
         $ref_array = explode('/', $ref);
 
@@ -102,6 +108,9 @@ EOF;
 
         $head_commit = $obj->head_commit;
 
+        if (null === $head_commit) {
+            return 0;
+        }
         $commit_message = $head_commit->message;
 
         $commit_timestamp = Date::parse($head_commit->timestamp);
@@ -114,7 +123,6 @@ EOF;
 
         $committer_username = $committer->username;
 
-        $rid = $obj->repository->id;
 
         $sql = <<<'EOF'
 INSERT builds(
@@ -126,7 +134,7 @@ rid,event_time,build_status,request_raw
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
+            static::$git_type, __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
             $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
         ];
@@ -135,7 +143,7 @@ EOF;
 
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
-        $repo_full_name = DB::select($sql, ['github', $rid], true);
+        $repo_full_name = DB::select($sql, [static::$git_type, $rid], true);
 
         $github_status = CI::GITHUB_STATUS_PENDING;
 
@@ -176,7 +184,7 @@ git_type,event_type,request_raw
 EOF;
 
         return DB::insert($sql, [
-                'github', __FUNCTION__, $content,
+                static::$git_type, __FUNCTION__, $content,
             ]
         );
     }
@@ -204,7 +212,7 @@ git_type,event_type,request_raw
 EOF;
 
         return DB::insert($sql, [
-                'github', __FUNCTION__, $content,
+                static::$git_type, __FUNCTION__, $content,
             ]
         );
     }
@@ -234,7 +242,7 @@ git_type,event_type,request_raw
 EOF;
 
         return DB::insert($sql, [
-                'github', __FUNCTION__, $content,
+                static::$git_type, __FUNCTION__, $content,
             ]
         );
     }
@@ -284,8 +292,8 @@ pull_request_id,branch,rid,build_status
 
 EOF;
 
-        return DB::insert($sql,
-            ['github', __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
+        return DB::insert($sql, [
+                static::$git_type, __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
                 $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
             ]
         );
@@ -337,7 +345,7 @@ committer_username,rid,event_time,build_status,request_raw
 EOF;
 
         $last_id = DB::insert($sql, [
-            'github', __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
+            static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
             $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
         ]);
 
@@ -424,7 +432,7 @@ EOF;
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
 
-            return DB::delete($sql, ['github', $obj->ref, $rid]);
+            return DB::delete($sql, [static::$git_type, $obj->ref, $rid]);
 
         } else {
             return 0;
