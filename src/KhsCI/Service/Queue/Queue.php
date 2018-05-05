@@ -8,11 +8,12 @@ use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
 use Exception;
+use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
-use KhsCI\Support\CIConst;
-use KhsCI\Support\DATE;
+use KhsCI\Support\CI;
+use KhsCI\Support\Date;
 use KhsCI\Support\DB;
-use KhsCI\Support\GIT;
+use KhsCI\Support\Git;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
 
@@ -44,8 +45,8 @@ builds WHERE build_status=? AND event_type=? ORDER BY id DESC LIMIT 1;
 EOF;
 
         $output = DB::select($sql, [
-            CIConst::BUILD_STATUS_PENDING,
-            CIConst::BUILD_EVENT_PUSH,
+            CI::BUILD_STATUS_PENDING,
+            CI::BUILD_EVENT_PUSH,
         ]);
 
         foreach ($output as $k) {
@@ -86,7 +87,7 @@ EOF;
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            throw new Exception(CIConst::BUILD_STATUS_INACTIVE, (int)$build_activate);
+            throw new Exception(CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
         }
     }
 
@@ -106,16 +107,16 @@ EOF;
             return;
         }
 
-        throw new Exception(CIConst::BUILD_STATUS_SKIP, self::$build_key_id);
+        throw new Exception(CI::BUILD_STATUS_SKIP, self::$build_key_id);
     }
 
     /**
      * @param string $image
-     * @param array  $matrix
+     * @param array  $config
      *
      * @return array|mixed|string
      */
-    private function getImage(string $image, array $matrix)
+    private function getImage(string $image, array $config)
     {
         $arg = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $image, $output);
 
@@ -133,8 +134,8 @@ EOF;
 
                 $var = '';
 
-                if (in_array($k, array_keys($matrix), true)) {
-                    $var = $matrix["$k"][0];
+                if (in_array($k, array_keys($config), true)) {
+                    $var = $config["$k"][0];
                 }
 
                 $image = str_replace($var_secret, $var, $image);
@@ -169,7 +170,8 @@ EOF;
         $base = $repo_full_name.'/'.$commit_id;
 
         $url = "https://raw.githubusercontent.com/$base/.drone.yml";
-        // $url = "https://ci2.khs1994.com:10000/.drone.yml";
+
+        $url = "https://ci2.khs1994.com:10000/.drone.yml";
 
         $yaml_obj = (object)yaml_parse(HTTP::get($url));
 
@@ -190,6 +192,8 @@ EOF;
 
         $matrix = $yaml_obj->matrix;
 
+        $matrix = $this->parseMatrix($matrix);
+
         /**
          * 变量命名尽量与 docker container run 的参数保持一致.
          *
@@ -209,7 +213,7 @@ EOF;
          */
         $workdir = $base_path.'/'.$path;
 
-        $git_url = GIT::getUrl($gitType, $repo_full_name);
+        $git_url = Git::getUrl($gitType, $repo_full_name);
 
         $docker = Docker::docker(Docker::createOptionArray('127.0.0.1:2375'));
 
@@ -229,28 +233,32 @@ EOF;
             ], $workdir, $unique_id, $docker_container, $docker_image
         );
 
-        // $this->runService($services, $docker, $unique_id);
+        foreach ($matrix as $k => $config) {
 
-        $this->runPipeline($pipeline, $workdir, $unique_id, $matrix, $docker);
+            // $this->runService($services, $unique_id, $docker);
+
+            $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker);
+        }
     }
 
     /**
      * @param array  $pipeline
      *
+     * @param array  $config
      * @param string $work_dir
      * @param string $unique_id
-     * @param array  $matrix
      * @param Docker $docker
      *
      * @throws Exception
      */
-    private function runPipeline(array $pipeline, string $work_dir, string $unique_id, array $matrix, Docker $docker)
+    private function runPipeline(array $pipeline, array $config, string $work_dir, string $unique_id, Docker $docker)
     {
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
-            $image = $this->getImage($image, $matrix);
+
+            $image = $this->getImage($image, $config);
 
             Log::connect()->debug('Run Container By Image '.$image);
 
@@ -297,7 +305,7 @@ EOF;
 
             $this->docker_container_logs($docker_container, $container_id);
 
-            throw new Exception(CIConst::BUILD_STATUS_PASSED, self::$build_key_id);
+            throw new Exception(CI::BUILD_STATUS_PASSED, self::$build_key_id);
         }
     }
 
@@ -321,7 +329,7 @@ EOF;
         try {
             $container_id = $docker_container->create($image_name, null, $cmd);
         } catch (Exception $e) {
-            throw new Exception(CIConst::BUILD_STATUS_ERRORED, self::$build_key_id);
+            throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
         }
 
         $output = $docker_container->start($container_id);
@@ -329,7 +337,7 @@ EOF;
         if ((bool)$output) {
             Log::connect()->debug('Start Container '.$container_id.' Error');
 
-            throw new Exception(CIConst::BUILD_STATUS_ERRORED, self::$build_key_id);
+            throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
         }
 
         return $container_id;
@@ -366,7 +374,7 @@ EOF;
             $status = $image_status_obj->Status;
 
             $startedAt = $image_status_obj->StartedAt;
-            $startedAt = DATE::parse($startedAt);
+            $startedAt = Date::parse($startedAt);
 
             $first = false;
 
@@ -425,7 +433,7 @@ EOF;
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    throw new Exception(CIConst::BUILD_STATUS_ERRORED, self::$build_key_id);
+                    throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
                 }
 
                 break;
@@ -461,12 +469,13 @@ EOF;
     }
 
     /**
-     * @param array  $matrix
-     * @param string $image
+     * @param array $matrix
+     *
+     * @return array
      */
-    private function parseMatrix(array $matrix, string $image)
+    private function parseMatrix(array $matrix)
     {
-
+        return ArrayHelper::combination($matrix);
     }
 
     /**
@@ -477,7 +486,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function runService(array $service, Docker $docker, string $unique_id)
+    private function runService(array $service, string $unique_id, Docker $docker)
     {
         foreach ($service as $service_name => $array) {
             foreach ($array as $k => $v) {

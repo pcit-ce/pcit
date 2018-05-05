@@ -6,7 +6,7 @@ namespace App\Console;
 
 use Exception;
 use KhsCI\Service\Queue\Queue as QueueService;
-use KhsCI\Support\CIConst;
+use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Log;
 
@@ -22,28 +22,29 @@ class Queue
             $queue();
         } catch (Exception $e) {
             $commit_id = '1';
+            echo $e->getMessage();
 
             /**
              * $e->getCode() is build key id.
              */
             switch ($e->getMessage()) {
-                case CIConst::BUILD_STATUS_SKIP:
+                case CI::BUILD_STATUS_SKIP:
                     self::setBuildStatusSkip($e->getCode(), $commit_id);
 
                     break;
-                case CIConst::BUILD_STATUS_INACTIVE:
+                case CI::BUILD_STATUS_INACTIVE:
                     self::setBuildStatusInactive($e->getCode());
 
                     break;
-                case CIConst::BUILD_STATUS_ERRORED:
+                case CI::BUILD_STATUS_ERRORED:
                     self::setBuildStatusErrored($e->getCode(), $commit_id);
 
                     break;
-                case CIConst::BUILD_STATUS_FAILED:
+                case CI::BUILD_STATUS_FAILED:
                     self::setBuildStatusFailed($e->getCode(), $commit_id);
 
                     break;
-                case CIConst::BUILD_STATUS_PASSED:
+                case CI::BUILD_STATUS_PASSED:
                     self::setBuildStatusPassed($e->getCode(), $commit_id);
 
                     break;
@@ -75,7 +76,7 @@ class Queue
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CIConst::BUILD_STATUS_SKIP, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_SKIP, $build_key_id]);
     }
 
     /**
@@ -88,7 +89,7 @@ class Queue
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CIConst::BUILD_STATUS_PENDING, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_PENDING, $build_key_id]);
     }
 
     /**
@@ -104,7 +105,7 @@ class Queue
         /*
          * 更新数据库状态
          */
-        DB::update($sql, [CIConst::BUILD_STATUS_ERRORED, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_ERRORED, $build_key_id]);
         /*
          * 通知 GitHub commit Status
          */
@@ -124,7 +125,7 @@ class Queue
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CIConst::BUILD_STATUS_FAILED, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_FAILED, $build_key_id]);
     }
 
     /**
@@ -137,6 +138,6 @@ class Queue
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CIConst::BUILD_STATUS_PASSED, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_PASSED, $build_key_id]);
     }
 }

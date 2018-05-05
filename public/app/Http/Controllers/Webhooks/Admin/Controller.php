@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Webhooks\Admin;
 use Error;
 use Exception;
 use KhsCI\Support\Cache;
-use KhsCI\Support\CIConst;
+use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
@@ -222,7 +222,7 @@ class Controller
         /*
          * 更新缓存 + 更新数据库
          */
-        self::setBuildStatusCache(CIConst::BUILD_ACTIVATE, ...$arg);
+        self::setBuildStatusCache(CI::BUILD_ACTIVATE, ...$arg);
 
         return $array;
     }
@@ -240,7 +240,7 @@ class Controller
     {
         $arg = self::setGitType(...$arg);
 
-        self::setBuildStatusCache(CIConst::BUILD_DEACTIVATE, ...$arg);
+        self::setBuildStatusCache(CI::BUILD_DEACTIVATE, ...$arg);
 
         return [
             'code' => 200,
@@ -301,6 +301,8 @@ EOF;
   "name": "web",
   "active": true,
   "events": [
+    "create",
+    "delete",
     "deployment",
     "issues",
     "issue_comment",

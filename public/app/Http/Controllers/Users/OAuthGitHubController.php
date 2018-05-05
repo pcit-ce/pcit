@@ -36,7 +36,7 @@ class OAuthGitHubController
      */
     public function getAccessToken(): void
     {
-        $state = Session::get('github.state');
+        $state = Session::pull('github.state');
 
         $this->getAccessTokenCommon('gitHub', $state);
     }

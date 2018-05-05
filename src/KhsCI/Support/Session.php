@@ -6,6 +6,10 @@ namespace KhsCI\Support;
 
 class Session
 {
+    /**
+     * @param string $name
+     * @param        $value
+     */
     public static function put(string $name, $value): void
     {
         session_start();
@@ -13,6 +17,9 @@ class Session
         session_write_close();
     }
 
+    /**
+     * @param string $name
+     */
     public static function forget(string $name): void
     {
         session_start();
@@ -20,6 +27,11 @@ class Session
         session_write_close();
     }
 
+    /**
+     * @param string $name
+     *
+     * @return null
+     */
     public static function get(string $name)
     {
         session_start();
@@ -29,6 +41,23 @@ class Session
         return $value;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public static function has(string $name)
+    {
+        session_start();
+        $output = $_SESSION[$name] ?? false;
+        session_write_close();
+
+        return !($output === false);
+    }
+
+    /**
+     * @return mixed
+     */
     public static function all()
     {
         session_start();
@@ -38,10 +67,33 @@ class Session
         return $value;
     }
 
+    /**
+     * 清空 Session
+     */
     public static function flush(): void
     {
         session_start();
         $_SESSION = [];
         session_write_close();
+    }
+
+    /**
+     * 取出之后删除原数据
+     *
+     * @param string $name
+     *
+     * @return bool|null
+     */
+    public static function pull(string $name)
+    {
+        $output = self::has($name);
+
+        if ($output) {
+            $output = self::get($name);
+            self::forget($name);
+            return $output;
+        }
+
+        return null;
     }
 }

@@ -7,8 +7,8 @@ namespace KhsCI\Service\Webhooks;
 use App\Http\Controllers\Status\GitHubController;
 use Error;
 use Exception;
-use KhsCI\Support\CIConst;
-use KhsCI\Support\DATE;
+use KhsCI\Support\CI;
+use KhsCI\Support\Date;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
@@ -102,7 +102,7 @@ EOF;
 
         $commit_message = $head_commit->message;
 
-        $commit_timestamp = DATE::parse($head_commit->timestamp);
+        $commit_timestamp = Date::parse($head_commit->timestamp);
 
         $committer = $head_commit->committer;
 
@@ -126,7 +126,7 @@ EOF;
         $data = [
             'github', __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
-            $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content,
+            $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
         ];
 
         $lastId = DB::insert($sql, $data);
@@ -135,7 +135,7 @@ EOF;
 
         $repo_full_name = DB::select($sql, ['github', $rid], true);
 
-        $github_status = CIConst::GITHUB_STATUS_PENDING;
+        $github_status = CI::GITHUB_STATUS_PENDING;
 
         $target_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
 
@@ -284,7 +284,7 @@ EOF;
 
         return DB::insert($sql,
             ['github', __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
-                $pull_request_id, $branch, $rid, CIConst::BUILD_STATUS_PENDING,
+                $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
             ]
         );
     }
@@ -319,7 +319,7 @@ EOF;
 
         $committer_email = $committer->email;
 
-        $event_time = DATE::parse($head_commit->timestamp);
+        $event_time = Date::parse($head_commit->timestamp);
 
         $rid = $obj->repository->id;
 
@@ -336,7 +336,7 @@ EOF;
 
         $last_id = DB::insert($sql, [
             'github', __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
-            $committer_email, $committer_username, $rid, $event_time, CIConst::BUILD_STATUS_PENDING, $content,
+            $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
         ]);
 
         return $last_id;
@@ -381,12 +381,42 @@ EOF;
         ];
     }
 
-    private function release($content): void
+    private function release(string $content): void
     {
+
     }
 
-    private function create($content): void
+    /**
+     * Create "repository", "branch", or "tag"
+     *
+     * @param string $content
+     */
+    private function create(string $content): void
     {
+
+    }
+
+    /**
+     * Delete tag or branch
+     *
+     * @param string $content
+     *
+     * @return int
+     * @throws Exception
+     */
+    private function delete(string $content)
+    {
+        $obj = json_decode($content);
+
+        $ref_type = $obj->ref_type;
+
+        if ('branch' === $ref_type) {
+            $sql = 'DELETE FROM builds WHERE branch=?';
+
+            return DB::delete($sql, [$obj->ref]);
+        } else {
+            return 0;
+        }
     }
 
     /**

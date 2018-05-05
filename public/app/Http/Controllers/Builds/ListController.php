@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Builds;
 
 use Exception;
 use KhsCI\Support\Cache;
-use KhsCI\Support\CIConst;
+use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 
 class ListController
@@ -35,7 +35,7 @@ class ListController
         $sql = 'SELECT id FROM builds WHERE rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
 
         $last_build_id = DB::select($sql, [
-            $rid, CIConst::BUILD_STATUS_PENDING, CIConst::BUILD_STATUS_SKIP, CIConst::BUILD_STATUS_INACTIVE,
+            $rid, CI::BUILD_STATUS_PENDING, CI::BUILD_STATUS_SKIP, CI::BUILD_STATUS_INACTIVE,
         ], true
         );
 
@@ -71,7 +71,7 @@ ORDER BY id DESC
 EOF;
 
         $output = DB::select($sql, [
-                $gitType, CIConst::BUILD_EVENT_PUSH, CIConst::BUILD_EVENT_TAG, $gitType, "$username/$repo",
+                $gitType, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG, $gitType, "$username/$repo",
             ]
         );
 

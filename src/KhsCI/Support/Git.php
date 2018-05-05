@@ -6,7 +6,7 @@ namespace KhsCI\Support;
 
 use Exception;
 
-class GIT
+class Git
 {
     /**
      * @param string $type
