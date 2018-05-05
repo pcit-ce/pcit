@@ -15,6 +15,8 @@ use KhsCI\Support\Request;
 
 class GitHub
 {
+    private static $git_type = 'github';
+
     /**
      * @throws Exception
      *
@@ -393,7 +395,14 @@ EOF;
      */
     private function create(string $content): void
     {
+        $obj = json_decode($content);
 
+        $ref_type = $obj->ref_type;
+
+        switch ($ref_type) {
+            case 'branch':
+                $branch = $obj->ref;
+        }
     }
 
     /**
@@ -410,10 +419,13 @@ EOF;
 
         $ref_type = $obj->ref_type;
 
-        if ('branch' === $ref_type) {
-            $sql = 'DELETE FROM builds WHERE branch=?';
+        $rid = $obj->repository->id;
 
-            return DB::delete($sql, [$obj->ref]);
+        if ('branch' === $ref_type) {
+            $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
+
+            return DB::delete($sql, ['github', $obj->ref, $rid]);
+
         } else {
             return 0;
         }
