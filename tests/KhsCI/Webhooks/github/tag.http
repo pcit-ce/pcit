@@ -60,9 +60,9 @@ X-Hub-Signature: sha1=b2d02da4833416405d282adcff8a7ea1296891ae
       "public/route/web.php",
       "src/KhsCI/Service/Queue/Queue.php",
       "src/KhsCI/Support/CIConst.php",
-      "src/KhsCI/Support/DATE.php",
+      "Date.php",
       "src/KhsCI/Support/DB.php",
-      "src/KhsCI/Support/GIT.php"
+      "Git.php"
     ]
   },
   "repository": {
@@ -203,3 +203,5 @@ X-Hub-Signature: sha1=b2d02da4833416405d282adcff8a7ea1296891ae
     "site_admin": false
   }
 }
+
+###

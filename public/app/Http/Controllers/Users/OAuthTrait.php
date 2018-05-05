@@ -15,17 +15,15 @@ trait OAuthTrait
      * @param string      $type
      * @param null|string $state
      *
-     * @return string
      *
      * @throws Exception
      */
-    public function getAccessTokenCommon(string $type, ?string $state)
+    public function getAccessTokenCommon(string $type, ?string $state): void
     {
         $code = $_GET['code'] ?? false;
 
         if (false === $code) {
             throw new Exception('code not found');
-            return;
         }
 
         $obj = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
@@ -33,16 +31,16 @@ trait OAuthTrait
         try {
             $method = 'OAuth'.ucfirst($type);
 
-            $access_token = $this->ci->$method->getAccessToken((string) $code, $state)
+            $access_token = $this->ci->$method->getAccessToken((string)$code, $state)
                 ?? false;
 
             $typeLower = strtolower($type);
 
             false !== $access_token && Session::put($typeLower.'.access_token', $access_token);
 
-            $userInfoArray = $obj::getUserInfo((string) $access_token);
+            $userInfoArray = $obj::getUserInfo((string)$access_token);
         } catch (Error $e) {
-            return $e->getMessage();
+            throw new Exception($e->getMessage(), 500);
         }
 
         $uid = $userInfoArray['uid'];

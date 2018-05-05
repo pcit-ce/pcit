@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
-class DATE
+class Date
 {
     /**
      * @param      $timestamp

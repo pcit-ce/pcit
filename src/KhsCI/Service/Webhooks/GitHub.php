@@ -7,14 +7,16 @@ namespace KhsCI\Service\Webhooks;
 use App\Http\Controllers\Status\GitHubController;
 use Error;
 use Exception;
-use KhsCI\Support\CIConst;
-use KhsCI\Support\DATE;
+use KhsCI\Support\CI;
+use KhsCI\Support\Date;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 
 class GitHub
 {
+    private static $git_type = 'github';
+
     /**
      * @throws Exception
      *
@@ -31,7 +33,7 @@ class GitHub
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
-        // return $this->$type($content);
+        return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {
@@ -67,13 +69,17 @@ git_type,event_type,rid,event_time,request_raw
 ) VALUES(?,?,?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $rid, $event_time, $content,
+            static::$git_type, __FUNCTION__, $rid, $event_time, $content,
         ];
 
         return DB::insert($sql, $data);
     }
 
     /**
+     * push
+     *
+     * 1. 首次推送到新分支，head_commit 为空
+     *
      * @param string $content
      *
      * @return string
@@ -85,6 +91,8 @@ EOF;
         $obj = json_decode($content);
 
         $ref = $obj->ref;
+
+        $rid = $obj->repository->id;
 
         $ref_array = explode('/', $ref);
 
@@ -100,9 +108,12 @@ EOF;
 
         $head_commit = $obj->head_commit;
 
+        if (null === $head_commit) {
+            return 0;
+        }
         $commit_message = $head_commit->message;
 
-        $commit_timestamp = DATE::parse($head_commit->timestamp);
+        $commit_timestamp = Date::parse($head_commit->timestamp);
 
         $committer = $head_commit->committer;
 
@@ -112,7 +123,6 @@ EOF;
 
         $committer_username = $committer->username;
 
-        $rid = $obj->repository->id;
 
         $sql = <<<'EOF'
 INSERT builds(
@@ -124,18 +134,18 @@ rid,event_time,build_status,request_raw
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $data = [
-            'github', __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
+            static::$git_type, __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
-            $rid, $commit_timestamp, CIConst::BUILD_STATUS_PENDING, $content,
+            $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
         ];
 
         $lastId = DB::insert($sql, $data);
 
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
-        $repo_full_name = DB::select($sql, ['github', $rid], true);
+        $repo_full_name = DB::select($sql, [static::$git_type, $rid], true);
 
-        $github_status = CIConst::GITHUB_STATUS_PENDING;
+        $github_status = CI::GITHUB_STATUS_PENDING;
 
         $target_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
 
@@ -174,7 +184,7 @@ git_type,event_type,request_raw
 EOF;
 
         return DB::insert($sql, [
-                'github', __FUNCTION__, $content,
+                static::$git_type, __FUNCTION__, $content,
             ]
         );
     }
@@ -202,7 +212,7 @@ git_type,event_type,request_raw
 EOF;
 
         return DB::insert($sql, [
-                'github', __FUNCTION__, $content,
+                static::$git_type, __FUNCTION__, $content,
             ]
         );
     }
@@ -232,7 +242,7 @@ git_type,event_type,request_raw
 EOF;
 
         return DB::insert($sql, [
-                'github', __FUNCTION__, $content,
+                static::$git_type, __FUNCTION__, $content,
             ]
         );
     }
@@ -282,9 +292,9 @@ pull_request_id,branch,rid,build_status
 
 EOF;
 
-        return DB::insert($sql,
-            ['github', __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
-                $pull_request_id, $branch, $rid, CIConst::BUILD_STATUS_PENDING,
+        return DB::insert($sql, [
+                static::$git_type, __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
+                $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
             ]
         );
     }
@@ -319,7 +329,7 @@ EOF;
 
         $committer_email = $committer->email;
 
-        $event_time = DATE::parse($head_commit->timestamp);
+        $event_time = Date::parse($head_commit->timestamp);
 
         $rid = $obj->repository->id;
 
@@ -335,8 +345,8 @@ committer_username,rid,event_time,build_status,request_raw
 EOF;
 
         $last_id = DB::insert($sql, [
-            'github', __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
-            $committer_email, $committer_username, $rid, $event_time, CIConst::BUILD_STATUS_PENDING, $content,
+            static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
+            $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
         ]);
 
         return $last_id;
@@ -381,12 +391,52 @@ EOF;
         ];
     }
 
-    private function release($content): void
+    private function release(string $content): void
     {
+
     }
 
-    private function create($content): void
+    /**
+     * Create "repository", "branch", or "tag"
+     *
+     * @param string $content
+     */
+    private function create(string $content): void
     {
+        $obj = json_decode($content);
+
+        $ref_type = $obj->ref_type;
+
+        switch ($ref_type) {
+            case 'branch':
+                $branch = $obj->ref;
+        }
+    }
+
+    /**
+     * Delete tag or branch
+     *
+     * @param string $content
+     *
+     * @return int
+     * @throws Exception
+     */
+    private function delete(string $content)
+    {
+        $obj = json_decode($content);
+
+        $ref_type = $obj->ref_type;
+
+        $rid = $obj->repository->id;
+
+        if ('branch' === $ref_type) {
+            $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
+
+            return DB::delete($sql, [static::$git_type, $obj->ref, $rid]);
+
+        } else {
+            return 0;
+        }
     }
 
     /**

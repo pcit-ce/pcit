@@ -6,8 +6,9 @@ namespace App\Http\Controllers\Builds;
 
 use Exception;
 use KhsCI\Support\Cache;
-use KhsCI\Support\CIConst;
+use KhsCI\Support\CI;
 use KhsCI\Support\DB;
+use KhsCI\Support\Git;
 
 class ListController
 {
@@ -35,7 +36,7 @@ class ListController
         $sql = 'SELECT id FROM builds WHERE rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
 
         $last_build_id = DB::select($sql, [
-            $rid, CIConst::BUILD_STATUS_PENDING, CIConst::BUILD_STATUS_SKIP, CIConst::BUILD_STATUS_INACTIVE,
+            $rid, CI::BUILD_STATUS_PENDING, CI::BUILD_STATUS_SKIP, CI::BUILD_STATUS_INACTIVE,
         ], true
         );
 
@@ -47,7 +48,7 @@ class ListController
     }
 
     /**
-     * List build Status.
+     * List build Status, include commit tag, not include pull_request.
      *
      * @param mixed ...$args
      *
@@ -59,10 +60,14 @@ class ListController
     {
         list($gitType, $username, $repo) = $args;
 
+        $repo_full_name = "$username/$repo";
+
+        $base_url = Git::getUrl($gitType, $repo_full_name);
+
         $sql = <<<'EOF'
 SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
-FROM builds WHERE git_type=? AND event_type IN (?,?) AND rid=
+FROM builds WHERE event_type IN (?,?) AND rid=
 
 (SELECT rid FROM repo WHERE git_type=? AND repo_full_name=?)
 
@@ -71,11 +76,20 @@ ORDER BY id DESC
 EOF;
 
         $output = DB::select($sql, [
-                $gitType, CIConst::BUILD_EVENT_PUSH, CIConst::BUILD_EVENT_TAG, $gitType, "$username/$repo",
+                CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG, $gitType, $repo_full_name,
             ]
         );
 
-        return $output;
+        foreach ($output as $k) {
+            $merge_array = [
+                'commit_url' => $base_url.'/commit/'.$k['commit_id'],
+                'commit_id' => substr($k['commit_id'], 0, 7)
+            ];
+
+            $array[] = array_merge($k, $merge_array);
+        }
+
+        return $array;
     }
 
     /**
@@ -89,22 +103,16 @@ EOF;
      */
     public function getBuildDetails(...$args)
     {
-        list($gitType, $username, $repo, $buildId) = $args;
+        list($gitType, $username, $repo, $build_key_id) = $args;
 
         $redis = Cache::connect();
 
-        $build_log = $redis->hget('build_log', $buildId);
+        $build_log = $redis->hget('build_log', $build_key_id);
 
         $sql = 'SELECT build_status FROM builds WHERE id=?';
 
-        $output = DB::select($sql, [$buildId], true);
+        $output = DB::select($sql, [$build_key_id], true);
 
-        if ($build_log) {
-            return [
-                'status' => $output, 'data' => $build_log,
-            ];
-        }
-
-        return ['status' => $output, 'data' => null];
+        return ['status' => $output, 'data' => $build_log];
     }
 }

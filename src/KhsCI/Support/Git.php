@@ -6,17 +6,19 @@ namespace KhsCI\Support;
 
 use Exception;
 
-class GIT
+class Git
 {
     /**
      * @param string $type
      * @param string $repo_full_name
      *
+     * @param bool   $ssh
+     *
      * @return string
      *
      * @throws Exception
      */
-    public static function getUrl(string $type, string $repo_full_name)
+    public static function getUrl(string $type, string $repo_full_name, bool $ssh = false)
     {
         switch ($type) {
             case 'github':
