@@ -273,6 +273,8 @@ EOF;
 
             $content = '\n';
 
+            $content .= 'echo Start Build in '.$image;
+
             for ($i = 0; $i < count($commands); ++$i) {
                 $command = addslashes($commands[$i]);
 
@@ -287,7 +289,7 @@ EOF;
 
             $ci_script = base64_encode(stripcslashes($content));
 
-            // $docker = new Docker(Docker::createOptionArray(Env::get('DOCKER_HOST')),new Curl);
+            $docker = new Docker(Docker::createOptionArray(Env::get('DOCKER_HOST')), new Curl);
 
             $docker_container = $docker->container;
 
