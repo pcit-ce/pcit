@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
   <title>KhsCI - Builds</title>
 </head>
@@ -81,21 +82,24 @@
             let committer_username = status.committer_username;
             let commit_message = status.commit_message;
             let commit_id = status.commit_id;
+            let commit_url = status.commit_url;
             let build_status = status.build_status;
             let create_time = status.create_time;
             let end_time = status.end_time;
+            let nbsp = "&nbsp;&nbsp;&nbsp;";
 
             $("#display").append(
               "<tr>" +
-              "<td>" + build_id + "</td>" +
-              "<td>" + event_type + "</td>" +
-              "<td>" + branch + "</td>" +
-              "<td>" + committer_username + "</td>" +
-              "<td>" + commit_message + "</td>" +
-              "<td>" + commit_id + "</td>" +
-              "<td>" + build_status + "</td>" +
-              "<td>" + create_time + "</td>" +
-              "<td>" + end_time + "</td>" +
+              "<td>" + "<a href='" + location.href + '/' + build_id + "' target='_blank'>" + build_id +
+              "</a>" + nbsp + "</td>" +
+              "<td style='color: blue;'>" + nbsp + event_type + nbsp + "</td>" +
+              "<td>" + nbsp + branch + nbsp + "</td>" +
+              "<td>" + committer_username + nbsp + "</td>" +
+              "<td style='color: brown'>" + nbsp + commit_message + nbsp + "</td>" +
+              "<td>" + nbsp + "<a href='" + commit_url + "' target='_blank'>" + commit_id + "</a>" + nbsp + "</td>" +
+              "<td>" + nbsp + build_status + nbsp + "</td>" +
+              "<td>" + nbsp + create_time + nbsp + "</td>" +
+              "<td>" + nbsp + end_time + nbsp + "</td>" +
               +"</tr>"
             )
 

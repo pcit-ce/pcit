@@ -33,7 +33,7 @@ class GitHub
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
-        // return $this->$type($content);
+        return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {
