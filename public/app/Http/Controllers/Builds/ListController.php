@@ -62,8 +62,6 @@ class ListController
 
         $repo_full_name = "$username/$repo";
 
-        $base_url = Git::getUrl($gitType, $repo_full_name);
-
         $sql = <<<'EOF'
 SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
@@ -84,7 +82,7 @@ EOF;
 
         foreach ($output as $k) {
             $merge_array = [
-                'commit_url' => $base_url.'/commit/'.$k['commit_id'],
+                'commit_url' => Git::getCommitUrl($gitType, $repo_full_name, $k['commit_id']),
                 'commit_id' => substr($k['commit_id'], 0, 7)
             ];
 
@@ -125,6 +123,10 @@ FROM builds WHERE
 id=? 
 EOF;
         $output = DB::select($sql, [$build_key_id]);
+
+        if (!$output) {
+            return [];
+        }
 
         $output = $output[0];
 

@@ -120,6 +120,10 @@ WHERE id=?
 EOF;
         $output = DB::select($sql, [$build_key_id], true);
 
+        if (!$output) {
+            throw new Exception('Build Key Id Not Found', 404);
+        }
+
         foreach ($output[0] as $k => $v) {
             $rid = $k['rid'];
             $commit_id = $k['commit_id'];
@@ -233,11 +237,9 @@ EOF;
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
-        $base = $repo_full_name.'/'.$commit_id;
-
-        $url = "https://raw.githubusercontent.com/$base/.drone.yml";
-
-        $yaml_obj = (object)yaml_parse(HTTP::get($url));
+        $yaml_obj = (object)yaml_parse(HTTP::get(Git::getRawUrl(
+            $gitType, $repo_full_name, $commit_id, '.drone.yml'))
+        );
 
         $yaml_to_json = json_encode($yaml_obj);
 
