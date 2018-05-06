@@ -8,11 +8,13 @@ use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
 use Exception;
+use KhsCI\CIException;
 use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
 use KhsCI\Support\DB;
+use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
@@ -30,6 +32,23 @@ class Queue
     private static $build_key_id;
 
     /**
+     * 构建标识符
+     *
+     * @var
+     */
+    private static $unique_id;
+
+    /**
+     * @var
+     */
+    private static $pull_id;
+
+    /**
+     * @var
+     */
+    private static $tag_name;
+
+    /**
      * @throws Exception
      */
     public function __invoke(): void
@@ -37,27 +56,33 @@ class Queue
         $sql = <<<'EOF'
 SELECT 
 
-id,git_type,rid,commit_id,commit_message,branch 
+id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name
 
 FROM 
 
-builds WHERE build_status=? AND event_type=? ORDER BY id DESC LIMIT 1;
+builds WHERE build_status=? AND event_type IN (?,?,?) ORDER BY id DESC LIMIT 1;
 EOF;
 
         $output = DB::select($sql, [
             CI::BUILD_STATUS_PENDING,
             CI::BUILD_EVENT_PUSH,
+            CI::BUILD_EVENT_TAG,
+            CI::BUILD_EVENT_PR
         ]);
+
+        self::$unique_id = session_create_id();
 
         foreach ($output as $k) {
             $build_key_id = $k['id'];
-            $git_type = $k['git_type'];
             $rid = $k['rid'];
             $commit_id = $k['commit_id'];
             $commit_message = $k['commit_message'];
             $branch = $k['branch'];
+            $event_type = $k['event_type'];
 
-            self::$gitType = $git_type;
+            self::$pull_id = $k['pull_request_id'];
+            self::$tag_name = $k['tag_name'];
+            self::$gitType = $k['git_type'];
 
             self::$build_key_id = (int)$build_key_id;
 
@@ -67,7 +92,47 @@ EOF;
             // 是否启用构建
             self::getRepoBuildActivateStatus($rid);
 
-            self::run($rid, $commit_id, $branch);
+            self::run($rid, $commit_id, $branch, $event_type);
+
+            // 暂时，一个队列只构建一个任务
+
+            break;
+        }
+    }
+
+    /**
+     * 网页手动触发构建
+     *
+     * @param string $build_key_id
+     *
+     * @throws Exception
+     */
+    public function trigger(string $build_key_id)
+    {
+        $sql = <<<EOF
+SELECT
+
+git_type,rid,commit_id,branch,event_type,pull_request_id,tag_name
+
+FROM builds
+
+WHERE id=?
+EOF;
+        $output = DB::select($sql, [$build_key_id], true);
+
+        foreach ($output[0] as $k => $v) {
+            $rid = $k['rid'];
+            $commit_id = $k['commit_id'];
+            $branch = $k['branch'];
+            $event_type = $k['event_type'];
+
+            self::$gitType = $k['git_type'];
+            self::$pull_id = $k['pull_request_id'];
+            self::$tag_name = $k['tag_name'];
+
+            self::run($rid, $commit_id, $branch, $event_type);
+
+            break;
         }
     }
 
@@ -87,7 +152,7 @@ EOF;
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            throw new Exception(CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
+            throw new CIException(self::$unique_id, CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
         }
     }
 
@@ -107,7 +172,7 @@ EOF;
             return;
         }
 
-        throw new Exception(CI::BUILD_STATUS_SKIP, self::$build_key_id);
+        throw new CIException(self::$unique_id, CI::BUILD_STATUS_SKIP, (int)self::$build_key_id);
     }
 
     /**
@@ -135,7 +200,7 @@ EOF;
                 $var = '';
 
                 if (in_array($k, array_keys($config), true)) {
-                    $var = $config["$k"][0];
+                    $var = $config["$k"];
                 }
 
                 $image = str_replace($var_secret, $var, $image);
@@ -152,13 +217,14 @@ EOF;
      * @param string $commit_id
      * @param string $branch
      *
+     * @param string $event_type
+     *
      * @throws Exception
      */
-    private function run($rid, string $commit_id, string $branch): void
+    private function run($rid, string $commit_id, string $branch, string $event_type): void
     {
         $gitType = self::$gitType;
-
-        $unique_id = session_create_id();
+        $unique_id = self::$unique_id;
 
         Log::connect()->debug('Create Volume '.$unique_id);
         Log::connect()->debug('Create Network '.$unique_id);
@@ -170,8 +236,6 @@ EOF;
         $base = $repo_full_name.'/'.$commit_id;
 
         $url = "https://raw.githubusercontent.com/$base/.drone.yml";
-
-        $url = "https://ci2.khs1994.com:10000/.drone.yml";
 
         $yaml_obj = (object)yaml_parse(HTTP::get($url));
 
@@ -213,134 +277,130 @@ EOF;
          */
         $workdir = $base_path.'/'.$path;
 
-        $git_url = Git::getUrl($gitType, $repo_full_name);
-
-        $docker = Docker::docker(Docker::createOptionArray('127.0.0.1:2375'));
+        $docker = Docker::docker(Docker::createOptionArray(Env::get('DOCKER_HOST')));
 
         $docker_container = $docker->container;
         $docker_image = $docker->image;
         $docker_network = $docker->network;
 
+        $docker_image->pull('plugins/git');
         $docker_network->create($unique_id);
 
-        $this->runGit(
-            [
-                'DRONE_REMOTE_URL' => $git_url,
-                'DRONE_WORKSPACE' => $workdir,
-                'DRONE_BUILD_EVENT' => 'push',
-                'DRONE_COMMIT_SHA' => $commit_id,
-                'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
-            ], $workdir, $unique_id, $docker_container, $docker_image
-        );
+        $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
 
+        $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
+
+        /**
+         * 矩阵构建循环
+         */
         foreach ($matrix as $k => $config) {
 
-            // $this->runService($services, $unique_id, $docker);
+            /**
+             * 启动服务
+             */
+            $this->runService($services, $unique_id, $config, $docker);
 
-            $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker);
+            /**
+             * 构建步骤
+             */
+            $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
+
+            /**
+             * 后续根据 throw 出的异常执行对应的操作
+             */
         }
     }
 
     /**
-     * @param array  $pipeline
+     * @param array     $pipeline
      *
-     * @param array  $config
-     * @param string $work_dir
-     * @param string $unique_id
-     * @param Docker $docker
+     * @param array     $config
+     * @param string    $work_dir
+     * @param string    $unique_id
+     * @param Container $docker_container
+     * @param Image     $docker_image
      *
      * @throws Exception
      */
-    private function runPipeline(array $pipeline, array $config, string $work_dir, string $unique_id, Docker $docker)
+    private function runPipeline(array $pipeline,
+                                 array $config,
+                                 string $work_dir,
+                                 string $unique_id,
+                                 Container $docker_container,
+                                 Image $docker_image)
     {
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
 
+            if ($event) {
+                if (!in_array('push', $event, true)) {
+
+                    Log::connect()->debug('Event '.$event.' not in '.implode(' | ', $event));
+
+                    continue;
+                }
+            }
+
             $image = $this->getImage($image, $config);
 
             Log::connect()->debug('Run Container By Image '.$image);
 
-            if ($event) {
-                if (!in_array('push', $event, true)) {
-                    throw new Exception('Event error', self::$build_key_id);
-                }
-            }
-
-            $content = '\n';
-
-            for ($i = 0; $i < count($commands); ++$i) {
-                $command = addslashes($commands[$i]);
-
-                $content .= 'echo $ '.str_replace('$', '\\\\$', $command).'\n\n';
-
-                $content .= 'echo;echo'.'\n\n';
-
-                $content .= str_replace('$$', '$', $command).'\n\n';
-
-                $content .= 'echo;echo'.'\n\n';
-            }
-
-            $ci_script = base64_encode(stripcslashes($content));
-
-            $docker_container = $docker->container;
-
-            $docker_image = $docker->image;
-
-            $docker_container->setEnv([
-                'CI_SCRIPT' => $ci_script,
-            ]);
-
             $docker_container
+                ->setEnv([
+                    'CI_SCRIPT' => $this->parseCommand($image, $commands),
+                ])
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
+                ->setLabels(['com.khs1994.ci' => $unique_id])
                 ->setWorkingDir($work_dir);
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
-            $container_id = $this->docker_container_run($image, $docker_image, $docker_container, $cmd);
+            $tag = explode(':', $image)[1] ?? 'latest';
+
+            $docker_image->pull($image, $tag);
+
+            $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
 
             Log::connect()->debug('Run Container '.$container_id);
 
             $this->docker_container_logs($docker_container, $container_id);
-
-            throw new Exception(CI::BUILD_STATUS_PASSED, self::$build_key_id);
         }
+
+        throw new CIException(self::$unique_id, CI::BUILD_STATUS_PASSED, self::$build_key_id);
     }
 
     /**
-     * @param string            $image_name
-     * @param Image             $docker_image
-     * @param Container         $docker_container
-     * @param string|array|null $cmd
+     * @param $image
+     * @param $commands
      *
      * @return string
-     *
-     * @throws Exception
      */
-    private function docker_container_run(string $image_name,
-                                          Image $docker_image,
-                                          Container $docker_container,
-                                          $cmd = null)
+    private function parseCommand($image, $commands)
     {
-        $docker_image->pull($image_name);
+        $content = '\n';
 
-        try {
-            $container_id = $docker_container->create($image_name, null, $cmd);
-        } catch (Exception $e) {
-            throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
+        $content .= 'echo;echo\n\n';
+
+        $content .= 'echo Start Build in '.$image;
+
+        $content .= '\n\necho;echo\n\n';
+
+        for ($i = 0; $i < count($commands); ++$i) {
+            $command = addslashes($commands[$i]);
+
+            $content .= 'echo $ '.str_replace('$', '\\\\$', $command).'\n\n';
+
+            $content .= 'echo;echo\n\n';
+
+            $content .= str_replace('$$', '$', $command).'\n\n';
+
+            $content .= 'echo;echo\n\n';
         }
 
-        $output = $docker_container->start($container_id);
-
-        if ((bool)$output) {
-            Log::connect()->debug('Start Container '.$container_id.' Error');
-
-            throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
-        }
-
-        return $container_id;
+        return $ci_script = base64_encode(stripcslashes($content));
     }
 
     /**
@@ -365,39 +425,27 @@ EOF;
 
         $startedAt = null;
         $finishedAt = null;
+        $until_time = 0;
 
         while (1) {
             $i = $i + 1;
 
             $image_status_obj = json_decode($docker_container->inspect($container_id))->State;
-
             $status = $image_status_obj->Status;
-
-            $startedAt = $image_status_obj->StartedAt;
-            $startedAt = Date::parse($startedAt);
-
-            $first = false;
+            $startedAt = Date::parse($image_status_obj->StartedAt);
 
             if ('running' === $status) {
                 if (0 === $i) {
-                    $first = true;
                     $since_time = $startedAt;
                     $until_time = $startedAt;
-                }
-
-                if (!$first) {
+                } else {
                     $since_time = $until_time;
                     $until_time = $until_time + 1;
                 }
 
                 $image_log = $docker_container->logs(
-                    $container_id,
-                    false,
-                    true,
-                    true,
-                    $since_time,
-                    $until_time,
-                    true
+                    $container_id, false, true, true,
+                    $since_time, $until_time, true
                 );
 
                 echo $image_log;
@@ -407,13 +455,7 @@ EOF;
                 continue;
             } else {
                 $image_log = $docker_container->logs(
-                    $container_id,
-                    false,
-                    true,
-                    true,
-                    0,
-                    0,
-                    true
+                    $container_id, false, true, true, 0, 0, true
                 );
 
                 $prev_docker_log = $redis->hget('build_log', (string)self::$build_key_id);
@@ -433,7 +475,7 @@ EOF;
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    throw new Exception(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
+                    throw new CIException(self::$unique_id, CI::BUILD_STATUS_ERRORED, self::$build_key_id);
                 }
 
                 break;
@@ -447,21 +489,82 @@ EOF;
     }
 
     /**
+     * @param string $event_type
+     * @param string $repo_full_name
+     * @param string $workdir
+     * @param string $commit_id
+     * @param string $branch
+     *
+     * @return array
+     * @throws Exception
+     * @see https://github.com/drone-plugins/drone-git
+     */
+    private function getGitEnv(string $event_type,
+                               string $repo_full_name,
+                               string $workdir,
+                               string $commit_id,
+                               string $branch)
+    {
+        $git_url = Git::getUrl(self::$gitType, $repo_full_name);
+
+        $git_env = null;
+
+        switch ($event_type) {
+            case CI::BUILD_EVENT_PUSH:
+                $git_env = [
+                    'DRONE_REMOTE_URL' => $git_url,
+                    'DRONE_WORKSPACE' => $workdir,
+                    'DRONE_BUILD_EVENT' => 'push',
+                    'DRONE_COMMIT_SHA' => $commit_id,
+                    'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
+                ];
+
+                break;
+            case CI::BUILD_EVENT_PR:
+                $git_env = [
+                    'DRONE_REMOTE_URL' => $git_url,
+                    'DRONE_WORKSPACE' => $workdir,
+                    'DRONE_BUILD_EVENT' => 'pull_request',
+                    'DRONE_COMMIT_SHA' => $commit_id,
+                    'DRONE_COMMIT_REF' => 'refs/pull/'.self::$pull_id.'/head'
+                ];
+
+                break;
+            case  CI::BUILD_EVENT_TAG:
+                $git_env = [
+                    'DRONE_REMOTE_URL' => $git_url,
+                    'DRONE_WORKSPACE' => $workdir,
+                    'DRONE_BUILD_EVENT' => 'tag',
+                    'DRONE_COMMIT_SHA' => $commit_id,
+                    'DRONE_COMMIT_REF' => 'refs/tags/'.self::$tag_name.'/head'
+
+                ];
+
+                break;
+        }
+
+        return $git_env;
+    }
+
+    /**
+     * 运行 Git clone
+     *
+     * @param string    $image
      * @param array     $env
      * @param           $work_dir
      * @param           $unique_id
      * @param Container $docker_container
-     * @param Image     $docker_image
      *
      * @throws Exception
      */
-    private function runGit(array $env, $work_dir, $unique_id, Container $docker_container, Image $docker_image)
+    private function runGit(string $image, array $env, $work_dir, $unique_id, Container $docker_container)
     {
         $docker_container
             ->setEnv($env)
+            ->setLabels(['com.khs1994.ci' => $unique_id])
             ->setHostConfig(["$unique_id:$work_dir"]);
 
-        $container_id = $this->docker_container_run('plugins/git', $docker_image, $docker_container);
+        $container_id = $docker_container->start($docker_container->create($image));
 
         Log::connect()->debug('Run Container '.$container_id);
 
@@ -469,6 +572,8 @@ EOF;
     }
 
     /**
+     * 解析矩阵.
+     *
      * @param array $matrix
      *
      * @return array
@@ -479,32 +584,51 @@ EOF;
     }
 
     /**
-     * @param array  $service
-     * @param Docker $docker
+     * 运行服务.
      *
+     * @param array  $service
      * @param string $unique_id
+     *
+     * @param array  $config
+     * @param Docker $docker
      *
      * @throws Exception
      */
-    private function runService(array $service, string $unique_id, Docker $docker)
+    private function runService(array $service, string $unique_id, array $config, Docker $docker)
     {
         foreach ($service as $service_name => $array) {
-            foreach ($array as $k => $v) {
-                $image = $v['image'];
-                $env = $v['environment'] ?? null;
-                $entrypoint = $v['entrypoint'];
-                $command = $v['command'];
+            $image = $array['image'];
+            $env = $array['environment'] ?? null;
 
-                $docker_container = $docker->container;
+            $env_array = [];
 
-                $container_id = $docker_container
-                    ->setEnv($env)
-                    ->setEntrypoint($entrypoint)
-                    ->setHostConfig(null, $unique_id)
-                    ->create($image, null, $command);
-
-                $docker_container->start($container_id);
+            if ($env) {
+                foreach ($env as $k) {
+                    $array = explode('=', $k);
+                    $env_array[$array[0]] = $array[1];
+                }
             }
+
+            $entrypoint = $array['entrypoint'] ?? null;
+            $command = $array['command'] ?? null;
+
+            $image = $this->getImage($image, $config);
+
+            $docker_image = $docker->image;
+            $docker_container = $docker->container;
+
+            $tag = explode(':', $image)[1] ?? 'latest';
+
+            $docker_image->pull($image, $tag);
+
+            $container_id = $docker_container
+                ->setEnv($env_array)
+                ->setEntrypoint($entrypoint)
+                ->setHostConfig(null, $unique_id)
+                ->setLabels(['com.khs1994.ci' => $unique_id])
+                ->create($image, null, $command);
+
+            $docker_container->start($container_id);
         }
     }
 }

@@ -80,6 +80,8 @@ EOF;
             ]
         );
 
+        $array = [];
+
         foreach ($output as $k) {
             $merge_array = [
                 'commit_url' => $base_url.'/commit/'.$k['commit_id'],
@@ -109,10 +111,30 @@ EOF;
 
         $build_log = $redis->hget('build_log', $build_key_id);
 
-        $sql = 'SELECT build_status FROM builds WHERE id=?';
+        $sql = <<<'EOF'
+SELECT 
 
-        $output = DB::select($sql, [$build_key_id], true);
+build_status,
+commit_id,
+branch,
+committer_name,
+end_time
 
-        return ['status' => $output, 'data' => $build_log];
+FROM builds WHERE 
+
+id=? 
+EOF;
+        $output = DB::select($sql, [$build_key_id]);
+
+        $output = $output[0];
+
+        return [
+            'status' => $output['build_status'],
+            'commit_id' => $output['commit_id'],
+            'branch' => $output['branch'],
+            'committer_name' => $output['committer_name'],
+            'end_time' => $output['end_time'],
+            'data' => $build_log
+        ];
     }
 }

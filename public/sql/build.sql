@@ -25,5 +25,7 @@ CREATE TABLE `builds` (
   `config`             JSON,
   `build_log`          LONGTEXT,
   `action`             varchar(100),
+  `stages`             VARCHAR(100),
+  `matrix`             varchar(100),
   KEY (`id`)
 );

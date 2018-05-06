@@ -33,7 +33,7 @@ class GitHub
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
-        return $this->$type($content);
+        // return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {
@@ -90,9 +90,9 @@ EOF;
     {
         $obj = json_decode($content);
 
-        $ref = $obj->ref;
-
         $rid = $obj->repository->id;
+
+        $ref = $obj->ref;
 
         $ref_array = explode('/', $ref);
 
@@ -248,6 +248,11 @@ EOF;
     }
 
     /**
+     * Action
+     *
+     * "assigned", "unassigned", "review_requested", "review_request_removed",
+     * "labeled", "unlabeled",   "opened", "edited", "closed", or "reopened"
+     *
      * @param string $content
      *
      * @return string
@@ -268,7 +273,7 @@ EOF;
 
         $commit_message = $pull_request->title;
 
-        $commit_id = $pull_request->head->ref;
+        $commit_id = $pull_request->head->sha;
 
         $committer_username = $pull_request->user->login;
 
@@ -276,12 +281,6 @@ EOF;
 
         $branch = $pull_request->base->ref;
 
-        /**
-         * review_requested
-         * assigned
-         * labeled
-         * synchronize.
-         */
         $sql = <<<'EOF'
 INSERT builds(
 
@@ -311,6 +310,8 @@ EOF;
     {
         $obj = json_decode($content);
 
+        $rid = $obj->repository->id;
+
         $ref = $obj->ref;
 
         $branch = $this->ref2branch($obj->base_ref);
@@ -330,8 +331,6 @@ EOF;
         $committer_email = $committer->email;
 
         $event_time = Date::parse($head_commit->timestamp);
-
-        $rid = $obj->repository->id;
 
         $sql = <<<'EOF'
 INSERT builds(
