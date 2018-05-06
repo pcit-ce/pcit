@@ -32,6 +32,23 @@ class Queue
     private static $build_key_id;
 
     /**
+     * 构建标识符
+     *
+     * @var
+     */
+    private static $unique_id;
+
+    /**
+     * @var
+     */
+    private static $pull_id;
+
+    /**
+     * @var
+     */
+    private static $tag_name;
+
+    /**
      * @throws Exception
      */
     public function __invoke(): void
@@ -39,7 +56,7 @@ class Queue
         $sql = <<<'EOF'
 SELECT 
 
-id,git_type,rid,commit_id,commit_message,branch,event_type
+id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name
 
 FROM 
 
@@ -53,16 +70,19 @@ EOF;
             CI::BUILD_EVENT_PR
         ]);
 
+        self::$unique_id = session_create_id();
+
         foreach ($output as $k) {
             $build_key_id = $k['id'];
-            $git_type = $k['git_type'];
             $rid = $k['rid'];
             $commit_id = $k['commit_id'];
             $commit_message = $k['commit_message'];
             $branch = $k['branch'];
             $event_type = $k['event_type'];
 
-            self::$gitType = $git_type;
+            self::$pull_id = $k['pull_request_id'];
+            self::$tag_name = $k['tag_name'];
+            self::$gitType = $k['git_type'];
 
             self::$build_key_id = (int)$build_key_id;
 
@@ -74,6 +94,41 @@ EOF;
 
             self::run($rid, $commit_id, $branch, $event_type);
         }
+    }
+
+    /**
+     * 网页手动触发构建
+     *
+     * @param string $build_key_id
+     *
+     * @throws Exception
+     */
+    public function trigger(string $build_key_id)
+    {
+        $sql = <<<EOF
+SELECT
+
+git_type,rid,commit_id,branch,event_type,pull_request_id,tag_name
+
+FROM builds
+
+WHERE id=?
+EOF;
+        $output = DB::select($sql, [$build_key_id], true);
+
+        foreach ($output[0] as $k => $v) {
+
+            $rid = $k['rid'];
+            $commit_id = $k['commit_id'];
+            $branch = $k['branch'];
+            $event_type = $k['event_type'];
+
+            self::$gitType = $k['git_type'];
+            self::$pull_id = $k['pull_request_id'];
+            self::$tag_name = $k['tag_name'];
+        }
+
+        self::run($rid, $commit_id, $branch, $event_type);
     }
 
     /**
@@ -92,7 +147,7 @@ EOF;
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            throw new CIException(CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
+            throw new CIException(self::$unique_id, CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
         }
     }
 
@@ -112,7 +167,7 @@ EOF;
             return;
         }
 
-        throw new CIException(CI::BUILD_STATUS_SKIP, self::$build_key_id);
+        throw new CIException(self::$unique_id, CI::BUILD_STATUS_SKIP, self::$build_key_id);
     }
 
     /**
@@ -165,7 +220,7 @@ EOF;
     {
         $gitType = self::$gitType;
 
-        $unique_id = session_create_id();
+        $unique_id = self::$unique_id;
 
         Log::connect()->debug('Create Volume '.$unique_id);
         Log::connect()->debug('Create Network '.$unique_id);
@@ -220,8 +275,6 @@ EOF;
          */
         $workdir = $base_path.'/'.$path;
 
-        $git_url = Git::getUrl($gitType, $repo_full_name);
-
         $docker = Docker::docker(Docker::createOptionArray(Env::get('DOCKER_HOST')));
 
         $docker_container = $docker->container;
@@ -235,10 +288,19 @@ EOF;
 
         $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
 
+        /**
+         * 矩阵构建循环
+         */
         foreach ($matrix as $k => $config) {
 
-            // $this->runService($services, $unique_id, $config, $docker);
+            /**
+             * 启动服务
+             */
+            $this->runService($services, $unique_id, $config, $docker);
 
+            /**
+             * 构建步骤
+             */
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
 
             /**
@@ -301,11 +363,9 @@ EOF;
             Log::connect()->debug('Run Container '.$container_id);
 
             $this->docker_container_logs($docker_container, $container_id);
-
-            exit;
         }
 
-        throw new CIException(CI::BUILD_STATUS_PASSED, self::$build_key_id);
+        throw new CIException(self::$unique_id, CI::BUILD_STATUS_PASSED, self::$build_key_id);
     }
 
     /**
@@ -411,7 +471,7 @@ EOF;
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    throw new CIException(CI::BUILD_STATUS_ERRORED, self::$build_key_id);
+                    throw new CIException(self::$unique_id, CI::BUILD_STATUS_ERRORED, self::$build_key_id);
                 }
 
                 break;
@@ -438,6 +498,7 @@ EOF;
     private function getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch)
     {
         $git_url = Git::getUrl(self::$gitType, $repo_full_name);
+
         switch ($event_type) {
             case CI::BUILD_EVENT_PUSH:
                 $git_env = [
@@ -447,27 +508,28 @@ EOF;
                     'DRONE_COMMIT_SHA' => $commit_id,
                     'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
                 ];
-                break;
 
+                break;
             case CI::BUILD_EVENT_PR:
                 $git_env = [
-                    'DRONE_REMOTE_URL' => '',
-                    'DRONE_WORKSPACE' => '',
+                    'DRONE_REMOTE_URL' => $git_url,
+                    'DRONE_WORKSPACE' => $workdir,
                     'DRONE_BUILD_EVENT' => 'pull_request',
-                    'DRONE_COMMIT_SHA' => '',
-                    'DRONE_COMMIT_REF' => '',
+                    'DRONE_COMMIT_SHA' => $commit_id,
+                    'DRONE_COMMIT_REF' => 'refs/pull/'.self::$pull_id.'/head'
                 ];
-                break;
 
+                break;
             case  CI::BUILD_EVENT_TAG:
                 $git_env = [
-                    'DRONE_REMOTE_URL' => '',
-                    'DRONE_WORKSPACE' => '',
+                    'DRONE_REMOTE_URL' => $git_url,
+                    'DRONE_WORKSPACE' => $workdir,
                     'DRONE_BUILD_EVENT' => 'tag',
-                    'DRONE_COMMIT_SHA' => '',
-                    'DRONE_COMMIT_REF' => ''
+                    'DRONE_COMMIT_SHA' => $commit_id,
+                    'DRONE_COMMIT_REF' => 'refs/tags/'.self::$tag_name.'/head'
 
                 ];
+
                 break;
         }
 

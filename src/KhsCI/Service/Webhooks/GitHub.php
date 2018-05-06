@@ -273,7 +273,7 @@ EOF;
 
         $commit_message = $pull_request->title;
 
-        $commit_id = $pull_request->head->ref;
+        $commit_id = $pull_request->head->sha;
 
         $committer_username = $pull_request->user->login;
 
