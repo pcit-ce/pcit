@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI;
 
 use Exception;
@@ -26,7 +28,7 @@ class CIException extends Exception
     public function __construct(string $unique_id,
                                 string $commit_id,
                                 string $event_type,
-                                string $message = "",
+                                string $message = '',
                                 int $code = 0,
                                 Throwable $previous = null)
     {

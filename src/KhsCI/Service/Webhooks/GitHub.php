@@ -76,7 +76,7 @@ EOF;
     }
 
     /**
-     * push
+     * push.
      *
      * 1. 首次推送到新分支，head_commit 为空
      *
@@ -122,7 +122,6 @@ EOF;
         $committer_email = $committer->email;
 
         $committer_username = $committer->username;
-
 
         $sql = <<<'EOF'
 INSERT builds(
@@ -248,7 +247,7 @@ EOF;
     }
 
     /**
-     * Action
+     * Action.
      *
      * "assigned", "unassigned", "review_requested", "review_request_removed",
      * "labeled", "unlabeled",   "opened", "edited", "closed", or "reopened"
@@ -392,11 +391,10 @@ EOF;
 
     private function release(string $content): void
     {
-
     }
 
     /**
-     * Create "repository", "branch", or "tag"
+     * Create "repository", "branch", or "tag".
      *
      * @param string $content
      */
@@ -413,11 +411,12 @@ EOF;
     }
 
     /**
-     * Delete tag or branch
+     * Delete tag or branch.
      *
      * @param string $content
      *
      * @return int
+     *
      * @throws Exception
      */
     private function delete(string $content)
@@ -432,7 +431,6 @@ EOF;
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
 
             return DB::delete($sql, [static::$git_type, $obj->ref, $rid]);
-
         } else {
             return 0;
         }

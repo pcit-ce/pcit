@@ -61,7 +61,7 @@ EOF;
 
             foreach ($outputArray as $output) {
                 $build_status = $output['build_status'];
-                $build_id = (string)$output['id'];
+                $build_id = (string) $output['id'];
                 $commit_id = $output['commit_id'];
                 $commit_url = $base_url.'/commit/'.$commit_id;
                 $commit_id = substr($commit_id, 0, 7);
@@ -69,7 +69,7 @@ EOF;
                 $end_time = $output['end_time'];
 
                 $build_status_array[$branch]['k'."$build_id"] = [
-                    $build_status, $commit_id, $committer_name, $end_time, $commit_url
+                    $build_status, $commit_id, $committer_name, $end_time, $commit_url,
                 ];
             }
         }

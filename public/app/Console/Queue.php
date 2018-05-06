@@ -33,7 +33,6 @@ class Queue
             $queue = new QueueService();
             $queue();
         } catch (CIException $e) {
-
             self::$commit_id = $e->getCommitId();
             self::$unique_id = $e->getUniqueId();
             self::$event_type = $e->getEventType();
@@ -42,29 +41,24 @@ class Queue
             /**
              * $e->getCode() is build key id.
              */
-
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_SKIP:
                     self::setBuildStatusSkip();
 
                     break;
                 case CI::BUILD_STATUS_INACTIVE:
-
                     self::setBuildStatusInactive();
 
                     break;
                 case CI::BUILD_STATUS_FAILED:
-
                     self::setBuildStatusFailed();
 
                     break;
                 case CI::BUILD_STATUS_PASSED:
-
                     self::setBuildStatusPassed();
 
                     break;
                 default:
-
                     self::setBuildStatusErrored();
             }
 
@@ -157,12 +151,11 @@ class Queue
 
     /**
      * @param string $state
-     *
      * @param string $description
      *
      * @throws Exception
      */
-    private static function updateGitHubCommitStatus(string $state, string $description)
+    private static function updateGitHubCommitStatus(string $state, string $description): void
     {
         $status = new GitHub();
 
@@ -191,10 +184,9 @@ EOF;
     }
 
     /**
-     * Remove all Docker Resource
+     * Remove all Docker Resource.
      */
-    private function systemDelete()
+    private function systemDelete(): void
     {
-
     }
 }

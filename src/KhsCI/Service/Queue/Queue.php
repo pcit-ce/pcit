@@ -32,7 +32,7 @@ class Queue
     private static $build_key_id;
 
     /**
-     * 构建标识符
+     * 构建标识符.
      *
      * @var
      */
@@ -71,7 +71,7 @@ EOF;
             CI::BUILD_STATUS_PENDING,
             CI::BUILD_EVENT_PUSH,
             CI::BUILD_EVENT_TAG,
-            CI::BUILD_EVENT_PR
+            CI::BUILD_EVENT_PR,
         ]);
 
         self::$unique_id = session_create_id();
@@ -88,7 +88,7 @@ EOF;
             self::$tag_name = $k['tag_name'];
             self::$gitType = $k['git_type'];
 
-            self::$build_key_id = (int)$build_key_id;
+            self::$build_key_id = (int) $build_key_id;
 
             // commit 信息跳过构建
             self::skip($commit_message);
@@ -105,13 +105,13 @@ EOF;
     }
 
     /**
-     * 网页手动触发构建
+     * 网页手动触发构建.
      *
      * @param string $build_key_id
      *
      * @throws Exception
      */
-    public function trigger(string $build_key_id)
+    public function trigger(string $build_key_id): void
     {
         $sql = <<<EOF
 SELECT
@@ -170,7 +170,7 @@ EOF;
                 self::$commit_id,
                 self::$event_type,
                 CI::BUILD_STATUS_INACTIVE,
-                (int)$build_activate
+                (int) $build_activate
             );
         }
     }
@@ -196,7 +196,7 @@ EOF;
             self::$commit_id,
             self::$event_type,
             CI::BUILD_STATUS_SKIP,
-            (int)self::$build_key_id
+            (int) self::$build_key_id
         );
     }
 
@@ -257,7 +257,7 @@ EOF;
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
-        $yaml_obj = (object)yaml_parse(HTTP::get(Git::getRawUrl(
+        $yaml_obj = (object) yaml_parse(HTTP::get(Git::getRawUrl(
             $gitType, $repo_full_name, $commit_id, '.drone.yml'))
         );
 
@@ -268,7 +268,7 @@ EOF;
         DB::update($sql, [$yaml_to_json, self::$build_key_id]);
 
         /**
-         * 解析 .drone.yml
+         * 解析 .drone.yml.
          */
         $workspace = $yaml_obj->workspace;
 
@@ -285,7 +285,6 @@ EOF;
          *
          * 项目根目录
          */
-
         $base_path = $workspace['base'] ?? null;
 
         $path = $workspace['path'] ?? $repo_full_name;
@@ -312,22 +311,21 @@ EOF;
 
         $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
 
-        /**
+        /*
          * 矩阵构建循环
          */
         foreach ($matrix as $k => $config) {
-
-            /**
+            /*
              * 启动服务
              */
             $this->runService($services, $unique_id, $config, $docker);
 
-            /**
+            /*
              * 构建步骤
              */
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
 
-            /**
+            /*
              * 后续根据 throw 出的异常执行对应的操作
              */
         }
@@ -335,7 +333,6 @@ EOF;
 
     /**
      * @param array     $pipeline
-     *
      * @param array     $config
      * @param string    $work_dir
      * @param string    $unique_id
@@ -349,7 +346,7 @@ EOF;
                                  string $work_dir,
                                  string $unique_id,
                                  Container $docker_container,
-                                 Image $docker_image)
+                                 Image $docker_image): void
     {
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
@@ -358,7 +355,6 @@ EOF;
 
             if ($event) {
                 if (!in_array('push', $event, true)) {
-
                     Log::connect()->debug('Event '.$event.' not in '.implode(' | ', $event));
 
                     continue;
@@ -486,9 +482,9 @@ EOF;
                     $container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string)self::$build_key_id);
+                $prev_docker_log = $redis->hget('build_log', (string) self::$build_key_id);
 
-                $redis->hset('build_log', (string)self::$build_key_id, $prev_docker_log.$image_log);
+                $redis->hset('build_log', (string) self::$build_key_id, $prev_docker_log.$image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
@@ -530,7 +526,9 @@ EOF;
      * @param string $branch
      *
      * @return array
+     *
      * @throws Exception
+     *
      * @see https://github.com/drone-plugins/drone-git
      */
     private function getGitEnv(string $event_type,
@@ -560,7 +558,7 @@ EOF;
                     'DRONE_WORKSPACE' => $workdir,
                     'DRONE_BUILD_EVENT' => 'pull_request',
                     'DRONE_COMMIT_SHA' => $commit_id,
-                    'DRONE_COMMIT_REF' => 'refs/pull/'.self::$pull_id.'/head'
+                    'DRONE_COMMIT_REF' => 'refs/pull/'.self::$pull_id.'/head',
                 ];
 
                 break;
@@ -570,8 +568,7 @@ EOF;
                     'DRONE_WORKSPACE' => $workdir,
                     'DRONE_BUILD_EVENT' => 'tag',
                     'DRONE_COMMIT_SHA' => $commit_id,
-                    'DRONE_COMMIT_REF' => 'refs/tags/'.self::$tag_name.'/head'
-
+                    'DRONE_COMMIT_REF' => 'refs/tags/'.self::$tag_name.'/head',
                 ];
 
                 break;
@@ -581,7 +578,7 @@ EOF;
     }
 
     /**
-     * 运行 Git clone
+     * 运行 Git clone.
      *
      * @param string    $image
      * @param array     $env
@@ -591,7 +588,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function runGit(string $image, array $env, $work_dir, $unique_id, Container $docker_container)
+    private function runGit(string $image, array $env, $work_dir, $unique_id, Container $docker_container): void
     {
         $docker_container
             ->setEnv($env)
@@ -622,13 +619,12 @@ EOF;
      *
      * @param array  $service
      * @param string $unique_id
-     *
      * @param array  $config
      * @param Docker $docker
      *
      * @throws Exception
      */
-    private function runService(array $service, string $unique_id, array $config, Docker $docker)
+    private function runService(array $service, string $unique_id, array $config, Docker $docker): void
     {
         foreach ($service as $service_name => $array) {
             $image = $array['image'];

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Support;
 
 class ArrayHelper
 {
     /**
-     * 实现二维数组的组合
+     * 实现二维数组的组合.
      *
      * @param array $options
      *

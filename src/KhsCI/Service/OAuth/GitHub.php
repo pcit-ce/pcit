@@ -273,5 +273,4 @@ class GitHub implements OAuth
 
         return static::http('delete', $url, $accessToken);
     }
-
 }
