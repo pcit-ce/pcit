@@ -183,4 +183,45 @@ class Git
 
         return $url ?? $common_url;
     }
+
+    /**
+     * @param string $type
+     * @param string $repo_full_name
+     * @param string $commit_id branch_name commit_id
+     * @param string $file_name
+     *
+     * @return string
+     * @throws Exception
+     */
+    public static function getRawUrl(string $type,
+                                     string $repo_full_name,
+                                     string $commit_id,
+                                     string $file_name)
+    {
+        switch ($type) {
+            case 'aliyun':
+                $url = null;
+
+                break;
+            case 'coding':
+                $url = null;
+
+                break;
+            case 'gitee':
+                $url = null;
+
+                break;
+            case 'github':
+                $url = 'https://raw.githubusercontent.com/'.$repo_full_name.'/'.$commit_id.'/'.$file_name;
+
+                break;
+            default:
+                throw new Exception('Not Support', 500);
+        }
+
+        $common_url = self::getUrl($type, $repo_full_name).'/raw/'.$commit_id.'/'.$file_name;
+
+        return $url ?? $common_url;
+
+    }
 }

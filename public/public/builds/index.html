@@ -157,7 +157,7 @@
 
       case "pull_requests":
         if (0 === data.length) {
-          $("#display").append('Not Build Yet !');
+          $("#display").append('No pull request builds for this repository');
         } else {
           $.each(data, function (id, status) {
             let event_type = 'Pull_requests';
