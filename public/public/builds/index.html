@@ -43,6 +43,8 @@
 
   repo = array[5];
 
+  base_full_url = baseUrl + '/' + git_type + '/' + username + '/' + repo;
+
   build_id = 'khsci';
 
   type_from_url = array[6];
@@ -60,11 +62,12 @@
     switch (id) {
       case 'current':
         if (0 === data.length) {
-          $("#display").append("Not Build Yet");
+          $("#display").append("Not Build Yet !");
         } else {
           $("#display").append("<pre>" + data.data + "</pre>");
           //$("#current").trigger('click');
         }
+
         break;
 
       case 'builds':
@@ -72,9 +75,14 @@
 
         let array = url.split('/');
         if (8 === array.length) {
-          $("#display").append(data.status).append('<pre>' + data.data + '</pre>');
 
-        } else {
+          if (0 === data.length) {
+            $("#display").append('Oops, we couldn\'t find that build!');
+          } else {
+            $("#display").append(data.status).append('<pre>' + data.data + '</pre>');
+          }
+
+        } else if (0 !== data.length) {
           $.each(data, function (id, status) {
             let event_type = status.event_type;
             let build_id = status.id;
@@ -104,40 +112,84 @@
             )
 
           });
+        } else {
+          $("#display").append('Not Build Yet !');
         }
+
         break;
       case 'branches':
+        if (0 === data.length) {
+          $("#display").append('Not Build Yet !')
+        } else {
 
-        $.each(data, function (branch, status) {
+          $.each(data, function (branch, status) {
 
-          $("#display").append(branch);
+            $("#display").append(branch);
 
-          $.each(status, function (id, status) {
-            id = id.replace('k', '');
+            $.each(status, function (id, status) {
+              id = id.replace('k', '');
 
-            let nbsp = '&nbsp;&nbsp;';
+              let nbsp = '&nbsp;&nbsp;';
 
-            let a_content = "<a href='builds/" + id + "' target='_blank'>" +
-              id + nbsp +
-              status[0] + nbsp +
+              let a_content = "<a href='builds/" + id + "' target='_blank'>" +
+                id + nbsp +
+                status[0] + nbsp +
 
-              status[2] + nbsp +
+                status[2] + nbsp +
 
-              status[3] + nbsp +
+                status[3] + nbsp +
 
-              "</a>";
+                "</a>";
 
-            $("#display").append('<br><br>' + a_content + nbsp);
+              $("#display").append('<br><br>' + a_content + nbsp);
 
-            $("#display").append(
-              "<a href='" + status[4] + "' target='_black'>" + status[1] + "</a>");
+              $("#display").append(
+                "<a href='" + status[4] + "' target='_black'>" + status[1] + "</a>");
+
+            });
+
+            $("#display").append("<hr>");
+
 
           });
+        }
+        break;
 
-          $("#display").append("<hr>");
+      case "pull_requests":
+        if (0 === data.length) {
+          $("#display").append('Not Build Yet !');
+        } else {
+          $.each(data, function (id, status) {
+            let event_type = 'Pull_requests';
+            let build_id = status.id;
+            let branch = status.branch;
+            let compare_url = status.compare;
+            let committer_username = status.committer_username;
+            let commit_message = status.commit_message;
+            let commit_id = status.commit_id;
+            let commit_url = status.commit_url;
+            let build_status = status.build_status;
+            let create_time = status.create_time;
+            let end_time = status.end_time;
+            let nbsp = "&nbsp;&nbsp;&nbsp;";
 
-
-        });
+            $("#display").append(
+              "<tr>" +
+              "<td>" + "<a href='" + base_full_url + '/builds/' + build_id + "' target='_blank'>" + build_id +
+              "</a>" + nbsp + "</td>" +
+              "<td style='color: blue;'>" + nbsp + event_type + nbsp + "</td>" +
+              "<td>" + nbsp + branch + nbsp + "</td>" +
+              "<td>" + committer_username + nbsp + "</td>" +
+              "<td style='color: brown'>" + nbsp + commit_message + nbsp + "</td>" +
+              "<td>" + nbsp + "<a href='" + commit_url + "' target='_blank'>" + commit_id + "</a>" + nbsp + "</td>" +
+              "<td>" + nbsp + "<a href='" + compare_url + "' target='_blank'>" + commit_message + "</a>" + nbsp + "</td>" +
+              "<td>" + nbsp + build_status + nbsp + "</td>" +
+              "<td>" + nbsp + create_time + nbsp + "</td>" +
+              "<td>" + nbsp + end_time + nbsp + "</td>" +
+              +"</tr>"
+            )
+          });
+        }
         break;
     }
   }
