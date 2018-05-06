@@ -48,6 +48,10 @@ class Queue
      */
     private static $tag_name;
 
+    private static $commit_id;
+
+    private static $event_type;
+
     /**
      * @throws Exception
      */
@@ -75,11 +79,11 @@ EOF;
         foreach ($output as $k) {
             $build_key_id = $k['id'];
             $rid = $k['rid'];
-            $commit_id = $k['commit_id'];
             $commit_message = $k['commit_message'];
             $branch = $k['branch'];
-            $event_type = $k['event_type'];
 
+            self::$commit_id = $k['commit_id'];
+            self::$event_type = $k['event_type'];
             self::$pull_id = $k['pull_request_id'];
             self::$tag_name = $k['tag_name'];
             self::$gitType = $k['git_type'];
@@ -92,7 +96,7 @@ EOF;
             // 是否启用构建
             self::getRepoBuildActivateStatus($rid);
 
-            self::run($rid, $commit_id, $branch, $event_type);
+            self::run($rid, $branch);
 
             // 暂时，一个队列只构建一个任务
 
@@ -124,17 +128,22 @@ EOF;
             throw new Exception('Build Key Id Not Found', 404);
         }
 
+        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
+
+        DB::update($sql, [CI::BUILD_STATUS_PENDING, $build_key_id]);
+
         foreach ($output[0] as $k => $v) {
             $rid = $k['rid'];
-            $commit_id = $k['commit_id'];
             $branch = $k['branch'];
-            $event_type = $k['event_type'];
+
+            self::$commit_id = $k['commit_id'];
+            self::$event_type = $k['event_type'];
 
             self::$gitType = $k['git_type'];
             self::$pull_id = $k['pull_request_id'];
             self::$tag_name = $k['tag_name'];
 
-            self::run($rid, $commit_id, $branch, $event_type);
+            self::run($rid, $branch);
 
             break;
         }
@@ -156,7 +165,13 @@ EOF;
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            throw new CIException(self::$unique_id, CI::BUILD_STATUS_INACTIVE, (int)$build_activate);
+            throw new CIException(
+                self::$unique_id,
+                self::$commit_id,
+                self::$event_type,
+                CI::BUILD_STATUS_INACTIVE,
+                (int)$build_activate
+            );
         }
     }
 
@@ -176,7 +191,13 @@ EOF;
             return;
         }
 
-        throw new CIException(self::$unique_id, CI::BUILD_STATUS_SKIP, (int)self::$build_key_id);
+        throw new CIException(
+            self::$unique_id,
+            self::$commit_id,
+            self::$event_type,
+            CI::BUILD_STATUS_SKIP,
+            (int)self::$build_key_id
+        );
     }
 
     /**
@@ -218,17 +239,16 @@ EOF;
      * 执行构建.
      *
      * @param        $rid
-     * @param string $commit_id
      * @param string $branch
-     *
-     * @param string $event_type
      *
      * @throws Exception
      */
-    private function run($rid, string $commit_id, string $branch, string $event_type): void
+    private function run($rid, string $branch): void
     {
         $gitType = self::$gitType;
         $unique_id = self::$unique_id;
+        $commit_id = self::$commit_id;
+        $event_type = self::$event_type;
 
         Log::connect()->debug('Create Volume '.$unique_id);
         Log::connect()->debug('Create Network '.$unique_id);
@@ -371,7 +391,13 @@ EOF;
             $this->docker_container_logs($docker_container, $container_id);
         }
 
-        throw new CIException(self::$unique_id, CI::BUILD_STATUS_PASSED, self::$build_key_id);
+        throw new CIException(
+            self::$unique_id,
+            self::$commit_id,
+            self::$event_type,
+            CI::BUILD_STATUS_PASSED,
+            self::$build_key_id
+        );
     }
 
     /**
@@ -477,7 +503,13 @@ EOF;
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    throw new CIException(self::$unique_id, CI::BUILD_STATUS_ERRORED, self::$build_key_id);
+                    throw new CIException(
+                        self::$unique_id,
+                        self::$commit_id,
+                        self::$event_type,
+                        CI::BUILD_STATUS_ERRORED,
+                        self::$build_key_id
+                    );
                 }
 
                 break;
