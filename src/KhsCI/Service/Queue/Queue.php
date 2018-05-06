@@ -93,6 +93,10 @@ EOF;
             self::getRepoBuildActivateStatus($rid);
 
             self::run($rid, $commit_id, $branch, $event_type);
+
+            // 暂时，一个队列只构建一个任务
+
+            break;
         }
     }
 
@@ -117,7 +121,6 @@ EOF;
         $output = DB::select($sql, [$build_key_id], true);
 
         foreach ($output[0] as $k => $v) {
-
             $rid = $k['rid'];
             $commit_id = $k['commit_id'];
             $branch = $k['branch'];
@@ -126,9 +129,11 @@ EOF;
             self::$gitType = $k['git_type'];
             self::$pull_id = $k['pull_request_id'];
             self::$tag_name = $k['tag_name'];
-        }
 
-        self::run($rid, $commit_id, $branch, $event_type);
+            self::run($rid, $commit_id, $branch, $event_type);
+
+            break;
+        }
     }
 
     /**
@@ -167,7 +172,7 @@ EOF;
             return;
         }
 
-        throw new CIException(self::$unique_id, CI::BUILD_STATUS_SKIP, self::$build_key_id);
+        throw new CIException(self::$unique_id, CI::BUILD_STATUS_SKIP, (int)self::$build_key_id);
     }
 
     /**
@@ -219,7 +224,6 @@ EOF;
     private function run($rid, string $commit_id, string $branch, string $event_type): void
     {
         $gitType = self::$gitType;
-
         $unique_id = self::$unique_id;
 
         Log::connect()->debug('Create Volume '.$unique_id);
@@ -232,8 +236,6 @@ EOF;
         $base = $repo_full_name.'/'.$commit_id;
 
         $url = "https://raw.githubusercontent.com/$base/.drone.yml";
-
-        // $url = "https://ci2.khs1994.com:10000/.drone.yml";
 
         $yaml_obj = (object)yaml_parse(HTTP::get($url));
 
@@ -304,7 +306,7 @@ EOF;
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
 
             /**
-             * 停止所有容器
+             * 后续根据 throw 出的异常执行对应的操作
              */
         }
     }
@@ -325,8 +327,7 @@ EOF;
                                  string $work_dir,
                                  string $unique_id,
                                  Container $docker_container,
-                                 Image $docker_image
-    )
+                                 Image $docker_image)
     {
         foreach ($pipeline as $setup => $array) {
             $image = $array['image'];
@@ -335,6 +336,9 @@ EOF;
 
             if ($event) {
                 if (!in_array('push', $event, true)) {
+
+                    Log::connect()->debug('Event '.$event.' not in '.implode(' | ', $event));
+
                     continue;
                 }
             }
@@ -485,19 +489,25 @@ EOF;
     }
 
     /**
-     * @param $event_type
-     * @param $workdir
-     * @param $commit_id
-     * @param $branch
+     * @param string $event_type
+     * @param string $repo_full_name
+     * @param string $workdir
+     * @param string $commit_id
+     * @param string $branch
      *
      * @return array
      * @throws Exception
-     *
      * @see https://github.com/drone-plugins/drone-git
      */
-    private function getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch)
+    private function getGitEnv(string $event_type,
+                               string $repo_full_name,
+                               string $workdir,
+                               string $commit_id,
+                               string $branch)
     {
         $git_url = Git::getUrl(self::$gitType, $repo_full_name);
+
+        $git_env = null;
 
         switch ($event_type) {
             case CI::BUILD_EVENT_PUSH:
