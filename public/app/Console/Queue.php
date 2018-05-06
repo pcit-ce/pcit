@@ -22,6 +22,8 @@ class Queue
 
     private static $event_type;
 
+    private static $build_key_id;
+
     /**
      * @throws Exception
      */
@@ -35,6 +37,7 @@ class Queue
             self::$commit_id = $e->getCommitId();
             self::$unique_id = $e->getUniqueId();
             self::$event_type = $e->getEventType();
+            self::$build_key_id = $e->getCode();
 
             /**
              * $e->getCode() is build key id.
@@ -42,27 +45,27 @@ class Queue
 
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_SKIP:
-                    self::setBuildStatusSkip($e->getCode());
+                    self::setBuildStatusSkip();
 
                     break;
                 case CI::BUILD_STATUS_INACTIVE:
 
-                    self::setBuildStatusInactive($e->getCode());
+                    self::setBuildStatusInactive();
 
                     break;
                 case CI::BUILD_STATUS_FAILED:
 
-                    self::setBuildStatusFailed($e->getCode());
+                    self::setBuildStatusFailed();
 
                     break;
                 case CI::BUILD_STATUS_PASSED:
 
-                    self::setBuildStatusPassed($e->getCode());
+                    self::setBuildStatusPassed();
 
                     break;
                 default:
 
-                    self::setBuildStatusErrored($e->getCode());
+                    self::setBuildStatusErrored();
             }
 
             Log::connect()->debug($e->getCode().$e->getMessage());
@@ -74,53 +77,48 @@ class Queue
     }
 
     /**
-     * @param int $build_key_id
-     * @param int $lastId
-     *
      * @throws Exception
      */
-    private static function setBuildStatusInactive(int $build_key_id, int $lastId = 0): void
+    private static function setBuildStatusInactive(): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CI::BUILD_STATUS_INACTIVE, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_INACTIVE, self::$build_key_id]);
 
-        self::updateGitHubCommitStatus(
-            $build_key_id,
-            CI::GITHUB_STATUS_FAILURE,
-            'This Repo is Inactive',
-            'continuous-integration/khsci/'.CI::BUILD_EVENT_PUSH
-        );
+        self::updateGitHubCommitStatus(CI::GITHUB_STATUS_FAILURE, 'This Repo is Inactive');
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @throws Exception
      */
-    private static function setBuildStatusSkip(int $build_key_id): void
+    private static function setBuildStatusSkip(): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CI::BUILD_STATUS_SKIP, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_SKIP, self::$build_key_id]);
+
+        self::updateGitHubCommitStatus(CI::GITHUB_STATUS_SUCCESS, 'The build is skip');
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @throws Exception
      */
-    private static function setBuildStatusErrored(int $build_key_id): void
+    private static function setBuildStatusErrored(): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
         /*
          * 更新数据库状态
          */
-        DB::update($sql, [CI::BUILD_STATUS_ERRORED, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_ERRORED, self::$build_key_id]);
+
         /*
          * 通知 GitHub commit Status
          */
+        self::updateGitHubCommitStatus(
+            CI::GITHUB_STATUS_ERROR,
+            'The '.Env::get('CI_NAME').' build could not complete due to an error'
+        );
 
         /*
          * 微信通知
@@ -128,44 +126,43 @@ class Queue
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @throws Exception
      */
-    private static function setBuildStatusFailed(int $build_key_id): void
+    private static function setBuildStatusFailed(): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CI::BUILD_STATUS_FAILED, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_FAILED, self::$build_key_id]);
+
+        self::updateGitHubCommitStatus(
+            CI::GITHUB_STATUS_FAILURE,
+            'The '.Env::get('CI_NAME').' build is failed'
+        );
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @throws Exception
      */
-    private static function setBuildStatusPassed(int $build_key_id): void
+    private static function setBuildStatusPassed(): void
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        DB::update($sql, [CI::BUILD_STATUS_PASSED, $build_key_id]);
+        DB::update($sql, [CI::BUILD_STATUS_PASSED, self::$build_key_id]);
+
+        self::updateGitHubCommitStatus(
+            CI::GITHUB_STATUS_SUCCESS,
+            'The '.Env::get('CI_NAME').' build passed'
+        );
     }
 
     /**
-     * @param int    $build_key_id
-     *
      * @param string $state
      *
      * @param string $description
      *
-     * @param string $context
-     *
      * @throws Exception
      */
-    private static function updateGitHubCommitStatus(int $build_key_id,
-                                                     string $state,
-                                                     string $description,
-                                                     string $context)
+    private static function updateGitHubCommitStatus(string $state, string $description)
     {
         $status = new GitHub();
 
@@ -179,7 +176,7 @@ FROM repo WHERE
 
 rid=( SELECT rid FROM builds WHERE id=? )
 EOF;
-        $output = DB::select($sql, []);
+        $output = DB::select($sql, [self::$build_key_id]);
 
         $status->create(
             $username = $output[0]['username'],
@@ -187,9 +184,9 @@ EOF;
             self::$commit_id,
             $accessToken,
             $state,
-            $target_url = Env::get('CI_HOST').$username.'/'.$repo.'/builds/'.$build_key_id,
+            $target_url = Env::get('CI_HOST').$username.'/'.$repo.'/builds/'.self::$build_key_id,
             $description,
-            $context
+            'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type
         );
     }
 
