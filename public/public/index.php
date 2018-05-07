@@ -59,6 +59,12 @@ spl_autoload_register(function ($class): void {
     }
 });
 
+if ('/index.php' === $_SERVER['REQUEST_URI']) {
+    Response::redirect('dashboard');
+    exit;
+}
+
+
 /*
  *  Route.
  */
