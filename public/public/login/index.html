@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<title>KhsCI Login</title>
+  <title>KhsCI Login</title>
 </head>
 <body>
 <header>
@@ -19,15 +19,15 @@
 </div>
 <script>
   function github() {
-    document.location = 'https://ci2.khs1994.com:10000/oauth/github/login';
+    document.location = 'https://' + location.host + '/oauth/github/login';
   }
 
   function coding() {
-    document.location = 'https://ci2.khs1994.com:10000/oauth/coding/login';
+    document.location = 'https://' + location.host + '/oauth/coding/login';
   }
 
   function gitee() {
-    document.location = 'https://ci2.khs1994.com:10000/oauth/gitee/login';
+    document.location = 'https://' + location.host + '/oauth/gitee/login';
   }
 </script>
 </body>
