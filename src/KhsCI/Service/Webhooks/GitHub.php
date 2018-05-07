@@ -13,6 +13,11 @@ use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 
+/**
+ * Class GitHub
+ *
+ * @see https://developer.github.com/webhooks/#events
+ */
 class GitHub
 {
     private static $git_type = 'github';
@@ -161,7 +166,8 @@ EOF;
 
         return $status->create(
             'khs1994', $repo_full_name, $commit_id, $github_status, $target_url,
-            'The analysis or builds is pending', 'continuous-integration/khsci/push'
+            'The analysis or builds is pending',
+            'continuous-integration/'.Env::get('CI_NAME').'/'.__FUNCTION__
         );
     }
 
@@ -250,7 +256,7 @@ EOF;
      * Action.
      *
      * "assigned", "unassigned", "review_requested", "review_request_removed",
-     * "labeled", "unlabeled",   "opened", "edited", "closed", or "reopened"
+     * "labeled", "unlabeled", "opened", "synchronize", "edited", "closed", or "reopened"
      *
      * @param string $content
      *
@@ -446,5 +452,21 @@ EOF;
         $ref_array = explode('/', $ref);
 
         return $ref_array[2];
+    }
+
+    /**
+     * @param string $content
+     */
+    private function member(string $content)
+    {
+
+    }
+
+    /**
+     * @param string $content
+     */
+    private function team_add(string $content)
+    {
+
     }
 }

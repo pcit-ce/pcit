@@ -31,12 +31,14 @@ FROM builds WHERE event_type IN (?) AND rid=
 
 (SELECT rid FROM repo WHERE git_type=? AND repo_full_name=?)
 
+AND action IN (?,?)
+
 ORDER BY id DESC 
 
 EOF;
 
         $output = DB::select($sql, [
-                CI::BUILD_EVENT_PR, $gitType, $repo_full_name,
+                CI::BUILD_EVENT_PR, $gitType, $repo_full_name, 'synchronize', 'opened'
             ]
         );
 
@@ -46,7 +48,7 @@ EOF;
             $merge_array = [
                 'commit_url' => Git::getCommitUrl($gitType, $repo_full_name, $k['commit_id']),
                 'commit_id' => substr($k['commit_id'], 0, 7),
-                'compare' => Git::getPullRequestUrl($gitType, $repo_full_name, (int) $k['pull_request_id']),
+                'compare' => Git::getPullRequestUrl($gitType, $repo_full_name, (int)$k['pull_request_id']),
             ];
 
             $array[] = array_merge($k, $merge_array);

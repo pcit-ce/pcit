@@ -170,7 +170,8 @@ class Queue
         $sql = <<<EOF
 SELECT
 
-username,repo_name
+repo_admin
+
 FROM repo WHERE 
 
 rid=( SELECT rid FROM builds WHERE id=? )
