@@ -200,7 +200,7 @@ class Controller
 
         DB::update($sql, [$status, $gitType, $repoFullName]);
 
-        $redis->hSet($uid.'_repo', $repoFullName, $status);
+        $redis->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
     }
 
     /**

@@ -160,9 +160,9 @@ class GitHubController
         $array = static::getProject($accessToken);
 
         $redis = Cache::connect();
-        $redis->set($uid.'_uid', $uid);
-        $redis->set($uid.'_username', $username);
-        $redis->set($uid.'_email', $email);
+        $redis->set($git_type_lower.'_'.$uid.'_uid', $uid);
+        $redis->set($git_type_lower.'_'.$uid.'_username', $username);
+        $redis->set($git_type_lower.'_'.$uid.'_email', $email);
 
         /*
          * 用户相关.
@@ -205,12 +205,16 @@ class GitHubController
                     $webhooksStatus, $buildActivate, "[$insert_admin]", "[$insert_collaborators]", $default_branch, $time,
                 ]);
 
-                $redis->hSet(static::TYPE_LOWER.'_repo', $repo_full_name, $open_or_close);
+                $redis->hSet($git_type_lower.'_repo', $repo_full_name, $open_or_close);
 
                 if ($admin) {
-                    $redis->hSet($uid.'_repo_admin', $repo_full_name, $open_or_close);
+                    $redis->hSet(
+                        $git_type_lower.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
+                    );
                 } else {
-                    $redis->hSet($uid.'_collaborators', $repo_full_name, $open_or_close);
+                    $redis->hSet(
+                        $git_type_lower.'_'.$uid.'_collaborators', $repo_full_name, $open_or_close
+                    );
                 }
 
                 continue;
@@ -250,10 +254,14 @@ EOF;
 
             if ($admin) {
                 $this->updateRepoAdmin($repo_key_id, $uid);
-                $redis->hSet($uid.'_repo', $repo_full_name, $open_or_close);
+                $redis->hSet(
+                    $git_type_lower.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
+                );
             } else {
                 $this->updateRepoCollaborators($repo_key_id, $uid);
-                $redis->hSet($uid.'_repo_collaborators', $repo_full_name, $open_or_close);
+                $redis->hSet(
+                    $git_type_lower.'_'.$uid.'_repo_collaborators', $repo_full_name, $open_or_close
+                );
             }
         }
     }
@@ -330,7 +338,7 @@ EOF;
 
         $redis = Cache::connect();
 
-        if ($redis->get($uid.'_username')) {
+        if ($redis->get(static::TYPE_LOWER.'_'.$uid.'_username')) {
             // Redis 已存在数据
             $sync = false;
         }
@@ -342,7 +350,7 @@ EOF;
             $sync = true;
         }
 
-        $cacheArray = $redis->hGetAll($uid.'_repo');
+        $cacheArray = $redis->hGetAll(static::TYPE_LOWER.'_'.$uid.'_repo_admin');
 
         $array_active = [];
 
