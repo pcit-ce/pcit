@@ -45,6 +45,7 @@ class Migrate extends Command
 
         if ($input->getOption('all')) {
             foreach ($this->getSqlList() as $file) {
+                echo "Migrate $file ...\n\n";
                 DB::statement(file_get_contents(__DIR__.'/../sql/'.$file));
 
                 return;
