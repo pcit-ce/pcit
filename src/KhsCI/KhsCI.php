@@ -18,11 +18,14 @@ use Pimple\Container;
  *
  * $a = $container['a'];
  *
- * @property Service\OAuth\Coding               $OAuthCoding
- * @property Service\OAuth\GitHub               $OAuthGitHub
- * @property Service\OAuth\Gitee                $OAuthGitee
+ * @property Service\OAuth\Coding               $oauth_coding
+ * @property Service\OAuth\GitHub               $oauth_github
+ * @property Service\OAuth\Gitee                $oauth_gitee
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status
+ * @property Service\Webhooks\Coding            $webhooks_coding
+ * @property Service\Webhooks\Gitee             $webhooks_gitee
+ * @property Service\Webhooks\GitHub            $webhooks_github
  */
 class KhsCI extends Container
 {

@@ -6,7 +6,10 @@ namespace KhsCI\Service\Webhooks;
 
 class Gitee extends GitHub
 {
-    public function __invoke(): void
+    private static $git_type = 'gitee';
+
+    public function __construct(string $access_token = null)
     {
+        parent::__construct($access_token);
     }
 }

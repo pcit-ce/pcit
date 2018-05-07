@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Profile;
 
 use Error;
 use Exception;
+use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\DB;
 use KhsCI\Support\Session;
@@ -65,11 +66,15 @@ class GitHubController
     {
         $array = [];
 
-        $objClass = 'KhsCI\\Service\\OAuth\\'.ucfirst(static::TYPE);
+        $khsci = new KhsCI();
+
+        $property = 'oauth_'.static::TYPE_LOWER;
+
+        $oauth = $khsci->$property;
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $objClass::getProjects((string)$accessToken, $page);
+                $json = $oauth::getProjects((string)$accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }

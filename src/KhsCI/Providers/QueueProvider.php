@@ -11,7 +11,7 @@ class QueueProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
-        $pimple['Queue'] = function ($app): void {
+        $pimple['queue'] = function ($app): void {
         };
     }
 }

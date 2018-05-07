@@ -12,16 +12,18 @@ class OAuthCodingController
 {
     use OAuthTrait;
 
-    private $ci;
+    private $oauth;
 
     public function __construct()
     {
-        $this->ci = new KhsCI();
+        $khsci = new KhsCI();
+
+        $this->oauth = $khsci->oauth_coding;
     }
 
     public function getLoginUrl(): void
     {
-        $url = $this->ci->OAuthCoding->getLoginUrl(null);
+        $url = $this->oauth->getLoginUrl(null);
 
         Response::redirect($url);
     }
