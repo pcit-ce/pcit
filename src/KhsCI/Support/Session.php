@@ -29,8 +29,6 @@ class Session
 
     /**
      * @param string $name
-     *
-     * @return null
      */
     public static function get(string $name)
     {
@@ -52,7 +50,7 @@ class Session
         $output = $_SESSION[$name] ?? false;
         session_write_close();
 
-        return !($output === false);
+        return !(false === $output);
     }
 
     /**
@@ -68,7 +66,7 @@ class Session
     }
 
     /**
-     * 清空 Session
+     * 清空 Session.
      */
     public static function flush(): void
     {
@@ -78,7 +76,7 @@ class Session
     }
 
     /**
-     * 取出之后删除原数据
+     * 取出之后删除原数据.
      *
      * @param string $name
      *
@@ -91,6 +89,7 @@ class Session
         if ($output) {
             $output = self::get($name);
             self::forget($name);
+
             return $output;
         }
 

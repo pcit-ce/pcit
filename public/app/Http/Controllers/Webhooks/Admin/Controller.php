@@ -146,7 +146,7 @@ class Controller
             if (422 === $e->getCode()) {
                 DB::update($sql, [1, $gitType, "$arg[1]/$arg[2]"]);
 
-                return ['code' => 200, 'message' => 'Success, But hook already exists on this repository'];
+                return ['code' => 200, 'message' => $e->getMessage()];
             } else {
                 return [
                     'code' => $e->getCode(),

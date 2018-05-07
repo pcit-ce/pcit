@@ -19,7 +19,6 @@ class Git
     /**
      * @param string $type
      * @param string $repo_full_name
-     *
      * @param bool   $ssh
      *
      * @return string
@@ -43,7 +42,7 @@ class Git
                 $url = 'https://coding.net/u/'.$username.'/p/'.$repo.'/git';
 
                 if ($ssh) {
-                    $url = "git@git.coding.net:".$repo_full_name;
+                    $url = 'git@git.coding.net:'.$repo_full_name;
                 }
 
                 break;
@@ -76,6 +75,7 @@ class Git
      * @param int    $pull_id
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function getPullRequestUrl(string $type, string $repo_full_name, int $pull_id)
@@ -110,6 +110,7 @@ class Git
      * @param string $issue_id
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function getIssueUrl(string $type, string $repo_full_name, string $issue_id)
@@ -150,6 +151,7 @@ class Git
      * @param string $commit_id
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function getCommitUrl(string $type, string $repo_full_name, string $commit_id)
@@ -176,7 +178,6 @@ class Git
 
             default:
                 throw new Exception('Not Support', 500);
-
         }
 
         $common_url = $base_url.'/commit/'.$commit_id;
@@ -187,10 +188,11 @@ class Git
     /**
      * @param string $type
      * @param string $repo_full_name
-     * @param string $commit_id branch_name commit_id
+     * @param string $commit_id      branch_name commit_id
      * @param string $file_name
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function getRawUrl(string $type,
@@ -222,6 +224,5 @@ class Git
         $common_url = self::getUrl($type, $repo_full_name).'/raw/'.$commit_id.'/'.$file_name;
 
         return $url ?? $common_url;
-
     }
 }

@@ -6,6 +6,7 @@ namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
+use KhsCI\Support\Log;
 
 class Coding implements OAuth
 {
@@ -77,6 +78,7 @@ class Coding implements OAuth
      * @param bool        $raw
      *
      * @return mixed
+     * @throws Exception
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false)
     {
@@ -88,6 +90,8 @@ class Coding implements OAuth
                 ]
             )
         );
+
+        Log::connect()->debug('Coding AccessToken Raw '.$json);
 
         if (true === $raw) {
             return $json;

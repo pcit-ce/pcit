@@ -6,6 +6,7 @@ namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
+use KhsCI\Support\Log;
 
 class GitHub implements OAuth
 {
@@ -103,6 +104,8 @@ class GitHub implements OAuth
         true !== $json && $this->curl->setHeader('Accept', 'application/xml');
 
         $accessToken = $this->curl->post($url);
+
+        Log::connect()->debug('GitHub AccessToken Raw '.$accessToken);
 
         // {"access_token":"47bb","token_type":"bearer","scope":"admin:gpg_key,admin:org"}
 
@@ -238,8 +241,8 @@ class GitHub implements OAuth
     }
 
     /**
-     * @param string $accessToken
-     * @param $data
+     * @param string      $accessToken
+     * @param             $data
      * @param string      $username
      * @param string      $repo
      * @param null|string $id
@@ -257,6 +260,10 @@ class GitHub implements OAuth
         $obj = json_decode($json);
 
         if ($obj->message ?? false) {
+            if ('Not Found' === $obj->message){
+                throw new Exception('Not Found, maybe you are Collaborators !',404);
+            }
+
             throw new Exception('Hook already exists on this repository', 422);
         }
 
@@ -273,5 +280,4 @@ class GitHub implements OAuth
 
         return static::http('delete', $url, $accessToken);
     }
-
 }

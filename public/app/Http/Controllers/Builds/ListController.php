@@ -83,7 +83,7 @@ EOF;
         foreach ($output as $k) {
             $merge_array = [
                 'commit_url' => Git::getCommitUrl($gitType, $repo_full_name, $k['commit_id']),
-                'commit_id' => substr($k['commit_id'], 0, 7)
+                'commit_id' => substr($k['commit_id'], 0, 7),
             ];
 
             $array[] = array_merge($k, $merge_array);
@@ -136,7 +136,7 @@ EOF;
             'branch' => $output['branch'],
             'committer_name' => $output['committer_name'],
             'end_time' => $output['end_time'],
-            'data' => $build_log
+            'data' => $build_log,
         ];
     }
 }
