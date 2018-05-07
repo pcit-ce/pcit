@@ -255,7 +255,7 @@ EOF;
      * Action.
      *
      * "assigned", "unassigned", "review_requested", "review_request_removed",
-     * "labeled", "unlabeled",   "opened", "edited", "closed", or "reopened"
+     * "labeled", "unlabeled", "opened", "synchronize", "edited", "closed", or "reopened"
      *
      * @param string $content
      *

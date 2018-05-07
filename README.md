@@ -49,7 +49,7 @@ require __DIR__.'/vendor/autoload.php';
 
 * [Kubernetes PHP]()
 
-* [Wechat PHP](https://github.com/khs1994-php/wechat)
+* [Wechat PHP](https://github.com/khs1994-php/libwechat)
 
 * [QQ PHP]()
 
