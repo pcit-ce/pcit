@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
+use KhsCI\Support\Log;
 
 class Gitee extends GitHub implements OAuth
 {
@@ -54,6 +55,8 @@ class Gitee extends GitHub implements OAuth
             ]);
 
         $json = $this->curl->post($url);
+
+        Log::connect()->debug('Gitee AccessToken Raw '.$json);
 
         // {"access_token":"52b","token_type":"bearer","expires_in":86400,"refresh_token":"c31e9","scope":"user_info projects pull_requests issues notes keys hook groups gists","created_at":1523757514}
 

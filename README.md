@@ -41,6 +41,28 @@ require __DIR__.'/vendor/autoload.php';
 
 ```
 
+## 子项目
+
+* [Docker PHP](https://github.com/khs1994-docker/libdocker)
+
+* [Docker Registry PHP](https://github.com/khs1994-docker/libregistry)
+
+* [Kubernetes PHP]()
+
+* [GitHub CLI]()
+
+* [Gitee CLI]()
+
+* [Coding CLI]()
+
+* [Aliyun CLI]()
+
+* [Tgit CLI]()
+
+* [GitLab CLI]()
+
+* [Gogs CLI]()
+
 ## CI/CD
 
 * [Drone](https://www.khs1994.com/categories/CI/Drone/)

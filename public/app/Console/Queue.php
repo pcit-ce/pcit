@@ -79,7 +79,10 @@ class Queue
 
         DB::update($sql, [CI::BUILD_STATUS_INACTIVE, self::$build_key_id]);
 
-        self::updateGitHubCommitStatus(CI::GITHUB_STATUS_FAILURE, 'This Repo is Inactive');
+        self::updateGitHubCommitStatus(
+            CI::GITHUB_STATUS_FAILURE,
+            'This Repo is Inactive'
+        );
     }
 
     /**
@@ -91,7 +94,10 @@ class Queue
 
         DB::update($sql, [CI::BUILD_STATUS_SKIP, self::$build_key_id]);
 
-        self::updateGitHubCommitStatus(CI::GITHUB_STATUS_SUCCESS, 'The build is skip');
+        self::updateGitHubCommitStatus(
+            CI::GITHUB_STATUS_SUCCESS,
+            'The '.Env::get('CI_NAME').' build is skip'
+        );
     }
 
     /**
