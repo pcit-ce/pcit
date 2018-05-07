@@ -167,7 +167,7 @@ EOF;
         return $status->create(
             'khs1994', $repo_full_name, $commit_id, $github_status, $target_url,
             'The analysis or builds is pending',
-            'continuous-integration/'.Env::get('CI_NAME').'/push'
+            'continuous-integration/'.Env::get('CI_NAME').'/'.__FUNCTION__
         );
     }
 
