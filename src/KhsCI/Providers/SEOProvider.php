@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
-use Curl\Curl;
-use KhsCI\Service\SEO\Baidu;
+use Baidu\Baidu;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -13,8 +12,8 @@ class SEOProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
-        $pimple['SEOBaidu'] = function ($app) {
-            return new Baidu($app['baidu'], new Curl());
+        $pimple['seo_baidu'] = function ($app) {
+            return new Baidu($app['baidu']);
         };
     }
 }

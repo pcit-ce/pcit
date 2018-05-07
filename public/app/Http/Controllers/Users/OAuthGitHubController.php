@@ -11,13 +11,15 @@ use KhsCI\Support\Session;
 
 class OAuthGitHubController
 {
-    private $ci;
+    private $oauth;
 
     use OAuthTrait;
 
     public function __construct()
     {
-        $this->ci = new KhsCI();
+        $khsci = new KhsCI();
+
+        $this->oauth = $khsci->oauth_github;
     }
 
     public function getLoginUrl(): void
@@ -26,7 +28,7 @@ class OAuthGitHubController
 
         Session::put('github.state', $state);
 
-        $url = $this->ci->OAuthGitHub->getLoginUrl($state);
+        $url = $this->oauth->getLoginUrl($state);
 
         Response::redirect($url);
     }

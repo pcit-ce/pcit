@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Webhooks;
 
-use App\Http\Controllers\Status\GitHubController;
 use Error;
 use Exception;
+use KhsCI\KhsCI;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
 use KhsCI\Support\DB;
@@ -21,6 +21,13 @@ use KhsCI\Support\Request;
 class GitHub
 {
     private static $git_type = 'github';
+
+    private static $access_token;
+
+    public function __construct(string $access_token = null)
+    {
+        self::$access_token = $access_token;
+    }
 
     /**
      * @throws Exception
@@ -162,7 +169,9 @@ EOF;
 
         // Wechat::push(Env::get('WECHAT_TEMPLATE_ID'), ENV::get('WECHAT_USER_OPENID'), $curl, $data);
 
-        $status = new GitHubController();
+        $khsci = new KhsCI(['github_access_token' => static::$access_token]);
+
+        $status = $khsci->repo_status;
 
         return $status->create(
             'khs1994', $repo_full_name, $commit_id, $github_status, $target_url,

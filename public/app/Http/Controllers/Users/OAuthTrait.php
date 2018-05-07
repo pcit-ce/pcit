@@ -25,19 +25,16 @@ trait OAuthTrait
             throw new Exception('code not found');
         }
 
-        $obj = 'KhsCI\\Service\\OAuth\\'.ucfirst($type);
-
         try {
-            $method = 'OAuth'.ucfirst($type);
 
-            $access_token = $this->ci->$method->getAccessToken((string) $code, $state)
+            $access_token = $this->oauth->getAccessToken((string)$code, $state)
                 ?? false;
 
             $typeLower = strtolower($type);
 
             false !== $access_token && Session::put($typeLower.'.access_token', $access_token);
 
-            $userInfoArray = $obj::getUserInfo((string) $access_token);
+            $userInfoArray = $this->oauth::getUserInfo((string)$access_token);
         } catch (Error $e) {
             throw new Exception($e->getMessage(), 500);
         }

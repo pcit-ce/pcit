@@ -12,16 +12,18 @@ class OAuthGiteeController
 {
     use OAuthTrait;
 
-    private $ci;
+    private $oauth;
 
     public function __construct()
     {
-        $this->ci = new KhsCI();
+        $khsci = new KhsCI();
+
+        $this->oauth = $khsci->oauth_gitee;
     }
 
     public function getLoginUrl(): void
     {
-        $url = $this->ci->OAuthGitee->getLoginUrl(null);
+        $url = $this->oauth->getLoginUrl(null);
 
         Response::redirect($url);
     }

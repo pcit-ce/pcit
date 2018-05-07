@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks;
 
 use Exception;
-use KhsCI\Service\Webhooks\GitHub;
+use KhsCI\KhsCI;
 
 class GitHubController
 {
@@ -16,8 +16,12 @@ class GitHubController
      */
     public function __invoke()
     {
-        $github = new GitHub();
+        $access_token = '';
 
-        return $github();
+        $khsci = new KhsCI(['github_access_token' => $access_token]);
+
+        $webhooks = $khsci->webhooks_github;
+
+        return $webhooks();
     }
 }

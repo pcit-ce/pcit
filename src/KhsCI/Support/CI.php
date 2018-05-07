@@ -40,7 +40,7 @@ class CI
 
     const GITHUB_STATUS_SUCCESS = 'success';
 
-    public static function env()
+    public static function environment()
     {
         return getenv('APP_ENV');
     }

@@ -7,8 +7,8 @@ namespace App\Console;
 use Error;
 use Exception;
 use KhsCI\CIException;
+use KhsCI\KhsCI;
 use KhsCI\Service\Queue\Queue as QueueService;
-use KhsCI\Service\Status\GitHub;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
@@ -163,14 +163,10 @@ class Queue
      */
     private static function updateGitHubCommitStatus(string $state, string $description): void
     {
-        $status = new GitHub();
-
-        $accessToken = '';
-
         $sql = <<<EOF
 SELECT
 
-repo_admin
+repo_prefix,repo_name,repo_admin
 
 FROM repo WHERE 
 
@@ -178,16 +174,38 @@ rid=( SELECT rid FROM builds WHERE id=? )
 EOF;
         $output = DB::select($sql, [self::$build_key_id]);
 
-        $status->create(
-            $username = $output[0]['username'],
-            $repo = $output[0]['repo_name'],
+        $repo_username = $output[0]['repo_prefix'];
+
+        $repo_name = $repo = $output[0]['repo_name'];
+
+        $sql = 'SELECT repo_admin FROM repo WHERE repo_full_name=? AND git_type=?';
+
+        $admin = DB::select($sql, [$repo_username.'/'.$repo_name, 'github'], true);
+
+        foreach (json_decode($admin) as $k) {
+            $sql = 'SELECT access_token FROM user WHERE uid=? AND git_type=?';
+
+            $output = DB::select($sql, [$k, 'github'], true);
+
+            if ($output) {
+                $accessToken = $output;
+                break;
+            }
+        }
+
+        $khsci = new KhsCI(['github_access_token' => $accessToken]);
+
+        $output = $khsci->repo_status->create(
+            $repo_username,
+            $repo_name,
             self::$commit_id,
-            $accessToken,
             $state,
-            $target_url = Env::get('CI_HOST').$username.'/'.$repo.'/builds/'.self::$build_key_id,
+            $target_url = Env::get('CI_HOST').'/github/'.$repo_username.'/'.$repo_name.'/builds/'.self::$build_key_id,
             $description,
             'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type
         );
+
+        var_dump($output);
     }
 
     /**

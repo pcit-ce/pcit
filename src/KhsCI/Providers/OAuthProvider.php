@@ -17,15 +17,15 @@ class OAuthProvider implements ServiceProviderInterface
     {
         $curl = new Curl();
 
-        $pimple['OAuthCoding'] = function ($app) use ($curl) {
+        $pimple['oauth_coding'] = function ($app) use ($curl) {
             return new Coding($app['config']['coding'], $curl);
         };
 
-        $pimple['OAuthGitee'] = function ($app) use ($curl) {
+        $pimple['oauth_gitee'] = function ($app) use ($curl) {
             return new Gitee($app['config']['gitee'], $curl);
         };
 
-        $pimple['OAuthGitHub'] = function ($app) use ($curl) {
+        $pimple['oauth_github'] = function ($app) use ($curl) {
             return new GitHub($app['config']['github'], $curl);
         };
     }

@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\Status;
+namespace KhsCI\Service\Repositories;
 
-use KhsCI\Support\HTTP;
+use Curl\Curl;
+use Exception;
 
 /**
  * The status API allows external services to mark commits with an
@@ -12,9 +13,21 @@ use KhsCI\Support\HTTP;
  *
  * @see https://developer.github.com/v3/repos/statuses/
  */
-class GitHub
+class Status
 {
     const API_URL = 'https://api.github.com';
+
+    private static $curl;
+
+    /**
+     * Status constructor.
+     *
+     * @param Curl $curl
+     */
+    public function __construct(Curl $curl)
+    {
+        self::$curl = $curl;
+    }
 
     /**
      * @param string $username
@@ -22,6 +35,7 @@ class GitHub
      * @param string $ref
      *
      * @return mixed
+     * @throws \Exception
      */
     public function list(string $username, string $repo, string $ref)
     {
@@ -29,25 +43,24 @@ class GitHub
 
         $url = implode('/', $url);
 
-        return HTTP::get($url);
+        return self::$curl->get($url);
     }
 
     /**
      * @param string $username
      * @param string $repo
      * @param string $commit_sha
-     * @param string $accessToken
      * @param string $state
      * @param string $target_url
      * @param string $description
      * @param string $context
      *
      * @return mixed
+     * @throws Exception
      */
     public function create(string $username,
                            string $repo,
                            string $commit_sha,
-                           string $accessToken,
                            string $state = 'pending',
                            string $target_url = 'https://ci.khs1994.com',
                            string $description = 'The analysis or builds is pending',
@@ -64,7 +77,7 @@ class GitHub
             'context' => $context,
         ]);
 
-        return HTTP::post($url, $data, ['Authorization' => 'token '.$accessToken]);
+        return self::$curl->post($url, $data);
     }
 
     /**
@@ -75,6 +88,7 @@ class GitHub
      * @param $ref
      *
      * @return mixed
+     * @throws Exception
      */
     public function listCombinedStatus($username, $repo, $ref)
     {
@@ -82,6 +96,6 @@ class GitHub
 
         $url = implode('/', $url);
 
-        return json_decode(HTTP::get($url), true);
+        return json_decode(self::$curl->get($url), true);
     }
 }

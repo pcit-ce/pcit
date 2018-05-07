@@ -6,4 +6,12 @@ namespace KhsCI\Service\Webhooks;
 
 class Coding
 {
+    public function __construct()
+    {
+    }
+
+    public function __invoke()
+    {
+
+    }
 }

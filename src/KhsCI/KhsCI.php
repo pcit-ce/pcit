@@ -18,10 +18,14 @@ use Pimple\Container;
  *
  * $a = $container['a'];
  *
- * @property \KhsCI\Service\OAuth\Coding        $OAuthCoding
- * @property \KhsCI\Service\OAuth\GitHub        $OAuthGitHub
- * @property \KhsCI\Service\OAuth\Gitee         $OAuthGitee
+ * @property Service\OAuth\Coding               $oauth_coding
+ * @property Service\OAuth\GitHub               $oauth_github
+ * @property Service\OAuth\Gitee                $oauth_gitee
  * @property Service\Repositories\Collaborators $repo_collaborators
+ * @property Service\Repositories\Status        $repo_status
+ * @property Service\Webhooks\Coding            $webhooks_coding
+ * @property Service\Webhooks\Gitee             $webhooks_gitee
+ * @property Service\Webhooks\GitHub            $webhooks_github
  */
 class KhsCI extends Container
 {
@@ -30,6 +34,7 @@ class KhsCI extends Container
      */
     protected $providers = [
         Providers\OAuthProvider::class,
+        Providers\RepositoriesProvider::class,
     ];
 
     /**
@@ -56,20 +61,22 @@ class KhsCI extends Container
         /*
          * 在容器中注入类
          */
-        $this['config'] = Config::config();
+        $this['config'] = Config::config($config);
 
-        if ($config['github_access_token'] ?? false) {
+        $this['curl'] = new Curl();
 
+        if ($this['config']['github']['access_token'] ?? false) {
+            echo 1;
             $this['curl'] = new Curl(
                 null,
                 false,
-                ['Authorization' => 'token '.$config['github_access_token']]
+                ['Authorization' => 'token '.$this['config']['github']['access_token']]
             );
-
-            set_time_limit(0);
-
-            $this['curl']->setTimeout(100);
         }
+
+        set_time_limit(0);
+
+        $this['curl']->setTimeout(100);
 
         /*
          * 注册服务提供器

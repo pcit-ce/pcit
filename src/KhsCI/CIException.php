@@ -33,7 +33,11 @@ class CIException extends Exception
                                 Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
+
         $this->unique_id = $unique_id;
+        $this->commit_id = $commit_id;
+        $this->event_type = $event_type;
+        $this->message = $message;
     }
 
     /**

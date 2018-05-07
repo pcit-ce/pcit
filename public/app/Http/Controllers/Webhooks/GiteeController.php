@@ -4,10 +4,20 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Webhooks;
 
+use Exception;
+use KhsCI\KhsCI;
+
 class GiteeController
 {
-    public function __invoke(): void
+    /**
+     * @throws Exception
+     */
+    public function __invoke()
     {
-        file_put_contents('C:/1', file_get_contents('php://input'));
+        $khsci = new KhsCI();
+
+        $webhooks = $khsci->webhooks_gitee;
+
+        return $webhooks();
     }
 }
