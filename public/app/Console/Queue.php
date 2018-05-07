@@ -8,7 +8,6 @@ use Error;
 use Exception;
 use KhsCI\CIException;
 use KhsCI\KhsCI;
-use KhsCI\Service\Queue\Queue as QueueService;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
@@ -30,7 +29,9 @@ class Queue
     public static function queue(): void
     {
         try {
-            $queue = new QueueService();
+            $khsci = new KhsCI();
+
+            $queue = $khsci->queue;
             $queue();
         } catch (CIException $e) {
             self::$commit_id = $e->getCommitId();
@@ -64,9 +65,7 @@ class Queue
 
             Log::connect()->debug($e->getCode().$e->getMessage());
         } catch (Exception | Error $e) {
-            echo $e->getMessage();
-            echo $e->getFile();
-            echo $e->getLine();
+            throw new Exception($e->getMessage());
         }
     }
 
