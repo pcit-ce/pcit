@@ -13,6 +13,11 @@ use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 
+/**
+ * Class GitHub
+ *
+ * @see https://developer.github.com/webhooks/#events
+ */
 class GitHub
 {
     private static $git_type = 'github';
@@ -446,5 +451,21 @@ EOF;
         $ref_array = explode('/', $ref);
 
         return $ref_array[2];
+    }
+
+    /**
+     * @param string $content
+     */
+    private function member(string $content)
+    {
+
+    }
+
+    /**
+     * @param string $content
+     */
+    private function team_add(string $content)
+    {
+
     }
 }
