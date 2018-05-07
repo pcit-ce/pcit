@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI;
 
+use Curl\Curl;
 use Exception;
 use KhsCI\Support\Config;
 use Pimple\Container;
@@ -17,9 +18,10 @@ use Pimple\Container;
  *
  * $a = $container['a'];
  *
- * @property \KhsCI\Service\OAuth\Coding $OAuthCoding
- * @property \KhsCI\Service\OAuth\GitHub $OAuthGitHub
- * @property \KhsCI\Service\OAuth\Gitee  $OAuthGitee
+ * @property \KhsCI\Service\OAuth\Coding        $OAuthCoding
+ * @property \KhsCI\Service\OAuth\GitHub        $OAuthGitHub
+ * @property \KhsCI\Service\OAuth\Gitee         $OAuthGitee
+ * @property Service\Repositories\Collaborators $repo_collaborators
  */
 class KhsCI extends Container
 {
@@ -55,6 +57,19 @@ class KhsCI extends Container
          * 在容器中注入类
          */
         $this['config'] = Config::config();
+
+        if ($config['github_access_token'] ?? false) {
+
+            $this['curl'] = new Curl(
+                null,
+                false,
+                ['Authorization' => 'token '.$config['github_access_token']]
+            );
+
+            set_time_limit(0);
+
+            $this['curl']->setTimeout(100);
+        }
 
         /*
          * 注册服务提供器
