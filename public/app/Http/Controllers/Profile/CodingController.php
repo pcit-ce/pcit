@@ -22,7 +22,7 @@ class CodingController
         $pic = Session::get('coding.pic');
         $access_token = Session::get('coding.access_token');
 
-        $json = json_decode(Coding::getProjects((string) $access_token))->data ?? false;
+        $json = json_decode(Coding::getProjects((string)$access_token))->data ?? false;
         $num = $json->totalRow ?? false;
         $array = [];
         for ($i = 0; $i < $num; ++$i) {

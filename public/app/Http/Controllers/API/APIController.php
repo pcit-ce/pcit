@@ -14,6 +14,13 @@ class APIController
             'homepage' => $host,
             'login' => $host.'/login',
             'beta' => $host.'/beta',
+            'dashboard' => $host.'/dashboard',
+            'api' => $host.'/api',
+            'about' => $host.'/about',
+            'team' => $host.'/team',
+            'blog' => $host.'/blog',
+            'status' => $host.'/status',
+            'feedback' => 'https://github.com/khs1994-php/khsci/issues',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
                 'test' => $host.'/test5',
@@ -102,13 +109,6 @@ class APIController
                 'create@post' => $host.'/deployment/create',
                 'createStatus@post' => $host.'/deployment/create/status',
             ],
-            'dashboard' => $host.'/dashboard',
-            'api' => $host.'/api',
-            'about' => $host.'/about',
-            'team' => $host.'/team',
-            'blog' => $host.'/blog',
-            'status' => $host.'/status',
-            'feedback' => 'https://github.com/khs1994-php/khsci/issues',
         ];
     }
 

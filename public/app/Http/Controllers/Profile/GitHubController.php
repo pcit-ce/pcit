@@ -127,8 +127,11 @@ class GitHubController
         $user_key_id = self::userExists($username);
 
         if ($user_key_id) {
-            $sql = 'UPDATE user set git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
-            DB::update($sql, [$git_type_lower, $uid, $username, $email, $pic, $accessToken, $user_key_id]);
+            $sql = 'UPDATE user SET git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
+            DB::update($sql, [
+                    $git_type_lower, $uid, $username, $email, $pic, $accessToken, $user_key_id
+                ]
+            );
         } else {
             $sql = 'INSERT user VALUES(null,?,?,?,?,?,?)';
             DB::insert($sql, [$git_type_lower, $uid, $username, $email, $pic, $accessToken]);
@@ -157,9 +160,9 @@ class GitHubController
         $array = static::getProject($accessToken);
 
         $redis = Cache::connect();
-        $redis->set($uid.'_uid', $uid);
-        $redis->set($uid.'_username', $username);
-        $redis->set($uid.'_email', $email);
+        $redis->set($git_type_lower.'_'.$uid.'_uid', $uid);
+        $redis->set($git_type_lower.'_'.$uid.'_username', $username);
+        $redis->set($git_type_lower.'_'.$uid.'_email', $email);
 
         /*
          * 用户相关.
@@ -185,19 +188,34 @@ class GitHubController
 
             $insert_admin = null;
 
+            $insert_collaborators = null;
+
             if ($admin) {
                 $insert_admin = $uid;
+            } else {
+                $insert_collaborators = $uid;
             }
 
-            $repoDataArray = [
-                static::TYPE_LOWER, $rid, $username, $repoPrefix, $repoName, $repo_full_name,
-                $webhooksStatus, $buildActivate, "[$insert_admin]", $default_branch, $time,
-            ];
-
             if (!$repo_key_id) {
+
                 $sql = 'INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?,?)';
-                DB::insert($sql, $repoDataArray);
-                $redis->hSet(static::TYPE_LOWER.'_repo', $repo_full_name, $open_or_close);
+
+                DB::insert($sql, [
+                    static::TYPE_LOWER, $rid, $repoPrefix, $repoName, $repo_full_name,
+                    $webhooksStatus, $buildActivate, "[$insert_admin]", "[$insert_collaborators]", $default_branch, $time,
+                ]);
+
+                $redis->hSet($git_type_lower.'_repo', $repo_full_name, $open_or_close);
+
+                if ($admin) {
+                    $redis->hSet(
+                        $git_type_lower.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
+                    );
+                } else {
+                    $redis->hSet(
+                        $git_type_lower.'_'.$uid.'_collaborators', $repo_full_name, $open_or_close
+                    );
+                }
 
                 continue;
             }
@@ -224,21 +242,26 @@ class GitHubController
              * repo 表已存在数据，则更新表
              */
 
-            if ($admin) {
-                $this->updateRepoAdmin($repo_key_id, $uid);
-            }
-
             $sql = <<<'EOF'
-UPDATE repo set git_type=?,rid=?,username=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
+UPDATE repo SET 
+
+git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
 EOF;
             DB::update($sql, [
-                $git_type_lower, $rid, $username, $repoPrefix, $repoName, $repo_full_name, $time, $repo_key_id,
+                $git_type_lower, $rid, $repoPrefix, $repoName,
+                $repo_full_name, $time, $repo_key_id,
             ]);
 
-            $sql = 'SELECT repo_full_name FROM repo WHERE json_contains(repo_admin,?) AND repo_full_name=?';
-
-            if (DB::select($sql, [$uid, $repo_full_name], true)) {
-                $redis->hSet($uid.'_repo', $repo_full_name, $open_or_close);
+            if ($admin) {
+                $this->updateRepoAdmin($repo_key_id, $uid);
+                $redis->hSet(
+                    $git_type_lower.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
+                );
+            } else {
+                $this->updateRepoCollaborators($repo_key_id, $uid);
+                $redis->hSet(
+                    $git_type_lower.'_'.$uid.'_repo_collaborators', $repo_full_name, $open_or_close
+                );
             }
         }
     }
@@ -257,7 +280,24 @@ EOF;
 UPDATE repo set repo_admin=JSON_MERGE(repo_admin,?) where id=? AND NOT JSON_CONTAINS(repo_admin,?);
 EOF;
 
-        DB::update($sql, ["[$repo_key_id]", $uid]);
+        DB::update($sql, ["[$uid]", $repo_key_id, $uid]);
+    }
+
+    /**
+     * @param int    $repo_key_id
+     * @param string $uid
+     *
+     * @throws Exception
+     */
+    private function updateRepoCollaborators(int $repo_key_id, string $uid): void
+    {
+        $sql = <<<EOF
+UPDATE repo set 
+
+repo_admin=JSON_MERGE(repo_collaborators,?) where id=? AND NOT JSON_CONTAINS(repo_collaborators,?);
+EOF;
+
+        DB::update($sql, ["[$repo_key_id]", $uid, $repo_key_id]);
     }
 
     /**
@@ -298,17 +338,19 @@ EOF;
 
         $redis = Cache::connect();
 
-        if ($redis->get($uid.'_username')) {
+        if ($redis->get(static::TYPE_LOWER.'_'.$uid.'_username')) {
             // Redis 已存在数据
             $sync = false;
         }
 
         if ($_GET['sync'] ?? false or $sync) {
-            $this->syncProject((string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken);
+            $this->syncProject(
+                (string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken
+            );
             $sync = true;
         }
 
-        $cacheArray = $redis->hGetAll($uid.'_repo');
+        $cacheArray = $redis->hGetAll(static::TYPE_LOWER.'_'.$uid.'_repo_admin');
 
         $array_active = [];
 

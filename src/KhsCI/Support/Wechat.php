@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\IM;
+namespace KhsCI\Support;
 
 use Curl\Curl;
 

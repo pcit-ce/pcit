@@ -49,6 +49,14 @@ require __DIR__.'/vendor/autoload.php';
 
 * [Kubernetes PHP]()
 
+* [Wechat PHP](https://github.com/khs1994-php/wechat)
+
+* [QQ PHP]()
+
+* [DingTalk PHP]()
+
+* [Baidu xiongzhang PHP](https://github.com/khs1994-php/xiongzhang)
+
 * [GitHub CLI]()
 
 * [Gitee CLI]()
