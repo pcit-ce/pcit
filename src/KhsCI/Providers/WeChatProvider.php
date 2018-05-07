@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace KhsCI\Providers;
 
 use Curl\Curl;
-use KhsCI\Service\IM\Wechat;
+use WeChat\Wechat;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class IMProvider implements ServiceProviderInterface
+class WeChatProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {

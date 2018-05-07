@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Status;
 
 use Exception;
-use KhsCI\Service\Status\GitHub;
+use KhsCI\KhsCI;
 use KhsCI\Support\DB;
 
 class GitHubController
 {
-    public $status;
+    private static $status;
 
-    /**
-     * GitHubController constructor.
-     */
     public function __construct()
     {
-        $this->status = new GitHub();
+        $khsci = new KhsCI();
+
+        self::$status = $khsci->repo_status;
     }
 
     /**
      * @param mixed ...$arg
      *
      * @return mixed
+     * @throws Exception
      */
     public function list(...$arg)
     {
-        return json_decode($this->status->list(...$arg), true);
+        return json_decode(self::$status->list(...$arg), true);
     }
 
     /**
@@ -38,6 +38,7 @@ class GitHubController
      * @param string $target_url
      * @param string $description
      * @param string $context
+     * @param string $accessToken
      *
      * @return mixed
      *
@@ -49,23 +50,34 @@ class GitHubController
                            string $state,
                            string $target_url,
                            string $description,
-                           string $context)
+                           string $context,
+                           string $accessToken = null
+    )
     {
-        $sql = 'SELECT access_token FROM user WHERE username=? AND git_type=?';
+        $sql = 'SELECT repo_admin FROM repo WHERE repo_full_name=? AND git_type=?';
 
-        $output = DB::select($sql, [$login_username, 'github']);
+        $admin = DB::select($sql, [$repo_full_name, 'github'], true);
 
-        foreach ($output as $k) {
-            $accessToken = $k['access_token'];
+        if (!$accessToken) {
+            foreach (json_decode($admin, true) as $k) {
+                $sql = 'SELECT access_token FROM user WHERE uid=? AND git_type=?';
+                $output = DB::select($sql, [$k, 'github'], true);
+
+                if ($output) {
+                    $accessToken = $output;
+                    break;
+                }
+            }
         }
 
         list($username, $repo) = explode('/', $repo_full_name);
 
-        return $this->status->create(
+        $khsci = new KhsCI(['github_access_token' => $accessToken]);
+
+        return $khsci->repo_status->create(
             $username,
             $repo,
             $commit_sha,
-            $accessToken,
             $state,
             $target_url,
             $description,
@@ -73,8 +85,14 @@ class GitHubController
         );
     }
 
+    /**
+     * @param mixed ...$arg
+     *
+     * @return mixed
+     * @throws Exception
+     */
     public function listCombinedStatus(...$arg)
     {
-        return $this->status->listCombinedStatus(...$arg);
+        return self::$status->listCombinedStatus(...$arg);
     }
 }

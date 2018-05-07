@@ -6,6 +6,8 @@ use Curl\Curl;
 
 class Collaborators
 {
+    const API_URL = 'https://api.github.com';
+
     private static $curl;
 
     public function __construct(Curl $curl)
@@ -22,7 +24,7 @@ class Collaborators
      */
     public function list(string $git_type, string $repo_full_name)
     {
-        $url = '';
+        $url = self::API_URL.'/repos/'.$repo_full_name.'/collaborators';
 
         return self::$curl->get($url);
     }

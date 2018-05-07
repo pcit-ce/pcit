@@ -11,9 +11,11 @@ use KhsCI\Support\DB;
 class UpdateRepoCollaborators
 {
     /**
+     * @param string $access_token
+     *
      * @throws \Exception
      */
-    public function __invoke()
+    public function __invoke(string $access_token)
     {
         $sql = 'SELECT id,git_type,repo_full_name FROM repo WHERE build_activate=?';
 

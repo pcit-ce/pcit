@@ -12,7 +12,7 @@ class WebhooksProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
-        $pimple['WebhooksCoding'] = function ($app) {
+        $pimple['webhooks_coding'] = function ($app) {
             return new Coding();
         };
     }
