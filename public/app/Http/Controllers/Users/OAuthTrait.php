@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Users;
 
 use Error;
 use Exception;
+use KhsCI\KhsCI;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
@@ -33,7 +34,9 @@ trait OAuthTrait
 
             false !== $access_token && Session::put($typeLower.'.access_token', $access_token);
 
-            $userInfoArray = $this->oauth::getUserInfo((string) $access_token);
+            $khsci = new KhsCI(['github_access_token'=>$access_token]);
+
+            $userInfoArray = $khsci->user_basic_info->getUserInfo();
         } catch (Error $e) {
             throw new Exception($e->getMessage(), 500);
         }
