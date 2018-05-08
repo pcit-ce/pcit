@@ -12,18 +12,20 @@ class OAuthCodingController
 {
     use OAuthTrait;
 
-    private $oauth;
+    protected static $oauth;
+
+    protected static $git_type = 'coding';
 
     public function __construct()
     {
         $khsci = new KhsCI();
 
-        $this->oauth = $khsci->oauth_coding;
+        static::$oauth = $khsci->oauth_coding;
     }
 
     public function getLoginUrl(): void
     {
-        $url = $this->oauth->getLoginUrl(null);
+        $url = static::$oauth->getLoginUrl(null);
 
         Response::redirect($url);
     }
@@ -33,6 +35,6 @@ class OAuthCodingController
      */
     public function getAccessToken(): void
     {
-        $this->getAccessTokenCommon('coding', null);
+        $this->getAccessTokenCommon(null);
     }
 }

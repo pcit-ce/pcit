@@ -6,26 +6,20 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Support\Response;
 
-class OAuthGiteeController
+class OAuthGiteeController extends OAuthGitHubController
 {
     use OAuthTrait;
 
-    private $oauth;
+    protected static $oauth;
+
+    protected static $git_type = 'github';
 
     public function __construct()
     {
         $khsci = new KhsCI();
 
-        $this->oauth = $khsci->oauth_gitee;
-    }
-
-    public function getLoginUrl(): void
-    {
-        $url = $this->oauth->getLoginUrl(null);
-
-        Response::redirect($url);
+        static::$oauth = $khsci->oauth_gitee;
     }
 
     /**
@@ -33,6 +27,6 @@ class OAuthGiteeController
      */
     public function getAccessToken(): void
     {
-        $this->getAccessTokenCommon('gitee', null);
+        $this->getAccessTokenCommon(null);
     }
 }

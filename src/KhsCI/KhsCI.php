@@ -21,6 +21,7 @@ use Pimple\Container;
  * @property Service\GitHubApps\Installations   $github_apps_installations
  * @property Service\OAuth\Coding               $oauth_coding
  * @property Service\OAuth\GitHub               $oauth_github
+ * @property Service\OAuth\GitHubApp            $oauth_github_app
  * @property Service\OAuth\Gitee                $oauth_gitee
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status

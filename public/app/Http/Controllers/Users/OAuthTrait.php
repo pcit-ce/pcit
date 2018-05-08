@@ -13,12 +13,11 @@ use KhsCI\Support\Session;
 trait OAuthTrait
 {
     /**
-     * @param string      $type
      * @param null|string $state
      *
      * @throws Exception
      */
-    public function getAccessTokenCommon(string $type, ?string $state): void
+    public function getAccessTokenCommon(?string $state): void
     {
         $code = $_GET['code'] ?? false;
 
@@ -27,14 +26,14 @@ trait OAuthTrait
         }
 
         try {
-            $access_token = $this->oauth->getAccessToken((string) $code, $state)
+            $access_token = static::$oauth->getAccessToken((string)$code, $state)
                 ?? false;
 
-            $typeLower = strtolower($type);
+            $git_type = self::$git_type;
 
-            false !== $access_token && Session::put($typeLower.'.access_token', $access_token);
+            false !== $access_token && Session::put($git_type.'.access_token', $access_token);
 
-            $khsci = new KhsCI(['github_access_token'=>$access_token]);
+            $khsci = new KhsCI(['github_access_token' => $access_token]);
 
             $userInfoArray = $khsci->user_basic_info->getUserInfo();
         } catch (Error $e) {
@@ -46,11 +45,11 @@ trait OAuthTrait
         $pic = $userInfoArray['pic'];
         $email = $userInfoArray['email'];
 
-        Session::put($typeLower.'.uid', $uid);
-        Session::put($typeLower.'.username', $name);
-        Session::put($typeLower.'.pic', $pic);
-        Session::put($typeLower.'.email', $email);
+        Session::put($git_type.'.uid', $uid);
+        Session::put($git_type.'.username', $name);
+        Session::put($git_type.'.pic', $pic);
+        Session::put($git_type.'.email', $email);
 
-        Response::redirect(getenv('CI_HOST').'/profile/'.$typeLower.'/'.$name);
+        Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
     }
 }

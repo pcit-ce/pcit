@@ -40,6 +40,10 @@ Route::get('oauth/github/login', 'Users\OAuthGitHubController@getLoginUrl');
 
 Route::get('oauth/github', 'Users\OAuthGitHubController@getAccessToken');
 
+Route::get('oauth/github_app/login', 'Users\OAuthGitHubAppController@getLoginUrl');
+
+Route::get('oauth/github_app', 'Users\OAuthGitHubAppController@getAccessToken');
+
 Route::get('oauth/gitee/login', 'Users\OAuthGiteeController@getLoginUrl');
 
 Route::get('oauth/gitee', 'Users\OAuthGiteeController@getAccessToken');
@@ -79,6 +83,8 @@ Route::get('profile/coding/{username}', 'Profile\CodingController');
 Route::get('profile/gitee/{username}', 'Profile\GiteeController');
 
 Route::get('profile/github/{username}', 'Profile\GitHubController');
+
+Route::get('profile/github_app/{username}', 'Profile\GitHubAppController');
 
 /*Sync Repo*/
 

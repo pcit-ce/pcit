@@ -8,6 +8,7 @@ use Curl\Curl;
 use KhsCI\Service\OAuth\Coding;
 use KhsCI\Service\OAuth\Gitee;
 use KhsCI\Service\OAuth\GitHub;
+use KhsCI\Service\OAuth\GitHubApp;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -27,6 +28,10 @@ class OAuthProvider implements ServiceProviderInterface
 
         $pimple['oauth_github'] = function ($app) use ($curl) {
             return new GitHub($app['config']['github'], $curl);
+        };
+
+        $pimple['oauth_github_app'] = function ($app) use ($curl) {
+            return new GitHubApp($app['config']['github_app'], $curl);
         };
     }
 }
