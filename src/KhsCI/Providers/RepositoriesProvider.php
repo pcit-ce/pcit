@@ -6,6 +6,7 @@ namespace KhsCI\Providers;
 
 use KhsCI\Service\Repositories\Collaborators;
 use KhsCI\Service\Repositories\Status;
+use KhsCI\Service\Repositories\Webhooks;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -19,6 +20,10 @@ class RepositoriesProvider implements ServiceProviderInterface
 
         $pimple['repo_status'] = function ($app) {
             return new Status($app['curl']);
+        };
+
+        $pimple['repo_webhooks'] = function ($app) {
+            return new Webhooks($app['curl']);
         };
     }
 }

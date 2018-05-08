@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Webhooks\Admin;
 
 use Error;
 use Exception;
+use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
@@ -56,22 +57,6 @@ class Controller
     }
 
     /**
-     * 获取类.
-     *
-     * @return string
-     */
-    private static function getObj()
-    {
-        if ('github' === self::$gitType) {
-            $obj = 'KhsCI\\Service\\OAuth\\GitHub';
-        } else {
-            $obj = 'KhsCI\\Service\\OAuth\\'.ucfirst(self::$gitType);
-        }
-
-        return $obj;
-    }
-
-    /**
      * 获取 Webhooks 列表.
      *
      * @param mixed ...$arg
@@ -88,9 +73,9 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $obj = self::getObj();
+        $khsci = new KhsCI(['github_access_token' => $access_token]);
 
-        $json = $obj::getWebhooks($access_token, $raw, ...$arg);
+        $json = $khsci->repo_webhooks->getWebhooks($raw, ...$arg);
 
         return json_decode($json, true);
     }
@@ -128,9 +113,9 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $obj = self::getObj();
+        $khsci = new KhsCI(['github_access_token' => $access_token]);
 
-        $getWebhooksStatus = $obj::getWebhooksStatus($access_token, $webhooksUrl, ...$arg);
+        $getWebhooksStatus = $khsci->repo_webhooks->getWebhooksStatus($webhooksUrl, ...$arg);
 
         $sql = 'UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?';
 
@@ -141,7 +126,7 @@ class Controller
         }
 
         try {
-            $json = $obj::setWebhooks($access_token, $data, ...$arg);
+            $json = $khsci->repo_webhooks->setWebhooks($data, ...$arg);
         } catch (Exception $e) {
             if (422 === $e->getCode()) {
                 DB::update($sql, [1, $gitType, "$arg[1]/$arg[2]"]);
@@ -175,9 +160,9 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $obj = self::getObj();
+        $khsci = new KhsCI(['github_access_token' => $access_token]);
 
-        return $obj::unsetWebhooks($access_token, ...$arg);
+        return $khsci->repo_webhooks->unsetWebhooks(...$arg);
     }
 
     /**

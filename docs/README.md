@@ -8,9 +8,9 @@
 
 ## GitHub 新建仓库
 
-之后在 https://ci.khs1994.com/login 页面点击 GitHub 按钮登录 GitHub 账号
+## 安装 KhsCI
 
-在列表中找到你新创建的仓库，点击左边的按钮 **激活** 构建
+在 https://github.com/apps/khsci 点击右边的 `Install` 按钮，在稍后跳转的页面中选择你新建的仓库
 
 ## 准备 PHP 项目
 
@@ -26,5 +26,16 @@ $ git clone https://github.com/khs1994-docker/php-demo
 
 ## 推送到 GitHub
 
-在 GitHub 点击 `commits`，点击 commit 信息后的小图标，进入到构建详情页，查看构建过程及结果
+```bash
+$ cd php-demo
 
+# edit file then push it to github
+
+$ git add .
+
+$ git commit -m "Test KhsCI"
+
+$ git push origin master
+```
+
+在 GitHub 点击 `commits`，点击 commit 信息后的小图标，进入到构建详情页，查看构建过程及结果
