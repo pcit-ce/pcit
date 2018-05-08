@@ -48,7 +48,7 @@ EOF;
             $merge_array = [
                 'commit_url' => Git::getCommitUrl($gitType, $repo_full_name, $k['commit_id']),
                 'commit_id' => substr($k['commit_id'], 0, 7),
-                'compare' => Git::getPullRequestUrl($gitType, $repo_full_name, (int) $k['pull_request_id']),
+                'compare' => Git::getPullRequestUrl($gitType, $repo_full_name, (int)$k['pull_request_id']),
             ];
 
             $array[] = array_merge($k, $merge_array);

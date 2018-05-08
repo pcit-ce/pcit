@@ -186,12 +186,4 @@ class DB
     public static function deleteUser(): void
     {
     }
-
-    /**
-     * @param string $tbl_name
-     */
-    public static function table(string $tbl_name)
-    {
-
-    }
 }
