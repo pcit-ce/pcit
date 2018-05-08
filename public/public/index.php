@@ -50,7 +50,7 @@ $debug = getenv('CI_DEBUG') ?? false;
  *  SPL Autoload
  */
 spl_autoload_register(function ($class): void {
-    $class = ucfirst($class);
+    $class = lcfirst($class);
     $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
     $file = $file.'.php';
 
