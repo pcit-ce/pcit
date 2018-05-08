@@ -17,7 +17,7 @@ class Webhooks
     {
         self::$curl = $curl;
 
-        self::$api_url = 'https://api.khs1994.com';
+        self::$api_url = 'https://api.github.com';
     }
 
     /**
