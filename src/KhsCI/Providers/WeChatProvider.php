@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace KhsCI\Providers;
 
 use Curl\Curl;
-use WeChat\Wechat;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use WeChat\Wechat;
 
 class WeChatProvider implements ServiceProviderInterface
 {

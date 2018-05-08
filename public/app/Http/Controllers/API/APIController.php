@@ -19,6 +19,7 @@ class APIController
             'about' => $host.'/about',
             'team' => $host.'/team',
             'blog' => $host.'/blog',
+            'docs' => $host.'/docs',
             'status' => $host.'/status',
             'feedback' => 'https://github.com/khs1994-php/khsci/issues',
             'tests' => [

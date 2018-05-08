@@ -50,7 +50,7 @@ $debug = getenv('CI_DEBUG') ?? false;
  *  SPL Autoload
  */
 spl_autoload_register(function ($class): void {
-    $class = str_replace('App\\Http', 'app\\Http', $class);
+    $class = lcfirst($class);
     $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
     $file = $file.'.php';
 
@@ -63,7 +63,6 @@ if ('/index.php' === $_SERVER['REQUEST_URI']) {
     Response::redirect('dashboard');
     exit;
 }
-
 
 /*
  *  Route.

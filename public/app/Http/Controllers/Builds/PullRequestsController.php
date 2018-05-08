@@ -38,7 +38,7 @@ ORDER BY id DESC
 EOF;
 
         $output = DB::select($sql, [
-                CI::BUILD_EVENT_PR, $gitType, $repo_full_name, 'synchronize', 'opened'
+                CI::BUILD_EVENT_PR, $gitType, $repo_full_name, 'synchronize', 'opened',
             ]
         );
 

@@ -14,6 +14,7 @@ class HTTP
      * @param array       $header
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public static function post(string $url, string $data = null, array $header = [])
@@ -29,6 +30,7 @@ class HTTP
      * @param array       $header
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public static function get(string $url, string $data = null, array $header = [])
@@ -43,6 +45,7 @@ class HTTP
      * @param array  $header
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public static function delete(string $url, array $header = [])

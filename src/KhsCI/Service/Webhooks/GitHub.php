@@ -14,7 +14,7 @@ use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 
 /**
- * Class GitHub
+ * Class GitHub.
  *
  * @see https://developer.github.com/webhooks/#events
  */
@@ -94,7 +94,7 @@ EOF;
      *
      * @param string $content
      *
-     * @return string
+     * @return string|array
      *
      * @throws Exception
      */
@@ -160,24 +160,15 @@ EOF;
 
         $target_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
 
-//        $data = Wechat::createTemplateContentArray(200, $commit_timestamp,
-//            __FUNCTION__, $repo_full_name, $branch, $committer, $commit_message, $target_url);
+        list($username, $repo_name) = explode('/', $repo_full_name);
 
-        /**
-         * 通知操作全部放入队列中.
-         */
-
-        // Wechat::push(Env::get('WECHAT_TEMPLATE_ID'), ENV::get('WECHAT_USER_OPENID'), $curl, $data);
-
-        $khsci = new KhsCI(['github_access_token' => static::$access_token]);
-
-        $status = $khsci->repo_status;
-
-        return $status->create(
-            'khs1994', $repo_full_name, $commit_id, $github_status, $target_url,
-            'The analysis or builds is pending',
-            'continuous-integration/'.Env::get('CI_NAME').'/'.__FUNCTION__
-        );
+        return [
+            'rid' => $rid, [
+                $username, $repo_name, $commit_id, $github_status, $target_url,
+                'The analysis or builds is pending',
+                'continuous-integration/'.Env::get('CI_NAME').'/'.__FUNCTION__,
+            ],
+        ];
     }
 
     /**
@@ -466,16 +457,14 @@ EOF;
     /**
      * @param string $content
      */
-    private function member(string $content)
+    private function member(string $content): void
     {
-
     }
 
     /**
      * @param string $content
      */
-    private function team_add(string $content)
+    private function team_add(string $content): void
     {
-
     }
 }

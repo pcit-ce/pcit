@@ -88,7 +88,7 @@ EOF;
             self::$tag_name = $k['tag_name'];
             self::$gitType = $k['git_type'];
 
-            self::$build_key_id = (int)$build_key_id;
+            self::$build_key_id = (int) $build_key_id;
 
             // commit 信息跳过构建
             self::skip($commit_message);
@@ -170,7 +170,7 @@ EOF;
                 self::$commit_id,
                 self::$event_type,
                 CI::BUILD_STATUS_INACTIVE,
-                (int)$build_activate
+                (int) $build_activate
             );
         }
     }
@@ -196,7 +196,7 @@ EOF;
             self::$commit_id,
             self::$event_type,
             CI::BUILD_STATUS_SKIP,
-            (int)self::$build_key_id
+            (int) self::$build_key_id
         );
     }
 
@@ -257,7 +257,7 @@ EOF;
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
-        $yaml_obj = (object)yaml_parse(HTTP::get(Git::getRawUrl(
+        $yaml_obj = (object) yaml_parse(HTTP::get(Git::getRawUrl(
             $gitType, $repo_full_name, $commit_id, '.drone.yml'))
         );
 
@@ -482,9 +482,9 @@ EOF;
                     $container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string)self::$build_key_id);
+                $prev_docker_log = $redis->hget('build_log', (string) self::$build_key_id);
 
-                $redis->hset('build_log', (string)self::$build_key_id, $prev_docker_log.$image_log);
+                $redis->hset('build_log', (string) self::$build_key_id, $prev_docker_log.$image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
