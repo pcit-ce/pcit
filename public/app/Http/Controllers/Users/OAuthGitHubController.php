@@ -6,11 +6,20 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
+use KhsCI\Service\OAuth\{
+    Coding,
+    Gitee,
+    GitHub,
+    GitHubApp
+};
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class OAuthGitHubController
 {
+    /**
+     * @var GitHubApp|GitHub|Coding|Gitee
+     */
     protected static $oauth;
 
     protected static $git_type = 'github';
@@ -21,7 +30,9 @@ class OAuthGitHubController
     {
         $khsci = new KhsCI();
 
-        static::$oauth = $khsci->oauth_github;
+        $method = 'oauth_'.static::$git_type;
+
+        static::$oauth = $khsci->$method;
     }
 
     public function getLoginUrl(): void

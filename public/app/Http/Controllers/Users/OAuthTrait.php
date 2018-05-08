@@ -7,11 +7,22 @@ namespace App\Http\Controllers\Users;
 use Error;
 use Exception;
 use KhsCI\KhsCI;
+use KhsCI\Service\OAuth\{
+    Coding,
+    GitHub,
+    GitHubApp,
+    Gitee
+};
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 trait OAuthTrait
 {
+    /**
+     * @var GitHubApp|Coding|GitHub|Gitee
+     */
+    public static $oauth;
+
     /**
      * @param null|string $state
      *

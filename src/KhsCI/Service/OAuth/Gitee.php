@@ -46,7 +46,7 @@ class Gitee extends GitHub implements OAuth
 
     public function getAccessToken(string $code, ?string $state, bool $raw = false)
     {
-        $url = self::POST_URL.http_build_query([
+        $url = static::POST_URL.http_build_query([
                 'code' => $code,
                 'client_id' => $this->clientId,
                 'client_secret' => $this->clientSecret,

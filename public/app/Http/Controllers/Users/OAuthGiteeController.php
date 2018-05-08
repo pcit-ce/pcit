@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Users;
 
 use Exception;
-use KhsCI\KhsCI;
 
 class OAuthGiteeController extends OAuthGitHubController
 {
@@ -13,14 +12,7 @@ class OAuthGiteeController extends OAuthGitHubController
 
     protected static $oauth;
 
-    protected static $git_type = 'github';
-
-    public function __construct()
-    {
-        $khsci = new KhsCI();
-
-        static::$oauth = $khsci->oauth_gitee;
-    }
+    protected static $git_type = 'gitee';
 
     /**
      * @throws Exception

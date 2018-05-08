@@ -85,6 +85,28 @@ class KhsCI extends Container
             );
         }
 
+        if ($this['config']['github_app']['access_token'] ?? false) {
+            $this['curl'] = new Curl(
+                null,
+                false,
+                [
+                    'Authorization' => 'token '.$this['config']['github_app']['access_token'],
+                    'Accept' => 'application/vnd.github.machine-man-preview+json',
+                ]
+            );
+        }
+
+        if ($this['config']['gitee_app']['access_token'] ?? false) {
+            $this['curl'] = new Curl(
+                null,
+                false,
+                [
+                    'Authorization' => 'token '.$this['config']['github_ee']['access_token'],
+                    'Accept' => 'application/vnd.github.machine-man-preview+json',
+                ]
+            );
+        }
+
         set_time_limit(0);
 
         $this['curl']->setTimeout(100);

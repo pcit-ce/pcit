@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
+use App\User;
 use Error;
 use Exception;
 use KhsCI\KhsCI;
@@ -13,27 +14,7 @@ use KhsCI\Support\Session;
 
 class GitHubController
 {
-    const TYPE = 'gitHub';
-
-    const TYPE_LOWER = 'github';
-
-    /**
-     * 查看用户是否已存在.
-     *
-     * @param $username
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
-    private function userExists($username)
-    {
-        $sql = 'SELECT id FROM user WHERE username=? AND git_type=?';
-
-        $repo_key_id = DB::select($sql, [$username, static::TYPE_LOWER], true) ?? false;
-
-        return (int)$repo_key_id;
-    }
+    const GIT_TYPE = 'github';
 
     /**
      * 查看 REPO 是否存在.
@@ -48,7 +29,7 @@ class GitHubController
     {
         $sql = 'SELECT id FROM repo WHERE git_type=? AND repo_full_name=?';
 
-        $repo_key_id = DB::select($sql, [static::TYPE_LOWER, $repo], true) ?? false;
+        $repo_key_id = DB::select($sql, [static::GIT_TYPE, $repo], true) ?? false;
 
         return (int)$repo_key_id;
     }
@@ -123,19 +104,19 @@ class GitHubController
      */
     private function updateUserInfo($uid, $username, $email, $pic, $accessToken): void
     {
-        $git_type_lower = static::TYPE_LOWER;
+        $git_type = static::GIT_TYPE;
 
-        $user_key_id = self::userExists($username);
+        $user_key_id = User::exists($git_type, $username);
 
         if ($user_key_id) {
             $sql = 'UPDATE user SET git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
             DB::update($sql, [
-                    $git_type_lower, $uid, $username, $email, $pic, $accessToken, $user_key_id,
+                    $git_type, $uid, $username, $email, $pic, $accessToken, $user_key_id,
                 ]
             );
         } else {
             $sql = 'INSERT user VALUES(null,?,?,?,?,?,?)';
-            DB::insert($sql, [$git_type_lower, $uid, $username, $email, $pic, $accessToken]);
+            DB::insert($sql, [$git_type, $uid, $username, $email, $pic, $accessToken]);
         }
     }
 
@@ -156,21 +137,21 @@ class GitHubController
                                  string $pic,
                                  string $accessToken): void
     {
-        $git_type_lower = static::TYPE_LOWER;
+        $git_type = static::GIT_TYPE;
 
         $array = static::getProject($accessToken);
 
         $redis = Cache::connect();
-        $redis->set($git_type_lower.'_'.$uid.'_uid', $uid);
-        $redis->set($git_type_lower.'_'.$uid.'_username', $username);
-        $redis->set($git_type_lower.'_'.$uid.'_email', $email);
+        $redis->set($git_type.'_'.$uid.'_uid', $uid);
+        $redis->set($git_type.'_'.$uid.'_username', $username);
+        $redis->set($git_type.'_'.$uid.'_email', $email);
 
         /*
          * 用户相关.
          *
          * 先检查用户是否存在
          */
-        self::updateUserInfo($uid, $username, $email, $pic, $accessToken);
+        static::updateUserInfo($uid, $username, $email, $pic, $accessToken);
 
         foreach ($array as $rid => $k) {
             list($repo_full_name, $default_branch, $admin) = $k;
@@ -180,7 +161,7 @@ class GitHubController
             /**
              * repo 表是否存在 repo 数据.
              */
-            $repo_key_id = self::repoExists($repo_full_name);
+            $repo_key_id = static::repoExists($repo_full_name);
 
             $webhooksStatus = 0;
             $buildActivate = 0;
@@ -201,19 +182,19 @@ class GitHubController
                 $sql = 'INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?,?)';
 
                 DB::insert($sql, [
-                    static::TYPE_LOWER, $rid, $repoPrefix, $repoName, $repo_full_name,
+                    $git_type, $rid, $repoPrefix, $repoName, $repo_full_name,
                     $webhooksStatus, $buildActivate, "[$insert_admin]", "[$insert_collaborators]", $default_branch, $time,
                 ]);
 
-                $redis->hSet($git_type_lower.'_repo', $repo_full_name, $open_or_close);
+                $redis->hSet($git_type.'_repo', $repo_full_name, $open_or_close);
 
                 if ($admin) {
                     $redis->hSet(
-                        $git_type_lower.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
+                        $git_type.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
                     );
                 } else {
                     $redis->hSet(
-                        $git_type_lower.'_'.$uid.'_collaborators', $repo_full_name, $open_or_close
+                        $git_type.'_'.$uid.'_collaborators', $repo_full_name, $open_or_close
                     );
                 }
 
@@ -225,7 +206,7 @@ class GitHubController
              */
             $sql = 'SELECT webhooks_status,build_activate FROM repo WHERE rid=? AND git_type=?';
 
-            $output = DB::select($sql, [$rid, static::TYPE_LOWER]);
+            $output = DB::select($sql, [$rid, $git_type]);
 
             if ($output) {
                 foreach ($output as $status_k) {
@@ -247,19 +228,19 @@ UPDATE repo SET
 git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
 EOF;
             DB::update($sql, [
-                $git_type_lower, $rid, $repoPrefix, $repoName,
+                $git_type, $rid, $repoPrefix, $repoName,
                 $repo_full_name, $time, $repo_key_id,
             ]);
 
             if ($admin) {
                 $this->updateRepoAdmin($repo_key_id, $uid);
                 $redis->hSet(
-                    $git_type_lower.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
+                    $git_type.'_'.$uid.'_repo_admin', $repo_full_name, $open_or_close
                 );
             } else {
                 $this->updateRepoCollaborators($repo_key_id, $uid);
                 $redis->hSet(
-                    $git_type_lower.'_'.$uid.'_repo_collaborators', $repo_full_name, $open_or_close
+                    $git_type.'_'.$uid.'_repo_collaborators', $repo_full_name, $open_or_close
                 );
             }
         }
@@ -300,6 +281,8 @@ EOF;
     }
 
     /**
+     * Profile 页主要展示用户仓库列表.
+     *
      * @param mixed ...$arg
      *
      * @return array
@@ -308,17 +291,17 @@ EOF;
      */
     public function __invoke(...$arg)
     {
-        $gitTypeLower = strtolower(static::TYPE);
+        $git_type = static::GIT_TYPE;
 
-        $email = Session::get($gitTypeLower.'.email');
-        $uid = Session::get($gitTypeLower.'.uid');
-        $username = Session::get($gitTypeLower.'.username');
-        $pic = Session::get($gitTypeLower.'.pic');
-        $accessToken = Session::get($gitTypeLower.'.access_token');
+        $email = Session::get($git_type.'.email');
+        $uid = Session::get($git_type.'.uid');
+        $username = Session::get($git_type.'.username');
+        $pic = Session::get($git_type.'.pic');
+        $accessToken = Session::get($git_type.'.access_token');
 
         $arg[0] === $username && $username = $arg[0];
 
-        self::updateUserInfo($uid, $username, $email, $pic, $accessToken);
+        static::updateUserInfo($uid, $username, $email, $pic, $accessToken);
 
         $ajax = $_GET['ajax'] ?? false;
 
@@ -336,7 +319,7 @@ EOF;
 
         $redis = Cache::connect();
 
-        if ($redis->get(static::TYPE_LOWER.'_'.$uid.'_username')) {
+        if ($redis->get($git_type.'_'.$uid.'_username')) {
             // Redis 已存在数据
             $sync = false;
         }
@@ -348,7 +331,7 @@ EOF;
             $sync = true;
         }
 
-        $cacheArray = $redis->hGetAll(static::TYPE_LOWER.'_'.$uid.'_repo_admin');
+        $cacheArray = $redis->hGetAll($git_type.'_'.$uid.'_repo_admin');
 
         $array_active = [];
 
@@ -368,7 +351,7 @@ EOF;
 
         return [
             'code' => 200,
-            'git_type' => $gitTypeLower,
+            'git_type' => $git_type,
             'uid' => $uid,
             'username' => $arg[0],
             'pic' => $pic,
