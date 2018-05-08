@@ -6,12 +6,23 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
+use KhsCI\Service\OAuth\{
+    Coding,
+    Gitee,
+    GitHub,
+    GitHubApp
+};
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class OAuthGitHubController
 {
-    private $oauth;
+    /**
+     * @var GitHubApp|GitHub|Coding|Gitee
+     */
+    protected static $oauth;
+
+    protected static $git_type = 'github';
 
     use OAuthTrait;
 
@@ -19,16 +30,18 @@ class OAuthGitHubController
     {
         $khsci = new KhsCI();
 
-        $this->oauth = $khsci->oauth_github;
+        $method = 'oauth_'.static::$git_type;
+
+        static::$oauth = $khsci->$method;
     }
 
     public function getLoginUrl(): void
     {
         $state = session_create_id();
 
-        Session::put('github.state', $state);
+        Session::put(static::$git_type.'.state', $state);
 
-        $url = $this->oauth->getLoginUrl($state);
+        $url = static::$oauth->getLoginUrl($state);
 
         Response::redirect($url);
     }
@@ -38,8 +51,8 @@ class OAuthGitHubController
      */
     public function getAccessToken(): void
     {
-        $state = Session::pull('github.state');
+        $state = Session::pull(static::$git_type.'.state');
 
-        $this->getAccessTokenCommon('gitHub', $state);
+        $this->getAccessTokenCommon($state);
     }
 }

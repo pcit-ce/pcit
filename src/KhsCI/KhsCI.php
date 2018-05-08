@@ -21,6 +21,7 @@ use Pimple\Container;
  * @property Service\GitHubApps\Installations   $github_apps_installations
  * @property Service\OAuth\Coding               $oauth_coding
  * @property Service\OAuth\GitHub               $oauth_github
+ * @property Service\OAuth\GitHubApp            $oauth_github_app
  * @property Service\OAuth\Gitee                $oauth_gitee
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status
@@ -79,6 +80,28 @@ class KhsCI extends Container
                 false,
                 [
                     'Authorization' => 'token '.$this['config']['github']['access_token'],
+                    'Accept' => 'application/vnd.github.machine-man-preview+json',
+                ]
+            );
+        }
+
+        if ($this['config']['github_app']['access_token'] ?? false) {
+            $this['curl'] = new Curl(
+                null,
+                false,
+                [
+                    'Authorization' => 'token '.$this['config']['github_app']['access_token'],
+                    'Accept' => 'application/vnd.github.machine-man-preview+json',
+                ]
+            );
+        }
+
+        if ($this['config']['gitee_app']['access_token'] ?? false) {
+            $this['curl'] = new Curl(
+                null,
+                false,
+                [
+                    'Authorization' => 'token '.$this['config']['github_ee']['access_token'],
                     'Accept' => 'application/vnd.github.machine-man-preview+json',
                 ]
             );

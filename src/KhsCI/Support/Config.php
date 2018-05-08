@@ -27,6 +27,12 @@ class Config
                 'callback_url' => getenv('GITHUB_CALLBACK_URL'),
                 'access_token' => $config['github_access_token'] ?? null,
             ],
+            'github_app' => [
+                'client_id' => getenv('GITHUB_APP_CLIENT_ID'),
+                'client_secret' => getenv('GITHUB_APP_CLIENT_SECRET'),
+                'callback_url' => getenv('GITHUB_APP_CALLBACK_URL'),
+                'access_token' => $config['github_app_access_token'] ?? null,
+            ],
         ];
     }
 }

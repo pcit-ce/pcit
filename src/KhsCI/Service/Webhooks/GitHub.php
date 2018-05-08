@@ -468,7 +468,7 @@ EOF;
     }
 
     /**
-     * GitHub Apps
+     * Any time a GitHub App is installed or uninstalled.
      *
      * action:
      *
@@ -505,6 +505,8 @@ EOF;
     }
 
     /**
+     * Any time a repository is added or removed from an installation.
+     *
      * action:
      *
      * added 用户增加仓库
@@ -517,13 +519,16 @@ EOF;
     }
 
     /**
-     * GitHub Apps
+     * @deprecated
      */
     private function integration_installation()
     {
 
     }
 
+    /**
+     * @deprecated
+     */
     private function integration_installation_repositories()
     {
 
