@@ -70,16 +70,15 @@ class DB
             throw new Exception($e->getMessage(), 500);
         }
 
-        if ($single)
+        if ($single) {
             if (1 === count($output)) {
-
                 foreach ($output[0] as $k => $v) {
                     return $v;
                 }
-
             } else {
                 return null;
             }
+        }
 
         return $output;
     }

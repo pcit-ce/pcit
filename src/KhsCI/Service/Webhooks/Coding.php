@@ -10,8 +10,7 @@ class Coding
     {
     }
 
-    public function __invoke()
+    public function __invoke(): void
     {
-
     }
 }

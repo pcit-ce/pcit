@@ -12,6 +12,7 @@ class GitHubController
 {
     /**
      * @return array
+     *
      * @throws Exception
      */
     public function __invoke()
@@ -23,7 +24,7 @@ class GitHubController
         $output = $webhooks();
 
         if ($output['rid'] ?? false) {
-            $access_token = GetAccessToken::byRid((int)$output['rid']);
+            $access_token = GetAccessToken::byRid((int) $output['rid']);
 
             $array = $output[0];
 

@@ -26,15 +26,14 @@ trait OAuthTrait
         }
 
         try {
-
-            $access_token = $this->oauth->getAccessToken((string)$code, $state)
+            $access_token = $this->oauth->getAccessToken((string) $code, $state)
                 ?? false;
 
             $typeLower = strtolower($type);
 
             false !== $access_token && Session::put($typeLower.'.access_token', $access_token);
 
-            $userInfoArray = $this->oauth::getUserInfo((string)$access_token);
+            $userInfoArray = $this->oauth::getUserInfo((string) $access_token);
         } catch (Error $e) {
             throw new Exception($e->getMessage(), 500);
         }

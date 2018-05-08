@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Exception;
@@ -10,7 +12,6 @@ class GetAccessToken
     /**
      * @param int $rid
      *
-     * @return null
      * @throws Exception
      */
     public static function byRid(int $rid)
@@ -23,6 +24,7 @@ class GetAccessToken
      * @param int|null    $rid
      *
      * @return array|null|string
+     *
      * @throws Exception
      */
     public static function byRepoFullName(?string $repo_full_name, ?int $rid = null)

@@ -14,7 +14,7 @@ use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 
 /**
- * Class GitHub
+ * Class GitHub.
  *
  * @see https://developer.github.com/webhooks/#events
  */
@@ -166,8 +166,8 @@ EOF;
             'rid' => $rid, [
                 $username, $repo_name, $commit_id, $github_status, $target_url,
                 'The analysis or builds is pending',
-                'continuous-integration/'.Env::get('CI_NAME').'/'.__FUNCTION__
-            ]
+                'continuous-integration/'.Env::get('CI_NAME').'/'.__FUNCTION__,
+            ],
         ];
     }
 
@@ -457,16 +457,14 @@ EOF;
     /**
      * @param string $content
      */
-    private function member(string $content)
+    private function member(string $content): void
     {
-
     }
 
     /**
      * @param string $content
      */
-    private function team_add(string $content)
+    private function team_add(string $content): void
     {
-
     }
 }

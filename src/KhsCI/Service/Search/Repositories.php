@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Search;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Search;
 
 class Repositories
 {
-
 }

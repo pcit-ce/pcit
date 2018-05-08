@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Data;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Data;
 
 class Blobs
 {
-
 }

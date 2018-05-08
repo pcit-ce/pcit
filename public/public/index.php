@@ -64,7 +64,6 @@ if ('/index.php' === $_SERVER['REQUEST_URI']) {
     exit;
 }
 
-
 /*
  *  Route.
  */

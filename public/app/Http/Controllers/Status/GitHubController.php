@@ -23,6 +23,7 @@ class GitHubController
      * @param mixed ...$arg
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function list(...$arg)
@@ -50,8 +51,7 @@ class GitHubController
                            string $description,
                            string $context,
                            string $accessToken = null
-    )
-    {
+    ) {
         if (!$accessToken) {
             $accessToken = GetAccessToken::byRepoFullName($repo_full_name);
         }
@@ -75,6 +75,7 @@ class GitHubController
      * @param mixed ...$arg
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listCombinedStatus(...$arg)

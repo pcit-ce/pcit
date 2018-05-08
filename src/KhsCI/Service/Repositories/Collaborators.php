@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Repositories;
 
 use Curl\Curl;
@@ -20,6 +22,7 @@ class Collaborators
      * @param string $repo_full_name
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function list(string $git_type, string $repo_full_name)
