@@ -6,7 +6,6 @@ namespace KhsCI\Service\Webhooks;
 
 use Error;
 use Exception;
-use KhsCI\KhsCI;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
 use KhsCI\Support\DB;
@@ -467,4 +466,78 @@ EOF;
     private function team_add(string $content): void
     {
     }
+
+    /**
+     * GitHub Apps
+     *
+     * action:
+     *
+     * created 用户点击安装按钮
+     *
+     * deleted 用户卸载了 GitHub Apps
+     *
+     * @see
+     *
+     * @param string $content
+     *
+     * @throws Exception
+     */
+    private function installation(string $content)
+    {
+        $obj = json_decode($content);
+
+        $action = $obj->action;
+
+        $installation = $obj->installation;
+
+        $installation_id = $installation->id;
+
+        $repo = $obj->repositories;
+
+        var_dump($repo);
+
+        exit;
+
+        $sql = 'INSERT builds(action,event_type) VALUES()';
+
+        DB::insert($sql, []);
+
+    }
+
+    /**
+     * action:
+     *
+     * added 用户增加仓库
+     *
+     * removed 移除仓库
+     */
+    private function installation_repositories()
+    {
+
+    }
+
+    /**
+     * GitHub Apps
+     */
+    private function integration_installation()
+    {
+
+    }
+
+    private function integration_installation_repositories()
+    {
+
+    }
+
+    private function check_suite()
+    {
+
+    }
+
+    private function check_run()
+    {
+
+    }
+
+
 }

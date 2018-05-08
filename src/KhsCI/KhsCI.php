@@ -18,15 +18,18 @@ use Pimple\Container;
  *
  * $a = $container['a'];
  *
+ * @property Service\GitHubApps\Installations   $github_apps_installations
  * @property Service\OAuth\Coding               $oauth_coding
  * @property Service\OAuth\GitHub               $oauth_github
  * @property Service\OAuth\Gitee                $oauth_gitee
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status
+ * @property Service\Repositories\Webhooks      $repo_webhooks
  * @property Service\Webhooks\Coding            $webhooks_coding
  * @property Service\Webhooks\Gitee             $webhooks_gitee
  * @property Service\Webhooks\GitHub            $webhooks_github
  * @property Service\Queue\Queue                $queue
+ * @property Service\Users\BasicInfo            $user_basic_info
  */
 class KhsCI extends Container
 {
@@ -34,10 +37,12 @@ class KhsCI extends Container
      * 服务提供器数组.
      */
     protected $providers = [
+        Providers\GitHubAppsProvider::class,
         Providers\OAuthProvider::class,
         Providers\QueueProvider::class,
         Providers\RepositoriesProvider::class,
         Providers\WebhooksProvider::class,
+        Providers\UserProvider::class,
     ];
 
     /**
@@ -69,11 +74,13 @@ class KhsCI extends Container
         $this['curl'] = new Curl();
 
         if ($this['config']['github']['access_token'] ?? false) {
-            echo 1;
             $this['curl'] = new Curl(
                 null,
                 false,
-                ['Authorization' => 'token '.$this['config']['github']['access_token']]
+                [
+                    'Authorization' => 'token '.$this['config']['github']['access_token'],
+                    'Accept' => 'application/vnd.github.machine-man-preview+json',
+                ]
             );
         }
 

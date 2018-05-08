@@ -32,7 +32,7 @@ class GitHubController
 
         $repo_key_id = DB::select($sql, [$username, static::TYPE_LOWER], true) ?? false;
 
-        return (int) $repo_key_id;
+        return (int)$repo_key_id;
     }
 
     /**
@@ -50,7 +50,7 @@ class GitHubController
 
         $repo_key_id = DB::select($sql, [static::TYPE_LOWER, $repo], true) ?? false;
 
-        return (int) $repo_key_id;
+        return (int)$repo_key_id;
     }
 
     /**
@@ -66,15 +66,11 @@ class GitHubController
     {
         $array = [];
 
-        $khsci = new KhsCI();
-
-        $property = 'oauth_'.static::TYPE_LOWER;
-
-        $oauth = $khsci->$property;
+        $khsci = new KhsCI(['github_access_token' => $accessToken]);
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $oauth::getProjects((string) $accessToken, $page);
+                $json = $khsci->user_basic_info->getProjects($page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -238,7 +234,7 @@ class GitHubController
                 }
             }
 
-            if (1 === (int) $webhooksStatus && 1 === (int) $buildActivate) {
+            if (1 === (int)$webhooksStatus && 1 === (int)$buildActivate) {
                 $open_or_close = 1;
             }
 
@@ -347,7 +343,7 @@ EOF;
 
         if ($_GET['sync'] ?? false or $sync) {
             $this->syncProject(
-                (string) $uid, (string) $username, (string) $email, (string) $pic, (string) $accessToken
+                (string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken
             );
             $sync = true;
         }
@@ -359,7 +355,7 @@ EOF;
         $array = [];
 
         foreach ($cacheArray as $k => $status) {
-            if (1 === (int) $status) {
+            if (1 === (int)$status) {
                 $array_active[$k] = $status;
 
                 continue;

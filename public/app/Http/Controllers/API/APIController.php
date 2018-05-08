@@ -31,6 +31,7 @@ class APIController
                 'coding' => $host.'/oauth/coding/login',
                 'gitee' => $host.'/oauth/gitee/login',
                 'github' => $host.'/oauth/github/login',
+                'github_apps' => $host.'/oauth/github/apps/login'
             ],
             'webhoks@admin' => [
                 'list@get' => [
