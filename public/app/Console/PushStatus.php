@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Http\Controllers\Status\GitHubController;
+use Exception;
 
 class PushStatus
 {
@@ -17,7 +18,7 @@ class PushStatus
      * @param string $description
      * @param string $context
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function push(string $login_username,
                                 string $repo_full_name,
