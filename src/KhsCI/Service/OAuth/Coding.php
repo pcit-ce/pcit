@@ -78,6 +78,7 @@ class Coding implements OAuth
      * @param bool        $raw
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false)

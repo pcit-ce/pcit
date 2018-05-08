@@ -32,7 +32,7 @@ class GitHubController
 
         $repo_key_id = DB::select($sql, [$username, static::TYPE_LOWER], true) ?? false;
 
-        return (int)$repo_key_id;
+        return (int) $repo_key_id;
     }
 
     /**
@@ -50,7 +50,7 @@ class GitHubController
 
         $repo_key_id = DB::select($sql, [static::TYPE_LOWER, $repo], true) ?? false;
 
-        return (int)$repo_key_id;
+        return (int) $repo_key_id;
     }
 
     /**
@@ -74,7 +74,7 @@ class GitHubController
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $oauth::getProjects((string)$accessToken, $page);
+                $json = $oauth::getProjects((string) $accessToken, $page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -92,7 +92,7 @@ class GitHubController
                     $default_branch = $obj_repo->default_branch;
 
                     /**
-                     * 获取 repo 全名，默认分支，是否为管理员（拥有全部权限）
+                     * 获取 repo 全名，默认分支，是否为管理员（拥有全部权限）.
                      *
                      * gitee permission
                      *
@@ -115,7 +115,7 @@ class GitHubController
     }
 
     /**
-     * 用户表中已存在用户信息，则更新数据
+     * 用户表中已存在用户信息，则更新数据.
      *
      * @param $uid
      * @param $username
@@ -134,7 +134,7 @@ class GitHubController
         if ($user_key_id) {
             $sql = 'UPDATE user SET git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
             DB::update($sql, [
-                    $git_type_lower, $uid, $username, $email, $pic, $accessToken, $user_key_id
+                    $git_type_lower, $uid, $username, $email, $pic, $accessToken, $user_key_id,
                 ]
             );
         } else {
@@ -202,7 +202,6 @@ class GitHubController
             }
 
             if (!$repo_key_id) {
-
                 $sql = 'INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?,?)';
 
                 DB::insert($sql, [
@@ -239,14 +238,13 @@ class GitHubController
                 }
             }
 
-            if (1 === (int)$webhooksStatus && 1 === (int)$buildActivate) {
+            if (1 === (int) $webhooksStatus && 1 === (int) $buildActivate) {
                 $open_or_close = 1;
             }
 
             /**
-             * repo 表已存在数据，则更新表
+             * repo 表已存在数据，则更新表.
              */
-
             $sql = <<<'EOF'
 UPDATE repo SET 
 
@@ -272,7 +270,7 @@ EOF;
     }
 
     /**
-     * 更新仓库管理员
+     * 更新仓库管理员.
      *
      * @param int    $repo_key_id
      * @param string $uid
@@ -332,7 +330,6 @@ EOF;
         // cache
 
         if (!($ajax)) {
-
             // 非 ajax 请求返回静态 HTML 页面
 
             require __DIR__.'/../../../../public/profile/index.html';
@@ -350,7 +347,7 @@ EOF;
 
         if ($_GET['sync'] ?? false or $sync) {
             $this->syncProject(
-                (string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken
+                (string) $uid, (string) $username, (string) $email, (string) $pic, (string) $accessToken
             );
             $sync = true;
         }
@@ -362,7 +359,7 @@ EOF;
         $array = [];
 
         foreach ($cacheArray as $k => $status) {
-            if (1 === (int)$status) {
+            if (1 === (int) $status) {
                 $array_active[$k] = $status;
 
                 continue;

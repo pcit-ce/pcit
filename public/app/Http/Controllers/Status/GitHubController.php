@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Status;
 
+use App\GetAccessToken;
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Support\DB;
 
 class GitHubController
 {
@@ -23,6 +23,7 @@ class GitHubController
      * @param mixed ...$arg
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function list(...$arg)
@@ -31,7 +32,6 @@ class GitHubController
     }
 
     /**
-     * @param string $login_username
      * @param string $repo_full_name
      * @param string $commit_sha
      * @param string $state
@@ -44,30 +44,16 @@ class GitHubController
      *
      * @throws Exception
      */
-    public function create(string $login_username,
-                           string $repo_full_name,
+    public function create(string $repo_full_name,
                            string $commit_sha,
                            string $state,
                            string $target_url,
                            string $description,
                            string $context,
                            string $accessToken = null
-    )
-    {
-        $sql = 'SELECT repo_admin FROM repo WHERE repo_full_name=? AND git_type=?';
-
-        $admin = DB::select($sql, [$repo_full_name, 'github'], true);
-
+    ) {
         if (!$accessToken) {
-            foreach (json_decode($admin, true) as $k) {
-                $sql = 'SELECT access_token FROM user WHERE uid=? AND git_type=?';
-                $output = DB::select($sql, [$k, 'github'], true);
-
-                if ($output) {
-                    $accessToken = $output;
-                    break;
-                }
-            }
+            $accessToken = GetAccessToken::byRepoFullName($repo_full_name);
         }
 
         list($username, $repo) = explode('/', $repo_full_name);
@@ -89,6 +75,7 @@ class GitHubController
      * @param mixed ...$arg
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listCombinedStatus(...$arg)

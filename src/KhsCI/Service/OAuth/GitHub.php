@@ -260,8 +260,8 @@ class GitHub implements OAuth
         $obj = json_decode($json);
 
         if ($obj->message ?? false) {
-            if ('Not Found' === $obj->message){
-                throw new Exception('Not Found, maybe you are Collaborators !',404);
+            if ('Not Found' === $obj->message) {
+                throw new Exception('Not Found, maybe you are Collaborators !', 404);
             }
 
             throw new Exception('Hook already exists on this repository', 422);

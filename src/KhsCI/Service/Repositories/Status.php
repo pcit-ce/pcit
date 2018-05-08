@@ -35,7 +35,8 @@ class Status
      * @param string $ref
      *
      * @return mixed
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     public function list(string $username, string $repo, string $ref)
     {
@@ -54,8 +55,10 @@ class Status
      * @param string $target_url
      * @param string $description
      * @param string $context
+     * @param string $access_token
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function create(string $username,
@@ -64,8 +67,9 @@ class Status
                            string $state = 'pending',
                            string $target_url = 'https://ci.khs1994.com',
                            string $description = 'The analysis or builds is pending',
-                           string $context = 'continuous-integration/khsci/push')
-    {
+                           string $context = 'continuous-integration/khsci/push',
+                           string $access_token = null
+    ) {
         $url = [self::API_URL, 'repos', $username, $repo, 'statuses', $commit_sha];
 
         $url = implode('/', $url);
@@ -76,6 +80,10 @@ class Status
             'description' => $description,
             'context' => $context,
         ]);
+
+        if ($access_token) {
+            return self::$curl->post($url, $data, ['Authorization' => 'token '.$access_token]);
+        }
 
         return self::$curl->post($url, $data);
     }
@@ -88,6 +96,7 @@ class Status
      * @param $ref
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listCombinedStatus($username, $repo, $ref)

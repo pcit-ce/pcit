@@ -26,6 +26,7 @@ use Pimple\Container;
  * @property Service\Webhooks\Coding            $webhooks_coding
  * @property Service\Webhooks\Gitee             $webhooks_gitee
  * @property Service\Webhooks\GitHub            $webhooks_github
+ * @property Service\Queue\Queue                $queue
  */
 class KhsCI extends Container
 {
@@ -34,7 +35,9 @@ class KhsCI extends Container
      */
     protected $providers = [
         Providers\OAuthProvider::class,
+        Providers\QueueProvider::class,
         Providers\RepositoriesProvider::class,
+        Providers\WebhooksProvider::class,
     ];
 
     /**

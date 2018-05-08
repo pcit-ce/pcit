@@ -24,7 +24,7 @@ class CodingController
 
         $khsci = new KhsCI();
         $oauth = $khsci->oauth_coding;
-        $json = json_decode($oauth::getProjects((string)$access_token))->data ?? false;
+        $json = json_decode($oauth::getProjects((string) $access_token))->data ?? false;
 
         $num = $json->totalRow ?? false;
         $array = [];

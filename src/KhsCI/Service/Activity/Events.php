@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Activity;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Activity;
 
 class Events
 {
-
 }

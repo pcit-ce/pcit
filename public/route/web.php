@@ -26,6 +26,8 @@ Route::get('about', 'AboutController');
 
 Route::get('team', 'TeamController');
 
+Route::get('docs', 'DocsController');
+
 /* OAuth login*/
 
 Route::get('oauth', 'Users\LoginController@index');
