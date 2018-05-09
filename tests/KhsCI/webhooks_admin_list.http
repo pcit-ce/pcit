@@ -1,5 +1,0 @@
-GET https://{{ci_host}}/webhooks/list/coding/khs1994/lnmp
-Authorization: token f2d055263c1b4ee88b038461220e83db
-
-###
-

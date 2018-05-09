@@ -21,11 +21,11 @@ class DB
     public static function connect()
     {
         if (!(self::$pdo instanceof PDO)) {
-            $mysql_host = Env::get('MYSQL_HOST');
-            $mysql_port = Env::get('MYSQL_PORT');
-            $mysql_username = Env::get('MYSQL_USERNAME');
-            $mysql_password = Env::get('MYSQL_PASSWORD');
-            $mysql_dbname = Env::get('MYSQL_DBNAME');
+            $mysql_host = Env::get('MYSQL_HOST') ?? '127.0.0.1';
+            $mysql_port = Env::get('MYSQL_PORT') ?? 3306;
+            $mysql_username = Env::get('MYSQL_USERNAME') ?? 'root';
+            $mysql_password = Env::get('MYSQL_PASSWORD') ?? 'mytest';
+            $mysql_dbname = Env::get('MYSQL_DBNAME') ?? 'test';
 
             $dsn = 'mysql:host='.$mysql_host.';port='.$mysql_port.';dbname='.$mysql_dbname;
 
@@ -170,13 +170,15 @@ class DB
      *
      * @param string $sql
      *
+     * @return int
+     *
      * @throws Exception
      */
-    public static function statement(string $sql): void
+    public static function statement(string $sql)
     {
         $pdo = self::connect();
 
-        $pdo->exec($sql);
+        return $pdo->exec($sql);
     }
 
     public static function createUser(): void

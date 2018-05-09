@@ -7,12 +7,10 @@ namespace App\Http\Controllers\Users;
 use Error;
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\{
-    Coding,
-    GitHub,
-    GitHubApp,
-    Gitee
-};
+use KhsCI\Service\OAuth\Coding;
+use KhsCI\Service\OAuth\Gitee;
+use KhsCI\Service\OAuth\GitHub;
+use KhsCI\Service\OAuth\GitHubApp;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
@@ -37,7 +35,7 @@ trait OAuthTrait
         }
 
         try {
-            $access_token = static::$oauth->getAccessToken((string)$code, $state)
+            $access_token = static::$oauth->getAccessToken((string) $code, $state)
                 ?? false;
 
             $git_type = self::$git_type;

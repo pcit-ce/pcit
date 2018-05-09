@@ -1,7 +1,8 @@
 <?php
 
-namespace KhsCI\Service\Checks;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Checks;
 
 use Curl\Curl;
 
@@ -18,45 +19,40 @@ class Run
         static::$api_url = 'https://api.github.com';
     }
 
-    public function create(string $repo_full_name)
+    public function create(string $repo_full_name): void
     {
         $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
     }
 
-    public function update()
+    public function update(): void
     {
-
     }
 
     /**
-     * List check runs for a specific ref
+     * List check runs for a specific ref.
      */
-    public function listSpecificRef()
+    public function listSpecificRef(): void
     {
-
     }
 
     /**
-     * List check runs in a check suite
+     * List check runs in a check suite.
      */
-    public function listCheckSuite()
+    public function listCheckSuite(): void
     {
-
     }
 
     /**
-     * Get a single check run
+     * Get a single check run.
      */
-    public function getSingle()
+    public function getSingle(): void
     {
-
     }
 
     /**
-     * List annotations for a check run
+     * List annotations for a check run.
      */
-    public function listAnnotations()
+    public function listAnnotations(): void
     {
-
     }
 }

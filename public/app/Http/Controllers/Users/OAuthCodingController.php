@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Users;
 
 use Exception;
-use KhsCI\{
-    KhsCI,
-    Service\OAuth\Coding,
-    Support\Response
-};
+use KhsCI\KhsCI;
+use KhsCI\Service\OAuth\Coding;
+use KhsCI\Support\Response;
 
 class OAuthCodingController
 {
@@ -30,7 +28,7 @@ class OAuthCodingController
     }
 
     /**
-     * OAuth 第一步获取登录 URL
+     * OAuth 第一步获取登录 URL.
      */
     public function getLoginUrl(): void
     {
@@ -40,7 +38,7 @@ class OAuthCodingController
     }
 
     /**
-     * OAuth 第二步在回调地址发起 POST 请求，返回 Access_Token
+     * OAuth 第二步在回调地址发起 POST 请求，返回 Access_Token.
      *
      * @throws Exception
      */

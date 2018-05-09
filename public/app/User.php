@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+declare(strict_types=1);
 
+namespace App;
 
 use Exception;
 use KhsCI\Support\DB;
@@ -24,8 +25,7 @@ class User
                                           string $email,
                                           string $pic,
                                           string $accessToken
-    )
-    {
+    ): void {
         $user_key_id = self::exists($git_type, $username);
 
         if ($user_key_id) {
@@ -45,14 +45,15 @@ class User
      * @param string $username
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function exists(string $git_type, string $username)
     {
         $sql = 'SELECT id FROM user WHERE username=? AND git_type=?';
 
-        $user_key_id = DB::select($sql, [$username, $git_type,], true) ?? false;
+        $user_key_id = DB::select($sql, [$username, $git_type], true) ?? false;
 
-        return (int)$user_key_id;
+        return (int) $user_key_id;
     }
 }

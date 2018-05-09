@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Repositories;
 
 use Curl\Curl;
@@ -26,6 +28,7 @@ class Webhooks
      * @param string $repo
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getWebhooks(bool $raw = false, string $username, string $repo)
@@ -53,6 +56,7 @@ class Webhooks
      * @param string $repo
      *
      * @return int
+     *
      * @throws Exception
      */
     public function getWebhooksStatus(string $url, string $username, string $repo)
@@ -120,6 +124,7 @@ class Webhooks
      * @param string $id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function unsetWebhooks(string $username, string $repo, string $id)

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Profile;
 
 use KhsCI\KhsCI;
-use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class GitHubAppController

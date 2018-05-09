@@ -6,12 +6,10 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\{
-    Coding,
-    Gitee,
-    GitHub,
-    GitHubApp
-};
+use KhsCI\Service\OAuth\Coding;
+use KhsCI\Service\OAuth\Gitee;
+use KhsCI\Service\OAuth\GitHub;
+use KhsCI\Service\OAuth\GitHubApp;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 

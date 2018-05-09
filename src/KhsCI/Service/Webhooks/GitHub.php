@@ -493,7 +493,7 @@ EOF;
         $repo = $obj->repositories;
 
         /**
-         * 可视为仓库管理员
+         * 可视为仓库管理员.
          */
         $sender_id = $obj->sender->id;
 
@@ -510,13 +510,13 @@ EOF;
      * @param int   $sender_id
      *
      * @return int
+     *
      * @throws Exception
      */
     private function installation_action_created(array $repo, int $installation_id, int $sender_id)
     {
         $i = 0;
         foreach ($repo as $k) {
-
             // 仓库信息存入 repo 表
 
             $id = $k->id;
@@ -551,14 +551,12 @@ EOF;
     private function installation_action_deleted(array $repo, int $installation_id, int $sender_id)
     {
         foreach ($repo as $k) {
-
             $id = $k->id;
             $repo_full_name = $k->full_name;
         }
 
         return 0;
     }
-
 
     /**
      * Any time a repository is added or removed from an installation.
@@ -568,6 +566,7 @@ EOF;
      * added 用户增加仓库
      *
      * removed 移除仓库
+     *
      * @throws Exception
      */
     private function installation_repositories(string $content)
@@ -598,6 +597,7 @@ EOF;
         foreach ($repo as $k) {
             $id = $k->id;
             $full_name = $k->full_name;
+
             return DB::update($sql, [$id, $full_name, $installation_id]);
         }
     }
@@ -605,21 +605,19 @@ EOF;
     /**
      * @deprecated
      */
-    private function integration_installation()
+    private function integration_installation(): void
     {
-
     }
 
     /**
      * @deprecated
      */
-    private function integration_installation_repositories()
+    private function integration_installation_repositories(): void
     {
-
     }
 
     /**
-     * Action
+     * Action.
      *
      * completed
      *
@@ -630,13 +628,12 @@ EOF;
      *
      * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
      */
-    private function check_suite()
+    private function check_suite(): void
     {
-
     }
 
     /**
-     * Action
+     * Action.
      *
      * created
      *
@@ -646,10 +643,7 @@ EOF;
      *
      * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
      */
-    private function check_run()
+    private function check_run(): void
     {
-
     }
-
-
 }

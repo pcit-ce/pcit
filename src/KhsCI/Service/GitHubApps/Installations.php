@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\GitHubApps;
 
 use Curl\Curl;
@@ -22,6 +24,7 @@ class Installations
      * List repositories that are accessible to the authenticated installation.
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function listRepositories($access_token)
@@ -41,6 +44,7 @@ class Installations
      * @param int $installation_id
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function listRepositoriesAccessible(int $installation_id)
@@ -50,20 +54,19 @@ class Installations
         return self::$curl->get($url);
     }
 
-    public function add()
+    public function add(): void
     {
-
     }
 
-    public function remove()
+    public function remove(): void
     {
-
     }
 
     /**
      * @param string $jwt
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getAppInfo(string $jwt)
@@ -82,6 +85,7 @@ class Installations
      * @param string $private_key_path
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getAccessToken(int $installation_id, string $private_key_path)
@@ -103,7 +107,6 @@ class Installations
      */
     private function getJWT(string $private_key_path)
     {
-        return JWT::getJWT($private_key_path, (int)Env::get('GITHUB_APP_ID'));
+        return JWT::getJWT($private_key_path, (int) Env::get('GITHUB_APP_ID'));
     }
-
 }

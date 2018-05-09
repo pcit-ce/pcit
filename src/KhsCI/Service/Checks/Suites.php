@@ -1,47 +1,37 @@
 <?php
 
-namespace KhsCI\Service\Checks;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Checks;
 
 class Suites
 {
     /**
-     * Get a single check suite
+     * Get a single check suite.
      */
-    public function getSingle()
+    public function getSingle(): void
     {
-
     }
 
     /**
-     * List check suites for a specific ref
+     * List check suites for a specific ref.
      */
-    public function listSpecificRef()
+    public function listSpecificRef(): void
     {
-
     }
 
     /**
-     * Set preferences for check suites on a repository
+     * Set preferences for check suites on a repository.
      */
-    public function setPreferences()
+    public function setPreferences(): void
     {
-
     }
 
-    /**
-     *
-     */
-    public function create()
+    public function create(): void
     {
-
     }
 
-    /**
-     *
-     */
-    public function request()
+    public function request(): void
     {
-
     }
 }

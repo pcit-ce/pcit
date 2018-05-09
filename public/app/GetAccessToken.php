@@ -13,6 +13,7 @@ class GetAccessToken
      * @param int $rid
      *
      * @return array|null|string
+     *
      * @throws Exception
      */
     public static function byRid(int $rid)

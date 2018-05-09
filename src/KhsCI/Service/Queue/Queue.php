@@ -352,6 +352,7 @@ EOF;
             $image = $array['image'];
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
+            $env = $array['environment'] ?? null;
 
             if ($event) {
                 if (!in_array('push', $event, true)) {
@@ -366,9 +367,9 @@ EOF;
             Log::connect()->debug('Run Container By Image '.$image);
 
             $docker_container
-                ->setEnv([
+                ->setEnv(array_merge([
                     'CI_SCRIPT' => $this->parseCommand($image, $commands),
-                ])
+                ], self::parseEnv($env)))
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
                 ->setLabels(['com.khs1994.ci' => $unique_id])
@@ -615,6 +616,27 @@ EOF;
     }
 
     /**
+     * @param array $env
+     *
+     * @return array|null
+     */
+    private function parseEnv(?array $env)
+    {
+        if (!$env) {
+            return null;
+        }
+
+        $env_array = [];
+
+        foreach ($env as $k) {
+            $array = explode('=', $k);
+            $env_array[$array[0]] = $array[1];
+        }
+
+        return $env_array;
+    }
+
+    /**
      * 运行服务.
      *
      * @param array  $service
@@ -629,16 +651,6 @@ EOF;
         foreach ($service as $service_name => $array) {
             $image = $array['image'];
             $env = $array['environment'] ?? null;
-
-            $env_array = [];
-
-            if ($env) {
-                foreach ($env as $k) {
-                    $array = explode('=', $k);
-                    $env_array[$array[0]] = $array[1];
-                }
-            }
-
             $entrypoint = $array['entrypoint'] ?? null;
             $command = $array['command'] ?? null;
 
@@ -652,7 +664,7 @@ EOF;
             $docker_image->pull($image, $tag);
 
             $container_id = $docker_container
-                ->setEnv($env_array)
+                ->setEnv(self::parseEnv($env))
                 ->setEntrypoint($entrypoint)
                 ->setHostConfig(null, $unique_id)
                 ->setLabels(['com.khs1994.ci' => $unique_id])

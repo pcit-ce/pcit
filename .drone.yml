@@ -26,6 +26,14 @@ pipeline:
   php:
     image: khs1994/php-fpm:${PHP_VERSION}
     pull: true
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=mytest
+      - MYSQL_DBNAME=khsci
     commands:
       - pwd
       - composer install -q

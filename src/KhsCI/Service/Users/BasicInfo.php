@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Users;
 
 use Curl\Curl;
@@ -21,6 +23,7 @@ class BasicInfo
      * @param bool $raw
      *
      * @return array|mixed
+     *
      * @throws Exception
      */
     public function getUserInfo(bool $raw = false)
@@ -44,11 +47,11 @@ class BasicInfo
     }
 
     /**
-     *
      * @param int  $page
      * @param bool $raw
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getRepos(int $page = 1, bool $raw = false)

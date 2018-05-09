@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Support;
 
 use Firebase\JWT\JWT as JWTService;
@@ -18,11 +20,11 @@ class JWT
     {
         $privateKey = file_get_contents($private_key_path);
 
-        $token = array(
-            "iss" => $iss,
-            "iat" => time(),
-            "exp" => time() + 10 * 60
-        );
+        $token = [
+            'iss' => $iss,
+            'iat' => time(),
+            'exp' => time() + 10 * 60,
+        ];
 
         $jwt = JWTService::encode($token, $privateKey, 'RS256');
 
