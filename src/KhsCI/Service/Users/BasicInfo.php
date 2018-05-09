@@ -44,13 +44,14 @@ class BasicInfo
     }
 
     /**
+     *
      * @param int  $page
      * @param bool $raw
      *
      * @return mixed
      * @throws Exception
      */
-    public function getProjects(int $page = 1, bool $raw = false)
+    public function getRepos(int $page = 1, bool $raw = false)
     {
         $url = self::$api_url.'/user/repos?page='.$page;
 

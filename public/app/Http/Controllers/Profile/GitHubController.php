@@ -51,7 +51,7 @@ class GitHubController
 
         for ($page = 1; $page <= 100; ++$page) {
             try {
-                $json = $khsci->user_basic_info->getProjects($page);
+                $json = $khsci->user_basic_info->getRepos($page);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }

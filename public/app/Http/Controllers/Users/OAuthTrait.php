@@ -21,7 +21,7 @@ trait OAuthTrait
     /**
      * @var GitHubApp|Coding|GitHub|Gitee
      */
-    public static $oauth;
+    protected static $oauth;
 
     /**
      * @param null|string $state

@@ -40,6 +40,24 @@ class CI
 
     const GITHUB_STATUS_SUCCESS = 'success';
 
+    const GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS = 'success';
+
+    const GITHUB_CHECK_SUITE_CONCLUSION_FAILURE = 'failure';
+
+    const GITHUB_CHECK_SUITE_CONCLUSION_NEUTRAL = 'neutral';
+
+    const GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED = 'cancelled';
+
+    const GITHUB_CHECK_SUITE_CONCLUSION_TIMED_OUT = 'timed_out';
+
+    const GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED = 'action_required';
+
+    const GITHUB_CHECK_SUITE_STATUS_QUEUED = 'queued';
+
+    const GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS = 'in_progress';
+
+    const GITHUB_CHECK_SUITE_COMPLETED = 'completed';
+
     public static function environment()
     {
         return getenv('APP_ENV');

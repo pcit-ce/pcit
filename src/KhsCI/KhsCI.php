@@ -102,7 +102,6 @@ class KhsCI extends Container
                 false,
                 [
                     'Authorization' => 'token '.$this['config']['github_ee']['access_token'],
-                    'Accept' => 'application/vnd.github.machine-man-preview+json',
                 ]
             );
         }

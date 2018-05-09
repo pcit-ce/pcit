@@ -44,7 +44,7 @@ class GitHub
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
-        // return $this->$type($content);
+        return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {
@@ -488,21 +488,29 @@ EOF;
 
         $action = $obj->action;
 
-        $installation = $obj->installation;
-
-        $installation_id = $installation->id;
+        $installation_id = $obj->installation->id;
 
         $repo = $obj->repositories;
 
-        var_dump($repo);
+        /**
+         * 可视为仓库管理员
+         */
+        $sender_id = $obj->sender->id;
 
-        exit;
+        foreach ($repo as $k) {
 
-        $sql = 'INSERT builds(action,event_type) VALUES()';
+            $id = $k->id;
+            $repo_full_name = $k->full_name;
+        }
+        $sql = <<<EOF
+INSERT github_app_installation VALUES(null,?,JSON_OBJECT('id',?,'repo_full_name',?),?,null,null)
 
-        DB::insert($sql, []);
+EOF;
 
+
+        DB::insert($sql, [$installation_id, $id, $repo_full_name, $sender_id]);
     }
+
 
     /**
      * Any time a repository is added or removed from an installation.
@@ -512,10 +520,38 @@ EOF;
      * added 用户增加仓库
      *
      * removed 移除仓库
+     * @throws Exception
      */
-    private function installation_repositories()
+    private function installation_repositories(string $content)
     {
+        $obj = json_decode($content);
 
+        $action = $obj->action;
+
+        $installation_id = $obj->installation->id;
+
+        $repo_type = 'repositories_'.$action;
+
+        $repo = $obj->$repo_type;
+
+        if ('added' === $action) {
+            $sql = <<<EOF
+UPDATE github_app_installation 
+
+SET 
+
+repo=JSON_ARRAY_APPEND(repo,'$',JSON_OBJECT('id',?,'full_name',?)) WHERE installation_id=?
+
+EOF;
+        } else {
+            $sql = 'UPDATE github_app_installation SET repo=JSON_REMOVE(repo,?) WHERE installation_id=?';
+        }
+
+        foreach ($repo as $k) {
+            $id = $k->id;
+            $full_name = $k->full_name;
+            return DB::update($sql, [$id, $full_name, $installation_id]);
+        }
     }
 
     /**
@@ -534,11 +570,34 @@ EOF;
 
     }
 
+    /**
+     * Action
+     *
+     * completed
+     *
+     * requested
+     *
+     * rerequested
+     *
+     *
+     * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
+     */
     private function check_suite()
     {
 
     }
 
+    /**
+     * Action
+     *
+     * created
+     *
+     * updated
+     *
+     * rerequested
+     *
+     * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
+     */
     private function check_run()
     {
 

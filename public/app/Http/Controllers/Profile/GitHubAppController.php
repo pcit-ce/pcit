@@ -16,6 +16,6 @@ class GitHubAppController
 
         $khsci = new KhsCI(['github_app_access_token' => $access_token]);
 
-        return json_decode($khsci->github_apps_installations->list(), true);
+        return json_decode($khsci->github_apps_installations->listRepositoriesAccessible(162542), true);
     }
 }
