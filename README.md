@@ -1,6 +1,6 @@
 # khsci
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![Build Status](https://travis-ci.org/khs1994-php/khsci.svg?branch=master)](https://travis-ci.org/khs1994-php/khsci) [![StyleCI](https://styleci.io/repos/119219872/shield?branch=master)](https://styleci.io/repos/119219872)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![KhsCI](https://ci2.khs1994.com:10000/github/khs1994-php/khsci/status)](https://ci2.khs1994.com:10000/github/khs1994-php/khsci)
 
 CI Based Docker Powered by PHP
 
