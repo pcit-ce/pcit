@@ -44,7 +44,7 @@ class GitHub
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
-        // return $this->$type($content);
+        return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {
@@ -488,21 +488,77 @@ EOF;
 
         $action = $obj->action;
 
-        $installation = $obj->installation;
-
-        $installation_id = $installation->id;
+        $installation_id = $obj->installation->id;
 
         $repo = $obj->repositories;
 
-        var_dump($repo);
+        /**
+         * 可视为仓库管理员
+         */
+        $sender_id = $obj->sender->id;
 
-        exit;
+        if ('created' === $action) {
+            return $this->installation_action_created($repo, $installation_id, $sender_id);
+        }
 
-        $sql = 'INSERT builds(action,event_type) VALUES()';
-
-        DB::insert($sql, []);
-
+        return $this->installation_action_deleted($installation_id, $repo, $sender_id);
     }
+
+    /**
+     * @param array $repo
+     * @param int   $installation_id
+     * @param int   $sender_id
+     *
+     * @return int
+     * @throws Exception
+     */
+    private function installation_action_created(array $repo, int $installation_id, int $sender_id)
+    {
+        $i = 0;
+        foreach ($repo as $k) {
+
+            // 仓库信息存入 repo 表
+
+            $id = $k->id;
+
+            $repo_full_name = $k->full_name;
+
+            if (0 === $i) {
+                $sql = <<<EOF
+INSERT github_app_installation VALUES(null,?,json_array_append(repo,'$',?),?,null,null);
+EOF;
+                DB::update($sql, [$installation_id, $id, $sender_id]);
+            } else {
+                $sql = <<<EOF
+
+UPDATE github_app_installation SET repo=JSON_ARRAY_APPEND(repo,'$',?) WHERE installation_id=?
+
+EOF;
+                DB::update($sql, [$id, $installation_id]);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param array $repo
+     * @param int   $installation_id
+     * @param int   $sender_id
+     *
+     * @return int
+     */
+    private function installation_action_deleted(array $repo, int $installation_id, int $sender_id)
+    {
+        foreach ($repo as $k) {
+
+            $id = $k->id;
+            $repo_full_name = $k->full_name;
+        }
+
+        return 0;
+    }
+
 
     /**
      * Any time a repository is added or removed from an installation.
@@ -512,10 +568,38 @@ EOF;
      * added 用户增加仓库
      *
      * removed 移除仓库
+     * @throws Exception
      */
-    private function installation_repositories()
+    private function installation_repositories(string $content)
     {
+        $obj = json_decode($content);
 
+        $action = $obj->action;
+
+        $installation_id = $obj->installation->id;
+
+        $repo_type = 'repositories_'.$action;
+
+        $repo = $obj->$repo_type;
+
+        if ('added' === $action) {
+            $sql = <<<EOF
+UPDATE github_app_installation 
+
+SET 
+
+repo=JSON_ARRAY_APPEND(repo,'$',JSON_OBJECT('id',?,'full_name',?)) WHERE installation_id=?
+
+EOF;
+        } else {
+            $sql = 'UPDATE github_app_installation SET repo=JSON_REMOVE(repo,?) WHERE installation_id=?';
+        }
+
+        foreach ($repo as $k) {
+            $id = $k->id;
+            $full_name = $k->full_name;
+            return DB::update($sql, [$id, $full_name, $installation_id]);
+        }
     }
 
     /**
@@ -534,11 +618,34 @@ EOF;
 
     }
 
+    /**
+     * Action
+     *
+     * completed
+     *
+     * requested
+     *
+     * rerequested
+     *
+     *
+     * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
+     */
     private function check_suite()
     {
 
     }
 
+    /**
+     * Action
+     *
+     * created
+     *
+     * updated
+     *
+     * rerequested
+     *
+     * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
+     */
     private function check_run()
     {
 

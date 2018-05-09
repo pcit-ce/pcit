@@ -64,6 +64,25 @@
         if (0 === data.length) {
           $("#display").append("Not Build Yet !");
         } else {
+          let build_id = data.id;
+          let build_status = data.build_status;
+          let commit_id = data.commit_id;
+          let commit_message = data.commit_message;
+          let branch = data.branch;
+          let committer_name = data.committer_name;
+          let compare = data.compare;
+          let end_time = data.end_time;
+          let nbsp = '&nbsp;&nbsp;';
+
+          $("#display").append('<h2>' + '# ' + build_id + nbsp +
+            branch + nbsp +
+            build_status + nbsp +
+            "<a href='" + commit_id + "' target='_blank'>" + commit_id.slice(0, 7) + "</a>" + nbsp +
+            commit_message + nbsp +
+            committer_name + nbsp +
+            "<a href='" + compare + "' target='_blank'>Compare" + "</a>" + nbsp +
+            end_time + nbsp + '</h2>'
+          );
           $("#display").append("<pre>" + data.data + "</pre>");
           //$("#current").trigger('click');
         }
@@ -131,17 +150,16 @@
             $.each(status, function (id, status) {
               id = id.replace('k', '');
 
-              let nbsp = '&nbsp;&nbsp;';
+              let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
               let a_content = "<a href='builds/" + id + "' target='_blank'>" +
-                id + nbsp +
+                '# ' + id + "</a>" + nbsp +
+
                 status[0] + nbsp +
 
                 status[2] + nbsp +
 
-                status[3] + nbsp +
-
-                "</a>";
+                status[3] + nbsp;
 
               $("#display").append('<br><br>' + a_content + nbsp);
 

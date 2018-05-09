@@ -112,10 +112,13 @@ EOF;
         $sql = <<<'EOF'
 SELECT 
 
+id,
 build_status,
 commit_id,
 branch,
 committer_name,
+commit_message,
+compare,
 end_time
 
 FROM builds WHERE 
@@ -130,13 +133,6 @@ EOF;
 
         $output = $output[0];
 
-        return [
-            'status' => $output['build_status'],
-            'commit_id' => $output['commit_id'],
-            'branch' => $output['branch'],
-            'committer_name' => $output['committer_name'],
-            'end_time' => $output['end_time'],
-            'data' => $build_log,
-        ];
+        return array_merge($output, ['data' => $build_log]);
     }
 }

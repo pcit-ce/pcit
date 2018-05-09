@@ -94,6 +94,7 @@ class APIController
                 'coding' => $host.'/profile/coding/{username}',
                 'gitee' => $host.'/profile/gitee/{username}',
                 'github' => $host.'/profile/github/{username}',
+                'github_app' => $host.'/profile/github_app/{username}',
             ],
             'statuses@github' => [
                 'list@get' => $host.'/status/github/{username}/{repo}/{ref}',

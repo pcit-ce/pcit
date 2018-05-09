@@ -22,6 +22,7 @@
     "php": ">=7.1",
     "ext-json": "*",
     "doctrine/cache": "^1.6",
+    "firebase/php-jwt": "^5.0",
     "khs1994/curl": "dev-master",
     "khs1994/docker": "dev-master",
     "monolog/monolog": "^1.23",
