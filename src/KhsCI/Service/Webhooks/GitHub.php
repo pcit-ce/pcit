@@ -497,18 +497,66 @@ EOF;
          */
         $sender_id = $obj->sender->id;
 
+        if ('created' === $action) {
+            return $this->installation_action_created($repo, $installation_id, $sender_id);
+        }
+
+        return $this->installation_action_deleted($installation_id, $repo, $sender_id);
+    }
+
+    /**
+     * @param array $repo
+     * @param int   $installation_id
+     * @param int   $sender_id
+     *
+     * @return int
+     * @throws Exception
+     */
+    private function installation_action_created(array $repo, int $installation_id, int $sender_id)
+    {
+        $i = 0;
+        foreach ($repo as $k) {
+
+            // 仓库信息存入 repo 表
+
+            $id = $k->id;
+
+            $repo_full_name = $k->full_name;
+
+            if (0 === $i) {
+                $sql = <<<EOF
+INSERT github_app_installation VALUES(null,?,json_array_append(repo,'$',?),?,null,null);
+EOF;
+                DB::update($sql, [$installation_id, $id, $sender_id]);
+            } else {
+                $sql = <<<EOF
+
+UPDATE github_app_installation SET repo=JSON_ARRAY_APPEND(repo,'$',?) WHERE installation_id=?
+
+EOF;
+                DB::update($sql, [$id, $installation_id]);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param array $repo
+     * @param int   $installation_id
+     * @param int   $sender_id
+     *
+     * @return int
+     */
+    private function installation_action_deleted(array $repo, int $installation_id, int $sender_id)
+    {
         foreach ($repo as $k) {
 
             $id = $k->id;
             $repo_full_name = $k->full_name;
         }
-        $sql = <<<EOF
-INSERT github_app_installation VALUES(null,?,JSON_OBJECT('id',?,'repo_full_name',?),?,null,null)
 
-EOF;
-
-
-        DB::insert($sql, [$installation_id, $id, $repo_full_name, $sender_id]);
+        return 0;
     }
 
 
