@@ -12,6 +12,8 @@
   <br>
   <br>
 </header>
+<div id="repo">
+</div>
 <div>
   <button id="current">Current</button>
   <button id="branches">Branches</button>
@@ -283,6 +285,13 @@
   $(document).ready(function () {
 
     display_title(type_from_url);
+
+    let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;';
+
+    $('#repo').append('<h2>' + git_type + nbsp + username + '/' + repo + nbsp +
+      "<a href='" + base_full_url + "/getstatus' target='_blank'>" +
+      '<image src="' + base_full_url + '/status" />' + '</a></h2>'
+    );
 
     $.ajax({
 

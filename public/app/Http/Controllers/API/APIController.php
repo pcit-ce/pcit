@@ -33,6 +33,18 @@ class APIController
                 'github' => $host.'/oauth/github/login',
                 'github_apps' => $host.'/oauth/github_app/login',
             ],
+            'logout' => [
+                'coding' => $host.'/coding/logout',
+                'gitee' => $host.'/gitee/logout',
+                'github' => $host.'/github/logout',
+                'github_apps' => $host.'/github_app/logout',
+            ],
+            'profile' => [
+                'coding' => $host.'/profile/coding/{username}',
+                'gitee' => $host.'/profile/gitee/{username}',
+                'github' => $host.'/profile/github/{username}',
+                'github_app' => $host.'/profile/github_app/{username}',
+            ],
             'webhoks@admin' => [
                 'list@get' => [
                     'coding' => $host.'/webhooks/coding/{username}/{repo}',
@@ -91,12 +103,6 @@ class APIController
                 'coding' => $host.'/sync/coding',
                 'gitee' => $host.'/sync/gitee',
                 'github' => $host.'/sync/github',
-            ],
-            'profile' => [
-                'coding' => $host.'/profile/coding/{username}',
-                'gitee' => $host.'/profile/gitee/{username}',
-                'github' => $host.'/profile/github/{username}',
-                'github_app' => $host.'/profile/github_app/{username}',
             ],
             'statuses@github' => [
                 'list@get' => $host.'/status/github/{username}/{repo}/{ref}',

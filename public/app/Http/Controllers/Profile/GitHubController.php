@@ -10,6 +10,8 @@ use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\DB;
+use KhsCI\Support\Env;
+use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class GitHubController
@@ -31,7 +33,7 @@ class GitHubController
 
         $repo_key_id = DB::select($sql, [static::GIT_TYPE, $repo], true) ?? false;
 
-        return (int) $repo_key_id;
+        return (int)$repo_key_id;
     }
 
     /**
@@ -215,7 +217,7 @@ class GitHubController
                 }
             }
 
-            if (1 === (int) $webhooksStatus && 1 === (int) $buildActivate) {
+            if (1 === (int)$webhooksStatus && 1 === (int)$buildActivate) {
                 $open_or_close = 1;
             }
 
@@ -293,11 +295,21 @@ EOF;
     {
         $git_type = static::GIT_TYPE;
 
+        $username_from_web = $arg[0];
+
         $email = Session::get($git_type.'.email');
         $uid = Session::get($git_type.'.uid');
         $username = Session::get($git_type.'.username');
         $pic = Session::get($git_type.'.pic');
         $accessToken = Session::get($git_type.'.access_token');
+
+        if (null === $username or null === $accessToken) {
+            Response::redirect(Env::get('CI_HOST').'/login');
+        }
+
+        if ($username_from_web !== $username) {
+            Response::redirect('/profile/'.$git_type.'/'.$username);
+        }
 
         $arg[0] === $username && $username = $arg[0];
 
@@ -326,7 +338,7 @@ EOF;
 
         if ($_GET['sync'] ?? false or $sync) {
             $this->syncProject(
-                (string) $uid, (string) $username, (string) $email, (string) $pic, (string) $accessToken
+                (string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken
             );
             $sync = true;
         }
@@ -338,7 +350,7 @@ EOF;
         $array = [];
 
         foreach ($cacheArray as $k => $status) {
-            if (1 === (int) $status) {
+            if (1 === (int)$status) {
                 $array_active[$k] = $status;
 
                 continue;

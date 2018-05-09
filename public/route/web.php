@@ -48,6 +48,8 @@ Route::get('oauth/gitee/login', 'Users\OAuthGiteeController@getLoginUrl');
 
 Route::get('oauth/gitee', 'Users\OAuthGiteeController@getAccessToken');
 
+Route::get('{git_type}/logout', 'Profile\LogOut');
+
 /*Admin webhooks: list create delete*/
 
 Route::post('webhooks/{git_type}/{username}/{repo}/{id}', 'Webhooks\Admin\Controller@add');
