@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Repo;
 use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
+use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 
 class ListController
@@ -27,11 +29,7 @@ class ListController
      */
     public function post(...$arg)
     {
-        list($gitType, $username, $repo) = $arg;
-
-        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
-
-        $rid = DB::select($sql, [$gitType, $username, $repo], true);
+        $rid = Repo::getRepoId(...$arg);
 
         $sql = 'SELECT id FROM builds WHERE rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
 
@@ -45,6 +43,61 @@ class ListController
         }
 
         return $this->getBuildDetails(null, null, null, $last_build_id);
+    }
+
+    /**
+     * @param mixed ...$arg
+     *
+     * @throws Exception
+     */
+    public function status(...$arg)
+    {
+        $branch = $_GET['branch'] ?? null;
+
+        if (!$branch) {
+            $branch = Repo::getDefaultBranch(...$arg) ?? 'master';
+        }
+
+        $rid = Repo::getRepoId(...$arg);
+
+        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? ORDER BY id LIMIT 1';
+
+        $status = DB::select($sql, [$rid, $branch], true);
+
+        if (null === $status) {
+            header('Content-Type: image/svg+xml;charset=utf-8');
+            require __DIR__.'/../../../../public/ico/unknown.svg';
+            exit;
+        }
+
+        header('Content-Type: image/svg+xml;charset=utf-8');
+
+        require __DIR__.'/../../../../public/ico/'.$status.'.svg';
+    }
+
+    /**
+     * @param mixed ...$arg
+     *
+     * @return string
+     */
+    public function getStatus(...$arg)
+    {
+        list($git_type, $username, $repo) = $arg;
+        $host = Env::get('CI_HOST');
+        return <<<EOF
+<pre>
+
+<h1>IMAGE</h1>
+
+$host/$git_type/$username/$repo/status?branch=master
+
+<h1>MARKDOWN</h1>
+
+[![Build Status]($host/$git_type/$username/$repo/status?branch=master)]($host/$git_type/$username/$repo)
+
+</pre>
+EOF;
+
     }
 
     /**
