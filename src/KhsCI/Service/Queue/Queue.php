@@ -64,7 +64,7 @@ id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_n
 
 FROM 
 
-builds WHERE build_status=? AND event_type IN (?,?,?) ORDER BY id DESC LIMIT 1;
+builds WHERE build_status=? AND event_type IN (?,?,?) ORDER BY id DESC;
 EOF;
 
         $output = DB::select($sql, [
@@ -89,6 +89,10 @@ EOF;
             self::$gitType = $k['git_type'];
 
             self::$build_key_id = (int) $build_key_id;
+
+            Log::connect()->debug('====== Start Build ======');
+
+            Log::connect()->debug('Build Key id is '.self::$build_key_id);
 
             // commit 信息跳过构建
             self::skip($commit_message);
@@ -201,6 +205,8 @@ EOF;
     }
 
     /**
+     * 解析 镜像名 中包含的 变量.
+     *
      * @param string $image
      * @param array  $config
      *
@@ -270,15 +276,15 @@ EOF;
         /**
          * 解析 .drone.yml.
          */
-        $workspace = $yaml_obj->workspace;
+        $git = $yaml_obj->git ?? null;
 
-        $pipeline = $yaml_obj->pipeline;
+        $workspace = $yaml_obj->workspace ?? null;
 
-        $services = $yaml_obj->services;
+        $pipeline = $yaml_obj->pipeline ?? null;
 
-        $matrix = $yaml_obj->matrix;
+        $services = $yaml_obj->services ?? null;
 
-        $matrix = $this->parseMatrix($matrix);
+        $matrix = $this->parseMatrix($yaml_obj->matrix);
 
         /**
          * 变量命名尽量与 docker container run 的参数保持一致.
@@ -299,7 +305,6 @@ EOF;
         $workdir = $base_path.'/'.$path;
 
         $docker = Docker::docker(Docker::createOptionArray(Env::get('DOCKER_HOST')));
-
         $docker_container = $docker->container;
         $docker_image = $docker->image;
         $docker_network = $docker->network;
@@ -308,7 +313,6 @@ EOF;
         $docker_network->create($unique_id);
 
         $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
-
         $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
 
         /*
@@ -328,6 +332,13 @@ EOF;
             /*
              * 后续根据 throw 出的异常执行对应的操作
              */
+            throw new CIException(
+                self::$unique_id,
+                self::$commit_id,
+                self::$event_type,
+                CI::BUILD_STATUS_PASSED,
+                self::$build_key_id
+            );
         }
     }
 
@@ -368,7 +379,7 @@ EOF;
 
             $docker_container
                 ->setEnv(array_merge([
-                    'CI_SCRIPT' => $this->parseCommand($image, $commands),
+                    'CI_SCRIPT' => $this->parseCommand($setup, $image, $commands),
                 ], self::parseEnv($env)))
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
@@ -377,9 +388,19 @@ EOF;
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
 
-            $tag = explode(':', $image)[1] ?? 'latest';
+            // docker.khs1994.com:1000/username/image:1.14.0
 
-            $docker_image->pull($image, $tag);
+            $image_array = explode(':', $image);
+
+            // image not include :
+
+            $tag = null;
+
+            if (1 !== count($image_array)) {
+                $tag = $image_array[count($image_array) - 1];
+            }
+
+            $docker_image->pull($image, $tag ?? 'latest');
 
             $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
 
@@ -387,29 +408,22 @@ EOF;
 
             $this->docker_container_logs($docker_container, $container_id);
         }
-
-        throw new CIException(
-            self::$unique_id,
-            self::$commit_id,
-            self::$event_type,
-            CI::BUILD_STATUS_PASSED,
-            self::$build_key_id
-        );
     }
 
     /**
-     * @param $image
-     * @param $commands
+     * @param string $setup
+     * @param        $image
+     * @param        $commands
      *
      * @return string
      */
-    private function parseCommand($image, $commands)
+    private function parseCommand(string $setup, $image, $commands)
     {
         $content = '\n';
 
         $content .= 'echo;echo\n\n';
 
-        $content .= 'echo Start Build in '.$image;
+        $content .= 'echo Start Build in '.$setup.' "=>" '.$image;
 
         $content .= '\n\necho;echo\n\n';
 
@@ -500,6 +514,7 @@ EOF;
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
+                    Log::connect()->debug('Build Error, ExitCode iss not 0');
                     throw new CIException(
                         self::$unique_id,
                         self::$commit_id,
@@ -618,12 +633,12 @@ EOF;
     /**
      * @param array $env
      *
-     * @return array|null
+     * @return array
      */
     private function parseEnv(?array $env)
     {
         if (!$env) {
-            return null;
+            return [];
         }
 
         $env_array = [];
@@ -668,7 +683,7 @@ EOF;
                 ->setEntrypoint($entrypoint)
                 ->setHostConfig(null, $unique_id)
                 ->setLabels(['com.khs1994.ci' => $unique_id])
-                ->create($image, null, $command);
+                ->create($image, $service_name, $command);
 
             $docker_container->start($container_id);
         }

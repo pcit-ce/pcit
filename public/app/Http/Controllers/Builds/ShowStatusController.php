@@ -20,7 +20,7 @@ class ShowStatusController
     {
         list($gitType, $username, $repo, $branch) = $arg;
 
-        $sql = 'SELECT build_status FROM builds WHERE git_type=? AND repo=? AND branch=?';
+        $sql = 'SELECT build_status FROM builds WHERE git_type=? AND rid=? AND branch=?';
 
         DB::select($sql, [$gitType, $repo, $branch]);
     }

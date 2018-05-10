@@ -43,9 +43,10 @@ class Status
      */
     public function list(string $username, string $repo, string $ref)
     {
-        $url = [self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'statuses'];
-
-        $url = implode('/', $url);
+        $url = implode('/', [
+                self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'statuses',
+            ]
+        );
 
         return self::$curl->get($url);
     }
@@ -70,12 +71,13 @@ class Status
                            string $state = 'pending',
                            string $target_url = 'https://ci.khs1994.com',
                            string $description = 'The analysis or builds is pending',
-                           string $context = 'continuous-integration/khsci/push',
+                           string $context = 'continuous-integration/ci.khs1994.com/push',
                            string $access_token = null
     ) {
-        $url = [self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha];
-
-        $url = implode('/', $url);
+        $url = implode('/', [
+                self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha,
+            ]
+        );
 
         $data = json_encode([
             'state' => $state,
@@ -104,9 +106,10 @@ class Status
      */
     public function listCombinedStatus($username, $repo, $ref)
     {
-        $url = [self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'status'];
-
-        $url = implode('/', $url);
+        $url = implode('/', [
+                self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'status',
+            ]
+        );
 
         return json_decode(self::$curl->get($url), true);
     }

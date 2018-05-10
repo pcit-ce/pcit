@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use Docker\Docker;
 use Error;
 use Exception;
 use KhsCI\CIException;
@@ -66,6 +67,8 @@ class Queue
             Log::connect()->debug($e->getCode().$e->getMessage());
         } catch (Exception | Error $e) {
             throw new Exception($e->getMessage());
+        } finally {
+            self::systemDelete();
         }
     }
 
@@ -203,14 +206,47 @@ EOF;
             $description,
             'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type
         );
-
-        var_dump($output);
     }
 
     /**
      * Remove all Docker Resource.
+     *
+     * @throws Exception
      */
-    private function systemDelete(): void
+    private static function systemDelete(): void
     {
+        $docker = Docker::docker(Docker::createOptionArray(Env::get('DOCKER_HOST')));
+
+        $docker_container = $docker->container;
+
+        $docker_image = $docker->image;
+
+        $docker_network = $docker->network;
+
+//        $docker_volume = $docker->volume;
+
+        // clean container
+
+        $output = $docker_container->list(true, null, false, [
+            'label' => 'com.khs1994.ci='.self::$unique_id,
+        ]);
+
+        foreach (json_decode($output) as $k) {
+            $id = $k->Id;
+
+            if (!$id) {
+                continue;
+            }
+
+            Log::connect()->debug('Delete Container '.$id);
+
+            $docker_container->delete($id, true, true);
+        }
+
+        // don't clean image
+
+        // clean volume
+
+        // clean network
     }
 }

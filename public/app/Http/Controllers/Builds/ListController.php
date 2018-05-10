@@ -60,7 +60,7 @@ class ListController
 
         $rid = Repo::getRepoId(...$arg);
 
-        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? ORDER BY id LIMIT 1';
+        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? ORDER BY id DESC LIMIT 1';
 
         $status = DB::select($sql, [$rid, $branch], true);
 

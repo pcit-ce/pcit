@@ -33,7 +33,7 @@ pipeline:
       - MYSQL_PORT=3306
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=mytest
-      - MYSQL_DBNAME=khsci
+      - MYSQL_DBNAME=test
     commands:
       - pwd
       - composer install -q
