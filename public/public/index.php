@@ -31,13 +31,13 @@ try {
 }
 
 ini_set('session.cookie_path', '/');
-ini_set('session.cookie_domain', '.'.getenv('SESSION_DOMAIN'));
+ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
 ini_set('session.cookie_lifetime', '690000'); // s
 ini_set('session.cookie_secure', 'On');
 
-// session_set_cookie_params(1800 , '/', '.'..getenv('SESSION_DOMAIN', true));
+// session_set_cookie_params(1800 , '/', '.'..getenv('CI_SESSION_DOMAIN', true));
 
-date_default_timezone_set(getenv('TZ'));
+date_default_timezone_set(getenv('CI_TZ'));
 
 /*
  * Open Debug?

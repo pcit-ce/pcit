@@ -215,7 +215,7 @@ EOF;
      */
     private static function systemDelete(): void
     {
-        $docker = Docker::docker(Docker::createOptionArray(Env::get('DOCKER_HOST')));
+        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
 
         $docker_container = $docker->container;
 

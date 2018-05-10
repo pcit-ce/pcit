@@ -38,13 +38,13 @@ class GitHub
         $signature = Request::getHeader('X-Hub-Signature');
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
         $content = file_get_contents('php://input');
-        $secret = Env::get('WEBHOOKS_TOKEN') ?? md5('khsci');
+        $secret = Env::get('CI_WEBHOOKS_TOKEN') ?? md5('khsci');
 
         list($algo, $github_hash) = explode('=', $signature, 2);
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
-        return $this->$type($content);
+        // return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {

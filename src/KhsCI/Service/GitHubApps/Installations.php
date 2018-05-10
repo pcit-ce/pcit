@@ -117,6 +117,6 @@ class Installations
      */
     private function getJWT(string $private_key_path)
     {
-        return JWT::getJWT($private_key_path, (int) Env::get('GITHUB_APP_ID'));
+        return JWT::getJWT($private_key_path, (int) Env::get('CI_GITHUB_APP_ID'));
     }
 }

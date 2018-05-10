@@ -304,7 +304,7 @@ EOF;
          */
         $workdir = $base_path.'/'.$path;
 
-        $docker = Docker::docker(Docker::createOptionArray(Env::get('DOCKER_HOST')));
+        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
         $docker_container = $docker->container;
         $docker_image = $docker->image;
         $docker_network = $docker->network;

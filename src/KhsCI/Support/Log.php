@@ -21,7 +21,7 @@ class Log
      */
     public static function connect(string $name = 'khsci', string $log_path = null)
     {
-        date_default_timezone_set(Env::get('TZ', 'PRC'));
+        date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
 
         $log_path = $log_path ?? sys_get_temp_dir().DIRECTORY_SEPARATOR.'khsci.log';
 
