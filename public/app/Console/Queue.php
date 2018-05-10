@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use Docker\Docker;
+use App\Builds;
 use Error;
 use Exception;
 use KhsCI\CIException;
@@ -70,6 +70,7 @@ class Queue
             throw new Exception($e->getMessage());
         } finally {
             $queue::systemDelete(self::$unique_id);
+            Builds::updateStopAt(self::$build_key_id);
         }
     }
 

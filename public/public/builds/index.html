@@ -76,6 +76,10 @@
           let end_time = data.end_time;
           let nbsp = '&nbsp;&nbsp;';
 
+          d = new Date(parseInt(end_time) * 1000);
+
+          end_time = d.toLocaleString();
+
           $("#display").append('<h2>' + '# ' + build_id + nbsp +
             branch + nbsp +
             build_status + nbsp +
@@ -118,6 +122,20 @@
             let create_time = status.create_time;
             let end_time = status.end_time;
             let nbsp = "&nbsp;&nbsp;&nbsp;";
+            let nbsp2 = nbsp + nbsp + nbsp;
+            if (null == create_time) {
+              create_time = nbsp2 + nbsp2 + 'Build Is Pending'
+            } else {
+              d = new Date(parseInt(create_time) * 1000);
+              create_time = d.toLocaleString();
+            }
+
+            if (null == end_time) {
+              end_time = ' '
+            } else {
+              d = new Date(parseInt(end_time) * 1000);
+              end_time = d.toLocaleString();
+            }
 
             $("#display").append(
               "<tr>" +
@@ -154,27 +172,34 @@
 
               let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
-              let a_content = "<a href='builds/" + id + "' target='_blank'>" +
-                '# ' + id + "</a>" + nbsp +
+              let end_time = status[3];
 
-                status[0] + nbsp +
+              if (null == end_time) {
+                end_time = '&nbsp;&nbsp;&nbsp;Build Is Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+              } else {
 
-                status[2] + nbsp +
+                d = new Date(end_time * 1000);
 
-                status[3] + nbsp;
+                end_time = d.toLocaleString();
+              }
+              $("#display").append("<tr><td><a href='builds/" + id + "' target='_blank'>" +
+                '# ' + id + "</a></td>" +
 
-              $("#display").append('<br><br>' + a_content + nbsp);
+                '<td>' + nbsp + status[0] + nbsp + '</td>' +
 
-              $("#display").append(
-                "<a href='" + status[4] + "' target='_black'>" + status[1] + "</a>");
+                '<td>' + nbsp + status[2] + nbsp + '</td>' +
+
+                '<td>' + nbsp + end_time + nbsp + '</td>' +
+
+                "<td><a href='" + status[4] + "' target='_black'>" + status[1] + "</a></td></tr>");
 
             });
 
             $("#display").append("<hr>");
 
-
-          });
+          })
         }
+
         break;
 
       case "pull_requests":
@@ -197,6 +222,20 @@
             let create_time = status.create_time;
             let end_time = status.end_time;
             let nbsp = "&nbsp;&nbsp;&nbsp;";
+
+            if (null == create_time) {
+              create_time = 'Build Is Pending'
+            } else {
+              d = new Date(create_time * 1000);
+              create_time = d.toLocaleString();
+            }
+
+            if (null == end_time) {
+              end_time = ' ';
+            } else {
+              d = new Date(end_time * 1000);
+              end_time = d.toLocaleString();
+            }
 
             $("#display").append(
               "<tr>" +

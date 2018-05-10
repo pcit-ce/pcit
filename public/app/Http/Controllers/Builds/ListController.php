@@ -156,7 +156,7 @@ EOF;
      */
     public function getBuildDetails(...$args)
     {
-        list($gitType, $username, $repo, $build_key_id) = $args;
+        $build_key_id = $args[3];
 
         $redis = Cache::connect();
 

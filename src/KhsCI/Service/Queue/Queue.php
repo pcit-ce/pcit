@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Queue;
 
+use App\Builds;
 use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
@@ -78,6 +79,9 @@ EOF;
 
         foreach ($output as $k) {
             $build_key_id = $k['id'];
+
+            Builds::updateStartAt((int)$build_key_id);
+
             $rid = $k['rid'];
             $commit_message = $k['commit_message'];
             $branch = $k['branch'];
@@ -278,7 +282,7 @@ EOF;
 
         // 解析 .drone.yml.
 
-        $git = $yaml_obj->git ?? null;
+        // $git = $yaml_obj->git ?? null;
 
         $workspace = $yaml_obj->workspace ?? null;
 
@@ -707,11 +711,11 @@ EOF;
 
         $docker_container = $docker->container;
 
-        $docker_image = $docker->image;
+        // $docker_image = $docker->image;
 
         $docker_network = $docker->network;
 
-//        $docker_volume = $docker->volume;
+        $docker_volume = $docker->volume;
 
         // clean container
 
@@ -735,6 +739,10 @@ EOF;
 
         // clean volume
 
+        $docker_volume->remove($unique_id);
+
         // clean network
+
+        $docker_network->remove($unique_id);
     }
 }

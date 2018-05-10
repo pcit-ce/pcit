@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Repo;
 use Exception;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
@@ -26,9 +27,7 @@ class BranchesController
 
         $base_url = Git::getUrl($git_type, $repo_full_name);
 
-        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_full_name=?';
-
-        $rid = DB::select($sql, [$git_type, $repo_full_name], true);
+        $rid = Repo::getRepoId($git_type,$username,$repo);
 
         $sql = 'SELECT DISTINCT branch FROM builds WHERE rid=?';
 
