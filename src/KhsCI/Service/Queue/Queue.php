@@ -88,7 +88,7 @@ EOF;
             self::$tag_name = $k['tag_name'];
             self::$gitType = $k['git_type'];
 
-            self::$build_key_id = (int) $build_key_id;
+            self::$build_key_id = (int)$build_key_id;
 
             Log::connect()->debug('====== Start Build ======');
 
@@ -174,7 +174,7 @@ EOF;
                 self::$commit_id,
                 self::$event_type,
                 CI::BUILD_STATUS_INACTIVE,
-                (int) $build_activate
+                (int)$build_activate
             );
         }
     }
@@ -200,7 +200,7 @@ EOF;
             self::$commit_id,
             self::$event_type,
             CI::BUILD_STATUS_SKIP,
-            (int) self::$build_key_id
+            (int)self::$build_key_id
         );
     }
 
@@ -263,9 +263,11 @@ EOF;
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
-        $yaml_obj = (object) yaml_parse(HTTP::get(Git::getRawUrl(
+        $yaml_obj = (object)yaml_parse(HTTP::get(Git::getRawUrl(
             $gitType, $repo_full_name, $commit_id, '.drone.yml'))
         );
+
+        // $yaml_obj = (object)yaml_parse(HTTP::get(Env::get('CI_HOST').'/.drone.yml'));
 
         $yaml_to_json = json_encode($yaml_obj);
 
@@ -273,9 +275,9 @@ EOF;
 
         DB::update($sql, [$yaml_to_json, self::$build_key_id]);
 
-        /**
-         * 解析 .drone.yml.
-         */
+
+        // 解析 .drone.yml.
+
         $git = $yaml_obj->git ?? null;
 
         $workspace = $yaml_obj->workspace ?? null;
@@ -299,9 +301,8 @@ EOF;
             $path = null;
         }
 
-        /**
-         * --workdir.
-         */
+
+        // --workdir.
         $workdir = $base_path.'/'.$path;
 
         $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
@@ -315,31 +316,31 @@ EOF;
         $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
         $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
 
-        /*
-         * 矩阵构建循环
-         */
+
+        // 矩阵构建循环
         foreach ($matrix as $k => $config) {
-            /*
-             * 启动服务
-             */
+
+            //启动服务
             $this->runService($services, $unique_id, $config, $docker);
 
-            /*
-             * 构建步骤
-             */
+
+            // 构建步骤
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
 
-            /*
-             * 后续根据 throw 出的异常执行对应的操作
-             */
-            throw new CIException(
-                self::$unique_id,
-                self::$commit_id,
-                self::$event_type,
-                CI::BUILD_STATUS_PASSED,
-                self::$build_key_id
-            );
+            // 清理
+            self::systemDelete($unique_id);
+
         }
+
+        // 后续根据 throw 出的异常执行对应的操作
+
+        throw new CIException(
+            self::$unique_id,
+            self::$commit_id,
+            self::$event_type,
+            CI::BUILD_STATUS_PASSED,
+            self::$build_key_id
+        );
     }
 
     /**
@@ -366,7 +367,11 @@ EOF;
             $env = $array['environment'] ?? null;
 
             if ($event) {
-                if (!in_array('push', $event, true)) {
+                if (is_string($event)) {
+                    if (self::$event_type !== $event) {
+                        continue;
+                    }
+                } elseif (!in_array(self::$event_type, $event, true)) {
                     Log::connect()->debug('Event '.$event.' not in '.implode(' | ', $event));
 
                     continue;
@@ -497,9 +502,9 @@ EOF;
                     $container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string) self::$build_key_id);
+                $prev_docker_log = $redis->hget('build_log', (string)self::$build_key_id);
 
-                $redis->hset('build_log', (string) self::$build_key_id, $prev_docker_log.$image_log);
+                $redis->hset('build_log', (string)self::$build_key_id, $prev_docker_log.$image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
@@ -687,5 +692,49 @@ EOF;
 
             $docker_container->start($container_id);
         }
+    }
+
+    /**
+     * Remove all Docker Resource.
+     *
+     * @param string $unique_id
+     *
+     * @throws Exception
+     */
+    public static function systemDelete(string $unique_id): void
+    {
+        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
+
+        $docker_container = $docker->container;
+
+        $docker_image = $docker->image;
+
+        $docker_network = $docker->network;
+
+//        $docker_volume = $docker->volume;
+
+        // clean container
+
+        $output = $docker_container->list(true, null, false, [
+            'label' => 'com.khs1994.ci='.self::$unique_id,
+        ]);
+
+        foreach (json_decode($output) as $k) {
+            $id = $k->Id;
+
+            if (!$id) {
+                continue;
+            }
+
+            Log::connect()->debug('Delete Container '.$id);
+
+            $docker_container->delete($id, true, true);
+        }
+
+        // don't clean image
+
+        // clean volume
+
+        // clean network
     }
 }

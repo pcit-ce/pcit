@@ -29,10 +29,11 @@ class Queue
      */
     public static function queue(): void
     {
-        try {
-            $khsci = new KhsCI();
+        $khsci = new KhsCI();
 
-            $queue = $khsci->queue;
+        $queue = $khsci->queue;
+
+        try {
             $queue();
         } catch (CIException $e) {
             self::$commit_id = $e->getCommitId();
@@ -64,11 +65,11 @@ class Queue
                     self::setBuildStatusErrored();
             }
 
-            Log::connect()->debug($e->getCode().$e->getMessage());
+            Log::connect()->debug($e->getCode().' '.$e->getMessage());
         } catch (Exception | Error $e) {
             throw new Exception($e->getMessage());
         } finally {
-            self::systemDelete();
+            $queue::systemDelete(self::$unique_id);
         }
     }
 
@@ -206,47 +207,5 @@ EOF;
             $description,
             'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type
         );
-    }
-
-    /**
-     * Remove all Docker Resource.
-     *
-     * @throws Exception
-     */
-    private static function systemDelete(): void
-    {
-        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
-
-        $docker_container = $docker->container;
-
-        $docker_image = $docker->image;
-
-        $docker_network = $docker->network;
-
-//        $docker_volume = $docker->volume;
-
-        // clean container
-
-        $output = $docker_container->list(true, null, false, [
-            'label' => 'com.khs1994.ci='.self::$unique_id,
-        ]);
-
-        foreach (json_decode($output) as $k) {
-            $id = $k->Id;
-
-            if (!$id) {
-                continue;
-            }
-
-            Log::connect()->debug('Delete Container '.$id);
-
-            $docker_container->delete($id, true, true);
-        }
-
-        // don't clean image
-
-        // clean volume
-
-        // clean network
     }
 }

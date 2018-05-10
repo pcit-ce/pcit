@@ -1,6 +1,14 @@
+#
+# @see http://docs.drone.io
+# @see http://docs.drone.io/zh/
+# @see https://github.com/drone-plugins
+# @see http://plugins.drone.io/
+#
+
 workspace:
   base: /app
-  path: .
+  # path: .
+  path: src
 
 #
 # khs1994.com PHP CI/CD 由 khs1994-docker/ci 提供。
@@ -17,19 +25,23 @@ pipeline:
   #
   php:
     image: khs1994/php-fpm:${PHP_VERSION}
-    # pull: true
+    pull: true
+    environment:
+      - CI_REDIS_HOST=redis
+      - CI_REDIS_PORT=6379
+      - CI_MYSQL_HOST=mysql
+      - CI_MYSQL_PORT=3306
+      - CI_MYSQL_USERNAME=root
+      - CI_MYSQL_PASSWORD=mytest
+      - CI_MYSQL_DBNAME=test
     commands:
       - pwd
-      - echo '\'
-      - echo ${A}
-      - echo $${A}
-      - echo $A
       - composer install -q
       - composer update -q
       #
       # 服务初始化需要时间，这里延迟执行
       #
-      - sleep 20
+      - sleep 60
       - vendor/bin/phpunit
     # volumes:
       # - /Users/khs1994/khs1994/khs1994-lnmp/tmp/cache:/tmp/cache
@@ -153,6 +165,7 @@ services:
 
   redis:
     image: redis:${REDIS_VERSION}
+    command: ["--bind", "0.0.0.0"]
 
   # mongodb:
   #   image: mongo:${MONGODB_VERSION}
@@ -160,21 +173,21 @@ services:
 
 matrix:
   PHP_VERSION:
-    - 7.2.0-alpine3.7
-    - 7.1.0-alpine3.4
-    # - 7.0.0-alpine3.4
-    # - 5.6.0-alpine3.4
+    - 7.2.5-alpine3.7
+    - 7.1.17-alpine3.4
+    # - 7.0.30-alpine3.4
+    # - 5.6.36-alpine3.4
   NGINX_VERSION:
-    - 1.13.0
+    - 1.13.12
   REDIS_VERSION:
-    - 4.0.0-alpine
+    - 4.0.9-alpine
   MYSQL_VERSION:
-    - 8.0.11
-    # - 5.7.0
+    # - 8.0.11
+    - 5.7.22
   MONGODB_VERSION:
-    - 3.7.0
+    - 3.7.3
   POSTGRESQL_VERSION:
-    - 10.0-alpine
+    - 10.3-alpine
 
 # branches:
 #   include: [ master, dev, feature/* ]

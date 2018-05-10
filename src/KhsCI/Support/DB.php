@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-//declare(strict_types=1);
 
 namespace KhsCI\Support;
 
@@ -36,7 +35,8 @@ class DB
 
                 self::$pdo = $pdo;
             } catch (PDOException $e) {
-                throw new Exception("Can't connect mysql server, mysql error code ".$e->getCode(), 500);
+                throw new Exception(
+                    'Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
             }
         }
 
