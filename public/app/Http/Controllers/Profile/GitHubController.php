@@ -33,7 +33,7 @@ class GitHubController
 
         $repo_key_id = DB::select($sql, [static::GIT_TYPE, $repo], true) ?? false;
 
-        return (int)$repo_key_id;
+        return (int) $repo_key_id;
     }
 
     /**
@@ -217,7 +217,7 @@ class GitHubController
                 }
             }
 
-            if (1 === (int)$webhooksStatus && 1 === (int)$buildActivate) {
+            if (1 === (int) $webhooksStatus && 1 === (int) $buildActivate) {
                 $open_or_close = 1;
             }
 
@@ -338,7 +338,7 @@ EOF;
 
         if ($_GET['sync'] ?? false or $sync) {
             $this->syncProject(
-                (string)$uid, (string)$username, (string)$email, (string)$pic, (string)$accessToken
+                (string) $uid, (string) $username, (string) $email, (string) $pic, (string) $accessToken
             );
             $sync = true;
         }
@@ -350,7 +350,7 @@ EOF;
         $array = [];
 
         foreach ($cacheArray as $k => $status) {
-            if (1 === (int)$status) {
+            if (1 === (int) $status) {
                 $array_active[$k] = $status;
 
                 continue;

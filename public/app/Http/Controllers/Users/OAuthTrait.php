@@ -42,7 +42,7 @@ trait OAuthTrait
 
             false !== $access_token && Session::put($git_type.'.access_token', $access_token);
 
-            $khsci = new KhsCI(['github_access_token' => $access_token]);
+            $khsci = new KhsCI([$git_type.'_access_token' => $access_token], $git_type);
 
             $userInfoArray = $khsci->user_basic_info->getUserInfo();
         } catch (Error $e) {
@@ -58,6 +58,7 @@ trait OAuthTrait
         Session::put($git_type.'.username', $name);
         Session::put($git_type.'.pic', $pic);
         Session::put($git_type.'.email', $email);
+        Session::put($git_type.'.expire', time() + 24 * 60 * 60);
 
         Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
     }

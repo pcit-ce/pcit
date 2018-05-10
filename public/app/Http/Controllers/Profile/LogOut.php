@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Profile;
 
 use KhsCI\Support\Env;
@@ -8,7 +10,7 @@ use KhsCI\Support\Session;
 
 class LogOut
 {
-    public function __invoke(...$args)
+    public function __invoke(...$args): void
     {
         list($git_type) = $args;
 

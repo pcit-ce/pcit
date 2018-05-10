@@ -73,7 +73,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI(['github_access_token' => $access_token]);
+        $khsci = new KhsCI(['github_access_token' => $access_token], static::$gitType);
 
         $json = $khsci->repo_webhooks->getWebhooks($raw, ...$arg);
 
@@ -113,7 +113,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI(['github_access_token' => $access_token]);
+        $khsci = new KhsCI(['github_access_token' => $access_token], static::$gitType);
 
         $getWebhooksStatus = $khsci->repo_webhooks->getWebhooksStatus($webhooksUrl, ...$arg);
 
@@ -160,7 +160,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI(['github_access_token' => $access_token]);
+        $khsci = new KhsCI(['github_access_token' => $access_token], static::$gitType);
 
         return $khsci->repo_webhooks->unsetWebhooks(...$arg);
     }

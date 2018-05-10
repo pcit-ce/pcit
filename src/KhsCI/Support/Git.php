@@ -8,13 +8,15 @@ use Exception;
 
 class Git
 {
-    const ALIYUN = 'aliyun';
+    const SUPPORT_ALIYUN = 'aliyun';
 
-    const CODING = 'coding';
+    const SUPPORT_CODING = 'coding';
 
-    const GITEE = 'gitee';
+    const SUPPORT_GITEE = 'gitee';
 
-    const GITHUB = 'github';
+    const SUPPORT_GITHUB = 'github';
+
+    const SUPPORT_GITHUB_APP = 'github_app';
 
     /**
      * @param string $type
@@ -62,6 +64,14 @@ class Git
                 }
 
                 break;
+            case 'github_app':
+                $url = 'https://github.com/'.$repo_full_name;
+
+                if ($ssh) {
+                    $url = 'git@githun.com:'.$repo_full_name;
+                }
+
+                break;
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -92,6 +102,10 @@ class Git
 
                 break;
             case 'github':
+                $url = null;
+
+                break;
+            case 'github_app':
                 $url = null;
 
                 break;
@@ -135,7 +149,10 @@ class Git
                 $url = null;
 
                 break;
+            case 'github_app':
+                $url = null;
 
+                break;
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -172,6 +189,11 @@ class Git
 
                 break;
             case 'github':
+                $url = null;
+
+                break;
+
+            case 'github_app':
                 $url = null;
 
                 break;
@@ -217,6 +239,11 @@ class Git
                 $url = 'https://raw.githubusercontent.com/'.$repo_full_name.'/'.$commit_id.'/'.$file_name;
 
                 break;
+
+            case 'github_app':
+                $url = 'https://raw.githubusercontent.com/'.$repo_full_name.'/'.$commit_id.'/'.$file_name;
+
+                break;
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -224,5 +251,44 @@ class Git
         $common_url = self::getUrl($type, $repo_full_name).'/raw/'.$commit_id.'/'.$file_name;
 
         return $url ?? $common_url;
+    }
+
+    /**
+     * @param string $git_type
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function getApiUrl(string $git_type)
+    {
+        switch ($git_type) {
+            case 'aliyun':
+                $url = '';
+
+                break;
+            case 'coding':
+                $url = 'open.coding.net/api';
+
+                break;
+
+            case 'gitee':
+                $url = 'gitee.com/api/v5';
+
+                break;
+
+            case 'github':
+                $url = 'api.github.com';
+
+                break;
+            case 'github_app':
+                $url = 'api.github.com';
+
+                break;
+            default:
+                throw new Exception('Not Support', 500);
+        }
+
+        return 'https://'.$url;
     }
 }

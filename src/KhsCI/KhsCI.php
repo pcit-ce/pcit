@@ -62,17 +62,18 @@ class KhsCI extends Container
     /**
      * KhsCI constructor.
      *
-     * @param array $config
+     * @param array  $config
+     * @param string $git_type
+     *
+     * @throws Exception
      */
-    public function __construct(array $config = [])
+    public function __construct(array $config = [], string $git_type = 'github')
     {
         parent::__construct($config);
-        /*
-         * 在容器中注入类
-         */
-        $this['config'] = Config::config($config);
 
-        $this['curl'] = new Curl();
+        // 在容器中注入类
+
+        $this['config'] = Config::config($config, $git_type);
 
         if ($this['config']['github']['access_token'] ?? false) {
             $this['curl'] = new Curl(
@@ -83,9 +84,7 @@ class KhsCI extends Container
                     'Accept' => 'application/vnd.github.machine-man-preview+json',
                 ]
             );
-        }
-
-        if ($this['config']['github_app']['access_token'] ?? false) {
+        } elseif ($this['config']['github_app']['access_token'] ?? false) {
             $this['curl'] = new Curl(
                 null,
                 false,
@@ -94,16 +93,16 @@ class KhsCI extends Container
                     'Accept' => 'application/vnd.github.machine-man-preview+json',
                 ]
             );
-        }
-
-        if ($this['config']['gitee_app']['access_token'] ?? false) {
+        } elseif ($this['config']['gitee']['access_token'] ?? false) {
             $this['curl'] = new Curl(
                 null,
                 false,
                 [
-                    'Authorization' => 'token '.$this['config']['github_ee']['access_token'],
+                    'Authorization' => 'token '.$this['config']['gitee']['access_token'],
                 ]
             );
+        } else {
+            $this['curl'] = new Curl();
         }
 
         set_time_limit(0);
