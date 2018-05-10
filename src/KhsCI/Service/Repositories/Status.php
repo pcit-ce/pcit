@@ -15,18 +15,21 @@ use Exception;
  */
 class Status
 {
-    const API_URL = 'https://api.github.com';
-
     private static $curl;
+
+    private static $api_url;
 
     /**
      * Status constructor.
      *
-     * @param Curl $curl
+     * @param Curl   $curl
+     * @param string $api_url
      */
-    public function __construct(Curl $curl)
+    public function __construct(Curl $curl, string $api_url)
     {
         self::$curl = $curl;
+
+        self::$api_url = $api_url;
     }
 
     /**
@@ -40,7 +43,7 @@ class Status
      */
     public function list(string $username, string $repo, string $ref)
     {
-        $url = [self::API_URL, 'repos', $username, $repo, 'commits', $ref, 'statuses'];
+        $url = [self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'statuses'];
 
         $url = implode('/', $url);
 
@@ -69,8 +72,9 @@ class Status
                            string $description = 'The analysis or builds is pending',
                            string $context = 'continuous-integration/khsci/push',
                            string $access_token = null
-    ) {
-        $url = [self::API_URL, 'repos', $username, $repo, 'statuses', $commit_sha];
+    )
+    {
+        $url = [self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha];
 
         $url = implode('/', $url);
 
@@ -101,7 +105,7 @@ class Status
      */
     public function listCombinedStatus($username, $repo, $ref)
     {
-        $url = [self::API_URL, 'repos', $username, $repo, 'commits', $ref, 'status'];
+        $url = [self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'status'];
 
         $url = implode('/', $url);
 

@@ -10,7 +10,6 @@ use KhsCI\Service\OAuth\Coding;
 use KhsCI\Service\OAuth\Gitee;
 use KhsCI\Service\OAuth\GitHub;
 use KhsCI\Service\OAuth\GitHubApp;
-use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
@@ -25,6 +24,11 @@ class OAuthGitHubController
 
     use OAuthTrait;
 
+    /**
+     * OAuthGitHubController constructor.
+     *
+     * @throws Exception
+     */
     public function __construct()
     {
         $khsci = new KhsCI();
@@ -38,7 +42,12 @@ class OAuthGitHubController
     {
         $git_type = static::$git_type;
 
-        if (Session::get($git_type.'.access_token')) {
+        /**
+         * logout -> unset access_token
+         *
+         * OAuth login -> get access_token and expire from Session | expire one day
+         */
+        if (Session::get($git_type.'.access_token') and Session::get($git_type.'.expire') > time()) {
             $username_from_session = Session::get($git_type.'.username');
 
             Response::redirect(implode('/', ['/profile', $git_type, $username_from_session]));

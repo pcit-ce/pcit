@@ -15,15 +15,15 @@ class RepositoriesProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['repo_collaborators'] = function ($app) {
-            return new Collaborators($app['curl']);
+            return new Collaborators($app['curl'],$app['config']['api_url']);
         };
 
         $pimple['repo_status'] = function ($app) {
-            return new Status($app['curl']);
+            return new Status($app['curl'], $app['config']['api_url']);
         };
 
         $pimple['repo_webhooks'] = function ($app) {
-            return new Webhooks($app['curl']);
+            return new Webhooks($app['curl'],$app['config']['api_url']);
         };
     }
 }

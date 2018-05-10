@@ -9,17 +9,15 @@ use Exception;
 
 class Webhooks
 {
-    const TYPE = 'github';
-
     private static $api_url;
 
     private static $curl;
 
-    public function __construct(Curl $curl)
+    public function __construct(Curl $curl, string $api_url)
     {
         self::$curl = $curl;
 
-        self::$api_url = 'https://api.github.com';
+        self::$api_url = $api_url;
     }
 
     /**
@@ -61,7 +59,7 @@ class Webhooks
      */
     public function getWebhooksStatus(string $url, string $username, string $repo)
     {
-        if ('github' === static::TYPE) {
+        if ('https://api.github.com' === static::$api_url) {
             /*
              * GitHub 不能添加重复 webhooks ,这里跳过判断
              */

@@ -20,6 +20,10 @@ class OAuthCodingController
 
     protected static $git_type = 'coding';
 
+    /**
+     * OAuthCodingController constructor.
+     * @throws Exception
+     */
     public function __construct()
     {
         $khsci = new KhsCI();
