@@ -9,12 +9,13 @@ use Exception;
 class Config
 {
     /**
-     * 配置项 生成数组
+     * 配置项 生成数组.
      *
      * @param array  $config
      * @param string $git_type
      *
      * @return array
+     *
      * @throws Exception
      */
     public static function config(array $config, string $git_type)

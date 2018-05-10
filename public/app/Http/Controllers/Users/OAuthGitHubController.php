@@ -42,7 +42,7 @@ class OAuthGitHubController
     {
         $git_type = static::$git_type;
 
-        /**
+        /*
          * logout -> unset access_token
          *
          * OAuth login -> get access_token and expire from Session | expire one day

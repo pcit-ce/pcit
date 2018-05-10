@@ -210,7 +210,7 @@ class Git
     /**
      * @param string $type
      * @param string $repo_full_name
-     * @param string $commit_id branch_name commit_id
+     * @param string $commit_id      branch_name commit_id
      * @param string $file_name
      *
      * @return string
@@ -257,6 +257,7 @@ class Git
      * @param string $git_type
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function getApiUrl(string $git_type)

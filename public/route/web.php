@@ -130,7 +130,6 @@ Route::get('{git_type}/{username}/{repo}/status', 'Builds\ListController@status'
 
 Route::get('{git_type}/{username}/{repo}/getstatus', 'Builds\ListController@getStatus');
 
-
 /* Star */
 
 Route::post('{git_type}/{username}/{repo}/star', 'Builds\ListController');

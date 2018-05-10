@@ -72,8 +72,7 @@ class Status
                            string $description = 'The analysis or builds is pending',
                            string $context = 'continuous-integration/khsci/push',
                            string $access_token = null
-    )
-    {
+    ) {
         $url = [self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha];
 
         $url = implode('/', $url);

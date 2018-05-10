@@ -22,6 +22,7 @@ class OAuthCodingController
 
     /**
      * OAuthCodingController constructor.
+     *
      * @throws Exception
      */
     public function __construct()

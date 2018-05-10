@@ -50,7 +50,7 @@ class ListController
      *
      * @throws Exception
      */
-    public function status(...$arg)
+    public function status(...$arg): void
     {
         $branch = $_GET['branch'] ?? null;
 
@@ -84,6 +84,7 @@ class ListController
     {
         list($git_type, $username, $repo) = $arg;
         $host = Env::get('CI_HOST');
+
         return <<<EOF
 <pre>
 
@@ -97,7 +98,6 @@ $host/$git_type/$username/$repo/status?branch=master
 
 </pre>
 EOF;
-
     }
 
     /**

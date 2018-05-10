@@ -1,7 +1,8 @@
 <?php
 
-namespace App;
+declare(strict_types=1);
 
+namespace App;
 
 use Exception;
 use KhsCI\Support\DB;
@@ -14,6 +15,7 @@ class Repo
      * @param string $repo
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getRepoId(string $git_type, string $username, string $repo)
@@ -31,6 +33,7 @@ class Repo
      * @param string $repo
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getDefaultBranch(string $git_type, string $username, string $repo)
