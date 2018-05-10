@@ -8,15 +8,19 @@ class Request
 {
     public static function getAllHeaders()
     {
-        $headers = [];
+        if (!function_exists('getallheaders')) {
+            $headers = [];
 
-        foreach ($_SERVER as $name => $value) {
-            if ('HTTP_' === substr($name, 0, 5)) {
-                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            foreach ($_SERVER as $name => $value) {
+                if ('HTTP_' === substr($name, 0, 5)) {
+                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                }
             }
+
+            return $headers;
         }
 
-        return $headers;
+        return getallheaders();
     }
 
     public static function getHeader($header = null, $default = null)

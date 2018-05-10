@@ -10,6 +10,7 @@ use KhsCI\Service\OAuth\Coding;
 use KhsCI\Service\OAuth\Gitee;
 use KhsCI\Service\OAuth\GitHub;
 use KhsCI\Service\OAuth\GitHubApp;
+use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
@@ -35,9 +36,17 @@ class OAuthGitHubController
 
     public function getLoginUrl(): void
     {
+        $git_type = static::$git_type;
+
+        if (Session::get($git_type.'.access_token')) {
+            $username_from_session = Session::get($git_type.'.username');
+
+            Response::redirect(implode('/', ['/profile', $git_type, $username_from_session]));
+        }
+
         $state = session_create_id();
 
-        Session::put(static::$git_type.'.state', $state);
+        Session::put($git_type.'.state', $state);
 
         $url = static::$oauth->getLoginUrl($state);
 

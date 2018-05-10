@@ -21,7 +21,7 @@ class GitHubAppController
 
         $access_token = Session::get(static::$git_type.'.access_token');
 
-        $username = Session::get(static::$git_type.'.github');
+        $username = Session::get(static::$git_type.'.username');
 
         if (null === $username or null === $access_token) {
             Response::redirect(Env::get('CI_HOST').'/login');

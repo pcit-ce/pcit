@@ -11,25 +11,35 @@ use KhsCI\Support\JWT;
 
 class Installations
 {
-    const API_URL = 'https://api.github.com';
-
     private static $curl;
 
-    public function __construct(Curl $curl)
+    private static $api_url;
+
+    /**
+     * Installations constructor.
+     *
+     * @param Curl   $curl
+     * @param string $api_url
+     */
+    public function __construct(Curl $curl, string $api_url)
     {
         self::$curl = $curl;
+
+        self::$api_url = $api_url;
     }
 
     /**
      * List repositories that are accessible to the authenticated installation.
      *
+     * @param string $access_token
+     *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function listRepositories($access_token)
+    public function listRepositories(string $access_token)
     {
-        $url = self::API_URL.'/installation/repositories';
+        $url = self::$api_url.'/installation/repositories';
 
         return self::$curl->get($url, null, [
                 'Authorization' => 'token '.$access_token,
@@ -49,7 +59,7 @@ class Installations
      */
     public function listRepositoriesAccessible(int $installation_id)
     {
-        $url = self::API_URL.'/user/installations/'.$installation_id.'/repositories';
+        $url = self::$api_url.'/user/installations/'.$installation_id.'/repositories';
 
         return self::$curl->get($url);
     }
@@ -71,7 +81,7 @@ class Installations
      */
     public function getAppInfo(string $jwt)
     {
-        $url = self::API_URL.'/app';
+        $url = self::$api_url.'/app';
 
         return self::$curl->get($url, null, [
                 'Authorization' => 'Bearer '.$jwt,
@@ -90,7 +100,7 @@ class Installations
      */
     public function getAccessToken(int $installation_id, string $private_key_path)
     {
-        $url = self::API_URL.'/installations/'.$installation_id.'/access_tokens';
+        $url = self::$api_url.'/installations/'.$installation_id.'/access_tokens';
 
         $jwt = self::getJWT($private_key_path);
 

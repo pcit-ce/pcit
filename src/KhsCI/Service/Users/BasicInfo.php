@@ -13,10 +13,10 @@ class BasicInfo
 
     private static $curl;
 
-    public function __construct(Curl $curl)
+    public function __construct(Curl $curl, string $api_url)
     {
         self::$curl = $curl;
-        self::$api_url = 'https://api.github.com';
+        self::$api_url = $api_url;
     }
 
     /**

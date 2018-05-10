@@ -4,11 +4,24 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
+use Exception;
+
 class Config
 {
-    public static function config($config)
+    /**
+     * 配置项 生成数组
+     *
+     * @param array  $config
+     * @param string $git_type
+     *
+     * @return array
+     * @throws Exception
+     */
+    public static function config(array $config, string $git_type)
     {
         return $config = [
+            'git_type' => $git_type,
+            'api_url' => Git::getAPIUrl($git_type),
             'coding' => [
                 'client_id' => getenv('CODING_CLIENT_ID'),
                 'client_secret' => getenv('CODING_CLIENT_SECRET'),

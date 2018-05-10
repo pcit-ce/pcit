@@ -13,7 +13,7 @@ class UserProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['user_basic_info'] = function ($app) {
-            return new BasicInfo($app['curl']);
+            return new BasicInfo($app['curl'], $app['config']['api_url']);
         };
     }
 }
