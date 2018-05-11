@@ -48,6 +48,34 @@ class Builds
     {
         $sql = 'SELECT git_type FROM builds WHERE id=?';
 
+        return DB::select($sql, [$build_key_id], true);
+    }
+
+    /**
+     * @param int $rid
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getRidByBuildKeyId(int $rid)
+    {
+        $sql = 'SELECT rid FROM builds WHERE id=?';
+
+        return DB::select($sql, [$rid], true);
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function get(int $build_key_id)
+    {
+        $sql = 'SELECT * FROM builds WHERE id=?';
+
         return DB::select($sql, [$build_key_id]);
     }
 }

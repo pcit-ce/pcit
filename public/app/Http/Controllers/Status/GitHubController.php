@@ -12,6 +12,11 @@ class GitHubController
 {
     private static $status;
 
+    /**
+     * GitHubController constructor.
+     *
+     * @throws Exception
+     */
     public function __construct()
     {
         $khsci = new KhsCI();

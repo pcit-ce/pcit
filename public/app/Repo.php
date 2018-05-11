@@ -44,4 +44,19 @@ class Repo
 
         return $default_branch;
     }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getRepoFullName(string $git_type, int $rid)
+    {
+        $sql = 'SELECT repo_full_name FROM repo WHERE rid=? AND git_type=?';
+
+        return DB::select($sql, [$rid, $git_type], true);
+    }
 }

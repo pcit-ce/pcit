@@ -163,25 +163,9 @@ EOF;
             $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
         ];
 
-        $lastId = DB::insert($sql, $data);
+        $last_insert_id = DB::insert($sql, $data);
 
-        $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
-
-        $repo_full_name = DB::select($sql, [static::$git_type, $rid], true);
-
-        $github_status = CI::GITHUB_STATUS_PENDING;
-
-        $target_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$lastId;
-
-        list($username, $repo_name) = explode('/', $repo_full_name);
-
-        return [
-            'rid' => $rid, [
-                $username, $repo_name, $commit_id, $github_status, $target_url,
-                'The analysis or builds is pending',
-                'continuous-integration/'.Env::get('CI_NAME').'/'.__FUNCTION__,
-            ],
-        ];
+        return ['build_key_id' => $last_insert_id];
     }
 
     /**
@@ -273,7 +257,7 @@ EOF;
      *
      * @param string $content
      *
-     * @return string
+     * @return array
      *
      * @throws Exception
      */
@@ -308,19 +292,20 @@ pull_request_id,branch,rid,build_status
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
-
-        return DB::insert($sql, [
-                static::$git_type, __FUNCTION__, $content, $action, $commit_id, $commit_message, $committer_username,
-                $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
+        $last_insert_id = DB::insert($sql, [
+                static::$git_type, __FUNCTION__, $content, $action, $commit_id, $commit_message,
+                $committer_username, $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
             ]
         );
+
+        return ['build_key_id' => $last_insert_id];
     }
 
     /**
      * @param string $tag
      * @param string $content
      *
-     * @return string
+     * @return array
      *
      * @throws Exception
      */
@@ -361,12 +346,12 @@ committer_username,rid,event_time,build_status,request_raw
 );
 EOF;
 
-        $last_id = DB::insert($sql, [
+        $last_insert_id = DB::insert($sql, [
             static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
             $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
         ]);
 
-        return $last_id;
+        return ['build_key_id' => $last_insert_id];
     }
 
     /**
@@ -648,28 +633,47 @@ EOF;
      *
      * completed
      *
-     * requested
+     * requested 用户推送分支，github post webhooks
      *
-     * rerequested
+     * rerequested 用户点击了重新运行按钮
      *
      *
      * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
      *
      * @param string $content
+     *
+     * @return array
+     *
+     * @throws Exception
      */
-    public function check_suite(string $content): void
+    public function check_suite(string $content)
     {
         $obj = json_decode($content);
 
-        $action = $obj->requested;
+        $action = $obj->action;
 
         $check_suite = $obj->check_suite;
 
         $check_suite_id = $check_suite->id;
 
-        $branch = $check_suite->branch;
+        $branch = $check_suite->head_branch;
 
         $commit_id = $check_suite->head_sha;
+
+        $sql = <<<EOF
+INSERT INTO builds(
+action,event_type,git_type,check_suites_id,branch,commit_id
+) VALUES (?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+            $action, __FUNCTION__, self::$git_type, $check_suite_id, $branch, $commit_id,
+        ]);
+
+        if ('rerequested' === $action) {
+        }
+
+        return ['build_key_id' => $last_insert_id];
     }
 
     /**

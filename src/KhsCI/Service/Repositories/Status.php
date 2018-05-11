@@ -70,8 +70,8 @@ class Status
                            string $commit_sha,
                            string $state = 'pending',
                            string $target_url = 'https://ci.khs1994.com',
-                           string $description = 'The analysis or builds is pending',
                            string $context = 'continuous-integration/ci.khs1994.com/push',
+                           string $description = 'The analysis or builds is pending',
                            string $access_token = null
     ) {
         $url = implode('/', [

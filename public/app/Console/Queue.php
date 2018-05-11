@@ -220,9 +220,9 @@ EOF;
             $repo_name,
             self::$commit_id,
             $state,
-            $target_url = Env::get('CI_HOST').'/github/'.$repo_username.'/'.$repo_name.'/builds/'.self::$build_key_id,
-            $description,
-            'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type
+            Env::get('CI_HOST').'/github/'.$repo_username.'/'.$repo_name.'/builds/'.self::$build_key_id,
+            'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type,
+            $description
         );
 
         Log::connect()->debug($output);

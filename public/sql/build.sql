@@ -27,5 +27,6 @@ CREATE TABLE `builds` (
   `action`             varchar(100),
   `stages`             VARCHAR(100),
   `matrix`             varchar(100),
+  `check_suites_id`    BIGINT,
   KEY (`id`)
 );
