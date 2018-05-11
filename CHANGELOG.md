@@ -2,6 +2,8 @@
 
 ## v18.06.0
 
+* [2018/05/13] KhsCI 是国内首家支持 GitHub [Checks API](https://blog.github.com/2018-05-07-introducing-checks-api/) 的 CI 系统
+
 * [2018/05/09] **2018** Only Support GitHub Apps
  
 * [2018/05/08] **后台任务** 刷新用户仓库列表

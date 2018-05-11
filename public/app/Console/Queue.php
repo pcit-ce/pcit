@@ -24,6 +24,8 @@ class Queue
 
     private static $build_key_id;
 
+    private static $git_type;
+
     /**
      * @throws Exception
      */
@@ -40,6 +42,7 @@ class Queue
             self::$unique_id = $e->getUniqueId();
             self::$event_type = $e->getEventType();
             self::$build_key_id = $e->getCode();
+            self::$git_type = Builds::getGitTypeByBuildKeyId(self::$build_key_id);
 
             /**
              * $e->getCode() is build key id.
@@ -87,6 +90,10 @@ class Queue
             CI::GITHUB_STATUS_FAILURE,
             'This Repo is Inactive'
         );
+
+        if ('github_app' === self::$git_type) {
+
+        }
     }
 
     /**
@@ -102,6 +109,10 @@ class Queue
             CI::GITHUB_STATUS_SUCCESS,
             'The '.Env::get('CI_NAME').' build is skip'
         );
+
+        if ('github_app' === self::$git_type) {
+
+        }
     }
 
     /**
@@ -111,22 +122,24 @@ class Queue
     {
         $sql = 'UPDATE builds SET build_status =? WHERE id=?';
 
-        /*
-         * 更新数据库状态
-         */
+        // 更新数据库状态
         DB::update($sql, [CI::BUILD_STATUS_ERRORED, self::$build_key_id]);
 
-        /*
-         * 通知 GitHub commit Status
-         */
+        // 通知 GitHub commit Status
         self::updateGitHubCommitStatus(
             CI::GITHUB_STATUS_ERROR,
             'The '.Env::get('CI_NAME').' build could not complete due to an error'
         );
 
-        /*
-         * 微信通知
-         */
+
+        // 微信通知
+
+
+        // GitHub App checks API
+
+        if ('github_app' === self::$git_type) {
+
+        }
     }
 
     /**
@@ -142,6 +155,10 @@ class Queue
             CI::GITHUB_STATUS_FAILURE,
             'The '.Env::get('CI_NAME').' build is failed'
         );
+
+        if ('github_app' === self::$git_type) {
+
+        }
     }
 
     /**
@@ -157,6 +174,10 @@ class Queue
             CI::GITHUB_STATUS_SUCCESS,
             'The '.Env::get('CI_NAME').' build passed'
         );
+
+        if ('github_app' === self::$git_type) {
+
+        }
     }
 
     /**
@@ -197,7 +218,7 @@ EOF;
             }
         }
 
-        $khsci = new KhsCI(['github_access_token' => $accessToken]);
+        $khsci = new KhsCI(['github_access_token' => $accessToken], 'github');
 
         $output = $khsci->repo_status->create(
             $repo_username,
@@ -208,5 +229,7 @@ EOF;
             $description,
             'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type
         );
+
+        Log::connect()->debug($output);
     }
 }

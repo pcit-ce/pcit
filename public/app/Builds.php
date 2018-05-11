@@ -36,4 +36,17 @@ class Builds
 
         return DB::update($sql, [time(), $build_key_id]);
     }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getGitTypeByBuildKeyId(int $build_key_id)
+    {
+        $sql = 'SELECT git_type FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id]);
+    }
 }

@@ -4,9 +4,11 @@
 
 * 安全性 除构建日志、项目特征信息外，本系统不存储任何用户数据、仓库代码
 
+* 便捷 基于 OAuth 协议，本系统不拥有账号体系，直接基于 Git 服务商账号体系
+
 * 多人协作 基于 Git 服务商的多人协作
 
-* 易部署（依托于 khs1994-docker/lnmp 提供的 PHP CaaS 解决方案）
+* 易部署 依托于 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) 提供的 PHP CaaS 解决方案，实现在多种环境中一键部署
 
 * 易迁移 （完全兼容 Drone CI）
 

@@ -14,11 +14,9 @@ CI Based Docker Powered by PHP
 
 * ~~Redis~~
 
-* ~~Docker~~
-
 * ~~RabbitMQ~~
 
-* **ONLY** need [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)
+* **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)
 
 To Use khsci, simply:
 
