@@ -62,6 +62,16 @@ class GitHub
     }
 
     /**
+     * @throws Exception
+     */
+    public function github_app()
+    {
+        self::$git_type = 'github_app';
+
+        return $this->__invoke();
+    }
+
+    /**
      * @param string $content
      *
      * @return string
@@ -644,9 +654,23 @@ EOF;
      *
      *
      * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
+     *
+     * @param string $content
      */
-    public function check_suite(): void
+    public function check_suite(string $content): void
     {
+        $obj = json_decode($content);
+
+        $action = $obj->requested;
+
+        $check_suite = $obj->check_suite;
+
+        $check_suite_id = $check_suite->id;
+
+        $branch = $check_suite->branch;
+
+        $commit_id = $check_suite->head_sha;
+
     }
 
     /**

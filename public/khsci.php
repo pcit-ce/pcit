@@ -34,6 +34,8 @@ $cli->add(new CLI\Queue());
 
 $cli->add(new CLI\Migrate());
 
+$cli->add(new CLI\Up());
+
 try {
     $cli->run();
 } catch (Exception $e) {

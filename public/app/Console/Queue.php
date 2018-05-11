@@ -9,6 +9,7 @@ use Error;
 use Exception;
 use KhsCI\CIException;
 use KhsCI\KhsCI;
+use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
@@ -74,6 +75,7 @@ class Queue
         } finally {
             $queue::systemDelete(self::$unique_id);
             Builds::updateStopAt(self::$build_key_id);
+            Cache::connect()->set('khsci_up_status', 0);
         }
     }
 
