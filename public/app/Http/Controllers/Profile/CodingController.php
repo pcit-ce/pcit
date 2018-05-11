@@ -14,6 +14,7 @@ class CodingController
      * @param mixed ...$arg
      *
      * @return array
+     *
      * @throws Exception
      */
     public function __invoke(...$arg)

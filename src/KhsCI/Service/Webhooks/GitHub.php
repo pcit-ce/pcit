@@ -510,7 +510,6 @@ EOF;
         $sender_id = $obj->sender->id;
 
         if ('created' === $action) {
-
             $repo = $obj->repositories;
 
             return self::installation_action_created($installation_id, $repo, $sender_id);
@@ -585,6 +584,7 @@ EOF;
      * @param string $content
      *
      * @return int
+     *
      * @throws Exception
      */
     public function installation_repositories(string $content)
@@ -670,7 +670,6 @@ EOF;
         $branch = $check_suite->branch;
 
         $commit_id = $check_suite->head_sha;
-
     }
 
     /**

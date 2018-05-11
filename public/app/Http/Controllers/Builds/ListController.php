@@ -31,10 +31,10 @@ class ListController
     {
         $rid = Repo::getRepoId(...$arg);
 
-        $sql = 'SELECT id FROM builds WHERE rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
+        $sql = 'SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
 
         $last_build_id = DB::select($sql, [
-            $rid, CI::BUILD_STATUS_PENDING, CI::BUILD_STATUS_SKIP, CI::BUILD_STATUS_INACTIVE,
+            $arg[0], $rid, CI::BUILD_STATUS_PENDING, CI::BUILD_STATUS_SKIP, CI::BUILD_STATUS_INACTIVE,
         ], true
         );
 
@@ -118,7 +118,7 @@ EOF;
         $sql = <<<'EOF'
 SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
-FROM builds WHERE event_type IN (?,?) AND rid=
+FROM builds WHERE git_type=? AND event_type IN (?,?) AND rid=
 
 (SELECT rid FROM repo WHERE git_type=? AND repo_full_name=?)
 
@@ -127,7 +127,7 @@ ORDER BY id DESC
 EOF;
 
         $output = DB::select($sql, [
-                CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG, $gitType, $repo_full_name,
+                $gitType, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG, $gitType, $repo_full_name,
             ]
         );
 

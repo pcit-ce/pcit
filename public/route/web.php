@@ -66,7 +66,7 @@ Route::delete('webhooks/{git_type}/{username}/{repo}/{id}/deactivate', 'Webhooks
 
 Route::post('webhooks/github', 'Webhooks\GitHubController');
 
-Route::post('webhooks/github', 'Webhooks\GitHubController@githubApp');
+Route::post('webhooks/github_app', 'Webhooks\GitHubController@githubApp');
 
 Route::post('webhooks/gitee', 'Webhooks\GiteeController');
 

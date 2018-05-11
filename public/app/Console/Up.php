@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console;
 
 use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
-use KhsCI\Support\Log;
 
 class Up
 {
     /**
      * @throws Exception
      */
-    public static function up()
+    public static function up(): void
     {
         while (1) {
             if (1 === Cache::connect()->get('khsci_up_status')) {

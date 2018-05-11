@@ -2,7 +2,7 @@
 # add
 #
 
-POST https://{{ci_host}}/webhooks/github
+POST https://{{ci_host}}/webhooks/github_app
 Request method: POST
 content-type: application/json
 Expect:
@@ -124,7 +124,7 @@ X-Hub-Signature: sha1=2dcb7fdeeca3000222c47a2d2fb1c319284aafc7
 # remove
 #
 
-POST https://{{ci_host}}/webhooks/github
+POST https://{{ci_host}}/webhooks/github_app
 Request method: POST
 content-type: application/json
 Expect:

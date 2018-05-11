@@ -29,9 +29,9 @@ class BranchesController
 
         $rid = Repo::getRepoId($git_type, $username, $repo);
 
-        $sql = 'SELECT DISTINCT branch FROM builds WHERE rid=?';
+        $sql = 'SELECT DISTINCT branch FROM builds WHERE git_type=? AND rid=?';
 
-        $branchArray = DB::select($sql, [$rid]);
+        $branchArray = DB::select($sql, [$git_type, $rid]);
 
         $build_status_array = [];
 
@@ -53,10 +53,10 @@ end_time
 
 FROM builds WHERE
  
-rid=? AND branch=? AND event_type IN (?,?) ORDER BY id DESC LIMIT 5
+git_type=? AND rid=? AND branch=? AND event_type IN (?,?) ORDER BY id DESC LIMIT 5
 
 EOF;
-            $outputArray = DB::select($sql, [$rid, $branch, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
+            $outputArray = DB::select($sql, [$git_type, $rid, $branch, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
 
             foreach ($outputArray as $output) {
                 $build_status = $output['build_status'];

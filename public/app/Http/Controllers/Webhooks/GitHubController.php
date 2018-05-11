@@ -39,6 +39,7 @@ class GitHubController
 
     /**
      * @return array|bool|int
+     *
      * @throws Exception
      */
     public function githubApp()

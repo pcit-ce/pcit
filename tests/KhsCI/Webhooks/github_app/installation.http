@@ -2,7 +2,7 @@
 # GitHub install
 #
 
-POST https://{{ci_host}}/webhooks/github
+POST https://{{ci_host}}/webhooks/github_app
 Request method: POST
 content-type: application/json
 Expect:
@@ -126,7 +126,7 @@ X-Hub-Signature: sha1=d313c0c83db5e284b40a88233fb0eea6fb74150a
 # GitHub uninstall
 #
 
-POST https://{{ci_host}}/webhooks/github
+POST https://{{ci_host}}/webhooks/github_app
 Request method: POST
 content-type: application/json
 Expect:

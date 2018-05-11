@@ -94,7 +94,6 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
-
         }
     }
 
@@ -113,7 +112,6 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
-
         }
     }
 
@@ -133,14 +131,11 @@ class Queue
             'The '.Env::get('CI_NAME').' build could not complete due to an error'
         );
 
-
         // 微信通知
-
 
         // GitHub App checks API
 
         if ('github_app' === self::$git_type) {
-
         }
     }
 
@@ -159,7 +154,6 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
-
         }
     }
 
@@ -178,7 +172,6 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
-
         }
     }
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace CLI;
+declare(strict_types=1);
 
+namespace CLI;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,14 +15,14 @@ class Up extends Command
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('up');
 
         $this->setDescription('Run KhsCI Daemon');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         \App\Console\Up::up();
     }

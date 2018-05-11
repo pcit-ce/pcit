@@ -41,6 +41,7 @@ class Builds
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getGitTypeByBuildKeyId(int $build_key_id)
