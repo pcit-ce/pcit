@@ -516,7 +516,6 @@ EOF;
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
-
             $rid = $k->id;
 
             $repo_full_name = $k->full_name;

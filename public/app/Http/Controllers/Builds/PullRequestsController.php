@@ -20,14 +20,14 @@ class PullRequestsController
      */
     public function post(...$args)
     {
-        list($gitType, $username, $repo) = $args;
+        list($git_type, $username, $repo) = $args;
 
         $repo_full_name = "$username/$repo";
 
         $sql = <<<'EOF'
 SELECT id,branch,pull_request_id,committer_username,commit_message,commit_id,build_status,create_time,end_time
 
-FROM builds WHERE event_type IN (?) AND rid=
+FROM builds WHERE git_type=? AND event_type IN (?) AND rid=
 
 (SELECT rid FROM repo WHERE git_type=? AND repo_full_name=?)
 
@@ -38,7 +38,7 @@ ORDER BY id DESC
 EOF;
 
         $output = DB::select($sql, [
-                CI::BUILD_EVENT_PR, $gitType, $repo_full_name, 'synchronize', 'opened',
+               $git_type, CI::BUILD_EVENT_PR, $git_type, $repo_full_name, 'synchronize', 'opened',
             ]
         );
 
@@ -46,9 +46,9 @@ EOF;
 
         foreach ($output as $k) {
             $merge_array = [
-                'commit_url' => Git::getCommitUrl($gitType, $repo_full_name, $k['commit_id']),
+                'commit_url' => Git::getCommitUrl($git_type, $repo_full_name, $k['commit_id']),
                 'commit_id' => substr($k['commit_id'], 0, 7),
-                'compare' => Git::getPullRequestUrl($gitType, $repo_full_name, (int) $k['pull_request_id']),
+                'compare' => Git::getPullRequestUrl($git_type, $repo_full_name, (int) $k['pull_request_id']),
             ];
 
             $array[] = array_merge($k, $merge_array);

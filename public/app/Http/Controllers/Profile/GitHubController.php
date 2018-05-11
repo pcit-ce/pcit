@@ -181,11 +181,11 @@ class GitHubController
             }
 
             if (!$repo_key_id) {
-                $sql = 'INSERT INTO repo VALUES(null,?,?,?,?,?,?,?,?,?,?,null,?,null)';
+                $sql = 'INSERT INTO repo VALUES(null,?,?,?,?,?,?,?,JSON_ARRAY(?),JSON_ARRAY(?),?,null,?,null)';
 
                 DB::insert($sql, [
                     $git_type, $rid, $repoPrefix, $repoName, $repo_full_name,
-                    $webhooksStatus, $buildActivate, "[$insert_admin]", "[$insert_collaborators]", $default_branch, $time,
+                    $webhooksStatus, $buildActivate, $insert_admin, $insert_collaborators, $default_branch, $time,
                 ]);
 
                 $redis->hSet($git_type.'_repo', $repo_full_name, $open_or_close);
@@ -262,7 +262,7 @@ EOF;
 UPDATE repo set repo_admin=JSON_MERGE(repo_admin,?) where id=? AND NOT JSON_CONTAINS(repo_admin,?);
 EOF;
 
-        DB::update($sql, ["[$uid]", $repo_key_id, $uid]);
+        DB::update($sql, ["[\"$uid\"]", $repo_key_id, "\"$uid\""]);
     }
 
     /**
@@ -279,7 +279,7 @@ UPDATE repo set
 repo_admin=JSON_MERGE(repo_collaborators,?) where id=? AND NOT JSON_CONTAINS(repo_collaborators,?);
 EOF;
 
-        DB::update($sql, ["[$repo_key_id]", $uid, $repo_key_id]);
+        DB::update($sql, ["[\"$repo_key_id\"]", "\"$uid\"", $repo_key_id]);
     }
 
     /**

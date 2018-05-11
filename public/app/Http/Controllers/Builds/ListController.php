@@ -111,7 +111,7 @@ EOF;
      */
     public function list(...$args)
     {
-        list($gitType, $username, $repo) = $args;
+        list($git_type, $username, $repo) = $args;
 
         $repo_full_name = "$username/$repo";
 
@@ -127,7 +127,7 @@ ORDER BY id DESC
 EOF;
 
         $output = DB::select($sql, [
-                $gitType, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG, $gitType, $repo_full_name,
+                $git_type, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG, $git_type, $repo_full_name,
             ]
         );
 
@@ -135,7 +135,7 @@ EOF;
 
         foreach ($output as $k) {
             $merge_array = [
-                'commit_url' => Git::getCommitUrl($gitType, $repo_full_name, $k['commit_id']),
+                'commit_url' => Git::getCommitUrl($git_type, $repo_full_name, $k['commit_id']),
                 'commit_id' => substr($k['commit_id'], 0, 7),
             ];
 
