@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnusedLocalVariableInspection */
+
 declare(strict_types=1);
 
 namespace KhsCI\Service\Webhooks;
@@ -35,6 +37,8 @@ class GitHub
      */
     public function __invoke()
     {
+        date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
+
         $signature = Request::getHeader('X-Hub-Signature');
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
         $content = file_get_contents('php://input');
@@ -64,7 +68,7 @@ class GitHub
      *
      * @throws Exception
      */
-    private function ping(string $content)
+    public function ping(string $content)
     {
         $obj = json_decode($content);
 
@@ -97,7 +101,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function push(string $content)
+    public function push(string $content)
     {
         $obj = json_decode($content);
 
@@ -177,7 +181,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function status(string $content)
+    public function status(string $content)
     {
         $sql = <<<'EOF'
 INSERT builds(
@@ -200,7 +204,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function issues(string $content)
+    public function issues(string $content)
     {
         $obj = json_decode($content);
         /**
@@ -228,7 +232,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function issue_comment(string $content)
+    public function issue_comment(string $content)
     {
         $obj = json_decode($content);
 
@@ -263,7 +267,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function pull_request(string $content)
+    public function pull_request(string $content)
     {
         $obj = json_decode($content);
 
@@ -310,7 +314,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function tag(string $tag, string $content)
+    public function tag(string $tag, string $content)
     {
         $obj = json_decode($content);
 
@@ -362,13 +366,12 @@ EOF;
      *
      * @return array
      */
-    private function watch($content)
+    public function watch($content)
     {
         $obj = json_decode($content);
 
-        /**
-         * started.
-         */
+        // started.
+
         $action = $obj->action;
 
         return [
@@ -383,7 +386,7 @@ EOF;
      *
      * @return array
      */
-    private function fork($content)
+    public function fork($content)
     {
         $obj = json_decode($content);
 
@@ -394,7 +397,7 @@ EOF;
         ];
     }
 
-    private function release(string $content): void
+    public function release(string $content): void
     {
     }
 
@@ -403,7 +406,7 @@ EOF;
      *
      * @param string $content
      */
-    private function create(string $content): void
+    public function create(string $content): void
     {
         $obj = json_decode($content);
 
@@ -424,7 +427,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function delete(string $content)
+    public function delete(string $content)
     {
         $obj = json_decode($content);
 
@@ -446,7 +449,7 @@ EOF;
      *
      * @return mixed
      */
-    private function ref2branch(string $ref)
+    public function ref2branch(string $ref)
     {
         $ref_array = explode('/', $ref);
 
@@ -456,14 +459,14 @@ EOF;
     /**
      * @param string $content
      */
-    private function member(string $content): void
+    public function member(string $content): void
     {
     }
 
     /**
      * @param string $content
      */
-    private function team_add(string $content): void
+    public function team_add(string $content): void
     {
     }
 
@@ -480,9 +483,11 @@ EOF;
      *
      * @param string $content
      *
+     * @return int
+     *
      * @throws Exception
      */
-    private function installation(string $content)
+    public function installation(string $content)
     {
         $obj = json_decode($content);
 
@@ -490,72 +495,72 @@ EOF;
 
         $installation_id = $obj->installation->id;
 
-        $repo = $obj->repositories;
+        // 可视为仓库管理员.
 
-        /**
-         * 可视为仓库管理员.
-         */
         $sender_id = $obj->sender->id;
 
         if ('created' === $action) {
-            return $this->installation_action_created($repo, $installation_id, $sender_id);
+
+            $repo = $obj->repositories;
+
+            return self::installation_action_created($installation_id, $repo, $sender_id);
         }
 
-        return $this->installation_action_deleted($installation_id, $repo, $sender_id);
+        return self::installation_action_deleted($installation_id);
     }
 
     /**
-     * @param array $repo
      * @param int   $installation_id
+     * @param array $repo
      * @param int   $sender_id
      *
      * @return int
      *
      * @throws Exception
      */
-    private function installation_action_created(array $repo, int $installation_id, int $sender_id)
+    private static function installation_action_created(int $installation_id, array $repo, int $sender_id)
     {
-        $i = 0;
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
 
-            $id = $k->id;
+            $rid = $k->id;
 
             $repo_full_name = $k->full_name;
 
-            if (0 === $i) {
-                $sql = <<<EOF
-INSERT github_app_installation VALUES(null,?,json_array_append(repo,'$',?),?,null,null);
-EOF;
-                DB::update($sql, [$installation_id, $id, $sender_id]);
-            } else {
-                $sql = <<<EOF
+            list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
 
-UPDATE github_app_installation SET repo=JSON_ARRAY_APPEND(repo,'$',?) WHERE installation_id=?
+            $sql = <<<EOF
+INSERT INTO repo(
+
+id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,installation_id,last_sync
+
+) VALUES(null,'github_app',?,?,?,?,JSON_ARRAY(?),'master',?,?)
 
 EOF;
-                DB::update($sql, [$id, $installation_id]);
-            }
+
+            $output = DB::insert($sql, [
+                    $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
+                ]
+            );
         }
 
         return 0;
     }
 
     /**
-     * @param array $repo
-     * @param int   $installation_id
-     * @param int   $sender_id
+     * @param int $installation_id
      *
      * @return int
+     *
+     * @throws Exception
      */
-    private function installation_action_deleted(array $repo, int $installation_id, int $sender_id)
+    private static function installation_action_deleted(int $installation_id)
     {
-        foreach ($repo as $k) {
-            $id = $k->id;
-            $repo_full_name = $k->full_name;
-        }
+        $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
 
-        return 0;
+        return DB::delete($sql, [
+            'github_app', $installation_id,
+        ]);
     }
 
     /**
@@ -567,9 +572,12 @@ EOF;
      *
      * removed 移除仓库
      *
+     * @param string $content
+     *
+     * @return int
      * @throws Exception
      */
-    private function installation_repositories(string $content)
+    public function installation_repositories(string $content)
     {
         $obj = json_decode($content);
 
@@ -581,38 +589,47 @@ EOF;
 
         $repo = $obj->$repo_type;
 
+        $sender = $obj->sender->id;
+
         if ('added' === $action) {
-            $sql = <<<EOF
-UPDATE github_app_installation 
-
-SET 
-
-repo=JSON_ARRAY_APPEND(repo,'$',JSON_OBJECT('id',?,'full_name',?)) WHERE installation_id=?
-
-EOF;
-        } else {
-            $sql = 'UPDATE github_app_installation SET repo=JSON_REMOVE(repo,?) WHERE installation_id=?';
+            return self::installation_action_created($installation_id, $repo, $sender);
         }
 
+        return self::installation_repositories_action_removed($installation_id, $repo);
+    }
+
+    /**
+     * @param int   $installation_id
+     * @param array $repo
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    private static function installation_repositories_action_removed(int $installation_id, array $repo)
+    {
         foreach ($repo as $k) {
-            $id = $k->id;
-            $full_name = $k->full_name;
+            $rid = $k->id;
 
-            return DB::update($sql, [$id, $full_name, $installation_id]);
+            $sql = 'DELETE FROM repo WHERE installation_id=? AND rid=?';
+
+            DB::delete($sql, [$installation_id, $rid]);
         }
+
+        return 0;
     }
 
     /**
      * @deprecated
      */
-    private function integration_installation(): void
+    public function integration_installation(): void
     {
     }
 
     /**
      * @deprecated
      */
-    private function integration_installation_repositories(): void
+    public function integration_installation_repositories(): void
     {
     }
 
@@ -628,7 +645,7 @@ EOF;
      *
      * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
      */
-    private function check_suite(): void
+    public function check_suite(): void
     {
     }
 
@@ -643,7 +660,7 @@ EOF;
      *
      * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
      */
-    private function check_run(): void
+    public function check_run(): void
     {
     }
 }

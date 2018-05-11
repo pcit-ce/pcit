@@ -13,6 +13,13 @@ class GitHubAppController
 {
     private static $git_type = 'github_app';
 
+    /**
+     * @param mixed ...$args
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
     public function __invoke(...$args)
     {
         $git_type = static::$git_type;
@@ -31,9 +38,7 @@ class GitHubAppController
             Response::redirect('/profile/'.$git_type.'/'.$username);
         }
 
-        $access_token = Session::get(static::$git_type.'.access_token');
-
-        $khsci = new KhsCI(['github_app_access_token' => $access_token]);
+        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         return json_decode($khsci->github_apps_installations->listRepositoriesAccessible(162542), true);
     }

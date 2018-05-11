@@ -14,6 +14,7 @@ class KhsCITestCase extends TestCase
 
     /**
      * @return KhsCI
+     *
      * @throws Exception
      */
     public static function getTest()

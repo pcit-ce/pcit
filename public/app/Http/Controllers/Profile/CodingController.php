@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
+use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Session;
 
@@ -13,6 +14,7 @@ class CodingController
      * @param mixed ...$arg
      *
      * @return array
+     * @throws Exception
      */
     public function __invoke(...$arg)
     {

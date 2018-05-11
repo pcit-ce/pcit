@@ -80,7 +80,7 @@ EOF;
         foreach ($output as $k) {
             $build_key_id = $k['id'];
 
-            Builds::updateStartAt((int)$build_key_id);
+            Builds::updateStartAt((int) $build_key_id);
 
             $rid = $k['rid'];
             $commit_message = $k['commit_message'];
@@ -92,7 +92,7 @@ EOF;
             self::$tag_name = $k['tag_name'];
             self::$gitType = $k['git_type'];
 
-            self::$build_key_id = (int)$build_key_id;
+            self::$build_key_id = (int) $build_key_id;
 
             Log::connect()->debug('====== Start Build ======');
 
@@ -178,7 +178,7 @@ EOF;
                 self::$commit_id,
                 self::$event_type,
                 CI::BUILD_STATUS_INACTIVE,
-                (int)$build_activate
+                (int) $build_activate
             );
         }
     }
@@ -204,7 +204,7 @@ EOF;
             self::$commit_id,
             self::$event_type,
             CI::BUILD_STATUS_SKIP,
-            (int)self::$build_key_id
+            (int) self::$build_key_id
         );
     }
 
@@ -267,7 +267,7 @@ EOF;
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
-        $yaml_obj = (object)yaml_parse(HTTP::get(Git::getRawUrl(
+        $yaml_obj = (object) yaml_parse(HTTP::get(Git::getRawUrl(
             $gitType, $repo_full_name, $commit_id, '.drone.yml'))
         );
 
@@ -278,7 +278,6 @@ EOF;
         $sql = 'UPDATE builds SET config=? WHERE id=? ';
 
         DB::update($sql, [$yaml_to_json, self::$build_key_id]);
-
 
         // 解析 .drone.yml.
 
@@ -305,7 +304,6 @@ EOF;
             $path = null;
         }
 
-
         // --workdir.
         $workdir = $base_path.'/'.$path;
 
@@ -320,20 +318,16 @@ EOF;
         $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
         $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
 
-
         // 矩阵构建循环
         foreach ($matrix as $k => $config) {
-
             //启动服务
             $this->runService($services, $unique_id, $config, $docker);
-
 
             // 构建步骤
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
 
             // 清理
             self::systemDelete($unique_id);
-
         }
 
         // 后续根据 throw 出的异常执行对应的操作
@@ -506,9 +500,9 @@ EOF;
                     $container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string)self::$build_key_id);
+                $prev_docker_log = $redis->hget('build_log', (string) self::$build_key_id);
 
-                $redis->hset('build_log', (string)self::$build_key_id, $prev_docker_log.$image_log);
+                $redis->hset('build_log', (string) self::$build_key_id, $prev_docker_log.$image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z

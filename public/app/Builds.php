@@ -13,6 +13,7 @@ class Builds
      * @param int $build_key_id
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function updateStartAt(int $build_key_id)
@@ -26,6 +27,7 @@ class Builds
      * @param int $build_key_id
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function updateStopAt(int $build_key_id)

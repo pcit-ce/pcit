@@ -12,6 +12,7 @@ class KhsCITest extends KhsCITestCase
 {
     /**
      * @return \KhsCI\KhsCI
+     *
      * @throws Exception
      */
     public function example()

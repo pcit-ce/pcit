@@ -94,10 +94,10 @@ X-Hub-Signature: sha1=d313c0c83db5e284b40a88233fb0eea6fb74150a
       "private": false
     },
     {
-       "id": 132416052,
-       "name": "libwechat",
-       "full_name": "khs1994-php/libwechat",
-        "private": false
+       "id": 132316052,
+       "name": "libxxx",
+       "full_name": "khs1994-php/libxxx",
+       "private": false
     }
   ],
   "sender": {
@@ -127,4 +127,108 @@ X-Hub-Signature: sha1=d313c0c83db5e284b40a88233fb0eea6fb74150a
 #
 
 POST https://{{ci_host}}/webhooks/github
+Request method: POST
+content-type: application/json
+Expect:
+User-Agent: GitHub-Hookshot/3783516
+X-GitHub-Delivery: 19e7a2ac-5354-11e8-8972-478e4e07566a
+X-GitHub-Event: installation
+X-Hub-Signature: sha1=c1ac983ad63ce591b0f2df361e77fee690ea285c
 
+{
+  "action": "deleted",
+  "installation": {
+    "id": 162542,
+    "account": {
+      "login": "khs1994-php",
+      "id": 31461768,
+      "avatar_url": "https://avatars0.githubusercontent.com/u/31461768?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/khs1994-php",
+      "html_url": "https://github.com/khs1994-php",
+      "followers_url": "https://api.github.com/users/khs1994-php/followers",
+      "following_url": "https://api.github.com/users/khs1994-php/following{/other_user}",
+      "gists_url": "https://api.github.com/users/khs1994-php/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/khs1994-php/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/khs1994-php/subscriptions",
+      "organizations_url": "https://api.github.com/users/khs1994-php/orgs",
+      "repos_url": "https://api.github.com/users/khs1994-php/repos",
+      "events_url": "https://api.github.com/users/khs1994-php/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/khs1994-php/received_events",
+      "type": "Organization",
+      "site_admin": false
+    },
+    "repository_selection": "selected",
+    "access_tokens_url": "https://api.github.com/installations/162542/access_tokens",
+    "repositories_url": "https://api.github.com/installation/repositories",
+    "html_url": "https://github.com/organizations/khs1994-php/settings/installations/162542",
+    "app_id": 11044,
+    "target_id": 31461768,
+    "target_type": "Organization",
+    "permissions": {
+      "checks": "write",
+      "statuses": "write",
+      "members": "write",
+      "contents": "write",
+      "pages": "write",
+      "administration": "write",
+      "issues": "write",
+      "repository_projects": "write",
+      "organization_projects": "write",
+      "deployments": "write",
+      "pull_requests": "write",
+      "team_discussions": "write",
+      "metadata": "read"
+    },
+    "events": [
+      "commit_comment",
+      "create",
+      "delete",
+      "deployment",
+      "deployment_status",
+      "issues",
+      "issue_comment",
+      "label",
+      "member",
+      "membership",
+      "organization",
+      "page_build",
+      "project",
+      "project_card",
+      "project_column",
+      "public",
+      "pull_request",
+      "pull_request_review",
+      "pull_request_review_comment",
+      "push",
+      "release",
+      "repository",
+      "team",
+      "team_add"
+    ],
+    "created_at": "2018-05-09T01:11:22.000Z",
+    "updated_at": "2018-05-09T01:11:22.000Z",
+    "single_file_name": null
+  },
+  "sender": {
+    "login": "khs1994",
+    "id": 16733187,
+    "avatar_url": "https://avatars2.githubusercontent.com/u/16733187?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/khs1994",
+    "html_url": "https://github.com/khs1994",
+    "followers_url": "https://api.github.com/users/khs1994/followers",
+    "following_url": "https://api.github.com/users/khs1994/following{/other_user}",
+    "gists_url": "https://api.github.com/users/khs1994/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/khs1994/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/khs1994/subscriptions",
+    "organizations_url": "https://api.github.com/users/khs1994/orgs",
+    "repos_url": "https://api.github.com/users/khs1994/repos",
+    "events_url": "https://api.github.com/users/khs1994/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/khs1994/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}
+
+###

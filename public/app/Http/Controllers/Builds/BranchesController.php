@@ -27,7 +27,7 @@ class BranchesController
 
         $base_url = Git::getUrl($git_type, $repo_full_name);
 
-        $rid = Repo::getRepoId($git_type,$username,$repo);
+        $rid = Repo::getRepoId($git_type, $username, $repo);
 
         $sql = 'SELECT DISTINCT branch FROM builds WHERE rid=?';
 

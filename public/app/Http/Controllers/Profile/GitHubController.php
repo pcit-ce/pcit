@@ -181,7 +181,7 @@ class GitHubController
             }
 
             if (!$repo_key_id) {
-                $sql = 'INSERT repo VALUES(null,?,?,?,?,?,?,?,?,?,?,?)';
+                $sql = 'INSERT INTO repo VALUES(null,?,?,?,?,?,?,?,?,?,?,null,?,null)';
 
                 DB::insert($sql, [
                     $git_type, $rid, $repoPrefix, $repoName, $repo_full_name,

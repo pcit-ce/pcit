@@ -282,8 +282,12 @@
     let id = $(this).attr('id');
 
     if ('current' === id) {
+      history.pushState({}, baseTitle, baseUrl + '/' + query);
+
       history.replaceState(null, baseTitle, baseUrl + '/' + query);
     } else {
+      history.pushState({}, baseTitle, baseUrl + '/' + query + '/' + id);
+
       history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
     }
 
@@ -305,6 +309,8 @@
 
   $("option").click(function () {
     let id = $(this).attr('value');
+    history.pushState({}, baseTitle, baseUrl + '/' + query + '/' + id);
+
     history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
 
     $('title').text(baseTitle);
