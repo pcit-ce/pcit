@@ -1,7 +1,8 @@
 <?php
 
-namespace KhsCI\Providers;
+declare(strict_types=1);
 
+namespace KhsCI\Providers;
 
 use KhsCI\Service\Checks\Run;
 use KhsCI\Service\Checks\Suites;
@@ -10,7 +11,7 @@ use Pimple\ServiceProviderInterface;
 
 class ChecksProvider implements ServiceProviderInterface
 {
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         $pimple['check_run'] = function ($app) {
             return new Run($app['curl'], $app['config']['api_url']);

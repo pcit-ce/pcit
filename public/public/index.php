@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpIncludeInspection */
+<?php
+
+/** @noinspection PhpIncludeInspection */
 
 declare(strict_types=1);
 
@@ -16,7 +18,6 @@ function open_error(): void
     ini_set('display_errors', 'on');
     ini_set('error_reporting', '32767');
 }
-
 
 // read .env.* file.
 

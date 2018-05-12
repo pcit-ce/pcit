@@ -7,11 +7,12 @@ namespace KhsCI\Service\Checks;
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Date;
+use KhsCI\Support\Log;
 
 class Run
 {
     protected static $header = [
-        'Accept' => 'application/vnd.github.antiope-preview+json'
+        'Accept' => 'application/vnd.github.antiope-preview+json',
     ];
 
     /**
@@ -23,25 +24,25 @@ class Run
 
     public function __construct(Curl $curl, string $api_url)
     {
-        static::$curl = $curl;
+        self::$curl = $curl;
 
-        static::$api_url = $api_url;
+        self::$api_url = $api_url;
     }
 
     /**
      * @param string $repo_full_name
-     * @param string $name         Required. The name of the check (e.g., "code-coverage").
-     * @param string $branch       Required. The name of the branch to perform a check against.
-     * @param string $commit_id    Required. The SHA of the commit.
-     * @param string $details_url  The URL of the integrator's site that has the full details of the check.
-     * @param string $external_id  A reference for the run on the integrator's system.
-     * @param string $status       The current status. Can be one of queued, in_progress, or completed. Default: queued
-     * @param int    $started_at   The time that the check run began in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-     * @param int    $completed_at Required. The time the check completed in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-     *                             Required if you provide conclusion.
-     * @param string $conclusion   Required. The final conclusion of the check. Can be one of success, failure,
-     *                             neutral,
-     *                             cancelled, timed_out, or action_required.
+     * @param string $name           Required. The name of the check (e.g., "code-coverage").
+     * @param string $branch         Required. The name of the branch to perform a check against.
+     * @param string $commit_id      Required. The SHA of the commit.
+     * @param string $details_url    the URL of the integrator's site that has the full details of the check
+     * @param string $external_id    a reference for the run on the integrator's system
+     * @param string $status         The current status. Can be one of queued, in_progress, or completed. Default: queued
+     * @param int    $started_at     the time that the check run began in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
+     * @param int    $completed_at   Required. The time the check completed in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     *                               Required if you provide conclusion.
+     * @param string $conclusion     Required. The final conclusion of the check. Can be one of success, failure,
+     *                               neutral,
+     *                               cancelled, timed_out, or action_required.
      * @param string $title
      * @param string $summary
      * @param string $text
@@ -49,6 +50,7 @@ class Run
      * @param array  $images
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function create(string $repo_full_name,
@@ -66,8 +68,7 @@ class Run
                            string $text = null,
                            array $annotations = [],
                            array $images = []
-    )
-    {
+    ) {
         $data = [
             'name' => $name,
             'head_branch' => $branch,
@@ -89,7 +90,11 @@ class Run
 
         $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
 
-        return self::$curl->post($url, json_encode($data), self::$header);
+        $output = self::$curl->post($url, json_encode($data), self::$header);
+
+        Log::connect()->debug(self::$curl->getRequestHeaders());
+
+        return $output;
     }
 
     /**
@@ -114,8 +119,7 @@ class Run
                                              string $message,
                                              string $title = null,
                                              string $raw_details = null
-    )
-    {
+    ) {
         return [
             'filename' => $filename,
             'blog_href' => $blog_href,
@@ -131,7 +135,7 @@ class Run
     /**
      * @param string $alt       Required. The alternative text for the image.
      * @param string $image_url Required. The full URL of the image.
-     * @param string $caption   A short image description.
+     * @param string $caption   a short image description
      *
      * @return array
      */
@@ -165,6 +169,7 @@ class Run
      * @param array  $images
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function update(string $repo_full_name,
@@ -212,14 +217,15 @@ class Run
      * List check runs for a specific ref.
      *
      * @param string $repo_full_name
-     * @param string $ref        Required. Can be a SHA, branch name, or tag name.
-     * @param string $check_name Returns check runs with the specified name.
-     * @param string $status     Returns check runs with the specified status. Can be one of queued, in_progress, or
-     *                           completed.
-     * @param string $filter     Filters check runs by their completed_at timestamp. Can be one of latest (returning
-     *                           the most recent check runs) or all. Default: latest
+     * @param string $ref            Required. Can be a SHA, branch name, or tag name.
+     * @param string $check_name     returns check runs with the specified name
+     * @param string $status         Returns check runs with the specified status. Can be one of queued, in_progress, or
+     *                               completed.
+     * @param string $filter         Filters check runs by their completed_at timestamp. Can be one of latest (returning
+     *                               the most recent check runs) or all. Default: latest
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listSpecificRef(string $repo_full_name,
@@ -233,7 +239,7 @@ class Run
         $data = [
             'check_name' => $check_name,
             'status' => $status,
-            'filter' => $filter
+            'filter' => $filter,
         ];
 
         $url = $url.'?'.http_build_query($data);
@@ -246,13 +252,14 @@ class Run
      *
      * @param string $repo_full_name
      * @param int    $id
-     * @param string $check_name Returns check runs with the specified name.
-     * @param string $status     Returns check runs with the specified status. Can be one of queued, in_progress, or
-     *                           completed.
-     * @param string $filter     Filters check runs by their completed_at timestamp. Can be one of latest (returning
-     *                           the most recent check runs) or all. Default: latest
+     * @param string $check_name     returns check runs with the specified name
+     * @param string $status         Returns check runs with the specified status. Can be one of queued, in_progress, or
+     *                               completed.
+     * @param string $filter         Filters check runs by their completed_at timestamp. Can be one of latest (returning
+     *                               the most recent check runs) or all. Default: latest
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listCheckSuite(string $repo_full_name,
@@ -281,6 +288,7 @@ class Run
      * @param int    $check_run_id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getSingle(string $repo_full_name, int $check_run_id)
@@ -297,6 +305,7 @@ class Run
      * @param int    $check_run_id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listAnnotations(string $repo_full_name, int $check_run_id)

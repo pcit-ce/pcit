@@ -91,12 +91,12 @@ class Up
     /**
      * @throws Exception
      */
-    private static function updateGitHubAppChecks()
+    private static function updateGitHubAppChecks(): void
     {
         $build_key_id = Cache::connect()->rpop('github_app_checks');
 
         if (!$build_key_id) {
-            return 0;
+            return;
         }
 
         $rid = Builds::getRidByBuildKeyId((int) $build_key_id);
@@ -109,7 +109,7 @@ class Up
 
         $access_token = $khsci->github_apps_installations->getAccessToken(
             (int) $installation_id,
-            __DIR__.'/../../'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
+            __DIR__.'/../../private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
         );
 
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
@@ -122,7 +122,7 @@ class Up
 
         $details_url = Env::get('CI_HOST').'/github_app/'.$repo_full_name.'/builds/'.$build_key_id;
 
-        return $khsci->check_run->create(
+        $output = $khsci->check_run->create(
             $repo_full_name,
             'Chinese First Support GitHub Checks API CI System',
             $branch,
@@ -135,5 +135,9 @@ class Up
             'testSummary',
             'test text'
         );
+
+        var_dump($output);
+
+        Cache::connect()->set('khsci_up_status', 0);
     }
 }

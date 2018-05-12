@@ -113,13 +113,13 @@ class Installations
         $redis->set("github_app_{$installation_id}_access_token", $access_token, 58 * 60);
 
         return $access_token;
-
     }
 
     /**
      * @param string $private_key_path
      *
      * @return string
+     *
      * @throws Exception
      */
     private function getJWT(string $private_key_path)
@@ -127,7 +127,6 @@ class Installations
         $jwt = Cache::connect()->get('github_app_jwt');
 
         if ($jwt) {
-
             return $jwt;
         }
 
@@ -136,6 +135,5 @@ class Installations
         Cache::connect()->set('github_app_jwt', $jwt, 8 * 60);
 
         return $jwt;
-
     }
 }

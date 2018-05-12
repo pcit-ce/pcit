@@ -64,6 +64,7 @@ class Repo
      * @param string $repo_full_name
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name)
