@@ -12,6 +12,7 @@ use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
+use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\HTTP;
@@ -136,7 +137,7 @@ class Up
 
         $output = $khsci->check_run->create(
             $repo_full_name,
-            'Chinese First Support GitHub Checks API CI System',
+            'China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI',
             $branch,
             $commit_id,
             $details_url,
@@ -157,17 +158,24 @@ Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master
 | Language         | $language  |
 | Operating System | $os        |
 
-# Build Configuration
+<details>
+<summary>Build Configuration</summary>
 
 ```json
 $config
 ```
+
+</details>
 EOF
         );
 
         Log::connect()->debug($output);
 
         var_dump($output);
+
+        $sql = 'UPDATE builds SET check_run_id=? WHERE id=?';
+
+        DB::update($sql, [json_decode($output)->id ?? null, $build_key_id]);
 
         Cache::connect()->set('khsci_up_status', 0);
     }

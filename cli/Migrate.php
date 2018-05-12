@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace CLI;
-
 use KhsCI\Support\DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

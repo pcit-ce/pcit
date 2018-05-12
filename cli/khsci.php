@@ -9,8 +9,11 @@ require __DIR__.'/../vendor/autoload.php';
 
 spl_autoload_register(function ($class): void {
     $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+    $file = __DIR__.DIRECTORY_SEPARATOR.$class.'.php';
 
-    require __DIR__.DIRECTORY_SEPARATOR.$class.'.php';
+    if (file_exists($file)) {
+        require $file;
+    }
 });
 
 spl_autoload_register(function ($class): void {
@@ -18,10 +21,10 @@ spl_autoload_register(function ($class): void {
     $class = str_replace('App\\Console', 'app\\Console', $class);
     $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
 
-    require __DIR__.DIRECTORY_SEPARATOR.$class.'.php';
+    require __DIR__.'/../public/'.$class.'.php';
 });
 
-$env = new Dotenv\Dotenv(__DIR__, '.env'.'.'.getenv('APP_ENV'));
+$env = new Dotenv\Dotenv(__DIR__.'/../public', '.env'.'.'.getenv('APP_ENV'));
 
 $env->load();
 
@@ -33,11 +36,11 @@ date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
  */
 $cli = new Application('KhsCI CLI', 'v18.05');
 
-$cli->add(new CLI\Queue());
+$cli->add(new Queue());
 
-$cli->add(new CLI\Migrate());
+$cli->add(new Migrate());
 
-$cli->add(new CLI\Up());
+$cli->add(new Up());
 
 try {
     $cli->run();
