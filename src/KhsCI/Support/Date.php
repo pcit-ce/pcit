@@ -58,12 +58,16 @@ class Date
     /**
      * 将整数时间戳转化为 2018-05-02T04:15:49Z (ISO 8601 格式的日期)
      *
-     * @param int $timestamp
+     * @param int|null $timestamp
      *
      * @return false|string
      */
-    public static function Int2ISO(int $timestamp)
+    public static function Int2ISO(?int $timestamp)
     {
-        return date('c', $timestamp);
+        if ($timestamp) {
+            return date('c', $timestamp);
+        }
+
+        return false;
     }
 }

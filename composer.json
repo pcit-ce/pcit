@@ -25,6 +25,7 @@
     "firebase/php-jwt": "^5.0",
     "khs1994/curl": "dev-master",
     "khs1994/docker": "dev-master",
+    "khs1994/tencent-ai": "^18.03",
     "monolog/monolog": "^1.23",
     "pimple/pimple": "~3.0",
     "symfony/console": "^3.4",

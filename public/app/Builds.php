@@ -76,6 +76,8 @@ class Builds
     {
         $sql = 'SELECT * FROM builds WHERE id=?';
 
-        return DB::select($sql, [$build_key_id]);
+        $output = DB::select($sql, [$build_key_id]);
+
+        return $output[0] ?? [];
     }
 }

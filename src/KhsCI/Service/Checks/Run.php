@@ -6,6 +6,7 @@ namespace KhsCI\Service\Checks;
 
 use Curl\Curl;
 use Exception;
+use KhsCI\Support\Date;
 
 class Run
 {
@@ -74,8 +75,8 @@ class Run
             'details_url' => $details_url,
             'external_id' => $external_id,
             'status' => $status,
-            'started_at' => $started_at,
-            'completed_at' => $completed_at,
+            'started_at' => Date::Int2ISO($started_at),
+            'completed_at' => Date::Int2ISO($completed_at),
             'conclusion' => $conclusion,
             'output' => [
                 'title' => $title,
@@ -192,8 +193,8 @@ class Run
             'details_url' => $details_url,
             'external_id' => $external_id,
             'status' => $status,
-            'started_at' => $started_at,
-            'completed_at' => $completed_at,
+            'started_at' => Date::Int2ISO($started_at),
+            'completed_at' => Date::Int2ISO($completed_at),
             'conclusion' => $conclusion,
             'output' => [
                 'title' => $title,
