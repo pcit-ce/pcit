@@ -18,11 +18,14 @@ spl_autoload_register(function ($class): void {
     require __DIR__.DIRECTORY_SEPARATOR.$class.'.php';
 });
 
+use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
 
 $env = new Dotenv\Dotenv(__DIR__, '.env'.'.'.getenv('APP_ENV'));
 
 $env->load();
+
+date_default_timezone_set(Env::get('CI_TZ','PRC'));
 
 /**
  * @see https://juejin.im/entry/5a3795a051882572ed55af00

@@ -105,10 +105,18 @@ class Installations
 
         $url = self::$api_url.'/installations/'.$installation_id.'/access_tokens';
 
-        $access_token = self::$curl->post($url, null, [
+        $access_token_json = self::$curl->post($url, null, [
             'Authorization' => 'Bearer '.self::getJWT($private_key_path),
             'Accept' => 'application/vnd.github.machine-man-preview+json',
         ]);
+
+        $access_token_obj = json_decode($access_token_json);
+
+        if ($access_token_obj->message ?? false) {
+            throw new Exception('GitHub App Access Token Error',500);
+        }
+
+        $access_token = $access_token_obj->token;
 
         $redis->set("github_app_{$installation_id}_access_token", $access_token, 58 * 60);
 

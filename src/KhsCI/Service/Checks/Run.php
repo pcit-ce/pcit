@@ -36,7 +36,8 @@ class Run
      * @param string $commit_id      Required. The SHA of the commit.
      * @param string $details_url    the URL of the integrator's site that has the full details of the check
      * @param string $external_id    a reference for the run on the integrator's system
-     * @param string $status         The current status. Can be one of queued, in_progress, or completed. Default: queued
+     * @param string $status         The current status. Can be one of queued, in_progress, or completed. Default:
+     *                               queued
      * @param int    $started_at     the time that the check run began in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
      * @param int    $completed_at   Required. The time the check completed in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
      *                               Required if you provide conclusion.
@@ -66,31 +67,36 @@ class Run
                            string $title = null,
                            string $summary = null,
                            string $text = null,
-                           array $annotations = [],
-                           array $images = []
-    ) {
-        $data = [
+                           array $annotations = null,
+                           array $images = null
+    )
+    {
+        $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
+
+        $data = array_filter([
             'name' => $name,
             'head_branch' => $branch,
-            'head_commit' => $commit_id,
+            'head_sha' => $commit_id,
             'details_url' => $details_url,
             'external_id' => $external_id,
             'status' => $status,
             'started_at' => Date::Int2ISO($started_at),
             'completed_at' => Date::Int2ISO($completed_at),
             'conclusion' => $conclusion,
-            'output' => [
+            'output' => array_filter([
                 'title' => $title,
                 'summary' => $summary,
                 'text' => $text,
                 'annotations' => $annotations,
                 'images' => $images,
-            ],
-        ];
+            ]),
+        ]);
 
-        $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
+        $request = json_encode($data);
 
-        $output = self::$curl->post($url, json_encode($data), self::$header);
+        Log::connect()->debug($request);
+
+        $output = self::$curl->post($url, $request, self::$header);
 
         Log::connect()->debug(self::$curl->getRequestHeaders());
 
@@ -119,7 +125,8 @@ class Run
                                              string $message,
                                              string $title = null,
                                              string $raw_details = null
-    ) {
+    )
+    {
         return [
             'filename' => $filename,
             'blog_href' => $blog_href,
@@ -186,31 +193,35 @@ class Run
                            string $title = null,
                            string $summary = null,
                            string $text = null,
-                           array $annotations = [],
-                           array $images = [])
+                           array $annotations = null,
+                           array $images = null)
     {
         $url = self::$api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id;
 
-        $data = [
+        $data = array_filter([
             'name' => $name,
             'head_branch' => $branch,
-            'head_commit' => $commit_id,
+            'head_sha' => $commit_id,
             'details_url' => $details_url,
             'external_id' => $external_id,
             'status' => $status,
             'started_at' => Date::Int2ISO($started_at),
             'completed_at' => Date::Int2ISO($completed_at),
             'conclusion' => $conclusion,
-            'output' => [
+            'output' => array_filter([
                 'title' => $title,
                 'summary' => $summary,
                 'text' => $text,
                 'annotations' => $annotations,
                 'images' => $images,
-            ],
-        ];
+            ]),
+        ]);
 
-        return self::$curl->patch($url, json_encode($data), self::$header);
+        $request = json_encode($data);
+
+        Log::connect()->debug($request);
+
+        return self::$curl->patch($url, $request, self::$header);
     }
 
     /**

@@ -103,7 +103,7 @@ class Up
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
 
-        $installation_id = Repo::getGitHubInstallationIdByRepoFullName($repo_full_name);
+        $installation_id = Repo::getGitHubInstallationIdByRid((int) $rid);
 
         $khsci = new KhsCI();
 
@@ -129,7 +129,7 @@ class Up
             $commit_id,
             $details_url,
             $build_key_id,
-            CI::GITHUB_CHECK_SUITE_STATUS_QUEUED,
+            CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
             time(), null, null,
             'testTitle',
             'testSummary',

@@ -56,7 +56,7 @@ class CI
 
     const GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS = 'in_progress';
 
-    const GITHUB_CHECK_SUITE_COMPLETED = 'completed';
+    const GITHUB_CHECK_SUITE_STATUS_COMPLETED = 'completed';
 
     public static function environment()
     {
