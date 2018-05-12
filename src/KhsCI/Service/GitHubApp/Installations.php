@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\GitHubApps;
+namespace KhsCI\Service\GitHubApp;
 
 use Curl\Curl;
 use Exception;

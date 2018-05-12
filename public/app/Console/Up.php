@@ -11,6 +11,7 @@ use Error;
 use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
+use KhsCI\Support\CI;
 use KhsCI\Support\Env;
 
 class Up
@@ -108,11 +109,23 @@ class Up
 
         $khsci = new KhsCI();
 
-        $khsci->github_apps_installations->getAccessToken(
+        $access_token = $khsci->github_apps_installations->getAccessToken(
             (int) $installation_id,
             __DIR__.'/../../'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
         );
 
-        $check = $khsci;
+        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
+
+        return $khsci->check_run->create(
+            $repo_full_name,
+            'Chinese First Support GitHub Checks API CI System',
+            $branch,
+            $commit_id,
+            $details_url,
+            $external_id,
+            CI::GITHUB_CHECK_SUITE_STATUS_QUEUED,
+            time()
+
+        );
     }
 }

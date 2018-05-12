@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpIncludeInspection */
 
 declare(strict_types=1);
 
@@ -17,17 +17,15 @@ function open_error(): void
     ini_set('error_reporting', '32767');
 }
 
-/*
- * read .env.* file.
- */
+
+// read .env.* file.
+
 try {
     $env = new Dotenv\Dotenv(__DIR__.'/../', '.env'.'.'.getenv('APP_ENV'));
     $env->load();
 } catch (Exception $e) {
-    $time = microtime(true) - $start_time;
-    header("X-Runtime-rack $time");
-    echo $e->getMessage();
-    exit(1);
+    Response::json(['message' => $e->getMessage()], $start_time);
+    exit;
 }
 
 ini_set('session.cookie_path', '/');
@@ -39,16 +37,14 @@ ini_set('session.cookie_secure', 'On');
 
 date_default_timezone_set(getenv('CI_TZ'));
 
-/*
- * Open Debug?
- */
+// Open Debug?
+
 $debug = getenv('CI_DEBUG') ?? false;
 
 'true' === $debug && open_error();
 
-/*
- *  SPL Autoload
- */
+// SPL Autoload
+
 spl_autoload_register(function ($class): void {
     $class = lcfirst($class);
     $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
@@ -64,9 +60,8 @@ if ('/index.php' === $_SERVER['REQUEST_URI']) {
     exit;
 }
 
-/*
- *  Route.
- */
+// Route.
+
 try {
     require_once __DIR__.'/../route/web.php';
 } catch (Exception | Error $e) {
