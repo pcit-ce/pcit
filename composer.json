@@ -6,7 +6,7 @@
     "docker"
   ],
   "homepage": "https://github.com/khs1994-php/khsci",
-  "type": "library",
+  "type": "project",
   "license": "MIT",
   "authors": [
     {
