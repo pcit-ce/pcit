@@ -13,6 +13,10 @@ use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Env;
+use KhsCI\Support\Git;
+use KhsCI\Support\HTTP;
+use KhsCI\Support\JSON;
+use KhsCI\Support\Log;
 
 class Up
 {
@@ -31,7 +35,7 @@ class Up
                     continue;
                 }
 
-                $status = Cache::connect()->set('khsci_up_status', 1);
+                Cache::connect()->set('khsci_up_status', 1);
 
                 // Queue::queue();
 
@@ -43,12 +47,8 @@ class Up
 
                 sleep(10);
             } catch (Exception | Error $e) {
-                echo $e->getMessage();
-                echo '';
-
-                echo $e->getCode();
-
-                echo '';
+                echo $e->getMessage().PHP_EOL;
+                echo $e->getCode().PHP_EOL;
             }
         }
     }
@@ -74,7 +74,7 @@ class Up
 
         $khsci = new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]);
 
-        $status = $khsci->repo_status->create(
+        $output = $khsci->repo_status->create(
             $repo_prefix,
             $repo_name,
             $build_output_array['commit_id'],
@@ -83,7 +83,9 @@ class Up
             'continuous-integration/'.Env::get('CI_NAME').'/'.$build_output_array['event_type']
         );
 
-        var_dump($status);
+        Log::connect()->debug($output);
+
+        var_dump($output);
 
         Cache::connect()->set('khsci_up_status', 0);
     }
@@ -122,6 +124,16 @@ class Up
 
         $details_url = Env::get('CI_HOST').'/github_app/'.$repo_full_name.'/builds/'.$build_key_id;
 
+        $language = 'PHP';
+
+        $os = PHP_OS_FAMILY;
+
+        $config = yaml_parse(
+            HTTP::get(Git::getRawUrl('github', $repo_full_name, $commit_id, '.drone.yml'))
+        );
+
+        $config = JSON::beautiful(json_encode($config));
+
         $output = $khsci->check_run->create(
             $repo_full_name,
             'Chinese First Support GitHub Checks API CI System',
@@ -131,10 +143,29 @@ class Up
             $build_key_id,
             CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
             time(), null, null,
-            'testTitle',
-            'testSummary',
-            'test text'
+            Env::get('CI_NAME').' Build is Pending',
+            'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)',
+            <<<EOF
+# Try KhsCI ?
+
+Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master/docs)
+
+# Build Configuration
+
+|Build Option      | Setting    |
+| --               |   --       |  
+| Language         | $language  |
+| Operating System | $os        |
+
+# Build Configuration
+
+```json
+$config
+```
+EOF
         );
+
+        Log::connect()->debug($output);
 
         var_dump($output);
 

@@ -9,6 +9,7 @@ use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\Env;
 use KhsCI\Support\JWT;
+use KhsCI\Support\Log;
 
 class Installations
 {
@@ -108,12 +109,15 @@ class Installations
         $access_token_json = self::$curl->post($url, null, [
             'Authorization' => 'Bearer '.self::getJWT($private_key_path),
             'Accept' => 'application/vnd.github.machine-man-preview+json',
+            'a' => 1
         ]);
+
+        Log::connect()->debug(self::$curl->getRequestHeaders());
 
         $access_token_obj = json_decode($access_token_json);
 
         if ($access_token_obj->message ?? false) {
-            throw new Exception('GitHub App Access Token Error',500);
+            throw new Exception('GitHub App Access Token Error, '.$access_token_obj->message, 500);
         }
 
         $access_token = $access_token_obj->token;
