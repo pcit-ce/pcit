@@ -6,6 +6,7 @@ namespace KhsCI\Service\GitHubApps;
 
 use Curl\Curl;
 use Exception;
+use KhsCI\Support\Cache;
 use KhsCI\Support\Env;
 use KhsCI\Support\JWT;
 
@@ -31,21 +32,15 @@ class Installations
     /**
      * List repositories that are accessible to the authenticated installation.
      *
-     * @param string $access_token
-     *
      * @return mixed
      *
      * @throws Exception
      */
-    public function listRepositories(string $access_token)
+    public function listRepositories()
     {
         $url = self::$api_url.'/installation/repositories';
 
-        return self::$curl->get($url, null, [
-                'Authorization' => 'token '.$access_token,
-                'Accept' => 'application/vnd.github.machine-man-preview+json',
-            ]
-        );
+        return self::$curl->get($url);
     }
 
     /**
@@ -55,7 +50,7 @@ class Installations
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function listRepositoriesAccessible(int $installation_id)
     {
@@ -100,23 +95,47 @@ class Installations
      */
     public function getAccessToken(int $installation_id, string $private_key_path)
     {
+        $redis = Cache::connect();
+
+        $access_token = $redis->get("github_app_{$installation_id}_access_token");
+
+        if ($access_token) {
+            return $access_token;
+        }
+
         $url = self::$api_url.'/installations/'.$installation_id.'/access_tokens';
 
-        $jwt = self::getJWT($private_key_path);
-
-        return self::$curl->post($url, null, [
-            'Authorization' => 'Bearer '.$jwt,
+        $access_token = self::$curl->post($url, null, [
+            'Authorization' => 'Bearer '.self::getJWT($private_key_path),
             'Accept' => 'application/vnd.github.machine-man-preview+json',
         ]);
+
+        $redis->set("github_app_{$installation_id}_access_token", $access_token, 58 * 60);
+
+        return $access_token;
+
     }
 
     /**
      * @param string $private_key_path
      *
      * @return string
+     * @throws Exception
      */
     private function getJWT(string $private_key_path)
     {
-        return JWT::getJWT($private_key_path, (int) Env::get('CI_GITHUB_APP_ID'));
+        $jwt = Cache::connect()->get('github_app_jwt');
+
+        if ($jwt) {
+
+            return $jwt;
+        }
+
+        $jwt = JWT::getJWT($private_key_path, (int) Env::get('CI_GITHUB_APP_ID'));
+
+        Cache::connect()->set('github_app_jwt', $jwt, 8 * 60);
+
+        return $jwt;
+
     }
 }

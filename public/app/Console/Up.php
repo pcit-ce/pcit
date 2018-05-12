@@ -100,7 +100,18 @@ class Up
             return;
         }
 
+        $rid = Builds::getRidByBuildKeyId((int) $build_key_id);
+
+        $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
+
+        $installation_id = Repo::getGitHubInstallationIdByRepoFullName($repo_full_name);
+
         $khsci = new KhsCI();
+
+        $khsci->github_apps_installations->getAccessToken(
+            (int) $installation_id,
+            __DIR__.'/../../'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
+        );
 
         $check = $khsci;
     }

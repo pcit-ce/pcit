@@ -59,4 +59,17 @@ class Repo
 
         return DB::select($sql, [$rid, $git_type], true);
     }
+
+    /**
+     * @param string $repo_full_name
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name)
+    {
+        $sql = 'SELECT installation_id FROM repo WHERE repo_full_name=?';
+
+        return DB::select($sql, [$repo_full_name], true);
+    }
 }

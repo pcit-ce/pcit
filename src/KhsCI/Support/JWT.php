@@ -10,7 +10,7 @@ class JWT
 {
     /**
      * @param string $private_key_path
-     * @param        $iss
+     * @param int    $iss
      *
      * @return string
      *

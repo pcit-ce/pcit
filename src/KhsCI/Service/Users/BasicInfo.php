@@ -9,8 +9,14 @@ use Exception;
 
 class BasicInfo
 {
+    /**
+     * @var null|string
+     */
     private static $api_url = null;
 
+    /**
+     * @var Curl
+     */
     private static $curl;
 
     public function __construct(Curl $curl, string $api_url)
