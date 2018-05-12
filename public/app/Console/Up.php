@@ -11,6 +11,7 @@ use Error;
 use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
+use KhsCI\Support\CI;
 use KhsCI\Support\Env;
 
 class Up
@@ -71,8 +72,6 @@ class Up
 
         $build_output_array = Builds::get((int) $build_key_id);
 
-        $build_output_array = $build_output_array[0];
-
         $khsci = new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]);
 
         $status = $khsci->repo_status->create(
@@ -92,12 +91,12 @@ class Up
     /**
      * @throws Exception
      */
-    private static function updateGitHubAppChecks(): void
+    private static function updateGitHubAppChecks()
     {
         $build_key_id = Cache::connect()->rpop('github_app_checks');
 
         if (!$build_key_id) {
-            return;
+            return 0;
         }
 
         $rid = Builds::getRidByBuildKeyId((int) $build_key_id);
@@ -108,11 +107,33 @@ class Up
 
         $khsci = new KhsCI();
 
-        $khsci->github_apps_installations->getAccessToken(
+        $access_token = $khsci->github_apps_installations->getAccessToken(
             (int) $installation_id,
             __DIR__.'/../../'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
         );
 
-        $check = $khsci;
+        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
+
+        $output_array = Builds::get((int) $build_key_id);
+
+        $branch = $output_array['branch'];
+
+        $commit_id = $output_array['commit_id'];
+
+        $details_url = Env::get('CI_HOST').'/github_app/'.$repo_full_name.'/builds/'.$build_key_id;
+
+        return $khsci->check_run->create(
+            $repo_full_name,
+            'Chinese First Support GitHub Checks API CI System',
+            $branch,
+            $commit_id,
+            $details_url,
+            $build_key_id,
+            CI::GITHUB_CHECK_SUITE_STATUS_QUEUED,
+            time(), null, null,
+            'testTitle',
+            'testSummary',
+            'test text'
+        );
     }
 }

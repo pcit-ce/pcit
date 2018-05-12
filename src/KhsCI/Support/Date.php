@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
+use Exception;
+
 class Date
 {
     /**
+     * 将 2018-05-02T04:15:49.011488700Z (ISO 8601 格式的日期) 时间转化为整数时间戳
+     *
      * @param      $timestamp
      * @param bool $returnArray
      *
      * @return array|false|int PRC timestamp
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function parse(string $timestamp, bool $returnArray = false)
     {
@@ -48,6 +52,22 @@ class Date
             return mktime((int) $hour, (int) $minute, (int) $second, (int) $month, (int) $day, (int) $year) + 8 * 60 * 60;
         }
 
-        throw new \Exception('Only Support UTC or PRC', 500);
+        throw new Exception('Only Support UTC or PRC', 500);
+    }
+
+    /**
+     * 将整数时间戳转化为 2018-05-02T04:15:49Z (ISO 8601 格式的日期)
+     *
+     * @param int|null $timestamp
+     *
+     * @return false|string
+     */
+    public static function Int2ISO(?int $timestamp)
+    {
+        if ($timestamp) {
+            return date('c', $timestamp);
+        }
+
+        return false;
     }
 }

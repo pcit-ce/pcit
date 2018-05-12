@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
-use KhsCI\Service\GitHubApps\Installations;
+use KhsCI\Service\GitHubApp\Installations;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class GitHubAppsProvider implements ServiceProviderInterface
+class GitHubAppProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {

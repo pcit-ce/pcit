@@ -18,7 +18,7 @@ use Pimple\Container;
  *
  * $a = $container['a'];
  *
- * @property Service\GitHubApps\Installations   $github_apps_installations
+ * @property Service\GitHubApp\Installations    $github_apps_installations
  * @property Service\OAuth\Coding               $oauth_coding
  * @property Service\OAuth\GitHub               $oauth_github
  * @property Service\OAuth\GitHubApp            $oauth_github_app
@@ -31,6 +31,8 @@ use Pimple\Container;
  * @property Service\Webhooks\GitHub            $webhooks_github
  * @property Service\Queue\Queue                $queue
  * @property Service\Users\BasicInfo            $user_basic_info
+ * @property Service\Checks\Run                 $check_run
+ * @property Service\Checks\Suites              $check_suites
  */
 class KhsCI extends Container
 {
@@ -38,12 +40,13 @@ class KhsCI extends Container
      * 服务提供器数组.
      */
     protected $providers = [
-        Providers\GitHubAppsProvider::class,
+        Providers\ChecksProvider::class,
+        Providers\GitHubAppProvider::class,
         Providers\OAuthProvider::class,
         Providers\QueueProvider::class,
         Providers\RepositoriesProvider::class,
-        Providers\WebhooksProvider::class,
         Providers\UserProvider::class,
+        Providers\WebhooksProvider::class,
     ];
 
     /**

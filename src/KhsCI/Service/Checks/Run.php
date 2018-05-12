@@ -6,6 +6,7 @@ namespace KhsCI\Service\Checks;
 
 use Curl\Curl;
 use Exception;
+use KhsCI\Support\Date;
 
 class Run
 {
@@ -20,11 +21,11 @@ class Run
 
     private static $api_url;
 
-    public function __construct(Curl $curl)
+    public function __construct(Curl $curl, string $api_url)
     {
         static::$curl = $curl;
 
-        static::$api_url = 'https://api.github.com';
+        static::$api_url = $api_url;
     }
 
     /**
@@ -57,14 +58,14 @@ class Run
                            string $details_url,
                            string $external_id,
                            string $status,
-                           int $started_at,
-                           int $completed_at,
-                           string $conclusion,
-                           string $title,
-                           string $summary,
-                           string $text,
-                           array $annotations,
-                           array $images
+                           int $started_at = null,
+                           int $completed_at = null,
+                           string $conclusion = null,
+                           string $title = null,
+                           string $summary = null,
+                           string $text = null,
+                           array $annotations = [],
+                           array $images = []
     )
     {
         $data = [
@@ -74,8 +75,8 @@ class Run
             'details_url' => $details_url,
             'external_id' => $external_id,
             'status' => $status,
-            'started_at' => $started_at,
-            'completed_at' => $completed_at,
+            'started_at' => Date::Int2ISO($started_at),
+            'completed_at' => Date::Int2ISO($completed_at),
             'conclusion' => $conclusion,
             'output' => [
                 'title' => $title,
@@ -111,8 +112,8 @@ class Run
                                              int $end_line,
                                              string $warning_level,
                                              string $message,
-                                             string $title,
-                                             string $raw_details
+                                             string $title = null,
+                                             string $raw_details = null
     )
     {
         return [
@@ -162,6 +163,9 @@ class Run
      * @param string $text
      * @param array  $annotations
      * @param array  $images
+     *
+     * @return mixed
+     * @throws Exception
      */
     public function update(string $repo_full_name,
                            string $check_run_id,
@@ -171,14 +175,14 @@ class Run
                            string $details_url,
                            string $external_id,
                            string $status,
-                           int $started_at,
-                           int $completed_at,
-                           string $conclusion,
-                           string $title,
-                           string $summary,
-                           string $text,
-                           array $annotations,
-                           array $images)
+                           int $started_at = null,
+                           int $completed_at = null,
+                           string $conclusion = null,
+                           string $title = null,
+                           string $summary = null,
+                           string $text = null,
+                           array $annotations = [],
+                           array $images = [])
     {
         $url = self::$api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id;
 
@@ -189,8 +193,8 @@ class Run
             'details_url' => $details_url,
             'external_id' => $external_id,
             'status' => $status,
-            'started_at' => $started_at,
-            'completed_at' => $completed_at,
+            'started_at' => Date::Int2ISO($started_at),
+            'completed_at' => Date::Int2ISO($completed_at),
             'conclusion' => $conclusion,
             'output' => [
                 'title' => $title,
@@ -201,7 +205,7 @@ class Run
             ],
         ];
 
-        return self::$curl->patch($url, json_decode($data), self::$header);
+        return self::$curl->patch($url, json_encode($data), self::$header);
     }
 
     /**

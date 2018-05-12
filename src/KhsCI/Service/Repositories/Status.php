@@ -57,9 +57,8 @@ class Status
      * @param string $commit_sha
      * @param string $state
      * @param string $target_url
-     * @param string $description
      * @param string $context
-     * @param string $access_token
+     * @param string $description
      *
      * @return mixed
      *
@@ -71,8 +70,7 @@ class Status
                            string $state = 'pending',
                            string $target_url = 'https://ci.khs1994.com',
                            string $context = 'continuous-integration/ci.khs1994.com/push',
-                           string $description = 'The analysis or builds is pending',
-                           string $access_token = null
+                           string $description = 'The analysis or builds is pending'
     ) {
         $url = implode('/', [
                 self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha,
@@ -85,10 +83,6 @@ class Status
             'description' => $description,
             'context' => $context,
         ]);
-
-        if ($access_token) {
-            return self::$curl->post($url, $data, ['Authorization' => 'token '.$access_token]);
-        }
 
         return self::$curl->post($url, $data);
     }

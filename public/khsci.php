@@ -39,4 +39,7 @@ $cli->add(new CLI\Up());
 try {
     $cli->run();
 } catch (Exception $e) {
+    echo $e->getMessage();
+    echo '';
+    echo $e->getCode();
 }

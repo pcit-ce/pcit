@@ -18,12 +18,12 @@ class Response
 
     /**
      * @param array $array
-     * @param float $time
+     * @param float $startedAt
      */
-    public static function json(array $array, float $time): void
+    public static function json(array $array, float $startedAt): void
     {
         header('content-type: application/json;charset=utf-8');
-        $time = microtime(true) - $time;
+        $time = microtime(true) - $startedAt;
         header("X-Runtime-rack: $time");
         $code = $array['code'] ?? 200;
 
