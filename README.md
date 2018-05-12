@@ -1,8 +1,18 @@
-# KhsCI
+# KhsCI CE
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![KhsCI](https://ci2.khs1994.com:10000/github/khs1994-php/khsci/status)](https://ci2.khs1994.com:10000/github/khs1994-php/khsci)
 
-国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的 CI/CD 系统 
+国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的 CI/CD 系统
+
+* [支持文档](https://github.com/khs1994-php/khsci/tree/master/docs)
+
+* [问题反馈](https://github.com/khs1994-php/khsci/issues)
+
+* [API](https://ci.khs1994.com/api)
+
+* [捐赠](https://zan.khs1994.com)
+
+* [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/ee)
 
 ## PHP CaaS
 
@@ -18,25 +28,18 @@
 
 * **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)
 
-To Use khsci, simply:
+To **install** KhsCI, simply:
 
 ```bash
-$ composer require khs1994/khsci
-```
+# install khs1994-docker/lnmp
 
-For latest commit version:
+$ git clone --recursive https://github.com/khs1994-docker/lnmp.git ~/lnmp
 
-```bash
-$ composer require khs1994/khsci @dev
-```
+$ composer create-project khs1994/khsci ~/lnmp/app/khsci @dev
 
-## Usage
+$ cd lnmp
 
-```php
-<?php
-
-require __DIR__.'/vendor/autoload.php';
-
+$ ./lnmp-docker.sh khsci-up
 ```
 
 ## 子项目
@@ -93,7 +96,7 @@ require __DIR__.'/vendor/autoload.php';
 
 * [Docker Build Powered By Aliyun Container Service](https://www.aliyun.com/product/containerservice)
 
-# Other CI/CD on GitHub
+### Other CI/CD on GitHub
 
 * https://github.com/topics/continuous-integration?l=php&o=desc&s=stars
 
