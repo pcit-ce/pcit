@@ -11,6 +11,7 @@ class CodingController
 {
     /**
      * @return array
+     *
      * @throws Exception
      */
     public function __invoke()

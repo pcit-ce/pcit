@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
 use KhsCI\KhsCI;
 
 try {
-
     // Start Webhooks Server
     $khsci = new KhsCI();
 
@@ -15,9 +15,5 @@ try {
     $khsci->webhooks->getCache();
 
     // output is [type,event_type,$json_content]
-
 } catch (Exception $e) {
-
 }
-
-

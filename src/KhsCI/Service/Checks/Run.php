@@ -69,8 +69,7 @@ class Run
                            string $text = null,
                            array $annotations = null,
                            array $images = null
-    )
-    {
+    ) {
         $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
 
         $data = array_filter([
@@ -125,8 +124,7 @@ class Run
                                              string $message,
                                              string $title = null,
                                              string $raw_details = null
-    )
-    {
+    ) {
         return [
             'filename' => $filename,
             'blog_href' => $blog_href,

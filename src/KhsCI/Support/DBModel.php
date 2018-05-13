@@ -1,5 +1,7 @@
-<?php /** @noinspection SqlResolve */
+<?php
 
+declare(strict_types=1);
+/** @noinspection SqlResolve */
 
 namespace KhsCI\Support;
 
@@ -12,9 +14,10 @@ class DBModel
     protected static $set_array = [];
 
     /**
-     * 取得所有数据
+     * 取得所有数据.
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function all()
@@ -27,11 +30,12 @@ class DBModel
     }
 
     /**
-     * 通过主键查找数据
+     * 通过主键查找数据.
      *
      * @param int $table_primary_key_id
      *
      * @return int|array
+     *
      * @throws Exception
      */
     public static function find($table_primary_key_id)
@@ -50,11 +54,12 @@ class DBModel
     }
 
     /**
-     * 通过主键查找数据，找不到则抛出异常
+     * 通过主键查找数据，找不到则抛出异常.
      *
      * @param int|array $table_primary_key_id
      *
      * @return array|int
+     *
      * @throws Exception
      */
     public static function findOrFail($table_primary_key_id)
@@ -81,25 +86,23 @@ class DBModel
         }
 
         return $table;
-
     }
 
     /**
      * @throws Exception
      */
-    public function save()
+    public function save(): void
     {
         $table = self::getTableName();
 
         foreach (static::$set_array as $k => $v) {
-
             $sql = "INSERT INTO {$table}($k) VALUES(?)";
 
             DB::insert($sql, [$v]);
         }
     }
 
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $this->$name = $value;
 

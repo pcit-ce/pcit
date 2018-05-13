@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace KhsCI\Support;
-
 
 class StringSupport
 {
@@ -15,29 +15,30 @@ class StringSupport
      * @param string $separator
      *
      * @return string
+     *
      * @see https://www.jianshu.com/p/773fd334052f
      */
     public static function camelize(string $uncamelized_words, string $separator = '_')
     {
-        $uncamelized_words = $separator.str_replace($separator, " ", strtolower($uncamelized_words));
-        return ltrim(str_replace(" ", "", ucwords($uncamelized_words)), $separator);
+        $uncamelized_words = $separator.str_replace($separator, ' ', strtolower($uncamelized_words));
+
+        return ltrim(str_replace(' ', '', ucwords($uncamelized_words)), $separator);
     }
 
     /**
      * 驼峰命名转下划线命名
      * 思路:
-     * 小写和大写紧挨一起的地方,加上分隔符,然后全部转小写
+     * 小写和大写紧挨一起的地方,加上分隔符,然后全部转小写.
      *
      * @param string $camelCaps
      * @param string $separator
      *
      * @return string
+     *
      * @see https://www.jianshu.com/p/773fd334052f
      */
     public static function uncamelize(string $camelCaps, string $separator = '_')
     {
-        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1".$separator."$2", $camelCaps));
+        return strtolower(preg_replace('/([a-z])([A-Z])/', '$1'.$separator.'$2', $camelCaps));
     }
-
-
 }

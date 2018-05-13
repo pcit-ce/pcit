@@ -25,7 +25,7 @@ class Queue
     /**
      * @var
      */
-    private static $gitType;
+    private static $git_type;
 
     /**
      * @var
@@ -54,119 +54,64 @@ class Queue
     private static $event_type;
 
     /**
+     * @param        $build_key_id
+     * @param string $git_type
+     * @param        $rid
+     * @param string $commit_id
+     * @param string $commit_message
+     * @param string $branch
+     * @param string $event_type
+     * @param string $pull_request_id
+     * @param string $tag_name
+     *
      * @throws Exception
      */
-    public function __invoke(): void
+    public function __invoke($build_key_id,
+                             string $git_type,
+                             $rid,
+                             string $commit_id,
+                             string $commit_message,
+                             string $branch,
+                             string $event_type,
+                             string $pull_request_id,
+                             string $tag_name): void
     {
-        $sql = <<<'EOF'
-SELECT 
-
-id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name
-
-FROM 
-
-builds WHERE build_status=? AND event_type IN (?,?,?) ORDER BY id DESC;
-EOF;
-
-        $output = DB::select($sql, [
-            CI::BUILD_STATUS_PENDING,
-            CI::BUILD_EVENT_PUSH,
-            CI::BUILD_EVENT_TAG,
-            CI::BUILD_EVENT_PR,
-        ]);
-
         self::$unique_id = session_create_id();
 
-        foreach ($output as $k) {
-            $build_key_id = $k['id'];
+        Build::updateStartAt((int) $build_key_id);
 
-            Build::updateStartAt((int) $build_key_id);
+        self::$commit_id = $commit_id;
+        self::$event_type = $event_type;
+        self::$pull_id = $pull_request_id;
+        self::$tag_name = $tag_name;
+        self::$git_type = $git_type;
 
-            $rid = $k['rid'];
-            $commit_message = $k['commit_message'];
-            $branch = $k['branch'];
+        self::$build_key_id = (int) $build_key_id;
 
-            self::$commit_id = $k['commit_id'];
-            self::$event_type = $k['event_type'];
-            self::$pull_id = $k['pull_request_id'];
-            self::$tag_name = $k['tag_name'];
-            self::$gitType = $k['git_type'];
+        Log::connect()->debug('====== Start Build ======');
 
-            self::$build_key_id = (int) $build_key_id;
+        Log::connect()->debug('Build Key id is '.self::$build_key_id);
 
-            Log::connect()->debug('====== Start Build ======');
+        // commit 信息跳过构建
+        self::skip($commit_message);
 
-            Log::connect()->debug('Build Key id is '.self::$build_key_id);
+        // 是否启用构建
+        self::getRepoBuildActivateStatus((int) $rid);
 
-            // commit 信息跳过构建
-            self::skip($commit_message);
-
-            // 是否启用构建
-            self::getRepoBuildActivateStatus($rid);
-
-            self::run($rid, $branch);
-
-            // 暂时，一个队列只构建一个任务
-
-            break;
-        }
-    }
-
-    /**
-     * 网页手动触发构建.
-     *
-     * @param string $build_key_id
-     *
-     * @throws Exception
-     */
-    public function trigger(string $build_key_id): void
-    {
-        $sql = <<<EOF
-SELECT
-
-git_type,rid,commit_id,branch,event_type,pull_request_id,tag_name
-
-FROM builds
-
-WHERE id=?
-EOF;
-        $output = DB::select($sql, [$build_key_id], true);
-
-        if (!$output) {
-            throw new Exception('Build Key Id Not Found', 404);
-        }
-
-        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
-
-        DB::update($sql, [CI::BUILD_STATUS_PENDING, $build_key_id]);
-
-        foreach ($output[0] as $k => $v) {
-            $rid = $k['rid'];
-            $branch = $k['branch'];
-
-            self::$commit_id = $k['commit_id'];
-            self::$event_type = $k['event_type'];
-
-            self::$gitType = $k['git_type'];
-            self::$pull_id = $k['pull_request_id'];
-            self::$tag_name = $k['tag_name'];
-
-            self::run($rid, $branch);
-
-            break;
-        }
+        self::run($rid, $branch);
     }
 
     /**
      * 检查是否启用了构建.
      *
-     * @param string $rid
+     * @param int $rid
      *
+     * @throws CIException
      * @throws Exception
      */
-    private function getRepoBuildActivateStatus(string $rid): void
+    private function getRepoBuildActivateStatus(int $rid): void
     {
-        $gitType = self::$gitType;
+        $gitType = self::$git_type;
 
         $sql = 'SELECT build_activate FROM repo WHERE rid=? AND git_type=?';
 
@@ -255,7 +200,7 @@ EOF;
      */
     private function run($rid, string $branch): void
     {
-        $gitType = self::$gitType;
+        $gitType = self::$git_type;
         $unique_id = self::$unique_id;
         $commit_id = self::$commit_id;
         $event_type = self::$event_type;
@@ -270,8 +215,6 @@ EOF;
         $yaml_obj = (object) yaml_parse(HTTP::get(Git::getRawUrl(
             $gitType, $repo_full_name, $commit_id, '.drone.yml'))
         );
-
-        // $yaml_obj = (object)yaml_parse(HTTP::get(Env::get('CI_HOST').'/.drone.yml'));
 
         $yaml_to_json = json_encode($yaml_obj);
 
@@ -556,7 +499,7 @@ EOF;
                                string $commit_id,
                                string $branch)
     {
-        $git_url = Git::getUrl(self::$gitType, $repo_full_name);
+        $git_url = Git::getUrl(self::$git_type, $repo_full_name);
 
         $git_env = null;
 

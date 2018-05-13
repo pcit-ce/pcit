@@ -21,7 +21,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getRepoId(string $git_type, string $username, string $repo)
+    public static function getRid(string $git_type, string $username, string $repo)
     {
         $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
 

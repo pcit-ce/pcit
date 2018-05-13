@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Build;
 use App\Repo;
 use Exception;
-use KhsCI\Support\CI;
-use KhsCI\Support\DB;
 use KhsCI\Support\Git;
 
 class BranchesController
@@ -27,11 +26,9 @@ class BranchesController
 
         $base_url = Git::getUrl($git_type, $repo_full_name);
 
-        $rid = Repo::getRepoId($git_type, $username, $repo);
+        $rid = Repo::getRid($git_type, $username, $repo);
 
-        $sql = 'SELECT DISTINCT branch FROM builds WHERE git_type=? AND rid=?';
-
-        $branchArray = DB::select($sql, [$git_type, $rid]);
+        $branchArray = Build::getBranches($git_type, (int) $rid);
 
         $build_status_array = [];
 
@@ -42,21 +39,7 @@ class BranchesController
                 continue;
             }
 
-            $sql = <<<'EOF'
-SELECT 
-
-id,
-build_status,
-commit_id,
-committer_name,
-end_time
-
-FROM builds WHERE
- 
-git_type=? AND rid=? AND branch=? AND event_type IN (?,?) ORDER BY id DESC LIMIT 5
-
-EOF;
-            $outputArray = DB::select($sql, [$git_type, $rid, $branch, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
+            $outputArray = Build::getPushAndTagEvent($git_type, (int) $rid, $branch);
 
             foreach ($outputArray as $output) {
                 $build_status = $output['build_status'];

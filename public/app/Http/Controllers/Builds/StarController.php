@@ -6,11 +6,11 @@ namespace App\Http\Controllers\Builds;
 
 class StarController
 {
-    public function __invoke(): void
+    public function star(): void
     {
     }
 
-    public function post(): void
+    public function unStar(): void
     {
     }
 }
