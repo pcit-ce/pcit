@@ -9,8 +9,14 @@ use Exception;
 
 class Webhooks
 {
+    /**
+     * @var string
+     */
     private static $api_url;
 
+    /**
+     * @var Curl
+     */
     private static $curl;
 
     public function __construct(Curl $curl, string $api_url)

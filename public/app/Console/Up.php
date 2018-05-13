@@ -192,22 +192,30 @@ EOF
      */
     private static function webhooks(): void
     {
-        $json = Cache::connect()->rPop('webhooks');
+        $khsci = new KhsCI();
 
-        if (!$json) {
+        $webhooks = $khsci->webhooks;
+
+        $json_raw = $webhooks->getCache();
+
+        if (!$json_raw) {
             return;
         }
 
-        list($git_type, $event_type, $json) = json_decode($json, true);
+        list($git_type, $event_type, $json) = json_decode($json_raw, true);
 
         self::$git_type = $git_type;
 
         try {
             self::$event_type($json);
 
+            $webhooks->pushSuccessCache($json_raw);
+
+            return;
+
         } catch (Error | Exception $e) {
 
-            Cache::connect()->lPush('webhooks_error', $json);
+            $webhooks->pushErrorCache($json_raw);
 
             throw new Exception($e->getMessage(), $e->getCode());
         }

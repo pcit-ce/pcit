@@ -17,7 +17,7 @@ class GitHubController
     {
         $khsci = new KhsCI();
 
-        $output = $khsci->webhooks->github();
+        $output = $khsci->webhooks->startGithubServer();
 
         return [$output];
     }
@@ -29,7 +29,7 @@ class GitHubController
     {
         $khsci = new KhsCI();
 
-        $output = $khsci->webhooks->github_app();
+        $output = $khsci->webhooks->startGitHubAppServer();
 
         return [$output];
     }

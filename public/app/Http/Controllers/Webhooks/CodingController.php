@@ -10,13 +10,14 @@ use KhsCI\KhsCI;
 class CodingController
 {
     /**
+     * @return array
      * @throws Exception
      */
-    public function __invoke(): void
+    public function __invoke()
     {
         $khsci = new KhsCI();
 
-        $output = $khsci->webhooks->coding();
+        $output = $khsci->webhooks->startCodingServer();
 
         return [$output];
     }

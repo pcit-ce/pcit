@@ -17,18 +17,29 @@ use KhsCI\Support\Request;
  */
 class Webhooks
 {
+    /**
+     * @var string
+     */
     private static $git_type = 'github';
 
     /**
+     * @var string
+     */
+    public static $cache_key = 'webhooks';
+
+    /**
+     * @param string|null $secret
+     *
      * @return bool|int
      * @throws Exception
      */
-    public function github()
+    public function startGithubServer(string $secret = null)
     {
         $signature = Request::getHeader('X-Hub-Signature');
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
         $content = file_get_contents('php://input');
-        $secret = Env::get('CI_WEBHOOKS_TOKEN') ?? md5('khsci');
+
+        $secret = $secret ?? Env::get('CI_WEBHOOKS_TOKEN') ?? md5('khsci');
 
         list($algo, $github_hash) = explode('=', $signature, 2);
 
@@ -49,21 +60,34 @@ class Webhooks
     }
 
     /**
+     * @param string $secret
+     *
+     * @return bool|int
      * @throws Exception
      */
-    public function github_app()
+    public function startGitHubAppServer(string $secret = null)
     {
         self::$git_type = 'github_app';
 
-        return $this->github();
+        return $this->startGithubServer($secret);
     }
 
-    public function coding()
+    /**
+     * @param string $secret
+     *
+     * @return array
+     */
+    public function startCodingServer(string $secret = null)
     {
         return [];
     }
 
-    public function gitee()
+    /**
+     * @param string $secret
+     *
+     * @return array
+     */
+    public function startGiteeServer(string $secret = null)
     {
         return [];
     }
@@ -79,6 +103,72 @@ class Webhooks
      */
     private static function pushCache(string $type, $content)
     {
-        return Cache::connect()->lpush('webhooks', json_encode([static::$git_type, $type, $content]));
+        return Cache::connect()->lpush(self::$cache_key, json_encode([static::$git_type, $type, $content]));
+    }
+
+    /**
+     * 获取一条缓存数据
+     *
+     * @return string|false
+     * @throws Exception
+     */
+    public function getCache()
+    {
+        return Cache::connect()->rPop(self::$cache_key);
+    }
+
+    /**
+     * 回滚
+     *
+     * @param string $content
+     *
+     * @return bool|int
+     * @throws Exception
+     */
+    public function rollback(string $content)
+    {
+        return Cache::connect()->lPush(self::$cache_key, $content);
+    }
+
+    /**
+     * 处理成功，存入成功队列
+     *
+     * @param string $content
+     *
+     * @return bool|int
+     * @throws Exception
+     */
+    public function pushSuccessCache(string $content)
+    {
+        return Cache::connect()->lPush(self::$cache_key.'_success', $content);
+    }
+
+    /**
+     * 获取成功的队列
+     */
+    public function getSuccessCache()
+    {
+        return [];
+    }
+
+    /**
+     * 处理失败，插入失败队列
+     *
+     * @param string $content
+     *
+     * @return bool|int
+     * @throws Exception
+     */
+    public function pushErrorCache(string $content)
+    {
+        return Cache::connect()->lPush(self::$cache_key.'_error', $content);
+    }
+
+    /**
+     * 获取失败的队列
+     */
+    public function getErrorCache()
+    {
+        return [];
     }
 }
