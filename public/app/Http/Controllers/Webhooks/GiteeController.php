@@ -16,8 +16,8 @@ class GiteeController
     {
         $khsci = new KhsCI();
 
-        $webhooks = $khsci->webhooks_gitee;
+        $output = $khsci->webhooks->gitee();
 
-        return $webhooks();
+        return [$output];
     }
 }

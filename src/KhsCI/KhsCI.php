@@ -26,9 +26,7 @@ use Pimple\Container;
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status
  * @property Service\Repositories\Webhooks      $repo_webhooks
- * @property Service\Webhooks\Coding            $webhooks_coding
- * @property Service\Webhooks\Gitee             $webhooks_gitee
- * @property Service\Webhooks\GitHub            $webhooks_github
+ * @property Service\Webhooks\Webhooks          $webhooks
  * @property Service\Queue\Queue                $queue
  * @property Service\Users\BasicInfo            $user_basic_info
  * @property Service\Checks\Run                 $check_run
