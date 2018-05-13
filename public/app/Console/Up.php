@@ -47,9 +47,17 @@ class Up
 
                 // Queue::queue();
 
-                self::updateGitHubStatus();
+                $build_key_id = Cache::connect()->rPop('github_status');
 
-                self::updateGitHubAppChecks();
+                if ($build_key_id) {
+                    self::updateGitHubStatus((int) $build_key_id);
+                }
+
+                $build_key_id = Cache::connect()->rpop('github_app_checks');
+
+                if ($build_key_id) {
+                    self::updateGitHubAppChecks((int) $build_key_id);
+                }
 
                 self::webhooks();
 
@@ -65,23 +73,25 @@ class Up
     }
 
     /**
+     * @param int    $build_key_id
+     * @param string $state
+     *
+     * @param string $description
+     *
      * @throws Exception
      */
-    private static function updateGitHubStatus(): void
+    public static function updateGitHubStatus(int $build_key_id,
+                                              string $state = 'pending',
+                                              string $description = null
+    ): void
     {
-        $build_key_id = Cache::connect()->rPop('github_status');
-
-        if (!$build_key_id) {
-            return;
-        }
-
-        $rid = Build::getRid((int) $build_key_id);
+        $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
 
         list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
 
-        $build_output_array = Build::find((int) $build_key_id);
+        $build_output_array = Build::find($build_key_id);
 
         $khsci = new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]);
 
@@ -89,9 +99,10 @@ class Up
             $repo_prefix,
             $repo_name,
             $build_output_array['commit_id'],
-            'pending',
+            $state,
             Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id,
-            'continuous-integration/'.Env::get('CI_NAME').'/'.$build_output_array['event_type']
+            'continuous-integration/'.Env::get('CI_NAME').'/'.$build_output_array['event_type'],
+            $description ?? null
         );
 
         Log::connect()->debug($output);
@@ -102,16 +113,35 @@ class Up
     }
 
     /**
+     * @param int         $build_key_id
+     * @param string|null $name
+     *
+     * @param string      $status
+     * @param int         $started_at
+     * @param int         $completed_at
+     * @param string      $conclusion
+     * @param string|null $title
+     * @param string      $summary
+     *
+     * @param string      $text
+     * @param array|null  $annotations
+     * @param array       $images
+     *
      * @throws Exception
      */
-    private static function updateGitHubAppChecks(): void
+    public static function updateGitHubAppChecks(int $build_key_id,
+                                                 string $name = null,
+                                                 string $status = null,
+                                                 int $started_at,
+                                                 int $completed_at = null,
+                                                 string $conclusion = null,
+                                                 string $title = null,
+                                                 string $summary = null,
+                                                 string $text = null,
+                                                 array $annotations = null,
+                                                 array $images = null
+    ): void
     {
-        $build_key_id = Cache::connect()->rpop('github_app_checks');
-
-        if (!$build_key_id) {
-            return;
-        }
-
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -133,6 +163,8 @@ class Up
 
         $commit_id = $output_array['commit_id'];
 
+        $event_type = $output_array['event_type'];
+
         $details_url = Env::get('CI_HOST').'/github_app/'.$repo_full_name.'/builds/'.$build_key_id;
 
         $language = 'PHP';
@@ -145,18 +177,19 @@ class Up
 
         $config = JSON::beautiful(json_encode($config));
 
-        $output = $khsci->check_run->create(
-            $repo_full_name,
-            'China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI',
-            $branch,
-            $commit_id,
-            $details_url,
-            $build_key_id,
-            CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
-            time(), null, null,
-            Env::get('CI_NAME').' Build is Pending',
-            'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)',
-            <<<EOF
+        $name = $name ?? 'Build Event is '.$event_type.' '.ucfirst($event_type);
+
+        $status = $status ?? CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS;
+
+        $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status);
+
+        $summary = $summary ?? 'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)';
+
+        $text = $text ?? <<<EOF
+# About KhsCI ?
+
+China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI
+
 # Try KhsCI ?
 
 Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master/docs)
@@ -176,7 +209,12 @@ $config
 ```
 
 </details>
-EOF
+EOF;
+
+        $output = $khsci->check_run->create(
+            $repo_full_name, $name, $branch, $commit_id, $details_url, $build_key_id, $status,
+            $started_at ?? time(),
+            $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
         );
 
         Log::connect()->debug($output);

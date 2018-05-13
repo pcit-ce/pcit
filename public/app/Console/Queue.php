@@ -105,13 +105,24 @@ EOF;
     {
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_INACTIVE);
 
-        self::updateGitHubCommitStatus(
+        Up::updateGitHubStatus(
+            self::$build_key_id,
             CI::GITHUB_STATUS_FAILURE,
             'This Repo is Inactive'
         );
 
         if ('github_app' === self::$git_type) {
-            return;
+            Up::updateGitHubAppChecks(
+                self::$build_key_id,
+                null,
+                CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+                time() - 10,
+                time(),
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
+                null,
+                null,
+                null
+            );
         }
     }
 
@@ -122,13 +133,24 @@ EOF;
     {
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_SKIP);
 
-        self::updateGitHubCommitStatus(
+        Up::updateGitHubStatus(
+            self::$build_key_id,
             CI::GITHUB_STATUS_SUCCESS,
             'The '.Env::get('CI_NAME').' build is skip'
         );
 
         if ('github_app' === self::$git_type) {
-            return;
+            Up::updateGitHubAppChecks(
+                self::$build_key_id,
+                null,
+                CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+                time() - 10,
+                time(),
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
+                null,
+                null,
+                null
+            );
         }
     }
 
@@ -141,7 +163,8 @@ EOF;
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_ERRORED);
 
         // 通知 GitHub commit Status
-        self::updateGitHubCommitStatus(
+        Up::updateGitHubStatus(
+            self::$build_key_id,
             CI::GITHUB_STATUS_ERROR,
             'The '.Env::get('CI_NAME').' build could not complete due to an error'
         );
@@ -151,7 +174,17 @@ EOF;
         // GitHub App checks API
 
         if ('github_app' === self::$git_type) {
-            return;
+            Up::updateGitHubAppChecks(
+                self::$build_key_id,
+                null,
+                CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+                time() - 10,
+                time(),
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
+                null,
+                null,
+                null
+            );
         }
     }
 
@@ -162,83 +195,54 @@ EOF;
     {
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_FAILED);
 
-        self::updateGitHubCommitStatus(
+        Up::updateGitHubStatus(
+            self::$build_key_id,
             CI::GITHUB_STATUS_FAILURE,
             'The '.Env::get('CI_NAME').' build is failed'
         );
 
         if ('github_app' === self::$git_type) {
-            return;
+            Up::updateGitHubAppChecks(
+                self::$build_key_id,
+                null,
+                CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+                time() - 10,
+                time(),
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
+                null,
+                null,
+                null
+            );
         }
     }
 
     /**
+     *
+     *
      * @throws Exception
      */
     private static function setBuildStatusPassed(): void
     {
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_PASSED);
 
-        self::updateGitHubCommitStatus(
+        Up::updateGitHubStatus(
+            self::$build_key_id,
             CI::GITHUB_STATUS_SUCCESS,
             'The '.Env::get('CI_NAME').' build passed'
         );
 
         if ('github_app' === self::$git_type) {
-            return;
+            Up::updateGitHubAppChecks(
+                self::$build_key_id,
+                null,
+                CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+                time() - 10,
+                time(),
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
+                null,
+                null,
+                null
+            );
         }
-    }
-
-    /**
-     * @param string $state
-     * @param string $description
-     *
-     * @throws Exception
-     */
-    private static function updateGitHubCommitStatus(string $state, string $description): void
-    {
-        $sql = <<<EOF
-SELECT
-
-repo_prefix,repo_name,repo_admin
-
-FROM repo WHERE 
-
-rid=( SELECT rid FROM builds WHERE id=? )
-EOF;
-        $output = DB::select($sql, [self::$build_key_id]);
-
-        $repo_username = $output[0]['repo_prefix'];
-
-        $repo_name = $repo = $output[0]['repo_name'];
-
-        $sql = 'SELECT repo_admin FROM repo WHERE repo_full_name=? AND git_type=?';
-
-        $admin = DB::select($sql, [$repo_username.'/'.$repo_name, 'github'], true);
-
-        foreach (json_decode($admin) as $k) {
-            $sql = 'SELECT access_token FROM user WHERE uid=? AND git_type=?';
-
-            $output = DB::select($sql, [$k, 'github'], true);
-
-            if ($output) {
-                $accessToken = $output;
-                break;
-            }
-        }
-
-        $khsci = new KhsCI(['github_access_token' => $accessToken], 'github');
-
-        $output = $khsci->repo_status->create(
-            $repo_username,
-            $repo_name,
-            self::$commit_id,
-            $state,
-            Env::get('CI_HOST').'/github/'.$repo_username.'/'.$repo_name.'/builds/'.self::$build_key_id,
-            'continuous-integration/'.Env::get('CI_NAME').'/'.self::$event_type,
-            $description
-        );
-
-        Log::connect()->debug($output);
     }
 }
