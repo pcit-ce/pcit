@@ -39,6 +39,8 @@ class Webhooks
         if ($github_hash === $serverHash) {
             try {
                 self::pushCache($type, $content);
+
+                return;
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }

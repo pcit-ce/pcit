@@ -203,8 +203,12 @@ EOF
         self::$git_type = $git_type;
 
         try {
-            self::$$event_type($json);
+            self::$event_type($json);
+
         } catch (Error | Exception $e) {
+
+            Cache::connect()->lPush('webhooks_error', $json);
+
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }
