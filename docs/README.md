@@ -8,7 +8,7 @@
 
 ## GitHub 新建仓库
 
-## 安装 KhsCI
+## 安装 KhsCI GitHub App
 
 在 https://github.com/apps/khsci 点击右边的 `Install` 按钮，在稍后跳转的页面中选择你新建的仓库
 

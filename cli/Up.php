@@ -28,6 +28,8 @@ class Up extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
+        sleep(30);
+
         \App\Console\Migrate::all();
 
         \App\Console\Up::up();

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Build;
+use Exception;
+use KhsCI\Support\CI;
+
 /**
  * Class RestartController.
  *
@@ -11,4 +15,13 @@ namespace App\Http\Controllers\Builds;
  */
 class RestartController
 {
+    /**
+     * @param $build_key_id
+     *
+     * @throws Exception
+     */
+    public function __invoke($build_key_id)
+    {
+        Build::UpdateBuildStatus($build_key_id, CI::BUILD_STATUS_PENDING);
+    }
 }

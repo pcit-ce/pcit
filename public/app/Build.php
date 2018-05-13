@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use Exception;
+use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\DBModel;
 
@@ -45,25 +46,11 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function getGitTypeByBuildKeyId(int $build_key_id)
+    public static function getGitType(int $build_key_id)
     {
         $sql = 'SELECT git_type FROM builds WHERE id=?';
 
         return DB::select($sql, [$build_key_id], true);
-    }
-
-    /**
-     * @param int $rid
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getRidByBuildKeyId(int $rid)
-    {
-        $sql = 'SELECT rid FROM builds WHERE id=?';
-
-        return DB::select($sql, [$rid], true);
     }
 
     /**
@@ -73,12 +60,105 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function get(int $build_key_id)
+    public static function getRid(int $build_key_id)
     {
-        $sql = 'SELECT * FROM builds WHERE id=?';
+        $sql = 'SELECT rid FROM builds WHERE id=?';
 
-        $output = DB::select($sql, [$build_key_id]);
+        return DB::select($sql, [$build_key_id], true);
+    }
 
-        return $output[0] ?? [];
+    /**
+     * @param int    $build_key_id
+     * @param string $status
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function UpdateBuildStatus(int $build_key_id, string $status)
+    {
+        $sql = 'UPDATE builds SET build_status=? WHERE id=?';
+
+        return DB::update($sql, [$status, $build_key_id]);
+    }
+
+    /**
+     * @param int    $rid
+     * @param string $branch
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getBuildStatus(int $rid, string $branch)
+    {
+        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? ORDER BY id DESC LIMIT 1';
+
+        return DB::select($sql, [$rid, $branch], true);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getBranches(string $git_type, int $rid)
+    {
+        $sql = 'SELECT DISTINCT branch FROM builds WHERE git_type=? AND rid=?';
+
+        return $branches = DB::select($sql, [$git_type, $rid]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @param string $branch
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getPushAndTagEvent(string $git_type, int $rid, string $branch)
+    {
+        $sql = <<<'EOF'
+SELECT 
+
+id,
+build_status,
+commit_id,
+committer_name,
+end_time
+
+FROM builds WHERE
+
+git_type=? AND rid=? AND branch=? AND event_type IN (?,?) ORDER BY id DESC LIMIT 5
+
+EOF;
+        return DB::select($sql, [$git_type, $rid, $branch, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getLastBuildId(string $git_type, int $rid)
+    {
+        $sql = <<<EOF
+SELECT id FROM builds 
+
+WHERE 
+
+git_type=? AND rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1
+EOF;
+
+        return DB::select($sql, [
+            $git_type, $rid,
+            CI::BUILD_STATUS_PENDING,
+            CI::BUILD_STATUS_SKIP,
+            CI::BUILD_STATUS_INACTIVE,
+        ], true);
     }
 }

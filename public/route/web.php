@@ -107,7 +107,6 @@ Route::get('{git_type}/{username}/{repo}', 'Builds\ListController');
 Route::post('{git_type}/{username}/{repo}', 'Builds\ListController@post');
 
 Route::get('{git_type}/{username}/{repo}/branches', 'Builds\ListController');
-Route::get('{git_type}/{username}/{repo}/{branch}/status', 'Builds\ShowStatusController');
 Route::post('{git_type}/{username}/{repo}/branches', 'Builds\BranchesController@post');
 
 Route::get('{git_type}/{username}/{repo}/builds', 'Builds\ListController');
@@ -119,18 +118,17 @@ Route::post('{git_type}/{username}/{repo}/builds/{id}', 'Builds\ListController@g
 Route::get('{git_type}/{username}/{repo}/pull_requests', 'Builds\ListController');
 Route::post('{git_type}/{username}/{repo}/pull_requests', 'Builds\PullRequestsController@post');
 
-Route::get('{git_type}/{username}/{repo}/pull_requests/{id}', 'Builds\ListController');
-
 Route::get('{git_type}/{username}/{repo}/settings', 'Builds\ListController');
+Route::post('{git_type}/{username}/{repo}/settings', 'Builds\SettingsController');
 
 Route::get('{git_type}/{username}/{repo}/requests', 'Builds\ListController');
 Route::post('{git_type}/{username}/{repo}/requests', 'Builds\ListController@list');
 
 Route::get('{git_type}/{username}/{repo}/caches', 'Builds\ListController');
+Route::post('{git_type}/{username}/{repo}/caches', 'Builds\CacheController');
 
-Route::get('{git_type}/{username}/{repo}/status', 'Builds\ListController@status');
-
-Route::get('{git_type}/{username}/{repo}/getstatus', 'Builds\ListController@getStatus');
+Route::get('{git_type}/{username}/{repo}/status', 'Builds\ShowStatusController');
+Route::get('{git_type}/{username}/{repo}/getstatus', 'Builds\ShowStatusController@getStatus');
 
 /* Star */
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Build;
 use App\Repo;
 use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
-use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 
 class ListController
@@ -29,75 +29,15 @@ class ListController
      */
     public function post(...$arg)
     {
-        $rid = Repo::getRepoId(...$arg);
+        $rid = Repo::getRid(...$arg);
 
-        $sql = 'SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1';
-
-        $last_build_id = DB::select($sql, [
-            $arg[0], $rid, CI::BUILD_STATUS_PENDING, CI::BUILD_STATUS_SKIP, CI::BUILD_STATUS_INACTIVE,
-        ], true
-        );
+        $last_build_id = Build::getLastBuildId($arg[0], (int) $rid);
 
         if (!$last_build_id) {
             return [];
         }
 
         return $this->getBuildDetails(null, null, null, $last_build_id);
-    }
-
-    /**
-     * @param mixed ...$arg
-     *
-     * @throws Exception
-     */
-    public function status(...$arg): void
-    {
-        $branch = $_GET['branch'] ?? null;
-
-        if (!$branch) {
-            $branch = Repo::getDefaultBranch(...$arg) ?? 'master';
-        }
-
-        $rid = Repo::getRepoId(...$arg);
-
-        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? ORDER BY id DESC LIMIT 1';
-
-        $status = DB::select($sql, [$rid, $branch], true);
-
-        if (null === $status) {
-            header('Content-Type: image/svg+xml;charset=utf-8');
-            require __DIR__.'/../../../../public/ico/unknown.svg';
-            exit;
-        }
-
-        header('Content-Type: image/svg+xml;charset=utf-8');
-
-        require __DIR__.'/../../../../public/ico/'.$status.'.svg';
-    }
-
-    /**
-     * @param mixed ...$arg
-     *
-     * @return string
-     */
-    public function getStatus(...$arg)
-    {
-        list($git_type, $username, $repo) = $arg;
-        $host = Env::get('CI_HOST');
-
-        return <<<EOF
-<pre>
-
-<h1>IMAGE</h1>
-
-$host/$git_type/$username/$repo/status?branch=master
-
-<h1>MARKDOWN</h1>
-
-[![Build Status]($host/$git_type/$username/$repo/status?branch=master)]($host/$git_type/$username/$repo)
-
-</pre>
-EOF;
     }
 
     /**
