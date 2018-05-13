@@ -14,7 +14,7 @@
 
 * [捐赠](https://zan.khs1994.com)
 
-* [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/ee)
+* [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/enterprises)
 
 ## PHP CaaS
 

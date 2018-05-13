@@ -177,9 +177,9 @@ class Up
 
         $config = JSON::beautiful(json_encode($config));
 
-        $name = $name ?? 'Build Event is '.ucfirst($event_type);
-
         $status = $status ?? CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS;
+
+        $name = $name ?? 'Build Event is '.ucfirst($event_type).' '.ucfirst($status);
 
         $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status);
 
@@ -188,7 +188,7 @@ class Up
         $text = $text ?? <<<EOF
 # About KhsCI
 
-China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI
+**China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI**
 
 # Try KhsCI ?
 
