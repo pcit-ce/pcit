@@ -40,7 +40,7 @@ class Webhooks
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
         $content = file_get_contents('php://input');
 
-        $secret = $secret ?? Env::get('CI_WEBHOOKS_TOKEN') ?? md5('khsci');
+        $secret = $secret ?? Env::get('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
 
         list($algo, $github_hash) = explode('=', $signature, 2);
 
