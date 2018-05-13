@@ -132,7 +132,7 @@ class Up
     public static function updateGitHubAppChecks(int $build_key_id,
                                                  string $name = null,
                                                  string $status = null,
-                                                 int $started_at,
+                                                 int $started_at = null,
                                                  int $completed_at = null,
                                                  string $conclusion = null,
                                                  string $title = null,
@@ -177,7 +177,7 @@ class Up
 
         $config = JSON::beautiful(json_encode($config));
 
-        $name = $name ?? 'Build Event is '.$event_type.' '.ucfirst($event_type);
+        $name = $name ?? 'Build Event is '.ucfirst($event_type);
 
         $status = $status ?? CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS;
 
@@ -186,7 +186,7 @@ class Up
         $summary = $summary ?? 'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)';
 
         $text = $text ?? <<<EOF
-# About KhsCI ?
+# About KhsCI
 
 China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI
 
@@ -212,7 +212,7 @@ $config
 EOF;
 
         $output = $khsci->check_run->create(
-            $repo_full_name, $name, $branch, $commit_id, $details_url, $build_key_id, $status,
+            $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
             $started_at ?? time(),
             $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
         );
@@ -287,7 +287,7 @@ EOF;
     {
         $obj = json_decode($content);
 
-        $rid = $obj->repository->id;
+        $rid = $obj->repository->id ?? 0;
 
         $event_time = time();
 

@@ -20,7 +20,10 @@
   },
   "require": {
     "php": ">=7.1",
+    "ext-PDO": "*",
     "ext-json": "*",
+    "ext-curl": "*",
+    "ext-yaml": "*",
     "doctrine/cache": "^1.6",
     "firebase/php-jwt": "^5.0",
     "khs1994/curl": "dev-master",
@@ -32,7 +35,6 @@
     "vlucas/phpdotenv": "*"
   },
   "require-dev": {
-    "ext-PDO": "*",
     "phpunit/phpunit": "^7.0"
   },
   "config": {
