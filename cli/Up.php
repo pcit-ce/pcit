@@ -20,6 +20,12 @@ class Up extends Command
         $this->setDescription('Run KhsCI Daemon');
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @throws Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         \App\Console\Up::up();

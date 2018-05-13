@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\Builds;
+use App\Build;
 use App\GetAccessToken;
 use App\Repo;
 use Error;
@@ -65,13 +65,13 @@ class Up
             return;
         }
 
-        $rid = Builds::getRidByBuildKeyId((int) $build_key_id);
+        $rid = Build::getRidByBuildKeyId((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
 
         list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
 
-        $build_output_array = Builds::get((int) $build_key_id);
+        $build_output_array = Build::get((int) $build_key_id);
 
         $khsci = new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]);
 
@@ -102,7 +102,7 @@ class Up
             return;
         }
 
-        $rid = Builds::getRidByBuildKeyId((int) $build_key_id);
+        $rid = Build::getRidByBuildKeyId((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
 
@@ -117,7 +117,7 @@ class Up
 
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
-        $output_array = Builds::get((int) $build_key_id);
+        $output_array = Build::get((int) $build_key_id);
 
         $branch = $output_array['branch'];
 

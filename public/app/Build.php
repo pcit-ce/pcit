@@ -6,8 +6,9 @@ namespace App;
 
 use Exception;
 use KhsCI\Support\DB;
+use KhsCI\Support\DBModel;
 
-class Builds
+class Build extends DBModel
 {
     /**
      * @param int $build_key_id

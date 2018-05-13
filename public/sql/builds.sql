@@ -29,5 +29,5 @@ CREATE TABLE `builds` (
   `matrix`             varchar(100),
   `check_suites_id`    BIGINT,
   `check_run_id`       BIGINT,
-  KEY (`id`)
+  PRIMARY KEY (`id`)
 );

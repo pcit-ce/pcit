@@ -10,5 +10,5 @@ CREATE TABLE `user` (
   `email`        varchar(100),
   `pic`          varchar(200),
   `access_token` varchar(200),
-  KEY (`id`)
+  PRIMARY KEY (`id`)
 );

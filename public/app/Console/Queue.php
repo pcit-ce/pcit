@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\Builds;
+use App\Build;
 use Error;
 use Exception;
 use KhsCI\CIException;
@@ -43,7 +43,7 @@ class Queue
             self::$unique_id = $e->getUniqueId();
             self::$event_type = $e->getEventType();
             self::$build_key_id = $e->getCode();
-            self::$git_type = Builds::getGitTypeByBuildKeyId(self::$build_key_id);
+            self::$git_type = Build::getGitTypeByBuildKeyId(self::$build_key_id);
 
             /**
              * $e->getCode() is build key id.
@@ -74,7 +74,7 @@ class Queue
             throw new Exception($e->getMessage());
         } finally {
             $queue::systemDelete(self::$unique_id);
-            Builds::updateStopAt(self::$build_key_id);
+            Build::updateStopAt(self::$build_key_id);
             Cache::connect()->set('khsci_up_status', 0);
         }
     }

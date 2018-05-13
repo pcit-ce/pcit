@@ -17,5 +17,6 @@ CREATE TABLE `repo` (
   `installation_id`    BIGINT COMMENT 'github app only',
   `last_sync`          BIGINT UNSIGNED COMMENT '最后同步时间',
   `secrets`            JSON COMMENT '仓库密钥列表',
-  KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `unique_repo` (`git_type`,`repo_full_name`)
 );

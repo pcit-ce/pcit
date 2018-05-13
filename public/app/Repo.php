@@ -6,9 +6,12 @@ namespace App;
 
 use Exception;
 use KhsCI\Support\DB;
+use KhsCI\Support\DBModel;
 
-class Repo
+class Repo extends DBModel
 {
+    protected static $table = 'repo';
+
     /**
      * @param string $git_type
      * @param string $username

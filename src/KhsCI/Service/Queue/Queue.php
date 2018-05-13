@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Queue;
 
-use App\Builds;
+use App\Build;
 use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
@@ -80,7 +80,7 @@ EOF;
         foreach ($output as $k) {
             $build_key_id = $k['id'];
 
-            Builds::updateStartAt((int) $build_key_id);
+            Build::updateStartAt((int) $build_key_id);
 
             $rid = $k['rid'];
             $commit_message = $k['commit_message'];

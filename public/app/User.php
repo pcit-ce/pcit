@@ -6,9 +6,12 @@ namespace App;
 
 use Exception;
 use KhsCI\Support\DB;
+use KhsCI\Support\DBModel;
 
-class User
+class User extends DBModel
 {
+    protected static $table = 'user';
+
     /**
      * @param string $git_type
      * @param int    $uid
@@ -25,7 +28,8 @@ class User
                                           string $email,
                                           string $pic,
                                           string $accessToken
-    ): void {
+    ): void
+    {
         $user_key_id = self::exists($git_type, $username);
 
         if ($user_key_id) {

@@ -19,5 +19,5 @@ CREATE TABLE `issues` (
   `created_time`   BIGINT UNSIGNED,
   `updated_time`   BIGINT UNSIGNED,
   `closed_time`    BIGINT UNSIGNED,
-  KEY ('id')
+  PRIMARY KEY ('id')
 );
