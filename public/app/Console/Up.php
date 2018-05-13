@@ -26,7 +26,11 @@ class Up
 {
     private static $git_type;
 
-    private static $cache_key = 'khsci_up_status';
+    private static $cache_key_up_status = 'khsci_up_status';
+
+    private static $cache_key_github_app_checks = 'github_app_checks';
+
+    private static $cache_key_github_commit_status = 'github_commit_status';
 
     /**
      * @throws Exception
@@ -35,25 +39,25 @@ class Up
     {
         while (1) {
             try {
-                if (1 === Cache::connect()->get(self::$cache_key)) {
-                    echo "Wait sleep 2s ...\n\n";
+                if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
+                    echo "...";
 
                     sleep(2);
 
                     continue;
                 }
 
-                Cache::connect()->set(self::$cache_key, 1);
+                Cache::connect()->set(self::$cache_key_up_status, 1);
 
                 // Queue::queue();
 
-                $build_key_id = Cache::connect()->rPop('github_status');
+                $build_key_id = Cache::connect()->rPop(self::$cache_key_github_commit_status);
 
                 if ($build_key_id) {
                     self::updateGitHubStatus((int) $build_key_id);
                 }
 
-                $build_key_id = Cache::connect()->rpop('github_app_checks');
+                $build_key_id = Cache::connect()->rpop(self::$cache_key_github_app_checks);
 
                 if ($build_key_id) {
                     self::updateGitHubAppChecks((int) $build_key_id);
@@ -61,7 +65,7 @@ class Up
 
                 self::webhooks();
 
-                echo "Finished sleep 2s ...\n\n";
+                echo "...";
 
                 sleep(2);
             } catch (Exception | Error $e) {
@@ -109,7 +113,7 @@ class Up
 
         var_dump($output);
 
-        Cache::connect()->set(self::$cache_key, 0);
+        Cache::connect()->set(self::$cache_key_up_status, 0);
     }
 
     /**
@@ -147,6 +151,11 @@ class Up
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
 
         $installation_id = Repo::getGitHubInstallationIdByRid((int) $rid);
+
+        if (!$installation_id) {
+            Cache::connect()->set(self::$cache_key_github_app_checks.'_error', $build_key_id);
+            throw new Exception('installation_id is error', 500);
+        }
 
         $khsci = new KhsCI();
 
@@ -225,7 +234,7 @@ EOF;
 
         DB::update($sql, [json_decode($output)->id ?? null, $build_key_id]);
 
-        Cache::connect()->set('khsci_up_status', 0);
+        Cache::connect()->set(self::$cache_key_up_status, 0);
     }
 
     /**
@@ -268,12 +277,12 @@ EOF;
     private static function pushCache(int $last_insert_id): void
     {
         if ('github_app' === static::$git_type) {
-            Cache::connect()->lPush('github_app_checks', $last_insert_id);
+            Cache::connect()->lPush(self::$cache_key_github_app_checks, $last_insert_id);
 
             return;
         }
 
-        Cache::connect()->lPush('github_status', $last_insert_id);
+        Cache::connect()->lPush(self::$cache_key_github_commit_status, $last_insert_id);
     }
 
     /**

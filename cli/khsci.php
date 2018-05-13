@@ -17,8 +17,7 @@ spl_autoload_register(function ($class): void {
 });
 
 spl_autoload_register(function ($class): void {
-    $class = str_replace('App\\Http', 'app\\Http', $class);
-    $class = str_replace('App\\Console', 'app\\Console', $class);
+    $class = str_replace('App\\', 'app\\', $class);
     $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
 
     require __DIR__.'/../public/'.$class.'.php';
