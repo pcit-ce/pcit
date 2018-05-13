@@ -8,7 +8,7 @@ class Env
 {
     /**
      * @param string $key
-     * @param $default
+     * @param        $default
      *
      * @return array|false|string
      */
@@ -17,7 +17,7 @@ class Env
         try {
             $value = getenv($key);
 
-            if (false === $value) {
+            if (false === $value or '' === $value) {
                 $value = $default;
             }
         } catch (\Exception $e) {
