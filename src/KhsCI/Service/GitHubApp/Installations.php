@@ -109,7 +109,7 @@ class Installations
         $access_token_json = self::$curl->post($url, null, [
             'Authorization' => 'Bearer '.self::getJWT($private_key_path),
             'Accept' => 'application/vnd.github.machine-man-preview+json',
-            'a' => 1
+            'a' => 1,
         ]);
 
         Log::connect()->debug(self::$curl->getRequestHeaders());

@@ -20,7 +20,7 @@ class RestartController
      *
      * @throws Exception
      */
-    public function __invoke($build_key_id)
+    public function __invoke($build_key_id): void
     {
         Build::UpdateBuildStatus($build_key_id, CI::BUILD_STATUS_PENDING);
     }

@@ -72,6 +72,7 @@ class Build extends DBModel
      * @param string $status
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function UpdateBuildStatus(int $build_key_id, string $status)
@@ -86,6 +87,7 @@ class Build extends DBModel
      * @param string $branch
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getBuildStatus(int $rid, string $branch)
@@ -100,6 +102,7 @@ class Build extends DBModel
      * @param int    $rid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getBranches(string $git_type, int $rid)
@@ -112,10 +115,10 @@ class Build extends DBModel
     /**
      * @param string $git_type
      * @param int    $rid
-     *
      * @param string $branch
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getPushAndTagEvent(string $git_type, int $rid, string $branch)
@@ -134,6 +137,7 @@ FROM builds WHERE
 git_type=? AND rid=? AND branch=? AND event_type IN (?,?) ORDER BY id DESC LIMIT 5
 
 EOF;
+
         return DB::select($sql, [$git_type, $rid, $branch, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
     }
 
@@ -142,6 +146,7 @@ EOF;
      * @param int    $rid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getLastBuildId(string $git_type, int $rid)

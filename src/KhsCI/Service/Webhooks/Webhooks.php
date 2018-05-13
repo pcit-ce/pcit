@@ -31,6 +31,7 @@ class Webhooks
      * @param string|null $secret
      *
      * @return bool|int
+     *
      * @throws Exception
      */
     public function startGitHubServer(string $secret = null)
@@ -50,7 +51,6 @@ class Webhooks
         if ($github_hash === $serverHash) {
             try {
                 return self::pushCache($type, $content);
-
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -63,6 +63,7 @@ class Webhooks
      * @param string $secret
      *
      * @return bool|int
+     *
      * @throws Exception
      */
     public function startGitHubAppServer(string $secret = null)
@@ -93,12 +94,13 @@ class Webhooks
     }
 
     /**
-     * 仅接收收据,除有效性验证外不做任何处理
+     * 仅接收收据,除有效性验证外不做任何处理.
      *
      * @param string $type
      * @param        $content
      *
      * @return bool|int
+     *
      * @throws Exception
      */
     private static function pushCache(string $type, $content)
@@ -107,9 +109,10 @@ class Webhooks
     }
 
     /**
-     * 获取一条缓存数据
+     * 获取一条缓存数据.
      *
      * @return string|false
+     *
      * @throws Exception
      */
     public function getCache()
@@ -118,11 +121,12 @@ class Webhooks
     }
 
     /**
-     * 回滚
+     * 回滚.
      *
      * @param string $content
      *
      * @return bool|int
+     *
      * @throws Exception
      */
     public function rollback(string $content)
@@ -131,11 +135,12 @@ class Webhooks
     }
 
     /**
-     * 处理成功，存入成功队列
+     * 处理成功，存入成功队列.
      *
      * @param string $content
      *
      * @return bool|int
+     *
      * @throws Exception
      */
     public function pushSuccessCache(string $content)
@@ -144,7 +149,7 @@ class Webhooks
     }
 
     /**
-     * 获取成功的队列
+     * 获取成功的队列.
      */
     public function getSuccessCache()
     {
@@ -152,11 +157,12 @@ class Webhooks
     }
 
     /**
-     * 处理失败，插入失败队列
+     * 处理失败，插入失败队列.
      *
      * @param string $content
      *
      * @return bool|int
+     *
      * @throws Exception
      */
     public function pushErrorCache(string $content)
@@ -165,81 +171,67 @@ class Webhooks
     }
 
     /**
-     * 获取失败的队列
+     * 获取失败的队列.
      */
     public function getErrorCache()
     {
         return [];
     }
 
-    public function ping(string $webhooks_json_content)
+    public function ping(string $webhooks_json_content): void
     {
-
     }
 
-    public function push(string $webhooks_json_content)
+    public function push(string $webhooks_json_content): void
     {
-
     }
 
-    public function tag(string $webhooks_json_content)
+    public function tag(string $webhooks_json_content): void
     {
-
     }
 
-    public function pull_request(string $webhooks_json_content)
+    public function pull_request(string $webhooks_json_content): void
     {
-
     }
 
-    public function issues(string $webhooks_json_content)
+    public function issues(string $webhooks_json_content): void
     {
-
     }
 
-    public function issue_comment(string $webhooks_json_content)
+    public function issue_comment(string $webhooks_json_content): void
     {
-
     }
 
-    public function watch(string $webhooks_json_content)
+    public function watch(string $webhooks_json_content): void
     {
-
     }
 
-    public function fork(string $webhooks_json_content)
+    public function fork(string $webhooks_json_content): void
     {
-
     }
 
-    public function release(string $webhooks_json_content)
+    public function release(string $webhooks_json_content): void
     {
-
     }
 
-    public function create(string $webhooks_json_content)
+    public function create(string $webhooks_json_content): void
     {
-
     }
 
-    public function delete(string $webhooks_json_content)
+    public function delete(string $webhooks_json_content): void
     {
-
     }
 
-    public function member(string $webhooks_json_content)
+    public function member(string $webhooks_json_content): void
     {
-
     }
 
-    public function installation(string $webhooks_json_content)
+    public function installation(string $webhooks_json_content): void
     {
-
     }
 
-    public function installation_repositories(string $webhooks_json_content)
+    public function installation_repositories(string $webhooks_json_content): void
     {
-
     }
 
     /**
@@ -258,7 +250,7 @@ class Webhooks
         return;
     }
 
-    public static function check_suite(string $webhooks_json_content)
+    public static function check_suite(string $webhooks_json_content): void
     {
         return;
     }

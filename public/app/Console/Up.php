@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnusedLocalVariableInspection */
+<?php
+
+/** @noinspection PhpUnusedLocalVariableInspection */
 
 declare(strict_types=1);
 
@@ -52,7 +54,6 @@ class Up
                 echo "Finished sleep 2s ...\n\n";
 
                 sleep(2);
-
             } catch (Exception | Error $e) {
                 $errormsg = $e->getMessage().''.$e->getCode().PHP_EOL;
                 Log::connect()->debug($errormsg);
@@ -212,9 +213,7 @@ EOF
             $webhooks->pushSuccessCache($json_raw);
 
             return;
-
         } catch (Error | Exception $e) {
-
             $webhooks->pushErrorCache($json_raw);
 
             throw new Exception($e->getMessage(), $e->getCode());
@@ -287,6 +286,7 @@ EOF;
 
         if ('tags' === $ref_array[1]) {
             self::tag($ref_array[2], $content);
+
             return;
         }
 
@@ -425,7 +425,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function pull_request(string $content)
+    public static function pull_request(string $content): void
     {
         $obj = json_decode($content);
 
@@ -477,7 +477,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function tag(string $tag, string $content)
+    public static function tag(string $tag, string $content): void
     {
         $obj = json_decode($content);
 

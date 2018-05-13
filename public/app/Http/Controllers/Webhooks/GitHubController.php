@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Webhooks;
 
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Support\Cache;
 
 class GitHubController
 {

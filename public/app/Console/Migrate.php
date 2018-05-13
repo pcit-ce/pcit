@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console;
 
 use Exception;
@@ -12,7 +14,7 @@ class Migrate
      *
      * @throws Exception
      */
-    public static function migrate(string $sql_file)
+    public static function migrate(string $sql_file): void
     {
         if (in_array($sql_file, self::getSqlList(), true)) {
             DB::statement(file_get_contents(__DIR__.'/../../sql/'.$sql_file));
@@ -26,7 +28,7 @@ class Migrate
     /**
      * @throws Exception
      */
-    public static function all()
+    public static function all(): void
     {
         foreach (self::getSqlList() as $file) {
             echo "Migrate $file ...\n\n";
