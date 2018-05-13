@@ -6,6 +6,8 @@
 
 * [支持文档](https://github.com/khs1994-php/khsci/tree/master/docs)
 
+* [Changelog](https://github.com/khs1994-php/khsci/blob/master/CHANGELOG.md)
+
 * [问题反馈](https://github.com/khs1994-php/khsci/issues)
 
 * [API](https://ci.khs1994.com/api)
