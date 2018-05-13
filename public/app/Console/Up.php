@@ -218,10 +218,12 @@ EOF
      *
      * @throws Exception
      */
-    private static function pushCache(int $last_insert_id)
+    private static function pushCache(int $last_insert_id): void
     {
         if ('github_app' === static::$git_type) {
             Cache::connect()->lPush('github_app_checks', $last_insert_id);
+
+            return;
         }
 
         Cache::connect()->lPush('github_status', $last_insert_id);
