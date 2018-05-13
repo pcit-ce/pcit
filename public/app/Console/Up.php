@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnusedLocalVariableInspection */
 
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
+use KhsCI\Support\Date;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Git;
@@ -21,6 +22,8 @@ use KhsCI\Support\Log;
 
 class Up
 {
+    private static $git_type;
+
     /**
      * @throws Exception
      */
@@ -29,9 +32,9 @@ class Up
         while (1) {
             try {
                 if (1 === Cache::connect()->get('khsci_up_status')) {
-                    echo "Wait sleep 10s ...\n\n";
+                    echo "Wait sleep 2s ...\n\n";
 
-                    sleep(10);
+                    sleep(2);
 
                     continue;
                 }
@@ -44,12 +47,16 @@ class Up
 
                 self::updateGitHubAppChecks();
 
-                echo "Finished sleep 10s ...\n\n";
+                self::webhooks();
 
-                sleep(10);
+                echo "Finished sleep 2s ...\n\n";
+
+                sleep(2);
+
             } catch (Exception | Error $e) {
-                echo $e->getMessage().PHP_EOL;
-                echo $e->getCode().PHP_EOL;
+                $errormsg = $e->getMessage().''.$e->getCode().PHP_EOL;
+                Log::connect()->debug($errormsg);
+                echo $errormsg;
             }
         }
     }
@@ -178,5 +185,646 @@ EOF
         DB::update($sql, [json_decode($output)->id ?? null, $build_key_id]);
 
         Cache::connect()->set('khsci_up_status', 0);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private static function webhooks(): void
+    {
+        $json = Cache::connect()->rPop('webhooks');
+
+        if (!$json) {
+            return;
+        }
+
+        list($git_type, $event_type, $json) = json_decode($json, true);
+
+        self::$git_type = $git_type;
+
+        try {
+            self::$$event_type($json);
+        } catch (Error | Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function ping(string $content)
+    {
+        $obj = json_decode($content);
+
+        $rid = $obj->repository->id;
+
+        $event_time = time();
+
+        $sql = <<<'EOF'
+INSERT builds(
+
+git_type,event_type,rid,event_time,request_raw
+
+) VALUES(?,?,?,?,?);
+EOF;
+        $data = [
+            static::$git_type, __FUNCTION__, $rid, $event_time, $content,
+        ];
+
+        return DB::insert($sql, $data);
+    }
+
+    /**
+     * push.
+     *
+     * 1. 首次推送到新分支，head_commit 为空
+     *
+     * @param string $content
+     *
+     * @return string|array
+     *
+     * @throws Exception
+     */
+    public static function push(string $content)
+    {
+        $obj = json_decode($content);
+
+        $rid = $obj->repository->id;
+
+        $ref = $obj->ref;
+
+        $ref_array = explode('/', $ref);
+
+        if ('tags' === $ref_array[1]) {
+            return self::tag($ref_array[2], $content);
+        }
+
+        $branch = self::ref2branch($ref);
+
+        $commit_id = $obj->after;
+
+        $compare = $obj->compare;
+
+        $head_commit = $obj->head_commit;
+
+        if (null === $head_commit) {
+            return 0;
+        }
+        $commit_message = $head_commit->message;
+
+        $commit_timestamp = Date::parse($head_commit->timestamp);
+
+        $committer = $head_commit->committer;
+
+        $committer_name = $committer->name;
+
+        $committer_email = $committer->email;
+
+        $committer_username = $committer->username;
+
+        $sql = <<<'EOF'
+INSERT builds(
+
+git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
+committer_name,committer_email,committer_username,
+rid,event_time,build_status,request_raw
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+EOF;
+        $data = [
+            static::$git_type, __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
+            $commit_message, $committer_name, $committer_email, $committer_username,
+            $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
+        ];
+
+        $last_insert_id = DB::insert($sql, $data);
+
+        return ['build_key_id' => $last_insert_id];
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function status(string $content)
+    {
+        $sql = <<<'EOF'
+INSERT builds(
+
+git_type,event_type,request_raw
+
+) VALUES(?,?,?);
+EOF;
+
+        return DB::insert($sql, [
+                static::$git_type, __FUNCTION__, $content,
+            ]
+        );
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function issues(string $content)
+    {
+        $obj = json_decode($content);
+        /**
+         * opened.
+         */
+        $action = $obj->action;
+        $sql = <<<'EOF'
+INSERT builds(
+
+git_type,event_type,request_raw
+
+) VALUES(?,?,?);
+EOF;
+
+        return DB::insert($sql, [
+                static::$git_type, __FUNCTION__, $content,
+            ]
+        );
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function issue_comment(string $content)
+    {
+        $obj = json_decode($content);
+
+        /**
+         * created.
+         */
+        $action = $obj->action;
+
+        $sql = <<<'EOF'
+INSERT builds(
+
+git_type,event_type,request_raw
+
+) VALUES(?,?,?);
+EOF;
+
+        return DB::insert($sql, [
+                static::$git_type, __FUNCTION__, $content,
+            ]
+        );
+    }
+
+    /**
+     * Action.
+     *
+     * "assigned", "unassigned", "review_requested", "review_request_removed",
+     * "labeled", "unlabeled", "opened", "synchronize", "edited", "closed", or "reopened"
+     *
+     * @param string $content
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public static function pull_request(string $content)
+    {
+        $obj = json_decode($content);
+
+        // $event_time = '';
+
+        $action = $obj->action;
+
+        $pull_request = $obj->pull_request;
+
+        $rid = $pull_request->base->repo->id;
+
+        $commit_message = $pull_request->title;
+
+        $commit_id = $pull_request->head->sha;
+
+        $committer_username = $pull_request->user->login;
+
+        $pull_request_id = $obj->number;
+
+        $branch = $pull_request->base->ref;
+
+        $sql = <<<'EOF'
+INSERT builds(
+
+git_type,event_type,request_raw,action,commit_id,commit_message,committer_username,
+pull_request_id,branch,rid,build_status
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?);
+
+EOF;
+        $last_insert_id = DB::insert($sql, [
+                static::$git_type, __FUNCTION__, $content, $action, $commit_id, $commit_message,
+                $committer_username, $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
+            ]
+        );
+
+        return ['build_key_id' => $last_insert_id];
+    }
+
+    /**
+     * @param string $tag
+     * @param string $content
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public static function tag(string $tag, string $content)
+    {
+        $obj = json_decode($content);
+
+        $rid = $obj->repository->id;
+
+        $ref = $obj->ref;
+
+        $branch = self::ref2branch($obj->base_ref);
+
+        $head_commit = $obj->head_commit;
+
+        $commit_id = $head_commit->id;
+
+        $commit_message = $head_commit->message;
+
+        $committer = $head_commit->author;
+
+        $committer_username = $committer->username;
+
+        $committer_name = $committer->name;
+
+        $committer_email = $committer->email;
+
+        $event_time = Date::parse($head_commit->timestamp);
+
+        $sql = <<<'EOF'
+INSERT builds(
+
+git_type,event_type,ref,branch,tag_name,commit_id,commit_message,committer_name,committer_email,
+committer_username,rid,event_time,build_status,request_raw
+
+) VALUES(
+?,?,?,?,?,?,?,?,?,?,?,?,?,?
+);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+            static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
+            $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
+        ]);
+
+        return ['build_key_id' => $last_insert_id];
+    }
+
+    /**
+     * Do Nothing.
+     *
+     * @param $content
+     *
+     * @return array
+     */
+    public static function watch($content)
+    {
+        $obj = json_decode($content);
+
+        // started.
+
+        $action = $obj->action;
+
+        return [
+            'code' => 200,
+        ];
+    }
+
+    /**
+     * Do Nothing.
+     *
+     * @param $content
+     *
+     * @return array
+     */
+    public static function fork($content)
+    {
+        $obj = json_decode($content);
+
+        $forkee = $obj->forkee;
+
+        return [
+            'code' => 200,
+        ];
+    }
+
+    public static function release(string $content): void
+    {
+    }
+
+    /**
+     * Create "repository", "branch", or "tag".
+     *
+     * @param string $content
+     */
+    public static function create(string $content): void
+    {
+        $obj = json_decode($content);
+
+        $ref_type = $obj->ref_type;
+
+        switch ($ref_type) {
+            case 'branch':
+                $branch = $obj->ref;
+        }
+    }
+
+    /**
+     * Delete tag or branch.
+     *
+     * @param string $content
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public static function delete(string $content)
+    {
+        $obj = json_decode($content);
+
+        $ref_type = $obj->ref_type;
+
+        $rid = $obj->repository->id;
+
+        if ('branch' === $ref_type) {
+            $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
+
+            return DB::delete($sql, [static::$git_type, $obj->ref, $rid]);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @param string $ref
+     *
+     * @return mixed
+     */
+    public static function ref2branch(string $ref)
+    {
+        $ref_array = explode('/', $ref);
+
+        return $ref_array[2];
+    }
+
+    /**
+     * @param string $content
+     */
+    public static function member(string $content): void
+    {
+    }
+
+    /**
+     * @param string $content
+     */
+    public static function team_add(string $content): void
+    {
+    }
+
+    /**
+     * Any time a GitHub App is installed or uninstalled.
+     *
+     * action:
+     *
+     * created 用户点击安装按钮
+     *
+     * deleted 用户卸载了 GitHub Apps
+     *
+     * @see
+     *
+     * @param string $content
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public static function installation(string $content)
+    {
+        $obj = json_decode($content);
+
+        $action = $obj->action;
+
+        $installation_id = $obj->installation->id;
+
+        // 可视为仓库管理员.
+
+        $sender_id = $obj->sender->id;
+
+        if ('created' === $action) {
+            $repo = $obj->repositories;
+
+            return self::installation_action_created($installation_id, $repo, $sender_id);
+        }
+
+        return self::installation_action_deleted($installation_id);
+    }
+
+    /**
+     * @param int   $installation_id
+     * @param array $repo
+     * @param int   $sender_id
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    private static function installation_action_created(int $installation_id, array $repo, int $sender_id)
+    {
+        foreach ($repo as $k) {
+            // 仓库信息存入 repo 表
+            $rid = $k->id;
+
+            $repo_full_name = $k->full_name;
+
+            list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
+
+            $sql = <<<EOF
+INSERT INTO repo(
+
+id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,installation_id,last_sync
+
+) VALUES(null,'github_app',?,?,?,?,JSON_ARRAY(?),'master',?,?)
+
+EOF;
+
+            $output = DB::insert($sql, [
+                    $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
+                ]
+            );
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param int $installation_id
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    private static function installation_action_deleted(int $installation_id)
+    {
+        $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
+
+        return DB::delete($sql, [
+            'github_app', $installation_id,
+        ]);
+    }
+
+    /**
+     * Any time a repository is added or removed from an installation.
+     *
+     * action:
+     *
+     * added 用户增加仓库
+     *
+     * removed 移除仓库
+     *
+     * @param string $content
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public function installation_repositories(string $content)
+    {
+        $obj = json_decode($content);
+
+        $action = $obj->action;
+
+        $installation_id = $obj->installation->id;
+
+        $repo_type = 'repositories_'.$action;
+
+        $repo = $obj->$repo_type;
+
+        $sender = $obj->sender->id;
+
+        if ('added' === $action) {
+            return self::installation_action_created($installation_id, $repo, $sender);
+        }
+
+        return self::installation_repositories_action_removed($installation_id, $repo);
+    }
+
+    /**
+     * @param int   $installation_id
+     * @param array $repo
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    private static function installation_repositories_action_removed(int $installation_id, array $repo)
+    {
+        foreach ($repo as $k) {
+            $rid = $k->id;
+
+            $sql = 'DELETE FROM repo WHERE installation_id=? AND rid=?';
+
+            DB::delete($sql, [$installation_id, $rid]);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function integration_installation(): void
+    {
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function integration_installation_repositories(): void
+    {
+    }
+
+    /**
+     * Action.
+     *
+     * completed
+     *
+     * requested 用户推送分支，github post webhooks
+     *
+     * rerequested 用户点击了重新运行按钮
+     *
+     *
+     * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
+     *
+     * @param string $content
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public static function check_suite(string $content)
+    {
+        $obj = json_decode($content);
+
+        $action = $obj->action;
+
+        $check_suite = $obj->check_suite;
+
+        $check_suite_id = $check_suite->id;
+
+        $branch = $check_suite->head_branch;
+
+        $commit_id = $check_suite->head_sha;
+
+        $sql = <<<EOF
+INSERT INTO builds(
+action,event_type,git_type,check_suites_id,branch,commit_id
+) VALUES (?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+            $action, __FUNCTION__, self::$git_type, $check_suite_id, $branch, $commit_id,
+        ]);
+
+        if ('rerequested' === $action) {
+        }
+
+        return ['build_key_id' => $last_insert_id];
+    }
+
+    /**
+     * Action.
+     *
+     * created
+     *
+     * updated
+     *
+     * rerequested
+     *
+     * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
+     */
+    public static function check_run(): void
+    {
     }
 }
