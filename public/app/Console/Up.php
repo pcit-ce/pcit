@@ -19,7 +19,6 @@ use KhsCI\Support\Git;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
-use phpDocumentor\Reflection\DocBlock\Tags\Param;
 
 class Up
 {
@@ -215,6 +214,20 @@ EOF
     }
 
     /**
+     * @param int $last_insert_id
+     *
+     * @throws Exception
+     */
+    private static function pushCache(int $last_insert_id)
+    {
+        if ('github_app' === static::$git_type) {
+            Cache::connect()->lPush('github_app_checks', $last_insert_id);
+        }
+
+        Cache::connect()->lPush('github_status', $last_insert_id);
+    }
+
+    /**
      * @param string $content
      *
      * @return string
@@ -250,11 +263,9 @@ EOF;
      *
      * @param string $content
      *
-     * @return string|array
-     *
      * @throws Exception
      */
-    public static function push(string $content)
+    public static function push(string $content): void
     {
         $obj = json_decode($content);
 
@@ -265,7 +276,8 @@ EOF;
         $ref_array = explode('/', $ref);
 
         if ('tags' === $ref_array[1]) {
-            return self::tag($ref_array[2], $content);
+            self::tag($ref_array[2], $content);
+            return;
         }
 
         $branch = self::ref2branch($ref);
@@ -277,8 +289,9 @@ EOF;
         $head_commit = $obj->head_commit;
 
         if (null === $head_commit) {
-            return 0;
+            return;
         }
+
         $commit_message = $head_commit->message;
 
         $commit_timestamp = Date::parse($head_commit->timestamp);
@@ -308,7 +321,7 @@ EOF;
 
         $last_insert_id = DB::insert($sql, $data);
 
-        return ['build_key_id' => $last_insert_id];
+        self::pushCache((int) $last_insert_id);
     }
 
     /**
@@ -400,8 +413,6 @@ EOF;
      *
      * @param string $content
      *
-     * @return array
-     *
      * @throws Exception
      */
     public static function pull_request(string $content)
@@ -447,14 +458,12 @@ EOF;
             ]
         );
 
-        return ['build_key_id' => $last_insert_id];
+        self::pushCache((int) $last_insert_id);
     }
 
     /**
      * @param string $tag
      * @param string $content
-     *
-     * @return array
      *
      * @throws Exception
      */
@@ -500,7 +509,7 @@ EOF;
             $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
         ]);
 
-        return ['build_key_id' => $last_insert_id];
+        self::pushCache((int) $last_insert_id);
     }
 
     /**
