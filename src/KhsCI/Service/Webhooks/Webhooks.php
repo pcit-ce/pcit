@@ -33,7 +33,7 @@ class Webhooks
      * @return bool|int
      * @throws Exception
      */
-    public function startGithubServer(string $secret = null)
+    public function startGitHubServer(string $secret = null)
     {
         $signature = Request::getHeader('X-Hub-Signature');
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
@@ -69,7 +69,7 @@ class Webhooks
     {
         self::$git_type = 'github_app';
 
-        return $this->startGithubServer($secret);
+        return $this->startGitHubServer($secret);
     }
 
     /**
@@ -170,5 +170,101 @@ class Webhooks
     public function getErrorCache()
     {
         return [];
+    }
+
+    public function ping(string $webhooks_json_content)
+    {
+
+    }
+
+    public function push(string $webhooks_json_content)
+    {
+
+    }
+
+    public function tag(string $webhooks_json_content)
+    {
+
+    }
+
+    public function pull_request(string $webhooks_json_content)
+    {
+
+    }
+
+    public function issues(string $webhooks_json_content)
+    {
+
+    }
+
+    public function issue_comment(string $webhooks_json_content)
+    {
+
+    }
+
+    public function watch(string $webhooks_json_content)
+    {
+
+    }
+
+    public function fork(string $webhooks_json_content)
+    {
+
+    }
+
+    public function release(string $webhooks_json_content)
+    {
+
+    }
+
+    public function create(string $webhooks_json_content)
+    {
+
+    }
+
+    public function delete(string $webhooks_json_content)
+    {
+
+    }
+
+    public function member(string $webhooks_json_content)
+    {
+
+    }
+
+    public function installation(string $webhooks_json_content)
+    {
+
+    }
+
+    public function installation_repositories(string $webhooks_json_content)
+    {
+
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function integration_installation(): void
+    {
+        return;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function integration_installation_repositories(): void
+    {
+        return;
+    }
+
+    public static function check_suite(string $webhooks_json_content)
+    {
+        return;
+    }
+
+    public static function check_run(string $webhooks_json_content): void
+    {
+        return;
     }
 }
