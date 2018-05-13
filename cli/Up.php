@@ -28,9 +28,14 @@ class Up extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        sleep(30);
+        try {
+            sleep(20);
 
-        \App\Console\Migrate::all();
+            \App\Console\Migrate::all();
+        } catch (Exception $e) {
+            sleep(30);
+            \App\Console\Migrate::all();
+        }
 
         \App\Console\Up::up();
     }

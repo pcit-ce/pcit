@@ -26,6 +26,8 @@ class Up
 {
     private static $git_type;
 
+    private static $cache_key = 'khsci_up_status';
+
     /**
      * @throws Exception
      */
@@ -33,7 +35,7 @@ class Up
     {
         while (1) {
             try {
-                if (1 === Cache::connect()->get('khsci_up_status')) {
+                if (1 === Cache::connect()->get(self::$cache_key)) {
                     echo "Wait sleep 2s ...\n\n";
 
                     sleep(2);
@@ -41,7 +43,7 @@ class Up
                     continue;
                 }
 
-                Cache::connect()->set('khsci_up_status', 1);
+                Cache::connect()->set(self::$cache_key, 1);
 
                 // Queue::queue();
 
@@ -55,7 +57,7 @@ class Up
 
                 sleep(2);
             } catch (Exception | Error $e) {
-                $errormsg = $e->getMessage().''.$e->getCode().PHP_EOL;
+                $errormsg = $e->getMessage().' || '.$e->getCode().PHP_EOL;
                 Log::connect()->debug($errormsg);
                 echo $errormsg;
             }
@@ -96,7 +98,7 @@ class Up
 
         var_dump($output);
 
-        Cache::connect()->set('khsci_up_status', 0);
+        Cache::connect()->set(self::$cache_key, 0);
     }
 
     /**

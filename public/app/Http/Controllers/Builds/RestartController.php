@@ -22,6 +22,6 @@ class RestartController
      */
     public function __invoke($build_key_id): void
     {
-        Build::UpdateBuildStatus($build_key_id, CI::BUILD_STATUS_PENDING);
+        Build::updateBuildStatus($build_key_id, CI::BUILD_STATUS_PENDING);
     }
 }

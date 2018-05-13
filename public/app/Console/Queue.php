@@ -37,17 +37,35 @@ class Queue
         $queue = $khsci->queue;
 
         try {
-            $queue();
+
+            $sql = <<<'EOF'
+SELECT 
+
+id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name
+
+FROM 
+
+builds WHERE build_status=? AND event_type IN (?,?,?) ORDER BY id DESC;
+EOF;
+
+            $output = DB::select($sql, [
+                CI::BUILD_STATUS_PENDING,
+                CI::BUILD_EVENT_PUSH,
+                CI::BUILD_EVENT_TAG,
+                CI::BUILD_EVENT_PR,
+            ]);
+
+            $queue(...$output);
+
         } catch (CIException $e) {
             self::$commit_id = $e->getCommitId();
             self::$unique_id = $e->getUniqueId();
             self::$event_type = $e->getEventType();
             self::$build_key_id = $e->getCode();
-            self::$git_type = Build::getGitTypeByBuildKeyId(self::$build_key_id);
+            self::$git_type = Build::getGitType(self::$build_key_id);
 
-            /**
-             * $e->getCode() is build key id.
-             */
+            // $e->getCode() is build key id.
+
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_SKIP:
                     self::setBuildStatusSkip();
@@ -71,12 +89,13 @@ class Queue
 
             Log::connect()->debug($e->getCode().' '.$e->getMessage());
         } catch (Exception | Error $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception($e->getMessage(), $e->getCode());
         } finally {
             $queue::systemDelete(self::$unique_id);
             Build::updateStopAt(self::$build_key_id);
             Cache::connect()->set('khsci_up_status', 0);
         }
+
     }
 
     /**
@@ -84,9 +103,7 @@ class Queue
      */
     private static function setBuildStatusInactive(): void
     {
-        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
-
-        DB::update($sql, [CI::BUILD_STATUS_INACTIVE, self::$build_key_id]);
+        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_INACTIVE);
 
         self::updateGitHubCommitStatus(
             CI::GITHUB_STATUS_FAILURE,
@@ -94,6 +111,7 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
+            return;
         }
     }
 
@@ -102,9 +120,7 @@ class Queue
      */
     private static function setBuildStatusSkip(): void
     {
-        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
-
-        DB::update($sql, [CI::BUILD_STATUS_SKIP, self::$build_key_id]);
+        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_SKIP);
 
         self::updateGitHubCommitStatus(
             CI::GITHUB_STATUS_SUCCESS,
@@ -112,6 +128,7 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
+            return;
         }
     }
 
@@ -120,10 +137,8 @@ class Queue
      */
     private static function setBuildStatusErrored(): void
     {
-        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
-
         // 更新数据库状态
-        DB::update($sql, [CI::BUILD_STATUS_ERRORED, self::$build_key_id]);
+        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_ERRORED);
 
         // 通知 GitHub commit Status
         self::updateGitHubCommitStatus(
@@ -136,6 +151,7 @@ class Queue
         // GitHub App checks API
 
         if ('github_app' === self::$git_type) {
+            return;
         }
     }
 
@@ -144,9 +160,7 @@ class Queue
      */
     private static function setBuildStatusFailed(): void
     {
-        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
-
-        DB::update($sql, [CI::BUILD_STATUS_FAILED, self::$build_key_id]);
+        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_FAILED);
 
         self::updateGitHubCommitStatus(
             CI::GITHUB_STATUS_FAILURE,
@@ -154,6 +168,7 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
+            return;
         }
     }
 
@@ -162,9 +177,7 @@ class Queue
      */
     private static function setBuildStatusPassed(): void
     {
-        $sql = 'UPDATE builds SET build_status =? WHERE id=?';
-
-        DB::update($sql, [CI::BUILD_STATUS_PASSED, self::$build_key_id]);
+        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_PASSED);
 
         self::updateGitHubCommitStatus(
             CI::GITHUB_STATUS_SUCCESS,
@@ -172,6 +185,7 @@ class Queue
         );
 
         if ('github_app' === self::$git_type) {
+            return;
         }
     }
 
