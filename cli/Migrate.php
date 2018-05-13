@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,45 +31,13 @@ class Migrate extends Command
         $sql_file = $input->getArgument('sql_file');
 
         if ($sql_file) {
-            if (in_array($sql_file, $this->getSqlList(), true)) {
-                DB::statement(file_get_contents(__DIR__.'/../sql/'.$sql_file));
-            } else {
-                var_dump($this->getSqlList());
-            }
+            \App\Console\Migrate::migrate($sql_file);
 
             return;
         }
 
         if ($input->getOption('all')) {
-            foreach ($this->getSqlList() as $file) {
-                echo "Migrate $file ...\n\n";
-                DB::statement(file_get_contents(__DIR__.'/../sql/'.$file));
-
-                return;
-            }
+            \App\Console\Migrate::all();
         }
-    }
-
-    private function getSqlList()
-    {
-        $array = scandir(__DIR__.'/../sql');
-
-        $array = array_filter($array, function ($k) {
-            if (in_array($k, ['.', '..'], true)) {
-                return false;
-            }
-
-            $spl = new \SplFileInfo(__DIR__.'/../sql'.$k);
-
-            $ext = $spl->getExtension();
-
-            if ('sql' !== $ext) {
-                return false;
-            }
-
-            return true;
-        });
-
-        return $array;
     }
 }

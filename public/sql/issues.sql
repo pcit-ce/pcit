@@ -1,8 +1,6 @@
 USE khsci;
 
-DROP TABLE IF EXISTS issues;
-
-CREATE TABLE `issues` (
+CREATE TABLE IF NOT EXISTS `issues` (
   `id`             BIGINT AUTO_INCREMENT,
   `rid`            BIGINT UNSIGNED,
   `issue_id`       BIGINT UNSIGNED,

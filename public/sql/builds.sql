@@ -1,8 +1,6 @@
 USE khsci;
 
-DROP TABLE IF EXISTS `builds`;
-
-CREATE TABLE `builds` (
+CREATE TABLE IF NOT EXISTS `builds` (
   `id`                 BIGINT AUTO_INCREMENT,
   `git_type`           VARCHAR(20),
   `event_type`         VARCHAR(20) COMMENT 'push tag pr',
