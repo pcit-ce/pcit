@@ -16,6 +16,8 @@ class CodingController
     {
         $khsci = new KhsCI();
 
-        $khsci->webhooks->coding();
+        $output = $khsci->webhooks->coding();
+
+        return [$output];
     }
 }

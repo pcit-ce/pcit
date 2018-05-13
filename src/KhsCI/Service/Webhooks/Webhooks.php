@@ -20,7 +20,7 @@ class Webhooks
     private static $git_type = 'github';
 
     /**
-     * @return void
+     * @return bool|int
      * @throws Exception
      */
     public function github()
@@ -38,9 +38,8 @@ class Webhooks
 
         if ($github_hash === $serverHash) {
             try {
-                self::pushCache($type, $content);
+                return self::pushCache($type, $content);
 
-                return;
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -56,17 +55,17 @@ class Webhooks
     {
         self::$git_type = 'github_app';
 
-        $this->github();
+        return $this->github();
     }
 
     public function coding()
     {
-
+        return [];
     }
 
     public function gitee()
     {
-
+        return [];
     }
 
     /**
@@ -75,10 +74,11 @@ class Webhooks
      * @param string $type
      * @param        $content
      *
+     * @return bool|int
      * @throws Exception
      */
     private static function pushCache(string $type, $content)
     {
-        Cache::connect()->lpush('webhooks', json_encode([static::$git_type, $type, $content]));
+        return Cache::connect()->lpush('webhooks', json_encode([static::$git_type, $type, $content]));
     }
 }
