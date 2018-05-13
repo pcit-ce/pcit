@@ -322,11 +322,12 @@ class Queue
             $image = $this->getImage($image, $config);
 
             Log::connect()->debug('Run Container By Image '.$image);
+            $ci_script = $this->parseCommand($setup, $image, $commands);
 
             $docker_container
                 ->setEnv(array_merge([
-                    'CI_SCRIPT' => $this->parseCommand($setup, $image, $commands),
-                ], self::parseEnv($env)))
+                    "CI_SCRIPT=$ci_script",
+                ], $env))
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
                 ->setLabels(['com.khs1994.ci' => $unique_id])
@@ -506,31 +507,31 @@ class Queue
         switch ($event_type) {
             case CI::BUILD_EVENT_PUSH:
                 $git_env = [
-                    'DRONE_REMOTE_URL' => $git_url,
-                    'DRONE_WORKSPACE' => $workdir,
-                    'DRONE_BUILD_EVENT' => 'push',
-                    'DRONE_COMMIT_SHA' => $commit_id,
-                    'DRONE_COMMIT_REF' => 'refs/heads/'.$branch,
+                    'DRONE_REMOTE_URL='.$git_url,
+                    'DRONE_WORKSPACE='.$workdir,
+                    'DRONE_BUILD_EVENT=push',
+                    'DRONE_COMMIT_SHA='.$commit_id,
+                    'DRONE_COMMIT_REF='.'refs/heads/'.$branch,
                 ];
 
                 break;
             case CI::BUILD_EVENT_PR:
                 $git_env = [
-                    'DRONE_REMOTE_URL' => $git_url,
-                    'DRONE_WORKSPACE' => $workdir,
-                    'DRONE_BUILD_EVENT' => 'pull_request',
-                    'DRONE_COMMIT_SHA' => $commit_id,
-                    'DRONE_COMMIT_REF' => 'refs/pull/'.self::$pull_id.'/head',
+                    'DRONE_REMOTE_URL='.$git_url,
+                    'DRONE_WORKSPACE='.$workdir,
+                    'DRONE_BUILD_EVENT=pull_request',
+                    'DRONE_COMMIT_SHA='.$commit_id,
+                    'DRONE_COMMIT_REF=refs/pull/'.self::$pull_id.'/head',
                 ];
 
                 break;
             case  CI::BUILD_EVENT_TAG:
                 $git_env = [
-                    'DRONE_REMOTE_URL' => $git_url,
-                    'DRONE_WORKSPACE' => $workdir,
-                    'DRONE_BUILD_EVENT' => 'tag',
-                    'DRONE_COMMIT_SHA' => $commit_id,
-                    'DRONE_COMMIT_REF' => 'refs/tags/'.self::$tag_name.'/head',
+                    'DRONE_REMOTE_URL='.$git_url,
+                    'DRONE_WORKSPACE='.$workdir,
+                    'DRONE_BUILD_EVENT=tag',
+                    'DRONE_COMMIT_SHA='.$commit_id,
+                    'DRONE_COMMIT_REF=refs/tags/'.self::$tag_name.'/head',
                 ];
 
                 break;
@@ -577,27 +578,6 @@ class Queue
     }
 
     /**
-     * @param array $env
-     *
-     * @return array
-     */
-    private function parseEnv(?array $env)
-    {
-        if (!$env) {
-            return [];
-        }
-
-        $env_array = [];
-
-        foreach ($env as $k) {
-            $array = explode('=', $k);
-            $env_array[$array[0]] = $array[1];
-        }
-
-        return $env_array;
-    }
-
-    /**
      * 运行服务.
      *
      * @param array  $service
@@ -625,7 +605,7 @@ class Queue
             $docker_image->pull($image, $tag);
 
             $container_id = $docker_container
-                ->setEnv(self::parseEnv($env))
+                ->setEnv($env)
                 ->setEntrypoint($entrypoint)
                 ->setHostConfig(null, $unique_id)
                 ->setLabels(['com.khs1994.ci' => $unique_id])

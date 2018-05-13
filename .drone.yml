@@ -10,19 +10,8 @@ workspace:
   # path: .
   path: src
 
-#
-# khs1994.com PHP CI/CD 由 khs1994-docker/ci 提供。
-#
-# @link http://docs.drone.io/
-# @link https://github.com/khs1994-docker/ci
-#
-# 项目构建设置中 Repository Hooks 全部勾选
-#
-
 pipeline:
-  #
   # 测试 PHP 项目
-  #
   php:
     image: khs1994/php-fpm:${PHP_VERSION}
     pull: true
@@ -38,9 +27,7 @@ pipeline:
       - pwd
       - composer install -q
       - composer update -q
-      #
       # 服务初始化需要时间，这里延迟执行
-      #
       - sleep 30
       - vendor/bin/phpunit
     # volumes:

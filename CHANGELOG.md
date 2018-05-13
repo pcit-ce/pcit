@@ -2,17 +2,27 @@
 
 ## v18.06.0
 
+### 2018/05/14
+
+提交 PR 实现自动回复
+
+指定代码审阅者 (`reviewers`), 打标签（`label`）, 指定给某人 (`assign`), 关联项目 (`project`), 关联里程碑 (`milestone`)
+
+自动 Merge
+
 ### 2018/05/13
 
-数据库 **软删除** 不直接删除数据，而是通过检查标记 `deleted_at` 来确定数据是否有效（TODO）
+数据库 **软删除** 不直接删除数据, 而是通过检查标记 `deleted_at` 来确定数据是否有效（TODO）
 
 ### 2018/05/13
 
-提出 Issue 机器人自动回复，打标签（`label`），指定给某人 (`assign`)，关联项目 (`project`)，关联里程碑 (`milestone`)
+提出 Issue 实现自动回复
+
+打标签 (`label`), 指定给某人 (`assign`), 关联项目 (`project`), 关联里程碑 (`milestone`)
 
 无用问题自动 **关闭** 加 **锁定**
 
-超时问题（最后回复时间）自动关闭（TODO）
+超时问题（最后回复时间）自动关闭
 
 ### 2018/05/13
 
@@ -20,7 +30,7 @@
 
 ### 2018/05/13
 
-KhsCI 是国内首家支持 GitHub [Checks API](https://blog.github.com/2018-05-07-introducing-checks-api/) 的 CI 系统
+KhsCI 是国内首家支持 GitHub [Checks API](https://blog.github.com/2018-05-07-introducing-checks-api/) 的 CI/CD 系统
 
 ### 2018/05/09
 
