@@ -189,7 +189,7 @@ class Up
         $os = PHP_OS_FAMILY;
 
         $config = yaml_parse(
-            HTTP::get(Git::getRawUrl('github', $repo_full_name, $commit_id, '.drone.yml'))
+            HTTP::get(Git::getRawUrl('github', $repo_full_name, $commit_id, '.khsci.yml'))
         );
 
         $config = JSON::beautiful(json_encode($config));

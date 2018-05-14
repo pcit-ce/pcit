@@ -216,7 +216,7 @@ class Queue
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
         $yaml_obj = (object) yaml_parse(HTTP::get(Git::getRawUrl(
-            $gitType, $repo_full_name, $commit_id, '.drone.yml'))
+            $gitType, $repo_full_name, $commit_id, '.khsci.yml'))
         );
 
         $yaml_to_json = json_encode($yaml_obj);
@@ -225,7 +225,7 @@ class Queue
 
         DB::update($sql, [$yaml_to_json, self::$build_key_id]);
 
-        // 解析 .drone.yml.
+        // 解析 .khsci.yml.
 
         // $git = $yaml_obj->git ?? null;
 

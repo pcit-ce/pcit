@@ -20,9 +20,9 @@
 $ git clone https://github.com/khs1994-docker/php-demo
 ```
 
-## 编辑 `.drone.yml` 文件
+## 编辑 `.khsci.yml` 文件
 
-* 为降低入门难度，暂时以 `Drone CI` 的文件作为模板
+* 为降低入门难度，暂时与 `Drone CI` 模板兼容，但文件名为 `.khsci.yml`
 
 ## 推送到 GitHub
 

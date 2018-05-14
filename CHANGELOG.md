@@ -2,6 +2,10 @@
 
 ## v18.06.0
 
+### 2018/05/15
+
+使用 `.khsci.yml` 定义一切 https://github.com/khs1994-php/khsci/issues/66
+
 ### 2018/05/14
 
 `Tencent AI + Issue = ?`，欢迎体验 https://github.com/khs1994-php/khsci/issues/64
