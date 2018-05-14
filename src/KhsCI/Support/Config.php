@@ -47,6 +47,10 @@ class Config
                 'callback_url' => getenv('CI_GITHUB_APP_CALLBACK_URL'),
                 'access_token' => $config['github_app_access_token'] ?? null,
             ],
+            'tencent_ai' => [
+                'app_id' => getenv('CI_TENCENT_AI_APPID'),
+                'app_key' => getenv('CI_TENCENT_AI_APPKEY'),
+            ]
         ];
     }
 }

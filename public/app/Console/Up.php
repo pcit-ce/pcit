@@ -8,6 +8,7 @@ namespace App\Console;
 
 use App\Build;
 use App\GetAccessToken;
+use App\Issue;
 use App\Repo;
 use Error;
 use Exception;
@@ -31,6 +32,8 @@ class Up
     private static $cache_key_github_app_checks = 'github_app_checks';
 
     private static $cache_key_github_commit_status = 'github_commit_status';
+
+    private static $cache_key_github_issue = 'github_issue';
 
     /**
      * @throws Exception
@@ -356,11 +359,8 @@ EOF;
         $commit_timestamp = Date::parse($head_commit->timestamp);
 
         $committer = $head_commit->committer;
-
         $committer_name = $committer->name;
-
         $committer_email = $committer->email;
-
         $committer_username = $committer->username;
 
         $sql = <<<'EOF'
@@ -407,61 +407,176 @@ EOF;
     }
 
     /**
-     * @param string $content
+     *  "assigned", "unassigned",
+     *  "labeled",  "unlabeled",
+     *  "opened",   "edited", "closed" or "reopened"
+     *  "milestoned", "demilestoned",
      *
-     * @return string
+     * @param string $content
      *
      * @throws Exception
      */
     public static function issues(string $content)
     {
         $obj = json_decode($content);
-        /**
-         * opened.
-         */
+
         $action = $obj->action;
-        $sql = <<<'EOF'
-INSERT builds(
 
-git_type,event_type,request_raw
+        $issue = $obj->issue;
 
-) VALUES(?,?,?);
+        $rid = $obj->repository->id;
+
+        $issue_id = $issue->id;
+        $issue_number = $issue->number;
+        $title = $issue->title;
+        $body = $issue->body;
+
+        $sender = $obj->sender;
+        $sender_username = $sender->login;
+        $sender_uid = $sender->id;
+        $sender_pic = $sender->avatar_url;
+
+        $state = $issue->state;
+        $locked = $issue->locked;
+        $assignees = $issue->assignees;
+        $labels = $issue->labels;
+        $created_at = Date::parse($issue->created_at);
+        $updated_at = Date::parse($issue->updated_at);
+        $closed_at = Date::parse($issue->closed_at);
+
+        if (in_array($action, ["opened", "edited", "closed" or "reopened"])) {
+
+
+            $sql = <<<'EOF'
+INSERT INTO issues(
+
+id,git_type,rid,issue_id,issue_number,action,title,body,sender_username,sender_uid,sender_pic,
+state,locked,created_at,closed_at,updated_at
+
+) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
-        return DB::insert($sql, [
-                static::$git_type, __FUNCTION__, $content,
-            ]
-        );
+            $last_insert_id = DB::insert($sql, [
+                    static::$git_type, $rid, $issue_id, $issue_number, $action, $title, $body,
+                    $sender_username, $sender_uid, $sender_pic,
+                    $state, (int) $locked,
+                    $updated_at, $closed_at, $updated_at
+                ]
+            );
+        }
+
+        if ($assignees) {
+            foreach ($assignees as $k) {
+                Issue::updateAssignees($k, static::$git_type, $issue_id);
+            }
+        }
+
+        if ($labels) {
+            foreach ($labels as $k) {
+                Issue::updateLabels($k, static::$git_type, $issue_id);
+            }
+        }
+
+        $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
+
+        $access_token = GetAccessToken::getGitHubAccessToken($rid);
+
+        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
+
+        $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
     }
 
     /**
+     * "created", "edited", or "deleted"
+     *
      * @param string $content
      *
-     * @return string
      *
      * @throws Exception
      */
-    public static function issue_comment(string $content)
+    public static function issue_comment(string $content): void
     {
         $obj = json_decode($content);
 
-        /**
-         * created.
-         */
         $action = $obj->action;
+        $comment = $obj->comment;
+
+        $sender = $comment->user;
+        $sender_username = $sender->login;
+
+        if (strpos($sender_username, '[bot]')) {
+            echo "Bot skip";
+
+            return;
+        }
+
+        $sender_uid = $sender->id;
+        $sender_pic = $sender->avatar_url;
+
+        $issue = $obj->issue;
+        $issue_id = $issue->id;
+        $issue_number = $issue->number;
+
+        $comment_id = $comment->id;
+        $body = $comment->body;
+
+        $created_at = Date::parse($comment->created_at);
+        $updated_at = Date::parse($comment->updated_at);
+
+        $rid = $obj->repository->id;
+
+        $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
+        $access_token = GetAccessToken::getGitHubAccessToken($rid);
+        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
+
+        if ('edited' === $action) {
+            $output = Issue::comment_edited(
+                static::$git_type,
+                $issue_id,
+                $comment_id,
+                $updated_at,
+                $body
+            );
+            var_dump($output);
+
+            $output = $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+
+            var_dump($output);
+
+            return;
+        }
+
+        if ('deleted' === $action) {
+            $output = Issue::comment_deleted(
+                static::$git_type,
+                $issue_id,
+                $comment_id,
+                $updated_at
+            );
+            var_dump($output);
+            return;
+        }
 
         $sql = <<<'EOF'
-INSERT builds(
+INSERT INTO issues(
 
-git_type,event_type,request_raw
+id,git_type,rid,issue_id,comment_id,issue_number,body,sender_username,
+sender_uid,sender_pic,created_at
 
-) VALUES(?,?,?);
+) VALUES(null,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
-        return DB::insert($sql, [
-                static::$git_type, __FUNCTION__, $content,
+        $last_insert_id = DB::insert($sql, [
+                static::$git_type, $rid, $issue_id, $comment_id, $issue_number, $body,
+                $sender_username, $sender_uid, $sender_pic, $created_at
             ]
         );
+
+        Cache::connect()->lPush(static::$cache_key_github_issue, $last_insert_id);
+
+        $output = $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+
+        var_dump($output);
     }
 
     /**
@@ -493,7 +608,6 @@ EOF;
         $rid = $pull_request_base->repo->id;
 
         $commit_message = $pull_request->title;
-
         $commit_id = $pull_request_head->sha;
 
         $committer_username = $pull_request->user->login;
@@ -537,17 +651,12 @@ EOF;
         $branch = self::ref2branch($obj->base_ref);
 
         $head_commit = $obj->head_commit;
-
         $commit_id = $head_commit->id;
-
         $commit_message = $head_commit->message;
 
         $committer = $head_commit->author;
-
         $committer_username = $committer->username;
-
         $committer_name = $committer->name;
-
         $committer_email = $committer->email;
 
         $event_time = Date::parse($head_commit->timestamp);

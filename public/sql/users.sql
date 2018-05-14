@@ -1,5 +1,7 @@
 USE khsci;
 
+# DROP TABLE IF EXISTS `user`;
+
 CREATE TABLE IF NOT EXISTS `user` (
   `id`           BIGINT AUTO_INCREMENT,
   `git_type`     VARCHAR(20),

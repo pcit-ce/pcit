@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App;
 
 use Exception;
+use KhsCI\KhsCI;
 use KhsCI\Support\DB;
+use KhsCI\Support\Env;
 
 class GetAccessToken
 {
@@ -56,5 +58,29 @@ class GetAccessToken
         }
 
         throw new Exception('access_token not found', 500);
+    }
+
+    /**
+     * @param $rid
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public static function getGitHubAccessToken($rid)
+    {
+        $installation_id = Repo::getGitHubInstallationIdByRid((int) $rid);
+
+        if (!$installation_id) {
+            throw new Exception('installation_id is error', 500);
+        }
+
+        $khsci = new KhsCI();
+
+        $access_token = $khsci->github_apps_installations->getAccessToken(
+            (int) $installation_id,
+            __DIR__.'/../private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
+        );
+
+        return $access_token;
     }
 }

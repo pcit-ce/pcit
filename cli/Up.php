@@ -29,7 +29,7 @@ class Up extends Command
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         try {
-            sleep(20);
+            sleep(5);
 
             \App\Console\Migrate::all();
         } catch (Exception $e) {

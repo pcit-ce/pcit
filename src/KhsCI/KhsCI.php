@@ -8,6 +8,8 @@ use Curl\Curl;
 use Exception;
 use KhsCI\Support\Config;
 use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use TencentAI\TencentAI;
 
 /**
  * 核心方法 注入类（依赖），之后通过调用属性或方法，获取类.
@@ -19,6 +21,7 @@ use Pimple\Container;
  * $a = $container['a'];
  *
  * @property Service\GitHubApp\Installations    $github_apps_installations
+ * @property Service\Issue\Comments             $issue_comments
  * @property Service\OAuth\Coding               $oauth_coding
  * @property Service\OAuth\GitHub               $oauth_github
  * @property Service\OAuth\GitHubApp            $oauth_github_app
@@ -28,6 +31,7 @@ use Pimple\Container;
  * @property Service\Repositories\Webhooks      $repo_webhooks
  * @property Service\Webhooks\Webhooks          $webhooks
  * @property Service\Queue\Queue                $queue
+ * @property TencentAI                          $tencent_ai
  * @property Service\Users\BasicInfo            $user_basic_info
  * @property Service\Checks\Run                 $check_run
  * @property Service\Checks\Suites              $check_suites
@@ -40,9 +44,11 @@ class KhsCI extends Container
     protected $providers = [
         Providers\ChecksProvider::class,
         Providers\GitHubAppProvider::class,
+        Providers\IssueProvider::class,
         Providers\OAuthProvider::class,
         Providers\QueueProvider::class,
         Providers\RepositoriesProvider::class,
+        Providers\TencentAIProvider::class,
         Providers\UserProvider::class,
         Providers\WebhooksProvider::class,
     ];

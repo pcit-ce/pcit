@@ -4,6 +4,10 @@
 
 ### 2018/05/14
 
+`Tencent AI + Issue = ?`，欢迎体验 https://github.com/khs1994-php/khsci/issues/64
+
+### 2018/05/14
+
 提交 PR 实现自动回复
 
 指定代码审阅者 (`reviewers`), 打标签（`label`）, 指定给某人 (`assign`), 关联项目 (`project`), 关联里程碑 (`milestone`)

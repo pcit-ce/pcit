@@ -36,17 +36,19 @@ class Webhooks
      */
     public function startGitHubServer(string $secret = null)
     {
-        $signature = Request::getHeader('X-Hub-Signature');
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
         $content = file_get_contents('php://input');
 
+        if (Env::get('CI_WEBHOOKS_DEBUG', false)) {
+            return self::pushCache($type, $content);
+        }
+
         $secret = $secret ?? Env::get('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
 
+        $signature = Request::getHeader('X-Hub-Signature');
         list($algo, $github_hash) = explode('=', $signature, 2);
 
         $serverHash = hash_hmac($algo, $content, $secret);
-
-        // return $this->$type($content);
 
         if ($github_hash === $serverHash) {
             try {

@@ -1,5 +1,7 @@
 USE khsci;
 
+# DROP TABLE IF EXISTS `repo`;
+
 CREATE TABLE IF NOT EXISTS `repo` (
   `id`                 BIGINT AUTO_INCREMENT,
   `git_type`           VARCHAR(20) COMMENT 'github github_app coding gitee',
