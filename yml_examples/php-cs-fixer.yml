@@ -1,0 +1,12 @@
+workspace:
+  base: /app
+  path: .
+
+pipeline:
+
+  php-cs-fixer:
+    image: khs1994/php-fpm:7.2.5-alpine3.7
+    commands:
+      - php-cs-fixer
+      - fix
+

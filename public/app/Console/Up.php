@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpUnusedLocalVariableInspection */
-
 declare(strict_types=1);
 
 namespace App\Console;
@@ -153,19 +151,7 @@ class Up
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
 
-        $installation_id = Repo::getGitHubInstallationIdByRid((int) $rid);
-
-        if (!$installation_id) {
-            Cache::connect()->set(self::$cache_key_github_app_checks.'_error', $build_key_id);
-            throw new Exception('installation_id is error', 500);
-        }
-
-        $khsci = new KhsCI();
-
-        $access_token = $khsci->github_apps_installations->getAccessToken(
-            (int) $installation_id,
-            __DIR__.'/../../private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
-        );
+        $access_token = GetAccessToken::getGitHubAccessToken($rid);
 
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
@@ -414,6 +400,7 @@ EOF;
      *
      * @param string $content
      *
+     * @return string
      * @throws Exception
      */
     public static function issues(string $content)
@@ -460,7 +447,7 @@ EOF;
                     static::$git_type, $rid, $issue_id, $issue_number, $action, $title, $body,
                     $sender_username, $sender_uid, $sender_pic,
                     $state, (int) $locked,
-                    $updated_at, $closed_at, $updated_at
+                    $created_at, $closed_at, $updated_at
                 ]
             );
         }
@@ -484,6 +471,8 @@ EOF;
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+
+        return $last_insert_id;
     }
 
     /**
@@ -617,16 +606,16 @@ EOF;
         $branch = $pull_request->base->ref;
 
         $sql = <<<'EOF'
-INSERT builds(
+INSERT INTO builds(
 
-git_type,event_type,request_raw,action,commit_id,commit_message,committer_username,
+git_type,event_type,event_time,request_raw,action,commit_id,commit_message,committer_username,
 pull_request_id,branch,rid,build_status
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
         $last_insert_id = DB::insert($sql, [
-                static::$git_type, __FUNCTION__, $content, $action, $commit_id, $commit_message,
+                static::$git_type, __FUNCTION__, $event_time, $content, $action, $commit_id, $commit_message,
                 $committer_username, $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
             ]
         );
@@ -683,18 +672,12 @@ EOF;
     /**
      * Do Nothing.
      *
-     * @param $content
+     * @param string $content
      *
      * @return array
      */
-    public static function watch($content)
+    public static function watch(string $content)
     {
-        $obj = json_decode($content);
-
-        // started.
-
-        $action = $obj->action;
-
         return [
             'code' => 200,
         ];
@@ -703,23 +686,27 @@ EOF;
     /**
      * Do Nothing.
      *
-     * @param $content
+     * @param string $content
      *
      * @return array
      */
-    public static function fork($content)
+    public static function fork(string $content)
     {
-        $obj = json_decode($content);
-
-        $forkee = $obj->forkee;
-
         return [
             'code' => 200,
         ];
     }
 
-    public static function release(string $content): void
+    /**
+     * @param string $content
+     *
+     * @return array
+     */
+    public static function release(string $content)
     {
+        return [
+            'code' => 200
+        ];
     }
 
     /**
@@ -863,7 +850,7 @@ EOF;
             );
         }
 
-        return 0;
+        return $output;
     }
 
     /**
@@ -877,9 +864,11 @@ EOF;
     {
         $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
 
-        return DB::delete($sql, [
+        $output = DB::delete($sql, [
             'github_app', $installation_id,
         ]);
+
+        return $output;
     }
 
     /**
@@ -933,10 +922,10 @@ EOF;
 
             $sql = 'DELETE FROM repo WHERE installation_id=? AND rid=?';
 
-            DB::delete($sql, [$installation_id, $rid]);
+            $output = DB::delete($sql, [$installation_id, $rid]);
         }
 
-        return 0;
+        return $output;
     }
 
     /**
@@ -1004,11 +993,7 @@ EOF;
     /**
      * Action.
      *
-     * created
-     *
-     * updated
-     *
-     * rerequested
+     * created updated rerequested
      *
      * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
      */

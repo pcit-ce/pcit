@@ -1,0 +1,10 @@
+workspace:
+  base: /app
+  path: .
+
+pipeline:
+  sami:
+    image: khs1994/php-fpm:7.2.5-alpine3.7
+    commans:
+      - sami
+      - update

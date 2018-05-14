@@ -82,6 +82,46 @@ class Comments
                     json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
             }
 
+            try {
+                $pos = $nlp->wordpos($source);
+
+                $pos = JSON::beautiful(
+                    json_encode($pos, JSON_UNESCAPED_UNICODE));
+            } catch (TencentAIError $e) {
+                $pos = JSON::beautiful(
+                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            }
+
+            try {
+                $ner = $nlp->wordner($source);
+
+                $ner = JSON::beautiful(
+                    json_encode($ner, JSON_UNESCAPED_UNICODE));
+            } catch (TencentAIError $e) {
+                $ner = JSON::beautiful(
+                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            }
+
+            try {
+                $polar = $nlp->textPolar($source);
+
+                $polar = JSON::beautiful(
+                    json_encode($polar, JSON_UNESCAPED_UNICODE));
+            } catch (TencentAIError $e) {
+                $ner = JSON::beautiful(
+                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            }
+
+            try {
+                $seg = $nlp->wordseg($source);
+
+                $seg = JSON::beautiful(
+                    json_encode($seg, JSON_UNESCAPED_UNICODE));
+            } catch (TencentAIError $e) {
+                $ner = JSON::beautiful(
+                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            }
+
             $data = <<<EOF
 >$source
 
@@ -92,6 +132,15 @@ class Comments
 
 ```json\n
 $translate
+```
+
+</details>
+
+<details>
+<summary>智能分词</summary>
+
+```json\n
+$seg
 ```
 
 </details>
@@ -114,6 +163,32 @@ $sem
 
 </details>
 
+<details>
+<summary>词性标注</summary>
+
+```json\n
+$pos
+```
+
+</details>
+
+<details>
+<summary>专有名词识别</summary>
+
+```json\n
+$ner
+```
+
+</details>
+
+<details>
+<summary>情感分析</summary>
+
+```json\n
+$polar
+```
+
+</details>
 EOF;
         }
 
