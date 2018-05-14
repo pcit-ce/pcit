@@ -90,7 +90,7 @@ class Queue
 
         Log::connect()->debug('====== Start Build ======');
 
-        Log::connect()->debug('Build Key id is '.self::$build_key_id);
+        Log::debug(__FILE__, __LINE__, 'Build Key id is '.$build_key_id);
 
         // commit 信息跳过构建
         self::skip($commit_message);
@@ -105,7 +105,7 @@ class Queue
                 self::$unique_id,
                 self::$commit_id,
                 self::$event_type,
-                $e->getMessage(), $e->getCode()
+                $e->getMessage(), self::$build_key_id
             );
         }
     }
@@ -115,7 +115,6 @@ class Queue
      *
      * @param int $rid
      *
-     * @throws CIException
      * @throws Exception
      */
     private function getRepoBuildActivateStatus(int $rid): void
@@ -127,13 +126,9 @@ class Queue
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            throw new CIException(
-                self::$unique_id,
-                self::$commit_id,
-                self::$event_type,
-                CI::BUILD_STATUS_INACTIVE,
-                (int) $build_activate
-            );
+            Log::debug(__FILE__, __LINE__, static::$build_key_id.' is inactive');
+
+            throw new Exception(CI::BUILD_STATUS_INACTIVE);
         }
     }
 
@@ -152,14 +147,9 @@ class Queue
         if (false === $output && false === $output2) {
             return;
         }
+        Log::debug(__FILE__, __LINE__, self::$build_key_id.'is skip');
 
-        throw new CIException(
-            self::$unique_id,
-            self::$commit_id,
-            self::$event_type,
-            CI::BUILD_STATUS_SKIP,
-            (int) self::$build_key_id
-        );
+        throw new Exception(CI::BUILD_STATUS_SKIP);
     }
 
     /**
@@ -169,9 +159,12 @@ class Queue
      * @param array  $config
      *
      * @return array|mixed|string
+     * @throws Exception
      */
     private function getImage(string $image, array $config)
     {
+        Log::debug(__FILE__, __LINE__, 'Parse Image '.$image);
+
         $arg = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $image, $output);
 
         if ($arg) {
@@ -195,6 +188,7 @@ class Queue
                 $image = str_replace($var_secret, $var, $image);
             }
         }
+        Log::debug(__FILE__, __LINE__, 'Parse Image output is '.$image);
 
         return $image;
     }
@@ -214,8 +208,8 @@ class Queue
         $commit_id = self::$commit_id;
         $event_type = self::$event_type;
 
-        Log::connect()->debug('Create Volume '.$unique_id);
-        Log::connect()->debug('Create Network '.$unique_id);
+        Log::debug(__FILE__, __LINE__, 'Create Volume '.$unique_id);
+        Log::debug(__FILE__, __LINE__, 'Create Network '.$unique_id);
 
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
@@ -284,13 +278,7 @@ class Queue
 
         // 后续根据 throw 出的异常执行对应的操作
 
-        throw new CIException(
-            self::$unique_id,
-            self::$commit_id,
-            self::$event_type,
-            CI::BUILD_STATUS_PASSED,
-            self::$build_key_id
-        );
+        throw new Exception(CI::BUILD_STATUS_PASSED);
     }
 
     /**
@@ -330,7 +318,7 @@ class Queue
 
             $image = $this->getImage($image, $config);
 
-            Log::connect()->debug('Run Container By Image '.$image);
+            Log::debug(__FILE__, __LINE__, 'Run Container By Image '.$image);
             $ci_script = $this->parseCommand($setup, $image, $commands);
 
             $docker_container
@@ -360,7 +348,7 @@ class Queue
 
             $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
 
-            Log::connect()->debug('Run Container '.$container_id);
+            Log::debug(__FILE__, __LINE__, 'Run Container '.$container_id);
 
             $this->docker_container_logs($docker_container, $container_id);
         }
@@ -372,6 +360,7 @@ class Queue
      * @param        $commands
      *
      * @return string
+     * @throws Exception
      */
     private function parseCommand(string $setup, $image, $commands)
     {
@@ -395,7 +384,11 @@ class Queue
             $content .= 'echo;echo\n\n';
         }
 
-        return $ci_script = base64_encode(stripcslashes($content));
+        $ci_script = base64_encode(stripcslashes($content));
+
+        Log::debug(__FILE__, __LINE__, 'Command is '.$ci_script);
+
+        return $ci_script;
     }
 
     /**
@@ -411,7 +404,7 @@ class Queue
         $redis = Cache::connect();
 
         if ('/bin/drone-git' === json_decode($docker_container->inspect($container_id))->Path) {
-            Log::connect()->debug('Drop prev logs');
+            Log::debug(__FILE__, __LINE__, 'Drop prev logs');
 
             $redis->hDel('build_log', self::$build_key_id);
         }
@@ -470,14 +463,8 @@ class Queue
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    Log::connect()->debug('Build Error, ExitCode iss not 0');
-                    throw new CIException(
-                        self::$unique_id,
-                        self::$commit_id,
-                        self::$event_type,
-                        CI::BUILD_STATUS_ERRORED,
-                        self::$build_key_id
-                    );
+                    Log::debug(__FILE__, __LINE__, 'Container ExitCode is not 0');
+                    throw new Exception();
                 }
 
                 break;
@@ -569,7 +556,7 @@ class Queue
 
         $container_id = $docker_container->start($docker_container->create($image));
 
-        Log::connect()->debug('Run Container '.$container_id);
+        Log::debug(__FILE__, __LINE__, 'Run Git Clone Container '.$container_id);
 
         $this->docker_container_logs($docker_container, $container_id);
     }
@@ -621,6 +608,8 @@ class Queue
                 ->create($image, $service_name, $command);
 
             $docker_container->start($container_id);
+
+            Log::debug(__FILE__, __LINE__, "Run $service_name in Container $container_id");
         }
     }
 
@@ -629,9 +618,11 @@ class Queue
      *
      * @param string $unique_id
      *
+     * @param bool   $last
+     *
      * @throws Exception
      */
-    public static function systemDelete(string $unique_id): void
+    public static function systemDelete(string $unique_id, bool $last = false): void
     {
         $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
 
@@ -663,12 +654,17 @@ class Queue
 
         // don't clean image
 
-        // clean volume
+        // 全部构建任务结束之后才删除 volume、网络
 
-        $docker_volume->remove($unique_id);
+        if ($last) {
 
-        // clean network
+            // clean volume
 
-        $docker_network->remove($unique_id);
+            $docker_volume->remove($unique_id);
+
+            // clean network
+
+            $docker_network->remove($unique_id);
+        }
     }
 }

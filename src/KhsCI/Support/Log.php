@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
+use Exception;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -17,7 +18,7 @@ class Log
      *
      * @return Logger
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function connect(string $name = 'khsci', string $log_path = null)
     {
@@ -34,5 +35,26 @@ class Log
         }
 
         return self::$log;
+    }
+
+    /**
+     * @param string $file
+     * @param int    $line
+     * @param int    $code
+     * @param string $debug_info
+     * @param array  $context
+     *
+     * @throws Exception
+     */
+    public static function debug(string $file, int $line, string $debug_info, int $code = 500, array $context = [])
+    {
+        $debug_info = json_encode([
+            'file' => $file,
+            'line' => $line,
+            'code' => $code,
+            'info' => $debug_info,
+        ]);
+
+        self::connect()->debug($debug_info, $context);
     }
 }

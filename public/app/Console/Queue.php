@@ -89,15 +89,14 @@ EOF;
                     self::setBuildStatusErrored();
             }
 
-            Log::connect()->debug($e->getCode().' '.$e->getMessage());
+            Log::debug(__FILE__, __LINE__, $e->__toString(), $e->getCode());
         } catch (Exception | Error $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         } finally {
-            $queue::systemDelete(self::$unique_id);
+            $queue::systemDelete(self::$unique_id, true);
             Build::updateStopAt(self::$build_key_id);
             Cache::connect()->set('khsci_up_status', 0);
         }
-
     }
 
     /**
@@ -267,6 +266,5 @@ EOF;
 
             return;
         }
-
     }
 }
