@@ -66,7 +66,7 @@ class GetAccessToken
      * @return mixed
      * @throws Exception
      */
-    public static function getGitHubAccessToken($rid)
+    public static function getGitHubAppAccessToken($rid)
     {
         $installation_id = Repo::getGitHubInstallationIdByRid((int) $rid);
 

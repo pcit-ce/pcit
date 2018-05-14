@@ -166,4 +166,17 @@ EOF;
             CI::BUILD_STATUS_INACTIVE,
         ], true);
     }
+
+    /**
+     * @param int $check_run_id
+     * @param int $build_key_id
+     *
+     * @throws Exception
+     */
+    public static function updateCheckRunId(?int $check_run_id, int $build_key_id)
+    {
+        $sql = 'UPDATE builds SET check_run_id=? WHERE id=?';
+
+        DB::update($sql, [$check_run_id, $build_key_id]);
+    }
 }

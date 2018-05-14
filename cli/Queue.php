@@ -25,7 +25,7 @@ class Queue extends Command
      *
      * @return int|null|void
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

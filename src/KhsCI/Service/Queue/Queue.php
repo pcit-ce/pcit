@@ -73,8 +73,8 @@ class Queue
                              string $commit_message,
                              string $branch,
                              string $event_type,
-                             string $pull_request_id,
-                             string $tag_name): void
+                             ?string $pull_request_id = null,
+                             ?string $tag_name = null): void
     {
         self::$unique_id = session_create_id();
 
@@ -98,7 +98,16 @@ class Queue
         // 是否启用构建
         self::getRepoBuildActivateStatus((int) $rid);
 
-        self::run($rid, $branch);
+        try {
+            self::run($rid, $branch);
+        } catch (Exception $e) {
+            throw new CIException(
+                self::$unique_id,
+                self::$commit_id,
+                self::$event_type,
+                $e->getMessage(), $e->getCode()
+            );
+        }
     }
 
     /**
@@ -218,7 +227,7 @@ class Queue
 
         $yaml_to_json = json_encode($yaml_obj);
 
-        $sql = 'UPDATE builds SET config=? WHERE id=? ';
+        $sql = 'UPDATE builds SET config=? WHERE id=?';
 
         DB::update($sql, [$yaml_to_json, self::$build_key_id]);
 

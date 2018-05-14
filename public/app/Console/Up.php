@@ -41,10 +41,10 @@ class Up
         while (1) {
             try {
                 if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
+                    // 设为 1 说明有一个任务在运行，休眠之后跳过循环
                     echo "...";
 
-                    sleep(2);
-
+                    sleep(10);
                     continue;
                 }
 
@@ -52,12 +52,16 @@ class Up
 
                 // Queue::queue();
 
+                // 从 Webhooks 缓存中拿出数据，进行处理
+
+                // 处理 commit status GitHub OAuth
                 $build_key_id = Cache::connect()->rPop(self::$cache_key_github_commit_status);
 
                 if ($build_key_id) {
                     self::updateGitHubStatus((int) $build_key_id);
                 }
 
+                // 处理 Check Run GitHub App Only
                 $build_key_id = Cache::connect()->rpop(self::$cache_key_github_app_checks);
 
                 if ($build_key_id) {
@@ -70,8 +74,20 @@ class Up
 
                 sleep(2);
             } catch (Exception | Error $e) {
-                $errormsg = $e->getMessage().' || '.$e->getCode().PHP_EOL;
+                $msg = $e->getMessage();
+                $code = $e->getCode();
+                $file = $e->getFile();
+                $line = $e->getLine();
+
+                $errormsg = json_encode([
+                    'msg' => $msg,
+                    'code' => $code,
+                    'file' => $file,
+                    'line' => $line,
+                ]);
+
                 Log::connect()->debug($errormsg);
+
                 echo $errormsg;
             }
         }
@@ -151,7 +167,7 @@ class Up
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
 
-        $access_token = GetAccessToken::getGitHubAccessToken($rid);
+        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
@@ -219,9 +235,7 @@ EOF;
 
         var_dump($output);
 
-        $sql = 'UPDATE builds SET check_run_id=? WHERE id=?';
-
-        DB::update($sql, [json_decode($output)->id ?? null, $build_key_id]);
+        Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
 
         Cache::connect()->set(self::$cache_key_up_status, 0);
     }
@@ -259,6 +273,8 @@ EOF;
     }
 
     /**
+     * 需要更新状态的，存入缓存队列
+     *
      * @param int $last_insert_id
      *
      * @throws Exception
@@ -466,7 +482,7 @@ EOF;
 
         $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
 
-        $access_token = GetAccessToken::getGitHubAccessToken($rid);
+        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
@@ -515,7 +531,7 @@ EOF;
         $rid = $obj->repository->id;
 
         $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
-        $access_token = GetAccessToken::getGitHubAccessToken($rid);
+        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         if ('edited' === $action) {
@@ -526,7 +542,6 @@ EOF;
                 $updated_at,
                 $body
             );
-            var_dump($output);
 
             $output = $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
@@ -542,7 +557,9 @@ EOF;
                 $comment_id,
                 $updated_at
             );
+
             var_dump($output);
+
             return;
         }
 
@@ -985,6 +1002,7 @@ EOF;
         ]);
 
         if ('rerequested' === $action) {
+            $check_run_id = '';
         }
 
         return ['build_key_id' => $last_insert_id];
@@ -997,7 +1015,31 @@ EOF;
      *
      * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
      */
-    public static function check_run(): void
+    public static function check_run(string $content): void
     {
+        $obj = json_encode($content);
+
+        $action = $obj->action;
+
+        if ('rerequested' === $action) {
+
+            $check_run = $obj->check_run;
+
+            $check_run_id = $check_run->id;
+
+            $commit_id = $check_run->head_sha;
+
+            $external_id = $check_run->external_id;
+
+            $check_suite = $obj->check_suite;
+
+            $check_suite_id = $check_suite->id;
+
+            $branch = $check_suite->head_branch;
+
+        }
+
+        return;
+
     }
 }
