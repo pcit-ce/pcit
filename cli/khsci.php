@@ -44,7 +44,5 @@ $cli->add(new Up());
 try {
     $cli->run();
 } catch (Exception $e) {
-    echo $e->getMessage();
-    echo '';
-    echo $e->getCode();
+    throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 }

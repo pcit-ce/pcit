@@ -6,6 +6,7 @@ namespace KhsCI\Service\Repositories;
 
 use Curl\Curl;
 use Exception;
+use KhsCI\Support\Log;
 
 /**
  * The status API allows external services to mark commits with an
@@ -71,7 +72,8 @@ class Status
                            string $target_url = 'https://ci.khs1994.com',
                            string $context = 'continuous-integration/ci.khs1994.com/push',
                            string $description = 'The analysis or builds is pending'
-    ) {
+    )
+    {
         $url = implode('/', [
                 self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha,
             ]
@@ -84,7 +86,15 @@ class Status
             'context' => $context,
         ]);
 
-        return self::$curl->post($url, $data);
+        $output = self::$curl->post($url, $data);
+
+        $http_return_code = self::$curl->getCode();
+
+        if ($http_return_code !== 200) {
+            Log::debug(__FILE__, __LINE__, 'Http Return code is not 200 '.$http_return_code);
+        }
+
+        return $output;
     }
 
     /**

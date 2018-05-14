@@ -69,7 +69,8 @@ class Run
                            string $text = null,
                            array $annotations = null,
                            array $images = null
-    ) {
+    )
+    {
         $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
 
         $data = array_filter([
@@ -93,11 +94,13 @@ class Run
 
         $request = json_encode($data);
 
-        Log::connect()->debug($request);
-
         $output = self::$curl->post($url, $request, self::$header);
 
-        Log::connect()->debug(self::$curl->getRequestHeaders());
+        $http_return_code = self::$curl->getCode();
+
+        if ($http_return_code !== 200) {
+            Log::debug(__FILE__, __LINE__, 'Http Return code is not 200 '.$http_return_code);
+        }
 
         return $output;
     }
@@ -124,7 +127,8 @@ class Run
                                              string $message,
                                              string $title = null,
                                              string $raw_details = null
-    ) {
+    )
+    {
         return [
             'filename' => $filename,
             'blog_href' => $blog_href,

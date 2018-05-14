@@ -119,7 +119,7 @@ class Up
 
         $khsci = new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]);
 
-        $output = $khsci->repo_status->create(
+        $khsci->repo_status->create(
             $repo_prefix,
             $repo_name,
             $build_output_array['commit_id'],
@@ -129,9 +129,11 @@ class Up
             $description ?? null
         );
 
-        Log::connect()->debug($output);
+        $log_message = 'Create GitHub commit Status '.$build_key_id;
 
-        var_dump($output);
+        var_dump($log_message);
+
+        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$log_message);
 
         Cache::connect()->set(self::$cache_key_up_status, 0);
     }
@@ -234,9 +236,11 @@ EOF;
             $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
         );
 
-        Log::connect()->debug($output);
+        $log_message = 'Create GitHub App Check Run '.$build_key_id;
 
-        var_dump($output);
+        Log::debug(__FILE__, __LINE__, $log_message);
+
+        var_dump($log_message);
 
         Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
 
