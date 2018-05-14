@@ -10,6 +10,9 @@ use PDOException;
 
 class DB
 {
+    /**
+     * @var PDO
+     */
     private static $pdo;
 
     /**
@@ -41,6 +44,13 @@ class DB
         }
 
         return self::$pdo;
+    }
+
+    public static function close()
+    {
+        if (self::$pdo instanceof PDO) {
+            self::$pdo = null;
+        }
     }
 
     /**

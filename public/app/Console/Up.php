@@ -72,6 +72,9 @@ class Up
 
                 echo "...";
 
+                DB::close();
+                Cache::close();
+
                 sleep(2);
             } catch (Exception | Error $e) {
                 $msg = $e->getMessage();

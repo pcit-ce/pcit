@@ -40,18 +40,16 @@ class Log
     /**
      * @param string $file
      * @param int    $line
-     * @param int    $code
      * @param string $debug_info
      * @param array  $context
      *
      * @throws Exception
      */
-    public static function debug(string $file, int $line, string $debug_info, int $code = 500, array $context = [])
+    public static function debug(string $file, int $line, string $debug_info, array $context = [])
     {
         $debug_info = json_encode([
             'file' => $file,
             'line' => $line,
-            'code' => $code,
             'info' => $debug_info,
         ]);
 

@@ -9,6 +9,9 @@ use Redis;
 
 class Cache
 {
+    /**
+     * @var Redis
+     */
     private static $cache;
 
     /**
@@ -32,5 +35,13 @@ class Cache
         }
 
         return self::$cache;
+    }
+
+    public static function close()
+    {
+        if (self::$cache instanceof Redis) {
+            self::$cache->close();
+            self::$cache = null;
+        }
     }
 }
