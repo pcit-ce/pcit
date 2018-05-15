@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Issue;
 
 use Curl\Curl;
@@ -7,7 +9,8 @@ use Exception;
 use KhsCI\Support\Log;
 
 /**
- * Class Assignees
+ * Class Assignees.
+ *
  * @see  https://developer.github.com/v3/issues/assignees/
  */
 class Assignees
@@ -17,7 +20,7 @@ class Assignees
     private static $api_url;
 
     private static $header = [
-        'Accept' => 'application/vnd.github.symmetra-preview+json'
+        'Accept' => 'application/vnd.github.symmetra-preview+json',
     ];
 
     /**
@@ -37,6 +40,7 @@ class Assignees
      * @param string $repo_full_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function list(string $repo_full_name)
@@ -47,12 +51,13 @@ class Assignees
     }
 
     /**
-     * 204 404
+     * 204 404.
      *
      * @param string $repo_full_name
      * @param string $assignees
      *
      * @return bool
+     *
      * @throws Exception
      */
     public function check(string $repo_full_name, string $assignees)
@@ -69,7 +74,7 @@ class Assignees
     }
 
     /**
-     * Add assignees to an issue
+     * Add assignees to an issue.
      *
      * 201
      *
@@ -84,7 +89,7 @@ class Assignees
         $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
 
         $data = [
-            'assignees' => $assignees
+            'assignees' => $assignees,
         ];
 
         self::$curl->post($url, json_encode($data), self::$header);
@@ -99,7 +104,7 @@ class Assignees
     }
 
     /**
-     * Remove assignees from an issue
+     * Remove assignees from an issue.
      *
      * @param string $repo_full_name
      * @param int    $issue_number
@@ -112,7 +117,7 @@ class Assignees
         $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
 
         $data = [
-            'assignees' => $assignees
+            'assignees' => $assignees,
         ];
 
         self::$curl->delete($url, json_encode($data), self::$header);

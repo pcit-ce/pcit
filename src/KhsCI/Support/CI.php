@@ -45,7 +45,7 @@ class CI
     const GITHUB_CHECK_SUITE_CONCLUSION_FAILURE = 'failure';
 
     /**
-     * 中性的
+     * 中性的.
      */
     const GITHUB_CHECK_SUITE_CONCLUSION_NEUTRAL = 'neutral';
 
@@ -54,7 +54,7 @@ class CI
     const GITHUB_CHECK_SUITE_CONCLUSION_TIMED_OUT = 'timed_out';
 
     /**
-     * 需要注意，有意外情况
+     * 需要注意，有意外情况.
      */
     const GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED = 'action_required';
 

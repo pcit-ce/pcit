@@ -34,7 +34,7 @@ class Comments
     }
 
     /**
-     * Create a comment
+     * Create a comment.
      *
      * 201
      *
@@ -44,6 +44,7 @@ class Comments
      * @param bool   $enable_tencent_ai
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function create(string $repo_full_name,
@@ -58,7 +59,6 @@ class Comments
         $data = $source;
 
         if ($enable_tencent_ai) {
-
             $nlp = static::$tencent_ai->nlp();
 
             $translate = static::$tencent_ai->translate();
@@ -85,13 +85,13 @@ class Comments
 
             $lang_show_in_md = 'Chinese';
 
-            if ($lang === 'en') {
+            if ('en' === $lang) {
                 $source = $translate_output;
                 $lang_show_in_md = 'English';
             }
 
             try {
-                $chat = $nlp->chat($source, (string ) $issue_number);
+                $chat = $nlp->chat($source, (string) $issue_number);
                 $chat = JSON::beautiful(
                     json_encode($chat, JSON_UNESCAPED_UNICODE));
             } catch (TencentAIError $e) {
@@ -230,7 +230,7 @@ EOF;
         }
 
         $data = [
-            'body' => $data
+            'body' => $data,
         ];
 
         $output = static::$curl->post($url, json_encode($data));
@@ -245,12 +245,13 @@ EOF;
     }
 
     /**
-     * List comments on an issue
+     * List comments on an issue.
      *
      * @param string $repo_full_name
      * @param int    $issue_number
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function list(string $repo_full_name, int $issue_number)
@@ -261,11 +262,12 @@ EOF;
     }
 
     /**
-     * List comments in a repository
+     * List comments in a repository.
      *
      * @param string $repo_full_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listInRepository(string $repo_full_name)
@@ -276,12 +278,13 @@ EOF;
     }
 
     /**
-     * Get a single comment
+     * Get a single comment.
      *
      * @param string $repo_full_name
      * @param int    $comment_id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getSingle(string $repo_full_name, int $comment_id)
@@ -289,7 +292,6 @@ EOF;
         $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
 
         return self::$curl->get($url);
-
     }
 
     /**
@@ -319,13 +321,14 @@ EOF;
     }
 
     /**
-     * 204
+     * 204.
+     *
      * @param string $repo_full_name
      * @param int    $comment_id
      *
      * @throws Exception
      */
-    public function delete(string $repo_full_name, int $comment_id)
+    public function delete(string $repo_full_name, int $comment_id): void
     {
         $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
 

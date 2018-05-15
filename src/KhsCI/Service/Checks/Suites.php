@@ -17,7 +17,7 @@ class Suites
     private static $api_url;
 
     private static $header = [
-        'Accept' => 'application/vnd.github.antiope-preview+json'
+        'Accept' => 'application/vnd.github.antiope-preview+json',
     ];
 
     /**
@@ -40,6 +40,7 @@ class Suites
      * @param int    $check_suite_id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getSingle(string $repo_full_name, int $check_suite_id)
@@ -53,11 +54,12 @@ class Suites
      * List check suites for a specific ref.
      *
      * @param string $repo_full_name
-     * @param string $ref Required. The ref can be a SHA, branch name, or a tag name.
+     * @param string $ref            Required. The ref can be a SHA, branch name, or a tag name.
      * @param int    $app_id
      * @param string $check_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listSpecificRef(string $repo_full_name,
@@ -84,7 +86,9 @@ class Suites
      * @param array  $auto_trigger_checks
      *
      * @return mixed
+     *
      * @throws Exception
+     *
      * @example
      * <pre>
      * [
@@ -117,6 +121,7 @@ class Suites
      * @param string $head_sha
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function create(string $repo_full_name, string $head_branch, string $head_sha)
@@ -137,6 +142,7 @@ class Suites
      * @param string $repo_full_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function request(string $repo_full_name)

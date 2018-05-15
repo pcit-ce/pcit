@@ -1,12 +1,12 @@
 <?php
 
-namespace KhsCI\Service\Issue;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Issue;
 
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Log;
-use Monolog\Formatter\LogglyFormatter;
 use TencentAI\TencentAI;
 
 class Issues
@@ -19,7 +19,7 @@ class Issues
     private static $api_url;
 
     private static $header = [
-        'Accept' => 'application/vnd.github.symmetra-preview+json'
+        'Accept' => 'application/vnd.github.symmetra-preview+json',
     ];
 
     /**
@@ -38,25 +38,24 @@ class Issues
 
     /**
      * List all issues assigned to the authenticated user across all visible repositories including owned repositories,
-     * member repositories, and organization repositories:
+     * member repositories, and organization repositories:.
      */
-    public function list()
+    public function list(): void
     {
         $url = self::$api_url.'/issues';
     }
 
     /**
-     * List issues for a repository
+     * List issues for a repository.
      *
      * @param string $repo_full_name
      */
-    public function listRepositoryIssues(string $repo_full_name)
+    public function listRepositoryIssues(string $repo_full_name): void
     {
-
     }
 
     /**
-     * Get a single issue
+     * Get a single issue.
      *
      * 201
      *
@@ -64,6 +63,7 @@ class Issues
      * @param int    $issue_number
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getSingle(string $repo_full_name, int $issue_number)
@@ -116,7 +116,7 @@ class Issues
      * @param int    $issue_number
      * @param string $title
      * @param string $body
-     * @param string $state State of the issue. Either open or closed.
+     * @param string $state          State of the issue. Either open or closed.
      * @param int    $milestone
      * @param array  $labels
      * @param array  $assignees
@@ -140,7 +140,7 @@ class Issues
             'state' => $state,
             'milestone' => $milestone,
             'labels' => $labels,
-            'assignees' => $assignees
+            'assignees' => $assignees,
         ];
 
         self::$curl->patch($url, json_encode(array_filter($data)), self::$header);
@@ -155,12 +155,12 @@ class Issues
     }
 
     /**
-     * 204
+     * 204.
      *
      * @param string $repo_full_name
      * @param int    $issue_number
-     * @param string $lock_reason The reason for locking the issue or pull request conversation. Lock will fail if you
-     *                            don't use one of these reasons: off-topic too heated resolved spam
+     * @param string $lock_reason    The reason for locking the issue or pull request conversation. Lock will fail if you
+     *                               don't use one of these reasons: off-topic too heated resolved spam
      *
      * @throws Exception
      */
@@ -171,7 +171,7 @@ class Issues
         if ($lock_reason) {
             $data = [
                 'locked' => true,
-                'active_lock_reason' => $lock_reason
+                'active_lock_reason' => $lock_reason,
             ];
             self::$curl->put($url, json_encode($data), ['Accept' => 'application/vnd.github.sailor-v-preview+json']);
         } else {
@@ -193,7 +193,7 @@ class Issues
      *
      * @throws Exception
      */
-    public function unlock(string $repo_full_name, int $issue_number)
+    public function unlock(string $repo_full_name, int $issue_number): void
     {
         $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/lock';
 

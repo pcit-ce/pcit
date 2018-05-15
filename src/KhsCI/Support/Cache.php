@@ -37,7 +37,7 @@ class Cache
         return self::$cache;
     }
 
-    public static function close()
+    public static function close(): void
     {
         if (self::$cache instanceof Redis) {
             self::$cache->close();

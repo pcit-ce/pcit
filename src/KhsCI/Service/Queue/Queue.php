@@ -159,6 +159,7 @@ class Queue
      * @param array  $config
      *
      * @return array|mixed|string
+     *
      * @throws Exception
      */
     private function getImage(string $image, array $config)
@@ -360,6 +361,7 @@ class Queue
      * @param        $commands
      *
      * @return string
+     *
      * @throws Exception
      */
     private function parseCommand(string $setup, $image, $commands)
@@ -617,7 +619,6 @@ class Queue
      * Remove all Docker Resource.
      *
      * @param string $unique_id
-     *
      * @param bool   $last
      *
      * @throws Exception
@@ -657,7 +658,6 @@ class Queue
         // 全部构建任务结束之后才删除 volume、网络
 
         if ($last) {
-
             // clean volume
 
             $docker_volume->remove($unique_id);

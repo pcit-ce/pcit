@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Issue;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Issue;
 
 class Labels
 {
-
 }

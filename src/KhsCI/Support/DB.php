@@ -46,7 +46,7 @@ class DB
         return self::$pdo;
     }
 
-    public static function close()
+    public static function close(): void
     {
         if (self::$pdo instanceof PDO) {
             self::$pdo = null;

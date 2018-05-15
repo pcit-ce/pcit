@@ -50,7 +50,7 @@ class Config
             'tencent_ai' => [
                 'app_id' => getenv('CI_TENCENT_AI_APPID'),
                 'app_key' => getenv('CI_TENCENT_AI_APPKEY'),
-            ]
+            ],
         ];
     }
 }

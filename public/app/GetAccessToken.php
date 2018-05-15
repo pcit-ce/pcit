@@ -64,6 +64,7 @@ class GetAccessToken
      * @param $rid
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function getGitHubAppAccessToken($rid)

@@ -12,7 +12,8 @@ use KhsCI\Support\JWT;
 use KhsCI\Support\Log;
 
 /**
- * Class Installations
+ * Class Installations.
+ *
  * @see https://developer.github.com/v3/apps/installations/
  */
 class Installations
@@ -71,10 +72,10 @@ class Installations
      *
      * @param int    $installation_id
      * @param int    $repository_id
-     *
      * @param string $method
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function add(int $installation_id, int $repository_id, string $method = 'put'): void
@@ -93,7 +94,7 @@ class Installations
     }
 
     /**
-     * Remove repository from installation
+     * Remove repository from installation.
      *
      * 204
      *

@@ -72,8 +72,7 @@ class Status
                            string $target_url = 'https://ci.khs1994.com',
                            string $context = 'continuous-integration/ci.khs1994.com/push',
                            string $description = 'The analysis or builds is pending'
-    )
-    {
+    ) {
         $url = implode('/', [
                 self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha,
             ]
@@ -90,7 +89,7 @@ class Status
 
         $http_return_code = self::$curl->getCode();
 
-        if ($http_return_code !== 201) {
+        if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
         }
 

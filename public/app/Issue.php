@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Exception;
@@ -16,6 +18,7 @@ class Issue extends DBModel
      * @param string $body
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function comment_edited(string $git_type,
@@ -31,7 +34,7 @@ class Issue extends DBModel
             $updated_at,
             $git_type,
             $issue_id,
-            $comment_id
+            $comment_id,
         ]);
     }
 
@@ -42,6 +45,7 @@ class Issue extends DBModel
      * @param int    $deleted_at
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function comment_deleted(string $git_type,
@@ -55,20 +59,20 @@ class Issue extends DBModel
             $deleted_at,
             $git_type,
             $issue_id,
-            $comment_id
+            $comment_id,
         ]);
     }
 
     public static function updateLabels(string $label,
                                         string $git_type,
-                                        int $issue_id)
+                                        int $issue_id): void
     {
         $sql = 'UPDATE issues SET labels=JSON_MERGE_PRESERVE(labels,?) WHERE git_type=? AND issue_id=?';
     }
 
     public static function updateAssignees(string $assignees,
                                            string $git_type,
-                                           int $issue_id)
+                                           int $issue_id): void
     {
         $sql = 'UPDATE issues SET assignees=JSON_MERGE_PRESERVE(labels,?) WHERE git_type=? AND issue_id=?';
     }

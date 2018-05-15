@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Providers;
 
 use KhsCI\Service\Issue\Assignees;
@@ -14,7 +16,7 @@ use Pimple\ServiceProviderInterface;
 
 class IssueProvider implements ServiceProviderInterface
 {
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         $pimple['issue'] = function ($app) {
             return new Issues($app['curl'], $app['config']['api_url'], $app['tencent_ai']);

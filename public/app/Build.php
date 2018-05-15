@@ -173,7 +173,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function updateCheckRunId(?int $check_run_id, int $build_key_id)
+    public static function updateCheckRunId(?int $check_run_id, int $build_key_id): void
     {
         $sql = 'UPDATE builds SET check_run_id=? WHERE id=?';
 

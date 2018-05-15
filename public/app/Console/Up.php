@@ -42,7 +42,7 @@ class Up
             try {
                 if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
                     // 设为 1 说明有一个任务在运行，休眠之后跳过循环
-                    echo "...";
+                    echo '...';
 
                     sleep(10);
                     continue;
@@ -70,7 +70,7 @@ class Up
 
                 self::webhooks();
 
-                echo "...";
+                echo '...';
 
                 DB::close();
                 Cache::close();
@@ -99,7 +99,6 @@ class Up
     /**
      * @param int    $build_key_id
      * @param string $state
-     *
      * @param string $description
      *
      * @throws Exception
@@ -107,8 +106,7 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = 'pending',
                                               string $description = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -141,14 +139,12 @@ class Up
     /**
      * @param int         $build_key_id
      * @param string|null $name
-     *
      * @param string      $status
      * @param int         $started_at
      * @param int         $completed_at
      * @param string      $conclusion
      * @param string|null $title
      * @param string      $summary
-     *
      * @param string      $text
      * @param array|null  $annotations
      * @param array       $images
@@ -166,8 +162,7 @@ class Up
                                                  string $text = null,
                                                  array $annotations = null,
                                                  array $images = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -280,7 +275,7 @@ EOF;
     }
 
     /**
-     * 需要更新状态的，存入缓存队列
+     * 需要更新状态的，存入缓存队列.
      *
      * @param int $last_insert_id
      *
@@ -419,11 +414,12 @@ EOF;
      *  "assigned", "unassigned",
      *  "labeled",  "unlabeled",
      *  "opened",   "edited", "closed" or "reopened"
-     *  "milestoned", "demilestoned",
+     *  "milestoned", "demilestoned",.
      *
      * @param string $content
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function issues(string $content)
@@ -454,9 +450,7 @@ EOF;
         $updated_at = Date::parse($issue->updated_at);
         $closed_at = Date::parse($issue->closed_at);
 
-        if (in_array($action, ["opened", "edited", "closed" or "reopened"])) {
-
-
+        if (in_array($action, ['opened', 'edited', 'closed' or 'reopened'])) {
             $sql = <<<'EOF'
 INSERT INTO issues(
 
@@ -470,7 +464,7 @@ EOF;
                     static::$git_type, $rid, $issue_id, $issue_number, $action, $title, $body,
                     $sender_username, $sender_uid, $sender_pic,
                     $state, (int) $locked,
-                    $created_at, $closed_at, $updated_at
+                    $created_at, $closed_at, $updated_at,
                 ]
             );
         }
@@ -499,10 +493,9 @@ EOF;
     }
 
     /**
-     * "created", "edited", or "deleted"
+     * "created", "edited", or "deleted".
      *
      * @param string $content
-     *
      *
      * @throws Exception
      */
@@ -517,7 +510,7 @@ EOF;
         $sender_username = $sender->login;
 
         if (strpos($sender_username, '[bot]')) {
-            echo "Bot skip";
+            echo 'Bot skip';
 
             return;
         }
@@ -591,7 +584,7 @@ EOF;
 
         $last_insert_id = DB::insert($sql, [
                 static::$git_type, $rid, $issue_id, $comment_id, $issue_number, $body,
-                $sender_username, $sender_uid, $sender_pic, $created_at
+                $sender_username, $sender_uid, $sender_pic, $created_at,
             ]
         );
 
@@ -743,7 +736,7 @@ EOF;
     public static function release(string $content)
     {
         return [
-            'code' => 200
+            'code' => 200,
         ];
     }
 
@@ -1043,7 +1036,6 @@ EOF;
         $action = $obj->action;
 
         if ('rerequested' === $action) {
-
             $check_run = $obj->check_run;
 
             $check_run_id = $check_run->id;
@@ -1057,10 +1049,8 @@ EOF;
             $check_suite_id = $check_suite->id;
 
             $branch = $check_suite->head_branch;
-
         }
 
         return;
-
     }
 }

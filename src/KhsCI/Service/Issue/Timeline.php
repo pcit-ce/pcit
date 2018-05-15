@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Issue;
 
 use Curl\Curl;
 use Exception;
 
 /**
- * Class Timeline
+ * Class Timeline.
+ *
  * @see https://developer.github.com/v3/issues/timeline/
  */
 class Timeline
@@ -16,7 +19,7 @@ class Timeline
     private static $api_url;
 
     /**
-     * List events for an issue
+     * List events for an issue.
      *
      * @param Curl   $curl
      * @param string $api_url
@@ -32,6 +35,7 @@ class Timeline
      * @param int    $issue_number
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function list(string $repo_full_name, int $issue_number)

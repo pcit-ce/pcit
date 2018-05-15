@@ -37,7 +37,6 @@ class Queue
         $queue = $khsci->queue;
 
         try {
-
             $sql = <<<'EOF'
 SELECT 
 
@@ -58,7 +57,6 @@ EOF;
             $output = array_values($output[0]);
 
             $queue(...$output);
-
         } catch (CIException $e) {
             self::$commit_id = $e->getCommitId();
             self::$unique_id = $e->getUniqueId();
@@ -233,8 +231,6 @@ EOF;
     }
 
     /**
-     *
-     *
      * @throws Exception
      */
     private static function setBuildStatusPassed(): void

@@ -45,7 +45,7 @@ class Log
      *
      * @throws Exception
      */
-    public static function debug(string $file, int $line, string $debug_info, array $context = [])
+    public static function debug(string $file, int $line, string $debug_info, array $context = []): void
     {
         $debug_info = json_encode([
             'file' => $file,

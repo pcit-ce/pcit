@@ -11,8 +11,8 @@ class Date
     /**
      * 将 2018-05-02T04:15:49.011488700Z (ISO 8601 格式的日期) 时间转化为整数时间戳.
      *
-     * @param  null|string $timestamp
-     * @param bool         $returnArray
+     * @param null|string $timestamp
+     * @param bool        $returnArray
      *
      * @return array|false|int|null PRC timestamp
      *

@@ -69,8 +69,7 @@ class Run
                            string $text = null,
                            array $annotations = null,
                            array $images = null
-    )
-    {
+    ) {
         $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
 
         $data = array_filter([
@@ -98,7 +97,7 @@ class Run
 
         $http_return_code = self::$curl->getCode();
 
-        if ($http_return_code !== 201) {
+        if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
         }
 
@@ -127,8 +126,7 @@ class Run
                                              string $message,
                                              string $title = null,
                                              string $raw_details = null
-    )
-    {
+    ) {
         return [
             'filename' => $filename,
             'blog_href' => $blog_href,
