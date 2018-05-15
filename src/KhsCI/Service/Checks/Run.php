@@ -98,8 +98,8 @@ class Run
 
         $http_return_code = self::$curl->getCode();
 
-        if ($http_return_code !== 200) {
-            Log::debug(__FILE__, __LINE__, 'Http Return code is not 200 '.$http_return_code);
+        if ($http_return_code !== 201) {
+            Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
         }
 
         return $output;
@@ -221,9 +221,15 @@ class Run
 
         $request = json_encode($data);
 
-        Log::connect()->debug($request);
+        $output = self::$curl->patch($url, $request, self::$header);
 
-        return self::$curl->patch($url, $request, self::$header);
+        $http_return_header = self::$curl->getCode();
+
+        if ('201' !== $http_return_header) {
+            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_header);
+        }
+
+        return $output;
     }
 
     /**

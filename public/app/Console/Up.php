@@ -240,7 +240,7 @@ EOF;
 
         Log::debug(__FILE__, __LINE__, $log_message);
 
-        var_dump($log_message);
+        echo $log_message;
 
         Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
 
@@ -542,7 +542,7 @@ EOF;
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         if ('edited' === $action) {
-            $output = Issue::comment_edited(
+            Issue::comment_edited(
                 static::$git_type,
                 $issue_id,
                 $comment_id,

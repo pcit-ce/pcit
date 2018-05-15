@@ -79,19 +79,70 @@ class Suites
 
     /**
      * Set preferences for check suites on a repository.
+     *
+     * @param string $repo_full_name
+     * @param array  $auto_trigger_checks
+     *
+     * @return mixed
+     * @throws Exception
+     * @example
+     * <pre>
+     * [
+     *     'app_id' => 4,
+     *     'setting' => false
+     * ],[
+     *     'app_id' => 4,
+     *     'setting' => false
+     * ]
+     * </pre>
      */
-    public function setPreferences(): void
+    public function setPreferences(string $repo_full_name, array $auto_trigger_checks)
     {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-suites/preferences';
+
+        $data = [
+            'auto_trigger_checks' => [
+                $auto_trigger_checks,
+            ],
+        ];
+
+        return self::$curl->patch($url, json_encode($data), self::$header);
     }
 
     /**
      * By default, check suites are automatically created when you create a check run.
+     *
+     * @param string $repo_full_name
+     * @param string $head_branch
+     * @param string $head_sha
+     *
+     * @return mixed
+     * @throws Exception
      */
-    public function create(): void
+    public function create(string $repo_full_name, string $head_branch, string $head_sha)
     {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-suites';
+
+        $data = [
+            'head_branch' => $head_branch,
+            'head_sha' => $head_sha,
+        ];
+
+        return self::$curl->post($url, json_encode($data), self::$header);
     }
 
-    public function request(): void
+    /**
+     * Triggers GitHub to create a new check suite, without pushing new code to a repository.
+     *
+     * @param string $repo_full_name
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function request(string $repo_full_name)
     {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-suite-requests';
+
+        return self::$curl->post($url, null, self::$header);
     }
 }

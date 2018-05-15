@@ -231,8 +231,8 @@ EOF;
 
         $http_return_code = self::$curl->getCode();
 
-        if (200 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_code);
+        if (201 !== $http_return_code) {
+            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
         }
 
         return $output;
