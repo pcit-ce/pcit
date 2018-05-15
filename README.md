@@ -22,17 +22,21 @@
 
 ## About KhsCI
 
-**KhsCI** 由 **PHP 后端**（Webhooks Server + Daemon CLI） + **GitHub App** 组成。
+**KhsCI** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** 组成
 
-用户安装 GitHub App，即可使用，无需 **额外** 注册、登录、跳转。唯一需要做的就是仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 文件。
+* **Webhooks Server** 接收 GitHub App POST 过来的数据
+
+* **Daemon CLI** 后端常驻 (守护) 程序，处理 GitHub App POST 过来的数据并返回给 `GitHub App`
 
 * [什么是 GitHub App](https://github.com/khs1994-php/khsci/issues/51)
 
-所以想体验 KhsCI 有两种方案:
+用户安装 `GitHub App`，即可使用，无需 **额外** 注册、登录、跳转。唯一需要做的就是仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 文件。
 
-一是直接安装 [GitHub App KhsCI](https://github.com/khs1994-php/khsci/tree/master/docs)，体验 Demo（暂不提供 Docker 构建，仅提供 **Issue** **Pull Requests** 相关功能）。
+所以想体验 **KhsCI** 有 **两种** 方案:
 
-二是自己部署 PHP 后端，自己新建 GitHub 应用，安装自己的 GitHub 应用（支持 Docker 构建）。
+**一是** 直接安装 [GitHub App KhsCI](https://github.com/khs1994-php/khsci/tree/master/docs)，体验 Demo（暂不提供 `Docker` 构建，仅提供 **Issue**、**Pull Requests** 相关功能）。
+
+**二是** 自己部署 `PHP` 后端，自己新建 `GitHub App`，安装自己的 `GitHub App`（支持 `Docker` 构建）。
 
 ## Try Demo
 
