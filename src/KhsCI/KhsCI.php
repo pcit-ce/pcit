@@ -8,7 +8,6 @@ use Curl\Curl;
 use Exception;
 use KhsCI\Support\Config;
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use TencentAI\TencentAI;
 
 /**
@@ -21,11 +20,17 @@ use TencentAI\TencentAI;
  * $a = $container['a'];
  *
  * @property Service\GitHubApp\Installations    $github_apps_installations
- * @property Service\Issue\Comments             $issue_comments
  * @property Service\OAuth\Coding               $oauth_coding
  * @property Service\OAuth\GitHub               $oauth_github
  * @property Service\OAuth\GitHubApp            $oauth_github_app
  * @property Service\OAuth\Gitee                $oauth_gitee
+ * @property Service\Issue\Assignees            $issue_assignees
+ * @property Service\Issue\Comments             $issue_comments
+ * @property Service\Issue\Events               $issue_events
+ * @property Service\Issue\Issues               $issue
+ * @property Service\Issue\Labels               $issue_labels
+ * @property Service\Issue\Milestones           $issue_milestones
+ * @property Service\Issue\Timeline             $issue_timeline
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status
  * @property Service\Repositories\Webhooks      $repo_webhooks

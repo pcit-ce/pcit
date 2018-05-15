@@ -55,6 +55,8 @@ class Comments
 
         $source_show_in_md = $source;
 
+        $data = $source;
+
         if ($enable_tencent_ai) {
 
             $nlp = static::$tencent_ai->nlp();
