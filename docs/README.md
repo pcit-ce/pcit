@@ -1,10 +1,12 @@
 # KhsCI Documents
 
-## Install
+## 自己部署
+
+KhsCI 由 PHP 后端（Webhooks Server + Daemon CLI）和 GitHub App 组成。
 
 [Coming Soon !](https://github.com/khs1994-php/khsci/blob/master/docs/install.md)
 
-## Usage
+## 体验 Demo
 
 ## GitHub 新建仓库
 

@@ -550,9 +550,13 @@ EOF;
                 $body
             );
 
-            $output = $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+            $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
-            var_dump($output);
+            $debug_info = 'Create issue comments by issue comment edit';
+
+            Log::debug(__FILE__, __LINE__, $debug_info);
+
+            echo $debug_info;
 
             return;
         }
@@ -565,7 +569,13 @@ EOF;
                 $updated_at
             );
 
-            var_dump($output);
+            if (1 === $output) {
+                $debug_info = 'Delete Issue Comment Success';
+
+                Log::debug(__FILE__, __LINE__, $debug_info);
+
+                echo $debug_info;
+            }
 
             return;
         }
@@ -587,9 +597,13 @@ EOF;
 
         Cache::connect()->lPush(static::$cache_key_github_issue, $last_insert_id);
 
-        $output = $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+        $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
-        var_dump($output);
+        $debug_info = 'Create issue comments by issue comment add';
+
+        Log::debug(__FILE__, __LINE__, $debug_info);
+
+        echo $debug_info;
     }
 
     /**

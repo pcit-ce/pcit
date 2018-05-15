@@ -1,8 +1,8 @@
 # KhsCI CE
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![KhsCI](https://ci2.khs1994.com:10000/github/khs1994-php/khsci/status)](https://ci2.khs1994.com:10000/github/khs1994-php/khsci)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![Build Status](https://ci.khs1994.com/github_app/khs1994-php/khsci/status?branch=master)](https://ci.khs1994.com/github_app/khs1994-php/khsci)
 
-国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的 CI/CD 系统
+**国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的 CI/CD 系统**
 
 * [支持文档](https://github.com/khs1994-php/khsci/tree/master/docs)
 
@@ -20,7 +20,25 @@
 
 **Powered By [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)**
 
-## Installation
+## About KhsCI
+
+**KhsCI** 由 **PHP 后端**（Webhooks Server + Daemon CLI） + **GitHub App** 组成。
+
+用户安装 GitHub App，即可使用，无需 **额外** 注册、登录、跳转。唯一需要做的就是仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 文件。
+
+* [什么是 GitHub App](https://github.com/khs1994-php/khsci/issues/51)
+
+所以想体验 KhsCI 有两种方案:
+
+一是直接安装 [GitHub App KhsCI](https://github.com/khs1994-php/khsci/tree/master/docs)，体验 Demo（暂不提供 Docker 构建，仅提供 **Issue** **Pull Requests** 相关功能）。
+
+二是自己部署 PHP 后端，自己新建 GitHub 应用，安装自己的 GitHub 应用（支持 Docker 构建）。
+
+## Try Demo
+
+[Install GitHub App](https://github.com/khs1994-php/khsci/tree/master/docs)
+
+## Installation In Your host
 
 * ~~MySQL~~
 
