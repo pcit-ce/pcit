@@ -9,7 +9,12 @@ use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\Env;
 use KhsCI\Support\JWT;
+use KhsCI\Support\Log;
 
+/**
+ * Class Installations
+ * @see https://developer.github.com/v3/apps/installations/
+ */
 class Installations
 {
     private static $curl;
@@ -59,12 +64,47 @@ class Installations
         return self::$curl->get($url);
     }
 
-    public function add(): void
+    /**
+     * Add a single repository to an installation.
+     *
+     * 204
+     *
+     * @param int    $installation_id
+     * @param int    $repository_id
+     *
+     * @param string $method
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function add(int $installation_id, int $repository_id, string $method = 'put'): void
     {
+        $url = self::$api_url.'/user/installations/'.$installation_id.'/repositories/'.$repository_id;
+
+        self::$curl->$method($url);
+
+        $http_return_code = self::$curl->getCode();
+
+        if (204 !== $http_return_code) {
+            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 204 '.$http_return_code);
+
+            throw new Exception('GitHub App Add or remove repo to installation_id error', $http_return_code);
+        }
     }
 
-    public function remove(): void
+    /**
+     * Remove repository from installation
+     *
+     * 204
+     *
+     * @param int $installation_id
+     * @param int $repository_id
+     *
+     * @throws Exception
+     */
+    public function remove(int $installation_id, int $repository_id): void
     {
+        self::add($installation_id, $repository_id, 'delete');
     }
 
     /**
@@ -112,8 +152,12 @@ class Installations
 
         $access_token_obj = json_decode($access_token_json);
 
-        if ($access_token_obj->message ?? false) {
-            throw new Exception('GitHub App Access Token Error, '.$access_token_obj->message, 500);
+        $http_return_code = self::$curl->getCode();
+
+        if (201 !== $http_return_code) {
+            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
+
+            throw new Exception('Get GitHub App AccessToken Error', $http_return_code);
         }
 
         $access_token = $access_token_obj->token;

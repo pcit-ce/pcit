@@ -91,7 +91,7 @@ class Status
         $http_return_code = self::$curl->getCode();
 
         if ($http_return_code !== 201) {
-            Log::debug(__FILE__, __LINE__, 'Http Return code is not 200 '.$http_return_code);
+            Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
         }
 
         return $output;

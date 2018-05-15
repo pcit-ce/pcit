@@ -34,6 +34,10 @@ class Comments
     }
 
     /**
+     * Create a comment
+     *
+     * 201
+     *
      * @param string $repo_full_name
      * @param int    $issue_number
      * @param string $source
@@ -236,5 +240,101 @@ EOF;
         }
 
         return $output;
+    }
+
+    /**
+     * List comments on an issue
+     *
+     * @param string $repo_full_name
+     * @param int    $issue_number
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function list(string $repo_full_name, int $issue_number)
+    {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
+
+        return self::$curl->get($url);
+    }
+
+    /**
+     * List comments in a repository
+     *
+     * @param string $repo_full_name
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function listInRepository(string $repo_full_name)
+    {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments';
+
+        return self::$curl->get($url);
+    }
+
+    /**
+     * Get a single comment
+     *
+     * @param string $repo_full_name
+     * @param int    $comment_id
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function getSingle(string $repo_full_name, int $comment_id)
+    {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
+
+        return self::$curl->get($url);
+
+    }
+
+    /**
+     * @param string $repo_full_name
+     * @param int    $comment_id
+     * @param string $body
+     *
+     * @throws Exception
+     */
+    public function edit(string $repo_full_name, int $comment_id, string $body): void
+    {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
+
+        $data = [
+            'body' => $body,
+        ];
+
+        self::$curl->patch($url, json_encode($data));
+
+        $http_return_code = self::$curl->getCode();
+
+        if (200 !== $http_return_code) {
+            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_code);
+
+            throw new Exception('Edit Issue comment Error', $http_return_code);
+        }
+    }
+
+    /**
+     * 204
+     * @param string $repo_full_name
+     * @param int    $comment_id
+     *
+     * @throws Exception
+     */
+    public function delete(string $repo_full_name, int $comment_id)
+    {
+        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
+
+        self::$curl->delete($url);
+
+        $http_return_code = self::$curl->getCode();
+
+        if (204 !== $http_return_code) {
+            Log::debug(__FILE__, __LINE__, 'Http Return Code Is Not 204 '.$http_return_code);
+
+            throw new Exception('Delete Issue comment Error', $http_return_code);
+        }
     }
 }
