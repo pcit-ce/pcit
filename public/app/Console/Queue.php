@@ -96,8 +96,11 @@ EOF;
             }
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
+
         } catch (Exception | Error $e) {
+
             throw new Exception($e->getMessage(), $e->getCode());
+
         } finally {
             if (!self::$unique_id) {
                 return;
