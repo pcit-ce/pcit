@@ -27,10 +27,6 @@ class Up
 
     private static $cache_key_up_status = 'khsci_up_status';
 
-    private static $cache_key_github_app_checks = 'github_app_checks';
-
-    private static $cache_key_github_commit_status = 'github_commit_status';
-
     private static $cache_key_github_issue = 'github_issue';
 
     /**
@@ -51,20 +47,6 @@ class Up
                 Cache::connect()->set(self::$cache_key_up_status, 1);
 
                 // 从 Webhooks 缓存中拿出数据，进行处理
-
-                // 处理 commit status GitHub OAuth
-                $build_key_id = Cache::connect()->rPop(self::$cache_key_github_commit_status);
-
-                if ($build_key_id) {
-                    self::updateGitHubStatus((int) $build_key_id);
-                }
-
-                // 处理 Check Run GitHub App Only
-                $build_key_id = Cache::connect()->rpop(self::$cache_key_github_app_checks);
-
-                if ($build_key_id) {
-                    self::updateGitHubAppChecks((int) $build_key_id);
-                }
 
                 self::webhooks();
 
@@ -148,8 +130,6 @@ class Up
         $log_message = 'Create GitHub commit Status '.$build_key_id;
 
         Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$log_message);
-
-        Cache::connect()->set(self::$cache_key_up_status, 0);
     }
 
     /**
@@ -198,21 +178,9 @@ class Up
 
         $details_url = Env::get('CI_HOST').'/github_app/'.$repo_full_name.'/builds/'.$build_key_id;
 
-        $language = 'PHP';
+        $config = JSON::beautiful(Build::getConfig((int) $build_key_id));
 
-        $os = PHP_OS_FAMILY;
-
-        $yaml_file_content = HTTP::get(Git::getRawUrl('github', $repo_full_name, $commit_id, '.khsci.yml'));
-
-        if (!$yaml_file_content) {
-            $yaml_file_content = [];
-        }
-
-        $config = yaml_parse($yaml_file_content);
-
-        $config = JSON::beautiful(json_encode($config));
-
-        $status = $status ?? CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS;
+        $status = $status ?? CI::GITHUB_CHECK_SUITE_STATUS_QUEUED;
 
         $name = $name ?? 'Build Event is '.ucfirst($event_type).' '.ucfirst($status);
 
@@ -220,37 +188,24 @@ class Up
 
         $summary = $summary ?? 'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)';
 
-        $text = $text ?? <<<EOF
-# About KhsCI
+        $text = $text ?? $khsci->check_md->queued('PHP', PHP_OS, $config);
 
-**China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI**
+        $check_run_id = Build::getCheckRunId((int) $build_key_id);
 
-# Try KhsCI ?
+        if ($check_run_id) {
+            $output = $khsci->check_run->update(
+                $repo_full_name, $check_run_id, $name, $branch, $commit_id, $details_url,
+                (string) $build_key_id, $status, $started_at ?? time(),
+                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
+            );
+        } else {
 
-Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master/docs)
-
-# Build Configuration
-
-|Build Option      | Setting    |
-| --               |   --       |  
-| Language         | $language  |
-| Operating System | $os        |
-
-<details>
-<summary>Build Configuration</summary>
-
-```json
-$config
-```
-
-</details>
-EOF;
-
-        $output = $khsci->check_run->create(
-            $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
-            $started_at ?? time(),
-            $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
-        );
+            $output = $khsci->check_run->create(
+                $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
+                $started_at ?? time(),
+                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
+            );
+        }
 
         $log_message = 'Create GitHub App Check Run '.$build_key_id;
 
@@ -259,8 +214,28 @@ EOF;
         echo $log_message;
 
         Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
+    }
 
-        Cache::connect()->set(self::$cache_key_up_status, 0);
+    /**
+     * @param int    $rid
+     * @param string $commit_id
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public static function getConfig(int $rid, string $commit_id)
+    {
+        $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
+
+        $yaml_file_content = HTTP::get(
+            Git::getRawUrl(static::$git_type, $repo_full_name, $commit_id, '.khsci.yml')
+        );
+
+        if (!$yaml_file_content) {
+            $yaml_file_content = [];
+        }
+
+        return $config = yaml_parse($yaml_file_content);
     }
 
     /**
@@ -302,15 +277,16 @@ EOF;
      *
      * @throws Exception
      */
-    private static function pushCache(int $last_insert_id): void
+    private static function updateStatus(int $last_insert_id): void
     {
-        if ('github_app' === static::$git_type) {
-            Cache::connect()->lPush(self::$cache_key_github_app_checks, $last_insert_id);
+        if ('github_app' === self::$git_type) {
+            self::updateGitHubAppChecks($last_insert_id);
 
             return;
         }
 
-        Cache::connect()->lPush(self::$cache_key_github_commit_status, $last_insert_id);
+        self::updateGitHubStatus($last_insert_id);
+
     }
 
     /**
@@ -389,23 +365,24 @@ EOF;
         $committer_username = $committer->username;
 
         $sql = <<<'EOF'
-INSERT builds(
+INSERT INTO builds(
 
 git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
 committer_name,committer_email,committer_username,
-rid,event_time,build_status,request_raw
+rid,event_time,build_status,request_raw,config
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $data = [
             static::$git_type, __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
             $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
+            json_encode(self::getConfig($rid, $commit_id))
         ];
 
         $last_insert_id = DB::insert($sql, $data);
 
-        self::pushCache((int) $last_insert_id);
+        self::updateStatus((int) $last_insert_id);
     }
 
     /**
@@ -669,18 +646,19 @@ EOF;
 INSERT INTO builds(
 
 git_type,event_type,event_time,request_raw,action,commit_id,commit_message,committer_username,
-pull_request_id,branch,rid,build_status
+pull_request_id,branch,rid,build_status,config
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
         $last_insert_id = DB::insert($sql, [
                 static::$git_type, __FUNCTION__, $event_time, $content, $action, $commit_id, $commit_message,
-                $committer_username, $pull_request_id, $branch, $rid, CI::BUILD_STATUS_PENDING,
+                $committer_username, $pull_request_id, $branch, $rid,
+                CI::BUILD_STATUS_PENDING, json_encode(self::getConfig($rid, $commit_id))
             ]
         );
 
-        self::pushCache((int) $last_insert_id);
+        self::updateStatus((int) $last_insert_id);
     }
 
     /**
@@ -711,22 +689,21 @@ EOF;
         $event_time = Date::parse($head_commit->timestamp);
 
         $sql = <<<'EOF'
-INSERT builds(
+INSERT INTO builds(
 
 git_type,event_type,ref,branch,tag_name,commit_id,commit_message,committer_name,committer_email,
-committer_username,rid,event_time,build_status,request_raw
+committer_username,rid,event_time,build_status,request_raw,config
 
-) VALUES(
-?,?,?,?,?,?,?,?,?,?,?,?,?,?
-);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
         $last_insert_id = DB::insert($sql, [
             static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
             $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
+            json_encode(self::getConfig($rid, $commit_id))
         ]);
 
-        self::pushCache((int) $last_insert_id);
+        self::updateStatus((int) $last_insert_id);
     }
 
     /**

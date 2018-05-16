@@ -9,6 +9,10 @@ use Exception;
 use KhsCI\Support\Date;
 use KhsCI\Support\Log;
 
+/**
+ * Class Run
+ * @see https://developer.github.com/v3/checks/runs/
+ */
 class Run
 {
     protected static $header = [
@@ -98,7 +102,7 @@ class Run
         $http_return_code = self::$curl->getCode();
 
         if (201 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
+            Log::debug(__FILE__, __LINE__, 'Http Return code is not 200 '.$http_return_code);
         }
 
         return $output;

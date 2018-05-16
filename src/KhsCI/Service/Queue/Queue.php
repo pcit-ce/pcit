@@ -53,17 +53,21 @@ class Queue
 
     private static $event_type;
 
+    private static $config;
+
     /**
-     * @param        $build_key_id
-     * @param string $git_type
-     * @param        $rid
-     * @param string $commit_id
-     * @param string $commit_message
-     * @param string $branch
-     * @param string $event_type
-     * @param string $pull_request_id
-     * @param string $tag_name
+     * @param             $build_key_id
+     * @param string      $git_type
+     * @param             $rid
+     * @param string      $commit_id
+     * @param string      $commit_message
+     * @param string      $branch
+     * @param string      $event_type
+     * @param string      $pull_request_id
+     * @param string      $tag_name
+     * @param null|string $config
      *
+     * @throws CIException
      * @throws Exception
      */
     public function __invoke($build_key_id,
@@ -74,7 +78,8 @@ class Queue
                              string $branch,
                              string $event_type,
                              ?string $pull_request_id = null,
-                             ?string $tag_name = null): void
+                             ?string $tag_name = null,
+                             ?string $config): void
     {
         self::$unique_id = session_create_id();
 
@@ -85,6 +90,7 @@ class Queue
         self::$pull_id = $pull_request_id;
         self::$tag_name = $tag_name;
         self::$git_type = $git_type;
+        self::$config = $config;
 
         self::$build_key_id = (int) $build_key_id;
 
@@ -235,13 +241,7 @@ class Queue
             throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
         }
 
-        $yaml_obj = (object) yaml_parse($yaml_file_content);
-
-        $yaml_to_json = json_encode($yaml_obj);
-
-        $sql = 'UPDATE builds SET config=? WHERE id=?';
-
-        DB::update($sql, [$yaml_to_json, self::$build_key_id]);
+        $yaml_obj = json_decode(self::$config);
 
         // 解析 .khsci.yml.
 

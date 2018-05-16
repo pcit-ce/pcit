@@ -27,6 +27,10 @@ class Queue
 
     private static $git_type;
 
+    private static $config;
+
+    private static $khsci;
+
     /**
      * @throws Exception
      */
@@ -34,13 +38,15 @@ class Queue
     {
         $khsci = new KhsCI();
 
+        self::$khsci = $khsci;
+
         $queue = $khsci->queue;
 
         try {
             $sql = <<<'EOF'
 SELECT 
 
-id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name
+id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name,config,check_run_id
 
 FROM 
 
@@ -64,6 +70,27 @@ EOF;
 
             $output = array_values($output);
 
+            $build_key_id = $output['id'];
+
+            $check_run_id = $output['check_run_id'];
+
+            unset($output['check_run_id']);
+
+            self::$config = $output['config'];
+
+            if (!$check_run_id and 'github_app' === $output['git_type']) {
+
+                Up::updateGitHubAppChecks($build_key_id, null,
+                    CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
+                    time(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    $khsci->check_md->queued('PHP', PHP_OS, self::$config)
+                );
+            }
+
             $queue(...$output);
         } catch (CIException $e) {
             self::$commit_id = $e->getCommitId();
@@ -74,6 +101,8 @@ EOF;
 
             // $e->getCode() is build key id.
             Build::updateStopAt(self::$build_key_id);
+
+            self::saveLog();
 
             switch ($e->getMessage()) {
 
@@ -113,43 +142,49 @@ EOF;
 
             Log::connect()->debug('====== Build Stopped Success ======');
 
-            // 日志美化
-
-            $output = Cache::connect()->hGet('build_log', (string) self::$build_key_id);
-
-            if (!$output) {
-                Log::debug(__FILE__, __LINE__, 'Build Log empty, skip');
-
-                return;
-            }
-
-            file_put_contents(sys_get_temp_dir().'/'.self::$unique_id, $output);
-
-            $fh = fopen(sys_get_temp_dir().'/'.self::$unique_id, 'r');
-
-            Cache::connect()->del((string) self::$unique_id);
-
-            while (!feof($fh)) {
-                $one_line_content = fgets($fh);
-
-                $one_line_content = substr("$one_line_content", 8);
-
-                Cache::connect()->append((string) self::$unique_id, $one_line_content);
-            }
-
-            fclose($fh);
-
-            $a = Cache::connect()->get((string) self::$unique_id);
-
-            Build::updateLog(self::$build_key_id, $a);
-
-            // cleanup
-            unlink(sys_get_temp_dir().'/'.self::$unique_id);
-
-            Cache::connect()->del((string) self::$unique_id);
-
             self::$unique_id = null;
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private static function saveLog(): void
+    {
+        // 日志美化
+
+        $output = Cache::connect()->hGet('build_log', (string) self::$build_key_id);
+
+        if (!$output) {
+            Log::debug(__FILE__, __LINE__, 'Build Log empty, skip');
+
+            return;
+        }
+
+        file_put_contents(sys_get_temp_dir().'/'.self::$unique_id, $output);
+
+        $fh = fopen(sys_get_temp_dir().'/'.self::$unique_id, 'r');
+
+        Cache::connect()->del((string) self::$unique_id);
+
+        while (!feof($fh)) {
+            $one_line_content = fgets($fh);
+
+            $one_line_content = substr("$one_line_content", 8);
+
+            Cache::connect()->append((string) self::$unique_id, $one_line_content);
+        }
+
+        fclose($fh);
+
+        $a = Cache::connect()->get((string) self::$unique_id);
+
+        Build::updateLog(self::$build_key_id, $a);
+
+        // cleanup
+        unlink(sys_get_temp_dir().'/'.self::$unique_id);
+
+        Cache::connect()->del((string) self::$unique_id);
     }
 
     /**
@@ -168,6 +203,7 @@ EOF;
         }
 
         if ('github_app' === self::$git_type) {
+
             Up::updateGitHubAppChecks(
                 self::$build_key_id,
                 null,
@@ -177,7 +213,7 @@ EOF;
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
                 null,
                 null,
-                null,
+                self::$khsci->check_md->cancelled('PHP', PHP_OS, self::$config, null),
                 null,
                 null
             );
@@ -200,6 +236,7 @@ EOF;
         }
 
         if ('github_app' === self::$git_type) {
+
             Up::updateGitHubAppChecks(
                 self::$build_key_id,
                 null,
@@ -209,7 +246,7 @@ EOF;
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
                 null,
                 null,
-                null,
+                self::$khsci->check_md->cancelled('PHP', PHP_OS, self::$config, null),
                 null,
                 null
             );
@@ -237,6 +274,9 @@ EOF;
         // GitHub App checks API
 
         if ('github_app' === self::$git_type) {
+
+            $build_log = Build::getLog((int) self::$build_key_id);
+
             Up::updateGitHubAppChecks(
                 self::$build_key_id,
                 null,
@@ -246,7 +286,7 @@ EOF;
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
-                null,
+                self::$khsci->check_md->failure('PHP', PHP_OS, self::$config, $build_log),
                 null,
                 null
             );
@@ -269,6 +309,7 @@ EOF;
         }
 
         if ('github_app' === self::$git_type) {
+            $build_log = Build::getLog((int) self::$build_key_id);
             Up::updateGitHubAppChecks(
                 self::$build_key_id,
                 null,
@@ -278,7 +319,7 @@ EOF;
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
-                null,
+                self::$khsci->check_md->failure('PHP', PHP_OS, self::$config, $build_log),
                 null,
                 null
             );
@@ -301,6 +342,8 @@ EOF;
         }
 
         if ('github_app' === self::$git_type) {
+
+            $build_log = Build::getLog((int) self::$build_key_id);
             Up::updateGitHubAppChecks(
                 self::$build_key_id,
                 null,
@@ -310,7 +353,7 @@ EOF;
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 null,
                 null,
-                null,
+                self::$khsci->check_md->success('PHP', PHP_OS, self::$config, $build_log),
                 null,
                 null
             );

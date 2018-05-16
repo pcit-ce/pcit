@@ -43,7 +43,6 @@ pipeline:
       # status:  [ failure, success ]
 
       # event: tag
-      # event: [push, tag, deployment]
       # event: [push, pull_request, tag, deployment]
       event: [push, pull_request, tag]
 

@@ -196,6 +196,27 @@ EOF;
     }
 
     /**
+     * @param int  $build_key_id
+     *
+     * @param bool $throw
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getCheckRunId(int $build_key_id, bool $throw = false)
+    {
+        $sql = 'SELECT check_run_id FROM builds WHERE id=?';
+
+        $output = DB::select($sql, [$build_key_id], true);
+
+        if (!$output and $throw) {
+            throw new Exception('Check Run Id is null');
+        }
+
+        return $output;
+    }
+
+    /**
      * @param int $check_run_id
      * @param int $build_key_id
      *
@@ -232,5 +253,18 @@ EOF;
         $sql = 'UPDATE builds SET build_log=? WHERE id=?';
 
         DB::update($sql, [$build_log, $build_key_id]);
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getConfig(int $build_key_id)
+    {
+        $sql = 'SELECT config FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id], true);
     }
 }

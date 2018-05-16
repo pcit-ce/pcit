@@ -40,6 +40,7 @@ use TencentAI\TencentAI;
  * @property Service\Users\BasicInfo            $user_basic_info
  * @property Service\Checks\Run                 $check_run
  * @property Service\Checks\Suites              $check_suites
+ * @property Service\Checks\MarkDown            $check_md
  */
 class KhsCI extends Container
 {
