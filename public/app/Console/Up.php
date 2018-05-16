@@ -106,7 +106,8 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = 'pending',
                                               string $description = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -162,7 +163,8 @@ class Up
                                                  string $text = null,
                                                  array $annotations = null,
                                                  array $images = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -479,6 +481,10 @@ EOF;
             foreach ($labels as $k) {
                 Issue::updateLabels($k, static::$git_type, $issue_id);
             }
+        }
+
+        if ('opened' !== $action) {
+            return $last_insert_id;
         }
 
         $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);

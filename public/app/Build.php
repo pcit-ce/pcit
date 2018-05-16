@@ -28,6 +28,19 @@ class Build extends DBModel
     /**
      * @param int $build_key_id
      *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getStartAt(int $build_key_id)
+    {
+        $sql = 'SELECT create_time FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id], true);
+    }
+
+    /**
+     * @param int $build_key_id
+     *
      * @return int
      *
      * @throws Exception
@@ -37,6 +50,19 @@ class Build extends DBModel
         $sql = 'UPDATE builds SET end_time = ? WHERE id=?';
 
         return DB::update($sql, [time(), $build_key_id]);
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getStopAt(int $build_key_id)
+    {
+        $sql = 'SELECT end_time FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id], true);
     }
 
     /**
