@@ -89,44 +89,45 @@ EOF;
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } catch (Exception | Error $e) {
-
             throw new Exception($e->getMessage(), $e->getCode());
-
         } finally {
             $queue::systemDelete(self::$unique_id, true);
             Build::updateStopAt(self::$build_key_id);
             Cache::connect()->set('khsci_up_status', 0);
 
-            Log::connect()->debug('====== Build Stop Success ======');
+            Log::connect()->debug('====== Build Stoped Success ======');
 
             // 日志美化
 
-            $output = Cache::connect()->hGet('build_log', self::$build_key_id);
+            $output = Cache::connect()->hGet('build_log', (string) self::$build_key_id);
+
+            if (!$output) {
+                Log::debug(__FILE__, __LINE__, 'Build Log empty, skip');
+
+                return;
+            }
 
             file_put_contents(sys_get_temp_dir().'/'.self::$unique_id, $output);
 
             $fh = fopen(sys_get_temp_dir().'/'.self::$unique_id, 'r');
 
-            Cache::connect()->del(self::$unique_id);
+            Cache::connect()->del((string) self::$unique_id);
 
             while (!feof($fh)) {
-
                 $one_line_content = fgets($fh);
 
                 $one_line_content = substr("$one_line_content", 8);
 
-                Cache::connect()->append(self::$unique_id, $one_line_content);
-
+                Cache::connect()->append((string) self::$unique_id, $one_line_content);
             }
 
-            $a = Cache::connect()->get(self::$unique_id);
+            $a = Cache::connect()->get((string) self::$unique_id);
 
             Build::updateLog(self::$build_key_id, $a);
 
             unlink(sys_get_temp_dir().'/'.self::$unique_id);
 
-            Cache::connect()->del(self::$unique_id);
-
+            Cache::connect()->del((string) self::$unique_id);
         }
     }
 
@@ -150,8 +151,8 @@ EOF;
                 self::$build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                Build::getStartAt(self::$build_key_id),
-                Build::getStopAt(self::$build_key_id),
+                (int) Build::getStartAt(self::$build_key_id),
+                (int) Build::getStopAt(self::$build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
                 null,
                 null,
@@ -182,8 +183,8 @@ EOF;
                 self::$build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                Build::getStartAt(self::$build_key_id),
-                Build::getStopAt(self::$build_key_id),
+                (int) Build::getStartAt(self::$build_key_id),
+                (int) Build::getStopAt(self::$build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
                 null,
                 null,
@@ -219,8 +220,8 @@ EOF;
                 self::$build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                Build::getStartAt(self::$build_key_id),
-                Build::getStopAt(self::$build_key_id),
+                (int) Build::getStartAt(self::$build_key_id),
+                (int) Build::getStopAt(self::$build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
@@ -251,8 +252,8 @@ EOF;
                 self::$build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                Build::getStartAt(self::$build_key_id),
-                Build::getStopAt(self::$build_key_id),
+                (int) Build::getStartAt(self::$build_key_id),
+                (int) Build::getStopAt(self::$build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
@@ -283,8 +284,8 @@ EOF;
                 self::$build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                Build::getStartAt(self::$build_key_id),
-                Build::getStopAt(self::$build_key_id),
+                (int) Build::getStartAt(self::$build_key_id),
+                (int) Build::getStopAt(self::$build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 null,
                 null,

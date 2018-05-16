@@ -2,6 +2,10 @@
 
 ## v18.06.0
 
+### 2018/05/16
+
+区分内外 PR，即 PR 是从内部仓库发起，还是从他人仓库发起，这影响着后续 Secret 的功能。
+
 ### 2018/05/15
 
 使用 `.khsci.yml` 定义一切 https://github.com/khs1994-php/khsci/issues/66

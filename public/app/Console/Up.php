@@ -42,7 +42,7 @@ class Up
             try {
                 if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
                     // 设为 1 说明有一个任务在运行，休眠之后跳过循环
-                    echo '...';
+                    echo '..WQ..';
 
                     sleep(10);
                     continue;
@@ -50,7 +50,21 @@ class Up
 
                 Cache::connect()->set(self::$cache_key_up_status, 1);
 
-                // Queue::queue();
+                // Docker 构建队列
+
+                $docker_build_skip = false;
+
+                try {
+                    Http::get(Env::get('CI_DOCKER_HOST').'/info');
+                } catch (\Throwable $e) {
+                    $docker_build_skip = true;
+                }
+
+                if (!$docker_build_skip) {
+                    echo 'Connect Docker Daemon Success, Docker Build Running...';
+
+                    Queue::queue();
+                }
 
                 // 从 Webhooks 缓存中拿出数据，进行处理
 
@@ -70,7 +84,7 @@ class Up
 
                 self::webhooks();
 
-                echo '...';
+                echo '..W.';
 
                 DB::close();
                 Cache::close();
@@ -106,8 +120,7 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = 'pending',
                                               string $description = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -129,8 +142,6 @@ class Up
         );
 
         $log_message = 'Create GitHub commit Status '.$build_key_id;
-
-        var_dump($log_message);
 
         Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$log_message);
 
@@ -163,8 +174,7 @@ class Up
                                                  string $text = null,
                                                  array $annotations = null,
                                                  array $images = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -187,9 +197,13 @@ class Up
 
         $os = PHP_OS_FAMILY;
 
-        $config = yaml_parse(
-            HTTP::get(Git::getRawUrl('github', $repo_full_name, $commit_id, '.khsci.yml'))
-        );
+        $yaml_file_content = HTTP::get(Git::getRawUrl('github', $repo_full_name, $commit_id, '.khsci.yml'));
+
+        if (!$yaml_file_content) {
+            $yaml_file_content = [];
+        }
+
+        $config = yaml_parse($yaml_file_content);
 
         $config = JSON::beautiful(json_encode($config));
 

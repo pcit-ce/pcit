@@ -90,7 +90,14 @@ class Queue
 
         Log::connect()->debug('====== Start Build ======');
 
-        Log::debug(__FILE__, __LINE__, 'Build Key id is '.$build_key_id);
+        Log::debug(__FILE__, __LINE__, json_encode([
+            'build_key_id' => $build_key_id,
+            'event_type' => $event_type,
+            'commit_id' => $commit_id,
+            'pull_request_id' => $pull_request_id,
+            'tag_name' => $tag_name,
+            'git_type' => $git_type,
+        ]));
 
         // commit 信息跳过构建
         self::skip($commit_message);
@@ -147,7 +154,8 @@ class Queue
         if (false === $output && false === $output2) {
             return;
         }
-        Log::debug(__FILE__, __LINE__, self::$build_key_id.'is skip');
+
+        Log::debug(__FILE__, __LINE__, self::$build_key_id.' is skip');
 
         throw new Exception(CI::BUILD_STATUS_SKIP);
     }
@@ -216,9 +224,14 @@ class Queue
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
-        $yaml_obj = (object) yaml_parse(HTTP::get(Git::getRawUrl(
-            $gitType, $repo_full_name, $commit_id, '.khsci.yml'))
-        );
+        $yaml_file_content = HTTP::get(Git::getRawUrl(
+            $gitType, $repo_full_name, $commit_id, '.khsci.yml'));
+
+        if (!$yaml_file_content) {
+            throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+        }
+
+        $yaml_obj = (object) yaml_parse($yaml_file_content);
 
         $yaml_to_json = json_encode($yaml_obj);
 
@@ -319,7 +332,6 @@ class Queue
 
             $image = $this->getImage($image, $config);
 
-            Log::debug(__FILE__, __LINE__, 'Run Container By Image '.$image);
             $ci_script = $this->parseCommand($setup, $image, $commands);
 
             $docker_container
@@ -349,7 +361,11 @@ class Queue
 
             $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
 
-            Log::debug(__FILE__, __LINE__, 'Run Container '.$container_id);
+            Log::debug(
+                __FILE__,
+                __LINE__,
+                'Run Container By Image '.$image.', Container Id is '.$container_id
+            );
 
             $this->docker_container_logs($docker_container, $container_id);
         }
@@ -388,7 +404,7 @@ class Queue
 
         $ci_script = base64_encode(stripcslashes($content));
 
-        Log::debug(__FILE__, __LINE__, 'Command is '.$ci_script);
+        Log::debug(__FILE__, __LINE__, 'Command base64encode is '.$ci_script);
 
         return $ci_script;
     }
@@ -466,6 +482,7 @@ class Queue
 
                 if (0 !== $exitCode) {
                     Log::debug(__FILE__, __LINE__, 'Container ExitCode is not 0');
+
                     throw new Exception();
                 }
 
@@ -558,7 +575,11 @@ class Queue
 
         $container_id = $docker_container->start($docker_container->create($image));
 
-        Log::debug(__FILE__, __LINE__, 'Run Git Clone Container '.$container_id);
+        Log::debug(
+            __FILE__,
+            __LINE__,
+            'Run Git Clone Container By Image '.$image.', Container Id is '.$container_id
+        );
 
         $this->docker_container_logs($docker_container, $container_id);
     }
@@ -611,7 +632,11 @@ class Queue
 
             $docker_container->start($container_id);
 
-            Log::debug(__FILE__, __LINE__, "Run $service_name in Container $container_id");
+            Log::debug(
+                __FILE__,
+                __LINE__,
+                "Run $service_name By Image $image, Container Id Is $container_id"
+            );
         }
     }
 
@@ -662,9 +687,13 @@ class Queue
 
             $docker_volume->remove($unique_id);
 
+            Log::connect()->debug('Build Stoped Delete Volume '.$unique_id);
+
             // clean network
 
             $docker_network->remove($unique_id);
+
+            Log::connect()->debug('Build Stoped Delete Network '.$unique_id);
         }
     }
 }

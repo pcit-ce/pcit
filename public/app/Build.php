@@ -20,7 +20,7 @@ class Build extends DBModel
      */
     public static function updateStartAt(int $build_key_id)
     {
-        $sql = 'UPDATE builds SET create_time = ? WHERE id=?';
+        $sql = 'UPDATE builds SET started_at = ? WHERE id=?';
 
         return DB::update($sql, [time(), $build_key_id]);
     }
@@ -29,11 +29,12 @@ class Build extends DBModel
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getStartAt(int $build_key_id)
     {
-        $sql = 'SELECT create_time FROM builds WHERE id=?';
+        $sql = 'SELECT started_at FROM builds WHERE id=?';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -47,7 +48,7 @@ class Build extends DBModel
      */
     public static function updateStopAt(int $build_key_id)
     {
-        $sql = 'UPDATE builds SET end_time = ? WHERE id=?';
+        $sql = 'UPDATE builds SET stopped_at = ? WHERE id=?';
 
         return DB::update($sql, [time(), $build_key_id]);
     }
@@ -56,11 +57,12 @@ class Build extends DBModel
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getStopAt(int $build_key_id)
     {
-        $sql = 'SELECT end_time FROM builds WHERE id=?';
+        $sql = 'SELECT stopped_at FROM builds WHERE id=?';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -156,7 +158,7 @@ id,
 build_status,
 commit_id,
 committer_name,
-end_time
+stopped_at
 
 FROM builds WHERE
 
@@ -212,7 +214,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function updateLog(int $build_key_id, string $build_log)
+    public static function updateLog(int $build_key_id, string $build_log): void
     {
         $sql = 'UPDATE builds SET build_log=? WHERE id=?';
 
