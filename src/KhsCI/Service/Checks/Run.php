@@ -102,7 +102,7 @@ class Run
         $http_return_code = self::$curl->getCode();
 
         if (201 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return code is not 200 '.$http_return_code);
+            Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
         }
 
         return $output;
@@ -227,8 +227,8 @@ class Run
 
         $http_return_header = self::$curl->getCode();
 
-        if ('201' !== $http_return_header) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_header);
+        if ('200' !== $http_return_header) {
+            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_header);
         }
 
         return $output;

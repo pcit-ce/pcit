@@ -48,7 +48,7 @@ $config
 
 # Build Log
 
-```json
+```bash
 $build_log
 ```
 
@@ -78,7 +78,7 @@ $config
 
 # Build Log
 
-```json
+```bash
 $build_log
 ```
 
@@ -107,7 +107,7 @@ $config
 
 # Build Log
 
-```json
+```bash
 $build_log
 ```
 
@@ -136,7 +136,7 @@ $config
 
 # Build Log
 
-```json
+```bash
 $build_log
 ```
 
@@ -165,7 +165,7 @@ $config
 
 # Build Log
 
-```json
+```bash
 $build_log
 ```
 
@@ -194,7 +194,7 @@ $config
 
 # Build Log
 
-```json
+```bash
 $build_log
 ```
 

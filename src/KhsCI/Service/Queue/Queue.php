@@ -234,14 +234,7 @@ class Queue
             throw new Exception(CI::BUILD_STATUS_ERRORED);
         }
 
-        $yaml_file_content = HTTP::get(Git::getRawUrl(
-            $gitType, $repo_full_name, $commit_id, '.khsci.yml'));
-
-        if (!$yaml_file_content) {
-            throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
-        }
-
-        $yaml_obj = json_decode(self::$config);
+        $yaml_obj = (object) json_decode(self::$config, true);
 
         // 解析 .khsci.yml.
 
@@ -337,11 +330,10 @@ class Queue
                         continue;
                     }
                 } elseif (is_array($event) and (!in_array(self::$event_type, $event, true))) {
-                    Log::connect()->debug(
+                    Log::debug(
+                        __FILE__,
+                        __LINE__,
                         "Pipeline Event $event not in ".implode(' | ', $event).'. skip');
-
-                    continue;
-                } else {
 
                     continue;
                 }

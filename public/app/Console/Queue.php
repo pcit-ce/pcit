@@ -70,15 +70,15 @@ EOF;
 
             $output = array_values($output);
 
-            $build_key_id = $output['id'];
+            $build_key_id = $output[0];
 
-            $check_run_id = $output['check_run_id'];
+            $check_run_id = $output[10];
 
-            unset($output['check_run_id']);
+            unset($output[10]);
 
-            self::$config = $output['config'];
+            self::$config = $output[9];
 
-            if (!$check_run_id and 'github_app' === $output['git_type']) {
+            if (!$check_run_id and 'github_app' === $output[1]) {
 
                 Up::updateGitHubAppChecks($build_key_id, null,
                     CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
