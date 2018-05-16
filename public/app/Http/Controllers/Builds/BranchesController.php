@@ -48,7 +48,7 @@ class BranchesController
                 $commit_url = $base_url.'/commit/'.$commit_id;
                 $commit_id = substr($commit_id, 0, 7);
                 $committer_name = $output['committer_name'];
-                $end_time = $output['end_time'];
+                $end_time = $output['stopped_at'];
 
                 $build_status_array[$branch]['k'."$build_id"] = [
                     $build_status, $commit_id, $committer_name, $end_time, $commit_url,

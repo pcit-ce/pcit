@@ -73,12 +73,12 @@
           let branch = data.branch;
           let committer_name = data.committer_name;
           let compare = data.compare;
-          let end_time = data.end_time;
+          let stopped_at = data.stopped_at;
           let nbsp = '&nbsp;&nbsp;';
 
-          d = new Date(parseInt(end_time) * 1000);
+          d = new Date(parseInt(stopped_at) * 1000);
 
-          end_time = d.toLocaleString();
+          stopped_at = d.toLocaleString();
 
           $("#display").append('<h2>' + '# ' + build_id + nbsp +
             branch + nbsp +
@@ -87,7 +87,7 @@
             commit_message + nbsp +
             committer_name + nbsp +
             "<a href='" + compare + "' target='_blank'>Compare" + "</a>" + nbsp +
-            end_time + nbsp + '</h2>'
+            stopped_at + nbsp + '</h2>'
           );
           $("#display").append("<pre>" + data.data + "</pre>");
           //$("#current").trigger('click');
@@ -119,22 +119,22 @@
             let commit_id = status.commit_id;
             let commit_url = status.commit_url;
             let build_status = status.build_status;
-            let create_time = status.create_time;
-            let end_time = status.end_time;
+            let started_at = status.started_at;
+            let stopped_at = status.stopped_at;
             let nbsp = "&nbsp;&nbsp;&nbsp;";
             let nbsp2 = nbsp + nbsp + nbsp;
-            if (null == create_time) {
-              create_time = nbsp2 + nbsp2 + 'Build Is Pending'
+            if (null == started_at) {
+              started_at = nbsp2 + nbsp2 + 'Build Is Pending'
             } else {
-              d = new Date(parseInt(create_time) * 1000);
-              create_time = d.toLocaleString();
+              d = new Date(parseInt(started_at) * 1000);
+              started_at = d.toLocaleString();
             }
 
-            if (null == end_time) {
-              end_time = ' '
+            if (null == stopped_at) {
+              stopped_at = ' '
             } else {
-              d = new Date(parseInt(end_time) * 1000);
-              end_time = d.toLocaleString();
+              d = new Date(parseInt(stopped_at) * 1000);
+              stopped_at = d.toLocaleString();
             }
 
             $("#display").append(
@@ -147,8 +147,8 @@
               "<td>" + nbsp + "<a href='" + commit_url + "' target='_blank'>" + commit_id + "</a>" + nbsp + "</td>" +
               "<td>" + "<a href='" + location.href + '/' + build_id + "' target='_blank'>"
               + '#' + build_id + '&nbsp;' + build_status + "</a>" + nbsp + "</td>" +
-              "<td>" + nbsp + create_time + nbsp + "</td>" +
-              "<td>" + nbsp + end_time + nbsp + "</td>" +
+              "<td>" + nbsp + started_at + nbsp + "</td>" +
+              "<td>" + nbsp + stopped_at + nbsp + "</td>" +
               +"</tr>"
             )
 
@@ -172,15 +172,15 @@
 
               let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
-              let end_time = status[3];
+              let stopped_at = status[3];
 
-              if (null == end_time) {
-                end_time = '&nbsp;&nbsp;&nbsp;Build Is Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+              if (null == stopped_at) {
+                stopped_at = '&nbsp;&nbsp;&nbsp;Build Is Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
               } else {
 
-                d = new Date(end_time * 1000);
+                d = new Date(stopped_at * 1000);
 
-                end_time = d.toLocaleString();
+                stopped_at = d.toLocaleString();
               }
               $("#display").append("<tr><td><a href='builds/" + id + "' target='_blank'>" +
                 '# ' + id + "</a></td>" +
@@ -189,7 +189,7 @@
 
                 '<td>' + nbsp + status[2] + nbsp + '</td>' +
 
-                '<td>' + nbsp + end_time + nbsp + '</td>' +
+                '<td>' + nbsp + stopped_at + nbsp + '</td>' +
 
                 "<td><a href='" + status[4] + "' target='_black'>" + status[1] + "</a></td></tr>");
 
@@ -219,22 +219,22 @@
             let commit_id = status.commit_id;
             let commit_url = status.commit_url;
             let build_status = status.build_status;
-            let create_time = status.create_time;
-            let end_time = status.end_time;
+            let started_at = status.started_at;
+            let stopped_at = status.stopped_at;
             let nbsp = "&nbsp;&nbsp;&nbsp;";
 
-            if (null == create_time) {
-              create_time = 'Build Is Pending'
+            if (null == started_at) {
+              started_at= 'Build Is Pending'
             } else {
-              d = new Date(create_time * 1000);
-              create_time = d.toLocaleString();
+              d = new Date(started_at * 1000);
+              started_at = d.toLocaleString();
             }
 
-            if (null == end_time) {
-              end_time = ' ';
+            if (null == stopped_at) {
+              stopped_at = ' ';
             } else {
-              d = new Date(end_time * 1000);
-              end_time = d.toLocaleString();
+              d = new Date(stopped_at * 1000);
+              stopped_at = d.toLocaleString();
             }
 
             $("#display").append(
@@ -250,8 +250,8 @@
               "<a href='" + base_full_url + '/builds/' + build_id + "' target='_blank'>" +
               '#' + build_id + nbsp + build_status +
               "</a>" + nbsp + "</td>" +
-              "<td>" + nbsp + create_time + nbsp + "</td>" +
-              "<td>" + nbsp + end_time + nbsp + "</td>" +
+              "<td>" + nbsp + started_at + nbsp + "</td>" +
+              "<td>" + nbsp + stopped_at + nbsp + "</td>" +
               +"</tr>"
             )
           });

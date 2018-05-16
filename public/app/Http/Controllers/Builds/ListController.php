@@ -56,7 +56,7 @@ class ListController
         $repo_full_name = "$username/$repo";
 
         $sql = <<<'EOF'
-SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,create_time,end_time
+SELECT id,event_type,branch,committer_username,commit_message,commit_id,build_status,started_at,stopped_at
 
 FROM builds WHERE git_type=? AND event_type IN (?,?) AND rid=
 
@@ -98,9 +98,7 @@ EOF;
     {
         $build_key_id = $args[3];
 
-        $redis = Cache::connect();
-
-        $build_log = $redis->hget('build_log', $build_key_id);
+        $build_log = Build::getLog((int) $build_key_id);
 
         $sql = <<<'EOF'
 SELECT 
@@ -112,7 +110,7 @@ branch,
 committer_name,
 commit_message,
 compare,
-end_time
+stopped_at
 
 FROM builds WHERE 
 

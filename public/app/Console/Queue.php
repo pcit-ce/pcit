@@ -134,6 +134,8 @@ EOF;
                 Cache::connect()->append((string) self::$unique_id, $one_line_content);
             }
 
+            fclose($fh);
+
             $a = Cache::connect()->get((string) self::$unique_id);
 
             Build::updateLog(self::$build_key_id, $a);

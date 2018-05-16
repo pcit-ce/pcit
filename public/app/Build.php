@@ -209,6 +209,19 @@ EOF;
     }
 
     /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getLog(int $build_key_id)
+    {
+        $sql = 'SELECT build_log FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id], true);
+    }
+
+    /**
      * @param int    $build_key_id
      * @param string $build_log
      *
