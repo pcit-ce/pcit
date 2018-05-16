@@ -481,7 +481,7 @@ class Queue
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    Log::debug(__FILE__, __LINE__, 'Container ExitCode is not 0');
+                    Log::debug(__FILE__, __LINE__, "Container $container_id ExitCode is not 0");
 
                     throw new Exception();
                 }

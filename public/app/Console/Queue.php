@@ -56,6 +56,8 @@ EOF;
 
             $output = $output[0] ?? null;
 
+            // 数据库没有结果，跳过构建
+
             if (!$output) {
                 Log::debug(__FILE__, __LINE__, 'Build list empty');
 
@@ -100,6 +102,7 @@ EOF;
             throw new Exception($e->getMessage(), $e->getCode());
         } finally {
             if (!self::$unique_id) {
+                Log::debug(__FILE__, __LINE__, 'UniqueId Is Not Set, skip');
 
                 return;
             }
