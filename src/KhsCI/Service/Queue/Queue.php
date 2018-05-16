@@ -475,15 +475,12 @@ class Queue
                 $startedAt = $image_status_obj->StartedAt;
                 $finishedAt = $image_status_obj->FinishedAt;
 
-                /**
-                 * 将日志存入数据库.
-                 */
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
                     Log::debug(__FILE__, __LINE__, "Container $container_id ExitCode is not 0");
 
-                    throw new Exception();
+                    throw new Exception(CI::BUILD_STATUS_ERRORED);
                 }
 
                 break;
