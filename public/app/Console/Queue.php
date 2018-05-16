@@ -59,8 +59,6 @@ EOF;
             // 数据库没有结果，跳过构建
 
             if (!$output) {
-                Log::debug(__FILE__, __LINE__, 'Build list empty');
-
                 return;
             }
 
@@ -102,8 +100,6 @@ EOF;
             throw new Exception($e->getMessage(), $e->getCode());
         } finally {
             if (!self::$unique_id) {
-                Log::debug(__FILE__, __LINE__, 'UniqueId Is Not Set, skip');
-
                 return;
             }
 
@@ -143,9 +139,12 @@ EOF;
 
             Build::updateLog(self::$build_key_id, $a);
 
+            // cleanup
             unlink(sys_get_temp_dir().'/'.self::$unique_id);
 
             Cache::connect()->del((string) self::$unique_id);
+
+            self::$unique_id = null;
         }
     }
 
