@@ -35,14 +35,18 @@ pipeline:
       # - /data/lnmp/tmp/cache:/tmp/cache
     when:
       # environment: production
+
       # platform: linux/amd64
       # platform:  [ linux/*, windows/amd64 ]
+
       # status: changed
       # status:  [ failure, success ]
+
       # event: tag
       # event: [push, tag, deployment]
       # event: [push, pull_request, tag, deployment]
       event: [push, pull_request, tag]
+
       # branch: master
       # branch: prefix/*
       # branch: [master, develop]

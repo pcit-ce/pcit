@@ -317,6 +317,9 @@ class Queue
                                  Image $docker_image): void
     {
         foreach ($pipeline as $setup => $array) {
+
+            Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup);
+
             $image = $array['image'];
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
@@ -325,10 +328,20 @@ class Queue
             if ($event) {
                 if (is_string($event)) {
                     if (self::$event_type !== $event) {
+                        Log::debug(
+                            __FILE__,
+                            __LINE__,
+                            "Pipeline $event Is Not Current ".self::$event_type.'. Skip'
+                        );
+
                         continue;
                     }
-                } elseif (!in_array(self::$event_type, $event, true)) {
-                    Log::connect()->debug('Event '.$event.' not in '.implode(' | ', $event));
+                } elseif (is_array($event) and (!in_array(self::$event_type, $event, true))) {
+                    Log::connect()->debug(
+                        "Pipeline Event $event not in ".implode(' | ', $event).'. skip');
+
+                    continue;
+                } else {
 
                     continue;
                 }

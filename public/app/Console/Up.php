@@ -640,6 +640,10 @@ EOF;
 
         $action = $obj->action;
 
+        if (!in_array($action, ['opened', 'synchronize'])) {
+            return;
+        }
+
         $pull_request = $obj->pull_request;
 
         $event_time = $pull_request->updated_at ?? $pull_request->created_at;
