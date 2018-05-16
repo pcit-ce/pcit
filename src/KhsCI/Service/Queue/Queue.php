@@ -224,6 +224,10 @@ class Queue
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
+        if (!$repo_full_name) {
+            throw new Exception(CI::BUILD_STATUS_ERRORED);
+        }
+
         $yaml_file_content = HTTP::get(Git::getRawUrl(
             $gitType, $repo_full_name, $commit_id, '.khsci.yml'));
 
@@ -475,15 +479,12 @@ class Queue
                 $startedAt = $image_status_obj->StartedAt;
                 $finishedAt = $image_status_obj->FinishedAt;
 
-                /**
-                 * 将日志存入数据库.
-                 */
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    Log::debug(__FILE__, __LINE__, 'Container ExitCode is not 0');
+                    Log::debug(__FILE__, __LINE__, "Container $container_id ExitCode is not 0");
 
-                    throw new Exception();
+                    throw new Exception(CI::BUILD_STATUS_ERRORED);
                 }
 
                 break;

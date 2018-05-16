@@ -56,9 +56,9 @@ EOF;
 
             $output = $output[0] ?? null;
 
-            if (!$output) {
-                Log::debug(__FILE__, __LINE__, 'Build list empty');
+            // 数据库没有结果，跳过构建
 
+            if (!$output) {
                 return;
             }
 
@@ -73,8 +73,10 @@ EOF;
             self::$git_type = Build::getGitType(self::$build_key_id);
 
             // $e->getCode() is build key id.
+            Build::updateStopAt(self::$build_key_id);
 
             switch ($e->getMessage()) {
+
                 case CI::BUILD_STATUS_SKIP:
                     self::setBuildStatusSkip();
 
@@ -96,16 +98,17 @@ EOF;
             }
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
+
         } catch (Exception | Error $e) {
+
             throw new Exception($e->getMessage(), $e->getCode());
+
         } finally {
             if (!self::$unique_id) {
-
                 return;
             }
 
             $queue::systemDelete(self::$unique_id, true);
-            Build::updateStopAt(self::$build_key_id);
             Cache::connect()->set('khsci_up_status', 0);
 
             Log::connect()->debug('====== Build Stopped Success ======');
@@ -140,9 +143,12 @@ EOF;
 
             Build::updateLog(self::$build_key_id, $a);
 
+            // cleanup
             unlink(sys_get_temp_dir().'/'.self::$unique_id);
 
             Cache::connect()->del((string) self::$unique_id);
+
+            self::$unique_id = null;
         }
     }
 
