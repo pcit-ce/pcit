@@ -224,6 +224,10 @@ class Queue
 
         $repo_full_name = DB::select($sql, [$gitType, $rid], true);
 
+        if (!$repo_full_name) {
+            throw new Exception(CI::BUILD_STATUS_ERRORED);
+        }
+
         $yaml_file_content = HTTP::get(Git::getRawUrl(
             $gitType, $repo_full_name, $commit_id, '.khsci.yml'));
 

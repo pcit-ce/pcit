@@ -73,8 +73,10 @@ EOF;
             self::$git_type = Build::getGitType(self::$build_key_id);
 
             // $e->getCode() is build key id.
+            Build::updateStopAt(self::$build_key_id);
 
             switch ($e->getMessage()) {
+
                 case CI::BUILD_STATUS_SKIP:
                     self::setBuildStatusSkip();
 
@@ -107,7 +109,6 @@ EOF;
             }
 
             $queue::systemDelete(self::$unique_id, true);
-            Build::updateStopAt(self::$build_key_id);
             Cache::connect()->set('khsci_up_status', 0);
 
             Log::connect()->debug('====== Build Stopped Success ======');
