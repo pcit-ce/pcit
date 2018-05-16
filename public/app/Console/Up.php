@@ -50,22 +50,6 @@ class Up
 
                 Cache::connect()->set(self::$cache_key_up_status, 1);
 
-                // Docker 构建队列
-
-                $docker_build_skip = false;
-
-                try {
-                    Http::get(Env::get('CI_DOCKER_HOST').'/info');
-                } catch (\Throwable $e) {
-                    $docker_build_skip = true;
-                }
-
-                if (!$docker_build_skip) {
-                    echo 'Connect Docker Daemon Success, Docker Build Running...';
-
-                    Queue::queue();
-                }
-
                 // 从 Webhooks 缓存中拿出数据，进行处理
 
                 // 处理 commit status GitHub OAuth
@@ -83,6 +67,22 @@ class Up
                 }
 
                 self::webhooks();
+
+                // Docker 构建队列
+
+                $docker_build_skip = false;
+
+                try {
+                    Http::get(Env::get('CI_DOCKER_HOST').'/info');
+                } catch (\Throwable $e) {
+                    $docker_build_skip = true;
+                }
+
+                if (!$docker_build_skip) {
+                    echo 'Connect Docker Daemon Success, Docker Build Running...';
+
+                    Queue::queue();
+                }
 
                 echo '..W.';
 
@@ -106,6 +106,9 @@ class Up
                 Log::connect()->debug($errormsg);
 
                 echo $errormsg;
+                echo '...E.';
+                sleep(2);
+
             }
         }
     }
@@ -120,7 +123,8 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = 'pending',
                                               string $description = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -174,7 +178,8 @@ class Up
                                                  string $text = null,
                                                  array $annotations = null,
                                                  array $images = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);

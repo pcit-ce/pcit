@@ -54,7 +54,15 @@ EOF;
                 CI::BUILD_EVENT_PR,
             ]);
 
-            $output = array_values($output[0]);
+            $output = $output[0] ?? null;
+
+            if (!$output) {
+                Log::debug(__FILE__, __LINE__, 'Build list empty');
+
+                return;
+            }
+
+            $output = array_values($output);
 
             $queue(...$output);
         } catch (CIException $e) {
@@ -91,11 +99,16 @@ EOF;
         } catch (Exception | Error $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         } finally {
+            if (!self::$unique_id) {
+
+                return;
+            }
+
             $queue::systemDelete(self::$unique_id, true);
             Build::updateStopAt(self::$build_key_id);
             Cache::connect()->set('khsci_up_status', 0);
 
-            Log::connect()->debug('====== Build Stoped Success ======');
+            Log::connect()->debug('====== Build Stopped Success ======');
 
             // 日志美化
 
