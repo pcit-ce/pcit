@@ -99,35 +99,35 @@ class Comments
                     json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
             }
 
-            try {
-                $sem = $nlp->wordcom($source);
+//            try {
+//                $sem = $nlp->wordcom($source);
+//
+//                $sem = JSON::beautiful(
+//                    json_encode($sem, JSON_UNESCAPED_UNICODE));
+//            } catch (TencentAIError $e) {
+//                $sem = JSON::beautiful(
+//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+//            }
 
-                $sem = JSON::beautiful(
-                    json_encode($sem, JSON_UNESCAPED_UNICODE));
-            } catch (TencentAIError $e) {
-                $sem = JSON::beautiful(
-                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-            }
+//            try {
+//                $pos = $nlp->wordpos($source);
+//
+//                $pos = JSON::beautiful(
+//                    json_encode($pos, JSON_UNESCAPED_UNICODE));
+//            } catch (TencentAIError $e) {
+//                $pos = JSON::beautiful(
+//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+//            }
 
-            try {
-                $pos = $nlp->wordpos($source);
-
-                $pos = JSON::beautiful(
-                    json_encode($pos, JSON_UNESCAPED_UNICODE));
-            } catch (TencentAIError $e) {
-                $pos = JSON::beautiful(
-                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-            }
-
-            try {
-                $ner = $nlp->wordner($source);
-
-                $ner = JSON::beautiful(
-                    json_encode($ner, JSON_UNESCAPED_UNICODE));
-            } catch (TencentAIError $e) {
-                $ner = JSON::beautiful(
-                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-            }
+//            try {
+//                $ner = $nlp->wordner($source);
+//
+//                $ner = JSON::beautiful(
+//                    json_encode($ner, JSON_UNESCAPED_UNICODE));
+//            } catch (TencentAIError $e) {
+//                $ner = JSON::beautiful(
+//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+//            }
 
             try {
                 $polar = $nlp->textPolar($source);
@@ -147,15 +147,15 @@ class Comments
                 $emoji = '+1';
             }
 
-            try {
-                $seg = $nlp->wordseg($source);
-
-                $seg = JSON::beautiful(
-                    json_encode($seg, JSON_UNESCAPED_UNICODE));
-            } catch (TencentAIError $e) {
-                $seg = JSON::beautiful(
-                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-            }
+//            try {
+//                $seg = $nlp->wordseg($source);
+//
+//                $seg = JSON::beautiful(
+//                    json_encode($seg, JSON_UNESCAPED_UNICODE));
+//            } catch (TencentAIError $e) {
+//                $seg = JSON::beautiful(
+//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+//            }
 
             $data = <<<EOF
 >$source_show_in_md
@@ -174,46 +174,10 @@ $translate
 </details>
 
 <details>
-<summary><strong>智能分词</strong></summary>
-
-```json\n
-$seg
-```
-
-</details>
-
-<details>
 <summary><strong>智能闲聊</strong></summary>
 
 ```json\n
 $chat
-```
-
-</details>
-
-<details>
-<summary><strong>语义解析</strong></summary>
-
-```json\n
-$sem
-```
-
-</details>
-
-<details>
-<summary><strong>词性标注</strong></summary>
-
-```json\n
-$pos
-```
-
-</details>
-
-<details>
-<summary><strong>专有名词识别</strong></summary>
-
-```json\n
-$ner
 ```
 
 </details>

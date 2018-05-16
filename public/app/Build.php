@@ -179,4 +179,17 @@ EOF;
 
         DB::update($sql, [$check_run_id, $build_key_id]);
     }
+
+    /**
+     * @param int    $build_key_id
+     * @param string $build_log
+     *
+     * @throws Exception
+     */
+    public static function updateLog(int $build_key_id, string $build_log)
+    {
+        $sql = 'UPDATE builds SET build_log=? WHERE id=?';
+
+        DB::update($sql, [$build_log, $build_key_id]);
+    }
 }
