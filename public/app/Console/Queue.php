@@ -29,7 +29,9 @@ class Queue
     private static $git_type;
 
     private static $config;
-
+    /**
+     * @var KhsCI
+     */
     private static $khsci;
 
     /**
@@ -243,10 +245,11 @@ EOF;
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
                 (int) Build::getStartAt(self::$build_key_id),
                 (int) Build::getStopAt(self::$build_key_id),
-                CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 null,
                 null,
-                self::$khsci->check_md->cancelled('PHP', PHP_OS, self::$config, null),
+                self::$khsci->check_md->cancelled('PHP', PHP_OS, self::$config,
+                    'This Build skipped by commit message'),
                 null,
                 null
             );

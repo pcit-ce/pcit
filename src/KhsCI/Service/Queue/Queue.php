@@ -105,15 +105,18 @@ class Queue
             'git_type' => $git_type,
         ]));
 
-        // commit 信息跳过构建
-        self::skip($commit_message);
-
-        // 是否启用构建
-        self::getRepoBuildActivateStatus((int) $rid);
-
         try {
+
+            // commit 信息跳过构建
+            self::skip($commit_message);
+
+            // 是否启用构建
+            self::getRepoBuildActivateStatus((int) $rid);
+
             self::run($rid, $branch);
+
         } catch (Exception $e) {
+
             throw new CIException(
                 self::$unique_id,
                 self::$commit_id,
