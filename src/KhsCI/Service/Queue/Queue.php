@@ -572,7 +572,7 @@ class Queue
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=tag',
                     'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF=refs/tags/'.self::$tag_name.'/head',
+                    'DRONE_COMMIT_REF=refs/tags/'.self::$tag_name,
                 ];
 
                 break;
