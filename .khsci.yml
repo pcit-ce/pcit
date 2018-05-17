@@ -78,7 +78,7 @@ pipeline:
   #
 
   success:
-    image: ci_success_after
+    image: ci_after_success
     when:
       status: success
 
@@ -88,7 +88,7 @@ pipeline:
   #
 
   failure:
-    image: ci_failure_after
+    image: ci_after_failure
     when:
       status: failure
 
@@ -97,7 +97,7 @@ pipeline:
   #
 
   changed:
-    image: ci_changed
+    image: ci_status_changed
     when:
       status: changed
 

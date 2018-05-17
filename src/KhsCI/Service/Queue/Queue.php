@@ -317,6 +317,7 @@ class Queue
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
             $env = $array['environment'] ?? null;
+            $status = $array['when']['status'] ?? null;
 
             if ($event) {
                 if (is_string($event)) {
@@ -337,6 +338,26 @@ class Queue
 
                     continue;
                 }
+            }
+
+            // 暂时跳过非 Docker 构建
+            if ($status) {
+
+                switch ($image) {
+                    case 'ci_docker_build':
+                        break;
+
+                    case 'ci_after_success':
+                        break;
+
+                    case 'ci_after_failure':
+                        break;
+
+                    case 'ci_status_changed':
+                        break;
+                }
+
+                continue;
             }
 
             $image = $this->getImage($image, $config);
@@ -382,14 +403,13 @@ class Queue
 
     /**
      * @param string $setup
-     * @param        $image
-     * @param        $commands
+     * @param string $image
+     * @param array  $commands
      *
      * @return string
-     *
      * @throws Exception
      */
-    private function parseCommand(string $setup, $image, $commands)
+    private function parseCommand(string $setup, string $image, array $commands)
     {
         $content = '\n';
 
