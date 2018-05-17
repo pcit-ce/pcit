@@ -293,18 +293,22 @@ class Up
                     CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
                     time(),
                     time(),
-                    CI::GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED,
+                    CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                     null,
                     null,
                     $khsci->check_md->action_required('PHP', PHP_OS, '{}',
                         'This repo not include .khsci.yml file')
                 );
+
+                Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
             }
             return;
         }
 
         if (self::$config_array) {
             self::updateGitHubStatus($last_insert_id);
+        } else {
+            Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
         }
     }
 
