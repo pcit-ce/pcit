@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Queue;
 
-use App\Build;
 use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
@@ -17,7 +16,6 @@ use KhsCI\Support\Date;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Git;
-use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
 
 class Queue
@@ -82,21 +80,18 @@ class Queue
                              ?string $config): void
     {
         self::$unique_id = session_create_id();
-
-        Build::updateStartAt((int) $build_key_id);
-
         self::$commit_id = $commit_id;
         self::$event_type = $event_type;
         self::$pull_id = $pull_request_id;
         self::$tag_name = $tag_name;
         self::$git_type = $git_type;
         self::$config = $config;
-
         self::$build_key_id = (int) $build_key_id;
 
         Log::connect()->debug('====== Start Build ======');
 
         Log::debug(__FILE__, __LINE__, json_encode([
+            'unique_id' => self::$unique_id,
             'build_key_id' => $build_key_id,
             'event_type' => $event_type,
             'commit_id' => $commit_id,
@@ -161,6 +156,7 @@ class Queue
         $output2 = stripos($commit_message, '[ci skip]');
 
         if (false === $output && false === $output2) {
+
             return;
         }
 
@@ -179,7 +175,7 @@ class Queue
      *
      * @throws Exception
      */
-    private function getImage(string $image, array $config)
+    private function parseImage(string $image, array $config)
     {
         Log::debug(__FILE__, __LINE__, 'Parse Image '.$image);
 
@@ -363,7 +359,7 @@ class Queue
                 continue;
             }
 
-            $image = $this->getImage($image, $config);
+            $image = $this->parseImage($image, $config);
 
             $ci_script = $this->parseCommand($setup, $image, $commands);
 
@@ -643,7 +639,7 @@ class Queue
             $entrypoint = $array['entrypoint'] ?? null;
             $command = $array['command'] ?? null;
 
-            $image = $this->getImage($image, $config);
+            $image = $this->parseImage($image, $config);
 
             $docker_image = $docker->image;
             $docker_container = $docker->container;

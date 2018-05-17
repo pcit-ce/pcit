@@ -68,12 +68,16 @@ EOF;
             // 数据库没有结果，跳过构建
 
             if (!$output) {
+                Log::debug(__FILE__, __LINE__, 'Build Table output is empty skip');
+
                 return;
             }
 
             $output = array_values($output);
 
             $build_key_id = $output[0];
+
+            Build::updateStartAt((int) $build_key_id);
 
             unset($output[10]);
 

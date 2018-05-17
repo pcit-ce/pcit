@@ -387,6 +387,8 @@ EOF;
         $committer_email = $committer->email;
         $committer_username = $committer->username;
 
+        $installation_id = $obj->installation->id ?? null;
+
         $sql = <<<'EOF'
 INSERT INTO builds(
 
@@ -408,6 +410,8 @@ EOF;
         ];
 
         $last_insert_id = DB::insert($sql, $data);
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         self::$config_array = $config_array;
 
@@ -477,6 +481,8 @@ EOF;
         $updated_at = Date::parse($issue->updated_at);
         $closed_at = Date::parse($issue->closed_at);
 
+        $installation_id = $obj->installation->id ?? null;
+
         if (in_array($action, ['opened', 'edited', 'closed' or 'reopened'])) {
             $sql = <<<'EOF'
 INSERT INTO issues(
@@ -519,6 +525,8 @@ EOF;
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         return $last_insert_id;
     }
@@ -563,6 +571,9 @@ EOF;
 
         $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
+
+        $installation_id = $obj->installation->id ?? null;
+
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         if ('edited' === $action) {
@@ -627,6 +638,8 @@ EOF;
 
         Log::debug(__FILE__, __LINE__, $debug_info);
 
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+
         echo $debug_info;
     }
 
@@ -671,6 +684,8 @@ EOF;
 
         $branch = $pull_request->base->ref;
 
+        $installation_id = $obj->installation->id ?? null;
+
         $sql = <<<'EOF'
 INSERT INTO builds(
 
@@ -690,6 +705,8 @@ EOF;
                 CI::BUILD_STATUS_PENDING, $config
             ]
         );
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         self::$config_array = $config_array;
         self::updateStatus((int) $last_insert_id);
@@ -722,6 +739,8 @@ EOF;
 
         $event_time = Date::parse($head_commit->timestamp);
 
+        $installation_id = $obj->installation->id ?? null;
+
         $sql = <<<'EOF'
 INSERT INTO builds(
 
@@ -739,6 +758,8 @@ EOF;
             $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
             $config
         ]);
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         self::$config_array = $config_array;
 
@@ -789,12 +810,20 @@ EOF;
      * Create "repository", "branch", or "tag".
      *
      * @param string $content
+     *
+     * @throws Exception
      */
     public static function create(string $content): void
     {
         $obj = json_decode($content);
 
+        $rid = $obj->repository->id;
+
         $ref_type = $obj->ref_type;
+
+        $installation_id = $obj->installation->id ?? null;
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         switch ($ref_type) {
             case 'branch':
@@ -818,6 +847,10 @@ EOF;
         $ref_type = $obj->ref_type;
 
         $rid = $obj->repository->id;
+
+        $installation_id = $obj->installation->id ?? null;
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
@@ -845,6 +878,11 @@ EOF;
      */
     public static function member(string $content): void
     {
+        $obj = json_decode($content);
+
+        $rid = $obj->repository->id;
+
+        $installation_id = $obj->installation->id ?? null;
     }
 
     /**
@@ -852,6 +890,11 @@ EOF;
      */
     public static function team_add(string $content): void
     {
+        $obj = json_decode($content);
+
+        $rid = $obj->repository->id;
+
+        $installation_id = $obj->installation->id ?? null;
     }
 
     /**
@@ -1040,6 +1083,8 @@ EOF;
     {
         $obj = json_decode($content);
 
+        $rid = $obj->repository->id;
+
         $action = $obj->action;
 
         $check_suite = $obj->check_suite;
@@ -1049,6 +1094,8 @@ EOF;
         $branch = $check_suite->head_branch;
 
         $commit_id = $check_suite->head_sha;
+
+        $installation_id = $obj->installation->id ?? null;
 
         $sql = <<<EOF
 INSERT INTO builds(
@@ -1063,6 +1110,8 @@ EOF;
         if ('rerequested' === $action) {
             $check_run_id = '';
         }
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         return ['build_key_id' => $last_insert_id];
     }
@@ -1084,6 +1133,10 @@ EOF;
 
         $action = $obj->action;
 
+        $installation_id = $obj->installation->id ?? null;
+
+        $rid = $obj->repository->id;
+
         if ('rerequested' === $action) {
             $check_run = $obj->check_run;
 
@@ -1101,6 +1154,8 @@ EOF;
         } else {
             return;
         }
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         self::updateGitHubAppChecks((int) $external_id);
 

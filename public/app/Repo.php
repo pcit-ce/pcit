@@ -90,4 +90,26 @@ class Repo extends DBModel
 
         return DB::select($sql, [$rid, 'github_app'], true);
     }
+
+    /**
+     * @param int $rid
+     * @param int $installation_id
+     *
+     * @throws Exception
+     */
+    public static function updateGitHubInstallationIdByRid(int $rid, ?int $installation_id)
+    {
+        if (null === $installation_id) {
+
+            return;
+        }
+
+        $installation_id_in_db = self::getGitHubInstallationIdByRid($rid);
+
+        if ((int) $installation_id_in_db !== $installation_id) {
+            $sql = 'UPDATE repo SET installation_id=? WHERE rid=?';
+
+            DB::update($sql, [$installation_id, $rid]);
+        }
+    }
 }
