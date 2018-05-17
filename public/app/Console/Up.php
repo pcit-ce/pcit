@@ -25,6 +25,8 @@ class Up
 {
     private static $git_type;
 
+    private static $config_array;
+
     private static $cache_key_up_status = 'khsci_up_status';
 
     private static $cache_key_github_issue = 'github_issue';
@@ -231,7 +233,7 @@ class Up
         );
 
         if (!$yaml_file_content) {
-            $yaml_file_content = [];
+            return [];
         }
 
         return $config = yaml_parse($yaml_file_content);
@@ -279,13 +281,31 @@ class Up
     private static function updateStatus(int $last_insert_id): void
     {
         if ('github_app' === self::$git_type) {
-            self::updateGitHubAppChecks($last_insert_id);
+            if (self::$config_array) {
 
+                self::updateGitHubAppChecks($last_insert_id);
+
+            } else {
+
+                $khsci = new KhsCI();
+                self::updateGitHubAppChecks($last_insert_id,
+                    null,
+                    CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+                    time(),
+                    time(),
+                    CI::GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED,
+                    null,
+                    null,
+                    $khsci->check_md->action_required('PHP', PHP_OS, '{}',
+                        'This repo not include .khsci.yml file')
+                );
+            }
             return;
         }
 
-        self::updateGitHubStatus($last_insert_id);
-
+        if (self::$config_array) {
+            self::updateGitHubStatus($last_insert_id);
+        }
     }
 
     /**
@@ -372,14 +392,20 @@ rid,event_time,build_status,request_raw,config
 
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
+        $config_array = self::getConfig($rid, $commit_id);
+
+        $config = json_encode($config_array);
+
         $data = [
             static::$git_type, __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
             $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
-            json_encode(self::getConfig($rid, $commit_id))
+            $config
         ];
 
         $last_insert_id = DB::insert($sql, $data);
+
+        self::$config_array = $config_array;
 
         self::updateStatus((int) $last_insert_id);
     }
@@ -650,13 +676,18 @@ pull_request_id,branch,rid,build_status,config
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
+        $config_array = self::getConfig($rid, $commit_id);
+
+        $config = json_encode($config_array);
+
         $last_insert_id = DB::insert($sql, [
                 static::$git_type, __FUNCTION__, $event_time, $content, $action, $commit_id, $commit_message,
                 $committer_username, $pull_request_id, $branch, $rid,
-                CI::BUILD_STATUS_PENDING, json_encode(self::getConfig($rid, $commit_id))
+                CI::BUILD_STATUS_PENDING, $config
             ]
         );
 
+        self::$config_array = $config_array;
         self::updateStatus((int) $last_insert_id);
     }
 
@@ -695,12 +726,17 @@ committer_username,rid,event_time,build_status,request_raw,config
 
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
+        $config_array = self::getConfig($rid, $commit_id);
+
+        $config = json_encode($config_array);
 
         $last_insert_id = DB::insert($sql, [
             static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
             $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
-            json_encode(self::getConfig($rid, $commit_id))
+            $config
         ]);
+
+        self::$config_array = $config_array;
 
         self::updateStatus((int) $last_insert_id);
     }
