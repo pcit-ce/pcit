@@ -13,6 +13,7 @@ use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
+use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
 
 class Queue
@@ -72,22 +73,20 @@ EOF;
 
             $build_key_id = $output[0];
 
-            $check_run_id = $output[10];
-
             unset($output[10]);
 
-            self::$config = $output[9];
+            self::$config = JSON::beautiful($output[9]);
 
-            if (!$check_run_id and 'github_app' === $output[1]) {
+            if ('github_app' === $output[1]) {
 
-                Up::updateGitHubAppChecks($build_key_id, null,
+                Up::updateGitHubAppChecks((int) $build_key_id, null,
                     CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
                     time(),
                     null,
                     null,
                     null,
                     null,
-                    $khsci->check_md->queued('PHP', PHP_OS, self::$config)
+                    $khsci->check_md->in_progress('PHP', PHP_OS, self::$config)
                 );
             }
 
@@ -128,11 +127,12 @@ EOF;
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
 
-        } catch (Exception | Error $e) {
+        } catch (Exception | Error  $e) {
 
-            throw new Exception($e->getMessage(), $e->getCode());
+            Log::debug(__FILE__, __LINE__, $e->__toString());
 
         } finally {
+
             if (!self::$unique_id) {
                 return;
             }

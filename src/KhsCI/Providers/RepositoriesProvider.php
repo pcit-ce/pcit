@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KhsCI\Providers;
 
 use KhsCI\Service\Repositories\Collaborators;
+use KhsCI\Service\Repositories\Releases;
 use KhsCI\Service\Repositories\Status;
 use KhsCI\Service\Repositories\Webhooks;
 use Pimple\Container;
@@ -24,6 +25,10 @@ class RepositoriesProvider implements ServiceProviderInterface
 
         $pimple['repo_webhooks'] = function ($app) {
             return new Webhooks($app['curl'], $app['config']['api_url']);
+        };
+
+        $pimple['repo_releases'] = function ($app) {
+            return new Releases($app['curl'], $app['config']['api_url']);
         };
     }
 }

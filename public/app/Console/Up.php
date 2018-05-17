@@ -97,13 +97,13 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state
+     * @param string $state default is pending
      * @param string $description
      *
      * @throws Exception
      */
     public static function updateGitHubStatus(int $build_key_id,
-                                              string $state = 'pending',
+                                              string $state = null,
                                               string $description = null
     ): void
     {
@@ -121,10 +121,10 @@ class Up
             $repo_prefix,
             $repo_name,
             $build_output_array['commit_id'],
-            $state,
+            $state ?? 'pending',
             Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id,
             'continuous-integration/'.Env::get('CI_NAME').'/'.$build_output_array['event_type'],
-            $description ?? null
+            $description ?? 'The analysis or builds is pending'
         );
 
         $log_message = 'Create GitHub commit Status '.$build_key_id;
@@ -199,7 +199,6 @@ class Up
                 $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
             );
         } else {
-
             $output = $khsci->check_run->create(
                 $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
                 $started_at ?? time(),
@@ -395,7 +394,7 @@ EOF;
     public static function status(string $content)
     {
         $sql = <<<'EOF'
-INSERT builds(
+INSERT INTO builds(
 
 git_type,event_type,request_raw
 
@@ -1034,10 +1033,14 @@ EOF;
      * created updated rerequested
      *
      * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
+     *
+     * @param string $content
+     *
+     * @throws Exception
      */
     public static function check_run(string $content): void
     {
-        $obj = json_encode($content);
+        $obj = json_decode($content);
 
         $action = $obj->action;
 
@@ -1050,13 +1053,17 @@ EOF;
 
             $external_id = $check_run->external_id;
 
-            $check_suite = $obj->check_suite;
+            $check_suite = $check_run->check_suite;
 
             $check_suite_id = $check_suite->id;
 
             $branch = $check_suite->head_branch;
+        } else {
+            return;
         }
 
-        return;
+        self::updateGitHubAppChecks((int) $external_id);
+
+        Build::updateBuildStatus((int) $external_id, 'pending');
     }
 }

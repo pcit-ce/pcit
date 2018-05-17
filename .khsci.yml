@@ -11,7 +11,10 @@ workspace:
   path: src
 
 pipeline:
-  # 测试 PHP 项目
+  #
+  # This is phpunit demo
+  #
+
   php:
     image: khs1994/php-fpm:${PHP_VERSION}
     pull: true
@@ -30,12 +33,7 @@ pipeline:
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit
-    # volumes:
-      # - /Users/khs1994/khs1994/khs1994-lnmp/tmp/cache:/tmp/cache
-      # - /data/lnmp/tmp/cache:/tmp/cache
     when:
-      # environment: production
-
       # platform: linux/amd64
       # platform:  [ linux/*, windows/amd64 ]
 
@@ -54,89 +52,55 @@ pipeline:
       #   exclude: [ release/1.0.0, release/1.1.* ]
 
   #
-  # CI/CD 构建预上线环境 PHP NGINX 镜像
+  # This is a build docker image demo，when tag push
   #
+
   publish_php:
-    image: plugins/docker
+    #
+    # ci_xxx KhsCI Image
+    #
+    image: ci_docker_build
     # registry: docker.khs1994.com
     repo: khs1994/php-fpm
-    tags: swarm-${PHP_VERSION}-${DRONE_TAG}
-    target: php
-    mirror: https://registry.docker-cn.com
-    # build_args:
-    #   - a:1
+    tags: swarm-7.2.5-${CI_TAG}
+    # target: php
+    build_args:
+       - a:1
     # dockerfile: Dockerfile
     # dockerfile: path/to/Dockerfile
-    mirror: https://registry.docker-cn.com
-    debug: "true"
-    launch_debug: "true"
     when:
-      #
-      # 首先在命令行设置好相关变量 DRONE_SERVER DRONE_TOKEN 右上角 Token 有详细的说明
-      #
-      # 手动在命令行执行以下命令才会执行 publish
-      #
-      # $ drone deploy khs1994-php/example 6 staging
-      #
-      event: deployment
-      environment: staging
-    secrets: [ docker_username, docker_password ]
-
-  publish_nginx:
-    image: plugins/docker
-    # registry: docker.khs1994.com
-    repo: khs1994/nginx
-    tags: swarm-${NGINX_VERSION}-alpine-${DRONE_TAG}
-    target: nginx
-    mirror: https://registry.docker-cn.com
-    when:
-      #
-      # 手动在命令行执行以下命令才会执行 publish
-      #
-      # $ drone deploy khs1994-php/example 6 staging
-      #
-      #
-      event: deployment
-      environment: staging
+      event: tag
+    # 这里指定 secrets 系统将自动载入对应的环境变量
     secrets: [ docker_username, docker_password ]
 
   #
-  # CI/CD 构建生产环境 PHP NGINX 镜像
+  # This is success after demo
   #
-  publish_php_to_prod:
-    image: plugins/docker
-    # registry: docker.khs1994.com
-    repo: khs1994/php-fpm
-    tags: swarm-${PHP_VERSION}-${DRONE_TAG}
-    target: php
-    mirror: https://registry.docker-cn.com
-    when:
-      #
-      # 手动在命令行执行以下命令才会执行 publish
-      #
-      # $ drone deploy khs1994-php/demo 6 production
-      #
-      event: deployment
-      environment: production
-    secrets: [ docker_username, docker_password ]
 
-  publish_nginx_to_prod:
-    image: plugins/docker
-    # registry: docker.khs1994.com
-    repo: khs1994/nginx
-    tags: swarm-${NGINX_VERSION}-alpine-${DRONE_TAG}
-    target: nginx
-    mirror: https://registry.docker-cn.com
+  success:
+    image: ci_success_after
     when:
-      #
-      # 手动在命令行执行以下命令才会执行 publish
-      #
-      # $ drone deploy khs1994-php/demo 6 production
-      #
-      #
-      event: deployment
-      environment: production
-    secrets: [ docker_username, docker_password ]
+      status: success
+
+
+  #
+  # This is failure after demo
+  #
+
+  failure:
+    image: ci_failure_after
+    when:
+      status: failure
+
+  #
+  # This is build status changed demo,example prev success current failure
+  #
+
+  changed:
+    image: ci_changed
+    when:
+      status: changed
+
 
 services:
   mysql:
