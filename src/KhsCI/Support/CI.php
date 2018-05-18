@@ -60,8 +60,27 @@ class CI
 
     const GITHUB_CHECK_SUITE_STATUS_COMPLETED = 'completed';
 
-    public static function environment()
+    /**
+     * 返回当前 ENV
+     *
+     * 传入 env, 判断是否与当前环境匹配
+     *
+     * @param string|null|array $env
+     *
+     * @return array|false|string
+     */
+    public static function environment($env = null)
     {
-        return getenv('APP_ENV');
+        $current_env = getenv('APP_ENV');
+
+        if (null === $env) {
+
+            return $current_env;
+        } elseif (is_array($env)) {
+
+            return in_array($current_env, $env);
+        }
+
+        return $env === $current_env;
     }
 }

@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+
+<?php
+
+use KhsCI\Support\Env;
+use Symfony\Component\Console\Application;
+use App\Console\TencentAI\Translate;
+
+require __DIR__.'/../../vendor/autoload.php';
+
+$cli = new Application('Tencent AI CLI', 'v18.06');
+
+try {
+
+    (new \Dotenv\Dotenv(__DIR__.'/../../public', '.env.'.Env::get('APP_ENV')))->load();
+
+    (new \NunoMaduro\Collision\Provider)->register();
+
+    $cli->add(new Translate());
+
+    $cli->run();
+} catch (Throwable $e) {
+
+    throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
+}

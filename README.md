@@ -72,6 +72,8 @@ $ ./lnmp-docker.sh khsci-up
 
 * [Docker Registry PHP](https://github.com/khs1994-docker/libregistry)
 
+* [Tencent AI CLI]()
+
 * [Kubernetes PHP]()
 
 * [Wechat PHP](https://github.com/khs1994-php/libwechat)

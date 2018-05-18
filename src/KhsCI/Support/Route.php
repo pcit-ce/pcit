@@ -24,8 +24,8 @@ class Route
     public static $output = null;
 
     /**
-     * @param       $action
-     * @param mixed ...$arg
+     * @param string|Closure $action
+     * @param mixed          ...$arg
      *
      * @throws Exception
      */
