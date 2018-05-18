@@ -2,6 +2,7 @@
 
 <?php
 
+use App\Console\TencentAI\Chat;
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
 use App\Console\TencentAI\Translate;
@@ -17,6 +18,8 @@ try {
     (new \NunoMaduro\Collision\Provider)->register();
 
     $cli->add(new Translate());
+
+    $cli->add(new Chat());
 
     $cli->run();
 } catch (Throwable $e) {
