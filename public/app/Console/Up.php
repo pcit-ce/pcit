@@ -147,6 +147,8 @@ class Up
      * @param array|null  $annotations
      * @param array       $images
      *
+     * @param bool        $create_force
+     *
      * @throws Exception
      */
     public static function updateGitHubAppChecks(int $build_key_id,
@@ -159,7 +161,8 @@ class Up
                                                  string $summary = null,
                                                  string $text = null,
                                                  array $annotations = null,
-                                                 array $images = null
+                                                 array $images = null,
+                                                 bool $force_create = false
     ): void
     {
         $rid = Build::getRid((int) $build_key_id);
@@ -194,7 +197,7 @@ class Up
 
         $check_run_id = Build::getCheckRunId((int) $build_key_id);
 
-        if ($check_run_id) {
+        if ($check_run_id and !$force_create) {
             $output = $khsci->check_run->update(
                 $repo_full_name, $check_run_id, $name, $branch, $commit_id, $details_url,
                 (string) $build_key_id, $status, $started_at ?? time(),
@@ -256,6 +259,13 @@ class Up
 
         list($git_type, $event_type, $json) = json_decode($json_raw, true);
 
+        if ('aliyun_docker_registry' === $git_type) {
+
+            self::aliyunDockerRegistry($json);
+
+            return;
+        }
+
         self::$git_type = $git_type;
 
         try {
@@ -269,6 +279,54 @@ class Up
 
             throw new Exception($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * @param string $content
+     *
+     * @throws Exception
+     */
+    private static function aliyunDockerRegistry(string $content)
+    {
+        $khsci = new KhsCI();
+
+        $obj = json_decode($content);
+
+        $aliyun_docker_registry_name = $obj->repository->repo_full_name;
+
+        $aliyun_docker_registry_tagname = $obj->push_data->tag;
+
+        $aliyun_docker_registry = [];
+
+        require __DIR__.'/../../config/config.php';
+
+        if (array_key_exists($aliyun_docker_registry_name, $aliyun_docker_registry)) {
+
+            $git_repo_full_name = $aliyun_docker_registry["$aliyun_docker_registry_name"];
+
+            $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
+
+            self::updateGitHubAppChecks(
+                (int) Build::getLatestBuildKeyId($git_repo_full_name),
+                $name,
+                CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+                time(),
+                time(),
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
+                'Aliyun Docker Registry Push',
+                'Build Docker image Success',
+                $khsci->check_md->aliyunDockerRegistry(
+                    'PHP',
+                    PHP_OS,
+                    JSON::beautiful($content)
+                ),
+                null,
+                null,
+                true
+            );
+        }
+
+        return;
     }
 
     /**

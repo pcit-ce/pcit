@@ -246,4 +246,27 @@ $config
 
 EOF;
     }
+
+    public function aliyunDockerRegistry($language, $os, $image_details)
+    {
+        return self::$header.<<<EOF
+
+# Build Configuration
+
+|Build Option      | Setting    |
+| --               |   --       |  
+| Language         | $language  |
+| Operating System | $os        |
+
+<details>
+<summary><strong>Aliyun Docker Registry Details</strong></summary>
+
+```json
+$image_details
+```
+
+</details>
+
+EOF;
+    }
 }

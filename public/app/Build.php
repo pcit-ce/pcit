@@ -267,4 +267,21 @@ EOF;
 
         return DB::select($sql, [$build_key_id], true);
     }
+
+    /**
+     * @param string $repo_full_name
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getLatestBuildKeyId(string $repo_full_name)
+    {
+        list($username, $repo_name) = explode('/', $repo_full_name);
+
+        $rid = Repo::getRid('github_app', $username, $repo_name);
+
+        $sql = 'SELECT id FROM builds WHERE rid=? AND commit_id IS NOT NULL ORDER BY id DESC LIMIT 1';
+
+        return DB::select($sql, [$rid], true);
+    }
 }

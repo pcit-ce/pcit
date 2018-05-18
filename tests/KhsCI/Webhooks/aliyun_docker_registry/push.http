@@ -1,0 +1,23 @@
+POST https://{{ci_host}}/webhooks/aliyun_docker_registry
+Content-Type: application/json
+Request URL: https://ci2.khs1994.com:10000/webhooks/aliyun_docker_registry
+Request method: POST
+
+{
+    "push_data":{
+        "digest":"sha256:81fcb6e541a1386f8974e2eb3da0a17a1e039354e06b8e32e33e218220ea9ab3",
+        "pushed_at":"2018-05-18 10:55:09",
+        "tag":"debian-php72"
+        },
+    "repository":{
+        "date_created":"2018-03-30 00:26:52",
+        "name":"wsl","namespace":"khs1994",
+        "region":"cn-hangzhou",
+        "repo_authentication_type":"NO_CERTIFIED",
+        "repo_full_name":"khs1994/wsl",
+        "repo_origin_type":"NO_CERTIFIED",
+        "repo_type":"PUBLIC"
+    }
+}
+
+###

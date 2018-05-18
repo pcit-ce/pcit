@@ -72,6 +72,8 @@ Route::post('webhooks/gitee', 'Webhooks\GiteeController');
 
 Route::post('webhooks/coding', 'Webhooks\CodingController');
 
+Route::post('webhooks/aliyun_docker_registry', 'Webhooks\AliyunDockerRegistryController');
+
 // 获取所有接收到的 webhooks -> requests
 
 /*SEO*/
