@@ -97,10 +97,9 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function updateGitHubInstallationIdByRid(int $rid, ?int $installation_id)
+    public static function updateGitHubInstallationIdByRid(int $rid, ?int $installation_id): void
     {
         if (null === $installation_id) {
-
             return;
         }
 

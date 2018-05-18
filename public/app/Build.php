@@ -197,10 +197,10 @@ EOF;
 
     /**
      * @param int  $build_key_id
-     *
      * @param bool $throw
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getCheckRunId(int $build_key_id, bool $throw = false)
@@ -233,6 +233,7 @@ EOF;
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getLog(int $build_key_id)
@@ -259,6 +260,7 @@ EOF;
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getConfig(int $build_key_id)
@@ -272,6 +274,7 @@ EOF;
      * @param string $repo_full_name
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getLatestBuildKeyId(string $repo_full_name)

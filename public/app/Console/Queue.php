@@ -84,7 +84,6 @@ EOF;
             self::$config = JSON::beautiful($output[9]);
 
             if ('github_app' === $output[1]) {
-
                 Up::updateGitHubAppChecks((int) $build_key_id, null,
                     CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
                     time(),
@@ -110,7 +109,6 @@ EOF;
             self::saveLog();
 
             switch ($e->getMessage()) {
-
                 case CI::BUILD_STATUS_SKIP:
                     self::setBuildStatusSkip();
 
@@ -132,13 +130,9 @@ EOF;
             }
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
-
         } catch (Exception | Error  $e) {
-
             Log::debug(__FILE__, __LINE__, $e->__toString());
-
         } finally {
-
             if (!self::$unique_id) {
                 return;
             }
@@ -209,7 +203,6 @@ EOF;
         }
 
         if ('github_app' === self::$git_type) {
-
             Up::updateGitHubAppChecks(
                 self::$build_key_id,
                 null,
@@ -242,7 +235,6 @@ EOF;
         }
 
         if ('github_app' === self::$git_type) {
-
             Up::updateGitHubAppChecks(
                 self::$build_key_id,
                 null,
@@ -281,7 +273,6 @@ EOF;
         // GitHub App checks API
 
         if ('github_app' === self::$git_type) {
-
             $build_log = Build::getLog((int) self::$build_key_id);
 
             Up::updateGitHubAppChecks(
@@ -349,7 +340,6 @@ EOF;
         }
 
         if ('github_app' === self::$git_type) {
-
             $build_log = Build::getLog((int) self::$build_key_id);
             Up::updateGitHubAppChecks(
                 self::$build_key_id,

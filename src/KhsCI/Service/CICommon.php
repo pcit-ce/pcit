@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service;
 
 use Curl\Curl;
@@ -31,7 +33,7 @@ trait CICommon
      *
      * @throws \Exception
      */
-    private static function successOrFailure(string $file, $line, int $http_code)
+    private static function successOrFailure(string $file, $line, int $http_code): void
     {
         $http_return_code = self::$curl->getCode();
 

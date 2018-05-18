@@ -101,7 +101,6 @@ class Queue
         ]));
 
         try {
-
             // commit 信息跳过构建
             self::skip($commit_message);
 
@@ -109,9 +108,7 @@ class Queue
             self::getRepoBuildActivateStatus((int) $rid);
 
             self::run($rid, $branch);
-
         } catch (Exception $e) {
-
             throw new CIException(
                 self::$unique_id,
                 self::$commit_id,
@@ -156,7 +153,6 @@ class Queue
         $output2 = stripos($commit_message, '[ci skip]');
 
         if (false === $output && false === $output2) {
-
             return;
         }
 
@@ -309,7 +305,6 @@ class Queue
                                  Image $docker_image): void
     {
         foreach ($pipeline as $setup => $array) {
-
             Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup);
 
             $image = $array['image'];
@@ -341,7 +336,6 @@ class Queue
 
             // 暂时跳过非 Docker 构建
             if ($status) {
-
                 switch ($image) {
                     case 'ci_docker_build':
                         break;
@@ -406,6 +400,7 @@ class Queue
      * @param array  $commands
      *
      * @return string
+     *
      * @throws Exception
      */
     private function parseCommand(string $setup, string $image, array $commands)

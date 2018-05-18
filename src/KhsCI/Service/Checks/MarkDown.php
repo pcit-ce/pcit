@@ -1,7 +1,8 @@
 <?php
 
-namespace KhsCI\Service\Checks;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Checks;
 
 class MarkDown
 {
@@ -26,6 +27,14 @@ Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master
 
 EOF;
 
+    /**
+     * @param string $language
+     * @param string $os
+     * @param string $config
+     * @param string $build_log
+     *
+     * @return string
+     */
     public function success(string $language, string $os, string $config, string $build_log)
     {
         return self::$header.<<<EOF
@@ -53,9 +62,16 @@ $build_log
 ```
 
 EOF;
-
     }
 
+    /**
+     * @param string      $language
+     * @param string      $os
+     * @param string      $config
+     * @param null|string $build_log
+     *
+     * @return string
+     */
     public function failure(string $language, string $os, string $config, ?string $build_log)
     {
         return self::$header.<<<EOF
@@ -85,6 +101,14 @@ $build_log
 EOF;
     }
 
+    /**
+     * @param string $language
+     * @param string $os
+     * @param string $config
+     * @param string $build_log
+     *
+     * @return string
+     */
     public function neutral(string $language, string $os, string $config, string $build_log)
     {
         return self::$header.<<<EOF
@@ -114,6 +138,14 @@ $build_log
 EOF;
     }
 
+    /**
+     * @param string      $language
+     * @param string      $os
+     * @param string      $config
+     * @param null|string $build_log
+     *
+     * @return string
+     */
     public function cancelled(string $language, string $os, string $config, ?string $build_log)
     {
         return self::$header.<<<EOF
@@ -143,6 +175,14 @@ $build_log
 EOF;
     }
 
+    /**
+     * @param string      $language
+     * @param string      $os
+     * @param string      $config
+     * @param null|string $build_log
+     *
+     * @return string
+     */
     public function timed_out(string $language, string $os, string $config, ?string $build_log)
     {
         return self::$header.<<<EOF
@@ -172,6 +212,14 @@ $build_log
 EOF;
     }
 
+    /**
+     * @param string      $language
+     * @param string      $os
+     * @param string      $config
+     * @param null|string $build_log
+     *
+     * @return string
+     */
     public function action_required(string $language, string $os, string $config, ?string $build_log)
     {
         return self::$header.<<<EOF
@@ -201,6 +249,13 @@ $build_log
 EOF;
     }
 
+    /**
+     * @param string $language
+     * @param string $os
+     * @param string $config
+     *
+     * @return string
+     */
     public function queued(string $language, string $os, string $config)
     {
         return self::$header.<<<EOF
@@ -224,6 +279,13 @@ $config
 EOF;
     }
 
+    /**
+     * @param string $language
+     * @param string $os
+     * @param string $config
+     *
+     * @return string
+     */
     public function in_progress(string $language, string $os, string $config)
     {
         return self::$header.<<<EOF
@@ -247,7 +309,14 @@ $config
 EOF;
     }
 
-    public function aliyunDockerRegistry($language, $os, $image_details)
+    /**
+     * @param string $language
+     * @param string $os
+     * @param string $image_details
+     *
+     * @return string
+     */
+    public function aliyunDockerRegistry(string $language, string $os, string $image_details)
     {
         return self::$header.<<<EOF
 

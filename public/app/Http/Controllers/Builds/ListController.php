@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Builds;
 use App\Build;
 use App\Repo;
 use Exception;
-use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Git;

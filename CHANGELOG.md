@@ -4,7 +4,7 @@
 
 ### 2018/05/18
 
-支持 **阿里云** Docker 镜像构建服务 Webhooks
+支持 **阿里云** Docker 镜像构建服务 Webhooks `public/config/aliyun_docker_registry.json`
 
 ### 2018/05/17
 

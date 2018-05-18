@@ -92,14 +92,13 @@ class Up
                 echo $errormsg;
                 echo '...E.';
                 sleep(2);
-
             }
         }
     }
 
     /**
      * @param int    $build_key_id
-     * @param string $state default is pending
+     * @param string $state        default is pending
      * @param string $description
      *
      * @throws Exception
@@ -107,8 +106,7 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -146,7 +144,6 @@ class Up
      * @param string      $text
      * @param array|null  $annotations
      * @param array       $images
-     *
      * @param bool        $create_force
      *
      * @throws Exception
@@ -163,8 +160,7 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  bool $force_create = false
-    ): void
-    {
+    ): void {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -225,6 +221,7 @@ class Up
      * @param string $commit_id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public static function getConfig(int $rid, string $commit_id)
@@ -260,7 +257,6 @@ class Up
         list($git_type, $event_type, $json) = json_decode($json_raw, true);
 
         if ('aliyun_docker_registry' === $git_type) {
-
             self::aliyunDockerRegistry($json);
 
             return;
@@ -286,7 +282,7 @@ class Up
      *
      * @throws Exception
      */
-    private static function aliyunDockerRegistry(string $content)
+    private static function aliyunDockerRegistry(string $content): void
     {
         $khsci = new KhsCI();
 
@@ -301,7 +297,6 @@ class Up
         require __DIR__.'/../../config/config.php';
 
         if (array_key_exists($aliyun_docker_registry_name, $aliyun_docker_registry)) {
-
             $git_repo_full_name = $aliyun_docker_registry["$aliyun_docker_registry_name"];
 
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
@@ -340,11 +335,8 @@ class Up
     {
         if ('github_app' === self::$git_type) {
             if (self::$config_array) {
-
                 self::updateGitHubAppChecks($last_insert_id);
-
             } else {
-
                 $khsci = new KhsCI();
                 self::updateGitHubAppChecks($last_insert_id,
                     null,
@@ -360,6 +352,7 @@ class Up
 
                 Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
             }
+
             return;
         }
 
@@ -464,7 +457,7 @@ EOF;
             static::$git_type, __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
             $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
-            $config
+            $config,
         ];
 
         $last_insert_id = DB::insert($sql, $data);
@@ -760,7 +753,7 @@ EOF;
         $last_insert_id = DB::insert($sql, [
                 static::$git_type, __FUNCTION__, $event_time, $content, $action, $commit_id, $commit_message,
                 $committer_username, $pull_request_id, $branch, $rid,
-                CI::BUILD_STATUS_PENDING, $config
+                CI::BUILD_STATUS_PENDING, $config,
             ]
         );
 
@@ -814,7 +807,7 @@ EOF;
         $last_insert_id = DB::insert($sql, [
             static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
             $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
-            $config
+            $config,
         ]);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);

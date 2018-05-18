@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Repositories;
 
 use Exception;
 use KhsCI\Service\CICommon;
 
 /**
- * Class Releases
+ * Class Releases.
+ *
  * @see https://developer.github.com/v3/repos/releases/
  */
 class Releases
@@ -17,6 +20,7 @@ class Releases
      * @param string $repo_full_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function list(string $repo_full_name)
@@ -27,12 +31,13 @@ class Releases
     }
 
     /**
-     * Get a single release
+     * Get a single release.
      *
      * @param string $repo_full_name
      * @param int    $release_id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function get(string $repo_full_name, int $release_id)
@@ -42,18 +47,16 @@ class Releases
         return self::$curl->get($url);
     }
 
-    public function latest()
+    public function latest(): void
     {
-
     }
 
-    public function getByTag()
+    public function getByTag(): void
     {
-
     }
 
     /**
-     * 201
+     * 201.
      *
      * @param string $repo_full_name
      * @param string $tag_name
@@ -83,7 +86,7 @@ class Releases
             'name' => $name,
             'body' => $body,
             'draft' => $draft,
-            'preleases' => $prerelease
+            'preleases' => $prerelease,
         ];
 
         self::$curl->post($url, json_encode($data));
@@ -91,38 +94,31 @@ class Releases
         self::successOrFailure(__FILE__, __LINE__, 201);
     }
 
-    public function edit()
+    public function edit(): void
     {
-
     }
 
-    public function delete()
+    public function delete(): void
     {
-
     }
 
-    public function listAssets()
+    public function listAssets(): void
     {
-
     }
 
-    public function uploadAssets(string $content_type, string $name, string $label)
+    public function uploadAssets(string $content_type, string $name, string $label): void
     {
-
     }
 
-    public function getAssets()
+    public function getAssets(): void
     {
-
     }
 
-    public function editAssets()
+    public function editAssets(): void
     {
-
     }
 
-    public function deleteAssets()
+    public function deleteAssets(): void
     {
-
     }
 }
