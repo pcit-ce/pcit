@@ -51,8 +51,7 @@
   "autoload": {
     "psr-4": {
       "KhsCI\\": "src/KhsCI/",
-      "App\\Console\\": "public/app/Console/",
-      "App\\Http\\Controller\\": "public/app/Http/Controller/"
+      "App\\": "public/app/"
     }
   },
   "autoload-dev": {
