@@ -39,11 +39,9 @@ class Queue
      */
     public static function queue(): void
     {
-        $khsci = new KhsCI();
+        self::$khsci = new KhsCI();
 
-        self::$khsci = $khsci;
-
-        $queue = $khsci->queue;
+        $queue = self::$khsci->queue;
 
         try {
             $sql = <<<'EOF'
@@ -91,7 +89,7 @@ EOF;
                     null,
                     null,
                     null,
-                    $khsci->check_md->in_progress('PHP', PHP_OS, self::$config)
+                    self::$khsci->check_md->in_progress('PHP', PHP_OS, self::$config)
                 );
             }
 

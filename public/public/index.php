@@ -16,7 +16,7 @@ require_once __DIR__.'/../../vendor/autoload.php';
 function open_error(): void
 {
     ini_set('display_errors', 'on');
-    ini_set('error_reporting', '32767');
+    ini_set('error_reporting', (string) constant('E_ALL'));
 }
 
 // read .env.* file.

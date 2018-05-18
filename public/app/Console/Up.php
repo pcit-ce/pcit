@@ -98,7 +98,7 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state        default is pending
+     * @param string $state default is pending
      * @param string $description
      *
      * @throws Exception
@@ -106,7 +106,8 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -144,7 +145,9 @@ class Up
      * @param string      $text
      * @param array|null  $annotations
      * @param array       $images
-     * @param bool        $create_force
+     * @param bool        $force_create 默认请款下若 check_run_id 已存在，则更新此 check_run_id
+     *                                  若设为 true 则新建一个 check_run ,适用于第三方服务完成状态展示
+     *                                  或是没有过程，直接完成的构建
      *
      * @throws Exception
      */
@@ -160,7 +163,8 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  bool $force_create = false
-    ): void {
+    ): void
+    {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -244,9 +248,7 @@ class Up
      */
     private static function webhooks(): void
     {
-        $khsci = new KhsCI();
-
-        $webhooks = $khsci->webhooks;
+        $webhooks = (new KhsCI)->webhooks;
 
         $json_raw = $webhooks->getCache();
 
@@ -284,8 +286,6 @@ class Up
      */
     private static function aliyunDockerRegistry(string $content): void
     {
-        $khsci = new KhsCI();
-
         $obj = json_decode($content);
 
         $aliyun_docker_registry_name = $obj->repository->repo_full_name;
@@ -310,7 +310,7 @@ class Up
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 'Aliyun Docker Registry Push',
                 'Build Docker image Success',
-                $khsci->check_md->aliyunDockerRegistry(
+                (new KhsCi)->check_md->aliyunDockerRegistry(
                     'PHP',
                     PHP_OS,
                     JSON::beautiful($content)
@@ -337,7 +337,6 @@ class Up
             if (self::$config_array) {
                 self::updateGitHubAppChecks($last_insert_id);
             } else {
-                $khsci = new KhsCI();
                 self::updateGitHubAppChecks($last_insert_id,
                     null,
                     CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
@@ -346,7 +345,7 @@ class Up
                     CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                     null,
                     null,
-                    $khsci->check_md->action_required('PHP', PHP_OS, '{}',
+                    (new KhsCI)->check_md->action_required('PHP', PHP_OS, '{}',
                         'This repo not include .khsci.yml file')
                 );
 

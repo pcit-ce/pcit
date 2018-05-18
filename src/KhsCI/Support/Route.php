@@ -24,7 +24,7 @@ class Route
     public static $output = null;
 
     /**
-     * @param $action
+     * @param       $action
      * @param mixed ...$arg
      *
      * @throws Exception
@@ -32,7 +32,7 @@ class Route
     private static function make($action, ...$arg): void
     {
         if ($action instanceof Closure) {
-            self::$output = $action();
+            self::$output = call_user_func($action, ...$arg);
 
             throw new Exception('Finish', 200);
         }

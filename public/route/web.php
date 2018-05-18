@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 use KhsCI\Support\Route;
 
-Route::get('test', function () {
-    return 1;
+Route::get('test1/{id}', function ($id) {
+    return $id;
 });
-
-Route::get('test2', 'Test\TestController@test');
 
 Route::get('test3', 'Test\TestController');
 
