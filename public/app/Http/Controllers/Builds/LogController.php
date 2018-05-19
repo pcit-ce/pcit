@@ -16,11 +16,18 @@ class LogController
      *
      * @param $build_id
      *
+     * @return array|string
      * @throws Exception
      */
     public function __invoke($build_id)
     {
-        Build::getLog((int) $build_id);
+        $log = Build::getLog((int) $build_id);
+
+        if ($log) {
+            return $log;
+        }
+
+        throw new Exception('Not Found', 404);
     }
 
     /**
@@ -31,8 +38,11 @@ class LogController
      * /builds/{build_id}/log
      *
      * @param $build_id
+     *
+     * @throws Exception
      */
     public function delete($build_id): void
     {
+        Build::updateLog((int) $build_id, 'Log removed by '.'XXX at '.date('c'));
     }
 }

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-class APIController
+class SiteMapController
 {
     public function __invoke()
     {

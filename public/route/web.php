@@ -16,7 +16,9 @@ Route::get('test5', 'Test\TestController@test5');
 
 /*Test end*/
 
-Route::get('api', 'API\APIController');
+Route::get('api', 'APIController');
+
+Route::get('sitemap', 'SiteMapController');
 
 Route::get('status', 'StatusController');
 
@@ -141,8 +143,9 @@ Route::post('api/build/{build_id}/cancel', '');
 Route::post('api/build/{build_id}/restart', '');
 
 Route::get('api/repo/{git_type}/{username}/{repo_name}/env_vars', '');
+Route::post('api/repo/{git_type}/{username}/{repo_name}/env_vars', '');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/env_var/{env_var_id}', '');
-Route::post('api/repo/{git_type}/{username}/{repo_name}/env_var/{env_var_id}', '');
+Route::patch('api/repo/{git_type}/{username}/{repo_name}/env_var/{env_var_id}', '');
 Route::delete('api/repo/{git_type}/{username}/{repo_name}/env_var/{env_var_id}', '');
 
 Route::get('{git_type}/{username}/{repo_name}/pull_requests', 'Builds\ListController');
@@ -169,7 +172,7 @@ Route::get('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron
 Route::post('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron', '');
 
 Route::get('{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
-Route::get('api/{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
+Route::get('api/repo/{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
 Route::get('{git_type}/{username}/{repo_name}/getstatus', 'Builds\ShowStatusController@getStatus');
 
 Route::post('api/repo/{git_type}/{username}/{repo_name}/activate', '');
@@ -180,7 +183,7 @@ Route::post('api/repo/{git_type}/{username}/{repo_name}/unstar', 'Builds\StarCon
 
 /* Log */
 
-Route::get('api/build/{build_id}/log', '');
+Route::get('api/build/{build_id}/log', 'Builds\LogController');
 
 Route::delete('api/build/{build_id}/log', '');
 
