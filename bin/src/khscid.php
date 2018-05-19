@@ -5,7 +5,6 @@
 
 // khscid.php is KhsCI Daemon CLI
 
-
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
 
@@ -47,8 +46,6 @@ try {
     $cli->add(new Up());
 
     $cli->run();
-
 } catch (Exception $e) {
-
     throw new Exception($e->getMessage(), $e->getCode(), $e->getPrevious());
 }

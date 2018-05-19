@@ -77,7 +77,7 @@ class APIController
                 'gitee' => $host.'/webhooks/gitee',
                 'github' => $host.'/webhooks/github',
                 'github_app' => $host.'/webhooks/github_app',
-                'aliyun_docker_registry' => $host.'/webhooks/aliyun_docker_registry'
+                'aliyun_docker_registry' => $host.'/webhooks/aliyun_docker_registry',
             ],
             'repo' => [
                 'main' => $host.'/{git_type}/{username}/{repo}',

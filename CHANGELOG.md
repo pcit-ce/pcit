@@ -2,6 +2,10 @@
 
 ## v18.06.0
 
+### 2018/05/19
+
+设计 API
+
 ### 2018/05/18
 
 增加 Tencent AI CLI `bin/tencent.ps1` `bin/tencent.sh`

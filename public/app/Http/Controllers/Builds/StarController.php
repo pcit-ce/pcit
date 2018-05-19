@@ -6,10 +6,24 @@ namespace App\Http\Controllers\Builds;
 
 class StarController
 {
-    public function star(): void
+    /**
+     * star a repository based on the currently logged in user.
+     *
+     * post
+     *
+     * /repo/{repository.id}/star
+     */
+    public function __invoke(): void
     {
     }
 
+    /**
+     * unstar a repository based on the currently logged in user.
+     *
+     * post
+     *
+     * /repo/{repository.slug}/unstar
+     */
     public function unStar(): void
     {
     }

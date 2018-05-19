@@ -6,11 +6,29 @@ namespace App\Http\Controllers\Builds;
 
 class CachesController
 {
-    public function __invoke(): void
+    /**
+     * Returns all the caches for a repository.
+     *
+     * /repo/{repository.id}/caches
+     *
+     * @param array $args
+     */
+    public function __invoke(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
     }
 
-    public function post(): void
+    /**
+     * Deletes all caches for a repository.
+     *
+     * delete
+     *
+     * /repo/{repository.id}/caches
+     *
+     * @param array $args
+     */
+    public function delete(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
     }
 }

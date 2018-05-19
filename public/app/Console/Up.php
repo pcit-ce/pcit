@@ -98,7 +98,7 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state default is pending
+     * @param string $state        default is pending
      * @param string $description
      *
      * @throws Exception
@@ -106,8 +106,7 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -163,8 +162,7 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  bool $force_create = false
-    ): void
-    {
+    ): void {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -248,7 +246,7 @@ class Up
      */
     private static function webhooks(): void
     {
-        $webhooks = (new KhsCI)->webhooks;
+        $webhooks = (new KhsCI())->webhooks;
 
         $json_raw = $webhooks->getCache();
 
@@ -310,7 +308,7 @@ class Up
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 'Aliyun Docker Registry Push',
                 'Build Docker image Success',
-                (new KhsCi)->check_md->aliyunDockerRegistry(
+                (new KhsCi())->check_md->aliyunDockerRegistry(
                     'PHP',
                     PHP_OS,
                     JSON::beautiful($content)
@@ -345,7 +343,7 @@ class Up
                     CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                     null,
                     null,
-                    (new KhsCI)->check_md->action_required('PHP', PHP_OS, '{}',
+                    (new KhsCI())->check_md->action_required('PHP', PHP_OS, '{}',
                         'This repo not include .khsci.yml file')
                 );
 

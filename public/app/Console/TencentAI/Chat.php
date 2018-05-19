@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\TencentAI;
 
 use KhsCI\KhsCI;
@@ -26,7 +28,7 @@ class Chat extends Command
         self::$ai = (new KhsCI())->tencent_ai;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('chat');
 
@@ -40,7 +42,7 @@ EOF
         $this->addArgument('session', null, 'Session ID (unique within application)', '0');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $args = array_values($input->getArguments());
 

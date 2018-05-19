@@ -12,13 +12,17 @@ use KhsCI\Support\Git;
 class BranchesController
 {
     /**
+     * Return a list of branches a repository has on Git.
+     *
+     * /repo/{repository.id}/branches
+     *
      * @param mixed ...$args
      *
      * @return array
      *
      * @throws Exception
      */
-    public function post(...$args)
+    public function __invoke(...$args)
     {
         list($git_type, $username, $repo) = $args;
 
@@ -57,5 +61,17 @@ class BranchesController
         }
 
         return $build_status_array;
+    }
+
+    /**
+     *  Return information about an individual branch.
+     *
+     * /repo/{repository.id}/branch/{branch.name}
+     *
+     * @param array $args
+     */
+    public function find(...$args): void
+    {
+        list($git_type, $username, $repo_name, $branch_name) = $args;
     }
 }

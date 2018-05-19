@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\TencentAI;
 
 use Exception;
@@ -27,7 +29,7 @@ class Translate extends Command
         self::$ai = (new KhsCI())->tencent_ai;
     }
 
-    public function configure()
+    public function configure(): void
     {
         $this->setName('translate');
 
@@ -44,6 +46,7 @@ EOF
      * @param OutputInterface $output
      *
      * @return int|null|void
+     *
      * @throws Exception
      */
     public function execute(InputInterface $input, OutputInterface $output)
@@ -54,5 +57,4 @@ EOF
 
         $output->writeln(JSON::beautiful(json_encode($output_array, JSON_UNESCAPED_UNICODE)));
     }
-
 }
