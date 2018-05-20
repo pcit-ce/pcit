@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Queue;
 
+use App\Build;
 use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
@@ -272,9 +273,12 @@ class Queue
 
         // 矩阵构建循环
         foreach ($matrix as $k => $config) {
+            $this->cancel();
+
             //启动服务
             $this->runService($services, $unique_id, $config, $docker);
 
+            $this->cancel();
             // 构建步骤
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
 
@@ -285,6 +289,24 @@ class Queue
         // 后续根据 throw 出的异常执行对应的操作
 
         throw new Exception(CI::BUILD_STATUS_PASSED);
+    }
+
+    /**
+     * 检查用户是否取消了构建或重新构建
+     *
+     * @throws Exception
+     */
+    private function cancel()
+    {
+        $output = Build::getBuildStatusByBuildKeyId((int) self::$build_key_id);
+
+        if (CI::BUILD_STATUS_CANCELED === $output) {
+            throw new Exception(CI::BUILD_STATUS_CANCELED);
+        }
+
+        if (CI::BUILD_STATUS_PENDING === $output) {
+            throw new Exception(CI::BUILD_STATUS_CANCELED);
+        }
     }
 
     /**
@@ -629,6 +651,8 @@ class Queue
     private function runService(array $service, string $unique_id, array $config, Docker $docker): void
     {
         foreach ($service as $service_name => $array) {
+            $this->cancel();
+
             $image = $array['image'];
             $env = $array['environment'] ?? null;
             $entrypoint = $array['entrypoint'] ?? null;

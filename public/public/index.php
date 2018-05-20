@@ -89,7 +89,7 @@ try {
     Response::json([
         'code' => $e->getCode(),
         'message' => $e->getMessage() ?? 500,
-        'api_url' => getenv('CI_HOST').'/api',
+        'documentation_url' => 'https://github.com/khs1994-php/khsci/tree/master/docs/api',
     ], $start_time);
 
     exit;

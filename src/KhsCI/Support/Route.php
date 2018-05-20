@@ -111,6 +111,14 @@ class Route
             $urlArray = explode('/', $url);
 
             if (count($targetUrlArray) === count($urlArray)) {
+
+                if (!(false === ($int = array_search('{git_type}', $targetUrlArray)))) {
+                    if (!in_array($urlArray[$int], Git::SUPPORT_GIT_ARRAY)) {
+
+                        return;
+                    }
+                }
+
                 foreach ($offset as $k => $v) {
                     $kArray[] = $k;
                     $array[] = $urlArray[$k];
@@ -145,6 +153,6 @@ class Route
             return;
         }
 
-        self::exec($arg[0], $arg[1]);
+        self::exec(...$arg);
     }
 }

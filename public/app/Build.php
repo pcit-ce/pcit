@@ -287,4 +287,22 @@ EOF;
 
         return DB::select($sql, [$rid], true);
     }
+
+    public static function list()
+    {
+
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getBuildStatusByBuildKeyId(int $build_key_id)
+    {
+        $sql = 'SELECT build_status FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id], true);
+    }
 }

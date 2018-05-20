@@ -13,7 +13,7 @@ class APIController
 
         $array = [
             'user' => [
-                $ci_host.'/user',
+                $ci_host.'/user/{git_type}',
                 'beta_feature' => [
                     "get" => $ci_host.'/user/{git_type}/{username}/beta_features',
                     "update" => $ci_host.'/user/{git_type}/{username}/beta_feature/{beta_feature_id}',
@@ -23,7 +23,7 @@ class APIController
             ],
             'repo' => [
                 "branch" => [
-                    "list@get" => $ci_host.'/{git_type}/{username}/{repo_name}/branches',
+                    "list@get" => $ci_host.'/repo/{git_type}/{username}/{repo_name}/branches',
                     "find@get" => $ci_host.'/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}',
                 ],
                 "env_vars" => [
@@ -62,25 +62,25 @@ class APIController
             ],
             'builds' => [
                 "list" => $ci_host.'/builds',
-                "find" => $ci_host.'/builds/{build_id}',
-                "cancel@post" => $ci_host.'/builds/{build_id}/cancel',
-                "restart@post" => $ci_host.'/builds/{build_id}/restart',
+                "find" => $ci_host.'/build/{build_id}',
+                "cancel@post" => $ci_host.'/build/{build_id}/cancel',
+                "restart@post" => $ci_host.'/build/{build_id}/restart',
                 'log' => [
                     'find' => $ci_host.'/build/{build_id}/log',
                     'delete' => $ci_host.'/build/{build_id}/log'
                 ],
             ],
             "owner" => [
-                'find' => $ci_host.'/owner/{username}',
-                'active' => $ci_host.'/owner/{username}/active',
+                'find' => $ci_host.'/owner/{git_type}/{username}',
+                'active' => $ci_host.'/owner/{git_type}/{username}/active',
                 'activeByGitHubId' => $ci_host.'/owner/github_id/{id}/active',
                 'activeByCodingId' => $ci_host.'/owner/coding_id/{id}/active',
                 'activeByGiteeId' => $ci_host.'/owner/gitee_id/{id}/active',
                 'activeByAliyunCodeId' => $ci_host.'/owner/aliyuncode_id/{id}/active',
             ],
             'orgs' => [
-                'list' => $ci_host.'/orgs', // Returns a list of organizations the current user is a member of.
-                'find' => $ci_host.'/org/{org_name}'
+                'list' => $ci_host.'/orgs/{git_type}', // Returns a list of organizations the current user is a member of.
+                'find' => $ci_host.'/org/{git_tyep}/{org_name}'
             ],
         ];
 

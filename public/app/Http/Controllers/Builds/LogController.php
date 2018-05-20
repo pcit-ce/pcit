@@ -24,6 +24,7 @@ class LogController
         $log = Build::getLog((int) $build_id);
 
         if ($log) {
+
             return $log;
         }
 

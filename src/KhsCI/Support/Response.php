@@ -29,6 +29,8 @@ class Response
 
         if (in_array($code, self::HTTP_CODE, true)) {
             http_response_code($code);
+
+            unset($array['code']);
         }
 
         echo json_encode($array);

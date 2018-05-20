@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use KhsCI\Support\Git;
 use KhsCI\Support\Route;
 
 Route::get('test1/{id}', function ($id) {
@@ -138,7 +139,7 @@ Route::get('api/repo/{git_type}/{username}/{repo_name}/builds', 'Builds\ListCont
 
 Route::get('{git_type}/{username}/{repo_name}/builds/{build_id}', 'Builds\ListController');
 Route::get('api/builds', '');
-Route::get('api/build/{build_id}', 'Builds\ListController@getBuildDetails');
+Route::get('api/build/{build_id}', 'Builds\BuildsController@find');
 Route::post('api/build/{build_id}/cancel', '');
 Route::post('api/build/{build_id}/restart', '');
 

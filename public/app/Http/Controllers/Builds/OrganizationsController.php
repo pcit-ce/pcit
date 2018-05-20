@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+
 class OrganizationsController
 {
     /**
@@ -13,6 +14,7 @@ class OrganizationsController
      */
     public function __invoke(): void
     {
+
     }
 
     /**
@@ -24,5 +26,6 @@ class OrganizationsController
      */
     public function find(string $org_name): void
     {
+
     }
 }

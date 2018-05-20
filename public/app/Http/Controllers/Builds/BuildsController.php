@@ -17,6 +17,7 @@ class BuildsController
      */
     public function __invoke(): void
     {
+
     }
 
     /**
@@ -25,9 +26,20 @@ class BuildsController
      * /build/{build.id}
      *
      * @param $build_id
+     *
+     * @return array|int
+     * @throws Exception
      */
-    public function find($build_id): void
+    public function find($build_id)
     {
+        $output = Build::find((int) $build_id);
+
+        if ($output) {
+
+            return $output;
+        }
+
+        throw new Exception('Not Found', 404);
     }
 
     /**
@@ -36,9 +48,12 @@ class BuildsController
      * /build/{build.id}/cancel
      *
      * @param $build_id
+     *
+     * @throws Exception
      */
     public function cancel($build_id): void
     {
+        Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_CANCELED);
     }
 
     /**

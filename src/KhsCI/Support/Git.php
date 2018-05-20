@@ -18,6 +18,14 @@ class Git
 
     const SUPPORT_GITHUB_APP = 'github_app';
 
+    const SUPPORT_GIT_ARRAY = [
+        'aliyun',
+        'coding',
+        'gitee',
+        'github',
+        'github_app'
+    ];
+
     /**
      * @param string $type
      * @param string $repo_full_name
@@ -210,7 +218,7 @@ class Git
     /**
      * @param string $type
      * @param string $repo_full_name
-     * @param string $commit_id      branch_name commit_id
+     * @param string $commit_id branch_name commit_id
      * @param string $file_name
      *
      * @return string
