@@ -14,6 +14,20 @@ class User extends DBModel
 
     /**
      * @param string $git_type
+     * @param string $username
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getUserInfo(string $git_type, string $username)
+    {
+        $sql = 'SELECT * FROM user WHERE git_type=? AND username=?';
+
+        return DB::select($sql, [$git_type, $username]);
+    }
+
+    /**
+     * @param string $git_type
      * @param int    $uid
      * @param string $username
      * @param string $email
@@ -28,7 +42,8 @@ class User extends DBModel
                                           string $email,
                                           string $pic,
                                           string $accessToken
-    ): void {
+    ): void
+    {
         $user_key_id = self::exists($git_type, $username);
 
         if ($user_key_id) {

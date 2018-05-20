@@ -99,7 +99,7 @@ Route::get('api/user/{git_type}/{user_id}', '');
 
 // return information about the current user.
 
-Route::get('api/user', '');
+Route::get('api/user/{git_type}', 'Users\UserInfoController@find');
 
 Route::get('api/user/{git_type}/{username}/beta_features', '');
 Route::patch('api/user/{git_type}/{username}/beta_feature/{beta_feature_id}', '');
@@ -130,9 +130,8 @@ Route::get('{git_type}/{username}/{repo_name}', 'Builds\ListController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}', 'Builds\ListController@post');
 
 Route::get('{git_type}/{username}/{repo_name}/branches', 'Builds\ListController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/branches', 'Builds\BranchesController@post');
-
-Route::get('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}', '');
+Route::get('api/repo/{git_type}/{username}/{repo_name}/branches', 'Builds\BranchesController');
+Route::get('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}', 'Builds\BranchesController@find');
 
 Route::get('{git_type}/{username}/{repo_name}/builds', 'Builds\ListController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/builds', 'Builds\ListController@list');
@@ -160,7 +159,7 @@ Route::patch('api/repo/{git_type}/{username}/{repo_name}/setting/{setting_name}'
 Route::get('{git_type}/{username}/{repo_name}/requests', 'Builds\ListController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/requests', 'Builds\RequestsController');
 Route::post('api/repo/{git_type}/{username}/{repo_name}/requests', '');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/request/{requests_id}', '');
+Route::get('api/repo/{git_type}/{username}/{repo_name}/request/{requests_id}', 'Builds\RequestsController@find');
 
 Route::get('{git_type}/{username}/{repo_name}/caches', 'Builds\ListController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/caches', 'Builds\CachesController');
@@ -173,8 +172,8 @@ Route::get('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron
 Route::post('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron', '');
 
 Route::get('{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
 Route::get('{git_type}/{username}/{repo_name}/getstatus', 'Builds\ShowStatusController@getStatus');
+Route::get('api/repo/{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
 
 Route::post('api/repo/{git_type}/{username}/{repo_name}/activate', '');
 Route::post('api/repo/{git_type}/{username}/{repo_name}/deactivate', '');
@@ -186,7 +185,7 @@ Route::post('api/repo/{git_type}/{username}/{repo_name}/unstar', 'Builds\StarCon
 
 Route::get('api/build/{build_id}/log', 'Builds\LogController');
 
-Route::delete('api/build/{build_id}/log', '');
+Route::delete('api/build/{build_id}/log', 'Builds\LogController@delete');
 
 /* ICO */
 

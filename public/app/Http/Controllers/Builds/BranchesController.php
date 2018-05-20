@@ -69,9 +69,24 @@ class BranchesController
      * /repo/{repository.id}/branch/{branch.name}
      *
      * @param array $args
+     *
+     * @return array|string
+     * @throws Exception
      */
-    public function find(...$args): void
+    public function find(...$args)
     {
         list($git_type, $username, $repo_name, $branch_name) = $args;
+
+        $rid = Repo::getRid($git_type, $username, $repo_name);
+
+        $output = Build::listByBranch((int) $rid, $branch_name);
+
+
+        if ($output) {
+
+            return $output;
+        }
+
+        throw new Exception('Not Found', 4040);
     }
 }

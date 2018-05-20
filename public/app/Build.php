@@ -288,10 +288,33 @@ EOF;
         return DB::select($sql, [$rid], true);
     }
 
-    public static function list()
+    /**
+     * @param int    $rid
+     * @param string $branch_name
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function listByBranch(int $rid, string $branch_name)
     {
+        $sql = 'SELECT * FROM builds WHERE rid=? AND branch=?';
 
+        return DB::select($sql, [$rid, $branch_name]);
     }
+
+    /**
+     * @param int $rid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function listByRid(int $rid)
+    {
+        $sql = 'SELECT * FROM builds WHERE rid=?';
+
+        return DB::select($sql, [$rid]);
+    }
+
 
     /**
      * @param int $build_key_id
