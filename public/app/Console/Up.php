@@ -40,7 +40,7 @@ class Up
             try {
                 if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
                     // 设为 1 说明有一个任务在运行，休眠之后跳过循环
-                    echo '..WQ..';
+                    echo '.WQ';
 
                     sleep(10);
                     continue;
@@ -68,7 +68,7 @@ class Up
                     Queue::queue();
                 }
 
-                echo '..W.';
+                echo '.W';
 
                 DB::close();
                 Cache::close();
@@ -662,23 +662,7 @@ EOF;
 
         if ('edited' === $action) {
 
-            //            Issue::comment_edited(
-            //                static::$git_type,
-            //                $issue_id,
-            //                $comment_id,
-            //                $updated_at,
-            //                $body
-            //            );
-            //
-            //            $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
-            //
-            //            $debug_info = 'Create issue comments by issue comment edit';
-            //
-            //            Log::debug(__FILE__, __LINE__, $debug_info);
-            //
-            //            echo $debug_info;
-
-            echo "Edit issue comment SKIP";
+            echo "Edit Issue Comment SKIP";
 
             return;
         }
@@ -692,7 +676,7 @@ EOF;
             );
 
             if (1 === $output) {
-                $debug_info = 'Delete Issue Comment Success';
+                $debug_info = 'Delete Issue Comment SUCCESS';
 
                 Log::debug(__FILE__, __LINE__, $debug_info);
 
@@ -721,7 +705,7 @@ EOF;
 
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
-        $debug_info = 'Create issue comments by issue comment add';
+        $debug_info = 'Create Bot Issue Comment By Issue Comment ADD';
 
         Log::debug(__FILE__, __LINE__, $debug_info);
 
@@ -747,6 +731,7 @@ EOF;
         $action = $obj->action;
 
         if (!in_array($action, ['opened', 'synchronize'])) {
+
             return;
         }
 
@@ -773,13 +758,21 @@ EOF;
 
         $installation_id = $obj->installation->id ?? null;
 
+        // 检查内外部 PR
+
+        $internal = true;
+
+        if ($pull_request_head->repo->id !== $pull_request_base->repo->id) {
+            $internal = false;
+        }
+
         $sql = <<<'EOF'
 INSERT INTO builds(
 
 git_type,event_type,event_time,request_raw,action,commit_id,commit_message,committer_username,
-pull_request_id,branch,rid,build_status,config
+pull_request_id,branch,rid,build_status,config,internal
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
         $config_array = self::getConfig($rid, $commit_id);
@@ -789,7 +782,7 @@ EOF;
         $last_insert_id = DB::insert($sql, [
                 static::$git_type, __FUNCTION__, $event_time, $content, $action, $commit_id, $commit_message,
                 $committer_username, $pull_request_id, $branch, $rid,
-                CI::BUILD_STATUS_PENDING, $config,
+                CI::BUILD_STATUS_PENDING, $config, $internal
             ]
         );
 

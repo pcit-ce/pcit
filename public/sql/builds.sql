@@ -19,15 +19,19 @@ CREATE TABLE IF NOT EXISTS `builds` (
   `committer_username` VARCHAR(100),
   `event_time`         BIGINT UNSIGNED,
   `started_at`         BIGINT UNSIGNED,
-  `stopped_at`          BIGINT UNSIGNED,
+  `stopped_at`         BIGINT UNSIGNED,
   `build_status`       VARCHAR(20) COMMENT 'pending | canceled | passed | errored | failed | skip | inactive',
   `request_raw`        JSON,
   `config`             JSON,
   `build_log`          LONGTEXT,
-  `action`             varchar(100),
+  `action`             VARCHAR(100),
   `stages`             VARCHAR(100),
-  `matrix`             varchar(100),
+  `matrix`             VARCHAR(100),
   `check_suites_id`    BIGINT,
   `check_run_id`       BIGINT,
+  `internal`           INT UNSIGNED,
   PRIMARY KEY (`id`)
 );
+
+ALTER TABLE builds
+  ADD COLUMN internal INT UNSIGNED;
