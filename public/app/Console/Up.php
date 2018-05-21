@@ -98,7 +98,7 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state        default is pending
+     * @param string $state default is pending
      * @param string $description
      *
      * @throws Exception
@@ -106,7 +106,8 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -162,7 +163,8 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  bool $force_create = false
-    ): void {
+    ): void
+    {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -463,7 +465,41 @@ EOF;
 
         self::$config_array = $config_array;
 
+        if (self::skip($commit_message, (int) $last_insert_id)) {
+
+            return;
+        }
+
         self::updateStatus((int) $last_insert_id);
+    }
+
+    /**
+     * 检查 commit 信息跳过构建.
+     *
+     * @param string $commit_message
+     *
+     * @param int    $build_key_id
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private static function skip(string $commit_message, int $build_key_id)
+    {
+        $output = stripos($commit_message, '[skip ci]');
+        $output2 = stripos($commit_message, '[ci skip]');
+
+        if (false === $output && false === $output2) {
+
+            return false;
+        }
+
+        Build::updateBuildStatus($build_key_id, CI::BUILD_STATUS_SKIP);
+
+        Log::debug(__FILE__, __LINE__, $build_key_id.' is skip');
+
+        echo "Build ID $build_key_id skipped via commit message";
+
+        return true;
     }
 
     /**
@@ -597,7 +633,7 @@ EOF;
         $sender_username = $sender->login;
 
         if (strpos($sender_username, '[bot]')) {
-            echo 'Bot skip';
+            echo 'Bot issue comment SKIP';
 
             return;
         }
@@ -625,21 +661,24 @@ EOF;
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         if ('edited' === $action) {
-            Issue::comment_edited(
-                static::$git_type,
-                $issue_id,
-                $comment_id,
-                $updated_at,
-                $body
-            );
 
-            $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+            //            Issue::comment_edited(
+            //                static::$git_type,
+            //                $issue_id,
+            //                $comment_id,
+            //                $updated_at,
+            //                $body
+            //            );
+            //
+            //            $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+            //
+            //            $debug_info = 'Create issue comments by issue comment edit';
+            //
+            //            Log::debug(__FILE__, __LINE__, $debug_info);
+            //
+            //            echo $debug_info;
 
-            $debug_info = 'Create issue comments by issue comment edit';
-
-            Log::debug(__FILE__, __LINE__, $debug_info);
-
-            echo $debug_info;
+            echo "Edit issue comment SKIP";
 
             return;
         }
@@ -757,6 +796,12 @@ EOF;
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
         self::$config_array = $config_array;
+
+        if (self::skip($commit_message, (int) $last_insert_id)) {
+
+            return;
+        }
+
         self::updateStatus((int) $last_insert_id);
     }
 

@@ -107,10 +107,6 @@ EOF;
             self::saveLog();
 
             switch ($e->getMessage()) {
-                case CI::BUILD_STATUS_SKIP:
-                    self::setBuildStatusSkip();
-
-                    break;
                 case CI::BUILD_STATUS_INACTIVE:
                     self::setBuildStatusInactive();
 
@@ -211,39 +207,6 @@ EOF;
                 null,
                 null,
                 self::$khsci->check_md->cancelled('PHP', PHP_OS, self::$config, null),
-                null,
-                null
-            );
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    private static function setBuildStatusSkip(): void
-    {
-        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_SKIP);
-
-        if ('githuub' === static::$git_type) {
-            Up::updateGitHubStatus(
-                self::$build_key_id,
-                CI::GITHUB_STATUS_SUCCESS,
-                'The '.Env::get('CI_NAME').' build is skip'
-            );
-        }
-
-        if ('github_app' === self::$git_type) {
-            Up::updateGitHubAppChecks(
-                self::$build_key_id,
-                null,
-                CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) Build::getStartAt(self::$build_key_id),
-                (int) Build::getStopAt(self::$build_key_id),
-                CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
-                null,
-                null,
-                self::$khsci->check_md->cancelled('PHP', PHP_OS, self::$config,
-                    'This Build skipped by commit message'),
                 null,
                 null
             );

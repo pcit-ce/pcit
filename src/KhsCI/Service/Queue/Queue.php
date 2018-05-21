@@ -102,9 +102,6 @@ class Queue
         ]));
 
         try {
-            // commit 信息跳过构建
-            self::skip($commit_message);
-
             // 是否启用构建
             self::getRepoBuildActivateStatus((int) $rid);
 
@@ -139,27 +136,6 @@ class Queue
 
             throw new Exception(CI::BUILD_STATUS_INACTIVE);
         }
-    }
-
-    /**
-     * 检查 commit 信息跳过构建.
-     *
-     * @param string $commit_message
-     *
-     * @throws Exception
-     */
-    private function skip(string $commit_message): void
-    {
-        $output = stripos($commit_message, '[skip ci]');
-        $output2 = stripos($commit_message, '[ci skip]');
-
-        if (false === $output && false === $output2) {
-            return;
-        }
-
-        Log::debug(__FILE__, __LINE__, self::$build_key_id.' is skip');
-
-        throw new Exception(CI::BUILD_STATUS_SKIP);
     }
 
     /**

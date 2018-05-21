@@ -16,7 +16,7 @@ class APIController
                 $ci_host.'/user/{git_type}',
                 'beta_feature' => [
                     "get" => $ci_host.'/user/{git_type}/{username}/beta_features',
-                    "update" => $ci_host.'/user/{git_type}/{username}/beta_feature/{beta_feature_id}',
+                    "update@patch" => $ci_host.'/user/{git_type}/{username}/beta_feature/{beta_feature_id}',
                     "delete" => $ci_host.'/user/{git_type}/{username}/beta_feature/{beta_feature_id}',
                 ],
                 "sync" => $ci_host.'/user/{git_type}/{username}/sync',

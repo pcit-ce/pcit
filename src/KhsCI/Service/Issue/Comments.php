@@ -158,7 +158,11 @@ class Comments
 //            }
 
             $data = <<<EOF
->$source_show_in_md
+<blockquote>
+            
+$source_show_in_md
+
+</blockquote>
 
 $translate_output
 
