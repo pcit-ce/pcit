@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Http\Controllers\APITokenController;
+
 class CachesController
 {
     /**
@@ -16,6 +18,8 @@ class CachesController
     public function __invoke(...$args): void
     {
         list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -30,5 +34,7 @@ class CachesController
     public function delete(...$args): void
     {
         list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 }

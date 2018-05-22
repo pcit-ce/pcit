@@ -17,4 +17,28 @@ class ActiveController
     {
         list($git_type, $username) = $args;
     }
+
+    /**
+     * This will activate a repository, allowing its tests to be run on KhsCI
+     *
+     * POST
+     *
+     * /repo/{repository.id}/activate
+     */
+    public function activate()
+    {
+
+    }
+
+    /**
+     * This will deactivate a repository, preventing any tests from running on Travis CI.
+     *
+     * POST
+     *
+     * /repo/{repository.slug}/deactivate
+     */
+    public function deactivate()
+    {
+
+    }
 }

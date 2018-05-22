@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
+use App\Http\Controllers\APITokenController;
+
 class BetaFeatureController
 {
     /**
@@ -16,6 +18,8 @@ class BetaFeatureController
     public function list(...$args): void
     {
         list($git_type, $user_name) = $args;
+
+        APITokenController::checkByUser(...$args);
     }
 
     /**
@@ -34,6 +38,8 @@ class BetaFeatureController
     public function enable(...$args): void
     {
         list($git_type, $username, $beta_feature_id) = $args;
+
+        APITokenController::checkByUser($git_type, $username);
     }
 
     /**
@@ -48,5 +54,7 @@ class BetaFeatureController
     public function delete(...$args): void
     {
         list($git_type, $username, $beta_feature_id) = $args;
+
+        APITokenController::checkByUser($git_type, $username);
     }
 }

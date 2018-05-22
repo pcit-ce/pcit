@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Http\Controllers\APITokenController;
+
 class SettingsController
 {
     /**
@@ -11,12 +13,14 @@ class SettingsController
      *
      * /repo/{repository.id}/settings
      *
-     * @param $git_type
-     * @param $username
-     * @param $repo_name
+     * @param array $args
      */
-    public function __invoke(string $git_type, string $username, string $repo_name): void
+    public function __invoke(...$args): void
     {
+
+        list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -24,13 +28,13 @@ class SettingsController
      *
      * /repo/{repository.id}/setting/{setting.name}
      *
-     * @param $git_type
-     * @param $username
-     * @param $repo_name
-     * @param $setting_name
+     * @param array $args
      */
-    public function get(string $git_type, string $username, string $repo_name, string $setting_name): void
+    public function get(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -46,13 +50,14 @@ class SettingsController
      * { "setting.value": true }
      * </pre>
      *
-     * @param string $git_type
-     * @param string $username
-     * @param string $repo_name
-     * @param string $seeing_name
+     * @param array $args
      */
-    public function update(string $git_type, string $username, string $repo_name, string $seeing_name): void
+    public function update(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
+
         $json = file_get_contents('php://input');
     }
 }

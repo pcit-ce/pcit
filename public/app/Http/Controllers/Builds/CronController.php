@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Http\Controllers\APITokenController;
+
 class CronController
 {
     /**
@@ -16,6 +18,8 @@ class CronController
     public function __invoke(...$args): void
     {
         list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -27,6 +31,7 @@ class CronController
      */
     public function find($cron_id): void
     {
+
     }
 
     /**
@@ -40,6 +45,7 @@ class CronController
      */
     public function delete($cron_id): void
     {
+
     }
 
     /**
@@ -52,6 +58,8 @@ class CronController
     public function findByBranch(...$args): void
     {
         list($git_type, $username, $repo_name, $branch) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -66,5 +74,7 @@ class CronController
     public function createByBranch(...$args): void
     {
         list($git_type, $username, $repo_name, $branch) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 }

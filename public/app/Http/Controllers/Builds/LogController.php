@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
+use App\Http\Controllers\APITokenController;
 use Exception;
 
 class LogController
@@ -44,6 +45,8 @@ class LogController
      */
     public function delete($build_id): void
     {
+        APITokenController::check((int) $build_id);
+
         Build::updateLog((int) $build_id, 'Log removed by '.'XXX at '.date('c'));
     }
 }

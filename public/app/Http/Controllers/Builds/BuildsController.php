@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
+use App\Http\Controllers\APITokenController;
 use Exception;
 use KhsCI\Support\CI;
 
@@ -52,6 +53,8 @@ class BuildsController
      */
     public function cancel($build_id): void
     {
+        APITokenController::check((int) $build_id);
+
         Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_CANCELED);
     }
 
@@ -66,6 +69,8 @@ class BuildsController
      */
     public function restart($build_id): void
     {
+        APITokenController::check((int) $build_id);
+
         Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_PENDING);
     }
 }

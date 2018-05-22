@@ -1,0 +1,45 @@
+{
+  "title": "KhsCI API 文档",
+  "author": "ci.khs1994.com",
+  "language": "zh-hans",
+  "links": {
+    "sidebar": {
+      "Home": "//ci.khs1994.com/api"
+    }
+  },
+  "plugins": [
+    "-sharing",
+    "-highlight",
+    "-livereload",
+    "tbfed-pagefooter@git+https://github.com/khs1994/gitbook-plugin-tbfed-pagefooter.git",
+    "prism",
+    "page-treeview",
+    "favicon"
+  ],
+  "pluginsConfig": {
+    "prism": {
+      "css": [
+        "prismjs/themes/prism-solarizedlight.css"
+      ]
+    },
+    "tbfed-pagefooter": {
+      "copyright": "&copy 2018 ci.khs1994.com",
+      "modify_label": "修订时间：",
+      "modify_format": "YYYY-MM-DD HH:mm:ss"
+    },
+    "page-treeview": {
+      "copyright": "Copyright &#169; ci.khs1994.com",
+      "minHeaderCount": "2",
+      "minHeaderDeep": "2"
+    },
+    "favicon": {
+      "shortcut": "favicon.ico",
+      "bookmark": "favicon.ico",
+      "appleTouch": "favicon.ico",
+      "appleTouchMore": {
+        "120x120": "favicon.ico",
+        "180x180": "favicon.ico"
+      }
+    }
+  }
+}

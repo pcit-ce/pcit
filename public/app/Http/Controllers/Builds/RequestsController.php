@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
+use App\Http\Controllers\APITokenController;
 use App\Repo;
 use Exception;
 
@@ -26,6 +27,8 @@ class RequestsController
         // $limit = $_GET['limit'];
 
         list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
 
         $rid = Repo::getRid($git_type, $username, $repo_name);
 
@@ -55,9 +58,13 @@ class RequestsController
      * }
      *
      * <pre>
+     * @param array $args
      */
-    public function create(): void
+    public function create(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -74,6 +81,8 @@ class RequestsController
     public function find(...$args)
     {
         list($git_type, $username, $repo_name, $request_id) = $args;
+
+        APITokenController::checkByRepo(...$args);
 
         $output = Build::find((int) $request_id);
 

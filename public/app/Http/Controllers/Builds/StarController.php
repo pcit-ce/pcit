@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Http\Controllers\APITokenController;
+
 class StarController
 {
     /**
@@ -12,9 +14,14 @@ class StarController
      * post
      *
      * /repo/{repository.id}/star
+     *
+     * @param array $args
      */
-    public function __invoke(): void
+    public function __invoke(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -23,8 +30,13 @@ class StarController
      * post
      *
      * /repo/{repository.slug}/unstar
+     *
+     * @param array $args
      */
-    public function unStar(): void
+    public function unStar(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 }

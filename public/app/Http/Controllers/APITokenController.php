@@ -9,9 +9,39 @@ use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;
 use KhsCI\Support\JWT;
+use KhsCI\Support\Request;
 
 class APITokenController
 {
+    /**
+     * @param int $build_key_id
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public static function check(int $build_key_id)
+    {
+        $token = Request::getHeader('Authorization');
+
+        $token && $token = explode(' ', $token)[1] ?? null;
+
+        if (!$token) {
+            throw new Exception('Requires authentication', 401);
+        }
+
+        return true;
+    }
+
+    public static function checkByRepo(string $git_type, string $username, string $repo_name)
+    {
+
+    }
+
+    public static function checkByUser(string $git_type, string $username)
+    {
+
+    }
+
     /**
      * 生成 API Token.
      *
@@ -35,7 +65,7 @@ class APITokenController
 
         $curl = new Curl();
 
-        $curl->setHtpasswd($username, $password);
+        $curl->setHtpasswd((string) $username, (string) $password);
 
         $git_obj = json_decode($curl->get('https://api.github.com/user'));
 
@@ -52,14 +82,14 @@ class APITokenController
 
         $jwt = JWT::encode(
             __DIR__.'/../../../public/../private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE'),
-            $git_type,
-            $username,
+            (string) $git_type,
+            (string) $username,
             $uid
         );
 
         $token = hash('sha256', explode('.', $jwt)[1]);
 
-        ApiToken::add($token, $git_type, (int) $uid);
+        ApiToken::add($token, (string) $git_type, (int) $uid);
 
         return $token;
     }

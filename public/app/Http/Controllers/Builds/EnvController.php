@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Http\Controllers\APITokenController;
+
 class EnvController
 {
     /**
@@ -16,6 +18,9 @@ class EnvController
     public function __invoke(...$args): void
     {
         list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
+
     }
 
     /**
@@ -28,9 +33,15 @@ class EnvController
      * </pre>
      *
      * /repo/{repository.slug}/env_vars
+     *
+     * @param array $args
      */
-    public function create(): void
+    public function create(...$args): void
     {
+        list($git_type, $username, $repo_name) = $args;
+
+        APITokenController::checkByRepo(...$args);
+
         $json = file_get_contents('php://input');
 
         list($name, $value, $public) = json_decode($json, true);
@@ -46,6 +57,8 @@ class EnvController
     public function find(...$args): void
     {
         list($git_type, $username, $repo_name, $env_var_id) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -64,6 +77,8 @@ class EnvController
     public function update(...$args): void
     {
         list($git_type, $username, $repo_name, $env_var_id) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 
     /**
@@ -78,5 +93,7 @@ class EnvController
     public function delete(...$args): void
     {
         list($git_type, $username, $repo_name, $env_var_id) = $args;
+
+        APITokenController::checkByRepo(...$args);
     }
 }
