@@ -1,8 +1,8 @@
-## Beta features
+# Beta features
 
-### Action
+## Action
 
-#### List
+### List
      
 **This will return a list of beta features available to a user.**
 
@@ -12,7 +12,7 @@
 
 **Example**: GET /user/khs1994/beta_features
 
-#### Update
+### Update
 
 **This will update a user's beta_feature.**
 
@@ -31,7 +31,7 @@ $ curl -X PATCH \
 
 **Example**: PATCH /user/khs1994/beta_features/{beta_feature.id}
 
-#### Delete
+### Delete
 
 **This will delete a user's beta feature.**
 

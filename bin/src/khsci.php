@@ -3,26 +3,25 @@
 <?php
 
 use App\Console\Khsci\Login;
+use App\Console\Khsci\Logout;
 use Dotenv\Dotenv;
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
 
-try {
-    (new Dotenv(__DIR__.'/../../public/', '.env.'.Env::get('APP_ENV')))->load();
 
-    (new NunoMaduro\Collision\Provider())->register();
+(new Dotenv(__DIR__.'/../../public/', '.env.'.Env::get('APP_ENV')))->load();
 
-    date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
+(new NunoMaduro\Collision\Provider())->register();
 
-    $cli = new Application('KhsCI CLI', 'v18.06');
+date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
 
-    $cli->add(new Login());
+$cli = new Application('KhsCI CLI', 'v18.06');
 
-    $cli->run();
+$cli->add(new Login());
 
-} catch (Throwable $e) {
+$cli->add(new Logout());
 
-    throw new Exception($e->getMessage(), $e->getCode());
-}
+$cli->run();
+
