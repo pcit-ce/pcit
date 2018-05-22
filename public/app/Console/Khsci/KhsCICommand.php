@@ -37,7 +37,7 @@ class KhsCICommand
             'g',
             InputOption::VALUE_OPTIONAL,
             'Git Type',
-            'github',
+            'github_app',
         ];
     }
 

@@ -10,6 +10,7 @@ use App\Repo;
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;
+use KhsCI\Support\Git;
 use KhsCI\Support\JWT;
 use KhsCI\Support\Request;
 
@@ -73,6 +74,11 @@ class APITokenController
         $obj = json_decode($json);
 
         $git_type = $obj->git_type ?? false;
+
+        if (!in_array($git_type, Git::SUPPORT_GIT_ARRAY)) {
+            throw new Exception('Not Found', 404);
+        }
+
         $username = $obj->username ?? false;
         $password = $obj->password ?? false;
 
