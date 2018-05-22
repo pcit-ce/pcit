@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\ApiToken;
 use App\Build;
 use App\Http\Controllers\APITokenController;
 use App\Repo;
@@ -53,6 +54,8 @@ class BuildsController
      */
     public function find($build_id)
     {
+        APITokenController::check((int) $build_id);
+
         $output = Build::find((int) $build_id);
 
         if ($output) {

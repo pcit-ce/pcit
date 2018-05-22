@@ -121,9 +121,24 @@ class Repo extends DBModel
      */
     public static function getAdmin(string $git_type, int $rid)
     {
-        $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND id=?';
+        $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND rid=?';
 
         return DB::select($sql, [$git_type, $rid], true);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     * @param int    $uid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function checkAdmin(string $git_type, int $rid, int $uid)
+    {
+        $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,?)';
+
+        return DB::select($sql, [$git_type, $rid, "\"$uid\""]);
     }
 
     /**

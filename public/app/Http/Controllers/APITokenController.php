@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\ApiToken;
 use App\Build;
+use App\Repo;
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;
@@ -48,10 +49,23 @@ class APITokenController
 
         $array = ApiToken::getGitTypeAndUid((string) $token);
 
+        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
+
         $rid = Build::getRid($build_key_id);
 
+        $git_type_from_build = Build::getGitType($build_key_id);
 
-        return true;
+        if ($git_type !== $git_type_from_build) {
+            throw new Exception('Not Found', 404);
+        }
+
+        $output = Repo::checkAdmin($git_type, (int) $rid, (int) $uid);
+
+        if ($output) {
+            return true;
+        }
+
+        throw new Exception('Not Found', 404);
     }
 
     public static function checkByRepo(string $git_type, string $username, string $repo_name)
