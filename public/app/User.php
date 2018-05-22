@@ -28,22 +28,23 @@ class User extends DBModel
     }
 
     /**
-     * @param string $git_type
-     * @param int    $uid
-     * @param string $username
-     * @param string $email
-     * @param string $pic
-     * @param string $accessToken
+     * @param string      $git_type
+     * @param int         $uid
+     * @param string      $username
+     * @param string|null $email
+     * @param string      $pic
+     * @param string|null $accessToken
      *
      * @throws Exception
      */
     public static function updateUserInfo(string $git_type,
                                           int $uid,
                                           string $username,
-                                          string $email,
+                                          ?string $email,
                                           string $pic,
-                                          string $accessToken
-    ): void {
+                                          ?string $accessToken
+    ): void
+    {
         $user_key_id = self::exists($git_type, $username);
 
         if ($user_key_id) {
@@ -53,7 +54,7 @@ class User extends DBModel
                 ]
             );
         } else {
-            $sql = 'INSERT user VALUES(null,?,?,?,?,?,?)';
+            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?)';
             DB::insert($sql, [$git_type, $uid, $username, $email, $pic, $accessToken]);
         }
     }

@@ -92,9 +92,9 @@ X-Hub-Signature: sha1=c28b3eaf3794d1eab602631e1ef103e5900fb2fd
         "site_admin": false
       },
       "repo": {
-        "id": 119219872,
-        "name": "khsci",
-        "full_name": "khs1994-php/khsci",
+        "id": 100000001,
+        "name": "test",
+        "full_name": "khs1994-php/test",
         "owner": {
           "login": "khs1994-php",
           "id": 31461768,
@@ -212,9 +212,9 @@ X-Hub-Signature: sha1=c28b3eaf3794d1eab602631e1ef103e5900fb2fd
         "site_admin": false
       },
       "repo": {
-        "id": 119219872,
-        "name": "khsci",
-        "full_name": "khs1994-php/khsci",
+        "id": 100000001,
+        "name": "test",
+        "full_name": "khs1994-php/test",
         "owner": {
           "login": "khs1994-php",
           "id": 31461768,
@@ -349,7 +349,7 @@ X-Hub-Signature: sha1=c28b3eaf3794d1eab602631e1ef103e5900fb2fd
     "changed_files": 11
   },
   "repository": {
-    "id": 119219872,
+    "id": 100000001,
     "name": "khsci",
     "full_name": "khs1994-php/khsci",
     "owner": {
@@ -572,9 +572,9 @@ X-Hub-Signature: sha1=4c47850fe70450a7fbd1e6bbf32b44d53e15b23c
         "site_admin": false
       },
       "repo": {
-        "id": 119219872,
-        "name": "khsci",
-        "full_name": "khs1994-php/khsci",
+        "id": 100000001,
+        "name": "test",
+        "full_name": "khs1994-php/test",
         "owner": {
           "login": "khs1994-php",
           "id": 31461768,
@@ -692,9 +692,9 @@ X-Hub-Signature: sha1=4c47850fe70450a7fbd1e6bbf32b44d53e15b23c
         "site_admin": false
       },
       "repo": {
-        "id": 119219872,
-        "name": "khsci",
-        "full_name": "khs1994-php/khsci",
+        "id": 100000001,
+        "name": "test",
+        "full_name": "khs1994-php/test",
         "owner": {
           "login": "khs1994-php",
           "id": 31461768,
@@ -831,9 +831,9 @@ X-Hub-Signature: sha1=4c47850fe70450a7fbd1e6bbf32b44d53e15b23c
   "before": "18623bdcb1bc38ac470ae38e599f2d6f34ec5734",
   "after": "86a4140d16e0546c763c78110dc84d7155a877d1",
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -1054,9 +1054,9 @@ X-Hub-Signature: sha1=20977f29a5aaa366886715f1ad7247d9d66c02c2
         "site_admin": false
       },
       "repo": {
-        "id": 119219872,
-        "name": "khsci",
-        "full_name": "khs1994-php/khsci",
+        "id": 100000001,
+        "name": "test",
+        "full_name": "khs1994-php/test",
         "owner": {
           "login": "khs1994-php",
           "id": 31461768,
@@ -1174,9 +1174,9 @@ X-Hub-Signature: sha1=20977f29a5aaa366886715f1ad7247d9d66c02c2
         "site_admin": false
       },
       "repo": {
-        "id": 119219872,
-        "name": "khsci",
-        "full_name": "khs1994-php/khsci",
+        "id": 100000001,
+        "name": "test",
+        "full_name": "khs1994-php/test",
         "owner": {
           "login": "khs1994-php",
           "id": 31461768,
@@ -1311,9 +1311,9 @@ X-Hub-Signature: sha1=20977f29a5aaa366886715f1ad7247d9d66c02c2
     "changed_files": 11
   },
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,

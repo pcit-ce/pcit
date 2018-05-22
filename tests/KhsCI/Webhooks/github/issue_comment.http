@@ -87,9 +87,9 @@ X-Hub-Signature: sha1=e96850995b2b79891e083bdf5f2e57765606f1ac
     "body": "add issue comment"
   },
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -215,7 +215,7 @@ X-Hub-Signature: sha1=e96850995b2b79891e083bdf5f2e57765606f1ac
     "site_admin": false
   },
   "installation": {
-    "id": 172433
+    "id": 100000
   }
 }
 
@@ -313,9 +313,9 @@ X-Hub-Signature: sha1=1fb9770fd5c2590204f6ec5a497191cbfb70877e
     "body": "Edited issue comment"
   },
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -441,7 +441,7 @@ X-Hub-Signature: sha1=1fb9770fd5c2590204f6ec5a497191cbfb70877e
     "site_admin": false
   },
   "installation": {
-    "id": 172433
+    "id": 100000
   }
 }
 
@@ -534,9 +534,9 @@ X-Hub-Signature: sha1=a3d93dcfba636236f6c221d50ae6456c77a40a6f
     "body": "Edited issue comment"
   },
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -662,7 +662,7 @@ X-Hub-Signature: sha1=a3d93dcfba636236f6c221d50ae6456c77a40a6f
     "site_admin": false
   },
   "installation": {
-    "id": 172433
+    "id": 100000
   }
 }
 

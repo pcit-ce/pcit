@@ -28,9 +28,9 @@ X-Hub-Signature: sha1=450921ee3a7f3aad42d498d9bb44472cd502faba
   "description": "[TODO] 仿照 Drone CI Travis CI 使用 PHP 实现完全基于 Docker 的 CI 系统",
   "pusher_type": "user",
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,

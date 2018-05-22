@@ -56,9 +56,9 @@ X-Hub-Signature: sha1=849e99465295a68f57ad552370c3634c21b3b8e4
     "body": "https://github.com/khs1994-php/khsci/runs/463051"
   },
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,

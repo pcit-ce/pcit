@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\ApiToken;
+use App\Build;
+use App\Repo;
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;
@@ -14,6 +16,22 @@ use KhsCI\Support\Request;
 class APITokenController
 {
     /**
+     * @return array|false|mixed|null
+     *
+     * @throws Exception
+     */
+    private static function getToken()
+    {
+        $token = Request::getHeader('Authorization');
+
+        if (!$token) {
+            throw new Exception('Requires authentication', 401);
+        }
+
+        return $token;
+    }
+
+    /**
      * @param int $build_key_id
      *
      * @return bool
@@ -21,13 +39,12 @@ class APITokenController
      */
     public static function check(int $build_key_id)
     {
-        $token = Request::getHeader('Authorization');
+        $token = self::getToken();
 
-        $token && $token = explode(' ', $token)[1] ?? null;
+        $array = ApiToken::getGitTypeAndUid((string) $token);
 
-        if (!$token) {
-            throw new Exception('Requires authentication', 401);
-        }
+        $rid = Build::getRid($build_key_id);
+
 
         return true;
     }
@@ -78,6 +95,13 @@ class APITokenController
 
         if ($git_username !== $username) {
             throw new Exception('Requires authentication', 401);
+        }
+
+        $token_from_db = ApiToken::get((string) $git_type, $uid);
+
+        if ($token_from_db) {
+
+            return $token_from_db;
         }
 
         $jwt = JWT::encode(

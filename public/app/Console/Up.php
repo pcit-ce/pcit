@@ -8,6 +8,7 @@ use App\Build;
 use App\GetAccessToken;
 use App\Issue;
 use App\Repo;
+use App\User;
 use Error;
 use Exception;
 use KhsCI\KhsCI;
@@ -98,7 +99,7 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state        default is pending
+     * @param string $state default is pending
      * @param string $description
      *
      * @throws Exception
@@ -106,7 +107,8 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -162,7 +164,8 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  bool $force_create = false
-    ): void {
+    ): void
+    {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -1003,7 +1006,19 @@ EOF;
 
         // 可视为仓库管理员.
 
-        $sender_id = $obj->sender->id;
+        $sender = $obj->sender;
+
+        $sender_id = $sender->id;
+
+        $sender_username = $sender->login;
+
+        $email = null;
+
+        $pic = $sender->avatar_url;
+
+        $accessToken = null;
+
+        User::updateUserInfo('github_app', $sender_id, $sender_username, $email, $pic, $accessToken);
 
         if ('created' === $action) {
             $repo = $obj->repositories;

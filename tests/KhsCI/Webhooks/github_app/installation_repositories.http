@@ -14,7 +14,7 @@ X-Hub-Signature: sha1=2dcb7fdeeca3000222c47a2d2fb1c319284aafc7
 {
   "action": "added",
   "installation": {
-    "id": 162542,
+    "id": 100000,
     "account": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -89,9 +89,9 @@ X-Hub-Signature: sha1=2dcb7fdeeca3000222c47a2d2fb1c319284aafc7
   "repository_selection": "selected",
   "repositories_added": [
     {
-      "id": 132416052,
-      "name": "libwechat",
-      "full_name": "khs1994-php/libwechat",
+      "id": 100000003,
+      "name": "test3",
+      "full_name": "khs1994-php/test3",
       "private": false
     }
   ],
@@ -214,9 +214,9 @@ X-Hub-Signature: sha1=60d9d60682087b4f0f97186793fd90e198adcb57
   ],
   "repositories_removed": [
     {
-      "id": 132416052,
-      "name": "libwechat",
-      "full_name": "khs1994-php/libwechat",
+      "id": 100000002,
+      "name": "test2",
+      "full_name": "khs1994-php/test2",
       "private": false
     }
   ],

@@ -14,7 +14,7 @@ X-Hub-Signature: sha1=d313c0c83db5e284b40a88233fb0eea6fb74150a
 {
   "action": "created",
   "installation": {
-    "id": 162542,
+    "id": 100000,
     "account": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -88,15 +88,15 @@ X-Hub-Signature: sha1=d313c0c83db5e284b40a88233fb0eea6fb74150a
   },
   "repositories": [
     {
-      "id": 119219872,
-      "name": "khsci",
-      "full_name": "khs1994-php/khsci",
+      "id": 100000002,
+      "name": "test2",
+      "full_name": "khs1994-php/test2",
       "private": false
     },
     {
-       "id": 132316052,
-       "name": "libxxx",
-       "full_name": "khs1994-php/libxxx",
+       "id": 100000001,
+       "name": "test",
+       "full_name": "khs1994-php/test",
        "private": false
     }
   ],
@@ -138,7 +138,7 @@ X-Hub-Signature: sha1=c1ac983ad63ce591b0f2df361e77fee690ea285c
 {
   "action": "deleted",
   "installation": {
-    "id": 162542,
+    "id": 100000,
     "account": {
       "login": "khs1994-php",
       "id": 31461768,

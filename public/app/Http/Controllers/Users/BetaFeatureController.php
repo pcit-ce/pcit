@@ -15,7 +15,7 @@ class BetaFeatureController
      *
      * @param array $args
      */
-    public function list(...$args): void
+    public function __invoke(...$args): void
     {
         list($git_type, $user_name) = $args;
 

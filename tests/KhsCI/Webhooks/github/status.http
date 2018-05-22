@@ -106,9 +106,9 @@ X-Hub-Signature: sha1=d903bd3147e448d949d3e048ae0db13d82a94956
   "created_at": "2018-05-03T15:18:35Z",
   "updated_at": "2018-05-03T15:18:35Z",
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -250,7 +250,7 @@ X-Hub-Signature: sha1=99d089c08918f83f3a091692a1516b6e99368bb3
 {
   "id": 4908709325,
   "sha": "4b008f3118487b4adde8ab7a468ba4e74fc29d8a",
-  "name": "khs1994-php/khsci",
+  "name": "khs1994-php/test",
   "target_url": "https://styleci.io/analyses/87YayV",
   "context": "continuous-integration/styleci/pr",
   "description": "Issues have been identified with 5 files",
@@ -343,9 +343,9 @@ X-Hub-Signature: sha1=99d089c08918f83f3a091692a1516b6e99368bb3
   "created_at": "2018-05-03T15:18:37Z",
   "updated_at": "2018-05-03T15:18:37Z",
   "repository": {
-    "id": 119219872,
-    "name": "khsci",
-    "full_name": "khs1994-php/khsci",
+    "id": 100000001,
+    "name": "test",
+    "full_name": "khs1994-php/test",
     "owner": {
       "login": "khs1994-php",
       "id": 31461768,

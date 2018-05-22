@@ -111,4 +111,44 @@ class Repo extends DBModel
             DB::update($sql, [$installation_id, $rid]);
         }
     }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getAdmin(string $git_type, int $rid)
+    {
+        $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND id=?';
+
+        return DB::select($sql, [$git_type, $rid], true);
+    }
+
+    /**
+     * @param int $uid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function allByAdmin(int $uid)
+    {
+        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,?)';
+
+        return DB::select($sql, [$uid]);
+    }
+
+    /**
+     * @param int $uid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getActiveByAdmin(int $uid)
+    {
+        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) AND build_activate=1 AND webhooks_status=1';
+
+        return DB::select($sql, [$uid]);
+    }
 }

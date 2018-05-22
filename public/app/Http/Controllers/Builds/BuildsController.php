@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Builds;
 
 use App\Build;
 use App\Http\Controllers\APITokenController;
+use App\Repo;
 use Exception;
 use KhsCI\Support\CI;
 
@@ -15,9 +16,15 @@ class BuildsController
      * Returns a list of builds for the current user. The result is paginated.
      *
      * /builds
+     * @throws Exception
      */
     public function __invoke(): void
     {
+        $uid = '';
+
+        Repo::allByAdmin((int)$uid);
+
+
     }
 
     /**

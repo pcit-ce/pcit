@@ -41,7 +41,7 @@ class APIController
                 ],
                 'requests' => [
                     'list' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/requests',
-                    'create' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/requests',
+                    'create@post' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/requests',
                     'get' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/request/{requests_id}',
                 ],
                 'caches' => [
@@ -53,7 +53,7 @@ class APIController
                     'find' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/cron/{cron_id}',
                     'delete' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/cron/{cron_id}',
                     'findByBranch' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron',
-                    'createByBranch' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron',
+                    'createByBranch@post' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron',
                 ],
                 'status' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/status',
                 'activate@post' => $ci_host.'/repo/{git_type}/{username}/{repo_name}/activate',

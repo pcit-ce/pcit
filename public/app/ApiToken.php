@@ -68,4 +68,17 @@ class ApiToken extends DBModel
 
         DB::insert($sql, [$api_token, $git_type, $uid, time()]);
     }
+
+    /**
+     * @param string $api_token
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getGitTypeAndUid(string $api_token)
+    {
+        $sql = 'SELECT git_type,uid FROM api_token WHERE api_token=?';
+
+        return DB::select($sql, [$api_token]);
+    }
 }
