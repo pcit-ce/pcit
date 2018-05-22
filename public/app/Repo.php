@@ -127,16 +127,33 @@ class Repo extends DBModel
     }
 
     /**
-     * @param int $uid
+     * @param string $git_type
+     * @param int    $rid
+     * @param int    $uid
+     *
+     * @throws Exception
+     */
+    public static function updateAdmin(string $git_type, int $rid, int $uid)
+    {
+        $sql = <<<EOF
+UPDATE repo SET repo_admin=JSON_MERGE(repo_admin,?) WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS(repo_admin,?)
+EOF;
+
+        DB::update($sql, ["[\"$uid\"]", $git_type, $rid, "\"$uid\""]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $uid
      *
      * @return array|string
      * @throws Exception
      */
-    public static function allByAdmin(int $uid)
+    public static function allByAdmin(string $git_type, int $uid)
     {
-        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,?)';
+        $sql = 'SELECT rid FROM repo WHERE git_type=? AND JSON_CONTAINS(repo_admin,?)';
 
-        return DB::select($sql, [$uid]);
+        return DB::select($sql, [$git_type, "\"$uid\""]);
     }
 
     /**
@@ -147,7 +164,7 @@ class Repo extends DBModel
      */
     public static function getActiveByAdmin(int $uid)
     {
-        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) AND build_activate=1 AND webhooks_status=1';
+        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,"?") AND build_activate=1 AND webhooks_status=1';
 
         return DB::select($sql, [$uid]);
     }

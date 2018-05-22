@@ -259,7 +259,7 @@ EOF;
     private function updateRepoAdmin(int $repo_key_id, string $uid): void
     {
         $sql = <<<EOF
-UPDATE repo set repo_admin=JSON_MERGE(repo_admin,?) where id=? AND NOT JSON_CONTAINS(repo_admin,?);
+UPDATE repo SET repo_admin=JSON_MERGE(repo_admin,?) WHERE id=? AND NOT JSON_CONTAINS(repo_admin,?);
 EOF;
 
         DB::update($sql, ["[\"$uid\"]", $repo_key_id, "\"$uid\""]);

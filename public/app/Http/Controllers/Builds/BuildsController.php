@@ -16,13 +16,28 @@ class BuildsController
      * Returns a list of builds for the current user. The result is paginated.
      *
      * /builds
+     *
      * @throws Exception
      */
-    public function __invoke(): void
+    public function __invoke()
     {
-        $uid = '';
+        $array = APITokenController::getGitTypeAndUid();
 
-        Repo::allByAdmin((int) $uid);
+        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
+
+        $output = Repo::allByAdmin($git_type, (int) $uid);
+
+        $build_array = [];
+
+        foreach ($output as $k) {
+            $rid = $k['rid'];
+
+            foreach (Build::allByRid((int) $rid) as $build_k) {
+                $build_array [] = $build_k;
+            }
+        }
+
+        return $build_array;
     }
 
     /**

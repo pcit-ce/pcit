@@ -1057,13 +1057,13 @@ id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,i
 
 EOF;
 
-            $output = DB::insert($sql, [
+            $last_insert_id = DB::insert($sql, [
                     $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
                 ]
             );
         }
 
-        return $output;
+        return $last_insert_id;
     }
 
     /**

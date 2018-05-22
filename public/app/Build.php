@@ -330,4 +330,18 @@ EOF;
 
         return DB::select($sql, [$build_key_id], true);
     }
+
+    /**
+     * @param int $rid
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function allByRid(int $rid)
+    {
+        $sql = 'SELECT * FROM builds WHERE rid=?';
+
+        return DB::select($sql, [$rid]);
+    }
 }

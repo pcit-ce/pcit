@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-use KhsCI\Support\DB;
+use App\Repo;
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
@@ -51,9 +51,7 @@ class GitHubAppController
 
         $sync = true;
 
-        $sql = 'SELECT * FROM repo WHERE git_type=? AND JSON_CONTAINS(repo_admin,?)';
-
-        $repo_array = DB::select($sql, [$git_type, "\"$uid\""]);
+        $repo_array = Repo::allByAdmin(self::$git_type, (int) $uid);
 
         foreach ($repo_array as $k) {
             $array[$k['repo_full_name']] = 1;

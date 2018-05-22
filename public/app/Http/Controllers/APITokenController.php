@@ -16,13 +16,18 @@ use KhsCI\Support\Request;
 class APITokenController
 {
     /**
-     * @return array|false|mixed|null
+     * @return string
      *
      * @throws Exception
      */
     private static function getToken()
     {
-        $token = Request::getHeader('Authorization');
+        try {
+            $token = Request::getHeader('Authorization');
+            $token = explode(' ', $token)[1] ?? null;
+        } catch (\Throwable $e) {
+            throw new Exception('Requires authentication', 401);
+        }
 
         if (!$token) {
             throw new Exception('Requires authentication', 401);
@@ -54,9 +59,13 @@ class APITokenController
 
     }
 
-    public static function checkByUser(string $git_type, string $username)
+    /**
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getGitTypeAndUid()
     {
-
+        return ApiToken::getGitTypeAndUid(self::getToken());
     }
 
     /**
