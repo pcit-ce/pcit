@@ -1,2 +1,8 @@
 * [Overview](README.md)
 * [Authentication](authentication.md)
+* [Builds](builds/README.md)
+* [Organization](orgs/README.md)
+* [Owner](owner/README.md)
+* [Repositories](repo/README.md)
+* [User](user/README.md)
+    * [Beta features](user/beta_features.md)
