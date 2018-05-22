@@ -1,0 +1,6 @@
+GET https://{{ci_host}}/api/builds
+Authorization: token {{api_token}}
+
+###
+
+

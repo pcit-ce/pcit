@@ -31,7 +31,7 @@ class JWT
         return $jwt;
     }
 
-    public static function encode(string $privateKey, string $git_type, string $username, string $uid)
+    public static function encode(string $privateKey, string $git_type, string $username, int $uid)
     {
         $privateKey = file_get_contents($privateKey);
 
@@ -52,8 +52,8 @@ class JWT
 
     public static function decode(string $jwt): void
     {
-        $obj = JWTService::decode($jwt, $privateKey, 'RS256');
+        // $obj = JWTService::decode($jwt, $privateKey, 'RS256');
 
-        var_dump($obj);
+        // var_dump($obj);
     }
 }

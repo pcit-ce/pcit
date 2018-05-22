@@ -137,7 +137,7 @@ Route::get('{git_type}/{username}/{repo_name}/builds', 'Builds\ListController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/builds', 'Builds\ListController@list');
 
 Route::get('{git_type}/{username}/{repo_name}/builds/{build_id}', 'Builds\ListController');
-Route::get('api/builds', '');
+Route::get('api/builds', 'Builds\BuildsController');
 Route::get('api/build/{build_id}', 'Builds\BuildsController@find');
 Route::post('api/build/{build_id}/cancel', 'Builds\BuildsController@cancel');
 Route::post('api/build/{build_id}/restart', 'Builds\BuildsController@restart');

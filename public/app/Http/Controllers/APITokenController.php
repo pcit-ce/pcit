@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\ApiToken;
 use App\Build;
-use App\Repo;
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;
@@ -114,7 +113,7 @@ class APITokenController
             __DIR__.'/../../../public/../private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE'),
             (string) $git_type,
             (string) $username,
-            $uid
+            (int) $uid
         );
 
         $token = hash('sha256', explode('.', $jwt)[1]);

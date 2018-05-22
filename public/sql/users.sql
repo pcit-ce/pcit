@@ -10,5 +10,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email`        varchar(100),
   `pic`          varchar(200),
   `access_token` varchar(200),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`git_type`, `uid`)
 );

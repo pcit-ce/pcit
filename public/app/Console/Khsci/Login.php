@@ -60,7 +60,7 @@ class Login extends Command
         $http_return_code = $curl->getCode();
 
         if (200 !== $http_return_code) {
-            throw new Exception('Incorrect username or password.', $http_return_code);
+            throw new Exception('Incorrect username or password or git_type', $http_return_code);
         }
 
         $file_name = KhsCICommand::getConfigFileName();

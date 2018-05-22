@@ -22,9 +22,7 @@ class BuildsController
     {
         $uid = '';
 
-        Repo::allByAdmin((int)$uid);
-
-
+        Repo::allByAdmin((int) $uid);
     }
 
     /**
