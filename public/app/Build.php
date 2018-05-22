@@ -293,6 +293,7 @@ EOF;
      * @param string $branch_name
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function listByBranch(int $rid, string $branch_name)
@@ -306,6 +307,7 @@ EOF;
      * @param int $rid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function listByRid(int $rid)
@@ -315,11 +317,11 @@ EOF;
         return DB::select($sql, [$rid]);
     }
 
-
     /**
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getBuildStatusByBuildKeyId(int $build_key_id)

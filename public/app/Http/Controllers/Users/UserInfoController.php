@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Users;
 
 use App\User;
@@ -11,6 +13,7 @@ class UserInfoController
      * @param string $git_type
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public function find(string $git_type)
@@ -20,7 +23,6 @@ class UserInfoController
         $output = User::getUserInfo($git_type, $username);
 
         if ($output) {
-
             return $output;
         }
 

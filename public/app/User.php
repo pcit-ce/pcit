@@ -17,6 +17,7 @@ class User extends DBModel
      * @param string $username
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getUserInfo(string $git_type, string $username)
@@ -42,8 +43,7 @@ class User extends DBModel
                                           string $email,
                                           string $pic,
                                           string $accessToken
-    ): void
-    {
+    ): void {
         $user_key_id = self::exists($git_type, $username);
 
         if ($user_key_id) {
@@ -80,6 +80,7 @@ class User extends DBModel
      * @param string $username
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getUid(string $git_type, string $username)

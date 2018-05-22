@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\ApiToken;
@@ -11,9 +13,10 @@ use KhsCI\Support\JWT;
 class APITokenController
 {
     /**
-     * 生成 API Token
+     * 生成 API Token.
      *
      * @return string
+     *
      * @throws Exception
      */
     public function find()

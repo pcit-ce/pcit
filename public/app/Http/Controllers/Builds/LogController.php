@@ -17,6 +17,7 @@ class LogController
      * @param $build_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public function __invoke($build_id)
@@ -24,7 +25,6 @@ class LogController
         $log = Build::getLog((int) $build_id);
 
         if ($log) {
-
             return $log;
         }
 

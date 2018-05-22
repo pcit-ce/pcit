@@ -13,7 +13,7 @@ class EnvController
      *
      * @param array $args
      */
-    public function __invoke(...$args)
+    public function __invoke(...$args): void
     {
         list($git_type, $username, $repo_name) = $args;
     }
@@ -43,7 +43,7 @@ class EnvController
      *
      * @param array $args
      */
-    public function find(...$args)
+    public function find(...$args): void
     {
         list($git_type, $username, $repo_name, $env_var_id) = $args;
     }
@@ -61,7 +61,7 @@ class EnvController
      *
      * @param array $args
      */
-    public function update(...$args)
+    public function update(...$args): void
     {
         list($git_type, $username, $repo_name, $env_var_id) = $args;
     }

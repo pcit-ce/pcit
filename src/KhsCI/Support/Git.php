@@ -23,7 +23,7 @@ class Git
         'coding',
         'gitee',
         'github',
-        'github_app'
+        'github_app',
     ];
 
     /**
@@ -218,7 +218,7 @@ class Git
     /**
      * @param string $type
      * @param string $repo_full_name
-     * @param string $commit_id branch_name commit_id
+     * @param string $commit_id      branch_name commit_id
      * @param string $file_name
      *
      * @return string

@@ -268,11 +268,11 @@ class Queue
     }
 
     /**
-     * 检查用户是否取消了构建或重新构建
+     * 检查用户是否取消了构建或重新构建.
      *
      * @throws Exception
      */
-    private function cancel()
+    private function cancel(): void
     {
         $output = Build::getBuildStatusByBuildKeyId((int) self::$build_key_id);
 

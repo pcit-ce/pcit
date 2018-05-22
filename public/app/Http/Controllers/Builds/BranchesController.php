@@ -71,6 +71,7 @@ class BranchesController
      * @param array $args
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public function find(...$args)
@@ -81,9 +82,7 @@ class BranchesController
 
         $output = Build::listByBranch((int) $rid, $branch_name);
 
-
         if ($output) {
-
             return $output;
         }
 

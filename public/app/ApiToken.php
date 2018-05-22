@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Exception;
@@ -15,6 +17,7 @@ class ApiToken extends DBModel
      * @param int    $uid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function get(string $git_type, int $uid)
@@ -30,6 +33,7 @@ class ApiToken extends DBModel
      * @param string $api_token
      *
      * @return bool
+     *
      * @throws Exception
      */
     public static function check(string $git_type, int $uid, string $api_token)
@@ -45,7 +49,6 @@ class ApiToken extends DBModel
         // 检查过期时间
 
         if ((int) $uid_from_db === $uid) {
-
             return true;
         }
 
@@ -59,7 +62,7 @@ class ApiToken extends DBModel
      *
      * @throws Exception
      */
-    public static function add(string $api_token, string $git_type, int $uid)
+    public static function add(string $api_token, string $git_type, int $uid): void
     {
         $sql = 'INSERT INTO api_token VALUES(null,?,?,?,?)';
 

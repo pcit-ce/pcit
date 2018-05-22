@@ -17,7 +17,6 @@ class BuildsController
      */
     public function __invoke(): void
     {
-
     }
 
     /**
@@ -28,6 +27,7 @@ class BuildsController
      * @param $build_id
      *
      * @return array|int
+     *
      * @throws Exception
      */
     public function find($build_id)
@@ -35,7 +35,6 @@ class BuildsController
         $output = Build::find((int) $build_id);
 
         if ($output) {
-
             return $output;
         }
 

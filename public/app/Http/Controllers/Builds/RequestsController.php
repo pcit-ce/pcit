@@ -18,6 +18,7 @@ class RequestsController
      * @param array $args
      *
      * @return array|int
+     *
      * @throws Exception
      */
     public function __invoke(...$args)
@@ -67,6 +68,7 @@ class RequestsController
      * @param array $args
      *
      * @return array|int
+     *
      * @throws Exception
      */
     public function find(...$args)

@@ -50,7 +50,7 @@ class JWT
         return JWTService::encode($token, $privateKey, 'RS256');
     }
 
-    public static function decode(string $jwt)
+    public static function decode(string $jwt): void
     {
         $obj = JWTService::decode($jwt, $privateKey, 'RS256');
 

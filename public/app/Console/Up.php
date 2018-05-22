@@ -98,7 +98,7 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state default is pending
+     * @param string $state        default is pending
      * @param string $description
      *
      * @throws Exception
@@ -106,8 +106,7 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -163,8 +162,7 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  bool $force_create = false
-    ): void
-    {
+    ): void {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -466,7 +464,6 @@ EOF;
         self::$config_array = $config_array;
 
         if (self::skip($commit_message, (int) $last_insert_id)) {
-
             return;
         }
 
@@ -477,10 +474,10 @@ EOF;
      * 检查 commit 信息跳过构建.
      *
      * @param string $commit_message
-     *
      * @param int    $build_key_id
      *
      * @return bool
+     *
      * @throws Exception
      */
     private static function skip(string $commit_message, int $build_key_id)
@@ -489,7 +486,6 @@ EOF;
         $output2 = stripos($commit_message, '[ci skip]');
 
         if (false === $output && false === $output2) {
-
             return false;
         }
 
@@ -661,8 +657,7 @@ EOF;
         $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
 
         if ('edited' === $action) {
-
-            echo "Edit Issue Comment SKIP";
+            echo 'Edit Issue Comment SKIP';
 
             return;
         }
@@ -731,7 +726,6 @@ EOF;
         $action = $obj->action;
 
         if (!in_array($action, ['opened', 'synchronize'])) {
-
             return;
         }
 
@@ -782,7 +776,7 @@ EOF;
         $last_insert_id = DB::insert($sql, [
                 static::$git_type, __FUNCTION__, $event_time, $content, $action, $commit_id, $commit_message,
                 $committer_username, $pull_request_id, $branch, $rid,
-                CI::BUILD_STATUS_PENDING, $config, $internal
+                CI::BUILD_STATUS_PENDING, $config, $internal,
             ]
         );
 
@@ -791,7 +785,6 @@ EOF;
         self::$config_array = $config_array;
 
         if (self::skip($commit_message, (int) $last_insert_id)) {
-
             return;
         }
 

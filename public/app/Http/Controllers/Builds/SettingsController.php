@@ -50,7 +50,6 @@ class SettingsController
      * @param string $username
      * @param string $repo_name
      * @param string $seeing_name
-     *
      */
     public function update(string $git_type, string $username, string $repo_name, string $seeing_name): void
     {

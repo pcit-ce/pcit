@@ -13,7 +13,7 @@ class CronController
      *
      * @param array $args
      */
-    public function __invoke(...$args)
+    public function __invoke(...$args): void
     {
         list($git_type, $username, $repo_name) = $args;
     }
@@ -27,7 +27,6 @@ class CronController
      */
     public function find($cron_id): void
     {
-
     }
 
     /**
@@ -41,7 +40,6 @@ class CronController
      */
     public function delete($cron_id): void
     {
-
     }
 
     /**
