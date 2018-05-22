@@ -30,4 +30,30 @@ class JWT
 
         return $jwt;
     }
+
+    public static function encode(string $privateKey, string $git_type, string $username, string $uid)
+    {
+        $privateKey = file_get_contents($privateKey);
+
+        $ci_host = Env::get('CI_HOST');
+
+        $token = [
+            'iss' => $ci_host,
+            'iat' => time(),
+            'exp' => time() + 60 * 10,
+            'aud' => $ci_host,
+            'username' => $username,
+            'git_type' => $git_type,
+            'uid' => $uid,
+        ];
+
+        return JWTService::encode($token, $privateKey, 'RS256');
+    }
+
+    public static function decode(string $jwt)
+    {
+        $obj = JWTService::decode($jwt, $privateKey, 'RS256');
+
+        var_dump($obj);
+    }
 }

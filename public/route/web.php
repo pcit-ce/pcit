@@ -194,3 +194,7 @@ Route::get('ico/errored', 'Status\ShowStatusByICOController@errored');
 Route::get('ico/failing', 'Status\ShowStatusByICOController@failing');
 Route::get('ico/passing', 'Status\ShowStatusByICOController@passing');
 Route::get('ico/pending', 'Status\ShowStatusByICOController@pending');
+
+/* API Token */
+
+Route::post('api/user/token', 'APITokenController@find');

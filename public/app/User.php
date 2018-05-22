@@ -74,4 +74,18 @@ class User extends DBModel
 
         return (int) $user_key_id;
     }
+
+    /**
+     * @param string $git_type
+     * @param string $username
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getUid(string $git_type, string $username)
+    {
+        $sql = 'SELECT uid FROM user WHERE git_type=? and username=?';
+
+        return DB::select($sql, [$git_type, $username], true);
+    }
 }
