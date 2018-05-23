@@ -108,4 +108,16 @@ class DBModel
 
         static::$set_array[$name] = $value;
     }
+
+    /**
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getLastKeyId()
+    {
+        $table = self::getTableName();
+
+        return DB::select("SELECT id FROM $table ORDER BY id DESC LIMIT 1", null, true);
+    }
 }

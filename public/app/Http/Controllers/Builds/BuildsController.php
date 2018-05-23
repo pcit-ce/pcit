@@ -14,6 +14,8 @@ use KhsCI\Support\CI;
 class BuildsController
 {
     /**
+     * 某用户的构建列表
+     *
      * Returns a list of builds for the current user. The result is paginated.
      *
      * /builds
@@ -33,6 +35,26 @@ class BuildsController
         $array = Build::allByAdmin($git_type, (int) $uid, $id);
 
         return $array;
+    }
+
+    /**
+     * 某仓库的构建列表
+     *
+     * This returns a list of builds for an individual repository. The result is paginated. Each request will return 25
+     * results.
+     *
+     * /repo/{git_type}/{username}/{repo.name}/builds
+     *
+     * @param mixed ...$args
+     */
+    public function listByRepo(...$args)
+    {
+
+    }
+
+    public function repoCurrent(...$args)
+    {
+
     }
 
     /**

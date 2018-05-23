@@ -141,35 +141,8 @@ class Build extends DBModel
     }
 
     /**
-     * @param string $git_type
-     * @param int    $rid
-     * @param string $branch
+     * 某仓库最新的一次构建 ID PR 除外
      *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getPushAndTagEvent(string $git_type, int $rid, string $branch)
-    {
-        $sql = <<<'EOF'
-SELECT 
-
-id,
-build_status,
-commit_id,
-committer_name,
-finished_at
-
-FROM builds WHERE
-
-git_type=? AND rid=? AND branch=? AND event_type IN (?,?) ORDER BY id DESC LIMIT 5
-
-EOF;
-
-        return DB::select($sql, [$git_type, $rid, $branch, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
-    }
-
-    /**
      * @param string $git_type
      * @param int    $rid
      *
@@ -177,14 +150,10 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getLastBuildId(string $git_type, int $rid)
+    public static function getCurrentBuildKeyId(string $git_type, int $rid)
     {
         $sql = <<<EOF
-SELECT id FROM builds 
-
-WHERE 
-
-git_type=? AND rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1
+SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1
 EOF;
 
         return DB::select($sql, [
@@ -271,53 +240,6 @@ EOF;
     }
 
     /**
-     * @param string $repo_full_name
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getLatestBuildKeyId(string $repo_full_name)
-    {
-        list($username, $repo_name) = explode('/', $repo_full_name);
-
-        $rid = Repo::getRid('github_app', $username, $repo_name);
-
-        $sql = 'SELECT id FROM builds WHERE rid=? AND commit_id IS NOT NULL ORDER BY id DESC LIMIT 1';
-
-        return DB::select($sql, [$rid], true);
-    }
-
-    /**
-     * @param int    $rid
-     * @param string $branch_name
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function listByBranch(int $rid, string $branch_name)
-    {
-        $sql = 'SELECT * FROM builds WHERE rid=? AND branch=?';
-
-        return DB::select($sql, [$rid, $branch_name]);
-    }
-
-    /**
-     * @param int $rid
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function listByRid(int $rid)
-    {
-        $sql = 'SELECT * FROM builds WHERE rid=?';
-
-        return DB::select($sql, [$rid]);
-    }
-
-    /**
      * @param int $build_key_id
      *
      * @return array|string
@@ -332,15 +254,40 @@ EOF;
     }
 
     /**
+     * 某分支的构建列表
+     *
+     * @param string $git_type
+     * @param int    $rid
+     * @param string $branch_name
+     *
+     * @param int    $id
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function allByBranch(string $git_type, int $rid, string $branch_name, int $id)
+    {
+        $sql = <<<EOF
+SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
+FROM builds WHERE git_type=? AND rid=? AND branch=?
+EOF;
+        return DB::select($sql, [$rid, $branch_name]);
+    }
+
+    /**
+     * 某仓库的构建列表
+     *
      * @param int $rid
      *
+     * @param int $before
      * @param int $limit
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function allByRid(int $rid, int $limit = 25)
+    public static function allByRid(int $rid, int $before, int $limit = 25)
     {
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
@@ -351,26 +298,28 @@ EOF;
     }
 
     /**
+     * 某用户的构建列表
+     *
      * @param string   $git_type
      * @param int      $uid
-     * @param int|null $id
+     * @param int|null $before
      * @param int      $limit
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function allByAdmin(string $git_type, int $uid, ?int $id, int $limit = 25)
+    public static function allByAdmin(string $git_type, int $uid, ?int $before, int $limit = 25)
     {
-        $id = $id ?? DB::select('SELECT id FROM builds ORDER BY id DESC LIMIT 1', null, true);
+        $before = $before ?? self::getLastKeyId();
 
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
 FROM builds 
 WHERE rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) ) 
-AND git_type=? AND id<$id ORDER BY id DESC LIMIT $limit;
+AND git_type=? AND id<$before AND event_type IN(?,?) ORDER BY id DESC LIMIT $limit;
 EOF;
 
-        return DB::select($sql, ["\"$uid\"", $git_type]);
+        return DB::select($sql, ["\"$uid\"", $git_type, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
     }
 }

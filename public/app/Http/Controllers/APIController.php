@@ -63,6 +63,8 @@ class APIController
             ],
             'builds' => [
                 'list' => $ci_host.'/builds',
+                'listByRepo' => $ci_host.'/repo/{git_type}/{username}/{repo.name}/builds',
+                'findByRepoCurrent' => $ci_host.'/repo/{git_type}/{username}/{repo.name}/build/current',
                 'find' => $ci_host.'/build/{build_id}',
                 'cancel@post' => $ci_host.'/build/{build.id}/cancel',
                 'restart@post' => $ci_host.'/build/{build.id}/restart',

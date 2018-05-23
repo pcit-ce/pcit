@@ -12,6 +12,8 @@ use KhsCI\Support\Git;
 class BranchesController
 {
     /**
+     * 某分支的构建列表
+     *
      * Return a list of branches a repository has on Git.
      *
      * /repo/{repository.id}/branches
@@ -80,7 +82,7 @@ class BranchesController
 
         $rid = Repo::getRid($git_type, $username, $repo_name);
 
-        $output = Build::listByBranch((int) $rid, $branch_name);
+        $output = Build::allByBranch((int) $rid, $branch_name);
 
         if ($output) {
             return $output;

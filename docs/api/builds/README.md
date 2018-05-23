@@ -4,6 +4,8 @@
 
 This returns a list of builds for the current user. The result is paginated. The default limit is 100.
 
+> 某个用户名下所有仓库的构建列表
+
 | Method | URL       |
 | :----- | :-------- |
 | `GET`  | `/builds` |
@@ -12,12 +14,23 @@ This returns a list of builds for the current user. The result is paginated. The
 
 This returns a list of builds for an individual repository. The result is paginated. Each request will return 25 results.
 
+> 某仓库的构建列表
 
 | Method | URL                                              |
 | :----- | :----------------------------------------------- |
 | `GET`  | `/repo/{git_type}/{username}/{repo.name}/builds` |
 
 **Example:** `GET` `/repo/github_app/khs1994-php/khsci/builds`
+
+## Find By Repo Current
+
+> 某仓库最近完成的一次构建
+
+| Method | URL                                                     |
+| :----- | :-----------------------------------------------        |
+| `GET`  | `/repo/{git_type}/{username}/{repo.name}/build/current` |
+
+**Example:** `GET` `/repo/github_app/khs1994-php/khsci/build/current`
 
 ## Find
 
