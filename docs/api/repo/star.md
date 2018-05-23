@@ -1,7 +1,5 @@
 # Star
 
-## Action
+## Star
 
-### Star
-
-### Unstar
+## Unstar

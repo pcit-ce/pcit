@@ -1,13 +1,11 @@
 # Env vars
 
-## Action
+## List
 
-### List
+## Create
 
-### Create
+## Find
 
-### Find
+## Update
 
-### Update
-
-### Delete
+## Delete

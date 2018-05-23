@@ -1,7 +1,5 @@
 # Activate
 
-## Action
+## Activate
 
-### Activate
-
-### Deactivate
+## Deactivate

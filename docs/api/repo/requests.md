@@ -1,9 +1,7 @@
 # Requests
 
-## Action
+## List
 
-### List
+## Create
 
-### Create
-
-### Get
+## Get
