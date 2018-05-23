@@ -334,22 +334,43 @@ EOF;
     /**
      * @param int $rid
      *
+     * @param int $limit
+     *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function allByRid(int $rid)
+    public static function allByRid(int $rid, int $limit = 25)
     {
-        $sql = 'SELECT * FROM builds WHERE rid=?';
+        $sql = <<<EOF
+SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
+FROM builds WHERE rid=? ORDER BY id DESC LIMIT $limit
+EOF;
 
         return DB::select($sql, [$rid]);
     }
 
-    public static function allByInclude()
+    /**
+     * @param string   $git_type
+     * @param int      $uid
+     * @param int|null $id
+     * @param int      $limit
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function allByAdmin(string $git_type, int $uid, ?int $id, int $limit = 25)
     {
-        $sql = <<<EOF
-SELECT id,branch,commit_id,commit_message,compare,committer_name,started_at,finished_at FROM builds
+        $id = $id ?? DB::select('SELECT id FROM builds ORDER BY id DESC LIMIT 1', null, true);
 
+        $sql = <<<EOF
+SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
+FROM builds 
+WHERE rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) ) 
+AND git_type=? AND id<$id ORDER BY id DESC LIMIT $limit;
 EOF;
+
+        return DB::select($sql, ["\"$uid\"", $git_type]);
     }
 }

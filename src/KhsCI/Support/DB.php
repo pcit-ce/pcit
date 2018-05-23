@@ -64,7 +64,7 @@ class DB
      *
      * @throws Exception
      */
-    public static function select(string $sql, array $data = [], bool $single = false)
+    public static function select(string $sql, ?array $data, bool $single = false)
     {
         $pdo = self::connect();
 

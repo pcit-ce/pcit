@@ -806,8 +806,6 @@ EOF;
 
         $rid = $obj->repository->id;
 
-        $ref = $obj->ref;
-
         $branch = self::ref2branch($obj->base_ref);
 
         $head_commit = $obj->head_commit;

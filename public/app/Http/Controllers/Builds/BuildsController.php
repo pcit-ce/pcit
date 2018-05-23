@@ -22,23 +22,17 @@ class BuildsController
      */
     public function __invoke()
     {
-        $array = APITokenController::getGitTypeAndUid();
+        $id = $_GET['id'] ?? null;
 
-        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
-
-        $output = Repo::allByAdmin($git_type, (int) $uid);
-
-        $build_array = [];
-
-        foreach ($output as $k) {
-            $rid = $k['rid'];
-
-            foreach (Build::allByRid((int) $rid) as $build_k) {
-                $build_array [] = $build_k;
-            }
+        if ($id) {
+            $id = (int) $id;
         }
 
-        return $build_array;
+        list('git_type' => $git_type, 'uid' => $uid) = (APITokenController::getGitTypeAndUid())[0];
+
+        $array = Build::allByAdmin($git_type, (int) $uid, $id);
+
+        return $array;
     }
 
     /**

@@ -1,6 +1,21 @@
+### List
+
 GET https://{{ci_host}}/api/builds
 Authorization: token {{api_token}}
 
 ###
 
+GET https://{{ci_host}}/api/builds?id=10
+Authorization: token {{api_token}}
 
+### Find
+
+### not found
+
+GET https://{{ci_host}}/api/build/12
+Authorization: token {{api_token}}
+
+###
+
+GET https://{{ci_host}}/api/build/1
+Authorization: token {{api_token}}

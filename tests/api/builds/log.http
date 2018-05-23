@@ -1,0 +1,13 @@
+### Log
+
+### not found
+
+GET https://{{ci_host}}/api/build/12/log
+Authorization: token {{api_token}}
+
+###
+
+GET https://{{ci_host}}/api/build/1/log
+Authorization: token {{api_token}}
+
+###

@@ -35,8 +35,6 @@ try {
 
     (new \Dotenv\Dotenv(__DIR__.'/../../public', $env_file))->load();
 
-    $env->load();
-
     date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
 
     /**
