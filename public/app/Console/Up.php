@@ -443,21 +443,20 @@ EOF;
         $sql = <<<'EOF'
 INSERT INTO builds(
 
-git_type,event_type,ref,branch,tag_name,compare,commit_id,commit_message,
-committer_name,committer_email,committer_username,
-rid,event_time,build_status,request_raw,config
+git_type,branch,compare,commit_id,
+commit_message,committer_name,committer_email,committer_username,
+rid,created_at,config
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $config_array = self::getConfig($rid, $commit_id);
 
         $config = json_encode($config_array);
 
         $data = [
-            static::$git_type, __FUNCTION__, $ref, $branch, null, $compare, $commit_id,
+            static::$git_type, $branch, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
-            $rid, $commit_timestamp, CI::BUILD_STATUS_PENDING, $content,
-            $config,
+            $rid, $commit_timestamp, $config,
         ];
 
         $last_insert_id = DB::insert($sql, $data);
@@ -513,13 +512,13 @@ EOF;
         $sql = <<<'EOF'
 INSERT INTO builds(
 
-git_type,event_type,request_raw
+git_type,event_type
 
-) VALUES(?,?,?);
+) VALUES(?,?);
 EOF;
 
         return DB::insert($sql, [
-                static::$git_type, __FUNCTION__, $content,
+                static::$git_type, __FUNCTION__,
             ]
         );
     }
@@ -766,10 +765,11 @@ EOF;
         $sql = <<<'EOF'
 INSERT INTO builds(
 
-git_type,event_type,event_time,request_raw,action,commit_id,commit_message,committer_username,
-pull_request_id,branch,rid,build_status,config,internal
+git_type,event_type,created_at,action,
+commit_id,commit_message,committer_username,pull_request_id,
+branch,rid,config,internal
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
         $config_array = self::getConfig($rid, $commit_id);
@@ -777,9 +777,9 @@ EOF;
         $config = json_encode($config_array);
 
         $last_insert_id = DB::insert($sql, [
-                static::$git_type, __FUNCTION__, $event_time, $content, $action, $commit_id, $commit_message,
-                $committer_username, $pull_request_id, $branch, $rid,
-                CI::BUILD_STATUS_PENDING, $config, $internal,
+                static::$git_type, __FUNCTION__, $event_time, $action,
+                $commit_id, $commit_message, $committer_username, $pull_request_id,
+                $branch, $rid, $config, $internal,
             ]
         );
 
@@ -826,19 +826,20 @@ EOF;
         $sql = <<<'EOF'
 INSERT INTO builds(
 
-git_type,event_type,ref,branch,tag_name,commit_id,commit_message,committer_name,committer_email,
-committer_username,rid,event_time,build_status,request_raw,config
+git_type,event_type,branch,tag_name,
+commit_id,commit_message,committer_name,committer_email,
+committer_username,rid,created_at,config
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
         $config_array = self::getConfig($rid, $commit_id);
 
         $config = json_encode($config_array);
 
         $last_insert_id = DB::insert($sql, [
-            static::$git_type, __FUNCTION__, $ref, $branch, $tag, $commit_id, $commit_message, $committer_name,
-            $committer_email, $committer_username, $rid, $event_time, CI::BUILD_STATUS_PENDING, $content,
-            $config,
+            static::$git_type, __FUNCTION__, $branch, $tag,
+            $commit_id, $commit_message, $committer_name, $committer_email,
+            $committer_username, $rid, $event_time, $config,
         ]);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
@@ -1053,12 +1054,12 @@ INSERT INTO repo(
 
 id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,installation_id,last_sync
 
-) VALUES(null,'github_app',?,?,?,?,JSON_ARRAY(?),'master',?,?)
+) VALUES(null,?,?,?,?,?,JSON_ARRAY(?),'master',?,?)
 
 EOF;
 
             $last_insert_id = DB::insert($sql, [
-                    $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
+                    'github_app', $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
                 ]
             );
         }
@@ -1169,11 +1170,9 @@ EOF;
      *
      * @param string $content
      *
-     * @return array
-     *
      * @throws Exception
      */
-    public static function check_suite(string $content)
+    public static function check_suite(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1197,17 +1196,16 @@ action,event_type,git_type,check_suites_id,branch,commit_id
 ) VALUES (?,?,?,?,?,?);
 EOF;
 
-        $last_insert_id = DB::insert($sql, [
-            $action, __FUNCTION__, self::$git_type, $check_suite_id, $branch, $commit_id,
-        ]);
+
+        //        $last_insert_id = DB::insert($sql, [
+        //            $action, __FUNCTION__, self::$git_type, $check_suite_id, $branch, $commit_id,
+        //        ]);
 
         if ('rerequested' === $action) {
             $check_run_id = '';
         }
 
-        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-
-        return ['build_key_id' => $last_insert_id];
+        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
     }
 
     /**

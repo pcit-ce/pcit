@@ -2,4 +2,4 @@
 
 dir=$(cd "${0%[/\\]*}" > /dev/null && pwd)
 
-"${dir}/src/tencent-ai.php" $@
+php "${dir}/src/tencent-ai.php" $@

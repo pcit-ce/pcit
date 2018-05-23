@@ -3,12 +3,12 @@ USE khsci;
 # DROP TABLE IF EXISTS `builds`;
 
 CREATE TABLE IF NOT EXISTS `builds` (
-  `id`                 BIGINT AUTO_INCREMENT,
-  `git_type`           VARCHAR(20),
+  `id`                 BIGINT       AUTO_INCREMENT,
+  `git_type`           VARCHAR(20)  DEFAULT 'github_app',
   `rid`                BIGINT UNSIGNED,
-  `event_type`         VARCHAR(20) COMMENT 'push tag pr',
-  `ref`                VARCHAR(100),
-  `branch`             VARCHAR(100),
+  `event_type`         VARCHAR(20)  DEFAULT 'push'
+  COMMENT 'push tag pr',
+  `branch`             VARCHAR(100) DEFAULT 'master',
   `tag_name`           VARCHAR(100),
   `pull_request_id`    BIGINT,
   `compare`            VARCHAR(200),
@@ -17,21 +17,17 @@ CREATE TABLE IF NOT EXISTS `builds` (
   `committer_name`     VARCHAR(100),
   `committer_email`    VARCHAR(100),
   `committer_username` VARCHAR(100),
-  `event_time`         BIGINT UNSIGNED,
+  `created_at`         BIGINT UNSIGNED,
   `started_at`         BIGINT UNSIGNED,
-  `stopped_at`         BIGINT UNSIGNED,
-  `build_status`       VARCHAR(20) COMMENT 'pending | canceled | passed | errored | failed | skip | inactive',
-  `request_raw`        JSON,
+  `finished_at`        BIGINT UNSIGNED,
+  `deleted_at`         BIGINT UNSIGNED,
+  `build_status`       VARCHAR(20)  DEFAULT 'pending'
+  COMMENT 'pending | canceled | passed | errored | failed | skip | inactive',
   `config`             JSON,
   `build_log`          LONGTEXT,
   `action`             VARCHAR(100),
-  `stages`             VARCHAR(100),
-  `matrix`             VARCHAR(100),
   `check_suites_id`    BIGINT,
   `check_run_id`       BIGINT,
-  `internal`           INT UNSIGNED,
+  `internal`           INT UNSIGNED DEFAULT 1,
   PRIMARY KEY (`id`)
 );
-
-ALTER TABLE builds
-  ADD COLUMN internal INT UNSIGNED;

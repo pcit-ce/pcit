@@ -48,7 +48,7 @@ class Build extends DBModel
      */
     public static function updateStopAt(int $build_key_id)
     {
-        $sql = 'UPDATE builds SET stopped_at = ? WHERE id=?';
+        $sql = 'UPDATE builds SET finished_at = ? WHERE id=?';
 
         return DB::update($sql, [time(), $build_key_id]);
     }
@@ -62,7 +62,7 @@ class Build extends DBModel
      */
     public static function getStopAt(int $build_key_id)
     {
-        $sql = 'SELECT stopped_at FROM builds WHERE id=?';
+        $sql = 'SELECT finished_at FROM builds WHERE id=?';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -158,7 +158,7 @@ id,
 build_status,
 commit_id,
 committer_name,
-stopped_at
+finished_at
 
 FROM builds WHERE
 
@@ -343,5 +343,13 @@ EOF;
         $sql = 'SELECT * FROM builds WHERE rid=?';
 
         return DB::select($sql, [$rid]);
+    }
+
+    public static function allByInclude()
+    {
+        $sql = <<<EOF
+SELECT id,branch,commit_id,commit_message,compare,committer_name,started_at,finished_at FROM builds
+
+EOF;
     }
 }
