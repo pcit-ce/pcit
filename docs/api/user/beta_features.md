@@ -1,20 +1,22 @@
 # Beta features
 
-## Action
-
-### List
+## List
      
-**This will return a list of beta features available to a user.**
+This will return a list of beta features available to a user.
+
+> 返回 Beta 功能列表
 
 | Method | URL                           |
 | :----- | :---------------------------- |
-| GET    | /user/{user.name}/beta_features |
+| `GET`    | `/user/{user.name}/beta_features` |
 
-**Example**: GET /user/khs1994/beta_features
+**Example:** `GET` `/user/khs1994/beta_features`
 
-### Update
+## Update
 
-**This will update a user's beta_feature.**
+This will update a user's beta_feature.
+
+> 开启某个 Beta 功能
 
 ```bash
 $ curl -X PATCH \
@@ -27,16 +29,18 @@ $ curl -X PATCH \
 
 | Method | URL                                              |
 | :----- | :----------------------------------------------- |
-| PATCH  | /user/{user.name}/beta_feature/{beta_feature.id} |
+| `PATCH`  | `/user/{user.name}/beta_feature/{beta_feature.id}` |
 
-**Example**: PATCH /user/khs1994/beta_features/{beta_feature.id}
+**Example:** `PATCH` `/user/khs1994/beta_features/{beta_feature.id}`
 
-### Delete
+## Delete
 
-**This will delete a user's beta feature.**
+This will delete a user's beta feature.
+
+> 关闭某个 Beta 功能
 
 | Method | URL                                              |
 | :----- | :----------------------------------------------- |
-| DELETE | /user/{user.name}/beta_feature/{beta_feature.id} |
+| `DELETE` | `/user/{user.name}/beta_feature/{beta_feature.id}` |
 
-**Example**: DELETE /user/khs1994/beta_features/{beta_feature.id}
+**Example:** `DELETE` `/user/khs1994/beta_features/{beta_feature.id}`

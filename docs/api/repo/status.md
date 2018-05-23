@@ -1,5 +1,3 @@
 # Status
 
-## Action
-
-### Find
+## Find

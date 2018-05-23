@@ -1,9 +1,7 @@
 # Settings
 
-## Action
+## List
 
-### List
+## Get
 
-### Get
-
-### Update
+## Update
