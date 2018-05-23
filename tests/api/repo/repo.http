@@ -1,2 +1,0 @@
-GET https://{{ci_host}}/api
-Authorization: token {{api_token}}

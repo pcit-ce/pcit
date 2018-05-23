@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
-use App\ApiToken;
 use App\Build;
 use App\Http\Controllers\APITokenController;
 use App\Repo;
@@ -24,15 +23,13 @@ class BuildsController
      */
     public function __invoke()
     {
-        $id = $_GET['id'] ?? null;
+        $before = $_GET['before'] ?? null;
 
-        if ($id) {
-            $id = (int) $id;
-        }
+        $limit = $_GET['limit'] ?? null;
 
         list('git_type' => $git_type, 'uid' => $uid) = (APITokenController::getGitTypeAndUid())[0];
 
-        $array = Build::allByAdmin($git_type, (int) $uid, $id);
+        $array = Build::allByAdmin($git_type, (int) $uid, $before, $limit);
 
         return $array;
     }
@@ -46,15 +43,35 @@ class BuildsController
      * /repo/{git_type}/{username}/{repo.name}/builds
      *
      * @param mixed ...$args
+     *
+     * @return array|string
+     * @throws Exception
      */
     public function listByRepo(...$args)
     {
+        list($git_type, $username, $repo_name) = $args;
 
+        $before = $_GET['before'] ?? null;
+
+        $limit = $_GET['limit'] ?? null;
+
+        $rid = Repo::getRid(...$args);
+
+        $array = Build::allByRid($git_type, (int) $rid, $before, $limit);
+
+        return $array;
     }
 
+    /**
+     * @param mixed ...$args
+     *
+     * @throws Exception
+     */
     public function repoCurrent(...$args)
     {
+        list($git_type, $username, $repo_name) = $args;
 
+        Build::getCurrentBuildKeyId($git_type, (int) Repo::getRid(...$args));
     }
 
     /**

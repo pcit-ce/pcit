@@ -95,19 +95,19 @@ Route::get('profile/github_app/{username}', 'Profile\GitHubAppController');
 
 // return information about an individual user.
 
-Route::get('api/user/{git_type}/{user_id}', 'Users\UserInfoController');
+Route::get('api/user/{git_type}/{username}', 'Users\UserInfoController@find');
 
 // return information about the current user.
 
-Route::get('api/user/{git_type}', 'Users\UserInfoController@find');
+Route::get('api/user', 'Users\UserInfoController');
 
-Route::get('api/user/{git_type}/{username}/beta_features', 'Users\BetaFeatureController');
-Route::patch('api/user/{git_type}/{username}/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@enable');
-Route::delete('api/user/{git_type}/{username}/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@delete');
+Route::get('api/user/beta_features', 'Users\BetaFeatureController');
+Route::patch('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@enable');
+Route::delete('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@delete');
 
 /*Sync Repo*/
 
-Route::post('api/user/{git_type}/{user_id}/sync', 'Profile\SyncController');
+Route::post('api/user/sync', 'Profile\SyncController');
 
 /*Status*/
 

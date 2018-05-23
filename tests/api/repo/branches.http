@@ -1,0 +1,7 @@
+GET https://{{ci_host}}/api/repo/github_app/khs1994-php/khsci/branches
+Authorization: token {{api_token}}
+
+###
+
+GET https://{{ci_host}}/api/repo/github_app/khs1994-php/khsci/branch/master
+Authorization: token {{api_token}}

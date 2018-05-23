@@ -1,2 +1,6 @@
-GET https://{{ci_host}}/api
+GET https://{{ci_host}}/api/user
 Authorization: token {{api_token}}
+
+### Sync
+
+POST https://{{ci_host}}/api/khs1994/sync

@@ -17,7 +17,7 @@ class Repo extends DBModel
      * @param string $username
      * @param string $repo
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */

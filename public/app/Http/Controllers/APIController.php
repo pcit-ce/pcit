@@ -14,13 +14,14 @@ class APIController
 
         $array = [
             'user' => [
-                $ci_host.'/user/{git_type}',
+                'current' => $ci_host.'/user',
+                'find' => $ci_host.'/user/{git_type}/{username}',
+                'sync' => $ci_host.'/user/sync',
                 'beta_feature' => [
-                    'get' => $ci_host.'/user/{git_type}/{username}/beta_features',
-                    'update@patch' => $ci_host.'/user/{git_type}/{username}/beta_feature/{beta_feature.id}',
-                    'delete' => $ci_host.'/user/{git_type}/{username}/beta_feature/{beta_feature.id}',
+                    'get' => $ci_host.'/user/beta_features',
+                    'update@patch' => $ci_host.'/user/beta_feature/{beta_feature.id}',
+                    'delete' => $ci_host.'/user/beta_feature/{beta_feature.id}',
                 ],
-                'sync' => $ci_host.'/user/{git_type}/{username}/sync',
             ],
             'repo' => [
                 'branch' => [

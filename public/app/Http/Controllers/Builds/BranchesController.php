@@ -78,11 +78,15 @@ class BranchesController
      */
     public function find(...$args)
     {
+        $before = $_GET['before'] ?? null;
+
+        $limit = $_GET['limit'] ?? null;
+
         list($git_type, $username, $repo_name, $branch_name) = $args;
 
         $rid = Repo::getRid($git_type, $username, $repo_name);
 
-        $output = Build::allByBranch((int) $rid, $branch_name);
+        $output = Build::allByBranch($git_type, (int) $rid, $branch_name, (int) $before, (int) $limit);
 
         if ($output) {
             return $output;
