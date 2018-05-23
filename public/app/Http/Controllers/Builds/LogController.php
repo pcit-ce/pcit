@@ -33,7 +33,7 @@ class LogController
     }
 
     /**
-     * Removes the contents of a log. It gets replace with the message: Log removed by XXX at 2017-02-13 16:00:00 UTC.
+     * Removes the contents of a log. It gets replace with the message: Log removed at 2017-02-13 16:00:00 UTC.
      *
      * delete
      *
@@ -47,6 +47,6 @@ class LogController
     {
         APITokenController::check((int) $build_id);
 
-        Build::updateLog((int) $build_id, 'Log removed by '.'XXX at '.date('c'));
+        Build::updateLog((int) $build_id, 'Log removed at '.date('c'));
     }
 }

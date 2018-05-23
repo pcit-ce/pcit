@@ -15,6 +15,7 @@
 <div style="text-align: center;margin-top: 200px">
   <button type="button" onclick="github()">GitHub</button>
   <button type="button" onclick="github_app()">GitHub App Beta</button>
+  <button type="button" onclick="github_app_install()">Install GitHub App in your Repo</button>
   <button type="button" onclick="coding()">Coding</button>
   <button type="button" onclick="gitee()">Gitee</button>
   <br><br><br>
@@ -27,6 +28,10 @@
 
   function github_app() {
     document.location = 'https://' + location.host + '/oauth/github_app/login';
+  }
+
+  function github_app_install() {
+    document.location = "https://github.com/apps/khsci";
   }
 
   function coding() {

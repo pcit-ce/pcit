@@ -2,7 +2,7 @@
 
 ## Generated API Access Token
 
-### FROM CLI
+### From CLI
 
 ```bash
 
@@ -13,7 +13,7 @@ $ khsci token
 Your access token is XXXXX
 ```
 
-### FROM Website
+### From Website
 
 Login https://ci.khs1994.com/login , Then find API Access Token from Profile.
 
