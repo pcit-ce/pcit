@@ -11,9 +11,17 @@ use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
 
-(new Dotenv(__DIR__.'/../../public/', '.env.'.Env::get('APP_ENV')))->load();
-
 (new NunoMaduro\Collision\Provider())->register();
+
+$env_file = '.env';
+
+if(Env::get('APP_ENV')){
+    $env_file = '.env.'.Env::get('APP_ENV');
+}
+
+if(file_exists(__DIR__.'/../../public/'.$env_file)){
+    (new Dotenv(__DIR__.'/../../public', $env_file))->load();
+}
 
 date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
 

@@ -27,7 +27,13 @@ spl_autoload_register(function ($class): void {
 });
 
 try {
-    $env = new Dotenv\Dotenv(__DIR__.'/../../public', '.env'.'.'.getenv('APP_ENV'));
+    $env_file = '.env';
+
+    if(Env::get('APP_ENV')){
+        $env_file = '.env.'.Env::get('APP_ENV');
+    }
+
+    (new \Dotenv\Dotenv(__DIR__.'/../../public', $env_file))->load();
 
     $env->load();
 
