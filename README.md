@@ -59,7 +59,7 @@ To **install** KhsCI, simply:
 
 $ git clone --recursive https://github.com/khs1994-docker/lnmp.git ~/lnmp
 
-$ composer create-project khs1994/khsci ~/lnmp/app/khsci @dev
+$ composer create-project khs1994/khsci:dev-master ~/lnmp/app/khsci
 
 $ cd lnmp
 

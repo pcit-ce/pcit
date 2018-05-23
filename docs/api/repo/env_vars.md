@@ -1,4 +1,4 @@
-# Env vars
+# Env Vars
 
 ## List
 

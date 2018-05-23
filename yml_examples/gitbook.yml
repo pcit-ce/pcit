@@ -1,0 +1,13 @@
+#
+# https://github.com/khs1994-docker/gitbook
+#
+
+workspace:
+  base: /srv/gitbook-src
+  path: .
+
+pipeline:
+  gitbook:
+    image: khs1994/gitbook
+    commands:
+      - build

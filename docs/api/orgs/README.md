@@ -1,7 +1,5 @@
 # Organizations
 
-## Action
+## List
 
-### List
-
-### Find
+## Find

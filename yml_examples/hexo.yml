@@ -1,0 +1,13 @@
+#
+# https://github.com/khs1994-docker/hexo
+#
+
+workspace:
+  base: /srv/hexo-src
+  path: .
+
+pipeline:
+  hexo:
+    image: khs1994/hexo
+    commands:
+      - build

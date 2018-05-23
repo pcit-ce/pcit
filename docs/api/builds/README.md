@@ -10,7 +10,7 @@ This returns a list of builds for the current user. The result is paginated. The
 
 ## Find By Repo
 
-This returns a list of builds for an individual repository. It is possible to use the repository id or slug in the request. The result is paginated. Each request will return 25 results.
+This returns a list of builds for an individual repository. The result is paginated. Each request will return 25 results.
 
 
 | Method | URL                                              |
@@ -33,7 +33,7 @@ This returns a single build.
 
 ## Cancel
 
-This cancels a currently running build. It will set the build and associated jobs to "state": "canceled".
+This cancels a currently running build. It will set the build and associated jobs to "state": `canceled`.
 
 > 取消某个构建
 
