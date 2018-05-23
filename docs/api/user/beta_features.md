@@ -43,4 +43,4 @@ This will delete a user's beta feature.
 | :----- | :----------------------------------------------- |
 | `DELETE` | `/user/{user.name}/beta_feature/{beta_feature.id}` |
 
-**Example:**: `DELETE` `/user/khs1994/beta_features/{beta_feature.id}`
+**Example:** `DELETE` `/user/khs1994/beta_features/{beta_feature.id}`
