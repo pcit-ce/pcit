@@ -40,10 +40,9 @@ class APITokenController
     /**
      * @param int $build_key_id
      *
-     * @return bool
      * @throws Exception
      */
-    public static function check(int $build_key_id)
+    public static function check(int $build_key_id): void
     {
         $token = self::getToken();
 
@@ -51,18 +50,20 @@ class APITokenController
 
         list('git_type' => $git_type, 'uid' => $uid) = $array[0];
 
+        // 由构建 ID 得到仓库 ID，及 git 类型
         $rid = Build::getRid($build_key_id);
-
         $git_type_from_build = Build::getGitType($build_key_id);
 
+        // 若 token git 类型不匹配则 404
         if ($git_type !== $git_type_from_build) {
             throw new Exception('Not Found', 404);
         }
 
+        // 检查 token uid 是否为仓库管理员
         $output = Repo::checkAdmin($git_type, (int) $rid, (int) $uid);
 
         if ($output) {
-            return true;
+            return;
         }
 
         throw new Exception('Not Found', 404);

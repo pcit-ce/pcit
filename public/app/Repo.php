@@ -166,7 +166,7 @@ EOF;
      */
     public static function allByAdmin(string $git_type, int $uid)
     {
-        $sql = 'SELECT rid FROM repo WHERE git_type=? AND JSON_CONTAINS(repo_admin,?)';
+        $sql = 'SELECT rid,repo_full_name FROM repo WHERE git_type=? AND JSON_CONTAINS(repo_admin,?)';
 
         return DB::select($sql, [$git_type, "\"$uid\""]);
     }

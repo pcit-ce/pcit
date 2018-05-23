@@ -1,7 +1,7 @@
-# Branches
+# Caches
 
 ## Action
 
 ### List
 
-### Find
+### Delete
