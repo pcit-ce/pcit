@@ -3,7 +3,7 @@
 * [Builds](builds/README.md)
 * [Organization](orgs/README.md)
 * [Owner](owner/README.md)
-* [Repositories](repo/README.md)
+* Repositories
     * [Activate](repo/activate.md)
     * [Branches](repo/branches.md)
     * [Caches](repo/caches.md)

@@ -60,7 +60,7 @@ $ curl -X POST \
     -H "Travis-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "cron.interval": "monthly" }' \
-    https://ci.khs1994.com/repo/github_app/khs1994-php/khsci/branch/master/cron
+    https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/branch/master/cron
 ```
 
 | Method    | URL                                                                 |
