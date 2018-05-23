@@ -57,7 +57,7 @@ This creates a cron on the specified branch for the specified repository. Conten
 ```bash
 $ curl -X POST \
     -H "Content-Type: application/json" \
-    -H "Travis-API-Version: 3" \
+    -H "KhsCI-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "cron.interval": "monthly" }' \
     https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/branch/master/cron

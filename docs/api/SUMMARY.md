@@ -1,9 +1,10 @@
 * [Overview](README.md)
 * [Authentication](authentication.md)
 * [Builds](builds/README.md)
+    * [Log](builds/log.md)
 * [Organization](orgs/README.md)
 * [Owner](owner/README.md)
-* Repositories
+* [Repositories](repo/README.md)
     * [Activate](repo/activate.md)
     * [Branches](repo/branches.md)
     * [Caches](repo/caches.md)
@@ -15,4 +16,3 @@
     * [Status](repo/status.md)    
 * [User](user/README.md)
     * [Beta features](user/beta_features.md)
-    * [Sync](user/sync.md)

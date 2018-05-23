@@ -21,7 +21,7 @@ This creates an environment variable for an individual repository.
 ```bash
 $ curl -X POST \
     -H "Content-Type: application/json" \
-    -H "Travis-API-Version: 3" \
+    -H "KhsCI-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "env_var.name": "FOO", "env_var.value": "bar", "env_var.public": false }' \
     https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/env_vars
@@ -58,7 +58,7 @@ This updates a single environment variable.
 ```bash
 $ curl -X PATCH \
     -H "Content-Type: application/json" \
-    -H "Travis-API-Version: 3" \
+    -H "KhsCI-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "env_var.value": "bar", "env_var.public": false }' \
     https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/{env_var.id}
