@@ -9,12 +9,11 @@ use App\Http\Controllers\APITokenController;
 use App\Repo;
 use Exception;
 use KhsCI\Support\CI;
-use KhsCI\Support\Git;
 
 class BuildsController
 {
     /**
-     * 某用户的构建列表
+     * 某用户的构建列表.
      *
      * Returns a list of builds for the current user. The result is paginated.
      *
@@ -36,7 +35,7 @@ class BuildsController
     }
 
     /**
-     * 某仓库的构建列表
+     * 某仓库的构建列表.
      *
      * This returns a list of builds for an individual repository. The result is paginated. Each request will return 25
      * results.
@@ -46,6 +45,7 @@ class BuildsController
      * @param mixed ...$args
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public function listByRepo(...$args)
@@ -75,7 +75,7 @@ class BuildsController
      *
      * @throws Exception
      */
-    public function repoCurrent(...$args)
+    public function repoCurrent(...$args): void
     {
         list($git_type, $username, $repo_name) = $args;
 

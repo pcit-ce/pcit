@@ -69,13 +69,13 @@ class APITokenController
         throw new Exception('Not Found', 404);
     }
 
-    public static function checkByRepo(string $git_type, string $username, string $repo_name)
+    public static function checkByRepo(string $git_type, string $username, string $repo_name): void
     {
-
     }
 
     /**
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getGitTypeAndUid()
@@ -129,7 +129,6 @@ class APITokenController
         $token_from_db = ApiToken::get((string) $git_type, $uid);
 
         if ($token_from_db) {
-
             return $token_from_db;
         }
 

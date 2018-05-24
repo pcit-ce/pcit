@@ -117,6 +117,7 @@ class Repo extends DBModel
      * @param int    $rid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getAdmin(string $git_type, int $rid)
@@ -132,6 +133,7 @@ class Repo extends DBModel
      * @param int    $uid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function checkAdmin(string $git_type, int $rid, int $uid)
@@ -148,7 +150,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function updateAdmin(string $git_type, int $rid, int $uid)
+    public static function updateAdmin(string $git_type, int $rid, int $uid): void
     {
         $sql = <<<EOF
 UPDATE repo SET repo_admin=JSON_MERGE(repo_admin,?) WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS(repo_admin,?)
@@ -162,6 +164,7 @@ EOF;
      * @param int    $uid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function allByAdmin(string $git_type, int $uid)
@@ -175,6 +178,7 @@ EOF;
      * @param int $uid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getActiveByAdmin(int $uid)

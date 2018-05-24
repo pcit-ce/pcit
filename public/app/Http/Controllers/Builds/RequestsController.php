@@ -58,6 +58,7 @@ class RequestsController
      * }
      *
      * <pre>
+     *
      * @param array $args
      */
     public function create(...$args): void

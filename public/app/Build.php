@@ -13,7 +13,6 @@ class Build extends DBModel
 {
     /**
      * @param int $build_key_id
-     *
      * @param int $time
      *
      * @return int
@@ -49,7 +48,6 @@ class Build extends DBModel
 
     /**
      * @param int      $build_key_id
-     *
      * @param int|null $time
      *
      * @return int
@@ -157,7 +155,7 @@ class Build extends DBModel
     }
 
     /**
-     * 某仓库最新的一次构建 ID PR 除外
+     * 某仓库最新的一次构建 ID PR 除外.
      *
      * @param string $git_type
      * @param int    $rid
@@ -270,7 +268,7 @@ EOF;
     }
 
     /**
-     * 某分支的构建列表
+     * 某分支的构建列表.
      *
      * @param string   $git_type
      * @param int      $rid
@@ -299,11 +297,12 @@ FROM builds WHERE
 id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
  ORDER BY id DESC LIMIT $limit;
 EOF;
+
         return DB::select($sql, [$git_type, $rid, $branch_name, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
     }
 
     /**
-     * 某仓库的构建列表
+     * 某仓库的构建列表.
      *
      * @param string   $git_type
      * @param int      $rid
@@ -329,7 +328,6 @@ id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT
 ORDER BY id DESC LIMIT $limit
 EOF;
         if ($pr) {
-
             return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, null]);
         }
 
@@ -337,7 +335,7 @@ EOF;
     }
 
     /**
-     * 某用户的构建列表
+     * 某用户的构建列表.
      *
      * @param string   $git_type
      * @param int      $uid

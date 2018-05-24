@@ -20,7 +20,6 @@ class EnvController
         list($git_type, $username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
-
     }
 
     /**

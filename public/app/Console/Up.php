@@ -99,7 +99,7 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state default is pending
+     * @param string $state        default is pending
      * @param string $description
      *
      * @throws Exception
@@ -107,8 +107,7 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void
-    {
+    ): void {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -164,8 +163,7 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  bool $force_create = false
-    ): void
-    {
+    ): void {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -1208,7 +1206,6 @@ INSERT INTO builds(
 action,event_type,git_type,check_suites_id,branch,commit_id
 ) VALUES (?,?,?,?,?,?);
 EOF;
-
 
         //        $last_insert_id = DB::insert($sql, [
         //            $action, __FUNCTION__, self::$git_type, $check_suite_id, $branch, $commit_id,

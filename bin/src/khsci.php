@@ -15,11 +15,11 @@ require __DIR__.'/../../vendor/autoload.php';
 
 $env_file = '.env';
 
-if(Env::get('APP_ENV')){
+if (Env::get('APP_ENV')) {
     $env_file = '.env.'.Env::get('APP_ENV');
 }
 
-if(file_exists(__DIR__.'/../../public/'.$env_file)){
+if (file_exists(__DIR__.'/../../public/'.$env_file)) {
     (new Dotenv(__DIR__.'/../../public', $env_file))->load();
 }
 

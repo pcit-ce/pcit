@@ -31,7 +31,6 @@ class CronController
      */
     public function find($cron_id): void
     {
-
     }
 
     /**
@@ -45,7 +44,6 @@ class CronController
      */
     public function delete($cron_id): void
     {
-
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace KhsCI\Tests\Console;
 
@@ -11,15 +12,16 @@ class QueueTest extends KhsCITestCase
 {
     /**
      * @group DON'TTEST
+     *
      * @throws Exception
      */
-    public function testSaveLog()
+    public function testSaveLog(): void
     {
         $queue = new Queue();
 
-        $queue::$build_key_id = 22;
+        $queue::setBuildKeyId(23);
 
-        $queue::$unique_id = 0;
+        $queue::setUniqueId(0);
 
         $queue::saveLog();
     }

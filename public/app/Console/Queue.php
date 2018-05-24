@@ -20,15 +20,32 @@ class Queue
 {
     private static $commit_id;
 
-    public static $unique_id;
+    private static $unique_id;
 
     private static $event_type;
 
-    public static $build_key_id;
+    private static $build_key_id;
 
     private static $git_type;
 
     private static $config;
+
+    /**
+     * @param mixed $unique_id
+     */
+    public static function setUniqueId($unique_id): void
+    {
+        self::$unique_id = $unique_id;
+    }
+
+    /**
+     * @param mixed $build_key_id
+     */
+    public static function setBuildKeyId($build_key_id): void
+    {
+        self::$build_key_id = $build_key_id;
+    }
+
     /**
      * @var KhsCI
      */
@@ -181,7 +198,7 @@ EOF;
         Build::updateLog(self::$build_key_id, $log_content);
 
         // cleanup
-        //unlink($folder_name.'/'.self::$unique_id);
+        unlink($folder_name.'/'.self::$unique_id);
 
         Cache::connect()->del((string) self::$unique_id);
     }

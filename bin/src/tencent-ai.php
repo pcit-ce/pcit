@@ -15,11 +15,11 @@ $cli = new Application('Tencent AI CLI', 'v18.06');
 
 $env_file = '.env';
 
-if(Env::get('APP_ENV')){
+if (Env::get('APP_ENV')) {
     $env_file = '.env.'.Env::get('APP_ENV');
 }
 
-if(!file_exists(__DIR__.'/../../public/'.$env_file)){
+if (!file_exists(__DIR__.'/../../public/'.$env_file)) {
     throw new Exception('Please SET env vars in '.__DIR__.'/../../public/'.$env_file, 404);
 }
 

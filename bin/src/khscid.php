@@ -29,7 +29,7 @@ spl_autoload_register(function ($class): void {
 try {
     $env_file = '.env';
 
-    if(Env::get('APP_ENV')){
+    if (Env::get('APP_ENV')) {
         $env_file = '.env.'.Env::get('APP_ENV');
     }
 

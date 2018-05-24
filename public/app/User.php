@@ -43,8 +43,7 @@ class User extends DBModel
                                           ?string $email,
                                           string $pic,
                                           ?string $accessToken
-    ): void
-    {
+    ): void {
         $user_key_id = self::exists($git_type, $username);
 
         if ($user_key_id) {

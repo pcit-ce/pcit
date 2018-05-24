@@ -19,15 +19,14 @@ class ActiveController
     }
 
     /**
-     * This will activate a repository, allowing its tests to be run on KhsCI
+     * This will activate a repository, allowing its tests to be run on KhsCI.
      *
      * POST
      *
      * /repo/{repository.id}/activate
      */
-    public function activate()
+    public function activate(): void
     {
-
     }
 
     /**
@@ -37,8 +36,7 @@ class ActiveController
      *
      * /repo/{repository.slug}/deactivate
      */
-    public function deactivate()
+    public function deactivate(): void
     {
-
     }
 }

@@ -73,6 +73,7 @@ class ApiToken extends DBModel
      * @param string $api_token
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getGitTypeAndUid(string $api_token)

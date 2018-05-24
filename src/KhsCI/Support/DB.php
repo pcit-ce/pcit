@@ -15,6 +15,8 @@ class DB
      */
     private static $pdo;
 
+    private static $debug;
+
     /**
      * @return PDO
      *
@@ -33,9 +35,7 @@ class DB
 
             try {
                 $pdo = new PDO($dsn, $mysql_username, $mysql_password);
-
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
                 self::$pdo = $pdo;
             } catch (PDOException $e) {
                 throw new Exception(
@@ -70,11 +70,9 @@ class DB
 
         try {
             $stmt = $pdo->prepare($sql);
-
             $stmt->execute($data);
-
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
+            self::setDebugInfo($stmt);
             $output = $stmt->fetchAll();
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
@@ -109,9 +107,8 @@ class DB
 
         try {
             $stmt = $pdo->prepare($sql);
-
             $stmt->execute($data);
-
+            self::setDebugInfo($stmt);
             $last = $pdo->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
@@ -164,9 +161,8 @@ class DB
 
         try {
             $stmt = $pdo->prepare($sql);
-
             $stmt->execute($data);
-
+            self::setDebugInfo($stmt);
             $count = $stmt->rowCount();
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
@@ -197,5 +193,17 @@ class DB
 
     public static function deleteUser(): void
     {
+    }
+
+    private static function setDebugInfo(\PDOStatement $stmt)
+    {
+        ob_start();
+        $stmt->debugDumpParams();
+        self::$debug = ob_get_clean();
+    }
+
+    public static function getDebugInfo()
+    {
+        return self::$debug;
     }
 }

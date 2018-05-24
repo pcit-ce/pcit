@@ -11,7 +11,7 @@ use Exception;
 class BranchesController
 {
     /**
-     * 某分支的构建列表
+     * 某分支的构建列表.
      *
      * Return a list of branches a repository has on Git.
      *
