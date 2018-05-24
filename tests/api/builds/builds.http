@@ -41,5 +41,7 @@ Authorization: token {{api_token}}
 
 ### Restart
 
-POST https://{{ci_host}}/api/build/1/restart
+POST https://{{ci_host}}/api/build/18/restart
 Authorization: token {{api_token}}
+
+###

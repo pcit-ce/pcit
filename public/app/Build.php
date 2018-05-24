@@ -14,15 +14,23 @@ class Build extends DBModel
     /**
      * @param int $build_key_id
      *
+     * @param int $time
+     *
      * @return int
      *
      * @throws Exception
      */
-    public static function updateStartAt(int $build_key_id)
+    public static function updateStartAt(int $build_key_id, int $time = null)
     {
         $sql = 'UPDATE builds SET started_at = ? WHERE id=?';
 
-        return DB::update($sql, [time(), $build_key_id]);
+        $time = $time ?? time();
+
+        if (0 === $time) {
+            $time = null;
+        }
+
+        return DB::update($sql, [$time, $build_key_id]);
     }
 
     /**
@@ -40,17 +48,25 @@ class Build extends DBModel
     }
 
     /**
-     * @param int $build_key_id
+     * @param int      $build_key_id
+     *
+     * @param int|null $time
      *
      * @return int
      *
      * @throws Exception
      */
-    public static function updateStopAt(int $build_key_id)
+    public static function updateStopAt(int $build_key_id, int $time = null)
     {
         $sql = 'UPDATE builds SET finished_at = ? WHERE id=?';
 
-        return DB::update($sql, [time(), $build_key_id]);
+        $time = $time ?? time();
+
+        if (0 === $time) {
+            $time = null;
+        }
+
+        return DB::update($sql, [$time, $build_key_id]);
     }
 
     /**
@@ -280,7 +296,7 @@ EOF;
 SELECT id,branch,commit_id,tag_name,commit_message,
 compare,committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type
 FROM builds WHERE 
-id<$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
+id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
  ORDER BY id DESC LIMIT $limit;
 EOF;
         return DB::select($sql, [$git_type, $rid, $branch_name, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
@@ -309,7 +325,7 @@ EOF;
 SELECT id,branch,commit_id,tag_name,commit_message,compare,
 committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
 FROM builds WHERE 
-id<$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip') 
+id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip') 
 ORDER BY id DESC LIMIT $limit
 EOF;
         if ($pr) {
@@ -342,7 +358,7 @@ EOF;
 SELECT id,branch,commit_id,tag_name,commit_message,compare,
 committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
 FROM builds 
-WHERE id<$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) ) 
+WHERE id<=$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) ) 
 AND git_type=? AND event_type IN(?,?) AND build_status NOT IN('skip') ORDER BY id DESC LIMIT $limit;
 EOF;
 

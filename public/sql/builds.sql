@@ -31,3 +31,6 @@ CREATE TABLE IF NOT EXISTS `builds` (
   `internal`           INT UNSIGNED DEFAULT 1,
   PRIMARY KEY (`id`)
 );
+
+ALTER TABLE builds
+  ADD UNIQUE KEY (`git_type`, `rid`, `event_type`, `branch`, `commit_id`);

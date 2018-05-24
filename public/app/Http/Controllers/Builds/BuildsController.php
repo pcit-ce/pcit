@@ -136,5 +136,7 @@ class BuildsController
         APITokenController::check((int) $build_id);
 
         Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_PENDING);
+        Build::updateStartAt((int) $build_id, 0);
+        Build::updateStopAt((int) $build_id, 0);
     }
 }

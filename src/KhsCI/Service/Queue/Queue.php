@@ -148,7 +148,7 @@ class Queue
      *
      * @throws Exception
      */
-    private function parseImage(string $image, array $config)
+    private function parseImage(string $image, ?array $config)
     {
         Log::debug(__FILE__, __LINE__, 'Parse Image '.$image);
 
@@ -206,6 +206,10 @@ class Queue
             throw new Exception(CI::BUILD_STATUS_ERRORED);
         }
 
+        if (!self::$config) {
+            throw new Exception(CI::BUILD_STATUS_ERRORED);
+        }
+
         $yaml_obj = (object) json_decode(self::$config, true);
 
         // 解析 .khsci.yml.
@@ -218,7 +222,12 @@ class Queue
 
         $services = $yaml_obj->services ?? null;
 
-        $matrix = $this->parseMatrix($yaml_obj->matrix);
+        $matrix = $yaml_obj->matrix ?? null;
+
+        // 存在构建矩阵
+        if ($matrix) {
+            $matrix = $this->parseMatrix($yaml_obj->matrix);
+        }
 
         /**
          * 变量命名尽量与 docker container run 的参数保持一致.
@@ -246,6 +255,19 @@ class Queue
 
         $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
         $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
+
+        // 不存在构建矩阵
+        if (!$matrix) {
+            $this->cancel();
+
+            $this->runService($services, $unique_id, null, $docker);
+
+            $this->cancel();
+
+            $this->runPipeline($pipeline, null, $workdir, $unique_id, $docker_container, $docker_image);
+
+            throw new Exception(CI::BUILD_STATUS_PASSED);
+        }
 
         // 矩阵构建循环
         foreach ($matrix as $k => $config) {
@@ -296,7 +318,7 @@ class Queue
      * @throws Exception
      */
     private function runPipeline(array $pipeline,
-                                 array $config,
+                                 ?array $config,
                                  string $work_dir,
                                  string $unique_id,
                                  Container $docker_container,
@@ -624,7 +646,7 @@ class Queue
      *
      * @throws Exception
      */
-    private function runService(array $service, string $unique_id, array $config, Docker $docker): void
+    private function runService(array $service, string $unique_id, ?array $config, Docker $docker): void
     {
         foreach ($service as $service_name => $array) {
             $this->cancel();

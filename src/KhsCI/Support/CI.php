@@ -18,6 +18,8 @@ class CI
 
     const BUILD_STATUS_SKIP = 'skip';
 
+    const BUILD_STATUS_IN_PROGRESS = 'in_progress';
+
     const BUILD_STATUS_INACTIVE = 'inactive';
 
     const BUILD_ACTIVATE = 1;

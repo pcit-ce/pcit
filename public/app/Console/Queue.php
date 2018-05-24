@@ -76,6 +76,7 @@ EOF;
             $build_key_id = $output[0];
 
             Build::updateStartAt((int) $build_key_id);
+            Build::updateBuildStatus((int) $build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
 
             unset($output[10]);
 
