@@ -188,9 +188,15 @@ class Up
 
         $status = $status ?? CI::GITHUB_CHECK_SUITE_STATUS_QUEUED;
 
-        $name = $name ?? 'Build Event is '.ucfirst($event_type).' '.ucfirst($status);
+        $status_use_in_title = $status;
 
-        $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status);
+        if (CI::BUILD_STATUS_IN_PROGRESS === $status) {
+            $status_use_in_title = 'in Progress';
+        }
+
+        $name = $name ?? 'Build Event is '.ucfirst($event_type).' '.ucfirst($status_use_in_title);
+
+        $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status_use_in_title);
 
         $summary = $summary ?? 'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)';
 
@@ -303,7 +309,11 @@ class Up
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
 
             self::updateGitHubAppChecks(
-                (int) Build::getLatestBuildKeyId($git_repo_full_name),
+                (int) Build::getCurrentBuildKeyId(
+                    'github_app', (int) Repo::getRid(
+                    'github_app', ...explode('/', (string) $git_repo_full_name)
+                )
+                ),
                 $name,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
                 time(),

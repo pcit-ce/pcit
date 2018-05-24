@@ -509,7 +509,10 @@ class Queue
 
                 $prev_docker_log = $redis->hget('build_log', (string) self::$build_key_id);
 
-                $redis->hset('build_log', (string) self::$build_key_id, $prev_docker_log.$image_log);
+                $redis->hset(
+                    'build_log',
+                    (string) self::$build_key_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
+                );
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z

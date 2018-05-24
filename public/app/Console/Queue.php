@@ -20,11 +20,11 @@ class Queue
 {
     private static $commit_id;
 
-    private static $unique_id;
+    public static $unique_id;
 
     private static $event_type;
 
-    private static $build_key_id;
+    public static $build_key_id;
 
     private static $git_type;
 
@@ -144,7 +144,7 @@ EOF;
     /**
      * @throws Exception
      */
-    private static function saveLog(): void
+    public static function saveLog(): void
     {
         // 日志美化
 
@@ -156,9 +156,13 @@ EOF;
             return;
         }
 
-        file_put_contents(sys_get_temp_dir().'/'.self::$unique_id, $output);
+        $folder_name = sys_get_temp_dir().'/.khsci';
 
-        $fh = fopen(sys_get_temp_dir().'/'.self::$unique_id, 'r');
+        !is_dir($folder_name) && mkdir($folder_name);
+
+        file_put_contents($folder_name.'/'.self::$unique_id, "$output");
+
+        $fh = fopen($folder_name.'/'.self::$unique_id, 'r');
 
         Cache::connect()->del((string) self::$unique_id);
 
@@ -172,12 +176,12 @@ EOF;
 
         fclose($fh);
 
-        $a = Cache::connect()->get((string) self::$unique_id);
+        $log_content = Cache::connect()->get((string) self::$unique_id);
 
-        Build::updateLog(self::$build_key_id, $a);
+        Build::updateLog(self::$build_key_id, $log_content);
 
         // cleanup
-        unlink(sys_get_temp_dir().'/'.self::$unique_id);
+        //unlink($folder_name.'/'.self::$unique_id);
 
         Cache::connect()->del((string) self::$unique_id);
     }
