@@ -277,9 +277,11 @@ EOF;
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
+SELECT id,branch,commit_id,tag_name,commit_message,
+compare,committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type
 FROM builds WHERE 
-id<$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) ORDER BY id DESC LIMIT $limit;
+id<$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
+ ORDER BY id DESC LIMIT $limit;
 EOF;
         return DB::select($sql, [$git_type, $rid, $branch_name, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
     }
@@ -291,22 +293,29 @@ EOF;
      * @param int      $rid
      * @param int|null $before
      * @param int|null $limit
+     * @param bool     $pr
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function allByRid(string $git_type, int $rid, ?int $before, ?int $limit)
+    public static function allByRid(string $git_type, int $rid, ?int $before, ?int $limit, bool $pr)
     {
         $before = $before ?? self::getLastKeyId();
 
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
+SELECT id,branch,commit_id,tag_name,commit_message,compare,
+committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
 FROM builds WHERE 
-id<$before AND git_type=? AND rid=? AND event_type IN(?,?) ORDER BY id DESC LIMIT $limit
+id<$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip') 
+ORDER BY id DESC LIMIT $limit
 EOF;
+        if ($pr) {
+
+            return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, null]);
+        }
 
         return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_TAG, CI::BUILD_EVENT_PUSH]);
     }
@@ -330,10 +339,11 @@ EOF;
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,compare,committer_name,created_at,started_at,finished_at 
+SELECT id,branch,commit_id,tag_name,commit_message,compare,
+committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
 FROM builds 
 WHERE id<$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) ) 
-AND git_type=? AND event_type IN(?,?) ORDER BY id DESC LIMIT $limit;
+AND git_type=? AND event_type IN(?,?) AND build_status NOT IN('skip') ORDER BY id DESC LIMIT $limit;
 EOF;
 
         return DB::select($sql, ["\"$uid\"", $git_type, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);

@@ -9,6 +9,7 @@ use App\Http\Controllers\APITokenController;
 use App\Repo;
 use Exception;
 use KhsCI\Support\CI;
+use KhsCI\Support\Git;
 
 class BuildsController
 {
@@ -23,9 +24,9 @@ class BuildsController
      */
     public function __invoke()
     {
-        $before = $_GET['before'] ?? null;
+        $before = (int) $_GET['before'] ?? null;
 
-        $limit = $_GET['limit'] ?? null;
+        $limit = (int) $_GET['limit'] ?? null;
 
         list('git_type' => $git_type, 'uid' => $uid) = (APITokenController::getGitTypeAndUid())[0];
 
@@ -52,14 +53,21 @@ class BuildsController
         list($git_type, $username, $repo_name) = $args;
 
         $before = $_GET['before'] ?? null;
-
         $limit = $_GET['limit'] ?? null;
+        $pr = $_GET['type'] ?? null;
+
+        $before && $before = (int) $before;
+        $limit && $limit = (int) $before;
 
         $rid = Repo::getRid(...$args);
 
-        $array = Build::allByRid($git_type, (int) $rid, $before, $limit);
+        $array = Build::allByRid($git_type, (int) $rid, $before, $limit, (bool) $pr);
 
-        return $array;
+        foreach ($array as $k) {
+            $return_array[] = $k;
+        }
+
+        return $return_array;
     }
 
     /**
@@ -87,7 +95,7 @@ class BuildsController
      */
     public function find($build_id)
     {
-        APITokenController::check((int) $build_id);
+        // APITokenController::check((int) $build_id);
 
         $output = Build::find((int) $build_id);
 
