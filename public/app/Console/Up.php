@@ -433,10 +433,15 @@ EOF;
 
         $commit_timestamp = Date::parse($head_commit->timestamp);
 
-        $committer = $head_commit->committer;
-        $committer_name = $committer->name;
-        $committer_email = $committer->email;
-        $committer_username = $committer->username;
+        $author = $head_commit->author;
+        $committer_name = $author->name;
+        $committer_email = $author->email;
+        $committer_username = $author->username;
+
+        // $committer = $head_commit->committer;
+        // $committer_name = $committer->name;
+        // $committer_email = $committer->email;
+        // $committer_username = $committer->username;
 
         $installation_id = $obj->installation->id ?? null;
 

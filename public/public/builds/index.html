@@ -67,7 +67,6 @@
 
   function current() {
     $.ajax({
-
       type: "GET",
       url: '/api/repo/' + base_include + '/build/current',
       success: function (data) {
@@ -125,12 +124,17 @@
 
     switch (git_type) {
       case 'github_app':
-        commitUrl = 'https://github.com/' + username + '/' + repo + '/commits/' + commit_id;
+        commitUrl = 'https://github.com/' + username + '/' + repo + '/commit/' + commit_id;
 
         break;
 
       case 'github':
-        commitUrl = 'https://github.com/' + username + '/' + repo + '/commits/' + commit_id;
+        commitUrl = 'https://github.com/' + username + '/' + repo + '/commit/' + commit_id;
+        break;
+
+      case 'gitee':
+        commitUrl = `https://gitee.com/${username}/${repo}/commit/${commit_id}`
+
         break;
     }
 
@@ -142,7 +146,14 @@
 
     switch (git_type) {
       case 'github_app':
-        prUrl = `https://github,com/${username}/${repo}/pull/${pull_request_id}`;
+        prUrl = `https://github.com/${username}/${repo}/pull/${pull_request_id}`;
+
+        break;
+
+      case 'gitee':
+        prUrl = `https://gitee.com/${username}/${repo}/pulls/${pull_request_id}`;
+
+        break;
     }
 
     return prUrl;
@@ -170,9 +181,9 @@
           stopped_at = d.toLocaleString();
 
           $("#display").append(`<h2># ${build_id}{nbsp}${branch}${nbsp}${build_status}${nbsp}
-            <a href="${commit_id}" target='_blank'>${commit_id.slice(0, 7)}</a>${nbsp}
+            <a title="View commit on GitHub" href="${commit_id}" target='_blank'>${commit_id.slice(0, 7)}</a>${nbsp}
             ${commit_message}${nbsp}${committer_name}${nbsp}
-            <a href="${compare}" target='_blank'>Compare  </a>${nbsp}${stopped_at}${nbsp}</h2>
+            <a title="View diff on GitHub" href="${compare}" target='_blank'>Compare  </a>${nbsp}${stopped_at}${nbsp}</h2>
             <pre> + data.data + </pre>`);
         }
 
@@ -231,7 +242,7 @@
 <td>${nbsp}${branch}${nbsp}</td>
 <td>${committer_username}${nbsp}</td>
 <td style='color: brown'>${nbsp}${commit_message}${nbsp}</td>
-<td>${nbsp}<a href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
+<td>${nbsp}<a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
 <td><a href="${location.href}/${build_id}" target='_blank'># ${build_id}&nbsp;${build_status}</a>${nbsp}</td>
 <td>${nbsp}${started_at}${nbsp}</td>
 <td>${nbsp}${stopped_at}${nbsp}</td>
@@ -298,7 +309,6 @@
             let pull_request_id = status.pull_request_id;
             let build_id = status.id;
             let branch = status.branch;
-            let compare_url = status.compare;
             let committer_username = status.committer_username;
             let commit_message = status.commit_message;
             let commit_id = status.commit_id;
@@ -308,6 +318,8 @@
             let nbsp = "&nbsp;&nbsp;&nbsp;";
 
             let commit_url = getCommitUrl(commit_id);
+
+            let pull_request_url = getPRUrl(pull_request_id);
 
             commit_id = commit_id.substr(0, 7);
 
@@ -329,11 +341,11 @@
               `
 <tr>
 <td>${i}${nbsp}</td>
-<td><a href="${compare_url}" target="_blank">${event_type}${pull_request_id}</a>${nbsp}</td>
+<td><a title="View Pull Request on GitHub" href="${pull_request_url}" target="_blank">${event_type}${pull_request_id}</a>${nbsp}</td>
 <td>${nbsp}${branch}${nbsp}</td>
 <td>${committer_username}${nbsp}</td>
 <td style='color:brown'> ${nbsp}${commit_message}${nbsp}</td>
-<td>${nbsp}<a href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
+<td>${nbsp}<a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
 <td><a href="${base_full_url}/builds/${build_id}" target='_blank'> #${build_id}${nbsp}${build_status}</a>${nbsp}</td>
 <td>${nbsp}${started_at}${nbsp}</td>
 <td>${nbsp}${stopped_at}${nbsp}</td>
@@ -342,6 +354,7 @@
             )
           });
         }
+
         break;
     }
   }
