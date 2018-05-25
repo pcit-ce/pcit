@@ -35,25 +35,27 @@ class Run
     }
 
     /**
-     * @param string $repo_full_name
-     * @param string $name           Required. The name of the check (e.g., "code-coverage").
-     * @param string $branch         Required. The name of the branch to perform a check against.
-     * @param string $commit_id      Required. The SHA of the commit.
-     * @param string $details_url    the URL of the integrator's site that has the full details of the check
-     * @param string $external_id    a reference for the run on the integrator's system
-     * @param string $status         The current status. Can be one of queued, in_progress, or completed. Default:
-     *                               queued
-     * @param int    $started_at     the time that the check run began in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
-     * @param int    $completed_at   Required. The time the check completed in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-     *                               Required if you provide conclusion.
-     * @param string $conclusion     Required. The final conclusion of the check. Can be one of success, failure,
-     *                               neutral,
-     *                               cancelled, timed_out, or action_required.
-     * @param string $title
-     * @param string $summary
-     * @param string $text
-     * @param array  $annotations
-     * @param array  $images
+     * @param string     $repo_full_name
+     * @param string     $name         Required. The name of the check (e.g., "code-coverage").
+     * @param string     $branch       Required. The name of the branch to perform a check against.
+     * @param string     $commit_id    Required. The SHA of the commit.
+     * @param string     $details_url  the URL of the integrator's site that has the full details of the check
+     * @param string     $external_id  a reference for the run on the integrator's system
+     * @param string     $status       The current status. Can be one of queued, in_progress, or completed. Default:
+     *                                 queued
+     * @param int        $started_at   the time that the check run began in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
+     * @param int        $completed_at Required. The time the check completed in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
+     *                                 Required if you provide conclusion.
+     * @param string     $conclusion   Required. The final conclusion of the check. Can be one of success, failure,
+     *                                 neutral,
+     *                                 cancelled, timed_out, or action_required.
+     * @param string     $title
+     * @param string     $summary
+     * @param string     $text
+     * @param array      $annotations
+     * @param array      $images
+     *
+     * @param array|null $action
      *
      * @return mixed
      *
@@ -73,8 +75,10 @@ class Run
                            string $summary = null,
                            string $text = null,
                            array $annotations = null,
-                           array $images = null
-    ) {
+                           array $images = null,
+                           array $action = null
+    )
+    {
         $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
 
         $data = array_filter([
@@ -93,6 +97,7 @@ class Run
                 'text' => $text,
                 'annotations' => $annotations,
                 'images' => $images,
+                'action' => $action,
             ]),
         ]);
 
@@ -131,7 +136,8 @@ class Run
                                              string $message,
                                              string $title = null,
                                              string $raw_details = null
-    ) {
+    )
+    {
         return [
             'filename' => $filename,
             'blog_href' => $blog_href,
@@ -159,6 +165,27 @@ class Run
             'alt' => $alt,
             'image_url' => $image_url,
             'caption' => $caption,
+        ];
+    }
+
+    /**
+     * @param string $label
+     * @param string $identifier
+     * @param string $description
+     *
+     * @return array
+     *
+     * @see https://developer.github.com/changes/2018-05-23-request-actions-on-checks/
+     */
+    public static function createAction(string $label = 'fix',
+                                        string $identifier = 'fix_errors',
+                                        string $description = 'Allow us to fix these errors for you'
+    )
+    {
+        return [
+            'label' => $label,
+            'identifier' => $identifier,
+            'description' => $description,
         ];
     }
 

@@ -60,4 +60,12 @@ class Migrate
 
         return $array;
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function cleanup()
+    {
+        return DB::statement('DROP DATABASE test; CREATE DATABASE test');
+    }
 }

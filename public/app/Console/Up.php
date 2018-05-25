@@ -249,6 +249,14 @@ class Up
     }
 
     /**
+     * @param mixed $git_type
+     */
+    public static function setGitType($git_type): void
+    {
+        self::$git_type = $git_type;
+    }
+
+    /**
      * @throws Exception
      */
     private static function webhooks(): void
@@ -1111,7 +1119,7 @@ EOF;
      *
      * @throws Exception
      */
-    public function installation_repositories(string $content)
+    public static function installation_repositories(string $content)
     {
         $obj = json_decode($content);
 

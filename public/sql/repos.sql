@@ -1,4 +1,4 @@
-USE khsci;
+# USE khsci;
 
 # DROP TABLE IF EXISTS `repo`;
 

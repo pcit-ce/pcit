@@ -1,36 +1,7 @@
-#
-# add
-#
-
-POST https://{{ci_host}}/webhooks/github_app
-Request method: POST
-content-type: application/json
-Expect:
-User-Agent: GitHub-Hookshot/4f82700
-X-GitHub-Delivery: fe584bb0-533d-11e8-9a2d-719d0a516c76
-X-GitHub-Event: installation_repositories
-X-Hub-Signature: sha1=2dcb7fdeeca3000222c47a2d2fb1c319284aafc7
-
-< ./installation_repositories_add.json
-
-###
-#
-# remove
-#
-
-POST https://{{ci_host}}/webhooks/github_app
-Request method: POST
-content-type: application/json
-Expect:
-User-Agent: GitHub-Hookshot/4f82700
-X-GitHub-Delivery: 7206bb1e-533e-11e8-80e6-6d01c81f3ff7
-X-GitHub-Event: installation_repositories
-X-Hub-Signature: sha1=60d9d60682087b4f0f97186793fd90e198adcb57
-
 {
-  "action": "removed",
+  "action": "added",
   "installation": {
-    "id": 162542,
+    "id": 172433,
     "account": {
       "login": "khs1994-php",
       "id": 31461768,
@@ -51,9 +22,9 @@ X-Hub-Signature: sha1=60d9d60682087b4f0f97186793fd90e198adcb57
       "site_admin": false
     },
     "repository_selection": "selected",
-    "access_tokens_url": "https://api.github.com/installations/162542/access_tokens",
+    "access_tokens_url": "https://api.github.com/installations/172433/access_tokens",
     "repositories_url": "https://api.github.com/installation/repositories",
-    "html_url": "https://github.com/organizations/khs1994-php/settings/installations/162542",
+    "html_url": "https://github.com/organizations/khs1994-php/settings/installations/172433",
     "app_id": 11044,
     "target_id": 31461768,
     "target_type": "Organization",
@@ -98,21 +69,21 @@ X-Hub-Signature: sha1=60d9d60682087b4f0f97186793fd90e198adcb57
       "team",
       "team_add"
     ],
-    "created_at": "2018-05-09T09:11:22.000+08:00",
-    "updated_at": "2018-05-09T09:11:22.000+08:00",
+    "created_at": 1526101136,
+    "updated_at": 1526994330,
     "single_file_name": null
   },
   "repository_selection": "selected",
   "repositories_added": [
-
-  ],
-  "repositories_removed": [
     {
-      "id": 100000002,
-      "name": "test2",
-      "full_name": "khs1994-php/test2",
+      "id": 134826694,
+      "name": "khsci-test",
+      "full_name": "khs1994-php/khsci-test",
       "private": false
     }
+  ],
+  "repositories_removed": [
+
   ],
   "sender": {
     "login": "khs1994",
@@ -134,5 +105,3 @@ X-Hub-Signature: sha1=60d9d60682087b4f0f97186793fd90e198adcb57
     "site_admin": false
   }
 }
-
-###

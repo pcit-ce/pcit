@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit>
-    <testsuites>
-        <testsuite>
-            <directory>tests/KhsCI</directory>
-        </testsuite>
-    </testsuites>
-    <groups>
-        <exclude>
-            <group>DON'TTEST</group>
-        </exclude>
-    </groups>
+  <testsuites>
+    <testsuite>
+      <directory>tests/KhsCI</directory>
+    </testsuite>
+  </testsuites>
+  <groups>
+    <exclude>
+      <group>DON'TTEST</group>
+    </exclude>
+  </groups>
+  <php>
+    <env name="APP_ENV" value="testing"/>
+  </php>
 </phpunit>

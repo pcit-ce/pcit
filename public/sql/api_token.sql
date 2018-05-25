@@ -1,4 +1,4 @@
-use khsci;
+# use khsci;
 
 # DROP TABLE IF EXISTS `api_token`;
 
