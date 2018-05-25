@@ -341,4 +341,10 @@ EOF;
             return;
         }
     }
+
+    public function test()
+    {
+
+    }
+
 }

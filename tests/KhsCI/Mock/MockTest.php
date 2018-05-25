@@ -1,0 +1,24 @@
+<?php
+
+namespace KhsCI\Tests\Mock;
+
+
+use App\Console\Queue;
+use KhsCI\Tests\KhsCITestCase;
+
+class MockTest extends KhsCITestCase
+{
+    /**
+     * 请注意，final、private 和 static 方法无法对其进行上桩(stub)或模仿(mock)
+     *
+     * @throws \ReflectionException
+     */
+    public function testStub()
+    {
+        $stub = $this->createMock(Queue::class);
+
+        $stub->method('test')->willReturn(1);
+
+        $this->assertEquals(1, $stub->test());
+    }
+}

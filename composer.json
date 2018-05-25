@@ -36,7 +36,8 @@
     "vlucas/phpdotenv": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.0"
+    "phpunit/phpunit": "^7.0",
+    "phpunit/dbunit": "^4.0"
   },
   "config": {
     "platform": {

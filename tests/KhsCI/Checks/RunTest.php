@@ -18,6 +18,8 @@ class RunTest extends KhsCITestCase
      */
     public function setUp(): void
     {
+        parent::__construct();
+
         Migrate::all();
 
         Up::setGitType('github_app');
