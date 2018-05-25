@@ -2,6 +2,10 @@
 
 ## v18.06.0
 
+### 2018/05/25
+
+支持 GitHub App Check Run [Action](https://developer.github.com/changes/2018-05-23-request-actions-on-checks/) 
+
 ### 2018/05/22
 
 完成 API Access Token、CLI

@@ -143,8 +143,9 @@ class Up
      * @param string|null $title
      * @param string      $summary
      * @param string      $text
-     * @param array|null  $annotations
-     * @param array       $images
+     * @param array|null  $annotations  [$annotation, $annotation2]
+     * @param array|null  $images       [$image, $image2]
+     * @param array|null  $actions      [$action]
      * @param bool        $force_create 默认请款下若 check_run_id 已存在，则更新此 check_run_id
      *                                  若设为 true 则新建一个 check_run ,适用于第三方服务完成状态展示
      *                                  或是没有过程，直接完成的构建
@@ -162,6 +163,7 @@ class Up
                                                  string $text = null,
                                                  array $annotations = null,
                                                  array $images = null,
+                                                 array $actions = null,
                                                  bool $force_create = false
     ): void {
         $rid = Build::getRid((int) $build_key_id);
@@ -206,13 +208,13 @@ class Up
             $output = $khsci->check_run->update(
                 $repo_full_name, $check_run_id, $name, $branch, $commit_id, $details_url,
                 (string) $build_key_id, $status, $started_at ?? time(),
-                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
+                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
             );
         } else {
             $output = $khsci->check_run->create(
                 $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
                 $started_at ?? time(),
-                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images
+                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
             );
         }
 
@@ -1247,7 +1249,7 @@ EOF;
 
         $rid = $obj->repository->id;
 
-        if ('rerequested' === $action) {
+        if ('rerequested' === $action or 'requested_action' === $action) {
             $check_run = $obj->check_run;
 
             $check_run_id = $check_run->id;
@@ -1261,6 +1263,17 @@ EOF;
             $check_suite_id = $check_suite->id;
 
             $branch = $check_suite->head_branch;
+
+            switch ($action) {
+                case 'rerequested':
+
+                    break;
+
+                case 'requested_action':
+                    // 用户点击了按钮，CI 推送修复补丁
+
+                    break;
+            }
         } else {
             return;
         }

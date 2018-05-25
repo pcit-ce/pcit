@@ -195,7 +195,7 @@ class DB
     {
     }
 
-    private static function setDebugInfo(\PDOStatement $stmt)
+    private static function setDebugInfo(\PDOStatement $stmt): void
     {
         ob_start();
         $stmt->debugDumpParams();
