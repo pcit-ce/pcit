@@ -298,10 +298,12 @@ class Queue
     {
         $output = Build::getBuildStatusByBuildKeyId((int) self::$build_key_id);
 
+        // 取消构建
         if (CI::BUILD_STATUS_CANCELED === $output) {
             throw new Exception(CI::BUILD_STATUS_CANCELED);
         }
 
+        // 重新构建
         if (CI::BUILD_STATUS_PENDING === $output) {
             throw new Exception(CI::BUILD_STATUS_CANCELED);
         }

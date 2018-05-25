@@ -12,6 +12,8 @@
 
 * [API](https://ci.khs1994.com/api)
 
+* [API 文档](https://docs.ci.khs1994.com)
+
 * [捐赠](https://zan.khs1994.com)
 
 * [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/enterprises)

@@ -1,7 +1,4 @@
-
-# KhsCI EE 2019.05.01 Available
-
-# KhsCI CE 2018.10.01 Available
+# KhsCI EE
 
 * 安装好 Docker 并克隆部署环境（LNMP）
 
