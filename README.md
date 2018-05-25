@@ -1,4 +1,4 @@
-# KhsCI CE
+# KhsCI
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![Build Status](https://ci.khs1994.com/github_app/khs1994-php/khsci/status?branch=master)](https://ci.khs1994.com/github_app/khs1994-php/khsci)
 
@@ -16,7 +16,7 @@
 
 * [捐赠](https://zan.khs1994.com)
 
-* [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/enterprises)
+* [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/docs#about-khsci-ce-and-ee)
 
 ## PHP CaaS
 
@@ -24,11 +24,13 @@
 
 ## About KhsCI
 
-**KhsCI** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** 组成
+**KhsCI** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** 三部分组成
 
 * **Webhooks Server** 接收 GitHub App POST 过来的数据
 
 * **Daemon CLI** 后端常驻 (守护) 程序，处理 GitHub App POST 过来的数据并返回给 `GitHub App`
+
+* **CLI** 提供各种实用的功能，例如 命令行操作 GitHub，命令行中英互译，等
 
 * [什么是 GitHub App](https://github.com/khs1994-php/khsci/issues/51)
 
@@ -40,11 +42,11 @@
 
 **二是** 自己部署 `PHP` 后端，自己新建 `GitHub App`，安装自己的 `GitHub App`（支持 `Docker` 构建）。
 
-## Try Demo
+## Try Demo (KhsCI CE)
 
 [Install GitHub App](https://github.com/khs1994-php/khsci/tree/master/docs)
 
-## Installation In Your host
+## Installation In Your host (KhsCI EE)
 
 * ~~MySQL~~
 
@@ -52,9 +54,9 @@
 
 * ~~RabbitMQ~~
 
-* **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)
+* **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) and Website SSL/TLS Certificates
 
-To **install** KhsCI, simply:
+To **install** KhsCI EE in your host, simply:
 
 ```bash
 # install khs1994-docker/lnmp
@@ -64,6 +66,8 @@ $ git clone --recursive https://github.com/khs1994-docker/lnmp.git ~/lnmp
 $ composer create-project khs1994/khsci:dev-master ~/lnmp/app/khsci
 
 $ cd lnmp
+
+# read lnmp/khsci/README.md, then exec
 
 $ ./lnmp-docker.sh khsci-up
 ```
