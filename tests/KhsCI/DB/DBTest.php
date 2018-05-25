@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\DB\Tests;
 
 use App\Console\Migrate;
@@ -14,7 +16,6 @@ use PHPUnit\DbUnit\TestCaseTrait;
  * 数据库、表、序列、触发器还有视图，必须全部在运行测试套件之前创建好。
  *
  * Class DBTest
- * @package KhsCI\DB\Tests
  */
 class DBTest extends KhsCITestCase
 {
@@ -23,7 +24,7 @@ class DBTest extends KhsCITestCase
     /**
      * @throws Exception
      */
-    public function testCreateDB()
+    public function testCreateDB(): void
     {
         Migrate::all();
 
@@ -63,7 +64,7 @@ class DBTest extends KhsCITestCase
     /**
      * @throws Exception
      */
-    public function test()
+    public function test(): void
     {
         // 对表中数据行的数量作出断言
         $this->assertEquals(2, $this->getConnection()->getRowCount('builds'));
@@ -76,8 +77,8 @@ class DBTest extends KhsCITestCase
                     'id' => 1,
                 ], [
                     'id' => 2,
-                ]
-            ]
+                ],
+            ],
         ])->getTable('builds');
 
         // 对结果断言
@@ -89,7 +90,7 @@ class DBTest extends KhsCITestCase
     }
 
     /**
-     * 测试的前提条件
+     * 测试的前提条件.
      *
      * @requires PHP 7.3-dev|7.2.5
      * 任何 PHP 版本标识符
@@ -108,23 +109,23 @@ class DBTest extends KhsCITestCase
      *
      * @requires extension mysqli
      */
-    public function testRequire()
+    public function testRequire(): void
     {
         $this->assertEquals(0, 0);
     }
 
     /**
-     * 跳过测试
+     * 跳过测试.
      */
-    public function testSkip()
+    public function testSkip(): void
     {
         $this->markTestSkipped();
     }
 
     /**
-     * 暂未完成的测试
+     * 暂未完成的测试.
      */
-    public function testInComplete()
+    public function testInComplete(): void
     {
         $this->markTestIncomplete();
     }

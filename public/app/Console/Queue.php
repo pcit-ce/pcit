@@ -342,9 +342,7 @@ EOF;
         }
     }
 
-    public function test()
+    public function test(): void
     {
-
     }
-
 }

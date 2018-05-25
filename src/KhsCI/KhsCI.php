@@ -34,6 +34,7 @@ use TencentAI\TencentAI;
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status
  * @property Service\Repositories\Webhooks      $repo_webhooks
+ * @property Service\PullRequest\GitHubClient   $github_pull_request
  * @property Service\Webhooks\Webhooks          $webhooks
  * @property Service\Queue\Queue                $queue
  * @property TencentAI                          $tencent_ai
@@ -54,6 +55,7 @@ class KhsCI extends Container
         Providers\OAuthProvider::class,
         Providers\QueueProvider::class,
         Providers\RepositoriesProvider::class,
+        Providers\PullRequestProvider::class,
         Providers\TencentAIProvider::class,
         Providers\UserProvider::class,
         Providers\WebhooksProvider::class,
