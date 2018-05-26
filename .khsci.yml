@@ -12,8 +12,8 @@ clone:
     # recursive: true
     # skip_verify: false
     # tags: false
-#    submodule_override:
-#      hello-world: https://github.com/octocat/hello-world.git
+    # submodule_override:
+      # hello-world: https://github.com/octocat/hello-world.git
 
 workspace:
   base: /app

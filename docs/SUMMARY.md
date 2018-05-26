@@ -13,6 +13,7 @@
 ## Usage
 
 * [Usage](usage/README.md)
+    * [clone](usage/clone.md)
     * [workspace](usage/workspace.md)
     * [pipeline](usage/pipeline.md)
     * [services](usage/services.md)
