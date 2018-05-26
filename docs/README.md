@@ -8,13 +8,13 @@
 
 ## 体验 KhsCI CE
 
-## GitHub 新建仓库
+### GitHub 新建仓库
 
-## 安装 KhsCI GitHub App
+### 安装 KhsCI GitHub App
 
 在 https://github.com/apps/khsci 点击右边的 `Install` 按钮，在稍后跳转的页面中选择你新建的 **仓库**
 
-## 体验 Issue 内容中英互译
+### 体验 Issue 内容中英互译
 
 在你的 **仓库** 新建一个 Issue (内容不能为空)，提交之后，可以看到 `khsci[bot]` 回复了这个 Issue
 
@@ -52,11 +52,11 @@ $ git commit -m "Test KhsCI"
 $ git push origin master
 ```
 
-在 GitHub 点击 `commits`，点击 commit 信息后的小图标，进入到构建详情页，查看构建过程及结果
+在 **GitHub** 点击 `commits`，点击 commit 信息后的小图标，进入到构建详情页，查看构建过程及结果
 
 ## 私有部署 KhsCI EE
 
-KhsCI 由 PHP 后端（Webhooks Server + Daemon CLI）和 GitHub App 组成。
+**KhsCI** 由 **PHP 后端**（Webhooks Server + Daemon CLI）和 **GitHub App** 组成。
 
 [Coming Soon !](https://github.com/khs1994-php/khsci/blob/master/docs/install/ee.md)
 
@@ -81,10 +81,10 @@ KhsCI 由 PHP 后端（Webhooks Server + Daemon CLI）和 GitHub App 组成。
 
 ## 未来 CE 和 EE 版本价格问题
 
-总的来说 CE 和 EE 的最大区别就是 **是否需要自己部署**。
+总的来说 **CE** 和 **EE** 的最大区别就是 **是否需要自己部署**。
 
 > 为什么 CE 不提供构建功能?
 
-由于 CE 部署在一个 1G 1核 的云主机上，配置较低，暂不提供项目构建功能。
+由于 **CE** 部署在一个 **1G 1核** 的云主机上，配置较低，暂不提供项目构建功能。
 
 本项目承诺 **永久免费**，但对 **技术支持服务** 收费（ **如何收费待定** ）。
