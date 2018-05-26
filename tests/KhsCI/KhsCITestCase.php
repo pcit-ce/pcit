@@ -42,8 +42,9 @@ class KhsCITestCase extends TestCase
         if (file_exists(__DIR__.'/../../public/.env.testing')) {
             (new Dotenv(__DIR__.'/../../public', '.env.testing'))->load();
         }
-
+        ob_start();
         Migrate::all();
+        ob_end_clean();
 
         parent::__construct($name, $data, $dataName);
     }
