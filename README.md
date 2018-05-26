@@ -46,7 +46,7 @@
 
 [Install GitHub App](https://github.com/khs1994-php/khsci/tree/master/docs)
 
-## Installation In Your host (KhsCI EE)
+## Self-Hosting (KhsCI EE)
 
 * ~~MySQL~~
 
@@ -54,7 +54,7 @@
 
 * ~~RabbitMQ~~
 
-* **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) and Website SSL/TLS Certificates
+* **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) and [Website SSL/TLS Certificates](https://github.com/Neilpang/acme.sh)
 
 To **install** KhsCI EE in your host, simply:
 
@@ -135,4 +135,3 @@ $ ./lnmp-docker.sh khsci-up
 * https://github.com/topics/continuous-integration?l=php&o=desc&s=stars
 
 * https://github.com/topics/continuous-integration?o=desc&s=stars
-

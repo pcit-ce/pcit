@@ -2,9 +2,13 @@
 
 ## v18.06.0
 
+### 2018/05/26
+
+设计分布式部署方案
+
 ### 2018/05/25
 
-支持 GitHub App Check Run [Action](https://developer.github.com/changes/2018-05-23-request-actions-on-checks/) 
+支持 GitHub App Check Run [Action](https://developer.github.com/changes/2018-05-23-request-actions-on-checks/)
 
 ### 2018/05/22
 
@@ -20,7 +24,7 @@
 
 ### 2018/05/18
 
-支持 **阿里云** Docker 镜像构建服务 Webhooks 
+支持 **阿里云** Docker 镜像构建服务 Webhooks
 
 `public/config/aliyun_docker_registry.json`
 
@@ -75,7 +79,7 @@ KhsCI 是国内首家支持 GitHub [Checks API](https://blog.github.com/2018-05-
 ### 2018/05/09
 
 **2018** Only Support GitHub Apps
- 
+
 ### 2018/05/08
 
 **后台任务** 刷新用户仓库列表
@@ -90,7 +94,7 @@ KhsCI 是国内首家支持 GitHub [Checks API](https://blog.github.com/2018-05-
 
 ### 2018/05/03
 
-强制将 `tmp` 数据卷挂载到 `/tmp` 目录 
+强制将 `tmp` 数据卷挂载到 `/tmp` 目录
 
 ### 2018/04/29
 

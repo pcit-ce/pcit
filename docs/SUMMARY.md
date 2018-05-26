@@ -1,8 +1,13 @@
+# Summary
+
 * [Overview](README.md)
 * [API](https://docs.ci.khs1994.com)
 * [Install](install.md)
     * [KhsCI CE](install/ce.md)
     * [KhsCI EE](install/ee.md)
+
+# Example
+
 * Example
     * PHP
         * [PHPUnit](examples/php/phpunit.md)
