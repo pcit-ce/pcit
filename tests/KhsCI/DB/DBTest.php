@@ -26,7 +26,9 @@ class DBTest extends KhsCITestCase
      */
     public function testCreateDB(): void
     {
+        ob_start();
         Migrate::all();
+        ob_end_clean();
 
         $this->assertEquals(1, 1);
     }

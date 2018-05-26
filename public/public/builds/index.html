@@ -57,10 +57,6 @@
     type_from_url = 'current';
   }
 
-  if (8 === array.length) {
-    build_id = array[7];
-  }
-
   let query = git_type + '/' + username + '/' + repo;
 
   let baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
@@ -87,6 +83,16 @@
   }
 
   function builds() {
+
+    let url = location.href;
+
+    let array = url.split('/');
+
+    let build_id;
+
+    if (8 === array.length) {
+      build_id = array[7];
+    }
 
     if (build_id) {
       $.ajax({

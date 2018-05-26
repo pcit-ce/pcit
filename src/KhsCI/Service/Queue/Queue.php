@@ -110,7 +110,7 @@ class Queue
             self::getRepoBuildActivateStatus((int) $rid);
 
             self::run($rid, $branch);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             throw new CIException(
                 self::$unique_id,
                 self::$commit_id,
