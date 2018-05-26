@@ -7,8 +7,8 @@ namespace KhsCI\Support;
 class Env
 {
     /**
-     * @param string $key
-     * @param        $default
+     * @param string      $key
+     * @param string|int  $default
      *
      * @return array|false|string
      */

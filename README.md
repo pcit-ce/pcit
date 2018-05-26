@@ -74,6 +74,8 @@ $ ./lnmp-docker.sh khsci-up
 
 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 GitHub App， 填入相关信息，在你的 Git 仓库安装注册好的 GitHub App 即可。
 
+更多信息请查看 https://github.com/khs1994-php/khsci/blob/master/docs/install/ee.md
+
 ## 子项目
 
 * [Docker PHP](https://github.com/khs1994-docker/libdocker)

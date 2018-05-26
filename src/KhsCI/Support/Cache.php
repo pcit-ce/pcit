@@ -25,7 +25,7 @@ class Cache
             $redis = new Redis();
 
             try {
-                $redis->connect(Env::get('CI_REDIS_HOST', '127.0.0.1'), (int) Env::get('CI_REDIS_PORT', 6379));
+                $redis->connect(Env::get('CI_REDIS_HOST', 'redis'), (int) Env::get('CI_REDIS_PORT', 6379));
                 $redis->getLastError();
             } catch (Exception $e) {
                 throw new Exception("Can't connect Redis server, error code ".$e->getCode(), 500);
