@@ -390,22 +390,27 @@ class Queue
                 }
             }
 
-            // 暂时跳过非 Docker 构建
-            if ($status) {
-                switch ($image) {
-                    case 'ci_docker_build':
-                        break;
+            $skip = false;
 
-                    case 'ci_after_success':
-                        break;
+            switch ($image) {
+                case 'ci_docker_build':
+                    $skip = true;
+                    break;
 
-                    case 'ci_after_failure':
-                        break;
+                case 'ci_after_success':
+                    $skip = true;
+                    break;
 
-                    case 'ci_status_changed':
-                        break;
-                }
+                case 'ci_after_failure':
+                    $skip = true;
+                    break;
 
+                case 'ci_status_changed':
+                    $skip = true;
+                    break;
+            }
+
+            if ($skip) {
                 continue;
             }
 
