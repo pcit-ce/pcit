@@ -316,6 +316,10 @@ class Up
 
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
 
+            echo $name;
+
+            Log::debug(__FILE__, __LINE__, $name);
+
             self::updateGitHubAppChecks(
                 (int) Build::getCurrentBuildKeyId(
                     'github_app', (int) Repo::getRid(
@@ -334,6 +338,7 @@ class Up
                     PHP_OS,
                     JSON::beautiful($content)
                 ),
+                null,
                 null,
                 null,
                 true
