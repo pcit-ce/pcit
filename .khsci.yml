@@ -5,6 +5,16 @@
 # @see http://plugins.drone.io/
 #
 
+clone:
+  git:
+    # image: plugins/git
+    depth: 2
+    # recursive: true
+    # skip_verify: false
+    # tags: false
+#    submodule_override:
+#      hello-world: https://github.com/octocat/hello-world.git
+
 workspace:
   base: /app
   # path: .

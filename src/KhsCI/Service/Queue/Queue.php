@@ -54,6 +54,10 @@ class Queue
 
     private static $config;
 
+    private static $git_config = [];
+
+    private static $git_image = 'plugins/git';
+
     /**
      * @param             $build_key_id
      * @param string      $git_type
@@ -214,7 +218,7 @@ class Queue
 
         // 解析 .khsci.yml.
 
-        // $git = $yaml_obj->git ?? null;
+        $git = $yaml_obj->clone['git'] ?? null;
 
         $workspace = $yaml_obj->workspace ?? null;
 
@@ -223,6 +227,36 @@ class Queue
         $services = $yaml_obj->services ?? null;
 
         $matrix = $yaml_obj->matrix ?? null;
+
+        if ($git) {
+            $depth = $git['depth'] ?? 2;
+            $recursive = $git['recursive'] ?? false;
+            $skip_verify = $git['skip_verify'] ?? false;
+            $tags = $git['tags'] ?? false;
+            $submodule_override = $git['submodule_override'] ?? null;
+
+            $git_config = [];
+
+            // 防止用户传入 false
+            if ($depth) {
+                array_push($git_config, "PLUGIN_DEPTH=$depth");
+            } else {
+                array_push($git_config, 'PLUGIN_DEPTH=2');
+            }
+
+            $recursive && array_push($git_config, 'PLUGIN_RECURSIVE=true');
+
+            $skip_verify && array_push($git_config, 'PLUGIN_SKIP_VERIFY=true');
+
+            $tags && array_push($git_config, 'PLUGIN_TAGS=true');
+
+            $submodule_override && array_push(
+                $git_config, 'PLUGIN_SUBMODULE_OVERRIDE='.json_encode($submodule_override)
+            );
+
+            self::$git_config = $git_config;
+            self::$git_image = $git['image'] ?? 'plugins/git';
+        }
 
         // 存在构建矩阵
         if ($matrix) {
@@ -254,7 +288,7 @@ class Queue
         $docker_network->create($unique_id);
 
         $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
-        $this->runGit('plugins/git', $git_env, $workdir, $unique_id, $docker_container);
+        $this->runGit($git_env, $workdir, $unique_id, $docker_container);
 
         // 不存在构建矩阵
         if (!$matrix) {
@@ -566,36 +600,33 @@ class Queue
 
         switch ($event_type) {
             case CI::BUILD_EVENT_PUSH:
-                $git_env = [
+                $git_env = array_merge([
                     'DRONE_REMOTE_URL='.$git_url,
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=push',
                     'DRONE_COMMIT_SHA='.$commit_id,
                     'DRONE_COMMIT_REF='.'refs/heads/'.$branch,
-                    'PLUGIN_DEPTH=2',
-                ];
+                ], self::$git_config);
 
                 break;
             case CI::BUILD_EVENT_PR:
-                $git_env = [
+                $git_env = array_merge([
                     'DRONE_REMOTE_URL='.$git_url,
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=pull_request',
                     'DRONE_COMMIT_SHA='.$commit_id,
                     'DRONE_COMMIT_REF=refs/pull/'.self::$pull_id.'/head',
-                    'PLUGIN_DEPTH=2',
-                ];
+                ], self::$git_config);
 
                 break;
             case  CI::BUILD_EVENT_TAG:
-                $git_env = [
+                $git_env = array_merge([
                     'DRONE_REMOTE_URL='.$git_url,
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=tag',
                     'DRONE_COMMIT_SHA='.$commit_id,
                     'DRONE_COMMIT_REF=refs/tags/'.self::$tag_name,
-                    'PLUGIN_DEPTH=2',
-                ];
+                ], self::$git_config);
 
                 break;
         }
@@ -606,7 +637,6 @@ class Queue
     /**
      * 运行 Git clone.
      *
-     * @param string    $image
      * @param array     $env
      * @param           $work_dir
      * @param           $unique_id
@@ -614,8 +644,14 @@ class Queue
      *
      * @throws Exception
      */
-    private function runGit(string $image, array $env, $work_dir, $unique_id, Container $docker_container): void
+    private function runGit(array $env, $work_dir, $unique_id, Container $docker_container): void
     {
+        $image = self::$git_image;
+
+        self::$git_image = 'plugins/git';
+
+        self::$git_config = [];
+
         $docker_container
             ->setEnv($env)
             ->setLabels(['com.khs1994.ci' => $unique_id])

@@ -43,7 +43,7 @@ class KhsCITestCase extends TestCase
             (new Dotenv(__DIR__.'/../../public', '.env.testing'))->load();
         }
 
-        // Migrate::all();
+        Migrate::all();
 
         parent::__construct($name, $data, $dataName);
     }

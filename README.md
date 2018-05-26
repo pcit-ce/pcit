@@ -76,6 +76,12 @@ $ ./lnmp-docker.sh khsci-up
 
 更多信息请查看 https://github.com/khs1994-php/khsci/blob/master/docs/install/ee.md
 
+## Thanks
+
+* [Drone CI](https://drone.io)
+
+* [Travis CI](https://travis-ci.com)
+
 ## 子项目
 
 * [Docker PHP](https://github.com/khs1994-docker/libdocker)
