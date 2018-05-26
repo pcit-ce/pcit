@@ -572,6 +572,7 @@ class Queue
                     'DRONE_BUILD_EVENT=push',
                     'DRONE_COMMIT_SHA='.$commit_id,
                     'DRONE_COMMIT_REF='.'refs/heads/'.$branch,
+                    'PLUGIN_DEPTH=2',
                 ];
 
                 break;
@@ -582,6 +583,7 @@ class Queue
                     'DRONE_BUILD_EVENT=pull_request',
                     'DRONE_COMMIT_SHA='.$commit_id,
                     'DRONE_COMMIT_REF=refs/pull/'.self::$pull_id.'/head',
+                    'PLUGIN_DEPTH=2',
                 ];
 
                 break;
@@ -592,6 +594,7 @@ class Queue
                     'DRONE_BUILD_EVENT=tag',
                     'DRONE_COMMIT_SHA='.$commit_id,
                     'DRONE_COMMIT_REF=refs/tags/'.self::$tag_name,
+                    'PLUGIN_DEPTH=2',
                 ];
 
                 break;

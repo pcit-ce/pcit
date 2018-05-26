@@ -109,7 +109,7 @@ services:
       - MYSQL_DATABASE=test
       - MYSQL_ROOT_PASSWORD=mytest
     # entrypoint: [ "mysqld" ]
-    # command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
+    command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # postgresql:
   #   image: postgres:${POSTGRESQL_VERSION}
