@@ -1,6 +1,7 @@
 # Summary
 
 * [Overview](README.md)
+* [Getting Help](getting-help.md)
 * [API](https://docs.ci.khs1994.com)
 
 ## Install
@@ -15,6 +16,8 @@
     * [workspace](usage/workspace.md)
     * [pipeline](usage/pipeline.md)
     * [services](usage/services.md)
+    * [matrix](usage/matrix.md)
+    * [skip build](usage/skip.md)
 
 ## Example
 

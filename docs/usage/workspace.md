@@ -16,4 +16,4 @@ workspace:
   base: /app
 ```
 
-以上设定构建的根目录为 `/app/username/repo.name`
+以上设定构建的根目录为 `/app/username/reponame`

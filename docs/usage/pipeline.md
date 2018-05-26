@@ -66,7 +66,7 @@ pipeline:
       event: tag
 ```
 
-以上设置构建仅在 Git 打标签之后执行构建，其余 push、pull_request 均不构建。
+以上设置构建仅在 Git 打标签之后执行，其余例如 push、pull_request 均不构建。
 
 全部可用的设置如下：
 
