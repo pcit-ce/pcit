@@ -6,7 +6,6 @@
 * [Builds](builds/README.md)
     * [Log](builds/log.md)
 * [Organization](orgs/README.md)
-* [Owner](owner/README.md)
 * [Repositories](repo/README.md)
     * [Activate](repo/activate.md)
     * [Branches](repo/branches.md)

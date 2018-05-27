@@ -2,6 +2,8 @@
 
 ## Generated API Access Token
 
+> 要想访问 API 资源，必须首先生成密钥，之后在请求头中增加相关设置即可。
+
 ### From CLI
 
 ```bash

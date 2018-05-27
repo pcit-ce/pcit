@@ -32,3 +32,18 @@ This triggers a sync on a user's account with their GitHub account.
 | :----- | :------------|
 | `POST` | `/user/sync` |
 
+## Active
+
+A list of all the builds in an "active" state, either `created` or `started`.
+
+> 返回某用户处于 **开启构建** 状态的仓库列表
+
+|  Method   |  URL                          |
+| :-----   | :--------------------------    |
+| `GET`    | `/user/{owner.login}/active` |
+
+**Example:** `GET` `/user/khs1994/active`
+
+### Via GitHub User Id
+
+**Example:** `GET` `/user/github_id/639823/active`

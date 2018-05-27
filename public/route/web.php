@@ -117,9 +117,9 @@ Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}', 'Status
 /**Repos**/
 
 Route::get('{git_type}/{username}', 'Builds\IndexController@repo');
-Route::get('api/owner/{git_type}/{username}/repos', '');
+Route::get('api/user/{git_type}/{username}/repos', '');
 
-Route::get('api/owner/{git_type}/{username}/active', 'Builds\ActiveController');
+Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
 
 Route::get('api/orgs', 'Users\OrganizationsController');
 

@@ -68,6 +68,8 @@ This restarts a build that has completed or been canceled.
 
 **Example:** `POST` `/build/666/restart`
 
+**Response**
+
 ```json
 {
   "@type": "pending",

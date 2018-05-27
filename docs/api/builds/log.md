@@ -12,6 +12,8 @@ This returns a single log.
 
 **Example:** `GET` `/build/666/log`
 
+**Response**
+
 ```json
 {
   "@type": "log",
