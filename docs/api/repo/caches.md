@@ -10,9 +10,9 @@ This returns all the caches for a repository.
 
 | Method | URL                                              |
 | :----- | :----------------------------------------------- |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/caches` |
+| `GET`  | `/repo/{username}/{repo.name}/caches` |
 
-**Example:** `GET` `/repo/github_app/khs1994-php/khsci/caches`
+**Example:** `GET` `/repo/khs1994-php/khsci/caches`
 
 ## Delete
 
@@ -22,7 +22,7 @@ This deletes all caches for a repository.
 
 | Method    | URL                                              |
 | :-----    | :----------------------------------------------- |
-| `DELETE`  | `/repo/{git_type}/{username}/{repo.name}/caches` |
+| `DELETE`  | `/repo/{username}/{repo.name}/caches` |
 
-**Example:** `DELETE` `/repo/github_app/khs1994-php/khsci/caches`
+**Example:** `DELETE` `/repo/khs1994-php/khsci/caches`
 

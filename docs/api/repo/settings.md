@@ -8,9 +8,9 @@ This returns a list of the settings for that repository.
 
 | Method | URL                                                |
 | :----- | :------------------------------------------------- |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/settings` |
+| `GET`  | `/repo/{username}/{repo.name}/settings` |
 
-**Example:** `GET` `/repo/github_app/khs1994-php/khsci/settings`
+**Example:** `GET` `/repo/khs1994-php/khsci/settings`
 
 ## Get
 
@@ -20,7 +20,7 @@ This returns a single setting.
 
 | Method | URL                                                              |
 | :----- | :-------------------------------------------------------------   |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/setting/{setting.name}` |
+| `GET`  | `/repo/{username}/{repo.name}/setting/{setting.name}` |
 
 ## Update
 
@@ -34,9 +34,9 @@ $ curl -X PATCH \
     -H "KhsCI-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "setting.value": true }' \
-    https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/setting/{setting.name}
+    https://ci.khs1994.com/api/repo/khs1994-php/khsci/setting/{setting.name}
 ```
 
 | Method   | URL                                                              |
 | :-----   | :-------------------------------------------------------------   |
-| `PATCH`  | `/repo/{git_type}/{username}/{repo.name}/setting/{setting.name}` |
+| `PATCH`  | `/repo/{username}/{repo.name}/setting/{setting.name}` |

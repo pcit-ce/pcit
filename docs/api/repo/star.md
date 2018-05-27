@@ -8,7 +8,7 @@ This will star a repository based on the currently logged in user.
 
 | Method  | URL                                            |
 | :-----  | :--------------------------------------------- |
-| `POST`  | `/repo/{git_type}/{username}/{repo.name}/star` |
+| `POST`  | `/repo/{username}/{repo.name}/star` |
 
 ## Unstar
 
@@ -18,4 +18,4 @@ This will unstar a repository based on the currently logged in user.
 
 | Method  | URL                                              |
 | :-----  | :------------------------------------------------|
-| `POST`  | `/repo/{git_type}/{username}/{repo.name}/unstar` |
+| `POST`  | `/repo/{username}/{repo.name}/unstar` |

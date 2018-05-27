@@ -10,7 +10,7 @@ This returns a list of crons for an individual repository.
 
 | Method | URL                                             |
 | :----- | :---------------------------------------------- |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/crons` |
+| `GET`  | `/repo/{username}/{repo.name}/crons` |
 
 ## Find
 
@@ -44,9 +44,9 @@ This returns the cron set for the specified branch for the specified repository.
 
 | Method | URL                                                                 |
 | :----- | :------------------------------------------------------------------ |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/branch/{branch.name}/cron` |
+| `GET`  | `/repo/{username}/{repo.name}/branch/{branch.name}/cron` |
 
-**Example:** `GET` `/repo/github_app/khs1994-php/khsci/branch/master/cron`
+**Example:** `GET` `/repo/khs1994-php/khsci/branch/master/cron`
 
 ## CreateByBranch
 
@@ -60,12 +60,12 @@ $ curl -X POST \
     -H "KhsCI-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "cron.interval": "monthly" }' \
-    https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/branch/master/cron
+    https://ci.khs1994.com/api/repo/khs1994-php/khsci/branch/master/cron
 ```
 
 | Method    | URL                                                                 |
 | :-----    | :------------------------------------------------------------------ |
-| `CREATE`  | `/repo/{git_type}/{username}/{repo.name}/branch/{branch.name}/cron` |
+| `CREATE`  | `/repo/{username}/{repo.name}/branch/{branch.name}/cron` |
 
 | Accepted Parameter                     | Type    | Description                      |
 | :-----------------------------------   | :------ | ------------------------------   |

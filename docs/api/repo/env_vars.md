@@ -8,9 +8,9 @@ This returns a list of environment variables for an individual repository.
 
 | Method | URL                                                |
 | :----- | :------------------------------------------------  |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/env_vars` |
+| `GET`  | `/repo/{username}/{repo.name}/env_vars` |
 
-**Example:** `GET` `/repo/github_app/khs1994-php/khsci/env_vars`
+**Example:** `GET` `/repo/khs1994-php/khsci/env_vars`
 
 ## Create
 
@@ -24,12 +24,12 @@ $ curl -X POST \
     -H "KhsCI-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "env_var.name": "FOO", "env_var.value": "bar", "env_var.public": false }' \
-    https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/env_vars
+    https://ci.khs1994.com/api/repo/khs1994-php/khsci/env_vars
 ```
 
 | Method   | URL                                                            |
 | :-----   | :------------------------------------------------------------- |
-| `POST`   | `/repo/{git_type}/{username}/{repo.name}/env_vars` |
+| `POST`   | `/repo/{username}/{repo.name}/env_vars` |
 
 | Accepted Parameter | Type      | Description                                                          |
 | :----------------- | :-------- | -------------------------------------------------------------------- |
@@ -45,9 +45,9 @@ This returns a single environment variable.
 
 | Method | URL                                                            |
 | :----- | :------------------------------------------------------------- |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/env_var/{env_var.id}` |
+| `GET`  | `/repo/{username}/{repo.name}/env_var/{env_var.id}` |
 
-**Example:** `GET` `/repo/github_app/khs1994-php/khsci/env_var/666`
+**Example:** `GET` `/repo/khs1994-php/khsci/env_var/666`
 
 ## Update
 
@@ -61,12 +61,12 @@ $ curl -X PATCH \
     -H "KhsCI-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "env_var.value": "bar", "env_var.public": false }' \
-    https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/{env_var.id}
+    https://ci.khs1994.com/api/repo/khs1994-php/khsci/{env_var.id}
 ```
 
 | Method   | URL                                                            |
 | :-----   | :------------------------------------------------------------- |
-| `PATCH`  | `/repo/{git_type}/{username}/{repo.name}/env_var/{env_var.id}` |
+| `PATCH`  | `/repo/{username}/{repo.name}/env_var/{env_var.id}` |
 
 | Accepted Parameter | Type      | Description                                                          |
 | :----------------- | :-------- | -------------------------------------------------------------------- |
@@ -82,6 +82,6 @@ This deletes a single environment variable.
 
 | Method    | URL                                                            |
 | :-----    | :------------------------------------------------------------- |
-| `DELETE`  | `/repo/{git_type}/{username}/{repo.name}/env_var/{env_var.id}` |
+| `DELETE`  | `/repo/{username}/{repo.name}/env_var/{env_var.id}` |
 
-**Example:** `DELETE` `/repo/github_app/khs1994-php/khsci/env_var/666`
+**Example:** `DELETE` `/repo/khs1994-php/khsci/env_var/666`

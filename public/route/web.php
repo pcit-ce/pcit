@@ -117,9 +117,9 @@ Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}', 'Status
 /**Repos**/
 
 Route::get('{git_type}/{username}', 'Builds\IndexController@repo');
-Route::get('api/user/{git_type}/{username}/repos', '');
+Route::get('api/user/{username}/repos', '');
 
-Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
+Route::get('api/user/{username}/active', 'Builds\ActiveController');
 
 Route::get('api/orgs', 'Users\OrganizationsController');
 
@@ -143,44 +143,44 @@ Route::get('api/build/{build_id}', 'Builds\BuildsController@find');
 Route::post('api/build/{build_id}/cancel', 'Builds\BuildsController@cancel');
 Route::post('api/build/{build_id}/restart', 'Builds\BuildsController@restart');
 
-Route::get('api/repo/{git_type}/{username}/{repo_name}/env_vars', 'Builds\EnvController');
-Route::post('api/repo/{git_type}/{username}/{repo_name}/env_vars', 'Builds\EnvController@create');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@find');
-Route::patch('api/repo/{git_type}/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@update');
-Route::delete('api/repo/{git_type}/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@delete');
+Route::get('api/repo/{username}/{repo_name}/env_vars', 'Builds\EnvController');
+Route::post('api/repo/{username}/{repo_name}/env_vars', 'Builds\EnvController@create');
+Route::get('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@find');
+Route::patch('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@update');
+Route::delete('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@delete');
 
 Route::get('{git_type}/{username}/{repo_name}/pull_requests', 'Builds\IndexController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/pull_requests', 'Builds\PullRequestsController@post');
 
 Route::get('{git_type}/{username}/{repo_name}/settings', 'Builds\IndexController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/settings', 'Builds\SettingsController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@get');
-Route::patch('api/repo/{git_type}/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@update');
+Route::get('api/repo{username}/{repo_name}/settings', 'Builds\SettingsController');
+Route::get('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@get');
+Route::patch('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@update');
 
 Route::get('{git_type}/{username}/{repo_name}/requests', 'Builds\IndexController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/requests', 'Builds\RequestsController');
-Route::post('api/repo/{git_type}/{username}/{repo_name}/requests', 'Builds\RequestsController@create');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/request/{requests_id}', 'Builds\RequestsController@find');
+Route::get('api/repo/{username}/{repo_name}/requests', 'Builds\RequestsController');
+Route::post('api/repo/{username}/{repo_name}/requests', 'Builds\RequestsController@create');
+Route::get('api/repo/{username}/{repo_name}/request/{requests_id}', 'Builds\RequestsController@find');
 
 Route::get('{git_type}/{username}/{repo_name}/caches', 'Builds\IndexController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/caches', 'Builds\CachesController');
-Route::delete('api/repo/{git_type}/{username}/{repo_name}/caches', 'Builds\CachesController@delete');
+Route::get('api/repo/{username}/{repo_name}/caches', 'Builds\CachesController');
+Route::delete('api/repo/{username}/{repo_name}/caches', 'Builds\CachesController@delete');
 
-Route::get('api/repo/{git_type}/{username}/{repo_name}/crons', 'Builds\CronController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/cron/{cron_id}', 'Builds\CronController@find');
-Route::delete('api/repo/{git_type}/{username}/{repo_name}/cron/{cron_id}', 'Builds\CronController@delete');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron', 'Builds\CronController@findByBranch');
-Route::post('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}/cron', 'Builds\CronController@createByBranch');
+Route::get('api/repo/{username}/{repo_name}/crons', 'Builds\CronController');
+Route::get('api/repo/{username}/{repo_name}/cron/{cron_id}', 'Builds\CronController@find');
+Route::delete('api/repo/{username}/{repo_name}/cron/{cron_id}', 'Builds\CronController@delete');
+Route::get('api/repo/{username}/{repo_name}/branch/{branch_name}/cron', 'Builds\CronController@findByBranch');
+Route::post('api/repo/{username}/{repo_name}/branch/{branch_name}/cron', 'Builds\CronController@createByBranch');
 
 Route::get('{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
 Route::get('{git_type}/{username}/{repo_name}/getstatus', 'Builds\ShowStatusController@getStatus');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/status', 'Builds\ShowStatusController');
 
-Route::post('api/repo/{git_type}/{username}/{repo_name}/activate', 'Builds\ActiveController@activate');
-Route::post('api/repo/{git_type}/{username}/{repo_name}/deactivate', 'Builds\ActiveController@deactivate');
+Route::post('api/repo/{username}/{repo_name}/activate', 'Builds\ActiveController@activate');
+Route::post('api/repo/{username}/{repo_name}/deactivate', 'Builds\ActiveController@deactivate');
 
-Route::post('api/repo/{git_type}/{username}/{repo_name}/star', 'Builds\StarController');
-Route::post('api/repo/{git_type}/{username}/{repo_name}/unstar', 'Builds\StarController@unstar');
+Route::post('api/repo/{username}/{repo_name}/star', 'Builds\StarController');
+Route::post('api/repo/{username}/{repo_name}/unstar', 'Builds\StarController@unstar');
 
 /* Log */
 

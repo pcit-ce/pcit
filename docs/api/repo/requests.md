@@ -8,9 +8,9 @@ This will return a list of requests belonging to a repository.
 
 | Method | URL                                                |
 | :----- | :------------------------------------------------- |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/requests` |
+| `GET`  | `/repo/{username}/{repo.name}/requests` |
 
-**Example:** `GET` `/repo/github_app/khs1994-php/khsci/requests`
+**Example:** `GET` `/repo/khs1994-php/khsci/requests`
 
 ## Create
 
@@ -25,12 +25,12 @@ $ curl -X POST \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "request": {
         "message": "Override the commit message: this is an api request", "branch": "master" }}'\
-    https://ci.khs1994.com/api/repo/github_app/khs1994-php/khsci/requests
+    https://ci.khs1994.com/api/repo/khs1994-php/khsci/requests
 ```
 
 | Method  | URL                                                |
 | :-----  | :------------------------------------------------- |
-| `POST`  | `/repo/{git_type}/{username}/{repo.name}/requests` |
+| `POST`  | `/repo/{username}/{repo.name}/requests` |
 
 | Accepted Parameter | Type     | Description                                       |
 | :----------------- | :------- | ------------------------------------------------- |
@@ -46,6 +46,6 @@ This will return information about an individual request.
 
 | Method | URL                                                            |
 | :----- | :------------------------------------------------------------- |
-| `GET`  | `/repo/{git_type}/{username}/{repo.name}/request/{request.id}` |
+| `GET`  | `/repo/{username}/{repo.name}/request/{request.id}` |
 
-**Example** `GET` `/repo/github_app/khs1994-php/khsci/request/666`
+**Example** `GET` `/repo/khs1994-php/khsci/request/666`
