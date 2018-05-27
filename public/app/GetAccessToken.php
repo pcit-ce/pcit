@@ -84,4 +84,19 @@ class GetAccessToken
 
         return $access_token;
     }
+
+    /**
+     * @param string $git_type
+     * @param int    $uid
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getAccessTokenByUid(string $git_type, int $uid)
+    {
+        $sql = 'SELECT access_token FROM user WHERE git_type=? AND uid=?';
+
+        return DB::select($sql, [$git_type, $uid], true);
+    }
 }

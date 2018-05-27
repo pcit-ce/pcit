@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Profile;
 
 use App\Repo;
+use App\User;
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
@@ -29,6 +30,8 @@ class GitHubAppController
         $username = Session::get($git_type.'.username');
         $uid = Session::get($git_type.'.uid');
         $pic = Session::get($git_type.'.pic');
+        $email = Session::get($git_type.'.email');
+
         if (null === $username or null === $access_token) {
             Response::redirect(Env::get('CI_HOST').'/login');
         }
@@ -36,6 +39,8 @@ class GitHubAppController
         if ($username_from_web !== $username) {
             Response::redirect('/profile/'.$git_type.'/'.$username);
         }
+
+        User::updateUserInfo($git_type, (int) $uid, (string) $username, (string) $email, (string) $pic, $access_token);
 
         $ajax = $_GET['ajax'] ?? false;
 

@@ -62,6 +62,32 @@ class CI
 
     const GITHUB_CHECK_SUITE_STATUS_COMPLETED = 'completed';
 
+    const MEDIA_TYPE_COMMENT_BODY_RAW = 'application/vnd.github.v3.raw+json';
+
+    const MEDIA_TYPE_COMMENT_BODY_TEXT = 'application/vnd.github.v3.text+json';
+
+    const MEDIA_TYPE_COMMENT_BODY_HTML = 'application/vnd.github.v3.html+json';
+
+    const MEDIA_TYPE_COMMENT_BODY_FULL = 'application/vnd.github.v3.full+json';
+
+    const MEDIA_TYPE_GIT_BLOB_JSON = 'application/vnd.github.v3+json';
+
+    const MEDIA_TYPE_GIT_BLOB_RAW = 'application/vnd.github.v3.raw';
+
+    const MEDIA_TYPE_COMMITS_DIFF = 'application/vnd.github.v3.diff';
+
+    const MEDIA_TYPE_COMMITS_PATCH = 'application/vnd.github.v3.patch';
+
+    const MEDIA_TYPE_COMMITS_SHA = 'application/vnd.github.v3.sha';
+
+    const MEDIA_TYPE_REPOSITORY_CONTENTS_RAW = 'application/vnd.github.v3.raw';
+
+    const MEDIA_TYPE_REPOSITORY_CONTENTS_HTML = 'application/vnd.github.v3.html';
+
+    const MEDIA_TYPE_GIST_RAW = 'application/vnd.github.v3.raw';
+
+    const MEDIA_TYPE_GIST_BASE64 = 'application/vnd.github.v3.base64';
+
     /**
      * 返回当前 ENV.
      *

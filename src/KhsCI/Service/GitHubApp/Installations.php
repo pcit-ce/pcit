@@ -189,4 +189,38 @@ class Installations
 
         return $jwt;
     }
+
+    /**
+     * 某用户或组织的 GitHub App 安装请求地址，即用户在此 URL 安装 GitHub App
+     *
+     * @param int $rid
+     *
+     * @return string
+     */
+    public function getInstallUrl(int $rid)
+    {
+        return $url = 'https://github.com/apps/'.Env::get('CI_GITHUB_APP_NAME').
+            '/installations/new/permissions?suggested_target_id='.$rid;
+    }
+
+    /**
+     * @param int $installation_id
+     *
+     * @return string
+     */
+    public function getSettingsUrlByUser(int $installation_id)
+    {
+        return $url = 'https://github.com/settings/installations/'.$installation_id;
+    }
+
+    /**
+     * @param string $org_name
+     * @param int    $installation_id
+     *
+     * @return string
+     */
+    public function getSettingsUrlByOrg(string $org_name, int $installation_id)
+    {
+        return $url = 'https://github.com/organizations/'.$org_name.'/settings/installations/'.$installation_id;
+    }
 }

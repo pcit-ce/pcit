@@ -33,4 +33,35 @@ class Request
 
         return $headers;
     }
+
+    /**
+     * @param string|null $link
+     *
+     * @return array
+     */
+    public static function parseLink(string $link = null)
+    {
+        if (!$link) {
+            $link = self::getHeader('Link');
+        } else {
+            $link = explode('Link:', $link)[1] ?? null;
+        }
+
+        if (!$link) {
+            return null;
+        }
+
+        $return_array = [];
+
+        foreach (explode(',', $link) as $k) {
+            if (preg_match('/https.*[0-9]/', trim($k), $array)) {
+                $url = $array[0];
+                preg_match('#rel=".*#', trim($k), $array);
+                $rel = explode('=', $array[0])[1];
+                $return_array[str_replace('"', "", $rel)] = $url;
+            }
+        }
+
+        return $return_array;
+    }
 }

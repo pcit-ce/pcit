@@ -40,7 +40,7 @@
 
 **一是** 直接安装 [GitHub App KhsCI](https://github.com/khs1994-php/khsci/tree/master/docs)，体验 Demo（暂不提供 `Docker` 构建，仅提供 **Issue**、**Pull Requests** 相关功能）。
 
-**二是** 自己部署 `PHP` 后端，自己新建 `GitHub App`，安装自己的 `GitHub App`（支持 `Docker` 构建）。
+**二是** 自己部署 `PHP` 后端，自己新建 `GitHub App`，在Git 仓库中安装自己的 `GitHub App`（支持 `Docker` 构建）。
 
 ## Try Demo (KhsCI CE)
 
@@ -56,7 +56,7 @@
 
 * **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) and [Website SSL/TLS Certificates](https://github.com/Neilpang/acme.sh)
 
-To **install** KhsCI EE in your host, simply:
+To install **KhsCI EE** in your host, simply:
 
 ```bash
 # install khs1994-docker/lnmp

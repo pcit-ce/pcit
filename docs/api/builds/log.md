@@ -12,6 +12,23 @@ This returns a single log.
 
 **Example:** `GET` `/build/666/log`
 
+```json
+{
+  "@type": "log",
+  "@href": "/job/384019274/log",
+  "@representation": "standard",
+  "@permissions": {
+    "read": true,
+    "delete_log": false,
+    "cancel": false,
+    "restart": false,
+    "debug": false
+  },
+  "id": 280811776,
+  "content":"LOG Content"
+}
+```
+
 ## Delete
 
 This removes the contents of a log. It gets replace with the message: `Log removed at 2017-02-13 16:00:00 UTC`.

@@ -11,4 +11,10 @@ class IndexController
         require __DIR__.'/../../../../public/builds/index.html';
         exit;
     }
+
+    public function repo()
+    {
+        require __DIR__.'/../../../../public/repo/index.html';
+        exit;
+    }
 }

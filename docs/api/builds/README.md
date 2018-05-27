@@ -67,3 +67,17 @@ This restarts a build that has completed or been canceled.
 | `POST`  | `/build/{build.id}/restart` |
 
 **Example:** `POST` `/build/666/restart`
+
+```json
+{
+  "@type": "pending",
+  "job": {
+    "@type": "job",
+    "@href": "/job/384019276",
+    "@representation": "minimal",
+    "id": 384019276
+  },
+  "state_change": "restart",
+  "resource_type": "job"
+}
+```

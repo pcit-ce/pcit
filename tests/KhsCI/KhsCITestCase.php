@@ -15,14 +15,17 @@ class KhsCITestCase extends TestCase
     private static $test;
 
     /**
+     * @param array  $config
+     * @param string $git_type
+     *
      * @return KhsCI
      *
      * @throws Exception
      */
-    public static function getTest()
+    public static function getTest(array $config = [], string $git_type = null)
     {
         if (!(self::$test instanceof KhsCI)) {
-            self::$test = new KhsCI();
+            self::$test = new KhsCI($config, $git_type ?? 'github');
         }
 
         return self::$test;

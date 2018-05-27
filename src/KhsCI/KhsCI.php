@@ -31,6 +31,7 @@ use TencentAI\TencentAI;
  * @property Service\Issue\Labels               $issue_labels
  * @property Service\Issue\Milestones           $issue_milestones
  * @property Service\Issue\Timeline             $issue_timeline
+ * @property Service\Organizations\GitHubClient $github_orgs
  * @property Service\Repositories\Collaborators $repo_collaborators
  * @property Service\Repositories\Status        $repo_status
  * @property Service\Repositories\Webhooks      $repo_webhooks
@@ -38,7 +39,7 @@ use TencentAI\TencentAI;
  * @property Service\Webhooks\Webhooks          $webhooks
  * @property Service\Queue\Queue                $queue
  * @property TencentAI                          $tencent_ai
- * @property Service\Users\BasicInfo            $user_basic_info
+ * @property Service\Users\GitHubClient         $user_basic_info
  * @property Service\Checks\Run                 $check_run
  * @property Service\Checks\Suites              $check_suites
  * @property Service\Checks\MarkDown            $check_md
@@ -54,6 +55,7 @@ class KhsCI extends Container
         Providers\IssueProvider::class,
         Providers\OAuthProvider::class,
         Providers\QueueProvider::class,
+        Providers\OrganizationsProvider::class,
         Providers\RepositoriesProvider::class,
         Providers\PullRequestProvider::class,
         Providers\TencentAIProvider::class,
