@@ -21,6 +21,7 @@
     * [matrix](usage/matrix.md)
     * [config](usage/config.md)
     * [skip build](usage/skip.md)
+    * [System Env](usage/system_env.md)
 
 ## Example
 
@@ -32,3 +33,7 @@
     * Node.js
         * [Hexo](examples/nodejs/hexo.md)
         * [GitBook](examples/nodejs/gitbook.md)
+
+## Plugins
+
+* [Plugins](plugins/README.md)

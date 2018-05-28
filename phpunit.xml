@@ -3,6 +3,7 @@
   <testsuites>
     <testsuite>
       <directory>tests/KhsCI</directory>
+      <directory>tests/Plugins</directory>
     </testsuite>
   </testsuites>
   <groups>
