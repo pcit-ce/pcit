@@ -17,7 +17,7 @@ class CronController
      */
     public function __invoke(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -55,7 +55,7 @@ class CronController
      */
     public function findByBranch(...$args): void
     {
-        list($git_type, $username, $repo_name, $branch) = $args;
+        list($username, $repo_name, $branch) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -71,7 +71,7 @@ class CronController
      */
     public function createByBranch(...$args): void
     {
-        list($git_type, $username, $repo_name, $branch) = $args;
+        list($username, $repo_name, $branch) = $args;
 
         APITokenController::checkByRepo(...$args);
     }

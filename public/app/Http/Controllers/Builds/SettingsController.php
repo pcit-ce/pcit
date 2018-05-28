@@ -17,7 +17,7 @@ class SettingsController
      */
     public function __invoke(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -31,7 +31,7 @@ class SettingsController
      */
     public function get(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -53,7 +53,7 @@ class SettingsController
      */
     public function update(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
 

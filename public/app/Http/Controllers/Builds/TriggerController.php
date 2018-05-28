@@ -13,6 +13,6 @@ class TriggerController
      */
     public function __invoke(...$args): void
     {
-        list($git_type, $username, $repo_name, $branch) = $args;
+        list($username, $repo_name, $branch) = $args;
     }
 }

@@ -26,7 +26,7 @@ class RequestsController
     {
         // $limit = $_GET['limit'];
 
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
 
@@ -63,7 +63,7 @@ class RequestsController
      */
     public function create(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -81,7 +81,7 @@ class RequestsController
      */
     public function find(...$args)
     {
-        list($git_type, $username, $repo_name, $request_id) = $args;
+        list($username, $repo_name, $request_id) = $args;
 
         APITokenController::checkByRepo(...$args);
 

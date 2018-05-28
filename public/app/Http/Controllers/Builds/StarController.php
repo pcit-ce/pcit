@@ -19,7 +19,7 @@ class StarController
      */
     public function __invoke(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -35,7 +35,7 @@ class StarController
      */
     public function unStar(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }

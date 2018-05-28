@@ -69,8 +69,9 @@ class APITokenController
         throw new Exception('Not Found', 404);
     }
 
-    public static function checkByRepo(string $git_type, string $username, string $repo_name): void
+    public static function checkByRepo(string $username, string $repo_name): void
     {
+
     }
 
     /**

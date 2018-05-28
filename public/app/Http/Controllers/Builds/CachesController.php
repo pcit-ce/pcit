@@ -17,7 +17,7 @@ class CachesController
      */
     public function __invoke(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -33,7 +33,7 @@ class CachesController
      */
     public function delete(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }

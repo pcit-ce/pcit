@@ -17,7 +17,7 @@ class EnvController
      */
     public function __invoke(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -37,7 +37,7 @@ class EnvController
      */
     public function create(...$args): void
     {
-        list($git_type, $username, $repo_name) = $args;
+        list($username, $repo_name) = $args;
 
         APITokenController::checkByRepo(...$args);
 
@@ -55,7 +55,7 @@ class EnvController
      */
     public function find(...$args): void
     {
-        list($git_type, $username, $repo_name, $env_var_id) = $args;
+        list($username, $repo_name, $env_var_id) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -75,7 +75,7 @@ class EnvController
      */
     public function update(...$args): void
     {
-        list($git_type, $username, $repo_name, $env_var_id) = $args;
+        list($username, $repo_name, $env_var_id) = $args;
 
         APITokenController::checkByRepo(...$args);
     }
@@ -91,7 +91,7 @@ class EnvController
      */
     public function delete(...$args): void
     {
-        list($git_type, $username, $repo_name, $env_var_id) = $args;
+        list($username, $repo_name, $env_var_id) = $args;
 
         APITokenController::checkByRepo(...$args);
     }

@@ -9,6 +9,7 @@
 * Install
     * [KhsCI CE](install/ce.md)
     * [KhsCI EE](install/ee.md)
+    * [ENV](install/env.md)
 
 ## Usage
 
