@@ -18,6 +18,10 @@
 
 * [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/docs#about-khsci-ce-and-ee)
 
+## 诚邀各位 PHP 开发者加入本项目
+
+欢迎各位通过 Pull_Request 参入贡献本项目。
+
 ## PHP CaaS
 
 **Powered By [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)**

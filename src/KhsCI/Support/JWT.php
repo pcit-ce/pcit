@@ -9,6 +9,8 @@ use Firebase\JWT\JWT as JWTService;
 class JWT
 {
     /**
+     * GitHub App 由 JWT expire 10m 获取 Token expire 60m
+     *
      * @param string $private_key_path
      * @param int    $iss
      *
@@ -31,6 +33,16 @@ class JWT
         return $jwt;
     }
 
+    /**
+     * KhsCI 加密 token
+     *
+     * @param string $privateKey
+     * @param string $git_type
+     * @param string $username
+     * @param int    $uid
+     *
+     * @return string
+     */
     public static function encode(string $privateKey, string $git_type, string $username, int $uid)
     {
         $privateKey = file_get_contents($privateKey);
@@ -50,9 +62,17 @@ class JWT
         return JWTService::encode($token, $privateKey, 'RS256');
     }
 
-    public static function decode(string $jwt): void
+    /**
+     * 解密 token
+     *
+     * @param string $jwt
+     * @param string $privateKey
+     */
+    public static function decode(string $jwt, string $privateKey): void
     {
-        // $obj = JWTService::decode($jwt, $privateKey, 'RS256');
+        $privateKey = file_get_contents($privateKey);
+
+        $obj = JWTService::decode($jwt, $privateKey, 'RS256');
 
         // var_dump($obj);
     }

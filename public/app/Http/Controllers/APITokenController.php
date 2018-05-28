@@ -17,6 +17,8 @@ use KhsCI\Support\Request;
 class APITokenController
 {
     /**
+     * 从请求头获取 token
+     *
      * @return string
      *
      * @throws Exception
@@ -38,6 +40,8 @@ class APITokenController
     }
 
     /**
+     * 检查 token
+     *
      * @param int $build_key_id
      *
      * @throws Exception
@@ -69,12 +73,20 @@ class APITokenController
         throw new Exception('Not Found', 404);
     }
 
+    /**
+     * 检查 Token 是否有某仓库的权限
+     *
+     * @param string $username
+     * @param string $repo_name
+     */
     public static function checkByRepo(string $username, string $repo_name): void
     {
 
     }
 
     /**
+     * 获取 token 对应的信息
+     *
      * @return array|string
      *
      * @throws Exception

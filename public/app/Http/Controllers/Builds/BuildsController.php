@@ -63,6 +63,8 @@ class BuildsController
 
         $array = Build::allByRid($git_type, (int) $rid, $before, $limit, (bool) $pr);
 
+        $return_array = [];
+
         foreach ($array as $k) {
             $return_array[] = $k;
         }

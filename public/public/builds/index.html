@@ -186,10 +186,12 @@
     if (null === build_log) {
       build_log = 'This Build is ' + build_status;
     }
-
-    d = new Date(parseInt(stopped_at) * 1000);
-
-    stopped_at = d.toLocaleString();
+    if (null === stopped_at) {
+      stopped_at = 'This build is ' + build_status;
+    } else {
+      d = new Date(parseInt(stopped_at) * 1000);
+      stopped_at = d.toLocaleString();
+    }
 
     let commit_url = getCommitUrl(commit_id);
 

@@ -44,13 +44,15 @@ $ ./lnmp-docker.sh khsci-up
 
 编辑 `lnmp/app/khsci/public/.env.production` 文件，设置好相关变量
 
+特别注意以下变量
+
 ```bash
 CI_GITHUB_APP_PRIVATE_FILE=
 ```
 
 此变量值为上一步生成的私钥文件名，例如 `khsci.2018-04-28.private-key.pem`
 
-其他变量与 GitHub App 中设置的值对应，按实际填写即可
+其他变量含义请查看 [ENV](env.md)
 
 ## 启动
 

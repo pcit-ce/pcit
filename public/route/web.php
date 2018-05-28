@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\Git;
 use KhsCI\Support\Route;
 
 Route::get('test1/{id}', function ($id) {
@@ -14,6 +13,8 @@ Route::get('test3', 'Test\TestController');
 Route::get('test4', 'Test\TestController@notExistsMethod');
 
 Route::get('test5', 'Test\TestController@test5');
+
+Route::post('test5', 'Test\TestController@test5');
 
 /*Test end*/
 

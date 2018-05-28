@@ -31,11 +31,13 @@ class BranchesController
 
         $branchArray = Build::getBranches($git_type, (int) $rid);
 
+        $return_array = [];
+
         foreach ($branchArray as $k) {
-            $array[] = $k['branch'];
+            $return_array[] = $k['branch'];
         }
 
-        return $array;
+        return $return_array;
     }
 
     /**
