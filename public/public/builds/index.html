@@ -99,7 +99,10 @@
         type: 'GET',
         url: '/api/build/' + build_id,
         success: function (data) {
-          alert(data);
+          display('builds', data);
+        },
+        error: function (data) {
+          display('builds', 'error');
         }
       });
 
@@ -110,7 +113,10 @@
       type: 'GET',
       url: '/api/repo/' + base_include + '/builds',
       success: function (data) {
-        display('builds', data)
+        display('builds', data);
+      },
+      error: function (data) {
+        display('builds', 'error');
       }
     });
   }
@@ -165,6 +171,39 @@
     return prUrl;
   }
 
+  function showLog(data) {
+    let build_id = data.id;
+    let build_status = data.build_status;
+    let commit_id = data.commit_id;
+    let commit_message = data.commit_message;
+    let branch = data.branch;
+    let committer_name = data.committer_name;
+    let compare = data.compare;
+    let stopped_at = data.finished_at;
+    let nbsp = '&nbsp;&nbsp;';
+    let build_log = data.build_log;
+
+    if (null === build_log) {
+      build_log = 'This Build is ' + build_status;
+    }
+
+    d = new Date(parseInt(stopped_at) * 1000);
+
+    stopped_at = d.toLocaleString();
+
+    let commit_url = getCommitUrl(commit_id);
+
+    $("#display").append(
+      `
+ <h2># ${build_id}${nbsp}${branch}${nbsp}${build_status}${nbsp}
+<a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id.slice(0, 7)}</a>${nbsp}
+${commit_message}${nbsp}${committer_name}${nbsp}
+<a title="View diff on GitHub" href="${compare}" target='_blank'>Compare </a>${nbsp}${stopped_at}${nbsp}</h2>
+<pre>${build_log}</pre>
+`
+    );
+  }
+
   function display(id, data) {
     $("#display").empty();
     switch (id) {
@@ -172,25 +211,7 @@
         if (0 === data.length) {
           $("#display").append("Not Build Yet !");
         } else {
-          let build_id = data.id;
-          let build_status = data.build_status;
-          let commit_id = data.commit_id;
-          let commit_message = data.commit_message;
-          let branch = data.branch;
-          let committer_name = data.committer_name;
-          let compare = data.compare;
-          let stopped_at = data.stopped_at;
-          let nbsp = '&nbsp;&nbsp;';
-
-          d = new Date(parseInt(stopped_at) * 1000);
-
-          stopped_at = d.toLocaleString();
-
-          $("#display").append(`<h2># ${build_id}{nbsp}${branch}${nbsp}${build_status}${nbsp}
-            <a title="View commit on GitHub" href="${commit_id}" target='_blank'>${commit_id.slice(0, 7)}</a>${nbsp}
-            ${commit_message}${nbsp}${committer_name}${nbsp}
-            <a title="View diff on GitHub" href="${compare}" target='_blank'>Compare  </a>${nbsp}${stopped_at}${nbsp}</h2>
-            <pre> + data.data + </pre>`);
+          showLog(data);
         }
 
         break;
@@ -200,11 +221,10 @@
 
         let array = url.split('/');
         if (8 === array.length) {
-
-          if (0 === data.length) {
+          if (0 === data.length || 'error' === data) {
             $("#display").append('Oops, we couldn\'t find that build!');
           } else {
-            $("#display").append(data.status).append('<pre>' + data.data + '</pre>');
+            showLog(data);
           }
 
         } else if (0 !== data.length) {

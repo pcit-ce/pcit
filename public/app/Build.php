@@ -167,7 +167,8 @@ class Build extends DBModel
     public static function getCurrentBuildKeyId(string $git_type, int $rid)
     {
         $sql = <<<EOF
-SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) ORDER BY id DESC LIMIT 1
+SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) AND event_type NOT IN (?)
+ORDER BY id DESC LIMIT 1
 EOF;
 
         return DB::select($sql, [
@@ -175,6 +176,7 @@ EOF;
             CI::BUILD_STATUS_PENDING,
             CI::BUILD_STATUS_SKIP,
             CI::BUILD_STATUS_INACTIVE,
+            CI::BUILD_EVENT_PR
         ], true);
     }
 

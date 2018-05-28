@@ -26,10 +26,18 @@ class ShowStatusByICOController
     {
         try {
             header('content-type: image/svg+xml;charset=utf-8');
-            require __DIR__.'/../../../../public/ico/'.$k.'.svg';
+            $file = __DIR__.'/../../../../public/ico/'.$k.'.svg';
+
+            if (file_exists($file)) {
+                require $file;
+
+                exit();
+            }
+
+            throw new Exception();
+
         } catch (Error $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
+            require __DIR__.'/../../../../public/ico/unknown.svg';
         }
-        exit;
     }
 }

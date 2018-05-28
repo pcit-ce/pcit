@@ -73,13 +73,17 @@ class BuildsController
     /**
      * @param mixed ...$args
      *
+     * @return array|int
+     *
      * @throws Exception
      */
-    public function repoCurrent(...$args): void
+    public function repoCurrent(...$args)
     {
         list($git_type, $username, $repo_name) = $args;
 
-        Build::getCurrentBuildKeyId($git_type, (int) Repo::getRid(...$args));
+        $build_key_id = Build::getCurrentBuildKeyId($git_type, (int) Repo::getRid(...$args));
+
+        return self::find($build_key_id);
     }
 
     /**
