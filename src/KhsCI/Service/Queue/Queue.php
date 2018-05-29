@@ -21,42 +21,36 @@ use KhsCI\Support\Log;
 
 class Queue
 {
-    /**
-     * @var
-     */
+
     private static $git_type;
 
-    /**
-     * @var
-     */
     private static $build_key_id;
 
-    /**
-     * 构建标识符.
-     *
-     * @var
-     */
     private static $unique_id;
 
-    /**
-     * @var
-     */
     private static $pull_id;
 
-    /**
-     * @var
-     */
     private static $tag_name;
 
     private static $commit_id;
+
+    private static $commit_message;
+
+    private static $branch;
 
     private static $event_type;
 
     private static $config;
 
+    private static $pull_request_source;
+
+    private static $repo_full_name;
+
     private static $git_config = [];
 
     private static $git_image = 'plugins/git';
+
+    private static $system_env = [];
 
     /**
      * @param             $build_key_id
@@ -70,6 +64,9 @@ class Queue
      * @param string      $tag_name
      * @param null|string $config
      *
+     * @param null|string $pull_request_source
+     * @param null|string $repo_full_name
+     *
      * @throws CIException
      * @throws Exception
      */
@@ -82,16 +79,22 @@ class Queue
                              string $event_type,
                              ?string $pull_request_id = null,
                              ?string $tag_name = null,
-                             ?string $config): void
+                             ?string $config,
+                             ?string $pull_request_source,
+                             ?string $repo_full_name): void
     {
         self::$unique_id = session_create_id();
         self::$commit_id = $commit_id;
+        self::$commit_message = $commit_message;
+        self::$branch = $branch;
         self::$event_type = $event_type;
         self::$pull_id = $pull_request_id;
         self::$tag_name = $tag_name;
         self::$git_type = $git_type;
         self::$config = $config;
+        self::$pull_request_source = $pull_request_source;
         self::$build_key_id = (int) $build_key_id;
+        self::$repo_full_name = $repo_full_name;
 
         Log::connect()->debug('====== Start Build ======');
 
@@ -278,6 +281,37 @@ class Queue
 
         // --workdir.
         $workdir = $base_path.'/'.$path;
+
+        $system_env = [
+            "CI=true",
+            "KHSCI=true",
+            "CONTINUOUS_INTEGRATION=true",
+
+            "KHSCI_BRANCH=".self::$branch,
+            "KHSCI_TAG=".self::$tag_name,
+            "KHSCI_BUILD_DIR=".$workdir,
+            "KHSCI_BUILD_ID=".self::$build_key_id,
+            "KHSCI_COMMIT=".self::$commit_id,
+            "KHSCI_COMMIT_MESSAGE=".self::$commit_message,
+            "KHSCI_EVENT_TYPE=".self::$event_type,
+            "KHSCI_PULL_REQUEST=false",
+            "KHSCI_REPO_SLUG=".self::$repo_full_name,
+        ];
+
+        if (self::$pull_id) {
+            array_merge($system_env,
+                [
+                    "KHSCI_PULL_REQUEST=true",
+                    "KHSCI_PULL_REQUEST_BRANCH=".self::$branch,
+                    "KHSCI_PULL_REQUEST_SHA=".self::$commit_id,
+                    "KHSCI_PULL_REQUEST_SLUG=".self::$pull_request_source,
+                ]
+            );
+        }
+
+        self::$system_env = $system_env;
+
+        Log::debug(__FILE__, __LINE__, json_encode(self::$system_env));
 
         $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
         $docker_container = $docker->container;

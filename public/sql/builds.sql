@@ -34,3 +34,7 @@ CREATE TABLE IF NOT EXISTS `builds` (
 
 ALTER TABLE builds
   ADD UNIQUE KEY (`git_type`, `rid`, `event_type`, `branch`, `commit_id`);
+
+ALTER TABLE builds
+  ADD COLUMN pull_request_source VARCHAR(200)
+  after pull_request_id;

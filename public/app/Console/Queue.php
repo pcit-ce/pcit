@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build;
+use App\Repo;
 use Error;
 use Exception;
 use KhsCI\CIException;
@@ -64,7 +65,7 @@ class Queue
             $sql = <<<'EOF'
 SELECT 
 
-id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name,config,check_run_id
+id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name,config,check_run_id,pull_request_source
 
 FROM 
 
@@ -110,6 +111,10 @@ EOF;
                     self::$khsci->check_md->in_progress('PHP', PHP_OS, self::$config)
                 );
             }
+
+            $repo_full_name = Repo::getRepoFullName($output[1], $output[2]);
+
+            array_push($output, $repo_full_name);
 
             $queue(...$output);
         } catch (CIException $e) {
