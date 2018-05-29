@@ -9,6 +9,7 @@ use Exception;
 use KhsCI\Support\Config;
 use Pimple\Container;
 use TencentAI\TencentAI;
+use WeChat\WeChat;
 
 /**
  * 核心方法 注入类（依赖），之后通过调用属性或方法，获取类.
@@ -43,6 +44,8 @@ use TencentAI\TencentAI;
  * @property Service\Checks\Run                 $check_run
  * @property Service\Checks\Suites              $check_suites
  * @property Service\Checks\MarkDown            $check_md
+ * @property Curl                               $curl
+ * @property WeChat                             $wechat
  */
 class KhsCI extends Container
 {
@@ -61,6 +64,7 @@ class KhsCI extends Container
         Providers\TencentAIProvider::class,
         Providers\UserProvider::class,
         Providers\WebhooksProvider::class,
+        Providers\WeChatProvider::class,
     ];
 
     /**

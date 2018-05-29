@@ -200,3 +200,6 @@ Route::get('ico/pending', 'Status\ShowStatusByICOController@pending');
 /* API Token */
 
 Route::post('api/user/token', 'APITokenController@find');
+
+Route::get('wechat', 'WeChat\MessageServer');
+Route::post('wechat', 'WeChat\MessageServer');

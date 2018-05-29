@@ -29,6 +29,7 @@
     "khs1994/curl": "dev-master",
     "khs1994/docker": "dev-master",
     "khs1994/tencent-ai": "dev-master",
+    "khs1994/wechat": "^18.06@dev",
     "monolog/monolog": "^1.23",
     "nunomaduro/collision": "^2.0",
     "phpmailer/phpmailer": "^6.0",
