@@ -7,7 +7,6 @@ namespace App\Console;
 use App\Build;
 use App\Repo;
 use App\User;
-use Error;
 use Exception;
 use KhsCI\CIException;
 use KhsCI\KhsCI;
@@ -31,6 +30,8 @@ class Queue
     private static $git_type;
 
     private static $config;
+
+    private static $build_status;
 
     /**
      * @param mixed $unique_id
@@ -93,10 +94,19 @@ EOF;
 
             $build_key_id = $output[0];
 
+            $continue = true;
+
+            $commit_id = '';
+            $event_type = '';
+
             $ci_root = Env::get('CI_ROOT');
 
-            if ($ci_root) {
-                Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root');
+            Log::connect()->debug("====== $build_key_id Build Start Success ======");
+
+            while ($ci_root) {
+                $continue = false;
+
+                Log::debug(__FILE__, __LINE__, $build_key_id.' KhsCI already set ci root');
 
                 $git_type = $output[1];
                 $rid = $output[2];
@@ -104,12 +114,11 @@ EOF;
                 $event_type = $output[6];
 
                 $admin = Repo::getAdmin($git_type, (int) $rid);
+
                 $admin_array = json_decode($admin, true);
 
                 $ci_root_array = json_decode($ci_root, true);
                 $root = $ci_root_array[$git_type];
-
-                $continue = false;
 
                 foreach ($root as $k) {
                     $uid = User::getUid($git_type, $k);
@@ -121,11 +130,19 @@ EOF;
                     }
                 }
 
-                if (!$continue) {
-                    Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo');
+                break;
+            }
 
-                    throw new CIException(null, $commit_id, $event_type, CI::BUILD_STATUS_PASSED);
-                }
+            if (!$continue) {
+                Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo');
+
+                throw new CIException(
+                    null,
+                    $commit_id,
+                    $event_type,
+                    CI::BUILD_STATUS_PASSED,
+                    (int) $build_key_id
+                );
             }
 
             Build::updateStartAt((int) $build_key_id);
@@ -166,23 +183,28 @@ EOF;
 
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_INACTIVE:
+                    self::$build_status = CI::BUILD_STATUS_INACTIVE;
                     self::setBuildStatusInactive();
+
 
                     break;
                 case CI::BUILD_STATUS_FAILED:
+                    self::$build_status = CI::BUILD_STATUS_FAILED;
                     self::setBuildStatusFailed();
 
                     break;
                 case CI::BUILD_STATUS_PASSED:
+                    self::$build_status = CI::BUILD_STATUS_PASSED;
                     self::setBuildStatusPassed();
 
                     break;
                 default:
+                    self::$build_status = CI::BUILD_STATUS_ERRORED;
                     self::setBuildStatusErrored();
             }
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
-        } catch (Exception | Error  $e) {
+        } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
 
@@ -192,10 +214,12 @@ EOF;
                 return;
             }
 
+            Build::updateBuildStatus(self::$build_key_id, self::$build_status);
+
             $queue::systemDelete(self::$unique_id, true);
             Cache::connect()->set('khsci_up_status', 0);
 
-            Log::connect()->debug('====== Build Stopped Success ======');
+            Log::connect()->debug('======'.self::$build_key_id.' Build Stopped Success ======');
 
             self::$unique_id = null;
         }
@@ -250,8 +274,6 @@ EOF;
      */
     private static function setBuildStatusInactive(): void
     {
-        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_INACTIVE);
-
         $description = 'This Repo is Inactive';
 
         self::weChatTemplate($description);
@@ -286,9 +308,6 @@ EOF;
      */
     private static function setBuildStatusErrored(): void
     {
-        // 更新数据库状态
-        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_ERRORED);
-
         $description = 'The '.Env::get('CI_NAME').' build could not complete due to an error';
 
         // 通知 GitHub commit Status
@@ -328,8 +347,6 @@ EOF;
      */
     private static function setBuildStatusFailed(): void
     {
-        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_FAILED);
-
         $description = 'The '.Env::get('CI_NAME').' build is failed';
 
         self::weChatTemplate($description);
@@ -365,8 +382,6 @@ EOF;
      */
     private static function setBuildStatusPassed(): void
     {
-        Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_PASSED);
-
         $description = 'The '.Env::get('CI_NAME').' build passed';
 
         self::weChatTemplate($description);

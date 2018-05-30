@@ -8,7 +8,7 @@
 clone:
   git:
     # image: plugins/git
-    depth: 2
+    depth: 10
     # recursive: true
     # skip_verify: false
     # tags: false

@@ -27,7 +27,8 @@ class WeChatClient
      * @param string      $event_type
      * @param string      $repo_name
      * @param string      $branch
-     * @param string      $committer
+     * @param string      $commit_message
+     * @param string      $committer_username
      * @param string      $info
      *
      * @param string      $url
@@ -40,7 +41,8 @@ class WeChatClient
                                         string $event_type,
                                         string $repo_name,
                                         string $branch,
-                                        string $committer,
+                                        string $commit_message,
+                                        string $committer_username,
                                         string $info,
                                         string $url,
                                         string $openId = null)
@@ -48,7 +50,7 @@ class WeChatClient
         $openId || $openId = $this->openId;
 
         /**
-         * 结果 {{code.DATA}} 时间： {{time.DATA}} 类型： {{event_type.DATA}} 仓库： {{repo_name.DATA}} 分支： {{branch.DATA}} 推送人： {{committer.DATA}} 信息： {{info.DATA}}
+         * 结果：{{code.DATA}} 时间：{{time.DATA}} 类型：{{event_type.DATA}} 仓库：{{repo_name.DATA}} 提交信息：{{commit_message.DATA}} 推送：{{committer.DATA}} 信息：{{info.DATA}}
          *
          */
         $array = [
@@ -67,13 +69,13 @@ class WeChatClient
                     'value' => $event_type
                 ],
                 'repo_name' => [
-                    'value' => $repo_name
+                    'value' => $repo_name.' : '.$branch
                 ],
-                'branch' => [
-                    'value' => $branch
+                'commit_message' => [
+                    'value' => $commit_message
                 ],
                 'committer' => [
-                    'value' => $committer
+                    'value' => $committer_username
                 ],
                 'info' => [
                     'value' => $info

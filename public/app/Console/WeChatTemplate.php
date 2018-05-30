@@ -31,8 +31,10 @@ class WeChatTemplate
             'event_type' => $event_type,
             'rid' => $rid,
             'branch' => $branch,
-            'committer_name' => $committer,
+            'commit_message' => $commit_message,
+            'committer_username' => $committer_username,
             'git_type' => $git_type,
+            'commit_id' => $commit_id
             ) = $output;
 
         $repo_full_name = Repo::getRepoFullName($git_type, (int) $rid);
@@ -43,9 +45,10 @@ class WeChatTemplate
             $event_type,
             $repo_full_name,
             $branch,
-            $committer,
+            substr($commit_message, 0, 10),
+            $committer_username,
             $info,
-            Git::getUrl($git_type, $repo_full_name)
+            Git::getCommitUrl($git_type, $repo_full_name, $commit_id)
         );
 
         Log::debug(__FILE__, __LINE__, $output);

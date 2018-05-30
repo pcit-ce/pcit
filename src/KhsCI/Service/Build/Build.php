@@ -96,8 +96,6 @@ class Build
         self::$build_key_id = (int) $build_key_id;
         self::$repo_full_name = $repo_full_name;
 
-        Log::connect()->debug('====== Start Build ======');
-
         Log::debug(__FILE__, __LINE__, json_encode([
             'unique_id' => self::$unique_id,
             'build_key_id' => $build_key_id,
@@ -232,7 +230,7 @@ class Build
         $matrix = $yaml_obj->matrix ?? null;
 
         if ($git) {
-            $depth = $git['depth'] ?? 2;
+            $depth = $git['depth'] ?? 10;
             $recursive = $git['recursive'] ?? false;
             $skip_verify = $git['skip_verify'] ?? false;
             $tags = $git['tags'] ?? false;
