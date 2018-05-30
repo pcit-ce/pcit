@@ -16,7 +16,7 @@ class TemplateTest extends KhsCITestCase
     {
         $khsci = self::getTest();
 
-        $response = $khsci->wechat_template_message->SendTemplateMessage(
+        $response = $khsci->wechat_template_message->sendTemplateMessage(
             'Success',
             time(),
             'push',

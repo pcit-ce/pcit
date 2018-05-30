@@ -89,8 +89,6 @@ pipeline:
 
   success:
     image: khs1994/tencent_cloud_cos:v4
-    environment:
-      -
     when:
       status: success
 
@@ -99,10 +97,8 @@ pipeline:
   #
 
   failure:
-    image: drillster/drone-email
-    environment:
-      -
-    when: test
+    image: khs1994/email
+    when:
       status: failure
 
   #
@@ -110,10 +106,9 @@ pipeline:
   #
 
   changed:
-    image: ci_status_changed
+    image: khs1994/email
     when:
       status: changed
-
 
 services:
   mysql:

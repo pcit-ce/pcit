@@ -38,7 +38,7 @@ use WeChat\WeChat;
  * @property Service\Repositories\Webhooks        $repo_webhooks
  * @property Service\PullRequest\GitHubClient     $github_pull_request
  * @property Service\Webhooks\Webhooks            $webhooks
- * @property Service\Queue\Queue                  $queue
+ * @property Service\Build\Build                  $build
  * @property TencentAI                            $tencent_ai
  * @property Service\Users\GitHubClient           $user_basic_info
  * @property Service\Checks\Run                   $check_run
@@ -58,7 +58,7 @@ class KhsCI extends Container
         Providers\GitHubAppProvider::class,
         Providers\IssueProvider::class,
         Providers\OAuthProvider::class,
-        Providers\QueueProvider::class,
+        Providers\BuildProvider::class,
         Providers\OrganizationsProvider::class,
         Providers\RepositoriesProvider::class,
         Providers\PullRequestProvider::class,

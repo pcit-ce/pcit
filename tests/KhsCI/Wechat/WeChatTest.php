@@ -3,7 +3,7 @@
 namespace KhsCI\Tests\Wechat;
 
 use PHPUnit\Framework\TestCase;
-use WeChat\Encrypt;
+use WeChat\Support\Encrypt;
 
 class WeChatTest extends TestCase
 {

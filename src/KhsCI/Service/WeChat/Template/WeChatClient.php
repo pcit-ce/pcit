@@ -35,7 +35,7 @@ class WeChatClient
      *
      * @return mixed
      */
-    public function SendTemplateMessage(string $code,
+    public function sendTemplateMessage(string $code,
                                         string $time,
                                         string $event_type,
                                         string $repo_name,

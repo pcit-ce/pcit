@@ -60,7 +60,7 @@ class Queue
     {
         self::$khsci = new KhsCI();
 
-        $queue = self::$khsci->queue;
+        $queue = self::$khsci->build;
 
         try {
             $sql = <<<'EOF'
@@ -252,11 +252,15 @@ EOF;
     {
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_INACTIVE);
 
+        $description = 'This Repo is Inactive';
+
+        self::weChatTemplate($description);
+
         if ('github' === static::$git_type) {
             Up::updateGitHubStatus(
                 self::$build_key_id,
                 CI::GITHUB_STATUS_FAILURE,
-                'This Repo is Inactive'
+                $description
             );
         }
 
@@ -285,18 +289,21 @@ EOF;
         // 更新数据库状态
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_ERRORED);
 
+        $description = 'The '.Env::get('CI_NAME').' build could not complete due to an error';
+
         // 通知 GitHub commit Status
         if ('github' === static::$git_type) {
             Up::updateGitHubStatus(
                 self::$build_key_id,
                 CI::GITHUB_STATUS_ERROR,
-                'The '.Env::get('CI_NAME').' build could not complete due to an error'
+                $description
             );
         }
+
         // 微信通知
+        self::weChatTemplate($description);
 
         // GitHub App checks API
-
         if ('github_app' === self::$git_type) {
             $build_log = Build::getLog((int) self::$build_key_id);
 
@@ -323,11 +330,15 @@ EOF;
     {
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_FAILED);
 
+        $description = 'The '.Env::get('CI_NAME').' build is failed';
+
+        self::weChatTemplate($description);
+
         if ('github' === static::$git_type) {
             Up::updateGitHubStatus(
                 self::$build_key_id,
                 CI::GITHUB_STATUS_FAILURE,
-                'The '.Env::get('CI_NAME').' build is failed'
+                $description
             );
         }
 
@@ -356,11 +367,15 @@ EOF;
     {
         Build::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_PASSED);
 
+        $description = 'The '.Env::get('CI_NAME').' build passed';
+
+        self::weChatTemplate($description);
+
         if ('github' === static::$git_type) {
             Up::updateGitHubStatus(
                 self::$build_key_id,
                 CI::GITHUB_STATUS_SUCCESS,
-                'The '.Env::get('CI_NAME').' build passed'
+                $description
             );
         }
 
@@ -382,6 +397,16 @@ EOF;
 
             return;
         }
+    }
+
+    /**
+     * @param string $info
+     *
+     * @throws Exception
+     */
+    private static function weChatTemplate(string $info)
+    {
+        WeChatTemplate::send(self::$build_key_id, $info);
     }
 
     public function test()

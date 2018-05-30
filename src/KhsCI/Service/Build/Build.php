@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\Queue;
+namespace KhsCI\Service\Build;
 
-use App\Build;
+use App\Build as BuildDB;
 use Docker\Container\Container;
 use Docker\Docker;
 use Docker\Image\Image;
@@ -19,7 +19,7 @@ use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\Log;
 
-class Queue
+class Build
 {
 
     private static $git_type;
@@ -364,7 +364,7 @@ class Queue
      */
     private function cancel(): void
     {
-        $output = Build::getBuildStatusByBuildKeyId((int) self::$build_key_id);
+        $output = BuildDB::getBuildStatusByBuildKeyId((int) self::$build_key_id);
 
         // 取消构建
         if (CI::BUILD_STATUS_CANCELED === $output) {
@@ -424,27 +424,7 @@ class Queue
                 }
             }
 
-            $skip = false;
-
-            switch ($image) {
-                case 'ci_docker_build':
-                    $skip = true;
-                    break;
-
-                case 'ci_after_success':
-                    $skip = true;
-                    break;
-
-                case 'ci_after_failure':
-                    $skip = true;
-                    break;
-
-                case 'ci_status_changed':
-                    $skip = true;
-                    break;
-            }
-
-            if ($skip) {
+            if ($status) {
                 continue;
             }
 

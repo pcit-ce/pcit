@@ -246,11 +246,19 @@ class Up
         $yaml_file_content = HTTP::get($url);
 
         if (!$yaml_file_content) {
-            Log::debug(__FILE__,__LINE__,"$git_type $repo_full_name $commit_id not include .khsci.yml");
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml");
             return [];
         }
 
-        return $config = yaml_parse($yaml_file_content);
+        $config = yaml_parse($yaml_file_content);
+
+        if (!$config) {
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id .khsci.yml parse error");
+
+            return [];
+        }
+
+        return $config;
     }
 
     /**
