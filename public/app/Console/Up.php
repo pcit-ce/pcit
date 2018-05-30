@@ -99,7 +99,7 @@ class Up
 
     /**
      * @param int    $build_key_id
-     * @param string $state        default is pending
+     * @param string $state default is pending
      * @param string $description
      *
      * @throws Exception
@@ -107,7 +107,8 @@ class Up
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
                                               string $description = null
-    ): void {
+    ): void
+    {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -165,7 +166,8 @@ class Up
                                                  array $images = null,
                                                  array $actions = null,
                                                  bool $force_create = false
-    ): void {
+    ): void
+    {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
@@ -239,11 +241,12 @@ class Up
     {
         $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
 
-        $yaml_file_content = HTTP::get(
-            Git::getRawUrl(static::$git_type, $repo_full_name, $commit_id, '.khsci.yml')
-        );
+        $url = Git::getRawUrl(static::$git_type, $repo_full_name, $commit_id, '.khsci.yml');
+
+        $yaml_file_content = HTTP::get($url);
 
         if (!$yaml_file_content) {
+            Log::debug(__FILE__,__LINE__,"$git_type $repo_full_name $commit_id not include .khsci.yml");
             return [];
         }
 
@@ -790,14 +793,16 @@ EOF;
             $internal = false;
         }
 
+        $pull_request_source = $pull_request_head->repo->full_name;
+
         $sql = <<<'EOF'
 INSERT INTO builds(
 
 git_type,event_type,created_at,action,
 commit_id,commit_message,committer_username,pull_request_id,
-branch,rid,config,internal
+branch,rid,config,internal,pull_request_source
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
         $config_array = self::getConfig($rid, $commit_id);
@@ -807,7 +812,7 @@ EOF;
         $last_insert_id = DB::insert($sql, [
                 static::$git_type, __FUNCTION__, $event_time, $action,
                 $commit_id, $commit_message, $committer_username, $pull_request_id,
-                $branch, $rid, $config, $internal,
+                $branch, $rid, $config, $internal, $pull_request_source
             ]
         );
 

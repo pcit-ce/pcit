@@ -88,18 +88,21 @@ pipeline:
   #
 
   success:
-    image: ci_after_success
+    image: khs1994/tencent_cloud_cos:v4
+    environment:
+      -
     when:
       status: success
-
 
   #
   # This is failure after demo
   #
 
   failure:
-    image: ci_after_failure
-    when:
+    image: drillster/drone-email
+    environment:
+      -
+    when: test
       status: failure
 
   #
