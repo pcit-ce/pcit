@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use KhsCI\Support\Route;
+use KhsCI\Support\Env;
 
 Route::get('test1/{id}', function ($id) {
     return $id;
@@ -74,7 +75,8 @@ Route::post('webhooks/gitee', 'Webhooks\GiteeController');
 
 Route::post('webhooks/coding', 'Webhooks\CodingController');
 
-Route::post('webhooks/aliyun_docker_registry', 'Webhooks\AliyunDockerRegistryController');
+Route::post('webhooks/'.Env::get('CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS', 'aliyun_docker_registry'),
+'Webhooks\AliyunDockerRegistryController');
 
 // 获取所有接收到的 webhooks -> requests
 
@@ -113,7 +115,8 @@ Route::post('api/user/sync', 'Profile\SyncController');
 /*Status*/
 
 Route::get('status/github/{username}/{repo_name}/{ref}', 'Status\GithubController@list');
-Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}', 'Status\GitHubController@listcombinedStatus');
+Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
+'Status\GitHubController@listcombinedStatus');
 
 /**Repos**/
 

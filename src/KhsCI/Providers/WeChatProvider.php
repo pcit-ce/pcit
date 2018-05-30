@@ -8,6 +8,7 @@ use KhsCI\Support\Cache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use WeChat\Wechat;
+use KhsCI\Service\WeChat\Template\WeChatClient;
 
 class WeChatProvider implements ServiceProviderInterface
 {
@@ -20,6 +21,10 @@ class WeChatProvider implements ServiceProviderInterface
                 $app['config']['wechat']['token'],
                 Cache::connect()
             );
+        };
+
+        $pimple['wechat_template_message'] = function ($app) {
+            return new WeChatClient($app);
         };
     }
 }

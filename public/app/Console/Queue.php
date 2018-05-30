@@ -6,6 +6,7 @@ namespace App\Console;
 
 use App\Build;
 use App\Repo;
+use App\User;
 use Error;
 use Exception;
 use KhsCI\CIException;
@@ -63,11 +64,11 @@ class Queue
 
         try {
             $sql = <<<'EOF'
-SELECT 
+SELECT
 
 id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name,config,check_run_id,pull_request_source
 
-FROM 
+FROM
 
 builds WHERE build_status=? AND event_type IN (?,?,?) ORDER BY id DESC;
 EOF;
@@ -84,7 +85,6 @@ EOF;
             // 数据库没有结果，跳过构建
 
             if (!$output) {
-                Log::debug(__FILE__, __LINE__, 'Build Table output is empty skip');
 
                 return;
             }
@@ -92,6 +92,41 @@ EOF;
             $output = array_values($output);
 
             $build_key_id = $output[0];
+
+            $ci_root = Env::get('CI_ROOT');
+
+            if ($ci_root) {
+                Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root');
+
+                $git_type = $output[1];
+                $rid = $output[2];
+                $commit_id = $output[3];
+                $event_type = $output[6];
+
+                $admin = Repo::getAdmin($git_type, $rid);
+                $admin_array = json_decode($admin, true);
+
+                $ci_root_array = json_decode($ci_root, true);
+                $root = $ci_root_array[$git_type];
+
+                $continue = false;
+
+                foreach ($root as $k) {
+                    $uid = User::getUid($git_type, $k);
+
+                    if (in_array($uid, $admin_array)) {
+                        $continue = true;
+
+                        break;
+                    }
+                }
+
+                if (!$continue) {
+                    Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo');
+
+                    throw new CIException(null, $commit_id, $event_type, CI::BUILD_STATUS_PASSED);
+                }
+            }
 
             Build::updateStartAt((int) $build_key_id);
             Build::updateBuildStatus((int) $build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
@@ -150,7 +185,10 @@ EOF;
         } catch (Exception | Error  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
+
+            // 若 unique_id 不存在，则不清理 Docker 构建环境
             if (!self::$unique_id) {
+
                 return;
             }
 
@@ -169,7 +207,6 @@ EOF;
     public static function saveLog(): void
     {
         // 日志美化
-
         $output = Cache::connect()->hGet('build_log', (string) self::$build_key_id);
 
         if (!$output) {

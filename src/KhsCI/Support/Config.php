@@ -54,7 +54,9 @@ class Config
             'wechat' => [
                 'app_id' => getenv('CI_WECHAT_APP_ID'),
                 'app_secret' => getenv('CI_WECHAT_APP_SECRET'),
-                'token' => getenv('CI_WECHAT_TOKEN')
+                'token' => getenv('CI_WECHAT_TOKEN'),
+                'template_id'=>getenv('CI_WECHAT_TEMPLATE_ID'),
+                'open_id'=>getenv('CI_WECHAT_USER_OPENID'),
             ]
         ];
     }

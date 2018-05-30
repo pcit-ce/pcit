@@ -18,14 +18,14 @@ class CIException extends Exception
     /**
      * CIException constructor.
      *
-     * @param string         $unique_id
+     * @param string|null    $unique_id
      * @param string         $commit_id
      * @param string         $event_type
      * @param string         $message
      * @param int            $code
      * @param Throwable|null $previous
      */
-    public function __construct(string $unique_id,
+    public function __construct(?string $unique_id,
                                 string $commit_id,
                                 string $event_type,
                                 string $message = '',

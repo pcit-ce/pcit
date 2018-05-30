@@ -20,32 +20,33 @@ use WeChat\WeChat;
  *
  * $a = $container['a'];
  *
- * @property Service\GitHubApp\Installations    $github_apps_installations
- * @property Service\OAuth\Coding               $oauth_coding
- * @property Service\OAuth\GitHub               $oauth_github
- * @property Service\OAuth\GitHubApp            $oauth_github_app
- * @property Service\OAuth\Gitee                $oauth_gitee
- * @property Service\Issue\Assignees            $issue_assignees
- * @property Service\Issue\Comments             $issue_comments
- * @property Service\Issue\Events               $issue_events
- * @property Service\Issue\Issues               $issue
- * @property Service\Issue\Labels               $issue_labels
- * @property Service\Issue\Milestones           $issue_milestones
- * @property Service\Issue\Timeline             $issue_timeline
- * @property Service\Organizations\GitHubClient $github_orgs
- * @property Service\Repositories\Collaborators $repo_collaborators
- * @property Service\Repositories\Status        $repo_status
- * @property Service\Repositories\Webhooks      $repo_webhooks
- * @property Service\PullRequest\GitHubClient   $github_pull_request
- * @property Service\Webhooks\Webhooks          $webhooks
- * @property Service\Queue\Queue                $queue
- * @property TencentAI                          $tencent_ai
- * @property Service\Users\GitHubClient         $user_basic_info
- * @property Service\Checks\Run                 $check_run
- * @property Service\Checks\Suites              $check_suites
- * @property Service\Checks\MarkDown            $check_md
- * @property Curl                               $curl
- * @property WeChat                             $wechat
+ * @property Service\GitHubApp\Installations      $github_apps_installations
+ * @property Service\OAuth\Coding                 $oauth_coding
+ * @property Service\OAuth\GitHub                 $oauth_github
+ * @property Service\OAuth\GitHubApp              $oauth_github_app
+ * @property Service\OAuth\Gitee                  $oauth_gitee
+ * @property Service\Issue\Assignees              $issue_assignees
+ * @property Service\Issue\Comments               $issue_comments
+ * @property Service\Issue\Events                 $issue_events
+ * @property Service\Issue\Issues                 $issue
+ * @property Service\Issue\Labels                 $issue_labels
+ * @property Service\Issue\Milestones             $issue_milestones
+ * @property Service\Issue\Timeline               $issue_timeline
+ * @property Service\Organizations\GitHubClient   $github_orgs
+ * @property Service\Repositories\Collaborators   $repo_collaborators
+ * @property Service\Repositories\Status          $repo_status
+ * @property Service\Repositories\Webhooks        $repo_webhooks
+ * @property Service\PullRequest\GitHubClient     $github_pull_request
+ * @property Service\Webhooks\Webhooks            $webhooks
+ * @property Service\Queue\Queue                  $queue
+ * @property TencentAI                            $tencent_ai
+ * @property Service\Users\GitHubClient           $user_basic_info
+ * @property Service\Checks\Run                   $check_run
+ * @property Service\Checks\Suites                $check_suites
+ * @property Service\Checks\MarkDown              $check_md
+ * @property Curl                                 $curl
+ * @property WeChat                               $wechat
+ * @property Service\WeChat\Template\WeChatClient $wechat_template_message
  */
 class KhsCI extends Container
 {
