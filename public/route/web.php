@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\Route;
 use KhsCI\Support\Env;
+use KhsCI\Support\Route;
 
 Route::get('test1/{id}', function ($id) {
     return $id;

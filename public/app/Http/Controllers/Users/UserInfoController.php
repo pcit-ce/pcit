@@ -4,21 +4,41 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
+use App\Http\Controllers\APITokenController;
 use App\User;
 use Exception;
 
 class UserInfoController
 {
     /**
+     * 获取当前登录用户信息.
+     *
+     * /user
+     *
+     * @throws Exception
+     */
+    public function __invoke()
+    {
+        list($git_type, $uid) = APITokenController::getUser();
+
+        return User::getUserInfo($git_type, null, (int) $uid);
+    }
+
+    /**
+     * 获取某个用户的信息.
+     *
+     * /user/{git_type}/{username}
+     *
      * @param string $git_type
+     * @param string $username
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public function find(string $git_type)
+    public function find(string $git_type, string $username)
     {
-        $username = 'khs1994';
+        APITokenController::getUser();
 
         $output = User::getUserInfo($git_type, $username);
 

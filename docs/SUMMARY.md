@@ -37,3 +37,9 @@
 ## Plugins
 
 * [Plugins](plugins/README.md)
+
+## CLI
+
+* [CLI](cli/README.md)
+    * [Tencent AI](cli/tencent-ai-cli)
+    * [GitHub](github-cli)

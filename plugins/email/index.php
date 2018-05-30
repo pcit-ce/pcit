@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 use PHPMailer\PHPMailer\PHPMailer;
 
 require __DIR__.'/vendor/autoload.php';
@@ -9,9 +10,9 @@ $mail = new PHPMailer(true);
 try {
     $mail->SMTPDebug = 2;
     $mail->isSMTP();
-    $mail->Host = getEnv('CI_EMAIL_HOST');
+    $mail->Host = getenv('CI_EMAIL_HOST');
     $mail->SMTPAuth = true;
-    $mail->Username = getEnv('CI_EMAIL_USERNAME');
+    $mail->Username = getenv('CI_EMAIL_USERNAME');
     $mail->Password = getenv('CI_EMAIL_PASSWORD');
     $mail->SMTPSecure = 'tls';
     $mail->Port = 587;
@@ -24,7 +25,7 @@ try {
 
     foreach (json_decode(getenv('CI_EMAIL_CC_JSON'), true) as $k) {
         $mail->addCC($k); // 抄送
-    };
+    }
 
     foreach (json_decode(getenv('CI_EMAIL_BCC_JSON'), true) as $k) {
         $mail->addBCC($k); // 暗抄送

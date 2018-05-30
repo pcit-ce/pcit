@@ -35,7 +35,6 @@ class ShowStatusByICOController
             }
 
             throw new Exception();
-
         } catch (Error $e) {
             require __DIR__.'/../../../../public/ico/unknown.svg';
         }

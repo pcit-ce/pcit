@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\WeChat\Template;
 
 use KhsCI\KhsCI;
@@ -30,7 +32,6 @@ class WeChatClient
      * @param string      $commit_message
      * @param string      $committer_username
      * @param string      $info
-     *
      * @param string      $url
      * @param string|null $openId
      *
@@ -50,37 +51,36 @@ class WeChatClient
         $openId || $openId = $this->openId;
 
         /**
-         * 结果：{{code.DATA}} 时间：{{time.DATA}} 类型：{{event_type.DATA}} 仓库：{{repo_name.DATA}} 提交信息：{{commit_message.DATA}} 推送：{{committer.DATA}} 信息：{{info.DATA}}
-         *
+         * 结果：{{code.DATA}} 时间：{{time.DATA}} 类型：{{event_type.DATA}} 仓库：{{repo_name.DATA}} 提交信息：{{commit_message.DATA}} 推送：{{committer.DATA}} 信息：{{info.DATA}}.
          */
         $array = [
             'touser' => $openId,
             'template_id' => $this->template_id,
             'url' => $url,
             'data' => [
-                "code" => [
+                'code' => [
                     'value' => $code,
-                    'color' => '#173177'
+                    'color' => '#173177',
                 ],
-                "time" => [
+                'time' => [
                     'value' => $time,
                 ],
                 'event_type' => [
-                    'value' => $event_type
+                    'value' => $event_type,
                 ],
                 'repo_name' => [
-                    'value' => $repo_name.':'.$branch
+                    'value' => $repo_name.':'.$branch,
                 ],
                 'commit_message' => [
-                    'value' => $commit_message
+                    'value' => $commit_message,
                 ],
                 'committer' => [
-                    'value' => $committer_username
+                    'value' => $committer_username,
                 ],
                 'info' => [
-                    'value' => $info
-                ]
-            ]
+                    'value' => $info,
+                ],
+            ],
         ];
 
         return $this->template_message->send($array);

@@ -26,7 +26,7 @@ class GitHubClient
     }
 
     /**
-     * 获取当前登录用户或指定用户的基本信息
+     * 获取当前登录用户或指定用户的基本信息.
      *
      * @param bool        $raw
      * @param string|null $username
@@ -60,11 +60,10 @@ class GitHubClient
     }
 
     /**
-     * 获取当前用户或指定用户名下所有的仓库列表（包括组织中的列表）
+     * 获取当前用户或指定用户名下所有的仓库列表（包括组织中的列表）.
      *
      * @param int    $page
      * @param bool   $raw
-     *
      * @param string $username
      *
      * @return mixed
@@ -85,7 +84,7 @@ class GitHubClient
     }
 
     /**
-     * 获取用户名下组织列表
+     * 获取用户名下组织列表.
      *
      * @return mixed
      *
@@ -110,7 +109,6 @@ class GitHubClient
      */
     public function authorizations(string $username, string $password)
     {
-
         $url = self::$api_url.'/authorizations';
 
         self::$curl->setHtpasswd($username, $password);

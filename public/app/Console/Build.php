@@ -88,7 +88,6 @@ EOF;
             // 数据库没有结果，跳过构建
 
             if (!$output) {
-
                 return;
             }
 
@@ -108,7 +107,7 @@ EOF;
             while ($ci_root) {
                 $continue = false;
 
-                Log::debug(__FILE__, __LINE__, ' KhsCI already set ci root');
+                Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root');
 
                 $git_type = $output[1];
                 $rid = $output[2];
@@ -187,7 +186,6 @@ EOF;
                     self::$build_status = CI::BUILD_STATUS_INACTIVE;
                     self::setBuildStatusInactive();
 
-
                     break;
                 case CI::BUILD_STATUS_FAILED:
                     self::$build_status = CI::BUILD_STATUS_FAILED;
@@ -208,10 +206,8 @@ EOF;
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
-
             // 若 unique_id 不存在，则不清理 Docker 构建环境
             if (!self::$unique_id) {
-
                 return;
             }
 
@@ -414,7 +410,7 @@ EOF;
      *
      * @throws Exception
      */
-    private static function weChatTemplate(string $info)
+    private static function weChatTemplate(string $info): void
     {
         WeChatTemplate::send(self::$build_key_id, $info);
     }

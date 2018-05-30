@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
+use KhsCI\Service\WeChat\Template\WeChatClient;
 use KhsCI\Support\Cache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use WeChat\Wechat;
-use KhsCI\Service\WeChat\Template\WeChatClient;
 
 class WeChatProvider implements ServiceProviderInterface
 {

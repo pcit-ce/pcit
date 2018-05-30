@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace KhsCI\Tests\Service\Users;
 
@@ -13,7 +14,7 @@ class TestGitHubClient extends KhsCITestCase
      *
      * @throws \Exception
      */
-    public function testAuthorizations()
+    public function testAuthorizations(): void
     {
         $khsci = self::getTest();
 

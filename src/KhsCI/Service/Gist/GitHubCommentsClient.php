@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Gist;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Gist;
 
 class GitHubCommentsClient
 {
-
 }

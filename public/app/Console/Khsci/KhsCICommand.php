@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Console\Khsci;
 
+use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 class KhsCICommand
 {
+    private static $curl;
+
     public static function check(string $endpoints_url, string $git_type): void
     {
     }
@@ -41,6 +45,16 @@ class KhsCICommand
         ];
     }
 
+    public static function getRepoOptionArray()
+    {
+        return [
+            'repo',
+            'r',
+            InputOption::VALUE_REQUIRED,
+            'Repository to use, Example khs1994-php/khsci',
+        ];
+    }
+
     public static function getAPIEndpointOptionArray()
     {
         return [
@@ -60,14 +74,14 @@ class KhsCICommand
     }
 
     /**
-     * @param string $endpoints_url
-     * @param string $git_type
+     * @param InputInterface $input
+     * @param bool           $header
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public static function get(string $endpoints_url, string $git_type)
+    public static function getToken(InputInterface $input, bool $header = true)
     {
         if (!self::configExists()) {
             throw new Exception('Not Found', 404);
@@ -75,12 +89,163 @@ class KhsCICommand
 
         $array = json_decode(file_get_contents(self::getConfigFileName()), true);
 
+        $git_type = $input->getOption('git_type');
+
+        $endpoints_url = $input->getOption('api-endpoint');
+
         $token = $array['endpoints'][$endpoints_url][$git_type];
+
+        if ($header) {
+            return ['Authorization' => "token $token"];
+        }
 
         if ($token) {
             return $token;
         }
 
         throw new Exception('Not Found', 404);
+    }
+
+    private static function getCurl()
+    {
+        if (!(self::$curl instanceof Curl)) {
+            self::$curl = new Curl();
+        }
+
+        return self::$curl;
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param string         $entrypoint
+     * @param string         $data
+     * @param bool           $auth
+     * @param int            $target_code
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function HttpGet(InputInterface $input,
+                                   string $entrypoint,
+                                   ?string $data,
+                                   bool $auth = false,
+                                   int $target_code = 200
+    ) {
+        $endpoints_url = $input->getOption('api-endpoint');
+
+        $header = [];
+
+        $auth && $header = self::getToken($input);
+
+        $output = self::getCurl()->get($endpoints_url.'/api/'.$entrypoint, $data, $header);
+
+        if ($target_code === self::getCurl()->getCode()) {
+            return $output;
+        }
+
+        throw new Exception($output, 500);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param string         $entrypoint
+     * @param string         $data
+     * @param bool           $auth
+     * @param bool           $json
+     * @param int            $target_code
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function HttpPost(InputInterface $input,
+                                    string $entrypoint,
+                                    ?string $data,
+                                    bool $auth = false,
+                                    bool $json = false,
+                                    int $target_code = 200)
+    {
+        $endpoints_url = $input->getOption('api-endpoint');
+
+        $header = [];
+
+        $auth && $header = self::getToken($input);
+        $json && $header = array_merge($header, ['Content-Type' => 'application/json']);
+
+        $output = self::getCurl()->post($endpoints_url.'/api/'.$entrypoint, $data, $header);
+
+        if ($target_code === self::getCurl()->getCode()) {
+            return $output;
+        }
+
+        throw new Exception($output, 500);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param string         $entrypoint
+     * @param string         $data
+     * @param bool           $auth
+     * @param int            $target_code
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function HttpDelete(InputInterface $input,
+                                      string $entrypoint,
+                                      string $data,
+                                      bool $auth = false,
+                                      int $target_code = 200
+    ) {
+        $endpoints_url = $input->getOption('api-endpoint');
+
+        $header = [];
+
+        $auth && $header = self::getToken($input);
+
+        $output = self::getCurl()->delete($endpoints_url.'/api/'.$entrypoint, $data, $header);
+
+        if ($target_code === self::getCurl()->getCode()) {
+            return $output;
+        }
+
+        throw new Exception($output, 500);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param string         $entrypoint
+     * @param string         $data
+     * @param bool           $auth
+     * @param bool           $json
+     * @param int            $target_code
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function HttpPatch(InputInterface $input,
+                                     string $entrypoint,
+                                     string $data,
+                                     bool $auth = false,
+                                     bool $json = false,
+                                     int $target_code = 200
+    ) {
+        $endpoints_url = $input->getOption('api-endpoint');
+
+        $header = [];
+
+        $auth && $header = self::getToken($input);
+        $json && $header = array_merge($header, ['Content-Type' => 'application/json']);
+
+        $output = self::getCurl()->patch($endpoints_url.'/api/'.$entrypoint, $data, $header);
+
+        if ($target_code === self::getCurl()->getCode()) {
+            return $output;
+        }
+
+        throw new Exception($output, 500);
     }
 }

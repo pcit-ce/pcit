@@ -9,7 +9,7 @@ use Firebase\JWT\JWT as JWTService;
 class JWT
 {
     /**
-     * GitHub App 由 JWT expire 10m 获取 Token expire 60m
+     * GitHub App 由 JWT expire 10m 获取 Token expire 60m.
      *
      * @param string $private_key_path
      * @param int    $iss
@@ -34,7 +34,7 @@ class JWT
     }
 
     /**
-     * KhsCI 加密 token
+     * KhsCI 加密 token.
      *
      * @param string $privateKey
      * @param string $git_type
@@ -63,7 +63,7 @@ class JWT
     }
 
     /**
-     * 解密 token
+     * 解密 token.
      *
      * @param string $jwt
      * @param string $privateKey

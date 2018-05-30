@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\ApiToken;
 use App\Build;
 use App\Repo;
+use App\User;
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;
@@ -17,7 +18,7 @@ use KhsCI\Support\Request;
 class APITokenController
 {
     /**
-     * 从请求头获取 token
+     * 从请求头获取 token.
      *
      * @return string
      *
@@ -40,16 +41,30 @@ class APITokenController
     }
 
     /**
-     * 检查 token
+     * @throws Exception
+     */
+    public static function getUser()
+    {
+        $token = self::getToken();
+        $array = ApiToken::getGitTypeAndUid((string) $token);
+
+        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
+
+        return [$git_type, $uid];
+    }
+
+    /**
+     * 检查 token 是否有某构建的权限.
      *
      * @param int $build_key_id
      *
+     * @return array
+     *
      * @throws Exception
      */
-    public static function check(int $build_key_id): void
+    public static function check(int $build_key_id)
     {
         $token = self::getToken();
-
         $array = ApiToken::getGitTypeAndUid((string) $token);
 
         list('git_type' => $git_type, 'uid' => $uid) = $array[0];
@@ -67,25 +82,46 @@ class APITokenController
         $output = Repo::checkAdmin($git_type, (int) $rid, (int) $uid);
 
         if ($output) {
-            return;
+            return [$rid, $git_type, $uid];
         }
 
         throw new Exception('Not Found', 404);
     }
 
     /**
-     * 检查 Token 是否有某仓库的权限
+     * 检查 Token 是否有某仓库的权限.
+     *
+     * Token 的 uid 是否在给定仓库的管理员列表中
      *
      * @param string $username
      * @param string $repo_name
+     *
+     * @return array
+     *
+     * @throws Exception
      */
-    public static function checkByRepo(string $username, string $repo_name): void
+    public static function checkByRepo(string $username, string $repo_name)
     {
+        $token = self::getToken();
+        $array = ApiToken::getGitTypeAndUid((string) $token);
 
+        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
+
+        // 上面获取到了 token 的 uid
+        $rid = Repo::getRid($git_type, $username, $repo_name);
+
+        // 比对管理员列表
+        $output = Repo::checkAdmin($git_type, (int) $rid, (int) $uid);
+
+        if ($output) {
+            return [$rid, $git_type, $uid];
+        }
+
+        throw new Exception('Not Found', 404);
     }
 
     /**
-     * 获取 token 对应的信息
+     * 获取 token 对应的信息.
      *
      * @return array|string
      *

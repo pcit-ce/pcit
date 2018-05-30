@@ -12,12 +12,13 @@ class GitHubClient
     use CICommon;
 
     /**
-     * List a user's gists
+     * List a user's gists.
      *
      * @param string|null $username
-     * @param string      $since YYYY-MM-DDTHH:MM:SSZ
+     * @param string      $since    YYYY-MM-DDTHH:MM:SSZ
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function list(string $username = null, string $since)
@@ -32,70 +33,58 @@ class GitHubClient
     }
 
     /**
-     * GitHub 所有用户发布的最新 30*100 条 gists
+     * GitHub 所有用户发布的最新 30*100 条 gists.
      */
     public function all()
     {
         return [];
     }
 
-    public function ListStarred()
+    public function ListStarred(): void
     {
-
     }
 
-    public function find()
+    public function find(): void
     {
-
     }
 
-    public function getSpecificRevision()
+    public function getSpecificRevision(): void
     {
-
     }
 
-    public function create()
+    public function create(): void
     {
-
     }
 
-    public function edit()
+    public function edit(): void
     {
-
     }
 
-    public function listCommits()
+    public function listCommits(): void
     {
-
     }
 
-    public function star()
+    public function star(): void
     {
-
     }
 
-    public function unstar()
+    public function unstar(): void
     {
-
     }
 
-    public function isStarred()
+    public function isStarred(): void
     {
-
     }
 
-    public function fork()
+    public function fork(): void
     {
-
     }
 
-    public function listFork()
+    public function listFork(): void
     {
-
     }
 
-    public function delete()
+    public function delete(): void
     {
-
     }
 }

@@ -176,7 +176,7 @@ EOF;
             CI::BUILD_STATUS_PENDING,
             CI::BUILD_STATUS_SKIP,
             CI::BUILD_STATUS_INACTIVE,
-            CI::BUILD_EVENT_PR
+            CI::BUILD_EVENT_PR,
         ], true);
     }
 

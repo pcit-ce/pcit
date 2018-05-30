@@ -4,7 +4,9 @@
 
 use App\Console\Khsci\Login;
 use App\Console\Khsci\Logout;
+use App\Console\Khsci\Repo\Env as EnvCommand;
 use App\Console\Khsci\Token;
+use App\Console\Khsci\Whoami;
 use Dotenv\Dotenv;
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
@@ -32,5 +34,9 @@ $cli->add(new Login());
 $cli->add(new Logout());
 
 $cli->add(new Token());
+
+$cli->add(new EnvCommand());
+
+$cli->add(new Whoami());
 
 $cli->run();

@@ -58,7 +58,7 @@ class Request
                 $url = $array[0];
                 preg_match('#rel=".*#', trim($k), $array);
                 $rel = explode('=', $array[0])[1];
-                $return_array[str_replace('"', "", $rel)] = $url;
+                $return_array[str_replace('"', '', $rel)] = $url;
             }
         }
 

@@ -13,18 +13,23 @@ class User extends DBModel
     protected static $table = 'user';
 
     /**
-     * @param string $git_type
-     * @param string $username
+     * @param string      $git_type
+     * @param string|null $username
+     * @param int         $uid
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getUserInfo(string $git_type, string $username)
+    public static function getUserInfo(string $git_type, ?string $username, int $uid = 0)
     {
         $sql = 'SELECT * FROM user WHERE git_type=? AND username=?';
 
-        return DB::select($sql, [$git_type, $username]);
+        if ($uid) {
+            $sql = 'SELECT * FROM user WHERE git_type=? AND uid=?';
+        }
+
+        return DB::select($sql, [$git_type, $username ?? $uid]);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 require __DIR__.'/vendor/autoload.php';
 
 try {
@@ -8,8 +9,8 @@ try {
         'credentials' => [
             'appId' => getenv('COS_APP_ID'),
             'secretId' => getenv('COS_KEY'),
-            'secretKey' => getenv('COS_SECRET')
-        ]
+            'secretKey' => getenv('COS_SECRET'),
+        ],
     ]);
 
     $result = $cosClient->putObject([
@@ -19,7 +20,6 @@ try {
     ]);
 
     var_dump($result);
-
 } catch (Throwable $e) {
     echo $e->__toString();
 }

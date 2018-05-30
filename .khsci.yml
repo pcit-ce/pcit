@@ -20,6 +20,11 @@ workspace:
   # path: .
   path: src
 
+cache:
+  directories:
+  - vendor
+  - .php_cs.cache
+
 pipeline:
   #
   # This is phpunit demo

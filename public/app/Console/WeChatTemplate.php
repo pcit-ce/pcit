@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console;
 
 use App\Build;
@@ -14,12 +16,11 @@ class WeChatTemplate
 {
     /**
      * @param int    $build_key_id
-     *
      * @param string $info
      *
      * @throws Exception
      */
-    public static function send(int $build_key_id, string $info)
+    public static function send(int $build_key_id, string $info): void
     {
         $khsci = new Khsci();
 

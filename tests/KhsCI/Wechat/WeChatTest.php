@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Tests\Wechat;
 
 use PHPUnit\Framework\TestCase;
@@ -10,7 +12,7 @@ class WeChatTest extends TestCase
     /**
      * @group DON'TTEST
      */
-    public function test()
+    public function test(): void
     {
         $a = Encrypt::get('khs1994');
     }

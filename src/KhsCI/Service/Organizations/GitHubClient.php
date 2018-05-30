@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace KhsCI\Service\Organizations;
 
@@ -11,11 +12,12 @@ class GitHubClient
     use CICommon;
 
     /**
-     * 获取组织的基本信息
+     * 获取组织的基本信息.
      *
      * @param string $org_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getBasicInfo(string $org_name)
@@ -26,7 +28,7 @@ class GitHubClient
     }
 
     /**
-     * 获取组织的仓库列表
+     * 获取组织的仓库列表.
      *
      * @param string $org_name
      * @param int    $page
@@ -35,6 +37,7 @@ class GitHubClient
      * @param string $sort
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listRepo(string $org_name, int $page = 1, string $type = null, int $per_page = null, string $sort = null)

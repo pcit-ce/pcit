@@ -37,6 +37,7 @@ class OrganizationsController
      * @param string $org_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function find(string $org_name)

@@ -21,7 +21,6 @@ use KhsCI\Support\Log;
 
 class Build
 {
-
     private static $git_type;
 
     private static $build_key_id;
@@ -63,7 +62,6 @@ class Build
      * @param string      $pull_request_id
      * @param string      $tag_name
      * @param null|string $config
-     *
      * @param null|string $pull_request_source
      * @param null|string $repo_full_name
      *
@@ -281,28 +279,28 @@ class Build
         $workdir = $base_path.'/'.$path;
 
         $system_env = [
-            "CI=true",
-            "KHSCI=true",
-            "CONTINUOUS_INTEGRATION=true",
+            'CI=true',
+            'KHSCI=true',
+            'CONTINUOUS_INTEGRATION=true',
 
-            "KHSCI_BRANCH=".self::$branch,
-            "KHSCI_TAG=".self::$tag_name,
-            "KHSCI_BUILD_DIR=".$workdir,
-            "KHSCI_BUILD_ID=".self::$build_key_id,
-            "KHSCI_COMMIT=".self::$commit_id,
-            "KHSCI_COMMIT_MESSAGE=".self::$commit_message,
-            "KHSCI_EVENT_TYPE=".self::$event_type,
-            "KHSCI_PULL_REQUEST=false",
-            "KHSCI_REPO_SLUG=".self::$repo_full_name,
+            'KHSCI_BRANCH='.self::$branch,
+            'KHSCI_TAG='.self::$tag_name,
+            'KHSCI_BUILD_DIR='.$workdir,
+            'KHSCI_BUILD_ID='.self::$build_key_id,
+            'KHSCI_COMMIT='.self::$commit_id,
+            'KHSCI_COMMIT_MESSAGE='.self::$commit_message,
+            'KHSCI_EVENT_TYPE='.self::$event_type,
+            'KHSCI_PULL_REQUEST=false',
+            'KHSCI_REPO_SLUG='.self::$repo_full_name,
         ];
 
         if (self::$pull_id) {
             array_merge($system_env,
                 [
-                    "KHSCI_PULL_REQUEST=true",
-                    "KHSCI_PULL_REQUEST_BRANCH=".self::$branch,
-                    "KHSCI_PULL_REQUEST_SHA=".self::$commit_id,
-                    "KHSCI_PULL_REQUEST_SLUG=".self::$pull_request_source,
+                    'KHSCI_PULL_REQUEST=true',
+                    'KHSCI_PULL_REQUEST_BRANCH='.self::$branch,
+                    'KHSCI_PULL_REQUEST_SHA='.self::$commit_id,
+                    'KHSCI_PULL_REQUEST_SLUG='.self::$pull_request_source,
                 ]
             );
         }
@@ -423,7 +421,6 @@ class Build
             }
 
             if ($status) {
-
                 continue;
             }
 

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Env;
 use App\Http\Controllers\APITokenController;
+use App\Repo;
+use Exception;
 
 class EnvController
 {
@@ -14,12 +17,16 @@ class EnvController
      * /repo/{repository.id}/env_vars
      *
      * @param array $args
+     *
+     * @return array|string
+     *
+     * @throws Exception
      */
-    public function __invoke(...$args): void
+    public function __invoke(...$args)
     {
-        list($username, $repo_name) = $args;
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
 
-        APITokenController::checkByRepo(...$args);
+        return Env::list($git_type, (int) $rid);
     }
 
     /**
@@ -34,16 +41,22 @@ class EnvController
      * /repo/{repository.slug}/env_vars
      *
      * @param array $args
+     *
+     * @throws Exception
      */
-    public function create(...$args): void
+    public function create(...$args)
     {
-        list($username, $repo_name) = $args;
-
-        APITokenController::checkByRepo(...$args);
-
         $json = file_get_contents('php://input');
 
-        list($name, $value, $public) = json_decode($json, true);
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+
+        list(
+            'env_var.name' => $name,
+            'env_var.value' => $value,
+            'env_var.public' => $public
+            ) = json_decode($json, true);
+
+        return Env::create($git_type, (int) $rid, $name, $value, $public);
     }
 
     /**
@@ -52,6 +65,8 @@ class EnvController
      * /repo/{repository.id}/env_var/{env_var.id}
      *
      * @param array $args
+     *
+     * @throws Exception
      */
     public function find(...$args): void
     {
@@ -72,6 +87,8 @@ class EnvController
      * /repo/{repository.id}/env_var/{env_var.id}
      *
      * @param array $args
+     *
+     * @throws Exception
      */
     public function update(...$args): void
     {
@@ -88,6 +105,8 @@ class EnvController
      * /repo/{repository.id}/env_var/{env_var.id}
      *
      * @param array $args
+     *
+     * @throws Exception
      */
     public function delete(...$args): void
     {

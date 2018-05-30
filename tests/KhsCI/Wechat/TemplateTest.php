@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Tests\Wechat;
 
 use Exception;
@@ -12,7 +14,7 @@ class TemplateTest extends KhsCITestCase
      *
      * @throws Exception
      */
-    public function testSend()
+    public function testSend(): void
     {
         $khsci = self::getTest();
 

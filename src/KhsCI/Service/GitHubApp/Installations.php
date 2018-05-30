@@ -191,7 +191,7 @@ class Installations
     }
 
     /**
-     * 某用户或组织的 GitHub App 安装请求地址，即用户在此 URL 安装 GitHub App
+     * 某用户或组织的 GitHub App 安装请求地址，即用户在此 URL 安装 GitHub App.
      *
      * @param int $rid
      *

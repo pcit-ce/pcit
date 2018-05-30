@@ -35,7 +35,7 @@ class Token extends Command
         list('api-endpoint' => $api_endpoint, 'git_type' => $git_type) = $input->getOptions();
 
         try {
-            $output->writeln('Your access token is '.KhsCICommand::get($api_endpoint, $git_type));
+            $output->writeln('Your access token is '.KhsCICommand::getToken($input, false));
         } catch (\Throwable $e) {
             throw new Exception('Please exec login first', 404);
         }
