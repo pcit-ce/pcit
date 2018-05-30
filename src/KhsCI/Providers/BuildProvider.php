@@ -12,7 +12,7 @@ class BuildProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
-        $pimple['queue'] = function ($app) {
+        $pimple['build'] = function ($app) {
             return new Build();
         };
     }

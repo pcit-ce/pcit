@@ -42,7 +42,7 @@ class DBModel
     {
         $table = static::getTableName();
 
-        $sql = "SELECT * from $table WHERE id = ?";
+        $sql = "SELECT * from $table WHERE id=?";
 
         $output = DB::select($sql, [$table_primary_key_id]);
 

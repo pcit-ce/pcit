@@ -103,7 +103,7 @@ EOF;
                 $commit_id = $output[3];
                 $event_type = $output[6];
 
-                $admin = Repo::getAdmin($git_type, $rid);
+                $admin = Repo::getAdmin($git_type, (int) $rid);
                 $admin_array = json_decode($admin, true);
 
                 $ci_root_array = json_decode($ci_root, true);
@@ -147,7 +147,7 @@ EOF;
                 );
             }
 
-            $repo_full_name = Repo::getRepoFullName($output[1], $output[2]);
+            $repo_full_name = Repo::getRepoFullName($output[1], (int) $output[2]);
 
             array_push($output, $repo_full_name);
 
