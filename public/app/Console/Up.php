@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build;
+use App\Console\Build as BuildDaemon;
 use App\GetAccessToken;
 use App\Issue;
 use App\Repo;
@@ -66,7 +67,11 @@ class Up
                 if (!$docker_build_skip) {
                     echo 'Connect Docker Daemon Success, Docker Build Running...';
 
-                    Queue::queue();
+                    $build = new BuildDaemon();
+
+                    $build->build();
+
+                    unset($build);
                 }
 
                 echo '.W';

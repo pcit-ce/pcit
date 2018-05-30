@@ -423,6 +423,11 @@ class Build
             }
 
             if ($status) {
+
+                continue;
+            }
+
+            if ('ci_docker_build' === $image) {
                 continue;
             }
 

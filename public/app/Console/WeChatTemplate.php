@@ -45,7 +45,7 @@ class WeChatTemplate
             $event_type,
             $repo_full_name,
             $branch,
-            substr($commit_message, 0, 10),
+            substr($commit_message, 0, 60),
             $committer_username,
             $info,
             Git::getCommitUrl($git_type, $repo_full_name, $commit_id)

@@ -69,7 +69,7 @@ class WeChatClient
                     'value' => $event_type
                 ],
                 'repo_name' => [
-                    'value' => $repo_name.' : '.$branch
+                    'value' => $repo_name.':'.$branch
                 ],
                 'commit_message' => [
                     'value' => $commit_message

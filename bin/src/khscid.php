@@ -43,8 +43,6 @@ try {
      */
     $cli = new Application('KhsCI Daemon CLI', 'v18.06');
 
-    $cli->add(new Queue());
-
     $cli->add(new Migrate());
 
     $cli->add(new Up());
