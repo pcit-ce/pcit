@@ -103,7 +103,7 @@ EOF;
 
             $ci_root = Env::get('CI_ROOT');
 
-            Log::connect()->debug('======'.self::$build_key_id.'Build Start Success ======');
+            Log::connect()->debug('====== '.self::$build_key_id.' Build Start Success ======');
 
             while ($ci_root) {
                 $continue = false;

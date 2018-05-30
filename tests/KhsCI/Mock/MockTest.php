@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Tests\Mock;
 
-use App\Console\Queue;
+use App\Console\Build;
 use KhsCI\Tests\KhsCITestCase;
 
 class MockTest extends KhsCITestCase
@@ -16,7 +16,7 @@ class MockTest extends KhsCITestCase
      */
     public function testStub(): void
     {
-        $stub = $this->createMock(Queue::class);
+        $stub = $this->createMock(Build::class);
 
         $stub->method('test')->willReturn(1);
 
