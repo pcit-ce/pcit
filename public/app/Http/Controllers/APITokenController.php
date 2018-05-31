@@ -114,7 +114,7 @@ class APITokenController
         $output = Repo::checkAdmin($git_type, (int) $rid, (int) $uid);
 
         if ($output) {
-            return [$rid, $git_type, $uid];
+            return [(int) $rid, $git_type, (int) $uid];
         }
 
         throw new Exception('Not Found', 404);

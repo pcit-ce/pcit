@@ -27,9 +27,10 @@ class Env extends Command
 
         $this->addUsage('
 
-khsci env list [OPTIONS]
-khsci env set NAME VALUE [OPTIONS]
-khsci env unset [NAMES..]      
+khsci env list  [OPTIONS]
+khsci env set   NAME VALUE [OPTIONS]
+khsci env unset VAR_ID
+khsci env get   VAR_ID     
 ');
         $this->addArgument('name', InputArgument::IS_ARRAY, 'name or value');
 
@@ -63,7 +64,7 @@ khsci env unset [NAMES..]
         $repo = $input->getOption('repo');
 
         if (!$repo) {
-            throw new Exception('Please set repo by -r option', 500);
+            throw new Exception('Please input repo by -r option', 500);
         }
 
         switch ($type) {
@@ -81,7 +82,7 @@ khsci env unset [NAMES..]
                 $data = json_encode([
                     'env_var.name' => $name,
                     'env_var.value' => $value,
-                    'env_var.public' => $input->hasOption('p'),
+                    'env_var.public' => $input->hasOption('public'),
                 ]);
 
                 $return = KhsCICommand::HttpPost(
@@ -93,8 +94,23 @@ khsci env unset [NAMES..]
                 break;
             case 'unset':
 
-                foreach ($argument as $k) {
-                }
+                $return = KhsCICommand::HttpDelete(
+                    $input,
+                    'repo/'.$repo.'/env_var/'.$argument[0],
+                    null,
+                    true
+                );
+                break;
+
+            case 'get':
+
+                $return = KhsCICommand::HttpGet(
+                    $input,
+                    'repo/'.$repo.'/env_var/'.$argument[0],
+                    null,
+                    true
+                );
+
                 break;
 
             default:

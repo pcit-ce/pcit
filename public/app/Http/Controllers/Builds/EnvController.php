@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Builds;
 
 use App\Env;
 use App\Http\Controllers\APITokenController;
-use App\Repo;
 use Exception;
 
 class EnvController
@@ -42,6 +41,8 @@ class EnvController
      *
      * @param array $args
      *
+     * @return string
+     *
      * @throws Exception
      */
     public function create(...$args)
@@ -66,13 +67,17 @@ class EnvController
      *
      * @param array $args
      *
+     * @return array|int
+     *
      * @throws Exception
      */
-    public function find(...$args): void
+    public function find(...$args)
     {
         list($username, $repo_name, $env_var_id) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo($username, $repo_name);
+
+        return Env::get((int) $env_var_id, $git_type, $rid);
     }
 
     /**
@@ -94,7 +99,13 @@ class EnvController
     {
         list($username, $repo_name, $env_var_id) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+
+        $json = file_get_contents('php://input');
+
+        list('env_var.value' => $value, 'env_var.public' => $public) = json_decode($json, true);
+
+        Env::update($env_var_id, $git_type, $rid, $value, (bool) $public);
     }
 
     /**
@@ -106,12 +117,16 @@ class EnvController
      *
      * @param array $args
      *
+     * @return int
+     *
      * @throws Exception
      */
-    public function delete(...$args): void
+    public function delete(...$args)
     {
         list($username, $repo_name, $env_var_id) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo($username, $repo_name);
+
+        return Env::delete((int) $env_var_id, $git_type, $rid);
     }
 }

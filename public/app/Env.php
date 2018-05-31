@@ -49,18 +49,18 @@ class Env extends DBModel
      * @param int    $id
      * @param string $git_type
      * @param int    $rid
-     * @param string $name
      * @param string $value
+     * @param bool   $public
      *
      * @return int
      *
      * @throws Exception
      */
-    public static function update(int $id, string $git_type, int $rid, string $name, string $value)
+    public static function update(int $id, string $git_type, int $rid, string $value, bool $public)
     {
-        $sql = 'UPDATE env_vars SET value=? WHERE id=? AND git_type=? AND rid=? AND name=?';
+        $sql = 'UPDATE env_vars SET value=? WHERE id=? AND git_type=? AND rid=? AND public=?';
 
-        return DB::update($sql, [$value, $id, $git_type, $rid, $name]);
+        return DB::update($sql, [$value, $id, $git_type, $rid, $public]);
     }
 
     /**
@@ -77,5 +77,33 @@ class Env extends DBModel
         $sql = 'DELETE FROM env_vars WHERE id=? AND git_type=? AND rid=?';
 
         return DB::delete($sql, [$id, $git_type, $rid]);
+    }
+
+    /**
+     * @param int    $id
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @param bool   $show
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function get(int $id, string $git_type, int $rid, bool $show = false)
+    {
+        $sql = 'SELECT name,value,public FROM env_vars WHERE id=? AND git_type=? AND rid=?';
+
+        $output = DB::select($sql, [$id, $git_type, $rid]);
+
+        if (!$output) {
+            throw new Exception('Not Found', 404);
+        }
+
+        if ($public = $output[0]['public'] || $show) {
+
+            return $output[0]['name'].'='.$output[0]['value'];
+        }
+
+        return $output[0]['name'].'=[secure]';
     }
 }

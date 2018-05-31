@@ -131,7 +131,8 @@ class KhsCICommand
                                    ?string $data,
                                    bool $auth = false,
                                    int $target_code = 200
-    ) {
+    )
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -195,10 +196,11 @@ class KhsCICommand
      */
     public static function HttpDelete(InputInterface $input,
                                       string $entrypoint,
-                                      string $data,
+                                      ?string $data,
                                       bool $auth = false,
                                       int $target_code = 200
-    ) {
+    )
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -228,11 +230,12 @@ class KhsCICommand
      */
     public static function HttpPatch(InputInterface $input,
                                      string $entrypoint,
-                                     string $data,
+                                     ?string $data,
                                      bool $auth = false,
                                      bool $json = false,
                                      int $target_code = 200
-    ) {
+    )
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
