@@ -11,9 +11,9 @@ class GitHubClient
 {
     use CICommon;
 
-    private static $is_update;
+    private $is_update;
 
-    private static $header = [
+    private $header = [
         'Accept' => 'application/vnd.github.symmetra-preview+json',
     ];
 
@@ -40,7 +40,7 @@ class GitHubClient
                          string $sort = null,
                          string $direction = null)
     {
-        $url = self::$api_url.implode('/', ['/repos', $username, $repo_name, 'pulls']);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, 'pulls']);
 
         $data = [
             'state' => $state,
@@ -50,7 +50,7 @@ class GitHubClient
             'direction' => $direction,
         ];
 
-        return self::$curl->get($url.'?'.http_build_query($data));
+        return $this->curl->get($url.'?'.http_build_query($data));
     }
 
     /**
@@ -66,9 +66,9 @@ class GitHubClient
      */
     public function get(string $username, string $repo_name, int $pr_num)
     {
-        $url = self::$api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num]);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num]);
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -94,7 +94,7 @@ class GitHubClient
                            string $body = null,
                            bool $maintainer_can_modify = true)
     {
-        $url = self::$api_url.implode('/', ['/repos', $username, $repo_name, '/pulls']);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls']);
 
         $data = [
             'title' => $title,
@@ -111,11 +111,11 @@ class GitHubClient
             $array['issue'] = $from_issue;
         }
 
-        if (self::$is_update) {
-            return self::$curl->patch($url, json_encode($data));
+        if ($this->is_update) {
+            return $this->curl->patch($url, json_encode($data));
         }
 
-        return self::$curl->post($url, json_encode($data));
+        return $this->curl->post($url, json_encode($data));
     }
 
     /**
@@ -141,9 +141,9 @@ class GitHubClient
                            string $body = null,
                            bool $maintainer_can_modify = true)
     {
-        self::$is_update = true;
-        $output = self::create(...func_get_args());
-        self::$is_update = false;
+        $this->is_update = true;
+        $output = $this->create(...func_get_args());
+        $this->is_update = false;
 
         return $output;
     }
@@ -159,9 +159,9 @@ class GitHubClient
      */
     public function listCommits(string $username, string $repo_name, int $pr_num)
     {
-        $url = self::$api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num, 'commits']);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num, 'commits']);
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -177,9 +177,9 @@ class GitHubClient
      */
     public function listFiles(string $username, string $repo_name, int $pr_num)
     {
-        $url = self::$api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, '/files']);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, '/files']);
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -195,11 +195,11 @@ class GitHubClient
      */
     public function isMerged(string $username, string $repo_name, $pr_num)
     {
-        $url = self::$api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num, 'merge']);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num, 'merge']);
 
-        self::$curl->get($url);
+        $this->curl->get($url);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (204 === $http_return_code) {
             return true;
@@ -220,6 +220,7 @@ class GitHubClient
      * @param bool   $rebase
      * @param bool   $squash
      *
+     * @return bool|mixed
      * @throws Exception
      */
     public function merge(string $username,
@@ -229,8 +230,8 @@ class GitHubClient
                           string $commit_message,
                           string $sha,
                           bool $rebase = false,
-                          bool $squash = false
-    ) {
+                          bool $squash = false)
+    {
         if ($rebase && $squash) {
             throw new Exception('', 500);
         }
@@ -241,7 +242,7 @@ class GitHubClient
 
         $squash && $merge_method = 'squash';
 
-        $url = self::$api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, 'merge']);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, 'merge']);
 
         $data = [
             'commit_title' => $commit_title,
@@ -250,9 +251,9 @@ class GitHubClient
             'merge_method' => $merge_method,
         ];
 
-        $output = self::$curl->put($url, json_encode($data));
+        $output = $this->curl->put($url, json_encode($data));
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (200 === $http_return_code) {
             return true;

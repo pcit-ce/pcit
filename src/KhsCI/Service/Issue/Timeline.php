@@ -14,9 +14,9 @@ use Exception;
  */
 class Timeline
 {
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
 
     /**
      * List events for an issue.
@@ -26,8 +26,8 @@ class Timeline
      */
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
-        self::$api_url = $api_url;
+        $this->curl = $curl;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -40,8 +40,8 @@ class Timeline
      */
     public function list(string $repo_full_name, int $issue_number)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/timeline';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/timeline';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 }

@@ -22,9 +22,9 @@ class GitHubClient
      */
     public function getBasicInfo(string $org_name)
     {
-        $url = self::$api_url.'/orgs'.$org_name;
+        $url = $this->api_url.'/orgs'.$org_name;
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -42,8 +42,8 @@ class GitHubClient
      */
     public function listRepo(string $org_name, int $page = 1, string $type = null, int $per_page = null, string $sort = null)
     {
-        $url = self::$api_url.'/orgs/'.$org_name.'/repos';
+        $url = $this->api_url.'/orgs/'.$org_name.'/repos';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 }

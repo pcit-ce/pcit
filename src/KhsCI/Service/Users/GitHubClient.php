@@ -9,9 +9,6 @@ use Exception;
 
 class GitHubClient
 {
-    /**
-     * @var null|string
-     */
     private $api_url = null;
 
     /**

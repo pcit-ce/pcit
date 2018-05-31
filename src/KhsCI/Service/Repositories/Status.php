@@ -16,9 +16,9 @@ use KhsCI\Support\Log;
  */
 class Status
 {
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
 
     /**
      * Status constructor.
@@ -28,9 +28,9 @@ class Status
      */
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -45,11 +45,11 @@ class Status
     public function list(string $username, string $repo, string $ref)
     {
         $url = implode('/', [
-                self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'statuses',
+                $this->api_url, 'repos', $username, $repo, 'commits', $ref, 'statuses',
             ]
         );
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -72,9 +72,10 @@ class Status
                            string $target_url = 'https://ci.khs1994.com',
                            string $context = 'continuous-integration/ci.khs1994.com/push',
                            string $description = 'The analysis or builds is pending'
-    ) {
+    )
+    {
         $url = implode('/', [
-                self::$api_url, 'repos', $username, $repo, 'statuses', $commit_sha,
+                $this->api_url, 'repos', $username, $repo, 'statuses', $commit_sha,
             ]
         );
 
@@ -85,9 +86,9 @@ class Status
             'context' => $context,
         ]);
 
-        $output = self::$curl->post($url, $data);
+        $output = $this->curl->post($url, $data);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
@@ -110,10 +111,10 @@ class Status
     public function listCombinedStatus($username, $repo, $ref)
     {
         $url = implode('/', [
-                self::$api_url, 'repos', $username, $repo, 'commits', $ref, 'status',
+                $this->api_url, 'repos', $username, $repo, 'commits', $ref, 'status',
             ]
         );
 
-        return json_decode(self::$curl->get($url), true);
+        return json_decode($this->curl->get($url), true);
     }
 }

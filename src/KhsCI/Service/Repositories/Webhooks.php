@@ -9,21 +9,18 @@ use Exception;
 
 class Webhooks
 {
-    /**
-     * @var string
-     */
-    private static $api_url;
+    private $api_url;
 
     /**
      * @var Curl
      */
-    private static $curl;
+    private $curl;
 
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -37,9 +34,9 @@ class Webhooks
      */
     public function getWebhooks(bool $raw = false, string $username, string $repo)
     {
-        $url = self::$api_url.'/repos/'.$username.'/'.$repo.'/hooks';
+        $url = $this->api_url.'/repos/'.$username.'/'.$repo.'/hooks';
 
-        $json = self::$curl->get($url);
+        $json = $this->curl->get($url);
 
         if (true === $raw) {
             return $json;
@@ -65,7 +62,7 @@ class Webhooks
      */
     public function getWebhooksStatus(string $url, string $username, string $repo)
     {
-        if ('https://api.github.com' === static::$api_url) {
+        if ('https://api.github.com' === $this->api_url) {
             /*
              * GitHub 不能添加重复 webhooks ,这里跳过判断
              */
@@ -101,9 +98,9 @@ class Webhooks
      */
     public function setWebhooks($data, string $username, string $repo, ?string $id)
     {
-        $url = self::$api_url.'/repos/'.$username.'/'.$repo.'/hooks';
+        $url = $this->api_url.'/repos/'.$username.'/'.$repo.'/hooks';
 
-        $json = self::$curl->post($url, $data, ['content-type' => 'application/json']);
+        $json = $this->curl->post($url, $data, ['content-type' => 'application/json']);
 
         $obj = json_decode($json);
 
@@ -131,10 +128,10 @@ class Webhooks
      *
      * @throws Exception
      */
-    public static function unsetWebhooks(string $username, string $repo, string $id)
+    public function unsetWebhooks(string $username, string $repo, string $id)
     {
-        $url = self::$api_url.sprintf('/repos/%s/%s/hooks/%s', $username, $repo, $id);
+        $url = $this->api_url.sprintf('/repos/%s/%s/hooks/%s', $username, $repo, $id);
 
-        return static::$curl->delete($url);
+        return $this->curl->delete($url);
     }
 }

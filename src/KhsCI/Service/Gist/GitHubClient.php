@@ -23,13 +23,13 @@ class GitHubClient
      */
     public function list(string $username = null, string $since)
     {
-        $url = self::$api_url.'/gists';
+        $url = $this->api_url.'/gists';
 
         if ($username) {
-            $url = self::$api_url.'/users/'.$username.'/gists';
+            $url = $this->api_url.'/users/'.$username.'/gists';
         }
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**

@@ -15,11 +15,11 @@ use KhsCI\Support\Log;
  */
 class Assignees
 {
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
 
-    private static $header = [
+    private $header = [
         'Accept' => 'application/vnd.github.symmetra-preview+json',
     ];
 
@@ -31,9 +31,9 @@ class Assignees
      */
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -45,9 +45,9 @@ class Assignees
      */
     public function list(string $repo_full_name)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/assignees';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/assignees';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -62,11 +62,11 @@ class Assignees
      */
     public function check(string $repo_full_name, string $assignees)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/assignees/'.$assignees;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/assignees/'.$assignees;
 
-        self::$curl->get($url);
+        $this->curl->get($url);
 
-        if (204 !== self::$curl->getCode()) {
+        if (204 !== $this->curl->getCode()) {
             return false;
         }
 
@@ -86,15 +86,15 @@ class Assignees
      */
     public function add(string $repo_full_name, int $issue_number, array $assignees): void
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
 
         $data = [
             'assignees' => $assignees,
         ];
 
-        self::$curl->post($url, json_encode($data), self::$header);
+        $this->curl->post($url, json_encode($data), $this->header);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
@@ -114,15 +114,15 @@ class Assignees
      */
     public function remove(string $repo_full_name, int $issue_number, array $assignees): void
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
 
         $data = [
             'assignees' => $assignees,
         ];
 
-        self::$curl->delete($url, json_encode($data), self::$header);
+        $this->curl->delete($url, json_encode($data), $this->header);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (200 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_code);

@@ -9,9 +9,9 @@ use Exception;
 
 class Collaborators
 {
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
 
     /**
      * Collaborators constructor.
@@ -21,9 +21,9 @@ class Collaborators
      */
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -35,8 +35,8 @@ class Collaborators
      */
     public function list(string $repo_full_name)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/collaborators';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/collaborators';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 }

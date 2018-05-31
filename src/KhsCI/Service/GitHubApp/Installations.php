@@ -32,7 +32,7 @@ class Installations
     {
         $this->curl = $curl;
 
-        $this->$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**

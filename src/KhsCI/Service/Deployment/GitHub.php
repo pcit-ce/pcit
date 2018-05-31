@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Deployment;
 
+use Exception;
 use KhsCI\Support\HTTP;
 
 /**
@@ -33,10 +34,14 @@ class GitHub
      *
      * @param string $sha         The SHA that was recorded at creation time. Default: <code>none<code>
      * @param string $ref         The name of the ref. This can be a branch, tag, or SHA. Default: <code>none<code>
-     * @param string $task        The name of the task for the deployment (e.g., <code>deploy<code> or <code>deploy:migrations<code>). Default: <code>none<code>
-     * @param string $environment The name of the environment that was deployed to (e.g., <code>staging<code> or <code>production<code>). Default: <code>none<code>
+     * @param string $task        The name of the task for the deployment (e.g., <code>deploy<code> or
+     *                            <code>deploy:migrations<code>). Default: <code>none<code>
+     * @param string $environment The name of the environment that was deployed to (e.g., <code>staging<code> or
+     *                            <code>production<code>). Default: <code>none<code>
      *
      * @return mixed
+     *
+     * @throws Exception
      */
     public function list(string $sha, string $ref, string $task, string $environment)
     {
@@ -56,6 +61,8 @@ class GitHub
      * @param string $id
      *
      * @return mixed
+     *
+     * @throws Exception
      */
     public function getSingleInfo(string $id)
     {
@@ -80,6 +87,8 @@ class GitHub
      * @param string|null $description
      * @param bool|null   $transient_environment
      * @param bool|null   $production_environment
+     *
+     * @throws Exception
      */
     public function create(string $ref,
                            string $task = 'deploy',
@@ -89,8 +98,8 @@ class GitHub
                            string $environment = 'production',
                            string $description = null,
                            bool $transient_environment = null,
-                           bool $production_environment = null
-    ): void {
+                           bool $production_environment = null): void
+    {
         $array = [
             'ref' => $ref,
             'task' => $task,
@@ -116,6 +125,8 @@ class GitHub
 
     /**
      * @param string $id
+     *
+     * @throws Exception
      */
     public function getStatus(string $id): void
     {
@@ -133,6 +144,8 @@ class GitHub
      * @param string $statusId
      *
      * @return mixed
+     *
+     * @throws Exception
      */
     public function getSingleStatus(string $id, string $statusId)
     {

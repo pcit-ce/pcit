@@ -16,21 +16,21 @@ class Comments
     /**
      * @var Curl
      */
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
     /**
      * @var TencentAI
      */
-    private static $tencent_ai;
+    private $tencent_ai;
 
     public function __construct(Curl $curl, string $api_url, TencentAI $tencent_ai)
     {
-        static::$curl = $curl;
+        $this->curl = $curl;
 
-        static::$api_url = $api_url;
+        $this->api_url = $api_url;
 
-        static::$tencent_ai = $tencent_ai;
+        $this->tencent_ai = $tencent_ai;
     }
 
     /**
@@ -52,16 +52,16 @@ class Comments
                            string $source,
                            bool $enable_tencent_ai = true)
     {
-        $url = static::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
 
         $source_show_in_md = $source;
 
         $data = $source;
 
         if ($enable_tencent_ai) {
-            $nlp = static::$tencent_ai->nlp();
+            $nlp = $this->tencent_ai->nlp();
 
-            $translate = static::$tencent_ai->translate();
+            $translate = $this->tencent_ai->translate();
 
             // 鉴定语言 default is en || support en or zh
 
@@ -99,35 +99,35 @@ class Comments
                     json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
             }
 
-//            try {
-//                $sem = $nlp->wordcom($source);
-//
-//                $sem = JSON::beautiful(
-//                    json_encode($sem, JSON_UNESCAPED_UNICODE));
-//            } catch (TencentAIError $e) {
-//                $sem = JSON::beautiful(
-//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-//            }
+            //            try {
+            //                $sem = $nlp->wordcom($source);
+            //
+            //                $sem = JSON::beautiful(
+            //                    json_encode($sem, JSON_UNESCAPED_UNICODE));
+            //            } catch (TencentAIError $e) {
+            //                $sem = JSON::beautiful(
+            //                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            //            }
 
-//            try {
-//                $pos = $nlp->wordpos($source);
-//
-//                $pos = JSON::beautiful(
-//                    json_encode($pos, JSON_UNESCAPED_UNICODE));
-//            } catch (TencentAIError $e) {
-//                $pos = JSON::beautiful(
-//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-//            }
+            //            try {
+            //                $pos = $nlp->wordpos($source);
+            //
+            //                $pos = JSON::beautiful(
+            //                    json_encode($pos, JSON_UNESCAPED_UNICODE));
+            //            } catch (TencentAIError $e) {
+            //                $pos = JSON::beautiful(
+            //                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            //            }
 
-//            try {
-//                $ner = $nlp->wordner($source);
-//
-//                $ner = JSON::beautiful(
-//                    json_encode($ner, JSON_UNESCAPED_UNICODE));
-//            } catch (TencentAIError $e) {
-//                $ner = JSON::beautiful(
-//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-//            }
+            //            try {
+            //                $ner = $nlp->wordner($source);
+            //
+            //                $ner = JSON::beautiful(
+            //                    json_encode($ner, JSON_UNESCAPED_UNICODE));
+            //            } catch (TencentAIError $e) {
+            //                $ner = JSON::beautiful(
+            //                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            //            }
 
             try {
                 $polar = $nlp->textPolar($source);
@@ -147,15 +147,15 @@ class Comments
                 $emoji = '+1';
             }
 
-//            try {
-//                $seg = $nlp->wordseg($source);
-//
-//                $seg = JSON::beautiful(
-//                    json_encode($seg, JSON_UNESCAPED_UNICODE));
-//            } catch (TencentAIError $e) {
-//                $seg = JSON::beautiful(
-//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-//            }
+            //            try {
+            //                $seg = $nlp->wordseg($source);
+            //
+            //                $seg = JSON::beautiful(
+            //                    json_encode($seg, JSON_UNESCAPED_UNICODE));
+            //            } catch (TencentAIError $e) {
+            //                $seg = JSON::beautiful(
+            //                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+            //            }
 
             $data = <<<EOF
 <blockquote>
@@ -201,9 +201,9 @@ EOF;
             'body' => $data,
         ];
 
-        $output = static::$curl->post($url, json_encode($data));
+        $output = $this->curl->post($url, json_encode($data));
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
@@ -224,9 +224,9 @@ EOF;
      */
     public function list(string $repo_full_name, int $issue_number)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -240,9 +240,9 @@ EOF;
      */
     public function listInRepository(string $repo_full_name)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/comments';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -257,9 +257,9 @@ EOF;
      */
     public function getSingle(string $repo_full_name, int $comment_id)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -271,15 +271,15 @@ EOF;
      */
     public function edit(string $repo_full_name, int $comment_id, string $body): void
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
 
         $data = [
             'body' => $body,
         ];
 
-        self::$curl->patch($url, json_encode($data));
+        $this->curl->patch($url, json_encode($data));
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (200 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_code);
@@ -298,11 +298,11 @@ EOF;
      */
     public function delete(string $repo_full_name, int $comment_id): void
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
 
-        self::$curl->delete($url);
+        $this->curl->delete($url);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (204 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code Is Not 204 '.$http_return_code);
