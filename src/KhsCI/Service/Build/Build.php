@@ -21,35 +21,35 @@ use KhsCI\Support\Log;
 
 class Build
 {
-    private static $git_type;
+    private $git_type;
 
-    private static $build_key_id;
+    private $build_key_id;
 
-    private static $unique_id;
+    private $unique_id;
 
-    private static $pull_id;
+    private $pull_id;
 
-    private static $tag_name;
+    private $tag_name;
 
-    private static $commit_id;
+    private $commit_id;
 
-    private static $commit_message;
+    private $commit_message;
 
-    private static $branch;
+    private $branch;
 
-    private static $event_type;
+    private $event_type;
 
-    private static $config;
+    private $config;
 
-    private static $pull_request_source;
+    private $pull_request_source;
 
-    private static $repo_full_name;
+    private $repo_full_name;
 
-    private static $git_config = [];
+    private $git_config = [];
 
-    private static $git_image = 'plugins/git';
+    private $git_image = 'plugins/git';
 
-    private static $system_env = [];
+    private $system_env = [];
 
     /**
      * @param             $build_key_id
@@ -81,21 +81,21 @@ class Build
                              ?string $pull_request_source,
                              ?string $repo_full_name): void
     {
-        self::$unique_id = session_create_id();
-        self::$commit_id = $commit_id;
-        self::$commit_message = $commit_message;
-        self::$branch = $branch;
-        self::$event_type = $event_type;
-        self::$pull_id = $pull_request_id;
-        self::$tag_name = $tag_name;
-        self::$git_type = $git_type;
-        self::$config = $config;
-        self::$pull_request_source = $pull_request_source;
-        self::$build_key_id = (int) $build_key_id;
-        self::$repo_full_name = $repo_full_name;
+        $this->unique_id = session_create_id();
+        $this->commit_id = $commit_id;
+        $this->commit_message = $commit_message;
+        $this->branch = $branch;
+        $this->event_type = $event_type;
+        $this->pull_id = $pull_request_id;
+        $this->tag_name = $tag_name;
+        $this->git_type = $git_type;
+        $this->config = $config;
+        $this->pull_request_source = $pull_request_source;
+        $this->build_key_id = (int) $build_key_id;
+        $this->repo_full_name = $repo_full_name;
 
         Log::debug(__FILE__, __LINE__, json_encode([
-            'unique_id' => self::$unique_id,
+            'unique_id' => $this->unique_id,
             'build_key_id' => $build_key_id,
             'event_type' => $event_type,
             'commit_id' => $commit_id,
@@ -111,10 +111,10 @@ class Build
             self::run($rid, $branch);
         } catch (\Throwable $e) {
             throw new CIException(
-                self::$unique_id,
-                self::$commit_id,
-                self::$event_type,
-                $e->getMessage(), self::$build_key_id
+                $this->unique_id,
+                $this->commit_id,
+                $this->event_type,
+                $e->getMessage(), $this->build_key_id
             );
         }
     }
@@ -128,14 +128,14 @@ class Build
      */
     private function getRepoBuildActivateStatus(int $rid): void
     {
-        $gitType = self::$git_type;
+        $gitType = $this->git_type;
 
         $sql = 'SELECT build_activate FROM repo WHERE rid=? AND git_type=?';
 
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            Log::debug(__FILE__, __LINE__, static::$build_key_id.' is inactive');
+            Log::debug(__FILE__, __LINE__, $this->build_key_id.' is inactive');
 
             throw new Exception(CI::BUILD_STATUS_INACTIVE);
         }
@@ -193,10 +193,10 @@ class Build
      */
     private function run($rid, string $branch): void
     {
-        $gitType = self::$git_type;
-        $unique_id = self::$unique_id;
-        $commit_id = self::$commit_id;
-        $event_type = self::$event_type;
+        $gitType = $this->git_type;
+        $unique_id = $this->unique_id;
+        $commit_id = $this->commit_id;
+        $event_type = $this->event_type;
 
         Log::debug(__FILE__, __LINE__, 'Create Volume '.$unique_id);
         Log::debug(__FILE__, __LINE__, 'Create Network '.$unique_id);
@@ -209,11 +209,11 @@ class Build
             throw new Exception(CI::BUILD_STATUS_ERRORED);
         }
 
-        if (!self::$config) {
+        if (!$this->config) {
             throw new Exception(CI::BUILD_STATUS_ERRORED);
         }
 
-        $yaml_obj = (object) json_decode(self::$config, true);
+        $yaml_obj = (object) json_decode($this->config, true);
 
         // 解析 .khsci.yml.
 
@@ -253,8 +253,8 @@ class Build
                 $git_config, 'PLUGIN_SUBMODULE_OVERRIDE='.json_encode($submodule_override)
             );
 
-            self::$git_config = $git_config;
-            self::$git_image = $git['image'] ?? 'plugins/git';
+            $this->git_config = $git_config;
+            $this->git_image = $git['image'] ?? 'plugins/git';
         }
 
         // 存在构建矩阵
@@ -283,31 +283,31 @@ class Build
             'KHSCI=true',
             'CONTINUOUS_INTEGRATION=true',
 
-            'KHSCI_BRANCH='.self::$branch,
-            'KHSCI_TAG='.self::$tag_name,
+            'KHSCI_BRANCH='.$this->branch,
+            'KHSCI_TAG='.$this->tag_name,
             'KHSCI_BUILD_DIR='.$workdir,
-            'KHSCI_BUILD_ID='.self::$build_key_id,
-            'KHSCI_COMMIT='.self::$commit_id,
-            'KHSCI_COMMIT_MESSAGE='.self::$commit_message,
-            'KHSCI_EVENT_TYPE='.self::$event_type,
+            'KHSCI_BUILD_ID='.$this->build_key_id,
+            'KHSCI_COMMIT='.$this->commit_id,
+            'KHSCI_COMMIT_MESSAGE='.$this->commit_message,
+            'KHSCI_EVENT_TYPE='.$this->event_type,
             'KHSCI_PULL_REQUEST=false',
-            'KHSCI_REPO_SLUG='.self::$repo_full_name,
+            'KHSCI_REPO_SLUG='.$this->repo_full_name,
         ];
 
-        if (self::$pull_id) {
+        if ($this->pull_id) {
             array_merge($system_env,
                 [
                     'KHSCI_PULL_REQUEST=true',
-                    'KHSCI_PULL_REQUEST_BRANCH='.self::$branch,
-                    'KHSCI_PULL_REQUEST_SHA='.self::$commit_id,
-                    'KHSCI_PULL_REQUEST_SLUG='.self::$pull_request_source,
+                    'KHSCI_PULL_REQUEST_BRANCH='.$this->branch,
+                    'KHSCI_PULL_REQUEST_SHA='.$this->commit_id,
+                    'KHSCI_PULL_REQUEST_SLUG='.$this->pull_request_source,
                 ]
             );
         }
 
-        self::$system_env = $system_env;
+        $this->system_env = $system_env;
 
-        Log::debug(__FILE__, __LINE__, json_encode(self::$system_env));
+        Log::debug(__FILE__, __LINE__, json_encode($this->system_env));
 
         $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
         $docker_container = $docker->container;
@@ -360,7 +360,7 @@ class Build
      */
     private function cancel(): void
     {
-        $output = BuildDB::getBuildStatusByBuildKeyId((int) self::$build_key_id);
+        $output = BuildDB::getBuildStatusByBuildKeyId((int) $this->build_key_id);
 
         // 取消构建
         if (CI::BUILD_STATUS_CANCELED === $output) {
@@ -401,16 +401,16 @@ class Build
 
             if ($event) {
                 if (is_string($event)) {
-                    if (self::$event_type !== $event) {
+                    if ($this->event_type !== $event) {
                         Log::debug(
                             __FILE__,
                             __LINE__,
-                            "Pipeline $event Is Not Current ".self::$event_type.'. Skip'
+                            "Pipeline $event Is Not Current ".$this->event_type.'. Skip'
                         );
 
                         continue;
                     }
-                } elseif (is_array($event) and (!in_array(self::$event_type, $event, true))) {
+                } elseif (is_array($event) and (!in_array($this->event_type, $event, true))) {
                     Log::debug(
                         __FILE__,
                         __LINE__,
@@ -522,7 +522,7 @@ class Build
         if ('/bin/drone-git' === json_decode($docker_container->inspect($container_id))->Path) {
             Log::debug(__FILE__, __LINE__, 'Drop prev logs');
 
-            $redis->hDel('build_log', self::$build_key_id);
+            $redis->hDel('build_log', $this->build_key_id);
         }
 
         $i = -1;
@@ -562,11 +562,11 @@ class Build
                     $container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string) self::$build_key_id);
+                $prev_docker_log = $redis->hget('build_log', (string) $this->build_key_id);
 
                 $redis->hset(
                     'build_log',
-                    (string) self::$build_key_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
+                    (string) $this->build_key_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
                 );
 
                 /**
@@ -613,7 +613,7 @@ class Build
                                string $commit_id,
                                string $branch)
     {
-        $git_url = Git::getUrl(self::$git_type, $repo_full_name);
+        $git_url = Git::getUrl($this->git_type, $repo_full_name);
 
         $git_env = null;
 
@@ -625,7 +625,7 @@ class Build
                     'DRONE_BUILD_EVENT=push',
                     'DRONE_COMMIT_SHA='.$commit_id,
                     'DRONE_COMMIT_REF='.'refs/heads/'.$branch,
-                ], self::$git_config);
+                ], $this->git_config);
 
                 break;
             case CI::BUILD_EVENT_PR:
@@ -634,8 +634,8 @@ class Build
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=pull_request',
                     'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF=refs/pull/'.self::$pull_id.'/head',
-                ], self::$git_config);
+                    'DRONE_COMMIT_REF=refs/pull/'.$this->pull_id.'/head',
+                ], $this->git_config);
 
                 break;
             case  CI::BUILD_EVENT_TAG:
@@ -644,8 +644,8 @@ class Build
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=tag',
                     'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF=refs/tags/'.self::$tag_name,
-                ], self::$git_config);
+                    'DRONE_COMMIT_REF=refs/tags/'.$this->tag_name,
+                ], $this->git_config);
 
                 break;
         }
@@ -665,11 +665,11 @@ class Build
      */
     private function runGit(array $env, $work_dir, $unique_id, Container $docker_container): void
     {
-        $image = self::$git_image;
+        $image = $this->git_image;
 
-        self::$git_image = 'plugins/git';
+        $this->git_image = 'plugins/git';
 
-        self::$git_config = [];
+        $this->git_config = [];
 
         $docker_container
             ->setEnv($env)
@@ -753,7 +753,7 @@ class Build
      *
      * @throws Exception
      */
-    public static function systemDelete(string $unique_id, bool $last = false): void
+    public function systemDelete(string $unique_id, bool $last = false): void
     {
         $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
 
@@ -768,7 +768,7 @@ class Build
         // clean container
 
         $output = $docker_container->list(true, null, false, [
-            'label' => 'com.khs1994.ci='.self::$unique_id,
+            'label' => 'com.khs1994.ci='.$this->unique_id,
         ]);
 
         foreach (json_decode($output) as $k) {

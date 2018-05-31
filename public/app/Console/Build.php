@@ -19,51 +19,51 @@ use KhsCI\Support\Log;
 
 class Build
 {
-    private static $commit_id;
+    private $commit_id;
 
-    private static $unique_id;
+    private $unique_id;
 
-    private static $event_type;
+    private $event_type;
 
-    private static $build_key_id;
+    private $build_key_id;
 
-    private static $git_type;
+    private $git_type;
 
-    private static $config;
+    private $config;
 
-    private static $build_status;
+    private $build_status;
 
-    private static $description;
+    private $description;
+
+    /**
+     * @var KhsCI
+     */
+    private $khsci;
 
     /**
      * @param mixed $unique_id
      */
-    public static function setUniqueId($unique_id): void
+    public function setUniqueId($unique_id): void
     {
-        self::$unique_id = $unique_id;
+        $this->$unique_id = $unique_id;
     }
 
     /**
      * @param mixed $build_key_id
      */
-    public static function setBuildKeyId($build_key_id): void
+    public function setBuildKeyId($build_key_id): void
     {
-        self::$build_key_id = $build_key_id;
+        $this->build_key_id = $build_key_id;
     }
-
-    /**
-     * @var KhsCI
-     */
-    private static $khsci;
 
     /**
      * @throws Exception
      */
     public function build(): void
     {
-        self::$khsci = new KhsCI();
+        $this->khsci = new KhsCI();
 
-        $queue = self::$khsci->build;
+        $queue = $this->khsci->build;
 
         try {
             $sql = <<<'EOF'
@@ -93,7 +93,7 @@ EOF;
 
             $output = array_values($output);
 
-            self::$build_key_id = (int) $output[0];
+            $this->build_key_id = (int) $output[0];
 
             $continue = true;
 
@@ -102,7 +102,7 @@ EOF;
 
             $ci_root = Env::get('CI_ROOT');
 
-            Log::connect()->debug('====== '.self::$build_key_id.' Build Start Success ======');
+            Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
 
             while ($ci_root) {
                 $continue = false;
@@ -141,26 +141,26 @@ EOF;
                     $commit_id,
                     $event_type,
                     CI::BUILD_STATUS_PASSED,
-                    self::$build_key_id
+                    $this->build_key_id
                 );
             }
 
-            BuildDB::updateStartAt(self::$build_key_id);
-            BuildDB::updateBuildStatus(self::$build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
+            BuildDB::updateStartAt($this->build_key_id);
+            BuildDB::updateBuildStatus($this->build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
 
             unset($output[10]);
 
-            self::$config = JSON::beautiful($output[9]);
+            $this->config = JSON::beautiful($output[9]);
 
             if ('github_app' === $output[1]) {
-                Up::updateGitHubAppChecks(self::$build_key_id, null,
+                Up::updateGitHubAppChecks($this->build_key_id, null,
                     CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
                     time(),
                     null,
                     null,
                     null,
                     null,
-                    self::$khsci->check_md->in_progress('PHP', PHP_OS, self::$config)
+                    $this->khsci->check_md->in_progress('PHP', PHP_OS, $this->config)
                 );
             }
 
@@ -170,35 +170,35 @@ EOF;
 
             $queue(...$output);
         } catch (CIException $e) {
-            self::$commit_id = $e->getCommitId();
-            self::$unique_id = $e->getUniqueId();
-            self::$event_type = $e->getEventType();
-            self::$build_key_id = $e->getCode();
-            self::$git_type = BuildDB::getGitType(self::$build_key_id);
+            $this->commit_id = $e->getCommitId();
+            $this->unique_id = $e->getUniqueId();
+            $this->event_type = $e->getEventType();
+            $this->build_key_id = $e->getCode();
+            $this->git_type = BuildDB::getGitType($this->build_key_id);
 
             // $e->getCode() is build key id.
-            BuildDB::updateStopAt(self::$build_key_id);
+            BuildDB::updateStopAt($this->build_key_id);
 
             self::saveLog();
 
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_INACTIVE:
-                    self::$build_status = CI::BUILD_STATUS_INACTIVE;
+                    $this->build_status = CI::BUILD_STATUS_INACTIVE;
                     self::setBuildStatusInactive();
 
                     break;
                 case CI::BUILD_STATUS_FAILED:
-                    self::$build_status = CI::BUILD_STATUS_FAILED;
+                    $this->build_status = CI::BUILD_STATUS_FAILED;
                     self::setBuildStatusFailed();
 
                     break;
                 case CI::BUILD_STATUS_PASSED:
-                    self::$build_status = CI::BUILD_STATUS_PASSED;
+                    $this->build_status = CI::BUILD_STATUS_PASSED;
                     self::setBuildStatusPassed();
 
                     break;
                 default:
-                    self::$build_status = CI::BUILD_STATUS_ERRORED;
+                    $this->build_status = CI::BUILD_STATUS_ERRORED;
                     self::setBuildStatusErrored();
             }
 
@@ -207,31 +207,31 @@ EOF;
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
             // 若 unique_id 不存在，则不清理 Docker 构建环境
-            if (!self::$unique_id) {
+            if (!$this->unique_id) {
                 return;
             }
 
-            BuildDB::updateBuildStatus(self::$build_key_id, self::$build_status);
+            BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
 
-            self::weChatTemplate(self::$description);
+            $queue->systemDelete($this->unique_id, true);
 
-            $queue::systemDelete(self::$unique_id, true);
+            self::weChatTemplate($this->description);
+
+            Log::connect()->debug('======'.$this->build_key_id.' Build Stopped Success ======');
+
+            $this->unique_id = null;
 
             Cache::connect()->set('khsci_up_status', 0);
-
-            Log::connect()->debug('======'.self::$build_key_id.' Build Stopped Success ======');
-
-            self::$unique_id = null;
         }
     }
 
     /**
      * @throws Exception
      */
-    public static function saveLog(): void
+    public function saveLog(): void
     {
         // 日志美化
-        $output = Cache::connect()->hGet('build_log', (string) self::$build_key_id);
+        $output = Cache::connect()->hGet('build_log', (string) $this->build_key_id);
 
         if (!$output) {
             Log::debug(__FILE__, __LINE__, 'Build Log empty, skip');
@@ -243,58 +243,58 @@ EOF;
 
         !is_dir($folder_name) && mkdir($folder_name);
 
-        file_put_contents($folder_name.'/'.self::$unique_id, "$output");
+        file_put_contents($folder_name.'/'.$this->unique_id, "$output");
 
-        $fh = fopen($folder_name.'/'.self::$unique_id, 'r');
+        $fh = fopen($folder_name.'/'.$this->unique_id, 'r');
 
-        Cache::connect()->del((string) self::$unique_id);
+        Cache::connect()->del((string) $this->unique_id);
 
         while (!feof($fh)) {
             $one_line_content = fgets($fh);
 
             $one_line_content = substr("$one_line_content", 8);
 
-            Cache::connect()->append((string) self::$unique_id, $one_line_content);
+            Cache::connect()->append((string) $this->unique_id, $one_line_content);
         }
 
         fclose($fh);
 
-        $log_content = Cache::connect()->get((string) self::$unique_id);
+        $log_content = Cache::connect()->get((string) $this->unique_id);
 
-        BuildDB::updateLog(self::$build_key_id, $log_content);
+        BuildDB::updateLog($this->build_key_id, $log_content);
 
         // cleanup
-        unlink($folder_name.'/'.self::$unique_id);
+        unlink($folder_name.'/'.$this->unique_id);
 
-        Cache::connect()->del((string) self::$unique_id);
+        Cache::connect()->del((string) $this->unique_id);
     }
 
     /**
      * @throws Exception
      */
-    private static function setBuildStatusInactive(): void
+    private function setBuildStatusInactive(): void
     {
-        self::$description = 'This Repo is Inactive';
+        $this->description = 'This Repo is Inactive';
 
-        if ('github' === static::$git_type) {
+        if ('github' === $this->git_type) {
             Up::updateGitHubStatus(
-                self::$build_key_id,
+                $this->build_key_id,
                 CI::GITHUB_STATUS_FAILURE,
-                self::$description
+                $this->description
             );
         }
 
-        if ('github_app' === self::$git_type) {
+        if ('github_app' === $this->git_type) {
             Up::updateGitHubAppChecks(
-                self::$build_key_id,
+                $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt(self::$build_key_id),
-                (int) BuildDB::getStopAt(self::$build_key_id),
+                (int) BuildDB::getStartAt($this->build_key_id),
+                (int) BuildDB::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
                 null,
                 null,
-                self::$khsci->check_md->cancelled('PHP', PHP_OS, self::$config, null),
+                $this->khsci->check_md->cancelled('PHP', PHP_OS, $this->config, null),
                 null,
                 null
             );
@@ -304,33 +304,33 @@ EOF;
     /**
      * @throws Exception
      */
-    private static function setBuildStatusErrored(): void
+    private function setBuildStatusErrored(): void
     {
-        self::$description = 'The '.Env::get('CI_NAME').' build could not complete due to an error';
+        $this->description = 'The '.Env::get('CI_NAME').' build could not complete due to an error';
 
         // 通知 GitHub commit Status
-        if ('github' === static::$git_type) {
+        if ('github' === $this->git_type) {
             Up::updateGitHubStatus(
-                self::$build_key_id,
+                $this->build_key_id,
                 CI::GITHUB_STATUS_ERROR,
-                self::$description
+                $this->description
             );
         }
 
         // GitHub App checks API
-        if ('github_app' === self::$git_type) {
-            $build_log = BuildDB::getLog((int) self::$build_key_id);
+        if ('github_app' === $this->git_type) {
+            $build_log = BuildDB::getLog((int) $this->build_key_id);
 
             Up::updateGitHubAppChecks(
-                self::$build_key_id,
+                $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt(self::$build_key_id),
-                (int) BuildDB::getStopAt(self::$build_key_id),
+                (int) BuildDB::getStartAt($this->build_key_id),
+                (int) BuildDB::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
-                self::$khsci->check_md->failure('PHP', PHP_OS, self::$config, $build_log),
+                $this->khsci->check_md->failure('PHP', PHP_OS, $this->config, $build_log),
                 null,
                 null
             );
@@ -340,30 +340,30 @@ EOF;
     /**
      * @throws Exception
      */
-    private static function setBuildStatusFailed(): void
+    private function setBuildStatusFailed(): void
     {
-        self::$description = 'The '.Env::get('CI_NAME').' build is failed';
+        $this->description = 'The '.Env::get('CI_NAME').' build is failed';
 
-        if ('github' === static::$git_type) {
+        if ('github' === $this->git_type) {
             Up::updateGitHubStatus(
-                self::$build_key_id,
+                $this->build_key_id,
                 CI::GITHUB_STATUS_FAILURE,
-                self::$description
+                $this->description
             );
         }
 
-        if ('github_app' === self::$git_type) {
-            $build_log = BuildDB::getLog((int) self::$build_key_id);
+        if ('github_app' === $this->git_type) {
+            $build_log = BuildDB::getLog((int) $this->build_key_id);
             Up::updateGitHubAppChecks(
-                self::$build_key_id,
+                $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt(self::$build_key_id),
-                (int) BuildDB::getStopAt(self::$build_key_id),
+                (int) BuildDB::getStartAt($this->build_key_id),
+                (int) BuildDB::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
-                self::$khsci->check_md->failure('PHP', PHP_OS, self::$config, $build_log),
+                $this->khsci->check_md->failure('PHP', PHP_OS, $this->config, $build_log),
                 null,
                 null
             );
@@ -373,30 +373,30 @@ EOF;
     /**
      * @throws Exception
      */
-    private static function setBuildStatusPassed(): void
+    private function setBuildStatusPassed(): void
     {
-        self::$description = 'The '.Env::get('CI_NAME').' build passed';
+        $this->description = 'The '.Env::get('CI_NAME').' build passed';
 
-        if ('github' === static::$git_type) {
+        if ('github' === $this->git_type) {
             Up::updateGitHubStatus(
-                self::$build_key_id,
+                $this->build_key_id,
                 CI::GITHUB_STATUS_SUCCESS,
-                self::$description
+                $this->description
             );
         }
 
-        if ('github_app' === self::$git_type) {
-            $build_log = BuildDB::getLog((int) self::$build_key_id);
+        if ('github_app' === $this->git_type) {
+            $build_log = BuildDB::getLog((int) $this->build_key_id);
             Up::updateGitHubAppChecks(
-                self::$build_key_id,
+                $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt(self::$build_key_id),
-                (int) BuildDB::getStopAt(self::$build_key_id),
+                (int) BuildDB::getStartAt($this->build_key_id),
+                (int) BuildDB::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 null,
                 null,
-                self::$khsci->check_md->success('PHP', PHP_OS, self::$config, $build_log),
+                $this->khsci->check_md->success('PHP', PHP_OS, $this->config, $build_log),
                 null,
                 null
             );
@@ -410,9 +410,9 @@ EOF;
      *
      * @throws Exception
      */
-    private static function weChatTemplate(string $info): void
+    private function weChatTemplate(string $info): void
     {
-        WeChatTemplate::send(self::$build_key_id, $info);
+        WeChatTemplate::send($this->build_key_id, $info);
     }
 
     public function test()

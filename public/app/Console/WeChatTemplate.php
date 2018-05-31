@@ -42,7 +42,7 @@ class WeChatTemplate
 
         $output = $khsci->wechat_template_message->sendTemplateMessage(
             $build_status,
-            Date::Int2ISO($time),
+            Date::Int2ISO((int) $time),
             $event_type,
             $repo_full_name,
             $branch,

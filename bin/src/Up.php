@@ -40,7 +40,9 @@ class Up extends Command
         \KhsCI\Support\Log::debug(__FILE__, __LINE__, "Start Memory is ".memory_get_usage());
 
         while (1) {
-            \App\Console\Up::up();
+            $up = new \App\Console\Up();
+            $up->up();
+            unset($up);
             \KhsCI\Support\Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
             sleep(3);
         }

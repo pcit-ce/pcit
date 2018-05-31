@@ -25,33 +25,33 @@ use KhsCI\Support\Log;
 
 class Up
 {
-    private static $git_type;
+    private $git_type;
 
-    private static $config_array;
+    private $config_array;
 
-    private static $cache_key_up_status = 'khsci_up_status';
+    private $cache_key_up_status = 'khsci_up_status';
 
-    private static $cache_key_github_issue = 'github_issue';
+    private $cache_key_github_issue = 'github_issue';
 
     /**
      * @throws Exception
      */
-    public static function up(): void
+    public function up(): void
     {
         try {
-            if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
+            if (1 === Cache::connect()->get($this->cache_key_up_status)) {
                 // 设为 1 说明有一个任务在运行，休眠之后跳过循环
-                echo '.WQ';
-
+                echo '.WO';
                 sleep(10);
+
                 return;
             }
 
-            Cache::connect()->set(self::$cache_key_up_status, 1);
+            Cache::connect()->set($this->cache_key_up_status, 1);
 
             // 从 Webhooks 缓存中拿出数据，进行处理
 
-            self::webhooks();
+            $this->webhooks();
 
             // Docker 构建队列
 
@@ -69,8 +69,6 @@ class Up
                 $build = new BuildDaemon();
 
                 $build->build();
-
-                unset($build);
             }
             echo '[W]';
         } catch (Exception | Error $e) {
@@ -89,15 +87,16 @@ class Up
             Log::connect()->debug($errormsg);
             echo $errormsg.'[E]';
         } finally {
-            self::closeResource();
+            $this->closeResource();
         }
     }
 
-    public static function closeResource(): void
+    public function closeResource(): void
     {
         DB::close();
         Cache::close();
         HTTP::close();
+        Log::close();
     }
 
     /**
@@ -238,11 +237,11 @@ class Up
      *
      * @throws Exception
      */
-    public static function getConfig(int $rid, string $commit_id)
+    private function getConfig(int $rid, string $commit_id)
     {
-        $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
+        $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
 
-        $url = Git::getRawUrl(static::$git_type, $repo_full_name, $commit_id, '.khsci.yml');
+        $url = Git::getRawUrl($this->git_type, $repo_full_name, $commit_id, '.khsci.yml');
 
         $yaml_file_content = HTTP::get($url);
 
@@ -266,15 +265,15 @@ class Up
     /**
      * @param mixed $git_type
      */
-    public static function setGitType($git_type): void
+    public function setGitType($git_type): void
     {
-        self::$git_type = $git_type;
+        $this->git_type = $git_type;
     }
 
     /**
      * @throws Exception
      */
-    private static function webhooks(): void
+    private function webhooks(): void
     {
         $webhooks = (new KhsCI())->webhooks;
 
@@ -287,15 +286,15 @@ class Up
         list($git_type, $event_type, $json) = json_decode($json_raw, true);
 
         if ('aliyun_docker_registry' === $git_type) {
-            self::aliyunDockerRegistry($json);
+            $this->aliyunDockerRegistry($json);
 
             return;
         }
 
-        self::$git_type = $git_type;
+        $this->git_type = $git_type;
 
         try {
-            self::$event_type($json);
+            $this->$event_type($json);
 
             $webhooks->pushSuccessCache($json_raw);
 
@@ -312,7 +311,7 @@ class Up
      *
      * @throws Exception
      */
-    private static function aliyunDockerRegistry(string $content): void
+    private function aliyunDockerRegistry(string $content): void
     {
         $obj = json_decode($content);
 
@@ -333,7 +332,7 @@ class Up
 
             Log::debug(__FILE__, __LINE__, $name);
 
-            self::updateGitHubAppChecks(
+            $this->updateGitHubAppChecks(
                 (int) Build::getCurrentBuildKeyId(
                     'github_app', (int) Repo::getRid(
                     'github_app', ...explode('/', (string) $git_repo_full_name)
@@ -368,13 +367,13 @@ class Up
      *
      * @throws Exception
      */
-    private static function updateStatus(int $last_insert_id): void
+    private function updateStatus(int $last_insert_id): void
     {
-        if ('github_app' === self::$git_type) {
-            if (self::$config_array) {
-                self::updateGitHubAppChecks($last_insert_id);
+        if ('github_app' === $this->git_type) {
+            if ($this->config_array) {
+                $this->updateGitHubAppChecks($last_insert_id);
             } else {
-                self::updateGitHubAppChecks($last_insert_id,
+                $this->updateGitHubAppChecks($last_insert_id,
                     null,
                     CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
                     time(),
@@ -392,8 +391,8 @@ class Up
             return;
         }
 
-        if (self::$config_array) {
-            self::updateGitHubStatus($last_insert_id);
+        if ($this->config_array) {
+            $this->updateGitHubStatus($last_insert_id);
         } else {
             Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
         }
@@ -406,7 +405,7 @@ class Up
      *
      * @throws Exception
      */
-    public static function ping(string $content)
+    public function ping(string $content)
     {
         $obj = json_decode($content);
 
@@ -422,7 +421,7 @@ git_type,event_type,rid,event_time,request_raw
 ) VALUES(?,?,?,?,?);
 EOF;
         $data = [
-            static::$git_type, __FUNCTION__, $rid, $event_time, $content,
+            $this->git_type, __FUNCTION__, $rid, $event_time, $content,
         ];
 
         return DB::insert($sql, $data);
@@ -437,7 +436,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function push(string $content): void
+    public function push(string $content): void
     {
         $obj = json_decode($content);
 
@@ -448,12 +447,12 @@ EOF;
         $ref_array = explode('/', $ref);
 
         if ('tags' === $ref_array[1]) {
-            self::tag($ref_array[2], $content);
+            $this->tag($ref_array[2], $content);
 
             return;
         }
 
-        $branch = self::ref2branch($ref);
+        $branch = $this->ref2branch($ref);
 
         $commit_id = $obj->after;
 
@@ -490,12 +489,12 @@ rid,created_at,config
 
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?);
 EOF;
-        $config_array = self::getConfig($rid, $commit_id);
+        $config_array = $this->getConfig($rid, $commit_id);
 
         $config = json_encode($config_array);
 
         $data = [
-            static::$git_type, $branch, $compare, $commit_id,
+            $this->git_type, $branch, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
             $rid, $commit_timestamp, $config,
         ];
@@ -504,13 +503,13 @@ EOF;
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
-        self::$config_array = $config_array;
+        $this->config_array = $config_array;
 
-        if (self::skip($commit_message, (int) $last_insert_id)) {
+        if ($this->skip($commit_message, (int) $last_insert_id)) {
             return;
         }
 
-        self::updateStatus((int) $last_insert_id);
+        $this->updateStatus((int) $last_insert_id);
     }
 
     /**
@@ -523,7 +522,7 @@ EOF;
      *
      * @throws Exception
      */
-    private static function skip(string $commit_message, int $build_key_id)
+    private function skip(string $commit_message, int $build_key_id)
     {
         $output = stripos($commit_message, '[skip ci]');
         $output2 = stripos($commit_message, '[ci skip]');
@@ -548,7 +547,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function status(string $content)
+    public function status(string $content)
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -559,7 +558,7 @@ git_type,event_type
 EOF;
 
         return DB::insert($sql, [
-                static::$git_type, __FUNCTION__,
+                $this->git_type, __FUNCTION__,
             ]
         );
     }
@@ -576,7 +575,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function issues(string $content)
+    public function issues(string $content)
     {
         $obj = json_decode($content);
 
@@ -617,7 +616,7 @@ state,locked,created_at,closed_at,updated_at
 EOF;
 
             $last_insert_id = DB::insert($sql, [
-                    static::$git_type, $rid, $issue_id, $issue_number, $action, $title, $body,
+                    $this->git_type, $rid, $issue_id, $issue_number, $action, $title, $body,
                     $sender_username, $sender_uid, $sender_pic,
                     $state, (int) $locked,
                     $created_at, $closed_at, $updated_at,
@@ -627,13 +626,13 @@ EOF;
 
         if ($assignees) {
             foreach ($assignees as $k) {
-                Issue::updateAssignees($k, static::$git_type, $issue_id);
+                Issue::updateAssignees($k, $this->git_type, $issue_id);
             }
         }
 
         if ($labels) {
             foreach ($labels as $k) {
-                Issue::updateLabels($k, static::$git_type, $issue_id);
+                Issue::updateLabels($k, $this->git_type, $issue_id);
             }
         }
 
@@ -641,7 +640,7 @@ EOF;
             return $last_insert_id;
         }
 
-        $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
+        $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
@@ -661,7 +660,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function issue_comment(string $content): void
+    public function issue_comment(string $content): void
     {
         $obj = json_decode($content);
 
@@ -692,7 +691,7 @@ EOF;
 
         $rid = $obj->repository->id;
 
-        $repo_full_name = Repo::getRepoFullName(static::$git_type, $rid);
+        $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
         $installation_id = $obj->installation->id ?? null;
@@ -707,7 +706,7 @@ EOF;
 
         if ('deleted' === $action) {
             $output = Issue::comment_deleted(
-                static::$git_type,
+                $this->git_type,
                 $issue_id,
                 $comment_id,
                 $updated_at
@@ -734,12 +733,12 @@ sender_uid,sender_pic,created_at
 EOF;
 
         $last_insert_id = DB::insert($sql, [
-                static::$git_type, $rid, $issue_id, $comment_id, $issue_number, $body,
+                $this->git_type, $rid, $issue_id, $comment_id, $issue_number, $body,
                 $sender_username, $sender_uid, $sender_pic, $created_at,
             ]
         );
 
-        Cache::connect()->lPush(static::$cache_key_github_issue, $last_insert_id);
+        Cache::connect()->lPush($this->cache_key_github_issue, $last_insert_id);
 
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
@@ -762,7 +761,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function pull_request(string $content): void
+    public function pull_request(string $content): void
     {
         $obj = json_decode($content);
 
@@ -815,12 +814,12 @@ branch,rid,config,internal,pull_request_source
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
-        $config_array = self::getConfig($rid, $commit_id);
+        $config_array = $this->getConfig($rid, $commit_id);
 
         $config = json_encode($config_array);
 
         $last_insert_id = DB::insert($sql, [
-                static::$git_type, __FUNCTION__, $event_time, $action,
+                $this->git_type, __FUNCTION__, $event_time, $action,
                 $commit_id, $commit_message, $committer_username, $pull_request_id,
                 $branch, $rid, $config, $internal, $pull_request_source,
             ]
@@ -828,13 +827,13 @@ EOF;
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
-        self::$config_array = $config_array;
+        $this->config_array = $config_array;
 
-        if (self::skip($commit_message, (int) $last_insert_id)) {
+        if ($this->skip($commit_message, (int) $last_insert_id)) {
             return;
         }
 
-        self::updateStatus((int) $last_insert_id);
+        $this->updateStatus((int) $last_insert_id);
     }
 
     /**
@@ -843,13 +842,13 @@ EOF;
      *
      * @throws Exception
      */
-    public static function tag(string $tag, string $content): void
+    public function tag(string $tag, string $content): void
     {
         $obj = json_decode($content);
 
         $rid = $obj->repository->id;
 
-        $branch = self::ref2branch($obj->base_ref);
+        $branch = $this->ref2branch($obj->base_ref);
 
         $head_commit = $obj->head_commit;
         $commit_id = $head_commit->id;
@@ -873,21 +872,21 @@ committer_username,rid,created_at,config
 
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
-        $config_array = self::getConfig($rid, $commit_id);
+        $config_array = $this->getConfig($rid, $commit_id);
 
         $config = json_encode($config_array);
 
         $last_insert_id = DB::insert($sql, [
-            static::$git_type, __FUNCTION__, $branch, $tag,
+            $this->git_type, __FUNCTION__, $branch, $tag,
             $commit_id, $commit_message, $committer_name, $committer_email,
             $committer_username, $rid, $event_time, $config,
         ]);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
-        self::$config_array = $config_array;
+        $this->config_array = $config_array;
 
-        self::updateStatus((int) $last_insert_id);
+        $this->updateStatus((int) $last_insert_id);
     }
 
     /**
@@ -897,7 +896,7 @@ EOF;
      *
      * @return array
      */
-    public static function watch(string $content)
+    public function watch(string $content)
     {
         return [
             'code' => 200,
@@ -911,7 +910,7 @@ EOF;
      *
      * @return array
      */
-    public static function fork(string $content)
+    public function fork(string $content)
     {
         return [
             'code' => 200,
@@ -923,7 +922,7 @@ EOF;
      *
      * @return array
      */
-    public static function release(string $content)
+    public function release(string $content)
     {
         return [
             'code' => 200,
@@ -937,7 +936,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function create(string $content): void
+    public function create(string $content): void
     {
         $obj = json_decode($content);
 
@@ -964,7 +963,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function delete(string $content)
+    public function delete(string $content)
     {
         $obj = json_decode($content);
 
@@ -979,7 +978,7 @@ EOF;
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
 
-            return DB::delete($sql, [static::$git_type, $obj->ref, $rid]);
+            return DB::delete($sql, [$this->git_type, $obj->ref, $rid]);
         } else {
             return 0;
         }
@@ -990,7 +989,7 @@ EOF;
      *
      * @return mixed
      */
-    public static function ref2branch(string $ref)
+    public function ref2branch(string $ref)
     {
         $ref_array = explode('/', $ref);
 
@@ -1000,7 +999,7 @@ EOF;
     /**
      * @param string $content
      */
-    public static function member(string $content): void
+    public function member(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1012,7 +1011,7 @@ EOF;
     /**
      * @param string $content
      */
-    public static function team_add(string $content): void
+    public function team_add(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1038,7 +1037,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function installation(string $content)
+    public function installation(string $content)
     {
         $obj = json_decode($content);
 
@@ -1065,10 +1064,10 @@ EOF;
         if ('created' === $action) {
             $repo = $obj->repositories;
 
-            return self::installation_action_created($installation_id, $repo, $sender_id);
+            return $this->installation_action_created($installation_id, $repo, $sender_id);
         }
 
-        return self::installation_action_deleted($installation_id);
+        return $this->installation_action_deleted($installation_id);
     }
 
     /**
@@ -1080,7 +1079,7 @@ EOF;
      *
      * @throws Exception
      */
-    private static function installation_action_created(int $installation_id, array $repo, int $sender_id)
+    private function installation_action_created(int $installation_id, array $repo, int $sender_id)
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
@@ -1115,7 +1114,7 @@ EOF;
      *
      * @throws Exception
      */
-    private static function installation_action_deleted(int $installation_id)
+    private function installation_action_deleted(int $installation_id)
     {
         $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
 
@@ -1141,7 +1140,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function installation_repositories(string $content)
+    public function installation_repositories(string $content)
     {
         $obj = json_decode($content);
 
@@ -1156,10 +1155,10 @@ EOF;
         $sender = $obj->sender->id;
 
         if ('added' === $action) {
-            return self::installation_action_created($installation_id, $repo, $sender);
+            return $this->installation_action_created($installation_id, $repo, $sender);
         }
 
-        return self::installation_repositories_action_removed($installation_id, $repo);
+        return $this->installation_repositories_action_removed($installation_id, $repo);
     }
 
     /**
@@ -1170,7 +1169,7 @@ EOF;
      *
      * @throws Exception
      */
-    private static function installation_repositories_action_removed(int $installation_id, array $repo)
+    private function installation_repositories_action_removed(int $installation_id, array $repo)
     {
         foreach ($repo as $k) {
             $rid = $k->id;
@@ -1186,14 +1185,14 @@ EOF;
     /**
      * @deprecated
      */
-    public static function integration_installation(): void
+    public function integration_installation(): void
     {
     }
 
     /**
      * @deprecated
      */
-    public static function integration_installation_repositories(): void
+    public function integration_installation_repositories(): void
     {
     }
 
@@ -1213,7 +1212,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function check_suite(string $content): void
+    public function check_suite(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1238,7 +1237,7 @@ action,event_type,git_type,check_suites_id,branch,commit_id
 EOF;
 
         //        $last_insert_id = DB::insert($sql, [
-        //            $action, __FUNCTION__, self::$git_type, $check_suite_id, $branch, $commit_id,
+        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
         //        ]);
 
         if ('rerequested' === $action) {
@@ -1259,7 +1258,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function check_run(string $content): void
+    public function check_run(string $content): void
     {
         $obj = json_decode($content);
 
