@@ -2,6 +2,7 @@
 
 <?php
 
+use App\Console\Khsci\Init;
 use App\Console\Khsci\Login;
 use App\Console\Khsci\Logout;
 use App\Console\Khsci\Repo\Env as EnvCommand;
@@ -41,5 +42,7 @@ $cli->add(new EnvCommand());
 $cli->add(new Whoami());
 
 $cli->add(new SettingCommand());
+
+$cli->add(new Init());
 
 $cli->run();
