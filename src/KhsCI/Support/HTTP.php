@@ -9,6 +9,8 @@ use Exception;
 
 class HTTP
 {
+    private static $curl;
+
     /**
      * @param string      $url
      * @param string|null $data
@@ -20,9 +22,22 @@ class HTTP
      */
     public static function post(string $url, string $data = null, array $header = [])
     {
-        $curl = new Curl();
+        return self::getCurl()->post($url, $data, $header);
+    }
 
-        return $curl->post($url, $data, $header);
+    private static function getCurl()
+    {
+        if (!(self::$curl instanceof Curl)) {
+            self::$curl = new Curl();
+            self::$curl->setTimeout(5);
+        }
+
+        return self::$curl;
+    }
+
+    public static function close(): void
+    {
+        self::$curl = null;
     }
 
     /**
@@ -36,9 +51,7 @@ class HTTP
      */
     public static function get(string $url, string $data = null, array $header = [])
     {
-        $curl = new Curl();
-
-        return $curl->get($url, $data, $header);
+        return self::getCurl()->get($url, $data, $header);
     }
 
     /**
@@ -51,8 +64,6 @@ class HTTP
      */
     public static function delete(string $url, array $header = [])
     {
-        $curl = new Curl();
-
-        return $curl->delete($url, $header);
+        return self::getCurl()->delete($url, $header);
     }
 }

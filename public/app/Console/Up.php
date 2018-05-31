@@ -76,8 +76,7 @@ class Up
 
                 echo '.W';
 
-                DB::close();
-                Cache::close();
+                self::closeResource();
 
                 sleep(2);
             } catch (Exception | Error $e) {
@@ -97,9 +96,17 @@ class Up
 
                 echo $errormsg;
                 echo '...E.';
+                self::closeResource();
                 sleep(2);
             }
         }
+    }
+
+    public static function closeResource(): void
+    {
+        DB::close();
+        Cache::close();
+        HTTP::close();
     }
 
     /**
@@ -111,8 +118,8 @@ class Up
      */
     public static function updateGitHubStatus(int $build_key_id,
                                               string $state = null,
-                                              string $description = null
-    ): void {
+                                              string $description = null): void
+    {
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -169,8 +176,8 @@ class Up
                                                  array $annotations = null,
                                                  array $images = null,
                                                  array $actions = null,
-                                                 bool $force_create = false
-    ): void {
+                                                 bool $force_create = false): void
+    {
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);

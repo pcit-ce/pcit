@@ -48,7 +48,6 @@ class KhsCITestCase extends TestCase
         ob_start();
         Migrate::all();
         ob_end_clean();
-        ob_start();
 
         parent::__construct($name, $data, $dataName);
     }

@@ -41,7 +41,7 @@ class Response
      */
     public static function redirect(string $url): void
     {
-        header('Location:'.$url);
+        header('Location: '.$url);
         http_response_code(301);
         exit;
     }

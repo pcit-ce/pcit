@@ -55,4 +55,9 @@ class Log
 
         self::connect()->debug($debug_info, $context);
     }
+
+    public static function close(): void
+    {
+        self::$log = null;
+    }
 }

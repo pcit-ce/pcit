@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace KhsCI\Tests\Console;
 
-use App\Console\Queue;
+use App\Console\Build;
 use Exception;
 use KhsCI\Tests\KhsCITestCase;
 
-class QueueTest extends KhsCITestCase
+class BuildTest extends KhsCITestCase
 {
     /**
      * @group DON'TTEST
@@ -17,7 +17,7 @@ class QueueTest extends KhsCITestCase
      */
     public function testSaveLog(): void
     {
-        $queue = new Queue();
+        $queue = new Build();
 
         $queue::setBuildKeyId(23);
 

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Init extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('init');
 
@@ -23,6 +23,7 @@ class Init extends Command
      * @param OutputInterface $output
      *
      * @return int|null
+     *
      * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -30,7 +31,6 @@ class Init extends Command
         $current_file = getcwd().'/.khsci.yml';
 
         if (file_exists($current_file)) {
-
             throw new Exception('.khsci.yml exists, skip', 500);
         }
 

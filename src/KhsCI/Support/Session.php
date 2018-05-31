@@ -29,6 +29,8 @@ class Session
 
     /**
      * @param string $name
+     *
+     * @return string|null
      */
     public static function get(string $name)
     {
