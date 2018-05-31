@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Http\Controllers\APITokenController;
+use App\Setting;
+use Exception;
 
 class SettingsController
 {
@@ -14,12 +16,16 @@ class SettingsController
      * /repo/{repository.id}/settings
      *
      * @param array $args
+     *
+     * @return array|string
+     *
+     * @throws Exception
      */
-    public function __invoke(...$args): void
+    public function __invoke(...$args)
     {
-        list($username, $repo_name) = $args;
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
 
-        APITokenController::checkByRepo(...$args);
+        return Setting::list($git_type, $rid);
     }
 
     /**
@@ -28,12 +34,18 @@ class SettingsController
      * /repo/{repository.id}/setting/{setting.name}
      *
      * @param array $args
+     *
+     * @return array|string
+     *
+     * @throws Exception
      */
-    public function get(...$args): void
+    public function get(...$args)
     {
-        list($username, $repo_name) = $args;
+        list($username, $repo_name, $setting_name) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+
+        return Setting::get($git_type, $rid, $setting_name);
     }
 
     /**
@@ -50,13 +62,26 @@ class SettingsController
      * </pre>
      *
      * @param array $args
+     *
+     * @return int
+     *
+     * @throws Exception
      */
-    public function update(...$args): void
+    public function update(...$args)
     {
-        list($username, $repo_name) = $args;
+        list($username, $repo_name, $setting_name) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
 
         $json = file_get_contents('php://input');
+
+        foreach (json_decode($json, true) as $k => $v) {
+            $setting_name = explode('.', $k)[1];
+            $setting_value = $v;
+
+            return Setting::update($git_type, $rid, $setting_name, $setting_value);
+        }
+
+        throw new Exception('', 500);
     }
 }

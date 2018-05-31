@@ -5,6 +5,7 @@
 use App\Console\Khsci\Login;
 use App\Console\Khsci\Logout;
 use App\Console\Khsci\Repo\Env as EnvCommand;
+use App\Console\Khsci\Repo\SettingCommand;
 use App\Console\Khsci\Token;
 use App\Console\Khsci\Whoami;
 use Dotenv\Dotenv;
@@ -38,5 +39,7 @@ $cli->add(new Token());
 $cli->add(new EnvCommand());
 
 $cli->add(new Whoami());
+
+$cli->add(new SettingCommand());
 
 $cli->run();

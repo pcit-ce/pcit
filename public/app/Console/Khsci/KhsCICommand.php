@@ -131,15 +131,16 @@ class KhsCICommand
                                    ?string $data,
                                    bool $auth = false,
                                    int $target_code = 200
-    )
-    {
+    ) {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
 
         $auth && $header = self::getToken($input);
 
-        $output = self::getCurl()->get($endpoints_url.'/api/'.$entrypoint, $data, $header);
+        $url = $endpoints_url.'/api/'.$entrypoint;
+
+        $output = self::getCurl()->get($url, $data, $header);
 
         if ($target_code === self::getCurl()->getCode()) {
             return $output;
@@ -199,8 +200,7 @@ class KhsCICommand
                                       ?string $data,
                                       bool $auth = false,
                                       int $target_code = 200
-    )
-    {
+    ) {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -234,8 +234,7 @@ class KhsCICommand
                                      bool $auth = false,
                                      bool $json = false,
                                      int $target_code = 200
-    )
-    {
+    ) {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -243,12 +242,35 @@ class KhsCICommand
         $auth && $header = self::getToken($input);
         $json && $header = array_merge($header, ['Content-Type' => 'application/json']);
 
-        $output = self::getCurl()->patch($endpoints_url.'/api/'.$entrypoint, $data, $header);
+        $url = $endpoints_url.'/api/'.$entrypoint;
+
+        $output = self::getCurl()->patch($url, $data, $header);
 
         if ($target_code === self::getCurl()->getCode()) {
             return $output;
         }
 
         throw new Exception($output, 500);
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public static function existsRepoOption(InputInterface $input)
+    {
+        $repo = $input->getOption('repo');
+
+        if (!$repo) {
+            throw new Exception(
+                'Please specify the repo name via the -r option (e.g. khsci <command> -r <owner>/<repo>)',
+                500
+            );
+        }
+
+        return $repo;
     }
 }

@@ -83,10 +83,10 @@ class Env extends DBModel
      * @param int    $id
      * @param string $git_type
      * @param int    $rid
-     *
      * @param bool   $show
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function get(int $id, string $git_type, int $rid, bool $show = false)
@@ -100,7 +100,6 @@ class Env extends DBModel
         }
 
         if ($public = $output[0]['public'] || $show) {
-
             return $output[0]['name'].'='.$output[0]['value'];
         }
 

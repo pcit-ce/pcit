@@ -88,6 +88,15 @@ class CI
 
     const MEDIA_TYPE_GIST_BASE64 = 'application/vnd.github.v3.base64';
 
+    const CI_SETTING_ARRAY = [
+        'builds_only_with_khsci_yml',
+        'build_pushes',
+        'build_pull_requests',
+        'maximum_number_of_builds',
+        'auto_cancel_branch_builds',
+        'auto_cancel_pull_request_builds',
+    ];
+
     /**
      * 返回当前 ENV.
      *

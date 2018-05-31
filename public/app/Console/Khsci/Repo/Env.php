@@ -61,11 +61,7 @@ khsci env get   VAR_ID
 
         $argument = $input->getArgument('name');
 
-        $repo = $input->getOption('repo');
-
-        if (!$repo) {
-            throw new Exception('Please input repo by -r option', 500);
-        }
+        $repo = KhsCICommand::existsRepoOption($input);
 
         switch ($type) {
             case 'list':

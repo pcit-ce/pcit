@@ -157,7 +157,7 @@ Route::get('{git_type}/{username}/{repo_name}/pull_requests', 'Builds\IndexContr
 Route::get('api/repo/{git_type}/{username}/{repo_name}/pull_requests', 'Builds\PullRequestsController@post');
 
 Route::get('{git_type}/{username}/{repo_name}/settings', 'Builds\IndexController');
-Route::get('api/repo{username}/{repo_name}/settings', 'Builds\SettingsController');
+Route::get('api/repo/{username}/{repo_name}/settings', 'Builds\SettingsController');
 Route::get('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@get');
 Route::patch('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@update');
 
