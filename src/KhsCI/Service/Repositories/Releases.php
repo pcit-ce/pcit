@@ -25,9 +25,9 @@ class Releases
      */
     public function list(string $repo_full_name)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/releases';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/releases';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -42,9 +42,9 @@ class Releases
      */
     public function get(string $repo_full_name, int $release_id)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/releases/'.$release_id;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/releases/'.$release_id;
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     public function latest(): void
@@ -78,7 +78,7 @@ class Releases
                            bool $draft = false,
                            bool $prerelease = false): void
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/releases';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/releases';
 
         $data = [
             'tag_name' => $tag_name,
@@ -89,9 +89,9 @@ class Releases
             'preleases' => $prerelease,
         ];
 
-        self::$curl->post($url, json_encode($data));
+        $this->curl->post($url, json_encode($data));
 
-        self::successOrFailure(__FILE__, __LINE__, 201);
+        $this->successOrFailure(__FILE__, __LINE__, 201);
     }
 
     public function edit(): void

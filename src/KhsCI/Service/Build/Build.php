@@ -106,9 +106,9 @@ class Build
 
         try {
             // 是否启用构建
-            self::getRepoBuildActivateStatus((int) $rid);
+            $this->getRepoBuildActivateStatus((int) $rid);
 
-            self::run($rid, $branch);
+            $this->run($rid, $branch);
         } catch (\Throwable $e) {
             throw new CIException(
                 $this->unique_id,
@@ -345,7 +345,7 @@ class Build
             $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
 
             // 清理
-            self::systemDelete($unique_id);
+            $this->systemDelete($unique_id);
         }
 
         // 后续根据 throw 出的异常执行对应的操作

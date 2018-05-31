@@ -16,22 +16,22 @@ use KhsCI\Support\Log;
  */
 class Run
 {
-    protected static $header = [
+    protected $header = [
         'Accept' => 'application/vnd.github.antiope-preview+json',
     ];
 
     /**
      * @var Curl
      */
-    protected static $curl;
+    protected $curl;
 
-    private static $api_url;
+    private $api_url;
 
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -44,8 +44,8 @@ class Run
      * @param string     $status         The current status. Can be one of queued, in_progress, or completed. Default:
      *                                   queued
      * @param int        $started_at     the time that the check run began in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
-     * @param int        $completed_at   Required. The time the check completed in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.
-     *                                   Required if you provide conclusion.
+     * @param int        $completed_at   Required. The time the check completed in ISO 8601 format:
+     *                                   YYYY-MM-DDTHH:MM:SSZ. Required if you provide conclusion.
      * @param string     $conclusion     Required. The final conclusion of the check. Can be one of success, failure,
      *                                   neutral,
      *                                   cancelled, timed_out, or action_required.
@@ -75,9 +75,9 @@ class Run
                            string $text = null,
                            array $annotations = null,
                            array $images = null,
-                           array $actions = null
-    ) {
-        $url = static::$api_url.'/repos/'.$repo_full_name.'/check-runs';
+                           array $actions = null)
+    {
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-runs';
 
         $data = array_filter([
             'name' => $name,
@@ -101,9 +101,9 @@ class Run
 
         $request = json_encode($data);
 
-        $output = self::$curl->post($url, $request, self::$header);
+        $output = $this->curl->post($url, $request, $this->header);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
@@ -133,8 +133,8 @@ class Run
                                             string $warning_level,
                                             string $message,
                                             string $title = null,
-                                            string $raw_details = null
-    ) {
+                                            string $raw_details = null)
+    {
         return [
             'filename' => $filename,
             'blog_href' => $blog_href,
@@ -176,8 +176,8 @@ class Run
      */
     public static function createAction(string $label = 'Fix',
                                         string $identifier = 'fix_errors',
-                                        string $description = 'Allow us to fix these errors for you'
-    ) {
+                                        string $description = 'Allow us to fix these errors for you')
+    {
         return [
             'label' => $label,
             'identifier' => $identifier,
@@ -200,9 +200,9 @@ class Run
      * @param string     $title
      * @param string     $summary
      * @param string     $text
-     * @param array|null $annotations    [$annotation, $annotation2]
-     * @param array|null $images         [$image, $image2]
-     * @param array|null $actions        [$action]
+     * @param array|null $annotations [$annotation, $annotation2]
+     * @param array|null $images      [$image, $image2]
+     * @param array|null $actions     [$action]
      *
      * @return mixed
      *
@@ -226,7 +226,7 @@ class Run
                            array $images = null,
                            array $actions = null)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id;
 
         $data = array_filter([
             'name' => $name,
@@ -250,9 +250,9 @@ class Run
 
         $request = json_encode($data);
 
-        $output = self::$curl->patch($url, $request, self::$header);
+        $output = $this->curl->patch($url, $request, $this->header);
 
-        $http_return_header = self::$curl->getCode();
+        $http_return_header = $this->curl->getCode();
 
         if (200 !== $http_return_header) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_header);
@@ -282,7 +282,7 @@ class Run
                                     string $status,
                                     string $filter)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/commits/'.$ref.'/check-runs';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/commits/'.$ref.'/check-runs';
 
         $data = [
             'check_name' => $check_name,
@@ -292,7 +292,7 @@ class Run
 
         $url = $url.'?'.http_build_query($data);
 
-        return self::$curl->get($url, null, self::$header);
+        return $this->curl->get($url, null, $this->header);
     }
 
     /**
@@ -316,7 +316,7 @@ class Run
                                    string $status,
                                    string $filter)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-suites/'.$id.'/check-rus';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suites/'.$id.'/check-rus';
 
         $data = [
             'check_name' => $check_name,
@@ -326,7 +326,7 @@ class Run
 
         $url = $url.'?'.http_build_query($data);
 
-        return self::$curl->get($url, null, self::$header);
+        return $this->curl->get($url, null, $this->header);
     }
 
     /**
@@ -341,9 +341,9 @@ class Run
      */
     public function getSingle(string $repo_full_name, int $check_run_id)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id;
 
-        return self::$curl->get($url, null, self::$header);
+        return $this->curl->get($url, null, $this->header);
     }
 
     /**
@@ -358,8 +358,8 @@ class Run
      */
     public function listAnnotations(string $repo_full_name, int $check_run_id)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id.'/annotations';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id.'/annotations';
 
-        return self::$curl->get($url, null, self::$header);
+        return $this->curl->get($url, null, $this->header);
     }
 }

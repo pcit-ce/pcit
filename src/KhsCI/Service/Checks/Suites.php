@@ -12,11 +12,11 @@ class Suites
     /**
      * @var Curl
      */
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
 
-    private static $header = [
+    private $header = [
         'Accept' => 'application/vnd.github.antiope-preview+json',
     ];
 
@@ -28,9 +28,9 @@ class Suites
      */
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -45,16 +45,16 @@ class Suites
      */
     public function getSingle(string $repo_full_name, int $check_suite_id)
     {
-        $url = static::$api_url.'/repos/'.$repo_full_name.'/check-suites/'.$check_suite_id;
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suites/'.$check_suite_id;
 
-        return static::$curl->get($url, null, static::$header);
+        return $this->curl->get($url, null, $this->header);
     }
 
     /**
      * List check suites for a specific ref.
      *
      * @param string $repo_full_name
-     * @param string $ref            Required. The ref can be a SHA, branch name, or a tag name.
+     * @param string $ref Required. The ref can be a SHA, branch name, or a tag name.
      * @param int    $app_id
      * @param string $check_name
      *
@@ -67,7 +67,7 @@ class Suites
                                     int $app_id = null,
                                     string $check_name = null)
     {
-        $url = static::$api_url.'/repos/'.$repo_full_name.'/commits/'.$ref.'/check-suites';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/commits/'.$ref.'/check-suites';
 
         $data = [
             'app_id' => $app_id,
@@ -76,7 +76,7 @@ class Suites
 
         $url = $url.'?'.http_build_query($data);
 
-        return static::$curl->get($url, null, self::$header);
+        return $this->curl->get($url, null, $this->header);
     }
 
     /**
@@ -102,7 +102,7 @@ class Suites
      */
     public function setPreferences(string $repo_full_name, array $auto_trigger_checks)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-suites/preferences';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suites/preferences';
 
         $data = [
             'auto_trigger_checks' => [
@@ -110,7 +110,7 @@ class Suites
             ],
         ];
 
-        return self::$curl->patch($url, json_encode($data), self::$header);
+        return $this->curl->patch($url, json_encode($data), $this->header);
     }
 
     /**
@@ -126,14 +126,14 @@ class Suites
      */
     public function create(string $repo_full_name, string $head_branch, string $head_sha)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-suites';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suites';
 
         $data = [
             'head_branch' => $head_branch,
             'head_sha' => $head_sha,
         ];
 
-        return self::$curl->post($url, json_encode($data), self::$header);
+        return $this->curl->post($url, json_encode($data), $this->header);
     }
 
     /**
@@ -147,8 +147,8 @@ class Suites
      */
     public function request(string $repo_full_name)
     {
-        $url = self::$api_url.'/repos/'.$repo_full_name.'/check-suite-requests';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suite-requests';
 
-        return self::$curl->post($url, null, self::$header);
+        return $this->curl->post($url, null, $this->header);
     }
 }

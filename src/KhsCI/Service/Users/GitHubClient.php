@@ -12,17 +12,17 @@ class GitHubClient
     /**
      * @var null|string
      */
-    private static $api_url = null;
+    private $api_url = null;
 
     /**
      * @var Curl
      */
-    private static $curl;
+    private $curl;
 
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
-        self::$api_url = $api_url;
+        $this->curl = $curl;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -37,13 +37,13 @@ class GitHubClient
      */
     public function getUserInfo(bool $raw = false, string $username = null)
     {
-        $url = self::$api_url.'/user';
+        $url = $this->api_url.'/user';
 
         if ($username) {
-            $url = self::$api_url.'/users/'.$username;
+            $url = $this->api_url.'/users/'.$username;
         }
 
-        $json = self::$curl->get($url);
+        $json = $this->curl->get($url);
 
         if ($raw) {
             return $json;
@@ -72,13 +72,13 @@ class GitHubClient
      */
     public function getRepos(int $page = 1, bool $raw = false, string $username)
     {
-        $url = self::$api_url.'/user/repos?page='.$page;
+        $url = $this->api_url.'/user/repos?page='.$page;
 
         if ($username) {
-            $url = self::$api_url.'/users/'.$username.'/repos?page='.$page;
+            $url = $this->api_url.'/users/'.$username.'/repos?page='.$page;
         }
 
-        $output = self::$curl->get($url);
+        $output = $this->curl->get($url);
 
         return $output;
     }
@@ -92,11 +92,9 @@ class GitHubClient
      */
     public function listOrgs()
     {
-        $url = self::$api_url.'/user/orgs';
+        $url = $this->api_url.'/user/orgs';
 
-        self::$curl->get($url);
-
-        var_dump(self::$curl->getRequestHeaders());
+        $this->curl->get($url);
     }
 
     /**
@@ -109,10 +107,10 @@ class GitHubClient
      */
     public function authorizations(string $username, string $password)
     {
-        $url = self::$api_url.'/authorizations';
+        $url = $this->api_url.'/authorizations';
 
-        self::$curl->setHtpasswd($username, $password);
+        $this->curl->setHtpasswd($username, $password);
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 }

@@ -9,9 +9,9 @@ use KhsCI\Support\Log;
 
 trait CICommon
 {
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
 
     /**
      * CICommon constructor.
@@ -21,9 +21,9 @@ trait CICommon
      */
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->api_url = $api_url;
     }
 
     /**
@@ -33,9 +33,9 @@ trait CICommon
      *
      * @throws \Exception
      */
-    private static function successOrFailure(string $file, $line, int $http_code): void
+    private function successOrFailure(string $file, $line, int $http_code): void
     {
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if ($http_code !== $http_return_code) {
             Log::debug($file, $line, 'Http Return Code Is Not '.$http_code.' '.$http_return_code);

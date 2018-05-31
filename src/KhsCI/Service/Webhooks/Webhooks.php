@@ -20,12 +20,12 @@ class Webhooks
     /**
      * @var string
      */
-    private static $git_type = 'github';
+    private $git_type = 'github';
 
     /**
      * @var string
      */
-    public static $cache_key = 'webhooks';
+    public $cache_key = 'webhooks';
 
     /**
      * @param string|null $secret
@@ -40,7 +40,7 @@ class Webhooks
         $content = file_get_contents('php://input');
 
         if (Env::get('CI_WEBHOOKS_DEBUG', false)) {
-            return self::pushCache($type, $content);
+            return $this->pushCache($type, $content);
         }
 
         $secret = $secret ?? Env::get('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
@@ -52,7 +52,7 @@ class Webhooks
 
         if ($github_hash === $serverHash) {
             try {
-                return self::pushCache($type, $content);
+                return $this->pushCache($type, $content);
             } catch (Error | Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
@@ -70,7 +70,7 @@ class Webhooks
      */
     public function startGitHubAppServer(string $secret = null)
     {
-        self::$git_type = 'github_app';
+        $this->git_type = 'github_app';
 
         return $this->startGitHubServer($secret);
     }
@@ -105,9 +105,9 @@ class Webhooks
      *
      * @throws Exception
      */
-    private static function pushCache(string $type, $content)
+    private function pushCache(string $type, $content)
     {
-        return Cache::connect()->lpush(self::$cache_key, json_encode([static::$git_type, $type, $content]));
+        return Cache::connect()->lpush($this->cache_key, json_encode([$this->git_type, $type, $content]));
     }
 
     /**
@@ -119,7 +119,7 @@ class Webhooks
      */
     public function getCache()
     {
-        return Cache::connect()->rPop(self::$cache_key);
+        return Cache::connect()->rPop($this->cache_key);
     }
 
     /**
@@ -133,7 +133,7 @@ class Webhooks
      */
     public function rollback(string $content)
     {
-        return Cache::connect()->lPush(self::$cache_key, $content);
+        return Cache::connect()->lPush($this->cache_key, $content);
     }
 
     /**
@@ -147,7 +147,7 @@ class Webhooks
      */
     public function pushSuccessCache(string $content)
     {
-        return Cache::connect()->lPush(self::$cache_key.'_success', $content);
+        return Cache::connect()->lPush($this->cache_key.'_success', $content);
     }
 
     /**
@@ -169,7 +169,7 @@ class Webhooks
      */
     public function pushErrorCache(string $content)
     {
-        return Cache::connect()->lPush(self::$cache_key.'_error', $content);
+        return Cache::connect()->lPush($this->cache_key.'_error', $content);
     }
 
     /**
@@ -239,7 +239,7 @@ class Webhooks
     /**
      * @deprecated
      */
-    public static function integration_installation(): void
+    public function integration_installation(): void
     {
         return;
     }
@@ -247,17 +247,17 @@ class Webhooks
     /**
      * @deprecated
      */
-    public static function integration_installation_repositories(): void
+    public function integration_installation_repositories(): void
     {
         return;
     }
 
-    public static function check_suite(string $webhooks_json_content): void
+    public function check_suite(string $webhooks_json_content): void
     {
         return;
     }
 
-    public static function check_run(string $webhooks_json_content): void
+    public function check_run(string $webhooks_json_content): void
     {
         return;
     }

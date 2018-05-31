@@ -18,9 +18,9 @@ use KhsCI\Support\Log;
  */
 class Installations
 {
-    private static $curl;
+    private $curl;
 
-    private static $api_url;
+    private $api_url;
 
     /**
      * Installations constructor.
@@ -30,9 +30,9 @@ class Installations
      */
     public function __construct(Curl $curl, string $api_url)
     {
-        self::$curl = $curl;
+        $this->curl = $curl;
 
-        self::$api_url = $api_url;
+        $this->$api_url = $api_url;
     }
 
     /**
@@ -44,9 +44,9 @@ class Installations
      */
     public function listRepositories()
     {
-        $url = self::$api_url.'/installation/repositories';
+        $url = $this->api_url.'/installation/repositories';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -60,9 +60,9 @@ class Installations
      */
     public function listRepositoriesAccessible(int $installation_id)
     {
-        $url = self::$api_url.'/user/installations/'.$installation_id.'/repositories';
+        $url = $this->api_url.'/user/installations/'.$installation_id.'/repositories';
 
-        return self::$curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**
@@ -80,11 +80,11 @@ class Installations
      */
     public function add(int $installation_id, int $repository_id, string $method = 'put'): void
     {
-        $url = self::$api_url.'/user/installations/'.$installation_id.'/repositories/'.$repository_id;
+        $url = $this->api_url.'/user/installations/'.$installation_id.'/repositories/'.$repository_id;
 
-        self::$curl->$method($url);
+        $this->curl->$method($url);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (204 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 204 '.$http_return_code);
@@ -105,7 +105,7 @@ class Installations
      */
     public function remove(int $installation_id, int $repository_id): void
     {
-        self::add($installation_id, $repository_id, 'delete');
+        $this->add($installation_id, $repository_id, 'delete');
     }
 
     /**
@@ -117,9 +117,9 @@ class Installations
      */
     public function getAppInfo(string $jwt)
     {
-        $url = self::$api_url.'/app';
+        $url = $this->api_url.'/app';
 
-        return self::$curl->get($url, null, [
+        return $this->curl->get($url, null, [
                 'Authorization' => 'Bearer '.$jwt,
                 'Accept' => 'application/vnd.github.machine-man-preview+json',
             ]
@@ -144,16 +144,16 @@ class Installations
             return $access_token;
         }
 
-        $url = self::$api_url.'/installations/'.$installation_id.'/access_tokens';
+        $url = $this->api_url.'/installations/'.$installation_id.'/access_tokens';
 
-        $access_token_json = self::$curl->post($url, null, [
-            'Authorization' => 'Bearer '.self::getJWT($private_key_path),
+        $access_token_json = $this->curl->post($url, null, [
+            'Authorization' => 'Bearer '.$this->getJWT($private_key_path),
             'Accept' => 'application/vnd.github.machine-man-preview+json',
         ]);
 
         $access_token_obj = json_decode($access_token_json);
 
-        $http_return_code = self::$curl->getCode();
+        $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);

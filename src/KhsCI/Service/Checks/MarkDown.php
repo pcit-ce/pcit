@@ -6,7 +6,7 @@ namespace KhsCI\Service\Checks;
 
 class MarkDown
 {
-    private static $header = <<<EOF
+    private $header = <<<EOF
 # About KhsCI
 
 **China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI**
@@ -37,7 +37,7 @@ EOF;
      */
     public function success(string $language, string $os, string $config, string $build_log)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -74,7 +74,7 @@ EOF;
      */
     public function failure(string $language, string $os, string $config, ?string $build_log)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -111,7 +111,7 @@ EOF;
      */
     public function neutral(string $language, string $os, string $config, string $build_log)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -148,7 +148,7 @@ EOF;
      */
     public function cancelled(string $language, string $os, string $config, ?string $build_log)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -185,7 +185,7 @@ EOF;
      */
     public function timed_out(string $language, string $os, string $config, ?string $build_log)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -222,7 +222,7 @@ EOF;
      */
     public function action_required(string $language, string $os, string $config, ?string $build_log)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -258,7 +258,7 @@ EOF;
      */
     public function queued(string $language, string $os, string $config)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -288,7 +288,7 @@ EOF;
      */
     public function in_progress(string $language, string $os, string $config)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
@@ -318,7 +318,7 @@ EOF;
      */
     public function aliyunDockerRegistry(string $language, string $os, string $image_details)
     {
-        return self::$header.<<<EOF
+        return $this->header.<<<EOF
 
 # Build Configuration
 
