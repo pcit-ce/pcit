@@ -38,67 +38,58 @@ class Up
      */
     public static function up(): void
     {
-        while (1) {
-            try {
-                if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
-                    // 设为 1 说明有一个任务在运行，休眠之后跳过循环
-                    echo '.WQ';
+        try {
+            if (1 === Cache::connect()->get(self::$cache_key_up_status)) {
+                // 设为 1 说明有一个任务在运行，休眠之后跳过循环
+                echo '.WQ';
 
-                    sleep(10);
-                    continue;
-                }
-
-                Cache::connect()->set(self::$cache_key_up_status, 1);
-
-                // 从 Webhooks 缓存中拿出数据，进行处理
-
-                self::webhooks();
-
-                // Docker 构建队列
-
-                $docker_build_skip = false;
-
-                try {
-                    Http::get(Env::get('CI_DOCKER_HOST').'/info');
-                } catch (\Throwable $e) {
-                    $docker_build_skip = true;
-                }
-
-                if (!$docker_build_skip) {
-                    echo 'Connect Docker Daemon Success, Docker Build Running...';
-
-                    $build = new BuildDaemon();
-
-                    $build->build();
-
-                    unset($build);
-                }
-
-                echo '.W';
-
-                self::closeResource();
-
-                sleep(2);
-            } catch (Exception | Error $e) {
-                $msg = $e->getMessage();
-                $code = $e->getCode();
-                $file = $e->getFile();
-                $line = $e->getLine();
-
-                $errormsg = json_encode([
-                    'msg' => $msg,
-                    'code' => $code,
-                    'file' => $file,
-                    'line' => $line,
-                ]);
-
-                Log::connect()->debug($errormsg);
-
-                echo $errormsg;
-                echo '...E.';
-                self::closeResource();
-                sleep(2);
+                sleep(10);
+                return;
             }
+
+            Cache::connect()->set(self::$cache_key_up_status, 1);
+
+            // 从 Webhooks 缓存中拿出数据，进行处理
+
+            self::webhooks();
+
+            // Docker 构建队列
+
+            $docker_build_skip = false;
+
+            try {
+                Http::get(Env::get('CI_DOCKER_HOST').'/info');
+            } catch (\Throwable $e) {
+                $docker_build_skip = true;
+            }
+
+            if (!$docker_build_skip) {
+                echo 'Connect Docker Daemon Success, Docker Build Running...';
+
+                $build = new BuildDaemon();
+
+                $build->build();
+
+                unset($build);
+            }
+            echo '[W]';
+        } catch (Exception | Error $e) {
+            $msg = $e->getMessage();
+            $code = $e->getCode();
+            $file = $e->getFile();
+            $line = $e->getLine();
+
+            $errormsg = json_encode([
+                'msg' => $msg,
+                'code' => $code,
+                'file' => $file,
+                'line' => $line,
+            ]);
+
+            Log::connect()->debug($errormsg);
+            echo $errormsg.'[E]';
+        } finally {
+            self::closeResource();
         }
     }
 
@@ -110,8 +101,8 @@ class Up
     }
 
     /**
-     * @param int    $build_key_id
-     * @param string $state        default is pending
+     * @param int    $build_key_id Build table primary id
+     * @param string $state        Default is pending
      * @param string $description
      *
      * @throws Exception

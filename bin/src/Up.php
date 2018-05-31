@@ -37,6 +37,12 @@ class Up extends Command
             \App\Console\Migrate::all();
         }
 
-        \App\Console\Up::up();
+        \KhsCI\Support\Log::debug(__FILE__, __LINE__, "Start Memory is ".memory_get_usage());
+
+        while (1) {
+            \App\Console\Up::up();
+            \KhsCI\Support\Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
+            sleep(3);
+        }
     }
 }
