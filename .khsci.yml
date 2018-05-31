@@ -39,6 +39,7 @@ pipeline:
       - CI_MYSQL_PASSWORD=mytest
       - CI_MYSQL_DBNAME=test
     commands:
+      - env
       - pwd
       - composer install -q
       - composer update -q

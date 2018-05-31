@@ -435,7 +435,7 @@ class Build
             $docker_container
                 ->setEnv(array_merge([
                     "CI_SCRIPT=$ci_script",
-                ], $env))
+                ], $env, $this->system_env))
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
                 ->setLabels(['com.khs1994.ci' => $unique_id])
