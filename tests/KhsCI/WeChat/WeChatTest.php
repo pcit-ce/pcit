@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Tests\Wechat;
+namespace KhsCI\Tests\WeChat;
 
 use PHPUnit\Framework\TestCase;
 use WeChat\Support\Encrypt;

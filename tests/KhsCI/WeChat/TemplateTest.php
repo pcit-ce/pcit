@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Tests\Wechat;
+namespace KhsCI\Tests\WeChat;
 
 use Exception;
+use KhsCI\Support\Date;
 use KhsCI\Tests\KhsCITestCase;
 
 class TemplateTest extends KhsCITestCase
@@ -20,12 +21,13 @@ class TemplateTest extends KhsCITestCase
 
         $response = $khsci->wechat_template_message->sendTemplateMessage(
             'Success',
-            time(),
+            Date::Int2ISO(time()),
             'push',
             'khs1994-php/khsci',
             'master',
             'khs1994',
             'This Build is Success',
+            'Build Info',
             'https://ci.khs1994.com'
         );
 

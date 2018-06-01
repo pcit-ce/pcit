@@ -8,14 +8,14 @@ use KhsCI\Service\WeChat\Template\WeChatClient;
 use KhsCI\Support\Cache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use WeChat\Wechat;
+use WeChat\WeChat;
 
 class WeChatProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
         $pimple['wechat'] = function ($app) {
-            return new Wechat(
+            return new WeChat(
                 $app['config']['wechat']['app_id'],
                 $app['config']['wechat']['app_secret'],
                 $app['config']['wechat']['token'],
