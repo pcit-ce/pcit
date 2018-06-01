@@ -206,20 +206,26 @@ EOF;
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
+
+            if ($this->build_key_id && $this->build_status) {
+                BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
+            }
+
+            if (Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description) {
+                self::weChatTemplate($this->description);
+            }
+
             // 若 unique_id 不存在，则不清理 Docker 构建环境
+            if ($this->unique_id) {
+                $queue->systemDelete($this->unique_id, true);
+            }
+
             if (!$this->unique_id) {
+
                 return;
             }
 
-            BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
-
-            $queue->systemDelete($this->unique_id, true);
-
-            self::weChatTemplate($this->description);
-
             Log::connect()->debug('======'.$this->build_key_id.' Build Stopped Success ======');
-
-            $this->unique_id = null;
 
             Cache::connect()->set('khsci_up_status', 0);
         }

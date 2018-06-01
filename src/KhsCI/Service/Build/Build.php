@@ -709,8 +709,12 @@ class Build
      *
      * @throws Exception
      */
-    private function runService(array $service, string $unique_id, ?array $config, Docker $docker): void
+    private function runService(?array $service, string $unique_id, ?array $config, Docker $docker): void
     {
+        if (null === $service) {
+            return;
+        }
+
         foreach ($service as $service_name => $array) {
             $this->cancel();
 
@@ -753,8 +757,12 @@ class Build
      *
      * @throws Exception
      */
-    public function systemDelete(string $unique_id, bool $last = false): void
+    public function systemDelete(?string $unique_id, bool $last = false): void
     {
+        if (null === $unique_id) {
+            return;
+        }
+
         $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
 
         $docker_container = $docker->container;

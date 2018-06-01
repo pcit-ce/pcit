@@ -2,6 +2,8 @@
 # @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
 #
 
+language: php
+
 clone:
   git:
     # image: plugins/git
