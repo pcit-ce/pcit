@@ -396,7 +396,7 @@ class Build
             $image = $array['image'];
             $commands = $array['commands'] ?? null;
             $event = $array['when']['event'] ?? null;
-            $env = $array['environment'] ?? null;
+            $env = $array['environment'] ?? [];
             $status = $array['when']['status'] ?? null;
 
             if ($event) {
@@ -470,16 +470,20 @@ class Build
     }
 
     /**
-     * @param string $setup
-     * @param string $image
-     * @param array  $commands
+     * @param string     $setup
+     * @param string     $image
+     * @param array|null $commands
      *
-     * @return string
+     * @return string|void
      *
      * @throws Exception
      */
-    private function parseCommand(string $setup, string $image, array $commands)
+    private function parseCommand(string $setup, string $image, ?array $commands)
     {
+        if (null === $commands) {
+            return;
+        }
+
         $content = '\n';
 
         $content .= 'echo;echo\n\n';

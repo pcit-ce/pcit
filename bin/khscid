@@ -2,4 +2,4 @@
 
 dir=$(cd "${0%[/\\]*}" > /dev/null && pwd)
 
-php ./src/khscid.php $@
+php ${dir}/src/khscid.php $@
