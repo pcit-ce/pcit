@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
-dir=$(cd "${0%[/\\]*}" > /dev/null && pwd)
+dir=$(cd "${0%[/\\]*}" > /dev/null 2>&1 ; pwd)
 
 php "${dir}/src/tencent-ai.php" $@
