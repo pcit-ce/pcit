@@ -8,7 +8,9 @@
 // @link https://github.com/FriendsOfPHP/PHP-CS-Fixer
 
 $finder = PhpCsFixer\Finder::create()
-    // ->exclude('somedir')
+    ->exclude('build')
+    ->exclude('cache')
+    ->exclude('vendor')
     // ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
     ->in(__DIR__)
     ->ignoreVCS(true);

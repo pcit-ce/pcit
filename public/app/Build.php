@@ -134,7 +134,7 @@ class Build extends DBModel
      */
     public static function getBuildStatus(int $rid, string $branch)
     {
-        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? ORDER BY id DESC LIMIT 1';
+        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip") ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$rid, $branch], true);
     }
@@ -295,7 +295,7 @@ EOF;
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag_name,commit_message,
 compare,committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type
-FROM builds WHERE 
+FROM builds WHERE
 id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
  ORDER BY id DESC LIMIT $limit;
 EOF;
@@ -325,8 +325,8 @@ EOF;
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag_name,commit_message,compare,
 committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
-FROM builds WHERE 
-id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip') 
+FROM builds WHERE
+id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip')
 ORDER BY id DESC LIMIT $limit
 EOF;
         if ($pr) {
@@ -357,8 +357,8 @@ EOF;
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag_name,commit_message,compare,
 committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
-FROM builds 
-WHERE id<=$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) ) 
+FROM builds
+WHERE id<=$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) )
 AND git_type=? AND event_type IN(?,?) AND build_status NOT IN('skip') ORDER BY id DESC LIMIT $limit;
 EOF;
 
