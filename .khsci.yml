@@ -157,9 +157,9 @@ matrix:
   POSTGRESQL_VERSION:
     - 10.3-alpine
 
-# branches:
-#   include: [ master, dev, feature/* ]
-#   exclude: [ release/1.0.0, release/1.1.* ]
+branches:
+  include: [ master, dev, feature/* ]
+  exclude: [ release/1.0.0, release/1.1.* ]
 
 config:
   aliyun:

@@ -2,7 +2,6 @@
 
 <?php
 
-
 // khscid.php is KhsCI Daemon CLI
 
 use KhsCI\Support\Env;
@@ -17,13 +16,6 @@ spl_autoload_register(function ($class): void {
     if (file_exists($file)) {
         require $file;
     }
-});
-
-spl_autoload_register(function ($class): void {
-    $class = str_replace('App\\', 'app\\', $class);
-    $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
-
-    require __DIR__.'/../../public/'.$class.'.php';
 });
 
 try {

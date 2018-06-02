@@ -22,6 +22,7 @@ use KhsCI\Support\Git;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
+use TencentAI\TencentAI;
 
 class Up
 {
@@ -97,6 +98,7 @@ class Up
         Cache::close();
         HTTP::close();
         Log::close();
+        TencentAI::close();
     }
 
     /**

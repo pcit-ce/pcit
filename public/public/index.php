@@ -31,6 +31,7 @@ try {
 
 ini_set('session.cookie_path', '/');
 ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
+ini_set('session.gc_maxlifetime', "690000"); // s
 ini_set('session.cookie_lifetime', '690000'); // s
 ini_set('session.cookie_secure', 'On');
 
