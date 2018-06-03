@@ -527,13 +527,17 @@ EOF;
      *
      * @throws Exception
      */
-    private function skip(string $commit_message, int $build_key_id, string $branch = null, string $config = null)
+    public function skip(string $commit_message, int $build_key_id, string $branch = null, string $config = null)
     {
         // check commit message
         if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $commit_message)) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message');
 
             return true;
+        }
+
+        if (null === $config) {
+            return false;
         }
 
         $yaml_obj = (object) json_decode($config, true);
