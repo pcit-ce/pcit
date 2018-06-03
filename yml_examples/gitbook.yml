@@ -7,7 +7,17 @@ workspace:
   path: .
 
 pipeline:
-  gitbook:
+  gitbook_test_build:
     image: khs1994/gitbook
     commands:
       - build
+
+  gitbook_build_and_deploy:
+    image: khs1994/gitbook
+    commands:
+      - deploy
+    environment:
+      - GIT_USERNAME=username
+      - GIT_USEREMAIL=username@domain.com
+      - GIT_REPO=git@url:username/repo
+      - GIT_BRANCH=gh-pages

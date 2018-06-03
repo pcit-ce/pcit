@@ -7,7 +7,14 @@ workspace:
   path: .
 
 pipeline:
-  hexo:
+  hexo_test_build:
     image: khs1994/hexo
     commands:
       - build
+
+  hexo_build_and_deploy:
+    commands:
+      - deploy
+    environment:
+      - GIT_USERNAME=username
+      - GIT_USEREMAIL=username@domain.com
