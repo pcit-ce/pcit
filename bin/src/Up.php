@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use KhsCI\Support\Env;
+use KhsCI\Support\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,7 +41,7 @@ class Up extends Command
 
         \KhsCI\Support\DB::close();
 
-        \KhsCI\Support\Log::debug(__FILE__, __LINE__, "Start Memory is ".memory_get_usage());
+        Log::debug(__FILE__, __LINE__, "Start Memory is ".memory_get_usage());
 
         set_time_limit(0);
 
@@ -56,7 +58,11 @@ class Up extends Command
             $up = new \App\Console\Up();
             $up->up();
             unset($up);
-            \KhsCI\Support\Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
+
+            if (Env::get('CI_DEBUG_MEMORY', false)) {
+                Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
+            }
+
             sleep(3);
         }
     }
@@ -71,10 +77,14 @@ class Up extends Command
             $up = new \App\Console\Up();
             $up->up();
             unset($up);
-            \KhsCI\Support\Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
+
+            if (Env::get('CI_DEBUG_MEMORY', false)) {
+                Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
+            }
+
             exit;
         } else {//主进程
-            $pid = pcntl_wait($status, WUNTRACED); //取得子进程结束状态
+            pcntl_wait($status, WUNTRACED); //取得子进程结束状态
             if (pcntl_wifexited($status)) {
                 return;
             }

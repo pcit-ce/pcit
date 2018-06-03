@@ -508,6 +508,7 @@ EOF;
         $this->config_array = $config_array;
 
         if ($this->skip($commit_message, (int) $last_insert_id, $branch, $config)) {
+            $this->writeSkipToDB((int) $last_insert_id);
             return;
         }
 
@@ -565,7 +566,7 @@ EOF;
         if ($branches_exclude) {
             if ((new KhsCI())->build::check($branches_exclude, $branch)) {
 
-                $message = "config exclude $branch, build skip";
+                $message = "config exclude branch $branch, build skip";
 
                 Log::debug(__FILE__, __LINE__, $message);
 
@@ -580,7 +581,7 @@ EOF;
 
             if ((new KhsCI())->build::check($branches_include, $branch)) {
 
-                $message = "config include $branch, building";
+                $message = "config include branch $branch, building  ";
 
                 Log::debug(__FILE__, __LINE__, $message);
 
@@ -893,6 +894,7 @@ EOF;
         $this->config_array = $config_array;
 
         if ($this->skip($commit_message, (int) $last_insert_id, $branch, $config)) {
+            $this->writeSkipToDB((int) $last_insert_id);
             return;
         }
 
