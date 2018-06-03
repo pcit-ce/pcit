@@ -537,6 +537,7 @@ EOF;
         }
 
         if (null === $config) {
+            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because config is empty');
             return false;
         }
 
@@ -545,15 +546,17 @@ EOF;
         $branches = $yaml_obj->branches ?? null;
 
         if (null === $branches) {
+            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty');
 
             return false;
         }
 
-        $branches_exclude = $branches->exclude ?? [];
+        $branches_exclude = $branches['exclude'] ?? [];
 
-        $branches_include = $branches->include ?? [];
+        $branches_include = $branches['include'] ?? [];
 
         if ([] === $branches_exclude and [] === $branches_include) {
+            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty');
 
             return false;
         }
@@ -889,7 +892,7 @@ EOF;
 
         $this->config_array = $config_array;
 
-        if ($this->skip($commit_message, (int) $last_insert_id)) {
+        if ($this->skip($commit_message, (int) $last_insert_id, $branch, $config)) {
             return;
         }
 
