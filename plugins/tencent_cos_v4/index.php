@@ -16,9 +16,12 @@ $config = [
 try {
     $cosApi = new Api($config);
 
-    $ret = $cosApi->upload(getenv('COS_BUCKET'), getenv('COS_FILE'), getenv('COS_LABEL'));
+    foreach (json_decode(getenv('COS_FILE'), true) as $file => $label) {
+        $ret = $cosApi->upload(getenv('COS_BUCKET'), $file, $label);
 
-    var_dump($ret);
+        var_dump($ret);
+    }
+
 } catch (Throwable $e) {
     echo $e->__toString();
 }

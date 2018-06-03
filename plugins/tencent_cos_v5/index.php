@@ -13,13 +13,15 @@ try {
         ],
     ]);
 
-    $result = $cosClient->putObject([
-        'Bucket' => getenv('COS_BUCKET'),
-        'Key' => getenv('COS_LABEL'),
-        'Body' => fopen(getenv('COS_FILE'), 'rb'),
-    ]);
+    foreach (json_decode(getenv('COS_FILE'), true) as $file => $label) {
+        $result = $cosClient->putObject([
+            'Bucket' => getenv('COS_BUCKET'),
+            'Key' => $label,
+            'Body' => fopen($file, 'rb'),
+        ]);
 
-    var_dump($result);
+        var_dump($result);
+    }
 } catch (Throwable $e) {
     echo $e->__toString();
 }
