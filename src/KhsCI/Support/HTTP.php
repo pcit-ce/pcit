@@ -11,6 +11,16 @@ class HTTP
 {
     private static $curl;
 
+    private static $code;
+
+    /**
+     * @return mixed
+     */
+    public static function getCode()
+    {
+        return self::$code;
+    }
+
     /**
      * @param string      $url
      * @param string|null $data
@@ -22,7 +32,11 @@ class HTTP
      */
     public static function post(string $url, string $data = null, array $header = [])
     {
-        return self::getCurl()->post($url, $data, $header);
+        $curl = self::getCurl();
+        $output = $curl->post($url, $data, $header);
+        self::$code = $curl->getCode();
+
+        return $output;
     }
 
     private static function getCurl()
@@ -51,7 +65,11 @@ class HTTP
      */
     public static function get(string $url, string $data = null, array $header = [])
     {
-        return self::getCurl()->get($url, $data, $header);
+        $curl = self::getCurl();
+        $output = $curl->get($url, $data, $header);
+        self::$code = $curl->getCode();
+
+        return $output;
     }
 
     /**
@@ -64,6 +82,10 @@ class HTTP
      */
     public static function delete(string $url, array $header = [])
     {
-        return self::getCurl()->delete($url, $header);
+        $curl = self::getCurl();
+        $output = $curl->delete($url, $header);
+        self::$code = $curl->getCode();
+
+        return $output;
     }
 }

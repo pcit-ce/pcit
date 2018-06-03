@@ -239,13 +239,21 @@ class Up
      *
      * @throws Exception
      */
-    private function getConfig(int $rid, string $commit_id)
+    private function getConfig(?int $rid, string $commit_id)
     {
-        $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
+        if (null !== $rid) {
+            $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
 
-        $url = Git::getRawUrl($this->git_type, $repo_full_name, $commit_id, '.khsci.yml');
+            $url = Git::getRawUrl($this->git_type, $repo_full_name, $commit_id, '.khsci.yml');
+        } else {
+            $url = $commit_id;
+        }
 
         $yaml_file_content = HTTP::get($url);
+
+        if (404 === Http::getCode()) {
+            return [];
+        }
 
         if (!$yaml_file_content) {
             Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml");
@@ -528,7 +536,7 @@ EOF;
      *
      * @throws Exception
      */
-    public function skip(string $commit_message, int $build_key_id, string $branch = null, string $config = null)
+    private function skip(string $commit_message, int $build_key_id, string $branch = null, string $config = null)
     {
         // check commit message
         if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $commit_message)) {
@@ -1367,5 +1375,10 @@ EOF;
         self::updateGitHubAppChecks((int) $external_id);
 
         Build::updateBuildStatus((int) $external_id, 'pending');
+    }
+
+    public function __call($name, $arguments)
+    {
+        return $this->$name(...$arguments);
     }
 }
