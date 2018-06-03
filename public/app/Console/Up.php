@@ -252,6 +252,8 @@ class Up
         $yaml_file_content = HTTP::get($url);
 
         if (404 === Http::getCode()) {
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml");
+
             return [];
         }
 

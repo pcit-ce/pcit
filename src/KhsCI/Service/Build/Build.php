@@ -81,30 +81,36 @@ class Build
                              ?string $pull_request_source,
                              ?string $repo_full_name): void
     {
-        $this->unique_id = session_create_id();
-        $this->commit_id = $commit_id;
-        $this->commit_message = $commit_message;
-        $this->branch = $branch;
-        $this->event_type = $event_type;
-        $this->pull_id = $pull_request_id;
-        $this->tag_name = $tag_name;
-        $this->git_type = $git_type;
-        $this->config = $config;
-        $this->pull_request_source = $pull_request_source;
-        $this->build_key_id = (int) $build_key_id;
-        $this->repo_full_name = $repo_full_name;
-
-        Log::debug(__FILE__, __LINE__, json_encode([
-            'unique_id' => $this->unique_id,
-            'build_key_id' => $build_key_id,
-            'event_type' => $event_type,
-            'commit_id' => $commit_id,
-            'pull_request_id' => $pull_request_id,
-            'tag_name' => $tag_name,
-            'git_type' => $git_type,
-        ]));
-
         try {
+            $this->build_key_id = (int) $build_key_id;
+            $this->config = $config;
+            $this->commit_id = $commit_id;
+
+            if ('[]' === $config) {
+                throw new Exception(CI::BUILD_STATUS_PASSED);
+            }
+
+            $this->unique_id = session_create_id();
+            $this->commit_message = $commit_message;
+            $this->branch = $branch;
+            $this->event_type = $event_type;
+            $this->pull_id = $pull_request_id;
+            $this->tag_name = $tag_name;
+            $this->git_type = $git_type;
+            $this->pull_request_source = $pull_request_source;
+            $this->repo_full_name = $repo_full_name;
+
+            Log::debug(__FILE__, __LINE__, json_encode([
+                'unique_id' => $this->unique_id,
+                'build_key_id' => $build_key_id,
+                'event_type' => $event_type,
+                'commit_id' => $commit_id,
+                'pull_request_id' => $pull_request_id,
+                'tag_name' => $tag_name,
+                'git_type' => $git_type,
+            ]));
+
+
             // 是否启用构建
             $this->getRepoBuildActivateStatus((int) $rid);
 

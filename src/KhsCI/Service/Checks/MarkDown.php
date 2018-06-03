@@ -28,15 +28,19 @@ Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master
 EOF;
 
     /**
-     * @param string $language
-     * @param string $os
-     * @param string $config
-     * @param string $build_log
+     * @param string      $language
+     * @param string      $os
+     * @param null|string $config
+     * @param null|string $build_log
      *
      * @return string
      */
-    public function success(string $language, string $os, string $config, string $build_log)
+    public function success(string $language, string $os, ?string $config, ?string $build_log)
     {
+        $config = $config ?? 'This repo not include .khsci.yml file';
+
+        $build_log = $build_log ?? 'This repo not include .khsci.yml file';
+
         return $this->header.<<<EOF
 
 # Build Configuration
@@ -67,13 +71,15 @@ EOF;
     /**
      * @param string      $language
      * @param string      $os
-     * @param string      $config
+     * @param null|string $config
      * @param null|string $build_log
      *
      * @return string
      */
-    public function failure(string $language, string $os, string $config, ?string $build_log)
+    public function failure(string $language, string $os, ?string $config, ?string $build_log)
     {
+        $config = $config ?? 'This repo .khsci.yml file parse error';
+
         return $this->header.<<<EOF
 
 # Build Configuration

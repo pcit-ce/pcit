@@ -26,8 +26,8 @@ class CIException extends Exception
      * @param Throwable|null $previous
      */
     public function __construct(?string $unique_id,
-                                string $commit_id,
-                                string $event_type,
+                                ?string $commit_id,
+                                ?string $event_type,
                                 string $message = '',
                                 int $code = 0,
                                 Throwable $previous = null)
