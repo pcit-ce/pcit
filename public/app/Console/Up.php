@@ -507,7 +507,7 @@ EOF;
 
         $this->config_array = $config_array;
 
-        if ($this->skip($commit_message, (int) $last_insert_id)) {
+        if ($this->skip($commit_message, (int) $last_insert_id, $branch, $config)) {
             return;
         }
 
@@ -515,31 +515,85 @@ EOF;
     }
 
     /**
-     * 检查 commit 信息跳过构建.
+     * 检查 commit 信息跳过构建. branch 匹配构建
      *
      * @param string $commit_message
      * @param int    $build_key_id
+     *
+     * @param string $branch
+     * @param string $config
      *
      * @return bool
      *
      * @throws Exception
      */
-    private function skip(string $commit_message, int $build_key_id)
+    private function skip(string $commit_message, int $build_key_id, string $branch = null, string $config = null)
     {
-        $output = stripos($commit_message, '[skip ci]');
-        $output2 = stripos($commit_message, '[ci skip]');
+        // check commit message
+        if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $commit_message)) {
+            Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message');
 
-        if (false === $output && false === $output2) {
+            return true;
+        }
+
+        $yaml_obj = (object) json_decode($config, true);
+
+        $branches = $yaml_obj->branches ?? null;
+
+        if (null === $branches) {
+
             return false;
         }
 
+        $branches_exclude = $branches->exclude ?? [];
+
+        $branches_include = $branches->include ?? [];
+
+        if ([] === $branches_exclude and [] === $branches_include) {
+
+            return false;
+        }
+
+        // 匹配排除分支
+        if ($branches_exclude) {
+            if ((new KhsCI())->build::check($branches_exclude, $branch)) {
+
+                $message = "config exclude $branch, build skip";
+
+                Log::debug(__FILE__, __LINE__, $message);
+
+                echo $message;
+
+                return true;
+            }
+        }
+
+        // 匹配包含分支
+        if ($branches_include) {
+
+            if ((new KhsCI())->build::check($branches_include, $branch)) {
+
+                $message = "config include $branch, building";
+
+                Log::debug(__FILE__, __LINE__, $message);
+
+                echo $message;
+
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @throws Exception
+     */
+    private function writeSkipToDB(int $build_key_id)
+    {
         Build::updateBuildStatus($build_key_id, CI::BUILD_STATUS_SKIP);
-
-        Log::debug(__FILE__, __LINE__, $build_key_id.' is skip');
-
-        echo "Build ID $build_key_id skipped via commit message";
-
-        return true;
     }
 
     /**

@@ -218,14 +218,12 @@ class Build
         // 解析 .khsci.yml.
 
         $git = $yaml_obj->clone['git'] ?? null;
-
+        $cache = $yaml_obj->cache ?? null;
         $workspace = $yaml_obj->workspace ?? null;
-
         $pipeline = $yaml_obj->pipeline ?? null;
-
         $services = $yaml_obj->services ?? null;
-
         $matrix = $yaml_obj->matrix ?? null;
+        $config = $yaml_obj->config ?? null;
 
         if ($git) {
             $depth = $git['depth'] ?? 10;
@@ -474,7 +472,7 @@ class Build
      * @param string     $image
      * @param array|null $commands
      *
-     * @return string|void
+     * @return string
      *
      * @throws Exception
      */
@@ -812,5 +810,44 @@ class Build
 
             Log::connect()->debug('Build Stoped Delete Network '.$unique_id);
         }
+    }
+
+    /**
+     * @param string|array $pattern
+     * @param string       $subject
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public static function check($pattern, string $subject)
+    {
+        if (is_string($pattern)) {
+            return self::checkString($pattern, $subject);
+        }
+
+        if (is_array($pattern)) {
+            foreach ($pattern as $k) {
+                if (self::checkString($k, $subject)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $pattern
+     * @param string $subject
+     *
+     * @return bool
+     */
+    private static function checkString(string $pattern, string $subject)
+    {
+        if (preg_match('#'.$pattern.'#', $subject)) {
+            return true;
+        }
+
+        return false;
     }
 }
