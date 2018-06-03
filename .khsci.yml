@@ -65,6 +65,12 @@ pipeline:
       # branch:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
+      # tag: 7.1.*
+
+      # ^[0-9.]+$     1.2.0
+      # ^[0-9.]+      1.2.0-rc
+      # ^v([0-9.]+)$  v1.2.3
+
 
   #
   # This is a build docker image demo，when tag push
@@ -158,8 +164,8 @@ matrix:
     - 10.3-alpine
 
 branches:
-  include: [ master, dev, feature/* ]
-  exclude: [ release/1.0.0, release/1.1.* ]
+  include: [ master]
+  exclude: de*
 
 config:
   aliyun:
