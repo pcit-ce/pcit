@@ -22,6 +22,7 @@
     * [config](usage/config.md)
     * [skip build](usage/skip.md)
     * [System Env](usage/system_env.md)
+    * [CLI](usage/cli/README.md)
 
 ## Example
 

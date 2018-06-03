@@ -12,6 +12,4 @@
 
 * `COS_BUCKET`
 
-* `COS_LABEL` 上传之后的文件名
-
 * `COS_FILE` 待上传的文件名

@@ -59,15 +59,15 @@ class GitHubClient
     /**
      * 获取当前用户或指定用户名下所有的仓库列表（包括组织中的列表）.
      *
-     * @param int    $page
-     * @param bool   $raw
-     * @param string $username
+     * @param int         $page
+     * @param bool        $raw
+     * @param string|null $username
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public function getRepos(int $page = 1, bool $raw = false, string $username)
+    public function getRepos(int $page = 1, bool $raw = false, string $username = null)
     {
         $url = $this->api_url.'/user/repos?page='.$page;
 

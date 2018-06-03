@@ -2,6 +2,7 @@
 
 <html>
 <head>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <title>KhsCI Login</title>
@@ -13,11 +14,16 @@
   <br>
 </header>
 <div style="text-align: center;margin-top: 200px">
-  <button type="button" onclick="github()">GitHub</button>
-  <button type="button" onclick="github_app()">GitHub App Beta</button>
-  <button type="button" onclick="github_app_install()">Install GitHub App in your Repo</button>
-  <button type="button" onclick="coding()">Coding</button>
-  <button type="button" onclick="gitee()">Gitee</button>
+  <button type="button" onclick="hello()"
+          title="KhsCI Hello 能使你在两秒内登录 KhsCI，而无需密码，只需看一下">KhsCI Hello
+  </button>
+  <button type="button" onclick="github()" title="Login With GitHub">GitHub</button>
+  <button type="button" onclick="github_app()">GitHub App New</button>
+  <button type="button" onclick="github_app_install()" title="Install KhsCI in your repo">
+    Install GitHub App in your Repo
+  </button>
+  <button type="button" onclick="coding()" title="Login With Coding Coming soon">Coding</button>
+  <button type="button" onclick="gitee()" title="Login With Gitee Coming soon">Gitee</button>
   <br><br><br>
   <a href="https://github.com/khs1994-php/khsci/tree/master/docs" target="_blank"><h1>Support Docs</h1></a>
 </div>

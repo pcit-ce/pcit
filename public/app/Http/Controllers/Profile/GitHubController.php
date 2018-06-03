@@ -181,8 +181,13 @@ class GitHubController
             }
 
             if (!$repo_key_id) {
-                $sql = 'INSERT INTO repo VALUES(null,?,?,?,?,?,?,?,JSON_ARRAY(?),JSON_ARRAY(?),?,null,?,null)';
-
+                $sql = <<<EOF
+INSERT INTO repo(
+id,git_type, rid, repo_prefix, repo_name, repo_full_name, 
+webhooks_status, build_activate, repo_admin, repo_collaborators, default_branch, 
+last_sync
+) VALUES(null,?,?,?,?,?,?,?,JSON_ARRAY(?),JSON_ARRAY(?),?,?)
+EOF;
                 DB::insert($sql, [
                     $git_type, $rid, $repoPrefix, $repoName, $repo_full_name,
                     $webhooksStatus, $buildActivate, $insert_admin, $insert_collaborators, $default_branch, $time,

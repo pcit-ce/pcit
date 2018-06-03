@@ -36,7 +36,7 @@ $ git clone https://github.com/khs1994-docker/php-demo
 
 #### 编辑 `.khsci.yml` 文件
 
-* 为降低入门难度，暂时与 `Drone CI` 模板兼容，但文件名为 `.khsci.yml`
+为降低入门难度，参考了 `Drone CI` 与 `Travis CI` 构建配置模板，**KhsCI** 的构建配置文件名为 `.khsci.yml`
 
 #### 推送到 GitHub
 
