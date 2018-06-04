@@ -31,7 +31,7 @@ try {
 
 ini_set('session.cookie_path', '/');
 ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
-ini_set('session.gc_maxlifetime', "690000"); // s
+ini_set('session.gc_maxlifetime', '690000'); // s
 ini_set('session.cookie_lifetime', '690000'); // s
 ini_set('session.cookie_secure', 'On');
 
@@ -49,7 +49,7 @@ $debug = getenv('CI_DEBUG') ?? false;
 
 spl_autoload_register(function ($class): void {
     $class = lcfirst($class);
-    $file = __DIR__.'/../'.str_replace('\\', DIRECTORY_SEPARATOR, $class);
+    $file = __DIR__.'/../'.str_replace('\\', \DIRECTORY_SEPARATOR, $class);
     $file = $file.'.php';
 
     if (file_exists($file)) {

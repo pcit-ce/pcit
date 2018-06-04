@@ -99,29 +99,25 @@ class KhsCI extends Container
         $this['config'] = Config::config($config, $git_type);
 
         if ($this['config']['github']['access_token'] ?? false) {
-
             $this['curl_config'] = [null, false,
                 [
                     'Authorization' => 'token '.$this['config']['github']['access_token'],
                     'Accept' => 'application/vnd.github.machine-man-preview+json',
-                ]
+                ],
             ];
-
         } elseif ($this['config']['github_app']['access_token'] ?? false) {
             $this['curl_config'] = [null, false,
                 [
                     'Authorization' => 'token '.$this['config']['github_app']['access_token'],
                     'Accept' => 'application/vnd.github.machine-man-preview+json',
-                ]
+                ],
             ];
-
         } elseif ($this['config']['gitee']['access_token'] ?? false) {
             $this['curl_config'] = [null, false,
                 [
                     'Authorization' => 'token '.$this['config']['gitee']['access_token'],
-                ]
+                ],
             ];
-
         } else {
             $this['curl_config'] = [];
         }

@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\ApiToken;
 use App\Build;
 use App\Repo;
-use App\User;
 use Curl\Curl;
 use Exception;
 use KhsCI\Support\Env;

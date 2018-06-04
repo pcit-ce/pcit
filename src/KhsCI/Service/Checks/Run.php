@@ -200,9 +200,9 @@ class Run
      * @param string     $title
      * @param string     $summary
      * @param string     $text
-     * @param array|null $annotations [$annotation, $annotation2]
-     * @param array|null $images      [$image, $image2]
-     * @param array|null $actions     [$action]
+     * @param array|null $annotations    [$annotation, $annotation2]
+     * @param array|null $images         [$image, $image2]
+     * @param array|null $actions        [$action]
      *
      * @return mixed
      *

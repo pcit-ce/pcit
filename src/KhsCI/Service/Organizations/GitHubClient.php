@@ -48,22 +48,23 @@ class GitHubClient
     }
 
     /**
-     * List blocked users
+     * List blocked users.
      *
      * @param string $org_name
      */
-    public function listBlockedUsers(string $org_name)
+    public function listBlockedUsers(string $org_name): void
     {
         $url = $this->api_url.'/orgs/'.$org_name.'/blocks';
     }
 
     /**
-     * Check whether a user is blocked from an organization
+     * Check whether a user is blocked from an organization.
      *
      * @param string $org_name
      * @param string $username
      *
      * @return bool
+     *
      * @throws Exception
      */
     public function isBlockedUser(string $org_name, string $username)
@@ -75,12 +76,10 @@ class GitHubClient
         $http_return_code = $this->curl->getCode();
 
         if (204 === $http_return_code) {
-
             return true;
         }
 
         if (404 === $http_return_code) {
-
             return false;
         }
 
@@ -88,7 +87,7 @@ class GitHubClient
     }
 
     /**
-     * Block a user
+     * Block a user.
      *
      * 204
      *
@@ -96,6 +95,7 @@ class GitHubClient
      * @param string $username
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function blockUser(string $org_name, string $username)
@@ -106,7 +106,7 @@ class GitHubClient
     }
 
     /**
-     * Unblock a user
+     * Unblock a user.
      *
      * 204
      *
@@ -114,6 +114,7 @@ class GitHubClient
      * @param string $username
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function unblockUser(string $org_name, string $username)

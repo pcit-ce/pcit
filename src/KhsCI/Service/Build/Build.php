@@ -110,7 +110,6 @@ class Build
                 'git_type' => $git_type,
             ]));
 
-
             // 是否启用构建
             $this->getRepoBuildActivateStatus((int) $rid);
 
@@ -823,6 +822,7 @@ class Build
      * @param string       $subject
      *
      * @return bool
+     *
      * @throws Exception
      */
     public static function check($pattern, string $subject)

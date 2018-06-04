@@ -212,7 +212,6 @@ EOF;
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
-
             if ($this->build_key_id && $this->build_status) {
                 BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
             }
@@ -227,7 +226,6 @@ EOF;
             }
 
             if (!$this->unique_id) {
-
                 return;
             }
 

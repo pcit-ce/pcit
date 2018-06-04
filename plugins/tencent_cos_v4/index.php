@@ -21,7 +21,6 @@ try {
 
         var_dump($ret);
     }
-
 } catch (Throwable $e) {
     echo $e->__toString();
 }

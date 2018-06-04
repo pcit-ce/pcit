@@ -221,6 +221,7 @@ class GitHubClient
      * @param bool   $squash
      *
      * @return bool|mixed
+     *
      * @throws Exception
      */
     public function merge(string $username,

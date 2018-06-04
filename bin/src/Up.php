@@ -41,12 +41,12 @@ class Up extends Command
 
         \KhsCI\Support\DB::close();
 
-        Log::debug(__FILE__, __LINE__, "Start Memory is ".memory_get_usage());
+        Log::debug(__FILE__, __LINE__, 'Start Memory is '.memory_get_usage());
 
         set_time_limit(0);
 
         if (PHP_OS === 'Linux') {
-            # http://www.laruence.com/2009/06/11/930.html
+            // http://www.laruence.com/2009/06/11/930.html
 
             while (1) {
                 $this->process_execute();
@@ -60,7 +60,7 @@ class Up extends Command
             unset($up);
 
             if (Env::get('CI_DEBUG_MEMORY', false)) {
-                Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
+                Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
             }
 
             sleep(3);
@@ -70,16 +70,16 @@ class Up extends Command
     /**
      * @throws Exception
      */
-    public function process_execute()
+    public function process_execute(): void
     {
         $pid = pcntl_fork(); //创建子进程
-        if ($pid == 0) {//子进程
+        if (0 == $pid) {//子进程
             $up = new \App\Console\Up();
             $up->up();
             unset($up);
 
             if (Env::get('CI_DEBUG_MEMORY', false)) {
-                Log::debug(__FILE__, __LINE__, "Now Memory is ".memory_get_usage());
+                Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
             }
 
             exit;
@@ -90,5 +90,4 @@ class Up extends Command
             }
         }
     }
-
 }

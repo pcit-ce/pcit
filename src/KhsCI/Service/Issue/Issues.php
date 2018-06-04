@@ -116,7 +116,7 @@ class Issues
      * @param int    $issue_number
      * @param string $title
      * @param string $body
-     * @param string $state State of the issue. Either open or closed.
+     * @param string $state          State of the issue. Either open or closed.
      * @param int    $milestone
      * @param array  $labels
      * @param array  $assignees

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Tests\CLI;
 
 use Exception;
@@ -12,7 +14,7 @@ class Up extends KhsCITestCase
      */
     private $up;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->up = new \App\Console\Up();
     }
@@ -20,33 +22,33 @@ class Up extends KhsCITestCase
     /**
      * @throws Exception
      */
-    public function testSkip()
+    public function testSkip(): void
     {
         $up = $this->up;
 
         $bool = $up->skip('', 1);
 
-        $this->assertEquals(false, $bool);
+        $this->assertFalse($bool);
 
         $bool = $up->skip('commit message [skip ci]', 1);
 
-        $this->assertEquals(true, $bool);
+        $this->assertTrue($bool);
 
         $bool = $up->skip('', 1, 'master',
             '{"branches": {"exclude": ["dev*"],"include": ["master"]}}');
 
-        $this->assertEquals(false, $bool);
+        $this->assertFalse($bool);
 
         $bool = $up->skip('', 1, 'dev',
             '{"branches": {"exclude": ["de*"],"include": ["master"]}}');
 
-        $this->assertEquals(true, $bool);
+        $this->assertTrue($bool);
     }
 
     /**
      * @throws Exception
      */
-    public function testGetConfig()
+    public function testGetConfig(): void
     {
         $output = $this->up->getConfig(
             null,
@@ -62,5 +64,4 @@ class Up extends KhsCITestCase
 
         $this->assertArrayHasKey('pipeline', $output);
     }
-
 }

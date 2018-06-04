@@ -1,4 +1,4 @@
-# 语言设置
+# language
 
 ```yaml
 language: php

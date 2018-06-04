@@ -37,13 +37,13 @@
 * `CI_TZ` String 时区设置
 
 * `CI_REDIS_HOST` String 若使用 khs1994-docker/lnmp LNMP 解决方案，以下信息无需填写
-* `CI_REDIS_PORT`
+* `CI_REDIS_PORT` String
 
-* `CI_MYSQL_HOST`
-* `CI_MYSQL_PORT`
-* `CI_MYSQL_USERNAME`
-* `CI_MYSQL_PASSWORD`
-* `CI_MYSQL_DBNAME`
+* `CI_MYSQL_HOST` String
+* `CI_MYSQL_PORT` String
+* `CI_MYSQL_USERNAME` String
+* `CI_MYSQL_PASSWORD` String
+* `CI_MYSQL_DBNAME` String
 
 * `CI_WEBHOOKS_TOKEN` String Webhooks Secert (仅支持 GitHub)
 * `CI_WEBHOOKS_DEBUG` Bool Webhooks 是否开启 Debug，若开启系统将不验证 Secret
@@ -63,8 +63,8 @@
 * `CI_GITHUB_TEST_USERNAME` String 在测试系统中使用的 GitHub 用户名及密码
 * `CI_GITHUB_TEST_PASSWORD` String
 
-* `CI_EMAIL_HOST` 电子邮件服务器地址
-* `CI_EMAIL_USERNAME`
-* `CI_EMAIL_PASSWORD`
-* `CI_EMAIL_FROM` 电子邮件地址
-* `CI_EMAIL_FROM_NAME` 电子邮件来源名称
+* `CI_EMAIL_HOST` String 电子邮件服务器地址
+* `CI_EMAIL_USERNAME` String
+* `CI_EMAIL_PASSWORD` String
+* `CI_EMAIL_FROM` String 电子邮件地址
+* `CI_EMAIL_FROM_NAME` String 电子邮件来源名称

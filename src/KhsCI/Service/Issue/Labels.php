@@ -8,7 +8,7 @@ use Exception;
 use KhsCI\Service\CICommon;
 
 /**
- * Class Labels
+ * Class Labels.
  *
  * @see https://developer.github.com/v3/issues/labels/
  */
@@ -17,11 +17,12 @@ class Labels
     use CICommon;
 
     /**
-     * List all labels for this repository
+     * List all labels for this repository.
      *
      * @param string $repo_full_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function all(string $repo_full_name)
@@ -32,12 +33,13 @@ class Labels
     }
 
     /**
-     * Get a single label
+     * Get a single label.
      *
      * @param string $repo_full_name
      * @param string $label_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function find(string $repo_full_name, string $label_name)
@@ -48,7 +50,7 @@ class Labels
     }
 
     /**
-     * Create a label
+     * Create a label.
      *
      * post 201
      *
@@ -58,6 +60,7 @@ class Labels
      * @param string $description
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function create(string $repo_full_name, string $label_name, string $color, string $description)
@@ -74,7 +77,7 @@ class Labels
     }
 
     /**
-     * Update a label
+     * Update a label.
      *
      * patch
      *
@@ -85,6 +88,7 @@ class Labels
      * @param string $description
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function update(string $repo_full_name,
@@ -98,14 +102,14 @@ class Labels
         $data = [
             'name' => $label_name,
             'color' => $color,
-            'description' => $description
+            'description' => $description,
         ];
 
         return $this->curl->post($url, json_encode($data));
     }
 
     /**
-     * Delete a label
+     * Delete a label.
      *
      * 204
      *
@@ -113,6 +117,7 @@ class Labels
      * @param string $label_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function delete(string $repo_full_name, string $label_name)
@@ -123,12 +128,13 @@ class Labels
     }
 
     /**
-     * List labels on an issue
+     * List labels on an issue.
      *
      * @param string $repo_full_name
      * @param int    $issue_number
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function listLabelsOnIssue(string $repo_full_name, int $issue_number)
@@ -139,13 +145,14 @@ class Labels
     }
 
     /**
-     * Add labels to an issue
+     * Add labels to an issue.
      *
      * @param string $repo_full_name
      * @param int    $issue_number
      * @param array  $label
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function addLabelsOnIssue(string $repo_full_name, int $issue_number, array $label)
@@ -156,13 +163,14 @@ class Labels
     }
 
     /**
-     * Remove a label from an issue
+     * Remove a label from an issue.
      *
      * @param string $repo_full_name
      * @param int    $issue_number
      * @param string $label_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function removeLabelOnIssue(string $repo_full_name, int $issue_number, string $label_name)
@@ -173,13 +181,14 @@ class Labels
     }
 
     /**
-     * Replace all labels for an issue
+     * Replace all labels for an issue.
      *
      * @param string $repo_full_name
      * @param int    $issue_number
      * @param array  $labels
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function replaceAllLabelsForIssue(string $repo_full_name, int $issue_number, array $labels = [])
@@ -190,7 +199,7 @@ class Labels
     }
 
     /**
-     * Remove all labels from an issue
+     * Remove all labels from an issue.
      *
      * 204
      *
@@ -198,6 +207,7 @@ class Labels
      * @param int    $issue_number
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function removeAllLabelsFromIssue(string $repo_full_name, int $issue_number)
@@ -208,12 +218,13 @@ class Labels
     }
 
     /**
-     * Get labels for every issue in a milestone
+     * Get labels for every issue in a milestone.
      *
      * @param string $repo_full_name
      * @param int    $milestones_number
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getLabelsForEveryIssueInAMilestone(string $repo_full_name, int $milestones_number)

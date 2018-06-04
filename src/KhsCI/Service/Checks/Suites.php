@@ -54,7 +54,7 @@ class Suites
      * List check suites for a specific ref.
      *
      * @param string $repo_full_name
-     * @param string $ref Required. The ref can be a SHA, branch name, or a tag name.
+     * @param string $ref            Required. The ref can be a SHA, branch name, or a tag name.
      * @param int    $app_id
      * @param string $check_name
      *

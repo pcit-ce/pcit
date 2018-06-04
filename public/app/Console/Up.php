@@ -526,7 +526,7 @@ EOF;
     }
 
     /**
-     * 检查 commit 信息跳过构建. branch 匹配构建
+     * 检查 commit 信息跳过构建. branch 匹配构建.
      *
      * @param null|string $commit_message
      * @param int         $build_key_id
@@ -548,6 +548,7 @@ EOF;
 
         if (null === $config) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because config is empty');
+
             return false;
         }
 
@@ -574,7 +575,6 @@ EOF;
         // 匹配排除分支
         if ($branches_exclude) {
             if ((new KhsCI())->build::check($branches_exclude, $branch)) {
-
                 $message = "config exclude branch $branch, build skip  ";
 
                 Log::debug(__FILE__, __LINE__, $message);
@@ -587,9 +587,7 @@ EOF;
 
         // 匹配包含分支
         if ($branches_include) {
-
             if ((new KhsCI())->build::check($branches_include, $branch)) {
-
                 $message = "config include branch $branch, building  ";
 
                 Log::debug(__FILE__, __LINE__, $message);
@@ -608,7 +606,7 @@ EOF;
      *
      * @throws Exception
      */
-    private function writeSkipToDB(int $build_key_id)
+    private function writeSkipToDB(int $build_key_id): void
     {
         Build::updateBuildStatus($build_key_id, CI::BUILD_STATUS_SKIP);
     }
@@ -904,6 +902,7 @@ EOF;
 
         if ($this->skip($commit_message, (int) $last_insert_id, $branch, $config)) {
             $this->writeSkipToDB((int) $last_insert_id);
+
             return;
         }
 
