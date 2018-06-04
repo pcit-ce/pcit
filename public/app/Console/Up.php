@@ -399,7 +399,7 @@ class Up
                             'PHP',
                             PHP_OS,
                             null,
-                            'This repo not include .khsci.yml file'
+                            'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/'
                         )
                 );
 
@@ -575,7 +575,7 @@ EOF;
         if ($branches_exclude) {
             if ((new KhsCI())->build::check($branches_exclude, $branch)) {
 
-                $message = "config exclude branch $branch, build skip";
+                $message = "config exclude branch $branch, build skip  ";
 
                 Log::debug(__FILE__, __LINE__, $message);
 

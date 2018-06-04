@@ -37,9 +37,9 @@ EOF;
      */
     public function success(string $language, string $os, ?string $config, ?string $build_log)
     {
-        $config = $config ?? 'This repo not include .khsci.yml file';
+        $config = $config ?? 'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/';
 
-        $build_log = $build_log ?? 'This repo not include .khsci.yml file';
+        $build_log = $build_log ?? 'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/';
 
         return $this->header.<<<EOF
 
@@ -78,7 +78,7 @@ EOF;
      */
     public function failure(string $language, string $os, ?string $config, ?string $build_log)
     {
-        $config = $config ?? 'This repo .khsci.yml file parse error';
+        $config = $config ?? 'This repo .khsci.yml file parse error, please see https://docs.ci.khs1994.com/usage/';
 
         return $this->header.<<<EOF
 

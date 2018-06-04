@@ -2,7 +2,7 @@
 
 * [Overview](README.md)
 * [Getting Help](getting-help.md)
-* [API](https://docs.ci.khs1994.com)
+* [API](https://api.ci.khs1994.com)
 
 ## Install
 
@@ -14,12 +14,14 @@
 ## Usage
 
 * [Usage](usage/README.md)
+    * [language](usage/language.md)
     * [clone](usage/clone.md)
     * [workspace](usage/workspace.md)
     * [pipeline](usage/pipeline.md)
     * [services](usage/services.md)
     * [matrix](usage/matrix.md)
     * [config](usage/config.md)
+    * [branches](usage/branches.md)
     * [skip build](usage/skip.md)
     * [System Env](usage/system_env.md)
     * [CLI](usage/cli/README.md)
