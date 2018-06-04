@@ -98,7 +98,13 @@ EOF;
             $commit_id = $output[3];
 
             if ('[]' === $config) {
-                throw new CIException(null, $commit_id, null, CI::BUILD_STATUS_PASSED);
+                throw new CIException(
+                    null,
+                    $commit_id,
+                    null,
+                    CI::BUILD_STATUS_PASSED,
+                    $this->build_key_id
+                );
             }
 
             $continue = true;
@@ -176,6 +182,11 @@ EOF;
 
             $queue(...$output);
         } catch (CIException $e) {
+
+            if (!$this->build_key_id) {
+                return;
+            }
+
             $this->commit_id = $e->getCommitId();
             $this->unique_id = $e->getUniqueId();
             $this->event_type = $e->getEventType();
@@ -246,6 +257,11 @@ EOF;
         if (!$output) {
             Log::debug(__FILE__, __LINE__, 'Build Log empty, skip');
 
+            return;
+        }
+
+        if (!$this->unique_id) {
+            Log::debug(__FILE__, __LINE__, 'config not found, skip');
             return;
         }
 

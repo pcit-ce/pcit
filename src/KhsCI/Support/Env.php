@@ -20,6 +20,10 @@ class Env
             if (false === $value or '' === $value) {
                 $value = $default;
             }
+
+            'false' === $value && $value = false;
+            'true'  === $value && $value = true;
+
         } catch (\Exception $e) {
             $value = $default;
         }

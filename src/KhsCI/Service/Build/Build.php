@@ -317,7 +317,12 @@ class Build
         $docker_image = $docker->image;
         $docker_network = $docker->network;
 
-        $docker_image->pull('plugins/git');
+        Log::debug(__FILE__, __LINE__, 'pull image plugins/git');
+
+        $image_pull_output = $docker_image->pull('plugins/git');
+
+        Log::debug(__FILE__, __LINE__, $image_pull_output);
+
         $docker_network->create($unique_id);
 
         $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
