@@ -23,7 +23,7 @@ class Repo extends DBModel
      */
     public static function getRid(string $git_type, string $username, string $repo)
     {
-        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
+        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=? ORDER BY id DESC LIMIT 1';
 
         $id = DB::select($sql, [$git_type, $username, $repo], true);
 
@@ -41,7 +41,7 @@ class Repo extends DBModel
      */
     public static function getDefaultBranch(string $git_type, string $username, string $repo)
     {
-        $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
+        $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=? ORDER BY id DESC LIMIT 1';
 
         $default_branch = DB::select($sql, [$git_type, $username, $repo], true);
 
@@ -58,7 +58,7 @@ class Repo extends DBModel
      */
     public static function getRepoFullName(string $git_type, int $rid)
     {
-        $sql = 'SELECT repo_full_name FROM repo WHERE rid=? AND git_type=?';
+        $sql = 'SELECT repo_full_name FROM repo WHERE rid=? AND git_type=? ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$rid, $git_type], true);
     }
@@ -72,7 +72,7 @@ class Repo extends DBModel
      */
     public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name)
     {
-        $sql = 'SELECT installation_id FROM repo WHERE repo_full_name=? AND git_type=?';
+        $sql = 'SELECT installation_id FROM repo WHERE repo_full_name=? AND git_type=? ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$repo_full_name, 'github_app'], true);
     }
@@ -86,7 +86,7 @@ class Repo extends DBModel
      */
     public static function getGitHubInstallationIdByRid(int $rid)
     {
-        $sql = 'SELECT installation_id FROM repo WHERE rid=? AND git_type=?';
+        $sql = 'SELECT installation_id FROM repo WHERE rid=? AND git_type=? ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$rid, 'github_app'], true);
     }
@@ -122,7 +122,7 @@ class Repo extends DBModel
      */
     public static function getAdmin(string $git_type, int $rid)
     {
-        $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND rid=?';
+        $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$git_type, $rid], true);
     }

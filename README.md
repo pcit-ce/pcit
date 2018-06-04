@@ -4,7 +4,7 @@
 
 **国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的 CI/CD 系统**
 
-* [支持文档](https://github.com/khs1994-php/khsci/tree/master/docs)
+* [支持文档](https://docs.ci.khs1994.com)
 
 * [Changelog](https://github.com/khs1994-php/khsci/blob/master/CHANGELOG.md)
 
@@ -12,7 +12,7 @@
 
 * [API](https://ci.khs1994.com/api)
 
-* [API 文档](https://docs.ci.khs1994.com)
+* [API 文档](https://api.ci.khs1994.com)
 
 * [捐赠](https://zan.khs1994.com)
 

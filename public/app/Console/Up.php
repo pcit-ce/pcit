@@ -120,17 +120,16 @@ class Up
 
         $build_output_array = Build::find($build_key_id);
 
-        $khsci = new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]);
-
-        $khsci->repo_status->create(
-            $repo_prefix,
-            $repo_name,
-            $build_output_array['commit_id'],
-            $state ?? 'pending',
-            Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id,
-            'continuous-integration/'.Env::get('CI_NAME').'/'.$build_output_array['event_type'],
-            $description ?? 'The analysis or builds is pending'
-        );
+        (new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]))
+            ->repo_status->create(
+                $repo_prefix,
+                $repo_name,
+                $build_output_array['commit_id'],
+                $state ?? 'pending',
+                Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id,
+                'continuous-integration/'.Env::get('CI_NAME').'/'.$build_output_array['event_type'],
+                $description ?? 'The analysis or builds is pending'
+            );
 
         $log_message = 'Create GitHub commit Status '.$build_key_id;
 
@@ -232,8 +231,8 @@ class Up
     }
 
     /**
-     * @param int    $rid
-     * @param string $commit_id
+     * @param int    $rid       repo id
+     * @param string $commit_id commit id or url(only test)
      *
      * @return mixed
      *
@@ -243,6 +242,7 @@ class Up
     {
         if (null !== $rid) {
             $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
+            Log::debug(__FILE__, __LINE__, $this->git_type." $rid is $repo_full_name");
 
             $url = Git::getRawUrl($this->git_type, $repo_full_name, $commit_id, '.khsci.yml');
         } else {
@@ -393,8 +393,14 @@ class Up
                     CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                     null,
                     null,
-                    (new KhsCI())->check_md->action_required('PHP', PHP_OS, '{}',
-                        'This repo not include .khsci.yml file')
+                    (new KhsCI())
+                        ->check_md
+                        ->success(
+                            'PHP',
+                            PHP_OS,
+                            null,
+                            'This repo not include .khsci.yml file'
+                        )
                 );
 
                 Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
@@ -453,9 +459,7 @@ EOF;
         $obj = json_decode($content);
 
         $rid = $obj->repository->id;
-
         $ref = $obj->ref;
-
         $ref_array = explode('/', $ref);
 
         if ('tags' === $ref_array[1]) {
@@ -465,11 +469,8 @@ EOF;
         }
 
         $branch = $this->ref2branch($ref);
-
         $commit_id = $obj->after;
-
         $compare = $obj->compare;
-
         $head_commit = $obj->head_commit;
 
         if (null === $head_commit) {
@@ -477,9 +478,7 @@ EOF;
         }
 
         $commit_message = $head_commit->message;
-
         $commit_timestamp = Date::parse($head_commit->timestamp);
-
         $author = $head_commit->author;
         $committer_name = $author->name;
         $committer_email = $author->email;
@@ -519,6 +518,7 @@ EOF;
 
         if ($this->skip($commit_message, (int) $last_insert_id, $branch, $config)) {
             $this->writeSkipToDB((int) $last_insert_id);
+
             return;
         }
 
@@ -528,17 +528,16 @@ EOF;
     /**
      * 检查 commit 信息跳过构建. branch 匹配构建
      *
-     * @param string $commit_message
-     * @param int    $build_key_id
-     *
-     * @param string $branch
-     * @param string $config
+     * @param null|string $commit_message
+     * @param int         $build_key_id
+     * @param string      $branch
+     * @param string      $config
      *
      * @return bool
      *
      * @throws Exception
      */
-    private function skip(string $commit_message, int $build_key_id, string $branch = null, string $config = null)
+    private function skip(?string $commit_message, int $build_key_id, string $branch = null, string $config = null)
     {
         // check commit message
         if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $commit_message)) {
@@ -1372,11 +1371,17 @@ EOF;
             return;
         }
 
+        $this->config_array = json_decode(Build::getConfig((int) $external_id), true);
+
+        // $this->skip(null, (int) $external_id, $branch, $config);
+
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
-        self::updateGitHubAppChecks((int) $external_id);
+        if (!$this->config_array) {
+            Build::updateBuildStatus((int) $external_id, 'pending');
+        }
 
-        Build::updateBuildStatus((int) $external_id, 'pending');
+        $this->updateStatus((int) $external_id);
     }
 
     public function __call($name, $arguments)

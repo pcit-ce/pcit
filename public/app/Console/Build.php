@@ -94,6 +94,12 @@ EOF;
             $output = array_values($output);
 
             $this->build_key_id = (int) $output[0];
+            $config = $output[9];
+            $commit_id = $output[3];
+
+            if ('[]' === $config) {
+                throw new CIException(null, $commit_id, null, CI::BUILD_STATUS_PASSED);
+            }
 
             $continue = true;
 

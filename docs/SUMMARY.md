@@ -42,5 +42,5 @@
 ## CLI
 
 * [CLI](cli/README.md)
-    * [Tencent AI](cli/tencent-ai-cli)
-    * [GitHub](github-cli)
+    * [Tencent AI](cli/tencent-ai-cli/README.md)
+    * [GitHub](cli/github-cli/README.md)

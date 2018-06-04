@@ -226,7 +226,7 @@ EOF;
      *
      * @return string
      */
-    public function action_required(string $language, string $os, string $config, ?string $build_log)
+    public function action_required(string $language, string $os, ?string $config, ?string $build_log)
     {
         return $this->header.<<<EOF
 
