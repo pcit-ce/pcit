@@ -65,7 +65,7 @@ class Up
             }
 
             if (!$docker_build_skip) {
-                echo 'Connect Docker Daemon Success, Docker Build Running...';
+                echo '[D]...';
 
                 $build = new BuildDaemon();
 
@@ -1376,7 +1376,7 @@ EOF;
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
-        if (!$this->config_array) {
+        if ($this->config_array) {
             Build::updateBuildStatus((int) $external_id, 'pending');
         }
 

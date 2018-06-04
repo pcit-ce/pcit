@@ -43,8 +43,8 @@ pipeline:
     commands:
       - env
       - pwd
-      - composer install -q
-      - composer update -q
+      - composer install
+      - composer update
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit

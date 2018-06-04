@@ -85,7 +85,7 @@ EOF;
 
             $output = $output[0] ?? null;
 
-            // 数据库没有结果，跳过构建
+            // 数据库没有结果，跳过构建，也就没有 build_key_id
 
             if (!$output) {
                 return;
@@ -183,7 +183,9 @@ EOF;
             $queue(...$output);
         } catch (CIException $e) {
 
+            // 没有 build_key_id，即数据库没有待构项目，跳过
             if (!$this->build_key_id) {
+
                 return;
             }
 
