@@ -364,4 +364,25 @@ EOF;
 
         return DB::select($sql, ["\"$uid\"", $git_type, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
     }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     * @param int    $auto_merge_mode
+     * @param string $commit_id
+     * @param int    $pull_request_number
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function setAutoMerge(string $git_type,
+                                        int $rid,
+                                        int $auto_merge_mode,
+                                        string $commit_id,
+                                        int $pull_request_number)
+    {
+        $sql = 'UPDATE builds SET auto_merge=? WHERE git_type=? AND rid =? AND event_type=? AND pull_request_id=? AND commit_id=?';
+
+        return DB::update($sql, [$auto_merge_mode, $git_type, $rid, CI::BUILD_EVENT_PR, $pull_request_number, $commit_id]);
+    }
 }

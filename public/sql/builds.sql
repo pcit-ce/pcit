@@ -38,3 +38,6 @@ ALTER TABLE builds
 ALTER TABLE builds
   ADD COLUMN pull_request_source VARCHAR(200)
   after pull_request_id;
+
+ALTER TABLE builds
+  ADD COLUMN auto_merge INT;

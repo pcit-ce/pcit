@@ -217,8 +217,7 @@ class GitHubClient
      * @param string $commit_title
      * @param string $commit_message
      * @param string $sha
-     * @param bool   $rebase
-     * @param bool   $squash
+     * @param string $merge_method
      *
      * @return bool|mixed
      *
@@ -230,19 +229,8 @@ class GitHubClient
                           string $commit_title,
                           string $commit_message,
                           string $sha,
-                          bool $rebase = false,
-                          bool $squash = false)
+                          string $merge_method = 'merge')
     {
-        if ($rebase && $squash) {
-            throw new Exception('', 500);
-        }
-
-        $merge_method = false;
-
-        $rebase && $merge_method = 'rebase';
-
-        $squash && $merge_method = 'squash';
-
         $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, 'merge']);
 
         $data = [

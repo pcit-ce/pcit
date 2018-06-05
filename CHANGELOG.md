@@ -2,6 +2,10 @@
 
 ## v18.06.0
 
+### 2018/06/05
+
+* [ ] Pull_request assignees KhsCI，实现测试通过自动 merge
+
 ### 2018/06/03
 
 * [ ] AI + CI，人脸登录网站? 代号 `KhsCI Hello`

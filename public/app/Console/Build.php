@@ -18,8 +18,8 @@ use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
 
 /**
- * @method setUniqueId($name, $value)
- * @method setBuildKeyId($name, $value)
+ * @method setUniqueId($name = 'unique_id', $value)
+ * @method setBuildKeyId($name = 'build_key_id', $value)
  *
  */
 class Build
