@@ -40,7 +40,6 @@ use WeChat\WeChat;
  * @property Service\Webhooks\Webhooks            $webhooks
  * @property Service\Build\Build                  $build
  * @property TencentAI                            $tencent_ai
- * @property Service\Users\CodingClient           $coding_user_basic_info
  * @property Service\Users\GitHubClient           $user_basic_info
  * @property Service\Checks\Run                   $check_run
  * @property Service\Checks\Suites                $check_suites

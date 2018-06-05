@@ -15,6 +15,7 @@
 
 * `CI_SESSION_DOMAIN` String SESSION domain
 
+* `CI_CODING_HOST` String Coding 企业版部署地址
 * `CI_CODING_CLIENT_ID` String Coding.net 应用 ID
 * `CI_CODING_CLIENT_SECRET` String Coding.net 应用 Secret
 * `CI_CODING_CALLBACK_URL` String Coding.net 应用 OAuth 回调地址

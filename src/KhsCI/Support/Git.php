@@ -217,8 +217,8 @@ class Git
 
     /**
      * @param string $type
-     * @param string $repo_full_name
-     * @param string $commit_id branch_name commit_id
+     * @param string $repo_full_name username/reponame
+     * @param string $commit_id      branch_name commit_id
      * @param string $file_name
      *
      * @return string

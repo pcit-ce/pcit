@@ -17,6 +17,11 @@ use KhsCI\Support\Env;
 use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
 
+/**
+ * @method setUniqueId($name, $value)
+ * @method setBuildKeyId($name, $value)
+ *
+ */
 class Build
 {
     private $commit_id;
@@ -40,20 +45,9 @@ class Build
      */
     private $khsci;
 
-    /**
-     * @param mixed $unique_id
-     */
-    public function setUniqueId($unique_id): void
+    public function __set($name, $value)
     {
-        $this->$unique_id = $unique_id;
-    }
-
-    /**
-     * @param mixed $build_key_id
-     */
-    public function setBuildKeyId($build_key_id): void
-    {
-        $this->build_key_id = $build_key_id;
+        $this->$name = $value;
     }
 
     /**
@@ -88,6 +82,7 @@ EOF;
             // 数据库没有结果，跳过构建，也就没有 build_key_id
 
             if (!$output) {
+
                 return;
             }
 
@@ -239,6 +234,7 @@ EOF;
             }
 
             if (!$this->unique_id) {
+
                 return;
             }
 
