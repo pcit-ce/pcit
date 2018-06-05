@@ -6,7 +6,7 @@ namespace KhsCI\Service\OAuth;
 
 use Curl\Curl;
 
-interface OAuth
+interface OAuthInterface
 {
     public function __construct($config, Curl $curl);
 

@@ -21,10 +21,10 @@ use WeChat\WeChat;
  * $a = $container['a'];
  *
  * @property Service\GitHubApp\Installations      $github_apps_installations
- * @property Service\OAuth\Coding                 $oauth_coding
- * @property Service\OAuth\GitHub                 $oauth_github
- * @property Service\OAuth\GitHubApp              $oauth_github_app
- * @property Service\OAuth\Gitee                  $oauth_gitee
+ * @property Service\OAuth\CodingClient           $oauth_coding
+ * @property Service\OAuth\GitHubClient           $oauth_github
+ * @property Service\OAuth\GitHubAppClient        $oauth_github_app
+ * @property Service\OAuth\GiteeClient            $oauth_gitee
  * @property Service\Issue\Assignees              $issue_assignees
  * @property Service\Issue\Comments               $issue_comments
  * @property Service\Issue\Events                 $issue_events
@@ -40,6 +40,7 @@ use WeChat\WeChat;
  * @property Service\Webhooks\Webhooks            $webhooks
  * @property Service\Build\Build                  $build
  * @property TencentAI                            $tencent_ai
+ * @property Service\Users\CodingClient           $coding_user_basic_info
  * @property Service\Users\GitHubClient           $user_basic_info
  * @property Service\Checks\Run                   $check_run
  * @property Service\Checks\Suites                $check_suites
@@ -96,6 +97,8 @@ class KhsCI extends Container
 
         // 在容器中注入类
 
+        $this['git_type'] = $git_type;
+
         $this['config'] = Config::config($config, $git_type);
 
         if ($this['config']['github']['access_token'] ?? false) {
@@ -118,6 +121,14 @@ class KhsCI extends Container
                     'Authorization' => 'token '.$this['config']['gitee']['access_token'],
                 ],
             ];
+        } elseif ($this['config']['coding']['access_token'] ?? false) {
+            $this['curl_config'] = [
+                null, false,
+                [
+                    'Authorization' => 'token '.$this['config']['coding']['access_token'],
+                ]
+            ];
+
         } else {
             $this['curl_config'] = [];
         }

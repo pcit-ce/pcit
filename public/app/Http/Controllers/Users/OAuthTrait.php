@@ -45,6 +45,7 @@ trait OAuthTrait
             $khsci = new KhsCI([$git_type.'_access_token' => $access_token], $git_type);
 
             $userInfoArray = $khsci->user_basic_info->getUserInfo();
+
         } catch (Error $e) {
             throw new Exception($e->getMessage(), 500);
         }

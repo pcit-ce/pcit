@@ -6,17 +6,17 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\Coding;
-use KhsCI\Service\OAuth\Gitee;
-use KhsCI\Service\OAuth\GitHub;
-use KhsCI\Service\OAuth\GitHubApp;
+use KhsCI\Service\OAuth\CodingClient;
+use KhsCI\Service\OAuth\GiteeClient;
+use KhsCI\Service\OAuth\GitHubAppClient;
+use KhsCI\Service\OAuth\GitHubClient;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 class OAuthGitHubController
 {
     /**
-     * @var GitHubApp|GitHub|Coding|Gitee
+     * @var GitHubAppClient|GitHubClient|CodingClient|GiteeClient
      */
     protected static $oauth;
 

@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\Coding;
+use KhsCI\Service\OAuth\CodingClient;
 use KhsCI\Support\Response;
 
 class OAuthCodingController
@@ -14,7 +14,7 @@ class OAuthCodingController
     use OAuthTrait;
 
     /**
-     * @var Coding
+     * @var CodingClient
      */
     protected static $oauth;
 

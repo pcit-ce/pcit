@@ -7,7 +7,7 @@ namespace KhsCI\Service\OAuth;
 use Curl\Curl;
 use KhsCI\Support\Log;
 
-class Gitee extends GitHub implements OAuth
+class GiteeClient extends GitHubClient implements OAuthInterface
 {
     const TYPE = 'gitee';
 

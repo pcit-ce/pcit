@@ -8,7 +8,7 @@ use Curl\Curl;
 use Exception;
 use KhsCI\Support\Log;
 
-class GitHub implements OAuth
+class GitHubClient implements OAuthInterface
 {
     const TYPE = 'github';
 

@@ -8,7 +8,7 @@ use Curl\Curl;
 use Exception;
 use KhsCI\Support\Log;
 
-class Coding implements OAuth
+class CodingClient implements OAuthInterface
 {
     const API_URL = 'https://coding.net/api';
 

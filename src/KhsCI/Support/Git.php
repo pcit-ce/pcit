@@ -218,7 +218,7 @@ class Git
     /**
      * @param string $type
      * @param string $repo_full_name
-     * @param string $commit_id      branch_name commit_id
+     * @param string $commit_id branch_name commit_id
      * @param string $file_name
      *
      * @return string
@@ -276,7 +276,8 @@ class Git
 
                 break;
             case 'coding':
-                $url = 'open.coding.net/api';
+                # 支持 Coding 企业版
+                $url = Env::get('CI_CODING_HOST', null) ?? 'coding.net/api';
 
                 break;
 
