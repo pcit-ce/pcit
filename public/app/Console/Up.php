@@ -573,8 +573,6 @@ EOF;
 
                 Log::debug(__FILE__, __LINE__, $message);
 
-                echo $message;
-
                 return true;
             }
         }
@@ -585,8 +583,6 @@ EOF;
                 $message = "config include branch $branch, building  ";
 
                 Log::debug(__FILE__, __LINE__, $message);
-
-                echo $message;
 
                 return false;
             }

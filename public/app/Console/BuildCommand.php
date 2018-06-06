@@ -306,7 +306,7 @@ EOF;
                         $this->commit_message,
                         $commit_message,
                         $this->commit_id,
-                        (int) $merge_method
+                        (int) $auto_merge_method
                     );
             } catch (\Throwable $e) {
                 Log::debug(__FILE__, __LINE__, $e->__toString());

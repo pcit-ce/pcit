@@ -209,7 +209,7 @@ class GitHubClient
         if (204 === $http_return_code) {
             return true;
         } elseif (404 === $http_return_code) {
-            throw new Exception('This pull_request not found', 404);
+            return false;
         }
 
         throw new Exception('pull_request is merged error', 500);
