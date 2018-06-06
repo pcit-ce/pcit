@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use KhsCI\Support\Cache;
 use KhsCI\Support\Env;
 use KhsCI\Support\Log;
 use Symfony\Component\Console\Command\Command;

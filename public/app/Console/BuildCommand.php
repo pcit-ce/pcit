@@ -23,7 +23,7 @@ use KhsCI\Support\Log;
  * @method setBuildKeyId($name = 'build_key_id', $value)
  *
  */
-class Build
+class BuildCommand
 {
     private $commit_id;
 
@@ -186,7 +186,7 @@ EOF;
             array_push($output, $repo_full_name);
 
             // 清理构建环境
-            (new KhsCI())->build->systemDelete(null);
+            (new KhsCI())->build->systemDelete('1');
 
             $queue(...$output);
         } catch (CIException $e) {
@@ -254,42 +254,63 @@ EOF;
                 return;
             }
 
-            if ($this->build_status === CI::BUILD_STATUS_PASSED && $merge_method = BuildDB::isAutoMerge(
-                    $this->git_type,
-                    (int) $this->rid,
-                    $this->commit_id,
-                    $this->pull_request_id
-                )) {
+            $this->autoMerge();
 
-                $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
-
-                $khsci = new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($this->rid)]);
-
-                try {
-                    if ($khsci->github_pull_request->isMerged($repo_array[0], $repo_array[1], $this->pull_request_id)) {
-                        return;
-                    }
-
-                    $commit_message = null;
-
-                    $khsci->github_pull_request
-                        ->merge(
-                            $repo_array[0],
-                            $repo_array[1],
-                            $this->pull_request_id,
-                            $this->commit_message,
-                            $commit_message,
-                            $this->commit_id,
-                            (int) $merge_method
-                        );
-                } catch (\Throwable $e) {
-                    Log::debug(__FILE__, __LINE__, $e->__toString());
-                }
-            }
-
-            Log::connect()->debug('======'.$this->build_key_id.' Build Stopped Success ======');
+            Log::connect()->debug('====== '.$this->build_key_id.' Build Stopped Success ======');
 
             Cache::connect()->set('khsci_up_status', 0);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function autoMerge()
+    {
+        Log::debug(__FILE__, __LINE__, 'check auto merge');
+
+        $build_status = $this->build_status;
+
+        $auto_merge_method = CI::BUILD_STATUS_PASSED && $merge_method = BuildDB::isAutoMerge(
+                $this->git_type,
+                (int) $this->rid,
+                $this->commit_id,
+                $this->pull_request_id
+            );
+
+        if (($build_status === CI::BUILD_STATUS_PASSED) && $auto_merge_method) {
+
+            Log::debug(__FILE__, __LINE__, 'already set auto merge');
+
+            $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
+
+            $khsci = new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($this->rid)]);
+
+            try {
+                if ($khsci->github_pull_request->isMerged($repo_array[0], $repo_array[1], $this->pull_request_id)) {
+                    Log::debug(
+                        __FILE__,
+                        __LINE__,
+                        'already merged, skip'
+                    );
+                    return;
+                }
+
+                $commit_message = null;
+
+                $khsci->github_pull_request
+                    ->merge(
+                        $repo_array[0],
+                        $repo_array[1],
+                        $this->pull_request_id,
+                        $this->commit_message,
+                        $commit_message,
+                        $this->commit_id,
+                        (int) $merge_method
+                    );
+            } catch (\Throwable $e) {
+                Log::debug(__FILE__, __LINE__, $e->__toString());
+            }
         }
     }
 

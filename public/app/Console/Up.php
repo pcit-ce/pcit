@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build;
-use App\Console\Build as BuildDaemon;
 use App\GetAccessToken;
 use App\Issue;
 use App\Repo;
@@ -55,7 +54,7 @@ class Up
             if (!$docker_build_skip) {
                 echo '[D]...';
 
-                $build = new BuildDaemon();
+                $build = new BuildCommand();
 
                 $build->build();
             }
@@ -235,6 +234,7 @@ class Up
             $url = Git::getRawUrl($this->git_type, $repo_full_name, $commit_id, '.khsci.yml');
         } else {
             $url = $commit_id;
+            $repo_full_name = 'test';
         }
 
         $yaml_file_content = HTTP::get($url);
@@ -612,21 +612,21 @@ EOF;
      *
      * @throws Exception
      */
-    public function status(string $content)
-    {
-        $sql = <<<'EOF'
-INSERT INTO builds(
-
-git_type,event_type
-
-) VALUES(?,?);
-EOF;
-
-        return DB::insert($sql, [
-                $this->git_type, __FUNCTION__,
-            ]
-        );
-    }
+    //    public function status(string $content)
+    //    {
+    //        $sql = <<<'EOF'
+    //INSERT INTO builds(
+    //
+    //git_type,event_type
+    //
+    //) VALUES(?,?);
+    //EOF;
+    //
+    //        return DB::insert($sql, [
+    //                $this->git_type, __FUNCTION__,
+    //            ]
+    //        );
+    //    }
 
     /**
      *  "assigned", "unassigned",
@@ -636,11 +636,10 @@ EOF;
      *
      * @param string $content
      *
-     * @return string
      *
      * @throws Exception
      */
-    public function issues(string $content)
+    public function issues(string $content): void
     {
         $obj = json_decode($content);
 
@@ -680,7 +679,7 @@ state,locked,created_at,closed_at,updated_at
 ) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
-            $last_insert_id = DB::insert($sql, [
+            DB::insert($sql, [
                     $this->git_type, $rid, $issue_id, $issue_number, $action, $title, $body,
                     $sender_username, $sender_uid, $sender_pic,
                     $state, (int) $locked,
@@ -702,7 +701,8 @@ EOF;
         }
 
         if ('opened' !== $action) {
-            return $last_insert_id;
+
+            return;
         }
 
         $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
@@ -715,7 +715,7 @@ EOF;
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
-        return $last_insert_id;
+        return;
     }
 
     /**
@@ -945,13 +945,13 @@ EOF;
 
         $pull_number = $obj->number;
 
-        $assignee = $obj->assignee;
+        // $assignee = $obj->assignee;
 
-        $assignee_username = $assignee->login;
-
-        $assignee_id = $assignee->id;
-
-        $assignee_type = $assignee->type;
+        //        $assignee_username = $assignee->login;
+        //
+        //        $assignee_id = $assignee->id;
+        //
+        //        $assignee_type = $assignee->type;
 
         Build::setAutoMerge(
             $this->git_type,
@@ -1111,12 +1111,12 @@ EOF;
      *
      * @return array
      */
-    public function watch(string $content)
-    {
-        return [
-            'code' => 200,
-        ];
-    }
+    //    public function watch(string $content)
+    //    {
+    //        return [
+    //            'code' => 200,
+    //        ];
+    //    }
 
     /**
      * Do Nothing.
@@ -1125,24 +1125,24 @@ EOF;
      *
      * @return array
      */
-    public function fork(string $content)
-    {
-        return [
-            'code' => 200,
-        ];
-    }
+    //    public function fork(string $content)
+    //    {
+    //        return [
+    //            'code' => 200,
+    //        ];
+    //    }
 
     /**
      * @param string $content
      *
      * @return array
      */
-    public function release(string $content)
-    {
-        return [
-            'code' => 200,
-        ];
-    }
+    //    public function release(string $content)
+    //    {
+    //        return [
+    //            'code' => 200,
+    //        ];
+    //    }
 
     /**
      * Create "repository", "branch", or "tag".
@@ -1151,23 +1151,23 @@ EOF;
      *
      * @throws Exception
      */
-    public function create(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $ref_type = $obj->ref_type;
-
-        $installation_id = $obj->installation->id ?? null;
-
-        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-
-        switch ($ref_type) {
-            case 'branch':
-                $branch = $obj->ref;
-        }
-    }
+    //    public function create(string $content): void
+    //    {
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $ref_type = $obj->ref_type;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //
+    //        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    //
+    //        switch ($ref_type) {
+    //            case 'branch':
+    //                $branch = $obj->ref;
+    //        }
+    //    }
 
     /**
      * Delete tag or branch.
@@ -1214,26 +1214,26 @@ EOF;
     /**
      * @param string $content
      */
-    public function member(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $installation_id = $obj->installation->id ?? null;
-    }
+    //    public function member(string $content): void
+    //    {
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //    }
 
     /**
      * @param string $content
      */
-    public function team_add(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $installation_id = $obj->installation->id ?? null;
-    }
+    //    public function team_add(string $content): void
+    //    {
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //    }
 
     /**
      * Any time a GitHub App is installed or uninstalled.
@@ -1248,11 +1248,9 @@ EOF;
      *
      * @param string $content
      *
-     * @return int
-     *
      * @throws Exception
      */
-    public function installation(string $content)
+    public function installation(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1279,10 +1277,12 @@ EOF;
         if ('created' === $action) {
             $repo = $obj->repositories;
 
-            return $this->installation_action_created($installation_id, $repo, $sender_id);
+            $this->installation_action_created($installation_id, $repo, $sender_id);
+
+            return;
         }
 
-        return $this->installation_action_deleted($installation_id);
+        $this->installation_action_deleted($installation_id);
     }
 
     /**
@@ -1290,11 +1290,9 @@ EOF;
      * @param array $repo
      * @param int   $sender_id
      *
-     * @return int
-     *
      * @throws Exception
      */
-    private function installation_action_created(int $installation_id, array $repo, int $sender_id)
+    private function installation_action_created(int $installation_id, array $repo, int $sender_id): void
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
@@ -1313,13 +1311,11 @@ id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,i
 
 EOF;
 
-            $last_insert_id = DB::insert($sql, [
+            DB::insert($sql, [
                     'github_app', $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
                 ]
             );
         }
-
-        return $last_insert_id;
     }
 
     /**
@@ -1351,11 +1347,10 @@ EOF;
      *
      * @param string $content
      *
-     * @return int
      *
      * @throws Exception
      */
-    public function installation_repositories(string $content)
+    public function installation_repositories(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1370,31 +1365,30 @@ EOF;
         $sender = $obj->sender->id;
 
         if ('added' === $action) {
-            return $this->installation_action_created($installation_id, $repo, $sender);
+            $this->installation_action_created($installation_id, $repo, $sender);
+
+            return;
         }
 
-        return $this->installation_repositories_action_removed($installation_id, $repo);
+        $this->installation_repositories_action_removed($installation_id, $repo);
     }
 
     /**
      * @param int   $installation_id
      * @param array $repo
      *
-     * @return int
      *
      * @throws Exception
      */
-    private function installation_repositories_action_removed(int $installation_id, array $repo)
+    private function installation_repositories_action_removed(int $installation_id, array $repo): void
     {
         foreach ($repo as $k) {
             $rid = $k->id;
 
             $sql = 'DELETE FROM repo WHERE installation_id=? AND rid=?';
 
-            $output = DB::delete($sql, [$installation_id, $rid]);
+            DB::delete($sql, [$installation_id, $rid]);
         }
-
-        return $output;
     }
 
     /**
@@ -1427,40 +1421,42 @@ EOF;
      *
      * @throws Exception
      */
-    public function check_suite(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $action = $obj->action;
-
-        $check_suite = $obj->check_suite;
-
-        $check_suite_id = $check_suite->id;
-
-        $branch = $check_suite->head_branch;
-
-        $commit_id = $check_suite->head_sha;
-
-        $installation_id = $obj->installation->id ?? null;
-
-        $sql = <<<EOF
-INSERT INTO builds(
-action,event_type,git_type,check_suites_id,branch,commit_id
-) VALUES (?,?,?,?,?,?);
-EOF;
-
-        //        $last_insert_id = DB::insert($sql, [
-        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
-        //        ]);
-
-        if ('rerequested' === $action) {
-            $check_run_id = '';
-        }
-
-        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-    }
+    //    public function check_suite(string $content): void
+    //    {
+    //        return;
+    //
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $action = $obj->action;
+    //
+    //        $check_suite = $obj->check_suite;
+    //
+    //        $check_suite_id = $check_suite->id;
+    //
+    //        $branch = $check_suite->head_branch;
+    //
+    //        $commit_id = $check_suite->head_sha;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //
+    //        $sql = <<<EOF
+    //INSERT INTO builds(
+    //action,event_type,git_type,check_suites_id,branch,commit_id
+    //) VALUES (?,?,?,?,?,?);
+    //EOF;
+    //
+    //        //        $last_insert_id = DB::insert($sql, [
+    //        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
+    //        //        ]);
+    //
+    //        if ('rerequested' === $action) {
+    //            $check_run_id = '';
+    //        }
+    //
+    //        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    //    }
 
     /**
      * Action.
@@ -1486,17 +1482,17 @@ EOF;
         if ('rerequested' === $action or 'requested_action' === $action) {
             $check_run = $obj->check_run;
 
-            $check_run_id = $check_run->id;
-
-            $commit_id = $check_run->head_sha;
+            //            $check_run_id = $check_run->id;
+            //
+            //            $commit_id = $check_run->head_sha;
 
             $external_id = $check_run->external_id;
 
-            $check_suite = $check_run->check_suite;
+            //$check_suite = $check_run->check_suite;
 
-            $check_suite_id = $check_suite->id;
-
-            $branch = $check_suite->head_branch;
+            //            $check_suite_id = $check_suite->id;
+            //
+            //            $branch = $check_suite->head_branch;
 
             switch ($action) {
                 case 'rerequested':
