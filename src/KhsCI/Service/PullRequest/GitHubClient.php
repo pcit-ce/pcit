@@ -248,7 +248,7 @@ class GitHubClient
                 break;
         }
 
-        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, 'merge']);
+        $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num, 'merge']);
 
         $data = [
             'commit_title' => $commit_title,
