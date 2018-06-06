@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build;
-use App\Console\Build as BuildDaemon;
 use App\GetAccessToken;
 use App\Issue;
 use App\Repo;
@@ -30,8 +29,6 @@ class Up
 
     private $config_array;
 
-    private $cache_key_up_status = 'khsci_up_status';
-
     private $cache_key_github_issue = 'github_issue';
 
     /**
@@ -40,16 +37,6 @@ class Up
     public function up(): void
     {
         try {
-            if (1 === Cache::connect()->get($this->cache_key_up_status)) {
-                // 设为 1 说明有一个任务在运行，休眠之后跳过循环
-                echo '.WO';
-                sleep(10);
-
-                return;
-            }
-
-            Cache::connect()->set($this->cache_key_up_status, 1);
-
             // 从 Webhooks 缓存中拿出数据，进行处理
 
             $this->webhooks();
@@ -67,7 +54,7 @@ class Up
             if (!$docker_build_skip) {
                 echo '[D]...';
 
-                $build = new BuildDaemon();
+                $build = new BuildCommand();
 
                 $build->build();
             }
@@ -247,6 +234,7 @@ class Up
             $url = Git::getRawUrl($this->git_type, $repo_full_name, $commit_id, '.khsci.yml');
         } else {
             $url = $commit_id;
+            $repo_full_name = 'test';
         }
 
         $yaml_file_content = HTTP::get($url);
@@ -285,36 +273,42 @@ class Up
     /**
      * @throws Exception
      */
-    private function webhooks(): void
+    public static function runWebhooks()
+    {
+        (new self)->webhooks();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function webhooks(): void
     {
         $webhooks = (new KhsCI())->webhooks;
 
-        $json_raw = $webhooks->getCache();
+        while (1) {
+            $json_raw = $webhooks->getCache();
 
-        if (!$json_raw) {
-            return;
-        }
+            if (!$json_raw) {
 
-        list($git_type, $event_type, $json) = json_decode($json_raw, true);
+                break;
+            }
 
-        if ('aliyun_docker_registry' === $git_type) {
-            $this->aliyunDockerRegistry($json);
+            list($git_type, $event_type, $json) = json_decode($json_raw, true);
 
-            return;
-        }
+            if ('aliyun_docker_registry' === $git_type) {
+                $this->aliyunDockerRegistry($json);
 
-        $this->git_type = $git_type;
+                return;
+            }
 
-        try {
-            $this->$event_type($json);
+            $this->git_type = $git_type;
 
-            $webhooks->pushSuccessCache($json_raw);
-
-            return;
-        } catch (Error | Exception $e) {
-            $webhooks->pushErrorCache($json_raw);
-
-            throw new Exception($e->getMessage(), $e->getCode());
+            try {
+                $this->$event_type($json);
+                $webhooks->pushSuccessCache($json_raw);
+            } catch (Error | Exception $e) {
+                $webhooks->pushErrorCache($json_raw);
+            }
         }
     }
 
@@ -579,8 +573,6 @@ EOF;
 
                 Log::debug(__FILE__, __LINE__, $message);
 
-                echo $message;
-
                 return true;
             }
         }
@@ -591,8 +583,6 @@ EOF;
                 $message = "config include branch $branch, building  ";
 
                 Log::debug(__FILE__, __LINE__, $message);
-
-                echo $message;
 
                 return false;
             }
@@ -618,21 +608,21 @@ EOF;
      *
      * @throws Exception
      */
-    public function status(string $content)
-    {
-        $sql = <<<'EOF'
-INSERT INTO builds(
-
-git_type,event_type
-
-) VALUES(?,?);
-EOF;
-
-        return DB::insert($sql, [
-                $this->git_type, __FUNCTION__,
-            ]
-        );
-    }
+    //    public function status(string $content)
+    //    {
+    //        $sql = <<<'EOF'
+    //INSERT INTO builds(
+    //
+    //git_type,event_type
+    //
+    //) VALUES(?,?);
+    //EOF;
+    //
+    //        return DB::insert($sql, [
+    //                $this->git_type, __FUNCTION__,
+    //            ]
+    //        );
+    //    }
 
     /**
      *  "assigned", "unassigned",
@@ -642,11 +632,10 @@ EOF;
      *
      * @param string $content
      *
-     * @return string
      *
      * @throws Exception
      */
-    public function issues(string $content)
+    public function issues(string $content): void
     {
         $obj = json_decode($content);
 
@@ -686,7 +675,7 @@ state,locked,created_at,closed_at,updated_at
 ) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
-            $last_insert_id = DB::insert($sql, [
+            DB::insert($sql, [
                     $this->git_type, $rid, $issue_id, $issue_number, $action, $title, $body,
                     $sender_username, $sender_uid, $sender_pic,
                     $state, (int) $locked,
@@ -708,7 +697,8 @@ EOF;
         }
 
         if ('opened' !== $action) {
-            return $last_insert_id;
+
+            return;
         }
 
         $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
@@ -721,7 +711,7 @@ EOF;
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
-        return $last_insert_id;
+        return;
     }
 
     /**
@@ -839,6 +829,10 @@ EOF;
         $action = $obj->action;
 
         if (!in_array($action, ['opened', 'synchronize'])) {
+            // 'assigned' === $action && $this->pull_request_assigned($content);
+            'labeled' === $action && $this->pull_request_labeled($content);
+            'unlabeled' === $action && $this->pull_request_labeled($content, true);
+
             return;
         }
 
@@ -853,7 +847,7 @@ EOF;
         $pull_request_head = $pull_request->head;
 
         $rid = $pull_request_base->repo->id;
-
+        $repo_full_name = $pull_request_base->repo->full_name;
         $commit_message = $pull_request->title;
         $commit_id = $pull_request_head->sha;
 
@@ -906,7 +900,151 @@ EOF;
             return;
         }
 
+        if ($action !== 'opened') {
+
+            return;
+        }
+
         $this->updateStatus((int) $last_insert_id);
+
+        $comment_body = <<<EOF
+You can add label **merge**, when test is pass, I will merge this Pull_request auto        
+
+
+---
+
+This Comment has been generated by [KhsCI Bot](https://github.com/khs1994-php/khsci).
+EOF;
+
+        (new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken((int) $rid)]))
+            ->issue_comments
+            ->create($repo_full_name, $pull_request_id, $comment_body, false);
+    }
+
+    /**
+     * @param string $content
+     *
+     * @throws Exception
+     */
+    public function pull_request_assigned(string $content)
+    {
+        $obj = json_decode($content);
+
+        $pull_request = $obj->pull_request;
+
+        $pull_request_base = $pull_request->base;
+        $pull_request_head = $pull_request->head;
+
+        $rid = $pull_request_base->repo->id;
+        $repo_full_name = $pull_request_base->repo->full_name;
+        $commit_id = $pull_request_head->sha;
+
+        $pull_number = $obj->number;
+
+        // $assignee = $obj->assignee;
+
+        //        $assignee_username = $assignee->login;
+        //
+        //        $assignee_id = $assignee->id;
+        //
+        //        $assignee_type = $assignee->type;
+
+        Build::setAutoMerge(
+            $this->git_type,
+            (int) $rid,
+            (int) Env::get('CI_AUTO_MERGE_METHOD', 1),
+            $commit_id,
+            (int) $pull_number
+        );
+
+        // 创建一条评论
+
+        $comment_body = <<<EOF
+You already assigned me, when test is pass, I will merge this Pull_request auto        
+
+
+---
+
+This Comment has been generated by [KhsCI Bot](https://github.com/khs1994-php/khsci).
+EOF;
+
+        (new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken((int) $rid)]))
+            ->issue_comments
+            ->create($repo_full_name, $pull_number, $comment_body, false);
+    }
+
+    /**
+     * @param string $content
+     * @param bool   $unlabeled
+     *
+     * @throws Exception
+     */
+    public function pull_request_labeled(string $content, bool $unlabeled = false)
+    {
+        $obj = json_decode($content);
+
+        $label = $obj->label;
+
+        $label_name = $label->name;
+
+        if ('merge' !== $label_name) {
+
+            return;
+        }
+
+        $pull_request = $obj->pull_request;
+
+        $pull_request_base = $pull_request->base;
+        $pull_request_head = $pull_request->head;
+
+        $rid = $pull_request_base->repo->id;
+        $repo_full_name = $pull_request_base->repo->full_name;
+        $commit_id = $pull_request_head->sha;
+
+        $pull_number = $obj->number;
+
+        $auto_merge_method = (int) Env::get('CI_AUTO_MERGE_METHOD', 2);
+
+        if ($unlabeled) {
+            $auto_merge_method = 0;
+        }
+
+        Build::setAutoMerge(
+            $this->git_type,
+            (int) $rid,
+            $auto_merge_method,
+            $commit_id,
+            (int) $pull_number
+        );
+
+        if ($unlabeled) {
+            Log::debug(
+                __FILE__,
+                __LINE__,
+                $this->git_type.' '.$rid.' '.$commit_id.' pull_request is unlabeled');
+
+            return;
+        }
+
+        Log::debug(
+            __FILE__,
+            __LINE__,
+            $this->git_type.' '.$rid.' '.$commit_id.' pull_request is labeled');
+
+        // 创建一条评论
+
+        $comment_body = <<<EOF
+You already add label **merge**, when test is pass, I will merge this Pull_request auto        
+
+
+---
+
+This Comment has been generated by [KhsCI Bot](https://github.com/khs1994-php/khsci).
+EOF;
+
+        (new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken((int) $rid)]))
+            ->issue_comments
+            ->create($repo_full_name, $pull_number, $comment_body, false);
     }
 
     /**
@@ -969,12 +1107,12 @@ EOF;
      *
      * @return array
      */
-    public function watch(string $content)
-    {
-        return [
-            'code' => 200,
-        ];
-    }
+    //    public function watch(string $content)
+    //    {
+    //        return [
+    //            'code' => 200,
+    //        ];
+    //    }
 
     /**
      * Do Nothing.
@@ -983,24 +1121,24 @@ EOF;
      *
      * @return array
      */
-    public function fork(string $content)
-    {
-        return [
-            'code' => 200,
-        ];
-    }
+    //    public function fork(string $content)
+    //    {
+    //        return [
+    //            'code' => 200,
+    //        ];
+    //    }
 
     /**
      * @param string $content
      *
      * @return array
      */
-    public function release(string $content)
-    {
-        return [
-            'code' => 200,
-        ];
-    }
+    //    public function release(string $content)
+    //    {
+    //        return [
+    //            'code' => 200,
+    //        ];
+    //    }
 
     /**
      * Create "repository", "branch", or "tag".
@@ -1009,23 +1147,23 @@ EOF;
      *
      * @throws Exception
      */
-    public function create(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $ref_type = $obj->ref_type;
-
-        $installation_id = $obj->installation->id ?? null;
-
-        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-
-        switch ($ref_type) {
-            case 'branch':
-                $branch = $obj->ref;
-        }
-    }
+    //    public function create(string $content): void
+    //    {
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $ref_type = $obj->ref_type;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //
+    //        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    //
+    //        switch ($ref_type) {
+    //            case 'branch':
+    //                $branch = $obj->ref;
+    //        }
+    //    }
 
     /**
      * Delete tag or branch.
@@ -1072,26 +1210,26 @@ EOF;
     /**
      * @param string $content
      */
-    public function member(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $installation_id = $obj->installation->id ?? null;
-    }
+    //    public function member(string $content): void
+    //    {
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //    }
 
     /**
      * @param string $content
      */
-    public function team_add(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $installation_id = $obj->installation->id ?? null;
-    }
+    //    public function team_add(string $content): void
+    //    {
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //    }
 
     /**
      * Any time a GitHub App is installed or uninstalled.
@@ -1106,11 +1244,9 @@ EOF;
      *
      * @param string $content
      *
-     * @return int
-     *
      * @throws Exception
      */
-    public function installation(string $content)
+    public function installation(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1137,10 +1273,12 @@ EOF;
         if ('created' === $action) {
             $repo = $obj->repositories;
 
-            return $this->installation_action_created($installation_id, $repo, $sender_id);
+            $this->installation_action_created($installation_id, $repo, $sender_id);
+
+            return;
         }
 
-        return $this->installation_action_deleted($installation_id);
+        $this->installation_action_deleted($installation_id);
     }
 
     /**
@@ -1148,11 +1286,9 @@ EOF;
      * @param array $repo
      * @param int   $sender_id
      *
-     * @return int
-     *
      * @throws Exception
      */
-    private function installation_action_created(int $installation_id, array $repo, int $sender_id)
+    private function installation_action_created(int $installation_id, array $repo, int $sender_id): void
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
@@ -1171,13 +1307,11 @@ id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,i
 
 EOF;
 
-            $last_insert_id = DB::insert($sql, [
+            DB::insert($sql, [
                     'github_app', $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
                 ]
             );
         }
-
-        return $last_insert_id;
     }
 
     /**
@@ -1209,11 +1343,10 @@ EOF;
      *
      * @param string $content
      *
-     * @return int
      *
      * @throws Exception
      */
-    public function installation_repositories(string $content)
+    public function installation_repositories(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1228,31 +1361,30 @@ EOF;
         $sender = $obj->sender->id;
 
         if ('added' === $action) {
-            return $this->installation_action_created($installation_id, $repo, $sender);
+            $this->installation_action_created($installation_id, $repo, $sender);
+
+            return;
         }
 
-        return $this->installation_repositories_action_removed($installation_id, $repo);
+        $this->installation_repositories_action_removed($installation_id, $repo);
     }
 
     /**
      * @param int   $installation_id
      * @param array $repo
      *
-     * @return int
      *
      * @throws Exception
      */
-    private function installation_repositories_action_removed(int $installation_id, array $repo)
+    private function installation_repositories_action_removed(int $installation_id, array $repo): void
     {
         foreach ($repo as $k) {
             $rid = $k->id;
 
             $sql = 'DELETE FROM repo WHERE installation_id=? AND rid=?';
 
-            $output = DB::delete($sql, [$installation_id, $rid]);
+            DB::delete($sql, [$installation_id, $rid]);
         }
-
-        return $output;
     }
 
     /**
@@ -1285,40 +1417,42 @@ EOF;
      *
      * @throws Exception
      */
-    public function check_suite(string $content): void
-    {
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $action = $obj->action;
-
-        $check_suite = $obj->check_suite;
-
-        $check_suite_id = $check_suite->id;
-
-        $branch = $check_suite->head_branch;
-
-        $commit_id = $check_suite->head_sha;
-
-        $installation_id = $obj->installation->id ?? null;
-
-        $sql = <<<EOF
-INSERT INTO builds(
-action,event_type,git_type,check_suites_id,branch,commit_id
-) VALUES (?,?,?,?,?,?);
-EOF;
-
-        //        $last_insert_id = DB::insert($sql, [
-        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
-        //        ]);
-
-        if ('rerequested' === $action) {
-            $check_run_id = '';
-        }
-
-        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-    }
+    //    public function check_suite(string $content): void
+    //    {
+    //        return;
+    //
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $action = $obj->action;
+    //
+    //        $check_suite = $obj->check_suite;
+    //
+    //        $check_suite_id = $check_suite->id;
+    //
+    //        $branch = $check_suite->head_branch;
+    //
+    //        $commit_id = $check_suite->head_sha;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //
+    //        $sql = <<<EOF
+    //INSERT INTO builds(
+    //action,event_type,git_type,check_suites_id,branch,commit_id
+    //) VALUES (?,?,?,?,?,?);
+    //EOF;
+    //
+    //        //        $last_insert_id = DB::insert($sql, [
+    //        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
+    //        //        ]);
+    //
+    //        if ('rerequested' === $action) {
+    //            $check_run_id = '';
+    //        }
+    //
+    //        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    //    }
 
     /**
      * Action.
@@ -1344,17 +1478,17 @@ EOF;
         if ('rerequested' === $action or 'requested_action' === $action) {
             $check_run = $obj->check_run;
 
-            $check_run_id = $check_run->id;
-
-            $commit_id = $check_run->head_sha;
+            //            $check_run_id = $check_run->id;
+            //
+            //            $commit_id = $check_run->head_sha;
 
             $external_id = $check_run->external_id;
 
-            $check_suite = $check_run->check_suite;
+            //$check_suite = $check_run->check_suite;
 
-            $check_suite_id = $check_suite->id;
-
-            $branch = $check_suite->head_branch;
+            //            $check_suite_id = $check_suite->id;
+            //
+            //            $branch = $check_suite->head_branch;
 
             switch ($action) {
                 case 'rerequested':

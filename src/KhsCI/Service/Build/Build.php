@@ -10,12 +10,12 @@ use Docker\Docker;
 use Docker\Image\Image;
 use Exception;
 use KhsCI\CIException;
+use KhsCI\KhsCI;
 use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
 use KhsCI\Support\DB;
-use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\Log;
 
@@ -312,7 +312,8 @@ class Build
 
         Log::debug(__FILE__, __LINE__, json_encode($this->system_env));
 
-        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
+        $docker = (new KhsCI())->docker;
+
         $docker_container = $docker->container;
         $docker_image = $docker->image;
         $docker_network = $docker->network;
@@ -446,7 +447,7 @@ class Build
                 ], $env, $this->system_env))
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
-                ->setLabels(['com.khs1994.ci' => $unique_id])
+                ->setLabels(['com.khs1994.ci.pipeline' => $unique_id])
                 ->setWorkingDir($work_dir);
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
@@ -685,7 +686,7 @@ class Build
 
         $docker_container
             ->setEnv($env)
-            ->setLabels(['com.khs1994.ci' => $unique_id])
+            ->setLabels(['com.khs1994.ci.git' => $unique_id])
             ->setHostConfig(["$unique_id:$work_dir"]);
 
         $container_id = $docker_container->start($docker_container->create($image));
@@ -748,7 +749,7 @@ class Build
                 ->setEnv($env)
                 ->setEntrypoint($entrypoint)
                 ->setHostConfig(null, $unique_id)
-                ->setLabels(['com.khs1994.ci' => $unique_id])
+                ->setLabels(['com.khs1994.ci.service' => $unique_id])
                 ->create($image, $service_name, $command);
 
             $docker_container->start($container_id);
@@ -771,36 +772,27 @@ class Build
      */
     public function systemDelete(?string $unique_id, bool $last = false): void
     {
-        if (null === $unique_id) {
+        if (is_null($unique_id)) {
+
             return;
         }
 
-        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
+        $label = 'com.khs1994.ci.service';
+
+        $docker = (new KhsCI())->docker;
 
         $docker_container = $docker->container;
 
         // $docker_image = $docker->image;
 
-        $docker_network = $docker->network;
-
-        $docker_volume = $docker->volume;
-
         // clean container
 
-        $output = $docker_container->list(true, null, false, [
-            'label' => 'com.khs1994.ci='.$this->unique_id,
-        ]);
+        self::deleteContainerByLabel($docker_container, $label);
 
-        foreach (json_decode($output) as $k) {
-            $id = $k->Id;
+        if ('1' === $unique_id) {
+            // 只清理服务，退出
 
-            if (!$id) {
-                continue;
-            }
-
-            Log::connect()->debug('Delete Container '.$id);
-
-            $docker_container->delete($id, true, true);
+            return;
         }
 
         // don't clean image
@@ -808,6 +800,17 @@ class Build
         // 全部构建任务结束之后才删除 volume、网络
 
         if ($last) {
+
+            $docker_network = $docker->network;
+
+            $docker_volume = $docker->volume;
+
+            // clean all container
+
+            self::deleteContainerByLabel($docker_container, 'com.khs1994.ci.git');
+
+            self::deleteContainerByLabel($docker_container, 'com.khs1994.ci.pipeline');
+
             // clean volume
 
             $docker_volume->remove($unique_id);
@@ -819,6 +822,31 @@ class Build
             $docker_network->remove($unique_id);
 
             Log::connect()->debug('Build Stoped Delete Network '.$unique_id);
+        }
+    }
+
+    /**
+     * @param Container $container
+     * @param string    $label
+     *
+     * @throws Exception
+     */
+    private function deleteContainerByLabel(Container $container, string $label)
+    {
+        $output = $container->list(true, null, false, [
+            'label' => $label,
+        ]);
+
+        foreach (json_decode($output) as $k) {
+            $id = $k->Id;
+
+            if (!$id) {
+                continue;
+            }
+
+            Log::connect()->debug('Delete Container '.$id);
+
+            $container->delete($id, true, true);
         }
     }
 

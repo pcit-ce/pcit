@@ -41,3 +41,16 @@ X-Hub-Signature: sha1=20977f29a5aaa366886715f1ad7247d9d66c02c2
 < ./pull_request_closed.json
 
 ###
+
+POST https://{{ci_host}}/webhooks/github
+Request method: POST
+content-type: application/json
+Expect:
+User-Agent: GitHub-Hookshot/16abbec
+X-GitHub-Delivery: 29cb7aa0-687a-11e8-95ad-766ba6355f92
+X-GitHub-Event: pull_request
+X-Hub-Signature: sha1=93537977d7f68786ee379e3b271b2eb3637c4c39
+
+< ./pull_request_assignees.json
+
+###

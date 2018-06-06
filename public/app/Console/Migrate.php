@@ -17,7 +17,7 @@ class Migrate
     public static function migrate(string $sql_file): void
     {
         if (in_array($sql_file, self::getSqlList(), true)) {
-            DB::statement(file_get_contents(__DIR__.'/../../sql/'.$sql_file));
+            self::execFromFile(__DIR__.'/../../sql/'.$sql_file);
         } else {
             var_dump(self::getSqlList());
         }
@@ -32,10 +32,24 @@ class Migrate
     {
         foreach (self::getSqlList() as $file) {
             echo "Migrate $file ...\n\n";
-            DB::statement(file_get_contents(__DIR__.'/../../sql/'.$file));
+
+            self::execFromFile(__DIR__.'/../../sql/'.$file);
         }
 
         return;
+    }
+
+    private static function execFromFile(string $file)
+    {
+        $content = file_get_contents($file);
+
+        foreach (explode(';', $content) as $k) {
+            try {
+                DB::statement($k);
+            } catch (\Throwable $e) {
+
+            }
+        }
     }
 
     private static function getSqlList()

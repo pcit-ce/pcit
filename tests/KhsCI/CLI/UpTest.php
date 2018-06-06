@@ -7,7 +7,7 @@ namespace KhsCI\Tests\CLI;
 use Exception;
 use KhsCI\Tests\KhsCITestCase;
 
-class Up extends KhsCITestCase
+class UpTest extends KhsCITestCase
 {
     /**
      * @var \App\Console\Up

@@ -2,6 +2,14 @@
 
 ## v18.06.0
 
+### 2018/06/06
+
+* [ ] Pull_request 增加 **php-cs-fixer** label，KhsCI 可以自动修复代码风格
+
+### 2018/06/05
+
+* [ ] Pull_request 增加 **merge** label，KhsCI 测试通过之后可以自动 merge
+
 ### 2018/06/03
 
 * [ ] AI + CI，人脸登录网站? 代号 `KhsCI Hello`
