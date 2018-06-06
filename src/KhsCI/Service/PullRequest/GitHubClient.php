@@ -7,6 +7,11 @@ namespace KhsCI\Service\PullRequest;
 use Exception;
 use KhsCI\Service\CICommon;
 
+/**
+ * Class GitHubClient
+ *
+ * @see https://developer.github.com/v3/pulls/
+ */
 class GitHubClient
 {
     use CICommon;
@@ -217,7 +222,7 @@ class GitHubClient
      * @param string $commit_title
      * @param string $commit_message
      * @param string $sha
-     * @param string $merge_method
+     * @param int    $merge_method
      *
      * @return bool|mixed
      *
@@ -227,15 +232,26 @@ class GitHubClient
                           string $repo_name,
                           int $pr_num,
                           string $commit_title,
-                          string $commit_message,
+                          ?string $commit_message,
                           string $sha,
-                          string $merge_method = 'merge')
+                          int $merge_method = 1)
     {
+        switch ($merge_method) {
+            case 1:
+                $merge_method = 'merge';
+                break;
+            case 2:
+                $merge_method = 'squash';
+                break;
+            case 3:
+                $merge_method = 'rebase';
+        }
+
         $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, 'merge']);
 
         $data = [
             'commit_title' => $commit_title,
-            'commit_message' => $commit_message,
+            'commit_message' => $commit_message ?? '',
             'sha' => $sha,
             'merge_method' => $merge_method,
         ];
@@ -249,13 +265,13 @@ class GitHubClient
         }
 
         if (405 === $http_return_code) {
-            return $output;
+            throw new Exception('merge cannot be performed', 405);
         }
 
         if (409 === $http_return_code) {
-            return $output;
+            throw new Exception('sha was provided and pull request head did not match', 409);
         }
 
-        return $output;
+        throw new Exception($output, $http_return_code);
     }
 }
