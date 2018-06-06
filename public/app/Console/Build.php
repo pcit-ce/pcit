@@ -248,12 +248,12 @@ EOF;
                 return;
             }
 
-            if ($merge_method = BuildDB::isAutoMerge(
-                $this->git_type,
-                (int) $this->rid,
-                $this->commit_id,
-                $this->pull_request_id
-            )) {
+            if ($this->build_status === CI::BUILD_STATUS_PASSED && $merge_method = BuildDB::isAutoMerge(
+                    $this->git_type,
+                    (int) $this->rid,
+                    $this->commit_id,
+                    $this->pull_request_id
+                )) {
 
                 $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
 
