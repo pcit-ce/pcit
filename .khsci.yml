@@ -49,7 +49,9 @@ pipeline:
       - composer update
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
-      - vendor/bin/phpunit
+      - vendor/bin/phpunit --coverage-clover=coverage.xml
+      # set env CODECOV_TOKEN=XXX
+      # - bash <(curl -s https://codecov.io/bash)
     when:
       # platform: linux/amd64
       # platform:  [ linux/*, windows/amd64 ]

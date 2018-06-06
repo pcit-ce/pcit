@@ -8,7 +8,7 @@ use KhsCI\Support\DBModel;
 
 class Cron extends DBModel
 {
-    protected $table = 'cron';
+    protected static $table = 'cron';
 
     public static function list(): void
     {

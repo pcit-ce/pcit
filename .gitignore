@@ -22,3 +22,8 @@ __pycache__
 .env*
 
 !.env.example
+
+# coerage report
+
+coverage_report
+coverage.xml
