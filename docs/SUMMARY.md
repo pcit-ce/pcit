@@ -10,7 +10,7 @@
     * [KhsCI CE](install/ce.md)
     * [KhsCI EE](install/ee.md)
     * [ENV](install/env.md)
-    * [Docker Daemo TLS](install/docker-tls.md)
+    * [Docker Daemon TLS](install/docker-tls.md)
 
 ## Usage
 

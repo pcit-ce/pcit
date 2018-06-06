@@ -8,7 +8,7 @@ use Exception;
 use KhsCI\Service\CICommon;
 
 /**
- * Class GitHubClient
+ * Class GitHubClient.
  *
  * @see https://developer.github.com/v3/pulls/
  */

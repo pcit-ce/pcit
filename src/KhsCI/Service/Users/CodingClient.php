@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Users;
 
 use Exception;
@@ -14,6 +16,7 @@ class CodingClient extends GitHubClient
      * @param string $username
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public function getUserInfo(bool $raw = false, string $username = null)
@@ -52,6 +55,7 @@ class CodingClient extends GitHubClient
      * @param string|null $username
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getRepos(int $page = 1, bool $raw = false, string $username = null)
@@ -67,7 +71,5 @@ class CodingClient extends GitHubClient
         if ($raw) {
             return $json;
         }
-
-
     }
 }

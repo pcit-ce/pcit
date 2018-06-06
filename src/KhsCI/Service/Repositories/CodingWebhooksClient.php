@@ -1,7 +1,8 @@
 <?php
 
-namespace KhsCI\Service\Repositories;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Repositories;
 
 use Exception;
 use KhsCI\Service\CICommon;
@@ -47,6 +48,7 @@ class CodingWebhooksClient
      * @param string $id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function setWebhooks($data, string $username, string $repo, string $id)
@@ -62,6 +64,7 @@ class CodingWebhooksClient
      * @param string $id
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function unsetWebhooks(string $username, string $repo, string $id)

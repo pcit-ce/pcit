@@ -39,7 +39,7 @@ class Migrate
         return;
     }
 
-    private static function execFromFile(string $file)
+    private static function execFromFile(string $file): void
     {
         $content = file_get_contents($file);
 
@@ -47,7 +47,6 @@ class Migrate
             try {
                 DB::statement($k);
             } catch (\Throwable $e) {
-
             }
         }
     }

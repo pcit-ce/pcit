@@ -373,6 +373,7 @@ EOF;
      * @param int    $pull_request_number
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function setAutoMerge(string $git_type,
@@ -393,6 +394,7 @@ EOF;
      * @param int    $pull_request_number
      *
      * @return string
+     *
      * @throws Exception
      */
     public static function isAutoMerge(string $git_type,

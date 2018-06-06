@@ -276,7 +276,7 @@ class Git
 
                 break;
             case 'coding':
-                # 支持 Coding 企业版
+                // 支持 Coding 企业版
                 $url = Env::get('CI_CODING_HOST', null) ?? 'coding.net/api';
 
                 break;

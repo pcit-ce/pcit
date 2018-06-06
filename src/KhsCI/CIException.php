@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace KhsCI;
 
 use Exception;
-use Throwable;
 
 class CIException extends Exception
 {
@@ -18,21 +17,19 @@ class CIException extends Exception
     /**
      * CIException constructor.
      *
-     * @param string|null    $unique_id
-     * @param string         $commit_id
-     * @param string         $event_type
-     * @param string         $message
-     * @param int            $code
-     * @param Throwable|null $previous
+     * @param string|null $unique_id
+     * @param string      $commit_id
+     * @param string      $event_type
+     * @param string      $message
+     * @param int         $code
      */
     public function __construct(?string $unique_id,
                                 ?string $commit_id,
                                 ?string $event_type,
                                 string $message = '',
-                                int $code = 0,
-                                Throwable $previous = null)
+                                int $code = 0)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code);
 
         $this->unique_id = $unique_id;
         $this->commit_id = $commit_id;

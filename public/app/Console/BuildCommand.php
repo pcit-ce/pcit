@@ -21,7 +21,6 @@ use KhsCI\Support\Log;
 /**
  * @method setUniqueId($name = 'unique_id', $value)
  * @method setBuildKeyId($name = 'build_key_id', $value)
- *
  */
 class BuildCommand
 {
@@ -52,7 +51,7 @@ class BuildCommand
      */
     private $khsci;
 
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $this->$name = $value;
     }
@@ -89,7 +88,6 @@ EOF;
             // 数据库没有结果，跳过构建，也就没有 build_key_id
 
             if (!$output) {
-
                 return;
             }
 
@@ -190,10 +188,8 @@ EOF;
 
             $queue(...$output);
         } catch (CIException $e) {
-
             // 没有 build_key_id，即数据库没有待构项目，跳过
             if (!$this->build_key_id) {
-
                 return;
             }
 
@@ -233,7 +229,6 @@ EOF;
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
-
             Up::runWebhooks();
 
             if ($this->build_key_id && $this->build_status) {
@@ -250,7 +245,6 @@ EOF;
             }
 
             if (!$this->unique_id) {
-
                 return;
             }
 
@@ -265,7 +259,7 @@ EOF;
     /**
      * @throws Exception
      */
-    public function autoMerge()
+    public function autoMerge(): void
     {
         Log::debug(__FILE__, __LINE__, 'check auto merge');
 
@@ -278,8 +272,7 @@ EOF;
             $this->pull_request_id
         );
 
-        if (($build_status === CI::BUILD_STATUS_PASSED) && $auto_merge_method) {
-
+        if ((CI::BUILD_STATUS_PASSED === $build_status) && $auto_merge_method) {
             Log::debug(__FILE__, __LINE__, 'already set auto merge');
 
             $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
@@ -293,6 +286,7 @@ EOF;
                         __LINE__,
                         'already merged, skip'
                     );
+
                     return;
                 }
 
@@ -331,6 +325,7 @@ EOF;
 
         if (!$this->unique_id) {
             Log::debug(__FILE__, __LINE__, 'config not found, skip');
+
             return;
         }
 

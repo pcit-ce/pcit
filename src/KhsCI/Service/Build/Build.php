@@ -772,8 +772,7 @@ class Build
      */
     public function systemDelete(?string $unique_id, bool $last = false): void
     {
-        if (is_null($unique_id)) {
-
+        if (null === $unique_id) {
             return;
         }
 
@@ -800,7 +799,6 @@ class Build
         // 全部构建任务结束之后才删除 volume、网络
 
         if ($last) {
-
             $docker_network = $docker->network;
 
             $docker_volume = $docker->volume;
@@ -831,7 +829,7 @@ class Build
      *
      * @throws Exception
      */
-    private function deleteContainerByLabel(Container $container, string $label)
+    private function deleteContainerByLabel(Container $container, string $label): void
     {
         $output = $container->list(true, null, false, [
             'label' => $label,

@@ -22,8 +22,7 @@ class Env
             }
 
             'false' === $value && $value = false;
-            'true'  === $value && $value = true;
-
+            'true' === $value && $value = true;
         } catch (\Exception $e) {
             $value = $default;
         }

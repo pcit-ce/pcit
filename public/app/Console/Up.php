@@ -273,9 +273,9 @@ class Up
     /**
      * @throws Exception
      */
-    public static function runWebhooks()
+    public static function runWebhooks(): void
     {
-        (new self)->webhooks();
+        (new self())->webhooks();
     }
 
     /**
@@ -289,7 +289,6 @@ class Up
             $json_raw = $webhooks->getCache();
 
             if (!$json_raw) {
-
                 break;
             }
 
@@ -632,7 +631,6 @@ EOF;
      *
      * @param string $content
      *
-     *
      * @throws Exception
      */
     public function issues(string $content): void
@@ -697,7 +695,6 @@ EOF;
         }
 
         if ('opened' !== $action) {
-
             return;
         }
 
@@ -900,8 +897,7 @@ EOF;
             return;
         }
 
-        if ($action !== 'opened') {
-
+        if ('opened' !== $action) {
             return;
         }
 
@@ -926,7 +922,7 @@ EOF;
      *
      * @throws Exception
      */
-    public function pull_request_assigned(string $content)
+    public function pull_request_assigned(string $content): void
     {
         $obj = json_decode($content);
 
@@ -979,7 +975,7 @@ EOF;
      *
      * @throws Exception
      */
-    public function pull_request_labeled(string $content, bool $unlabeled = false)
+    public function pull_request_labeled(string $content, bool $unlabeled = false): void
     {
         $obj = json_decode($content);
 
@@ -988,7 +984,6 @@ EOF;
         $label_name = $label->name;
 
         if ('merge' !== $label_name) {
-
             return;
         }
 
@@ -1343,7 +1338,6 @@ EOF;
      *
      * @param string $content
      *
-     *
      * @throws Exception
      */
     public function installation_repositories(string $content): void
@@ -1372,7 +1366,6 @@ EOF;
     /**
      * @param int   $installation_id
      * @param array $repo
-     *
      *
      * @throws Exception
      */
