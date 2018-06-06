@@ -259,17 +259,26 @@ EOF;
 
                 $khsci = new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($this->rid)]);
 
-                $commit_message = null;
+                try {
+                    if ($khsci->github_pull_request->isMerged($repo_array[0], $repo_array[1], $this->pull_request_id)) {
+                        return;
+                    }
 
-                $khsci->github_pull_request
-                    ->merge(
-                        $repo_array[0],
-                        $repo_array[1],
-                        $this->pull_request_id,
-                        $this->commit_message,
-                        $commit_message,
-                        $merge_method
-                    );
+                    $commit_message = null;
+
+                    $khsci->github_pull_request
+                        ->merge(
+                            $repo_array[0],
+                            $repo_array[1],
+                            $this->pull_request_id,
+                            $this->commit_message,
+                            $commit_message,
+                            $this->commit_id,
+                            (int) $merge_method
+                        );
+                } catch (\Throwable $e) {
+                    Log::debug(__FILE__, __LINE__, $e->__toString());
+                }
             }
 
             Log::connect()->debug('======'.$this->build_key_id.' Build Stopped Success ======');

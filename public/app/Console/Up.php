@@ -1012,7 +1012,7 @@ EOF;
         Build::setAutoMerge(
             $this->git_type,
             (int) $rid,
-            (int) Env::get('CI_AUTO_MERGE_METHOD', 1),
+            (int) Env::get('CI_AUTO_MERGE_METHOD', 2),
             $commit_id,
             (int) $pull_number
         );
