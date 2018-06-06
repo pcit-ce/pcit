@@ -25,9 +25,9 @@ class CodingController
         $pic = Session::get('coding.pic');
         $access_token = Session::get('coding.access_token');
 
-        $khsci = new KhsCI();
-        $oauth = $khsci->oauth_coding;
-        $json = json_decode($oauth::getProjects((string) $access_token))->data ?? false;
+        $khsci = new KhsCI(['coding_access_token' => $access_token], 'coding');
+
+        $json = json_decode($khsci->user_basic_info->getRepos(1, true))->data ?? false;
 
         $num = $json->totalRow ?? false;
         $array = [];

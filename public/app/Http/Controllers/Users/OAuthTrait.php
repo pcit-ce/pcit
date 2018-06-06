@@ -7,17 +7,17 @@ namespace App\Http\Controllers\Users;
 use Error;
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\Coding;
-use KhsCI\Service\OAuth\Gitee;
-use KhsCI\Service\OAuth\GitHub;
-use KhsCI\Service\OAuth\GitHubApp;
+use KhsCI\Service\Gist\GiteeClient;
+use KhsCI\Service\OAuth\GitHubAppClient;
+use KhsCI\Service\Users\CodingClient;
+use KhsCI\Service\Users\GitHubClient;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
 
 trait OAuthTrait
 {
     /**
-     * @var GitHubApp|Coding|GitHub|Gitee
+     * @var GitHubAppClient|CodingClient|GitHubClient|GiteeClient
      */
     protected static $oauth;
 
