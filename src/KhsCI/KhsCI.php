@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KhsCI;
 
 use Curl\Curl;
+use Docker\Docker;
 use Exception;
 use KhsCI\Support\Config;
 use Pimple\Container;
@@ -45,6 +46,7 @@ use WeChat\WeChat;
  * @property Service\Checks\Suites                $check_suites
  * @property Service\Checks\MarkDown              $check_md
  * @property Curl                                 $curl
+ * @property Docker                               $docker
  * @property WeChat                               $wechat
  * @property Service\WeChat\Template\WeChatClient $wechat_template_message
  */
@@ -56,6 +58,7 @@ class KhsCI extends Container
     protected $providers = [
         Providers\CurlProvider::class,
         Providers\ChecksProvider::class,
+        Providers\DockerProvider::class,
         Providers\GitHubAppProvider::class,
         Providers\IssueProvider::class,
         Providers\OAuthProvider::class,

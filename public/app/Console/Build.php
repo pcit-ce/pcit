@@ -185,6 +185,9 @@ EOF;
 
             array_push($output, $repo_full_name);
 
+            // 清理构建环境
+            (new KhsCI())->build->systemDelete(null);
+
             $queue(...$output);
         } catch (CIException $e) {
 
@@ -230,6 +233,9 @@ EOF;
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
+
+            Up::runWebhooks();
+
             if ($this->build_key_id && $this->build_status) {
                 BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
             }

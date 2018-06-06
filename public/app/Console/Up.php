@@ -30,8 +30,6 @@ class Up
 
     private $config_array;
 
-    private $cache_key_up_status = 'khsci_up_status';
-
     private $cache_key_github_issue = 'github_issue';
 
     /**
@@ -40,16 +38,6 @@ class Up
     public function up(): void
     {
         try {
-            if ('1' === Cache::connect()->get($this->cache_key_up_status)) {
-                // 设为 1 说明有一个任务在运行，休眠之后跳过循环
-                echo '.WO';
-                sleep(10);
-
-                return;
-            }
-
-            Cache::connect()->set($this->cache_key_up_status, 1);
-
             // 从 Webhooks 缓存中拿出数据，进行处理
 
             $this->webhooks();
@@ -285,36 +273,42 @@ class Up
     /**
      * @throws Exception
      */
-    private function webhooks(): void
+    public static function runWebhooks()
+    {
+        (new self)->webhooks();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function webhooks(): void
     {
         $webhooks = (new KhsCI())->webhooks;
 
-        $json_raw = $webhooks->getCache();
+        while (1) {
+            $json_raw = $webhooks->getCache();
 
-        if (!$json_raw) {
-            return;
-        }
+            if (!$json_raw) {
 
-        list($git_type, $event_type, $json) = json_decode($json_raw, true);
+                break;
+            }
 
-        if ('aliyun_docker_registry' === $git_type) {
-            $this->aliyunDockerRegistry($json);
+            list($git_type, $event_type, $json) = json_decode($json_raw, true);
 
-            return;
-        }
+            if ('aliyun_docker_registry' === $git_type) {
+                $this->aliyunDockerRegistry($json);
 
-        $this->git_type = $git_type;
+                return;
+            }
 
-        try {
-            $this->$event_type($json);
+            $this->git_type = $git_type;
 
-            $webhooks->pushSuccessCache($json_raw);
-
-            return;
-        } catch (Error | Exception $e) {
-            $webhooks->pushErrorCache($json_raw);
-
-            throw new Exception($e->getMessage(), $e->getCode());
+            try {
+                $this->$event_type($json);
+                $webhooks->pushSuccessCache($json_raw);
+            } catch (Error | Exception $e) {
+                $webhooks->pushErrorCache($json_raw);
+            }
         }
     }
 

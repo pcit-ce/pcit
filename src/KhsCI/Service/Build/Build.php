@@ -10,12 +10,12 @@ use Docker\Docker;
 use Docker\Image\Image;
 use Exception;
 use KhsCI\CIException;
+use KhsCI\KhsCI;
 use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
 use KhsCI\Support\DB;
-use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\Log;
 
@@ -312,7 +312,8 @@ class Build
 
         Log::debug(__FILE__, __LINE__, json_encode($this->system_env));
 
-        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
+        $docker = (new KhsCI())->docker;
+
         $docker_container = $docker->container;
         $docker_image = $docker->image;
         $docker_network = $docker->network;
@@ -446,7 +447,7 @@ class Build
                 ], $env, $this->system_env))
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
-                ->setLabels(['com.khs1994.ci' => $unique_id])
+                ->setLabels(['com.khs1994.ci.build' => $unique_id])
                 ->setWorkingDir($work_dir);
 
             $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
@@ -685,7 +686,7 @@ class Build
 
         $docker_container
             ->setEnv($env)
-            ->setLabels(['com.khs1994.ci' => $unique_id])
+            ->setLabels(['com.khs1994.ci.build' => $unique_id])
             ->setHostConfig(["$unique_id:$work_dir"]);
 
         $container_id = $docker_container->start($docker_container->create($image));
@@ -748,7 +749,7 @@ class Build
                 ->setEnv($env)
                 ->setEntrypoint($entrypoint)
                 ->setHostConfig(null, $unique_id)
-                ->setLabels(['com.khs1994.ci' => $unique_id])
+                ->setLabels(['com.khs1994.ci.build' => $unique_id])
                 ->create($image, $service_name, $command);
 
             $docker_container->start($container_id);
@@ -772,10 +773,12 @@ class Build
     public function systemDelete(?string $unique_id, bool $last = false): void
     {
         if (null === $unique_id) {
-            return;
+            $label = 'com.khs1994.ci.build';
+        } else {
+            $label = 'com.khs1994.ci.build'.'='.$this->unique_id;
         }
 
-        $docker = Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
+        $docker = (new KhsCI())->docker;
 
         $docker_container = $docker->container;
 
@@ -788,7 +791,7 @@ class Build
         // clean container
 
         $output = $docker_container->list(true, null, false, [
-            'label' => 'com.khs1994.ci='.$this->unique_id,
+            'label' => $label,
         ]);
 
         foreach (json_decode($output) as $k) {
@@ -800,7 +803,12 @@ class Build
 
             Log::connect()->debug('Delete Container '.$id);
 
-            $docker_container->delete($id, true, true);
+            var_dump($docker_container->delete($id, true, true));
+        }
+
+        if ($label === 'com.khs1994.ci.build') {
+
+            return;
         }
 
         // don't clean image
