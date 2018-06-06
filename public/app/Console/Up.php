@@ -40,7 +40,7 @@ class Up
     public function up(): void
     {
         try {
-            if (1 === Cache::connect()->get($this->cache_key_up_status)) {
+            if ('1' === Cache::connect()->get($this->cache_key_up_status)) {
                 // 设为 1 说明有一个任务在运行，休眠之后跳过循环
                 echo '.WO';
                 sleep(10);

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use KhsCI\Support\Cache;
 use KhsCI\Support\Env;
 use KhsCI\Support\Log;
 use Symfony\Component\Console\Command\Command;
@@ -39,6 +40,9 @@ class Up extends Command
             \App\Console\Migrate::all();
         }
 
+        Cache::connect()->set('khsci_up_status', 0);
+
+        Cache::close();
         \KhsCI\Support\DB::close();
 
         Log::debug(__FILE__, __LINE__, 'Start Memory is '.memory_get_usage());
