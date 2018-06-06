@@ -840,7 +840,9 @@ EOF;
 
         if (!in_array($action, ['opened', 'synchronize'])) {
             // 'assigned' === $action && $this->pull_request_assigned($content);
-            'labeled' === $action && $this->pull_request_labeled();
+            'labeled' === $action && $this->pull_request_labeled($content);
+            'unlabeled' === $action && $this->pull_request_labeled($content, true);
+
             return;
         }
 
@@ -983,10 +985,11 @@ EOF;
 
     /**
      * @param string $content
+     * @param bool   $unlabeled
      *
      * @throws Exception
      */
-    public function pull_request_labeled(string $content)
+    public function pull_request_labeled(string $content, bool $unlabeled = false)
     {
         $obj = json_decode($content);
 
@@ -995,6 +998,7 @@ EOF;
         $label_name = $label->name;
 
         if ('merge' !== $label_name) {
+
             return;
         }
 
@@ -1009,13 +1013,33 @@ EOF;
 
         $pull_number = $obj->number;
 
+        $auto_merge_method = (int) Env::get('CI_AUTO_MERGE_METHOD', 2);
+
+        if ($unlabeled) {
+            $auto_merge_method = 0;
+        }
+
         Build::setAutoMerge(
             $this->git_type,
             (int) $rid,
-            (int) Env::get('CI_AUTO_MERGE_METHOD', 1),
+            $auto_merge_method,
             $commit_id,
             (int) $pull_number
         );
+
+        if ($unlabeled) {
+            Log::debug(
+                __FILE__,
+                __LINE__,
+                $this->git_type.' '.$rid.' '.$commit_id.' pull_request is unlabeled');
+
+            return;
+        }
+
+        Log::debug(
+            __FILE__,
+            __LINE__,
+            $this->git_type.' '.$rid.' '.$commit_id.' pull_request is labeled');
 
         // 创建一条评论
 

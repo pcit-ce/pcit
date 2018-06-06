@@ -209,10 +209,10 @@ class GitHubClient
         if (204 === $http_return_code) {
             return true;
         } elseif (404 === $http_return_code) {
-            return false;
+            throw new Exception('This pull_request not found', 404);
         }
 
-        return false;
+        throw new Exception('pull_request is merged error', 500);
     }
 
     /**
@@ -245,6 +245,7 @@ class GitHubClient
                 break;
             case 3:
                 $merge_method = 'rebase';
+                break;
         }
 
         $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls', $pr_num, 'merge']);
