@@ -271,12 +271,12 @@ EOF;
 
         $build_status = $this->build_status;
 
-        $auto_merge_method = CI::BUILD_STATUS_PASSED && $merge_method = BuildDB::isAutoMerge(
-                $this->git_type,
-                (int) $this->rid,
-                $this->commit_id,
-                $this->pull_request_id
-            );
+        $auto_merge_method = BuildDB::isAutoMerge(
+            $this->git_type,
+            (int) $this->rid,
+            $this->commit_id,
+            $this->pull_request_id
+        );
 
         if (($build_status === CI::BUILD_STATUS_PASSED) && $auto_merge_method) {
 
@@ -308,6 +308,7 @@ EOF;
                         $this->commit_id,
                         (int) $auto_merge_method
                     );
+                Log::debug(__FILE__, __LINE__, 'auto merge success, method is '.$auto_merge_method);
             } catch (\Throwable $e) {
                 Log::debug(__FILE__, __LINE__, $e->__toString());
             }

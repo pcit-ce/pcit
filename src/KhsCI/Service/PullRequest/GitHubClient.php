@@ -234,7 +234,7 @@ class GitHubClient
                           string $commit_title,
                           ?string $commit_message,
                           string $sha,
-                          int $merge_method = 1)
+                          int $merge_method)
     {
         switch ($merge_method) {
             case 1:
