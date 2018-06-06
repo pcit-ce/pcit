@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build as BuildDB;
+use App\GetAccessToken;
 use App\Repo;
 use App\User;
 use Exception;
@@ -18,19 +19,25 @@ use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
 
 /**
- * @method setUniqueId($name, $value)
- * @method setBuildKeyId($name, $value)
+ * @method setUniqueId($name = 'unique_id', $value)
+ * @method setBuildKeyId($name = 'build_key_id', $value)
  *
  */
 class Build
 {
     private $commit_id;
 
+    private $commit_message;
+
     private $unique_id;
 
     private $event_type;
 
     private $build_key_id;
+
+    private $pull_request_id;
+
+    private $rid;
 
     private $git_type;
 
@@ -89,6 +96,9 @@ EOF;
             $output = array_values($output);
 
             $this->build_key_id = (int) $output[0];
+            $this->pull_request_id = (int) $output[7];
+            $this->rid = (int) $output[2];
+            $this->commit_message = $output[4];
             $config = $output[9];
             $commit_id = $output[3];
 
@@ -236,6 +246,30 @@ EOF;
             if (!$this->unique_id) {
 
                 return;
+            }
+
+            if ($merge_method = BuildDB::isAutoMerge(
+                $this->git_type,
+                (int) $this->rid,
+                $this->commit_id,
+                $this->pull_request_id
+            )) {
+
+                $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
+
+                $khsci = new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($this->rid)]);
+
+                $commit_message = null;
+
+                $khsci->github_pull_request
+                    ->merge(
+                        $repo_array[0],
+                        $repo_array[1],
+                        $this->pull_request_id,
+                        $this->commit_message,
+                        $commit_message,
+                        $merge_method
+                    );
             }
 
             Log::connect()->debug('======'.$this->build_key_id.' Build Stopped Success ======');

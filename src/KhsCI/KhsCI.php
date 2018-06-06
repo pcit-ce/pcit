@@ -124,7 +124,7 @@ class KhsCI extends Container
             $this['curl_config'] = [
                 null, false,
                 [
-                    'Authorization' => 'token '.$this['config']['coding']['access_token'],
+                    'Authorization' => 'access_token '.$this['config']['coding']['access_token'],
                 ]
             ];
 

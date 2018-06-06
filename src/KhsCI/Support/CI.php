@@ -97,6 +97,12 @@ class CI
         'auto_cancel_pull_request_builds',
     ];
 
+    const CI_PULL_REQUEST_MERGE_METHOD_MERGE = 1;
+
+    const CI_PULL_REQUEST_MERGE_METHOD_SQUASH = 2;
+
+    const CI_PULL_REQUEST_MERGE_METHOD_REBASE = 3;
+
     /**
      * 返回当前 ENV.
      *
