@@ -117,7 +117,7 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function updateBuildStatus(int $build_key_id, string $status)
+    public static function updateBuildStatus(int $build_key_id, ?string $status)
     {
         $sql = 'UPDATE builds SET build_status=? WHERE id=?';
 

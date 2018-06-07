@@ -48,9 +48,7 @@ class DB
 
     public static function close(): void
     {
-        if (self::$pdo instanceof PDO) {
-            self::$pdo = null;
-        }
+        self::$pdo = null;
     }
 
     /**

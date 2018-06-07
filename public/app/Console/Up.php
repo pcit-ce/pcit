@@ -52,26 +52,11 @@ class Up
             if (!$docker_build_skip) {
                 echo '[D]...';
 
-                $build = new BuildCommand();
-
-                $build->build();
+                (new BuildCommand())->build();
             }
             echo '[W]';
-        } catch (Exception | Error $e) {
-            $msg = $e->getMessage();
-            $code = $e->getCode();
-            $file = $e->getFile();
-            $line = $e->getLine();
-
-            $errormsg = json_encode([
-                'msg' => $msg,
-                'code' => $code,
-                'file' => $file,
-                'line' => $line,
-            ]);
-
-            Log::connect()->debug($errormsg);
-            echo $errormsg.'[E]';
+        } catch (\Throwable $e) {
+            Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
             $this->closeResource();
         }

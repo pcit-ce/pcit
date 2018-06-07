@@ -1,12 +1,12 @@
 * text=auto
 
+/docs                export-ignore
 /examples            export-ignore
 /tests               export-ignore
-/docs                export-ignore
 /.github             export-ignore
+/yml_example         export-ignore
 /.dockerignore       export-ignore
 /.drone.yml          export-ignore
-/.khsci.yml          export-ignore
 /.gitattributes      export-ignore
 /.gitignore          export-ignore
 /.gitmodules         export-ignore
@@ -20,3 +20,5 @@
 /Dockerfile          export-ignore
 /phpunit.xml         export-ignore
 /test.Dockerfile     export-ignore
+/renovate.json       export-ignore
+/ROADMAP.md          export-ignore
