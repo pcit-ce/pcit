@@ -1,13 +1,14 @@
 <?php
 
 declare(strict_types=1);
+
 use KhsCI\KhsCI;
 
 try {
     // Start Webhooks Server
-    $khsci = new KhsCI();
+    $khsci = new KhsCI([], 'github');
 
-    $khsci->webhooks->startGitHubServer(null);
+    $khsci->webhooks->Server(null);
 
     // $khsci->webhooks->startGitHubAppServer(null);
 

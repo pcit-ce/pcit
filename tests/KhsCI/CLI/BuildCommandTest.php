@@ -7,13 +7,29 @@ use KhsCI\Tests\KhsCITestCase;
 
 class BuildCommandTest extends KhsCITestCase
 {
+    private $build;
+
+    protected function setUp()
+    {
+        $this->build = new BuildCommand();
+    }
+
     /**
      * @group DON'TTEST
      */
     public function testCheckCIRoot()
     {
-        $build = new BuildCommand();
+        $this->build->checkCIRoot();
+    }
 
-        $build->checkCIRoot();
+    /**
+     * @group DON'TTEST
+     */
+    public function testSendEMail()
+    {
+        $this->build->config = json_encode(yaml_parse_file(__DIR__.'/../../../.khsci.yml'));
+
+
+        $this->build->sendEMail();
     }
 }

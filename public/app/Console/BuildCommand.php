@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build as BuildDB;
+use App\Build;
 use App\GetAccessToken;
 use App\Repo;
 use App\User;
@@ -45,6 +46,8 @@ class BuildCommand
     private $build_status;
 
     private $description;
+
+    private $branch;
 
     /**
      * @var KhsCI
@@ -150,14 +153,71 @@ class BuildCommand
 
             $this->autoMerge();
 
+            $this->sendEMail();
+
             Log::connect()->debug('====== '.$this->build_key_id.' Build Stopped Success ======');
 
             Cache::connect()->set('khsci_up_status', 0);
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function sendEMail()
     {
+        $build_status_changed = Build::buildStatusIsChanged((int) $this->rid, $this->branch);
+
+        $email_list = null;
+
+        $on_success = null;
+
+        $on_failure = null;
+
+        $config = (object) json_decode($this->config, true);
+
+        $email = $config->notifications['email'] ?? null;
+
+        if ($email) {
+            // email 指令存在
+            $recipients = $email['recipients'] ?? null;
+
+            if ($recipients) {
+                // recipients 指令存在
+                $on_success = $email['on_success'] ?? null;
+                $on_failure = $email['on_failure'] ?? null;
+
+                $email_list = $recipients;
+            } else {
+                $email_list = $email;
+            }
+        }
+
+        if (CI::BUILD_STATUS_PASSED === $this->build_status) {
+            // 构建成功
+            if ('never' === $on_success) {
+
+                return;
+            }
+        } else {
+            // 构建失败
+            if ('never' === $on_failure) {
+
+                return;
+            }
+        }
+
+        if (!(is_null($on_success) && is_null($on_failure && $build_status_changed))) {
+
+            return;
+        }
+
+        // 构建成功
+
+        $subject = 'user/repo#build_id(branch-commit_id)';
+
+        $body = '';
+
         try {
             $mail = ($this->khsci)->mail;
 
@@ -174,13 +234,17 @@ class BuildCommand
             }
 
             $mail->isHTML(true);
-            $mail->Subject = getenv('CI_EMAIL_OBJECT');
-            $mail->Body = getenv('CI_EMAIL_BODY');
+            $mail->Subject = $subject;
+            $mail->Body = $body;
 
             $mail->send();
-            echo 'Message has been sent';
+            Log::debug(__FILE__, __LINE__, 'Message has been sent');
         } catch (Exception $e) {
-            echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+            Log::debug(
+                __FILE__,
+                __LINE__,
+                'Message could not be sent. Mailer Error: ', $mail->ErrorInfo
+            );
         }
 
     }
@@ -225,6 +289,7 @@ EOF;
         $output = array_values($output);
 
         $this->git_type = $output[1];
+        $this->branch = $output[5];
         $this->build_key_id = (int) $output[0];
         $this->pull_request_id = (int) $output[7];
         $this->rid = (int) $output[2];

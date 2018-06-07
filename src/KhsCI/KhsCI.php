@@ -40,7 +40,7 @@ use WeChat\WeChat;
  * @property Service\Repositories\Webhooks        $repo_webhooks
  * @property PHPMailer                            $mail
  * @property Service\PullRequest\GitHubClient     $github_pull_request
- * @property Service\Webhooks\Webhooks            $webhooks
+ * @property Service\Webhooks\GitHubClient        $webhooks
  * @property Service\Build\Build                  $build
  * @property TencentAI                            $tencent_ai
  * @property Service\Users\GitHubClient           $user_basic_info

@@ -13,3 +13,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY (`git_type`, `uid`)
 );
+
+ALTER TABLE user
+  ADD COLUMN `admin` JSON;
+
+ALTER TABLE user
+  ADD COLUMN `type` varchar(100) DEFAULT 'user';

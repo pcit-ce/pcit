@@ -185,6 +185,13 @@ branches:
   # include: [ master, release/* ]
   # exclude: [ release/1.0.0, release/1.1.* ]
 
+notifications:
+  email:
+    recipients:
+      - khs1994@khs1994.com
+    on_success: never # default: change
+    on_failure: always # default: always
+
 config:
   aliyun:
     docker_registry:

@@ -69,14 +69,14 @@ Route::delete('webhooks/{git_type}/{username}/{repo_name}/{id}/deactivate', 'Web
 
 Route::post('webhooks/github', 'Webhooks\GitHubController');
 
-Route::post('webhooks/github_app', 'Webhooks\GitHubController@githubApp');
+Route::post('webhooks/gogs', 'Webhooks\GogsController');
 
 Route::post('webhooks/gitee', 'Webhooks\GiteeController');
 
 Route::post('webhooks/coding', 'Webhooks\CodingController');
 
 Route::post('webhooks/'.Env::get('CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS', 'aliyun_docker_registry'),
-'Webhooks\AliyunDockerRegistryController');
+    'Webhooks\AliyunDockerRegistryController');
 
 // 获取所有接收到的 webhooks -> requests
 
@@ -93,8 +93,6 @@ Route::get('profile/coding/{username}', 'Profile\CodingController');
 Route::get('profile/gitee/{username}', 'Profile\GiteeController');
 
 Route::get('profile/github/{username}', 'Profile\GitHubController');
-
-Route::get('profile/github_app/{username}', 'Profile\GitHubAppController');
 
 // return information about an individual user.
 
@@ -116,7 +114,7 @@ Route::post('api/user/sync', 'Profile\SyncController');
 
 Route::get('status/github/{username}/{repo_name}/{ref}', 'Status\GithubController@list');
 Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
-'Status\GitHubController@listcombinedStatus');
+    'Status\GitHubController@listcombinedStatus');
 
 /**Repos**/
 

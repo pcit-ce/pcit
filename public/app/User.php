@@ -37,8 +37,10 @@ class User extends DBModel
      * @param int         $uid
      * @param string      $username
      * @param string|null $email
-     * @param string      $pic
+     * @param string|null $pic
      * @param string|null $accessToken
+     *
+     * @param bool        $org
      *
      * @throws Exception
      */
@@ -46,9 +48,10 @@ class User extends DBModel
                                           int $uid,
                                           string $username,
                                           ?string $email,
-                                          string $pic,
-                                          ?string $accessToken
-    ): void {
+                                          ?string $pic,
+                                          ?string $accessToken,
+                                          bool $org = false): void
+    {
         $user_key_id = self::exists($git_type, $username);
 
         if ($user_key_id) {
@@ -58,9 +61,22 @@ class User extends DBModel
                 ]
             );
         } else {
-            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?)';
+            $org || $org = null;
+            $org && $org = 'org';
+
+            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,$org,null)';
             DB::insert($sql, [$git_type, $uid, $username, $email, $pic, $accessToken]);
         }
+    }
+
+    public static function setOrgAdmin()
+    {
+
+    }
+
+    public static function deleteOrgAdmin()
+    {
+
     }
 
     /**
