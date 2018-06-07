@@ -423,14 +423,14 @@ class Up
         $event_time = time();
 
         $sql = <<<'EOF'
-INSERT builds(
+INSERT INTO builds(
 
-git_type,event_type,rid,event_time,request_raw
+git_type,event_type,rid,created_at
 
-) VALUES(?,?,?,?,?);
+) VALUES(?,?,?,?);
 EOF;
         $data = [
-            $this->git_type, __FUNCTION__, $rid, $event_time, $content,
+            $this->git_type, __FUNCTION__, $rid, $event_time
         ];
 
         return DB::insert($sql, $data);
@@ -1096,42 +1096,29 @@ EOF;
     /**
      * Do Nothing.
      *
-     * @param string $content
-     *
-     * @return array
      */
-    //    public function watch(string $content)
-    //    {
-    //        return [
-    //            'code' => 200,
-    //        ];
-    //    }
+    public function watch()
+    {
+        return 200;
+    }
 
     /**
      * Do Nothing.
      *
-     * @param string $content
-     *
-     * @return array
      */
-    //    public function fork(string $content)
-    //    {
-    //        return [
-    //            'code' => 200,
-    //        ];
-    //    }
+    public function fork()
+    {
+        return 200;
+    }
 
     /**
-     * @param string $content
      *
-     * @return array
+     * Do nothing
      */
-    //    public function release(string $content)
-    //    {
-    //        return [
-    //            'code' => 200,
-    //        ];
-    //    }
+    public function release()
+    {
+        return 200;
+    }
 
     /**
      * Create "repository", "branch", or "tag".
@@ -1163,11 +1150,9 @@ EOF;
      *
      * @param string $content
      *
-     * @return int
-     *
      * @throws Exception
      */
-    public function delete(string $content)
+    public function delete(string $content): void
     {
         $obj = json_decode($content);
 
@@ -1182,9 +1167,7 @@ EOF;
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
 
-            return DB::delete($sql, [$this->git_type, $obj->ref, $rid]);
-        } else {
-            return 0;
+            DB::delete($sql, [$this->git_type, $obj->ref, $rid]);
         }
     }
 
