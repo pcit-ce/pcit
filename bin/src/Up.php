@@ -52,6 +52,8 @@ class Up extends Command
                 $this->process_execute();
                 sleep(3);
             }
+
+            exit;
         }
 
         while (1) {
@@ -72,20 +74,24 @@ class Up extends Command
      */
     public function process_execute(): void
     {
-        $pid = pcntl_fork(); //创建子进程
-        if (0 == $pid) {//子进程
+        //创建子进程
+        $pid = pcntl_fork();
+        //子进程
+        if (0 == $pid) {
             $up = new \App\Console\Up();
             $up->up();
-            unset($up);
 
             if (Env::get('CI_DEBUG_MEMORY', false)) {
                 Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
             }
 
             exit;
-        } else {//主进程
-            pcntl_wait($status, WUNTRACED); //取得子进程结束状态
+        } else {
+            //主进程
+            //取得子进程结束状态
+            pcntl_wait($status, WUNTRACED);
             if (pcntl_wifexited($status)) {
+
                 return;
             }
         }

@@ -138,9 +138,9 @@ class Repo extends DBModel
      */
     public static function checkAdmin(string $git_type, int $rid, int $uid)
     {
-        $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,?)';
+        $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,json_quote(?))';
 
-        return DB::select($sql, [$git_type, $rid, "\"$uid\""]);
+        return DB::select($sql, [$git_type, $rid, $uid]);
     }
 
     /**
@@ -153,10 +153,31 @@ class Repo extends DBModel
     public static function updateAdmin(string $git_type, int $rid, int $uid): void
     {
         $sql = <<<EOF
-UPDATE repo SET repo_admin=JSON_MERGE(repo_admin,?) WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS(repo_admin,?)
+UPDATE repo SET repo_admin=JSON_MERGE(repo_admin,?) 
+
+WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS(repo_admin,JSON_QUOTE(?))
 EOF;
 
-        DB::update($sql, ["[\"$uid\"]", $git_type, $rid, "\"$uid\""]);
+        DB::update($sql, ["[\"$uid\"]", $git_type, $rid, $uid]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     * @param int    $uid
+     *
+     * @throws Exception
+     */
+    public static function deleteAdmin(string $git_type, int $rid, int $uid)
+    {
+        $sql = <<<EOF
+UPDATE repo SET repo_admin=JSON_REMOVE(repo_admin,JSON_UNQUOTE(JSON_SEARCH(repo_admin,'one',?)))
+
+WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,JSON_QUOTE(?))
+
+EOF;
+
+        DB::update($sql, [$uid, $git_type, $rid, $uid]);
     }
 
     /**
@@ -169,9 +190,9 @@ EOF;
      */
     public static function allByAdmin(string $git_type, int $uid)
     {
-        $sql = 'SELECT rid,repo_full_name FROM repo WHERE git_type=? AND JSON_CONTAINS(repo_admin,?)';
+        $sql = 'SELECT rid,repo_full_name FROM repo WHERE git_type=? AND JSON_CONTAINS(repo_admin,JSON_QUOTE(?))';
 
-        return DB::select($sql, [$git_type, "\"$uid\""]);
+        return DB::select($sql, [$git_type, $uid]);
     }
 
     /**
@@ -183,7 +204,7 @@ EOF;
      */
     public static function getActiveByAdmin(int $uid)
     {
-        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,"?") AND build_activate=1 AND webhooks_status=1';
+        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,JSON_QUOTE(?)) AND build_activate=1 AND webhooks_status=1';
 
         return DB::select($sql, [$uid]);
     }

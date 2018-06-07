@@ -38,11 +38,9 @@ class Up
     {
         try {
             // 从 Webhooks 缓存中拿出数据，进行处理
-
             $this->webhooks();
 
             // Docker 构建队列
-
             $docker_build_skip = false;
 
             try {
@@ -1204,15 +1202,31 @@ EOF;
 
     /**
      * @param string $content
+     *
+     *                       action `added` `deleted` `edited` `removed`
+     *
+     * @throws Exception
      */
-    //    public function member(string $content): void
-    //    {
-    //        $obj = json_decode($content);
-    //
-    //        $rid = $obj->repository->id;
-    //
-    //        $installation_id = $obj->installation->id ?? null;
-    //    }
+    public function member(string $content): void
+    {
+        $obj = json_decode($content);
+
+        $action = $obj->action;
+
+        $member = $obj->member;
+        // $member_username = $member->login;
+        $member_uid = $member->id;
+        // $member_pic = $member->avatar_url;
+
+        $rid = $obj->repository->id;
+
+        // $installation_id = $obj->installation->id ?? null;
+
+        Log::debug(__FILE__, __LINE__, "$action $rid $member_uid");
+
+        'added' === $action && Repo::updateAdmin($this->git_type, (int) $rid, (int) $member_uid);
+        'removed' === $action && Repo::deleteAdmin($this->git_type, (int) $rid, (int) $member_uid);
+    }
 
     /**
      * @param string $content
