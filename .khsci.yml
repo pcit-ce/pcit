@@ -43,6 +43,7 @@ pipeline:
       - CI_MYSQL_PASSWORD=mytest
       - CI_MYSQL_DBNAME=test
     commands:
+      - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       - env
       - pwd
       - composer install
@@ -180,7 +181,7 @@ matrix:
 
 branches:
   include: [ master ]
-  exclude: de*
+  exclude: test*
   # include: [ master, release/* ]
   # exclude: [ release/1.0.0, release/1.1.* ]
 

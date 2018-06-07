@@ -70,7 +70,7 @@ class BuildCommand
 
             Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
 
-            $this->checkCIRoot($output);
+            $this->checkCIRoot();
 
             unset($output[10]);
 
@@ -102,27 +102,27 @@ class BuildCommand
             // $e->getCode() is build key id.
             BuildDB::updateStopAt($this->build_key_id);
 
-            self::saveLog();
+            $this->saveLog();
 
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_INACTIVE:
                     $this->build_status = CI::BUILD_STATUS_INACTIVE;
-                    self::setBuildStatusInactive();
+                    $this->setBuildStatusInactive();
 
                     break;
                 case CI::BUILD_STATUS_FAILED:
                     $this->build_status = CI::BUILD_STATUS_FAILED;
-                    self::setBuildStatusFailed();
+                    $this->setBuildStatusFailed();
 
                     break;
                 case CI::BUILD_STATUS_PASSED:
                     $this->build_status = CI::BUILD_STATUS_PASSED;
-                    self::setBuildStatusPassed();
+                    $this->setBuildStatusPassed();
 
                     break;
                 default:
                     $this->build_status = CI::BUILD_STATUS_ERRORED;
-                    self::setBuildStatusErrored();
+                    $this->setBuildStatusErrored();
             }
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
@@ -140,7 +140,7 @@ class BuildCommand
             BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
 
             Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description &&
-            self::weChatTemplate($this->description);
+            $this->weChatTemplate($this->description);
 
             $build->systemDelete($this->unique_id, true);
 
@@ -194,6 +194,8 @@ EOF;
             );
         }
 
+        $output = array_values($output);
+
         $this->git_type = $output[1];
         $this->build_key_id = (int) $output[0];
         $this->pull_request_id = (int) $output[7];
@@ -208,43 +210,35 @@ EOF;
     }
 
     /**
-     * @param array $output buildDB
-     *
      * @throws Exception
      */
-    private function checkCIRoot(array $output): void
+    private function checkCIRoot(): void
     {
         $ci_root = Env::get('CI_ROOT');
-
-        Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
 
         while ($ci_root) {
 
             Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root');
 
-            $git_type = $output[1];
-            $rid = $output[2];
-            $commit_id = $output[3];
-            $event_type = $output[6];
-
-            $admin = Repo::getAdmin($git_type, (int) $rid);
+            $admin = Repo::getAdmin($this->git_type, (int) $this->rid);
             $admin_array = json_decode($admin, true);
 
             $ci_root_array = json_decode($ci_root, true);
-            $root = $ci_root_array[$git_type];
+            $root = $ci_root_array[$this->git_type];
 
             foreach ($root as $k) {
-                $uid = User::getUid($git_type, $k);
+                $uid = User::getUid($this->git_type, $k);
 
                 if (in_array($uid, $admin_array)) {
+
                     return;
                 }
             }
 
             throw new CIException(
                 null,
-                $commit_id,
-                $event_type,
+                $this->commit_id,
+                $this->event_type,
                 CI::BUILD_STATUS_PASSED,
                 $this->build_key_id
             );
@@ -524,5 +518,12 @@ EOF;
     public function test()
     {
         return 1;
+    }
+
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this, $name)) {
+            $this->$name(...$arguments);
+        }
     }
 }
