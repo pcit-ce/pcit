@@ -76,13 +76,12 @@ class BuildCommand
 
             $this->setStatusInProgress();
 
-            $repo_full_name = Repo::getRepoFullName($output[1], (int) $output[2]);
+            $repo_full_name = Repo::getRepoFullName($this->git_type, (int) $this->rid);
 
             array_push($output, $repo_full_name);
 
             // 清理构建环境
             $build->systemDelete('1');
-
             $build(...$output);
         } catch (CIException $e) {
             // 没有 build_key_id，即数据库没有待构项目，跳过
@@ -155,6 +154,35 @@ class BuildCommand
 
             Cache::connect()->set('khsci_up_status', 0);
         }
+    }
+
+    private function sendEMail()
+    {
+        try {
+            $mail = ($this->khsci)->mail;
+
+            foreach (json_decode(getenv('CI_EMAIL_ADDRESS_JSON')) as $k => $v) {
+                $mail->addAddress($k, $v);
+            }
+
+            foreach (json_decode(getenv('CI_EMAIL_CC_JSON'), true) as $k) {
+                $mail->addCC($k); // 抄送
+            }
+
+            foreach (json_decode(getenv('CI_EMAIL_BCC_JSON'), true) as $k) {
+                $mail->addBCC($k); // 暗抄送
+            }
+
+            $mail->isHTML(true);
+            $mail->Subject = getenv('CI_EMAIL_OBJECT');
+            $mail->Body = getenv('CI_EMAIL_BODY');
+
+            $mail->send();
+            echo 'Message has been sent';
+        } catch (Exception $e) {
+            echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+        }
+
     }
 
     /**

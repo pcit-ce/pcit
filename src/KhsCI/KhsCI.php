@@ -8,6 +8,7 @@ use Curl\Curl;
 use Docker\Docker;
 use Exception;
 use KhsCI\Support\Config;
+use PHPMailer\PHPMailer\PHPMailer;
 use Pimple\Container;
 use TencentAI\TencentAI;
 use WeChat\WeChat;
@@ -37,6 +38,7 @@ use WeChat\WeChat;
  * @property Service\Repositories\Collaborators   $repo_collaborators
  * @property Service\Repositories\Status          $repo_status
  * @property Service\Repositories\Webhooks        $repo_webhooks
+ * @property PHPMailer                            $mail
  * @property Service\PullRequest\GitHubClient     $github_pull_request
  * @property Service\Webhooks\Webhooks            $webhooks
  * @property Service\Build\Build                  $build
@@ -65,6 +67,7 @@ class KhsCI extends Container
         Providers\BuildProvider::class,
         Providers\OrganizationsProvider::class,
         Providers\RepositoriesProvider::class,
+        Providers\PHPMailerProvider::class,
         Providers\PullRequestProvider::class,
         Providers\TencentAIProvider::class,
         Providers\UserProvider::class,
