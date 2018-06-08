@@ -118,11 +118,13 @@ Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
 
 /**Repos**/
 
-Route::get('api/repos', '');
+Route::get('api/repos', 'Users\RepositoriesController');
 
 Route::get('{git_type}/{username}', 'Users\RepositoriesController@index');
 
-Route::get('api/owner/{git_type}/{username}/repos', ''); //某用户名下的仓库列表
+Route::get('api/{git_type}/{username}/repos', 'Users\RepositoriesController@list'); //某用户名下的仓库列表
+
+Route::get('api/repo/{git_type}/{username}/{repo_name}', 'Users\RepositoriesController@find'); // 列出某仓库详情
 
 Route::get('api/user/{username}/active', 'Builds\ActiveController');
 
@@ -207,3 +209,7 @@ Route::post('api/user/token', 'APITokenController@find');
 
 Route::get('wechat', 'WeChat\MessageServer');
 Route::post('wechat', 'WeChat\MessageServer');
+
+/* System */
+
+Route::get('api/ci/oauth_client_id', 'System\OAuthClientController');

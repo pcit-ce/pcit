@@ -21,27 +21,7 @@ class OrganizationsController
      */
     public function __invoke()
     {
-        $array = APITokenController::getGitTypeAndUid();
-
-        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
-
-        $khsci = new KhsCI([$git_type.'_access_token' => GetAccessToken::getAccessTokenByUid($git_type, (int) $uid)]);
-
-        $orgs = $khsci->user_basic_info->listOrgs();
-
-        foreach (json_decode($orgs, true) as $k) {
-            $org_id = $k['id'];
-
-            $org_name = $k['login'];
-
-            $org_pic = $k['avatar_url'];
-
-            User::updateUserInfo($git_type, (int) $org_id, $org_name, null, $org_pic, null, true);
-
-            User::setOrgAdmin($git_type, (int) $org_id, (int) $uid);
-        }
-
-        return User::getOrgByAdmin($git_type, (int) $uid);
+        return User::getOrgByAdmin(...APITokenController::getUser());
     }
 
     /**

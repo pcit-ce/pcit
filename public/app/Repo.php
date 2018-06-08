@@ -204,6 +204,35 @@ EOF;
     }
 
     /**
+     * @param string $git_type
+     * @param string $username
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function allByRepoPrefix(string $git_type, string $username)
+    {
+        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_prefix=?';
+
+        return DB::select($sql, [$git_type, $username]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param string $username
+     * @param string $repo_name
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function findByRepoFullName(string $git_type, string $username, string $repo_name)
+    {
+        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
+
+        return DB::select($sql, [$git_type, $username, $repo_name]);
+    }
+
+    /**
      * @param int $uid
      *
      * @return array|string

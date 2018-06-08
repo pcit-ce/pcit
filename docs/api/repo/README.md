@@ -19,7 +19,7 @@ This returns a list of repositories an owner has access to.
 
 | Method | URL                                  |
 | :----- | :------------------------------------|
-| `GET`  | `/owner/{git_type}/{username}/repos` |
+| `GET`  | `/{git_type}/{username}/repos` |
 
 **Example:** `GET` `/owner/github/khs1994-php/repos`
 

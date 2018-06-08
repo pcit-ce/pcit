@@ -9,17 +9,15 @@ use App\Http\Controllers\APITokenController;
 class BetaFeatureController
 {
     /**
-     * /user/{git_type}/{username}/beta_features.
+     * /user/beta_features.
      *
      * Return a list of beta features available to a user.
      *
-     * @param array $args
+     * @throws \Exception
      */
-    public function __invoke(...$args): void
+    public function __invoke(): void
     {
-        list($git_type, $user_name) = $args;
-
-        APITokenController::checkByUser(...$args);
+        APITokenController::getUser();
     }
 
     /**
@@ -31,15 +29,13 @@ class BetaFeatureController
      * {"beta_feature.enabled":true}
      * <pre>
      *
-     * /user/{git_type}/{username}/beta_feature/{beta_feature_id}
+     * /user/beta_feature/{beta_feature_id}
      *
-     * @param array $args
+     * @throws \Exception
      */
-    public function enable(...$args): void
+    public function enable(): void
     {
-        list($git_type, $username, $beta_feature_id) = $args;
-
-        APITokenController::checkByUser($git_type, $username);
+        APITokenController::getUser();
     }
 
     /**
@@ -47,14 +43,14 @@ class BetaFeatureController
      *
      * delete
      *
-     * /user/{git_type}/{username}/beta_feature/{beta_feature_id}
+     * /user/beta_feature/{beta_feature_id}
      *
      * @param array $args
+     *
+     * @throws \Exception
      */
     public function delete(...$args): void
     {
-        list($git_type, $username, $beta_feature_id) = $args;
-
-        APITokenController::checkByUser($git_type, $username);
+        APITokenController::getUser();
     }
 }

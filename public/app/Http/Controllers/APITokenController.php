@@ -49,7 +49,7 @@ class APITokenController
 
         list('git_type' => $git_type, 'uid' => $uid) = $array[0];
 
-        return [$git_type, $uid];
+        return [$git_type, (int) $uid];
     }
 
     /**

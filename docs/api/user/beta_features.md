@@ -6,8 +6,8 @@ This will return a list of beta features available to a user.
 
 > 返回 Beta 功能列表
 
-| Method | URL                           |
-| :----- | :---------------------------- |
+| Method | URL                                 |
+| :----- | :----------------------------       |
 | `GET`    | `/user/{user.name}/beta_features` |
 
 **Example:** `GET` `/user/khs1994/beta_features`

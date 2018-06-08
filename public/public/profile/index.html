@@ -18,6 +18,12 @@
   <button id="sync">Sync</button>
 </div>
 <br>
+
+<div class="tip">
+  <p id="feature">
+    <strong>Interested in trying beta features?</strong> <a href="/features">Check out what's new.</a>
+  </p>
+</div>
 <hr>
 <br>
 <div id="repos">
@@ -110,7 +116,22 @@
       success: function (data) {
 
       }
-    })
+    });
+
+    if ('github' === git_type) {
+      $.ajax({
+        type: "GET",
+        url: "/api/ci/oauth_client_id",
+        headers: {
+          'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+        },
+        success: function (data) {
+          $('.tip').after(
+            `<p><strong>Missing an organization?</strong> <a href="${data}"> Review and add </a> your authorized organizations.</p>`
+          );
+        }
+      });
+    }
 
   });
 
