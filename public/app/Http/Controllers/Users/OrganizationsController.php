@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use App\GetAccessToken;
 use App\Http\Controllers\APITokenController;
 use App\User;
 use Exception;

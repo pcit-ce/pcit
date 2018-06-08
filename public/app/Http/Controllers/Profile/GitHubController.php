@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\APITokenController;
-use App\Repo;
 use App\User;
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
@@ -51,8 +50,8 @@ class GitHubController
             $git_type.'_api_token',
             $api_token,
             time() + 24 * 60 * 60,
-            "",
-            Env::get('CI_SESSION_DOMAIN'), true
+            '',
+            Env::get('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
         );
 
         User::updateUserInfo($git_type, (int) $uid, (string) $username, (string) $email, (string) $pic, $access_token);

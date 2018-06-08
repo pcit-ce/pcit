@@ -74,17 +74,12 @@ class APIController
                     'delete' => $ci_host.'/build/{build.id}/log',
                 ],
             ],
-            'owner' => [
-                'find' => $ci_host.'/owner/{git_type}/{username}',
-                'active' => $ci_host.'/owner/{git_type}/{username}/active',
-                'activeByGitHubId' => $ci_host.'/owner/github_id/{id}/active',
-                'activeByCodingId' => $ci_host.'/owner/coding_id/{id}/active',
-                'activeByGiteeId' => $ci_host.'/owner/gitee_id/{id}/active',
-                'activeByAliyunCodeId' => $ci_host.'/owner/aliyuncode_id/{id}/active',
-            ],
             'orgs' => [
                 'list' => $ci_host.'/orgs/{git_type}', // Returns a list of organizations the current user is a member of.
                 'find' => $ci_host.'/org/{git_tyep}/{org.name}',
+            ],
+            'system' => [
+                'oauth_client_id' => $ci_host.'/ci/oauth_client_id',
             ],
         ];
 

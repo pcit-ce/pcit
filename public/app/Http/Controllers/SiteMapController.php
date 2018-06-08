@@ -46,27 +46,22 @@ class SiteMapController
                 'list@get' => [
                     'coding' => $host.'/webhooks/coding/{username}/{repo}',
                     'gitee' => $host.'/webhooks/gitee/{username}/{repo}',
-                    'github' => $host.'/webhooks/github/{username}/{repo}',
                 ],
                 'cteate@post' => [
                     'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}',
                     'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}',
-                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}',
                 ],
                 'delete@delete' => [
                     'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}',
                     'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}',
-                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}',
                 ],
                 'activate@post' => [
                     'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}/activate',
                     'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}/activate',
-                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}/activate',
                 ],
                 'deactivate@post' => [
                     'coding' => $host.'/webhooks/coding/{username}/{repo}/{id}/deactivate',
                     'gitee' => $host.'/webhooks/gitee/{username}/{repo}/{id}/deactivate',
-                    'github' => $host.'/webhooks/github/{username}/{repo}/{id}/deactivate',
                 ],
             ],
             'webhooks@receive' => [
@@ -96,11 +91,6 @@ class SiteMapController
                 'unstar@delete' => $host.'/{git_type}/{username}/{repo}/unstar',
                 'status' => $host.'/{git_type}/{username}/{repo}/status',
                 'getstatus' => $host.'/{git_type}/{username}/{repo}/getstatus',
-            ],
-            'sync@post' => [
-                'coding' => $host.'/sync/coding',
-                'gitee' => $host.'/sync/gitee',
-                'github' => $host.'/sync/github',
             ],
             'statuses@github' => [
                 'list@get' => $host.'/status/github/{username}/{repo}/{ref}',

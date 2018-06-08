@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\APITokenController;
@@ -10,6 +12,7 @@ class OAuthClientController
 {
     /**
      * @return mixed
+     *
      * @throws Exception
      */
     public function __invoke()

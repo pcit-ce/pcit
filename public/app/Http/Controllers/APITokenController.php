@@ -147,7 +147,6 @@ class APITokenController
         $json = file_get_contents('php://input');
 
         if (!$json) {
-
             return self::getAccessTokenByUid($git_type, $username, $uid);
         }
 
@@ -200,7 +199,6 @@ class APITokenController
         $token_from_db = ApiToken::get((string) $git_type, $uid);
 
         if ($token_from_db) {
-
             return $token_from_db;
         }
 

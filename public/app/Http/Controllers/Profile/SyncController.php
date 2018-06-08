@@ -15,7 +15,7 @@ class SyncController
     /**
      * @throws Exception
      */
-    public function __invoke()
+    public function __invoke(): void
     {
         list($git_type, $uid) = APITokenController::getUser();
 

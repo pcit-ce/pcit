@@ -158,7 +158,7 @@ UPDATE repo SET repo_admin=?
 WHERE git_type=? AND rid=? AND JSON_VALID(repo_admin) IS NULL
 EOF;
 
-        DB::update($sql, ["[]", $git_type, $rid]);
+        DB::update($sql, ['[]', $git_type, $rid]);
 
         $sql = <<<EOF
 UPDATE repo SET repo_admin=JSON_MERGE_PRESERVE(repo_admin,?) 
@@ -208,6 +208,7 @@ EOF;
      * @param string $username
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function allByRepoPrefix(string $git_type, string $username)
@@ -223,6 +224,7 @@ EOF;
      * @param string $repo_name
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function findByRepoFullName(string $git_type, string $username, string $repo_name)

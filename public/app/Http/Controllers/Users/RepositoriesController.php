@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\APITokenController;
@@ -8,7 +10,7 @@ use Exception;
 
 class RepositoriesController
 {
-    public function index()
+    public function index(): void
     {
         require __DIR__.'/../../../../public/repo/index.html';
 
