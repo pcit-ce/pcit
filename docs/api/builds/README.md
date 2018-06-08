@@ -4,7 +4,7 @@
 
 This returns a list of builds for the current user. The result is paginated. The default limit is 100.
 
-> 某个用户名下所有仓库的构建列表
+> 当前用户名下所有仓库的构建列表
 
 | Method | URL       |
 | :----- | :-------- |

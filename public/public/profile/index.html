@@ -15,7 +15,7 @@
 </header>
 <div id="userinfo">
   <p id="username"></p>
-  <button id="sync">Sync</button>
+  <button id="sync" onclick="sync()">Sync</button>
 </div>
 <br>
 
@@ -79,10 +79,6 @@
     })
   }
 
-  function sync() {
-
-  }
-
   $(document).ready(function () {
 
     $.ajax({
@@ -127,13 +123,29 @@
         },
         success: function (data) {
           $('.tip').after(
-            `<p><strong>Missing an organization?</strong> <a href="${data}"> Review and add </a> your authorized organizations.</p>`
+            `<p>
+<strong>Missing an organization?</strong>
+<a href="${data}" target="_blank"> Review and add </a> your authorized organizations.
+</p>`
           );
         }
       });
     }
 
   });
+
+  function sync() {
+    $.ajax({
+      type: 'POST',
+      url: '/api/user/sync',
+      headers: {
+        'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+      },
+      success: function (data) {
+        location.reload();
+      }
+    })
+  }
 
   function open_or_close(id) {
     let repo = id.getAttribute('id');
@@ -163,8 +175,6 @@
 
     }
   }
-
-
 </script>
 </body>
 </html>

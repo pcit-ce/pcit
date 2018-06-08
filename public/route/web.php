@@ -106,7 +106,7 @@ Route::get('api/user/beta_features', 'Users\BetaFeatureController');
 Route::patch('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@enable');
 Route::delete('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@delete');
 
-/*Sync Repo*/
+/*Sync User info*/
 
 Route::post('api/user/sync', 'Profile\SyncController');
 
@@ -118,15 +118,17 @@ Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
 
 /**Repos**/
 
-Route::get('api/repos', 'Users\RepositoriesController');
-
 Route::get('{git_type}/{username}', 'Users\RepositoriesController@index');
 
-Route::get('api/{git_type}/{username}/repos', 'Users\RepositoriesController@list'); //某用户名下的仓库列表
+Route::get('api/repos', 'Users\RepositoriesController');
+
+Route::get('api/repos/{git_type}/{username}', 'Users\RepositoriesController@list'); //某用户名下的仓库列表
 
 Route::get('api/repo/{git_type}/{username}/{repo_name}', 'Users\RepositoriesController@find'); // 列出某仓库详情
 
-Route::get('api/user/{username}/active', 'Builds\ActiveController');
+Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
+
+/* orgs */
 
 Route::get('api/orgs', 'Users\OrganizationsController');
 

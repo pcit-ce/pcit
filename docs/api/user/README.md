@@ -40,9 +40,9 @@ A list of all the builds in an "active" state, either `created` or `started`.
 
 |  Method   |  URL                          |
 | :-----   | :--------------------------    |
-| `GET`    | `/user/{owner.login}/active` |
+| `GET`    | `/user/{git_type}/{owner.login}/active` |
 
-**Example:** `GET` `/user/khs1994/active`
+**Example:** `GET` `/user/github/khs1994/active`
 
 ### Via GitHub User Id
 

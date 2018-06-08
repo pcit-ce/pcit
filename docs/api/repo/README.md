@@ -8,20 +8,20 @@ This returns a list of repositories the current user has access to.
 
 | Method | URL       |
 | :----- | :-------- |
-| `GET`  | `/repos/` |
+| `GET`  | `/repos` |
 
 
 ## List By Owner
 
 This returns a list of repositories an owner has access to.
 
-> 返回某个用户名下的所有仓库列表
+> 返回某个用户(或组织)名下的所有仓库列表，不包含用户名下组织的仓库列表
 
 | Method | URL                                  |
 | :----- | :------------------------------------|
-| `GET`  | `/{git_type}/{username}/repos` |
+| `GET`  | `/repos/{git_type}/{username}` |
 
-**Example:** `GET` `/owner/github/khs1994-php/repos`
+**Example:** `GET` `/repos/github/khs1994-php`
 
 ## Find
 

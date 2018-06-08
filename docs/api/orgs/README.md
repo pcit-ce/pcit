@@ -18,4 +18,4 @@ This returns an individual organization.
 
 | Method | URL                                      |
 | :----- | :--------------------------------------- |
-| `GET`  | `/org/{git_type}/{organization.id.name}` |
+| `GET`  | `/org/{git_type}/{organization.name}` |

@@ -14,7 +14,7 @@ class APIController
 
         $array = [
             'user' => [
-                'current' => $ci_host.'/user',
+                'current_user_url' => $ci_host.'/user',
                 'find' => $ci_host.'/user/{git_type}/{username}',
                 'sync' => $ci_host.'/user/sync',
                 'beta_feature' => [
@@ -22,8 +22,11 @@ class APIController
                     'update@patch' => $ci_host.'/user/beta_feature/{beta_feature.id}',
                     'delete' => $ci_host.'/user/beta_feature/{beta_feature.id}',
                 ],
+                'active' => $ci_host.'/user/{git_type}/{username}/active', # 返回某用户（或组织）处于活跃状态的仓库列表
             ],
             'repo' => [
+                'current_user_repositories_url' => $ci_host.'/repos',
+                'user\'s repo' => $ci_host.'/repos/{git_type}/{username}',
                 'branch' => [
                     'list@get' => $ci_host.'/repo/{git_type}/{username}/{repo.name}/branches',
                     'find@get' => $ci_host.'/repo/{git_type}/{username}/{repo.name}/branch/{branch.name}',
@@ -63,7 +66,7 @@ class APIController
                 'unstar@post' => $ci_host.'/repo/{git_type}/{username}/{repo.name}/unstar',
             ],
             'builds' => [
-                'list' => $ci_host.'/builds',
+                'current_user_builds_url' => $ci_host.'/builds',
                 'listByRepo' => $ci_host.'/repo/{git_type}/{username}/{repo.name}/builds',
                 'findByRepoCurrent' => $ci_host.'/repo/{git_type}/{username}/{repo.name}/build/current',
                 'find' => $ci_host.'/build/{build_id}',
@@ -75,8 +78,8 @@ class APIController
                 ],
             ],
             'orgs' => [
-                'list' => $ci_host.'/orgs/{git_type}', // Returns a list of organizations the current user is a member of.
-                'find' => $ci_host.'/org/{git_tyep}/{org.name}',
+                'user_organizations_url' => $ci_host.'/orgs', // Returns a list of organizations the current user is a member of.
+                'find' => $ci_host.'/org/{git_type}/{org.name}',
             ],
             'system' => [
                 'oauth_client_id' => $ci_host.'/ci/oauth_client_id',
