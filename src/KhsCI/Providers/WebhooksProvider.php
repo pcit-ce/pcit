@@ -17,6 +17,7 @@ class WebhooksProvider implements ServiceProviderInterface
                 return new GitHubClient();
             } else {
                 $class = 'KhsCI\Service\Webhooks\\'.ucfirst($app['git_type']);
+
                 return new $class();
             }
         };

@@ -200,8 +200,7 @@ class KhsCICommand
                                       ?string $data,
                                       bool $auth = false,
                                       int $target_code = 200
-    )
-    {
+    ) {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -235,8 +234,7 @@ class KhsCICommand
                                      bool $auth = false,
                                      bool $json = false,
                                      int $target_code = 200
-    )
-    {
+    ) {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];

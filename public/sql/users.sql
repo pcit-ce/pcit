@@ -14,8 +14,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY (`git_type`, `uid`)
 );
 
+# ALTER TABLE user
+#   CHANGE `admin` `org_admin` JSON;
+
 ALTER TABLE user
-  ADD COLUMN `admin` JSON;
+  ADD COLUMN `org_admin` JSON;
 
 ALTER TABLE user
   ADD COLUMN `type` varchar(100) DEFAULT 'user';

@@ -134,13 +134,22 @@ class APITokenController
     /**
      * 生成 API Token.
      *
+     * @param string|null $git_type
+     * @param string      $username
+     * @param int         $uid
+     *
      * @return string
      *
      * @throws Exception
      */
-    public function find()
+    public static function find(string $git_type = null, string $username, int $uid)
     {
         $json = file_get_contents('php://input');
+
+        if (!$json) {
+
+            return self::getAccessTokenByUid($git_type, $username, $uid);
+        }
 
         $obj = json_decode($json);
 
@@ -174,9 +183,24 @@ class APITokenController
             throw new Exception('Requires authentication', 401);
         }
 
+        return self::getAccessTokenByUid((string) $git_type, (string) $username, (int) $uid);
+    }
+
+    /**
+     * @param string $git_type
+     * @param string $username
+     * @param int    $uid
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    private static function getAccessTokenByUid(string $git_type, string $username, int $uid)
+    {
         $token_from_db = ApiToken::get((string) $git_type, $uid);
 
         if ($token_from_db) {
+
             return $token_from_db;
         }
 

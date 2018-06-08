@@ -36,12 +36,12 @@ class OrganizationsController
 
             $org_pic = $k['avatar_url'];
 
-            User::updateUserInfo($git_type, $org_id, $org_name, null, $org_pic, null, true);
+            User::updateUserInfo($git_type, (int) $org_id, $org_name, null, $org_pic, null, true);
 
-            User::setOrgAdmin($git_type, $org_id, $uid);
+            User::setOrgAdmin($git_type, (int) $org_id, (int) $uid);
         }
 
-        return User::getOrgByAdmin($git_type, $uid);
+        return User::getOrgByAdmin($git_type, (int) $uid);
     }
 
     /**

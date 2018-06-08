@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
+use App\Http\Controllers\APITokenController;
 use App\Repo;
 use App\User;
-use KhsCI\KhsCI;
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
@@ -35,42 +35,30 @@ class GitHubController
 
         if (null === $username or null === $access_token) {
             Response::redirect(Env::get('CI_HOST').'/login');
+
+            exit;
         }
 
         if ($username_from_web !== $username) {
             Response::redirect('/profile/'.$git_type.'/'.$username);
-        }
 
-        User::updateUserInfo($git_type, (int) $uid, (string) $username, (string) $email, (string) $pic, $access_token);
-
-        $ajax = $_GET['ajax'] ?? false;
-
-        // ?ajax=true $ajax=true
-        // cache
-
-        if (!($ajax)) {
-            // 非 ajax 请求返回静态 HTML 页面
-
-            require __DIR__.'/../../../../public/profile/index.html';
             exit;
         }
 
-        $sync = true;
+        $api_token = APITokenController::find($git_type, $username, (int) $uid);
 
-        $repo_array = Repo::allByAdmin(self::$git_type, (int) $uid);
+        setcookie(
+            $git_type.'_api_token',
+            $api_token,
+            time() + 24 * 60 * 60,
+            "",
+            Env::get('CI_SESSION_DOMAIN'), true
+        );
 
-        foreach ($repo_array as $k) {
-            $array[$k['repo_full_name']] = 1;
-        }
+        User::updateUserInfo($git_type, (int) $uid, (string) $username, (string) $email, (string) $pic, $access_token);
 
-        return [
-            'code' => 200,
-            'git_type' => $git_type,
-            'uid' => $uid,
-            'username' => $username,
-            'pic' => $pic,
-            'cache' => false === $sync,
-            'repos' => $array,
-        ];
+        require __DIR__.'/../../../../public/profile/index.html';
+
+        exit;
     }
 }

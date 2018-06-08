@@ -9,7 +9,6 @@ use App\User;
 use Dotenv\Dotenv;
 use Exception;
 use KhsCI\KhsCI;
-use KhsCI\Service\Build\Build;
 use KhsCI\Support\DB;
 use PHPUnit\Framework\TestCase;
 
@@ -58,7 +57,7 @@ class KhsCITestCase extends TestCase
     /**
      * @throws Exception
      */
-    public function insertDB()
+    public function insertDB(): void
     {
         // User
 
@@ -81,7 +80,7 @@ null,'github_app',2,'khs1994-php','other'
 )
 EOF;
 
-        DB::insert($sql, ["[\"1\"]", "[\"2\"]"]);
+        DB::insert($sql, ['["1"]', '["2"]']);
 
         // issues
 
@@ -113,7 +112,6 @@ null,'github_app',1,'push','master',null,null,null,null,5,'commit message5','adm
 EOF;
 
         DB::insert($sql, [time(), time(), time(), time(), time()]);
-
 
         // api_token
     }

@@ -144,6 +144,7 @@ class Build extends DBModel
      * @param string $branch
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function buildStatusIsChanged(int $rid, string $branch)

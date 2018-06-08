@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Providers;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -8,7 +10,7 @@ use Pimple\ServiceProviderInterface;
 
 class PHPMailerProvider implements ServiceProviderInterface
 {
-    public function register(Container $pimple)
+    public function register(Container $pimple): void
     {
         $pimple['email'] = function () {
             $mail = new PHPMailer(true);

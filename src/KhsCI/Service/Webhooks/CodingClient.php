@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Webhooks;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Webhooks;
 
 class CodingClient
 {
-
 }

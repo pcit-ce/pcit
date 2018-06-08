@@ -39,7 +39,6 @@ class User extends DBModel
      * @param string|null $email
      * @param string|null $pic
      * @param string|null $accessToken
-     *
      * @param bool        $org
      *
      * @throws Exception
@@ -64,8 +63,8 @@ class User extends DBModel
             $org || $org = null;
             $org && $org = 'org';
 
-            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,$org,null)';
-            DB::insert($sql, [$git_type, $uid, $username, $email, $pic, $accessToken]);
+            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,null,?)';
+            DB::insert($sql, [$git_type, $uid, $username, $email, $pic, $accessToken, $org]);
         }
     }
 
@@ -76,25 +75,24 @@ class User extends DBModel
      *
      * @throws Exception
      */
-    public static function setOrgAdmin(string $git_type, int $org_id, int $admin_uid)
+    public static function setOrgAdmin(string $git_type, int $org_id, int $admin_uid): void
     {
         $sql = <<<EOF
-UPDATE user SET admin='[]' WHERE git_type=? AND uid=? AND JSON_VALID(admin) IS NULL
+UPDATE user SET org_admin=? WHERE git_type=? AND uid=? AND JSON_VALID(org_admin) IS NULL
 EOF;
 
-        DB::update($sql, [$git_type, $org_id]);
+        DB::update($sql, ['[]', $git_type, $org_id]);
 
         $sql = <<<EOF
-UPDATE user SET admin=JSON_MERGE_PRESERVE(admin,?) 
+UPDATE user SET org_admin=JSON_MERGE_PRESERVE(org_admin,?) 
 
-WHERE git_type=? AND uid=? AND NOT JSON_CONTAINS(admin,JSON_QUOTE(?))
+WHERE git_type=? AND uid=? AND NOT JSON_CONTAINS(org_admin,JSON_QUOTE(?))
 EOF;
         DB::update($sql, ["[\"$admin_uid\"]", $git_type, $org_id, $admin_uid]);
     }
 
-    public static function deleteOrgAdmin()
+    public static function deleteOrgAdmin(): void
     {
-
     }
 
     /**
@@ -102,11 +100,12 @@ EOF;
      * @param int    $admin_uid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getOrgByAdmin(string $git_type, int $admin_uid)
     {
-        $sql = 'SELECT * FROM user WHERE git_type=? AND JSON_CONTAINS(admin,JSON_QUOTE(?)) AND type=?';
+        $sql = 'SELECT * FROM user WHERE git_type=? AND JSON_CONTAINS(org_admin,JSON_QUOTE(?)) AND type=?';
 
         return DB::select($sql, [$git_type, $admin_uid, 'org']);
     }

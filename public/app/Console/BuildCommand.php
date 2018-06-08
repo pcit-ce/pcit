@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console;
 
-use App\Build as BuildDB;
 use App\Build;
+use App\Build as BuildDB;
 use App\GetAccessToken;
 use App\Repo;
 use App\User;
@@ -147,7 +147,6 @@ class BuildCommand
             $build->systemDelete($this->unique_id, true);
 
             if (!$this->unique_id) {
-
                 return;
             }
 
@@ -164,7 +163,7 @@ class BuildCommand
     /**
      * @throws Exception
      */
-    private function sendEMail()
+    private function sendEMail(): void
     {
         $build_status_changed = Build::buildStatusIsChanged((int) $this->rid, $this->branch);
 
@@ -196,19 +195,16 @@ class BuildCommand
         if (CI::BUILD_STATUS_PASSED === $this->build_status) {
             // 构建成功
             if ('never' === $on_success) {
-
                 return;
             }
         } else {
             // 构建失败
             if ('never' === $on_failure) {
-
                 return;
             }
         }
 
-        if (!(is_null($on_success) && is_null($on_failure && $build_status_changed))) {
-
+        if (!(null === $on_success && null === $on_failure && $build_status_changed)) {
             return;
         }
 
@@ -246,7 +242,6 @@ class BuildCommand
                 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo
             );
         }
-
     }
 
     /**
@@ -254,7 +249,6 @@ class BuildCommand
      */
     private function getBuildDB()
     {
-
         $sql = <<<'EOF'
 SELECT
 
@@ -310,7 +304,6 @@ EOF;
         $ci_root = Env::get('CI_ROOT');
 
         while ($ci_root) {
-
             Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root');
 
             $admin = Repo::getAdmin($this->git_type, (int) $this->rid);
@@ -323,7 +316,6 @@ EOF;
                 $uid = User::getUid($this->git_type, $k);
 
                 if (in_array($uid, $admin_array)) {
-
                     return;
                 }
             }
@@ -341,7 +333,7 @@ EOF;
     /**
      * @throws Exception
      */
-    private function setStatusInProgress()
+    private function setStatusInProgress(): void
     {
         BuildDB::updateStartAt($this->build_key_id);
         BuildDB::updateBuildStatus($this->build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
@@ -613,7 +605,7 @@ EOF;
         return 1;
     }
 
-    public function __call($name, $arguments)
+    public function __call($name, $arguments): void
     {
         if (method_exists($this, $name)) {
             $this->$name(...$arguments);

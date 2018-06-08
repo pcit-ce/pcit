@@ -118,8 +118,11 @@ Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
 
 /**Repos**/
 
-Route::get('{git_type}/{username}', 'Builds\IndexController@repo');
-Route::get('api/user/{username}/repos', '');
+Route::get('api/repos', '');
+
+Route::get('{git_type}/{username}', 'Users\RepositoriesController@index');
+
+Route::get('api/owner/{git_type}/{username}/repos', ''); //某用户名下的仓库列表
 
 Route::get('api/user/{username}/active', 'Builds\ActiveController');
 

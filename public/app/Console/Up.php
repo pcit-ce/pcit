@@ -409,7 +409,7 @@ git_type,event_type,rid,created_at
 ) VALUES(?,?,?,?);
 EOF;
         $data = [
-            $this->git_type, __FUNCTION__, $rid, $event_time
+            $this->git_type, __FUNCTION__, $rid, $event_time,
         ];
 
         return DB::insert($sql, $data);
@@ -1074,7 +1074,6 @@ EOF;
 
     /**
      * Do Nothing.
-     *
      */
     public function watch()
     {
@@ -1083,7 +1082,6 @@ EOF;
 
     /**
      * Do Nothing.
-     *
      */
     public function fork()
     {
@@ -1091,8 +1089,7 @@ EOF;
     }
 
     /**
-     *
-     * Do nothing
+     * Do nothing.
      */
     public function release()
     {
