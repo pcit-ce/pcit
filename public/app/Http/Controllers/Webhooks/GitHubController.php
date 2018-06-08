@@ -14,21 +14,9 @@ class GitHubController
      */
     public function __invoke()
     {
-        $khsci = new KhsCI();
+        $khsci = new KhsCI([], 'github');
 
-        $output = $khsci->webhooks->startGitHubServer();
-
-        return [$output];
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function githubApp()
-    {
-        $khsci = new KhsCI();
-
-        $output = $khsci->webhooks->startGitHubAppServer();
+        $output = $khsci->webhooks->Server();
 
         return [$output];
     }

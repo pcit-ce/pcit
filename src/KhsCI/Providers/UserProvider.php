@@ -14,7 +14,7 @@ class UserProvider implements ServiceProviderInterface
     {
         $pimple['user_basic_info'] = function ($app) {
             $git_type = $app['git_type'];
-            if ('github_app' === $git_type or 'github' === $git_type) {
+            if ('github' === $git_type) {
                 return new GitHubClient($app['curl'], $app['config']['api_url']);
             }
 

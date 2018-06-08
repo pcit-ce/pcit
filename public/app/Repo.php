@@ -153,7 +153,15 @@ class Repo extends DBModel
     public static function updateAdmin(string $git_type, int $rid, int $uid): void
     {
         $sql = <<<EOF
-UPDATE repo SET repo_admin=JSON_MERGE(repo_admin,?) 
+UPDATE repo SET repo_admin='[]'
+
+WHERE git_type=? AND rid=? AND JSON_VALID(repo_admin) IS NULL
+EOF;
+
+        DB::update($sql, [$git_type, $rid]);
+
+        $sql = <<<EOF
+UPDATE repo SET repo_admin=JSON_MERGE_PRESERVE(repo_admin,?) 
 
 WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS(repo_admin,JSON_QUOTE(?))
 EOF;

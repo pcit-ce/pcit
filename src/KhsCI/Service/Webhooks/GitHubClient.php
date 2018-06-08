@@ -15,7 +15,7 @@ use KhsCI\Support\Request;
  *
  * @see https://developer.github.com/webhooks/#events
  */
-class Webhooks
+class GitHubClient
 {
     /**
      * @var string
@@ -34,7 +34,7 @@ class Webhooks
      *
      * @throws Exception
      */
-    public function startGitHubServer(string $secret = null)
+    public function Server(string $secret = null)
     {
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
         $content = file_get_contents('php://input');
@@ -59,40 +59,6 @@ class Webhooks
         }
 
         throw new Exception('', 402);
-    }
-
-    /**
-     * @param string $secret
-     *
-     * @return bool|int
-     *
-     * @throws Exception
-     */
-    public function startGitHubAppServer(string $secret = null)
-    {
-        $this->git_type = 'github_app';
-
-        return $this->startGitHubServer($secret);
-    }
-
-    /**
-     * @param string $secret
-     *
-     * @return array
-     */
-    public function startCodingServer(string $secret = null)
-    {
-        return [];
-    }
-
-    /**
-     * @param string $secret
-     *
-     * @return array
-     */
-    public function startGiteeServer(string $secret = null)
-    {
-        return [];
     }
 
     /**

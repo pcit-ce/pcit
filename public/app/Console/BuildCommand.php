@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build as BuildDB;
+use App\Build;
 use App\GetAccessToken;
 use App\Repo;
 use App\User;
@@ -46,6 +47,8 @@ class BuildCommand
 
     private $description;
 
+    private $branch;
+
     /**
      * @var KhsCI
      */
@@ -70,19 +73,18 @@ class BuildCommand
 
             Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
 
-            $this->checkCIRoot($output);
+            $this->checkCIRoot();
 
             unset($output[10]);
 
             $this->setStatusInProgress();
 
-            $repo_full_name = Repo::getRepoFullName($output[1], (int) $output[2]);
+            $repo_full_name = Repo::getRepoFullName($this->git_type, (int) $this->rid);
 
             array_push($output, $repo_full_name);
 
             // 清理构建环境
             $build->systemDelete('1');
-
             $build(...$output);
         } catch (CIException $e) {
             // 没有 build_key_id，即数据库没有待构项目，跳过
@@ -102,27 +104,27 @@ class BuildCommand
             // $e->getCode() is build key id.
             BuildDB::updateStopAt($this->build_key_id);
 
-            self::saveLog();
+            $this->saveLog();
 
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_INACTIVE:
                     $this->build_status = CI::BUILD_STATUS_INACTIVE;
-                    self::setBuildStatusInactive();
+                    $this->setBuildStatusInactive();
 
                     break;
                 case CI::BUILD_STATUS_FAILED:
                     $this->build_status = CI::BUILD_STATUS_FAILED;
-                    self::setBuildStatusFailed();
+                    $this->setBuildStatusFailed();
 
                     break;
                 case CI::BUILD_STATUS_PASSED:
                     $this->build_status = CI::BUILD_STATUS_PASSED;
-                    self::setBuildStatusPassed();
+                    $this->setBuildStatusPassed();
 
                     break;
                 default:
                     $this->build_status = CI::BUILD_STATUS_ERRORED;
-                    self::setBuildStatusErrored();
+                    $this->setBuildStatusErrored();
             }
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
@@ -140,7 +142,7 @@ class BuildCommand
             BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
 
             Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description &&
-            self::weChatTemplate($this->description);
+            $this->weChatTemplate($this->description);
 
             $build->systemDelete($this->unique_id, true);
 
@@ -151,10 +153,100 @@ class BuildCommand
 
             $this->autoMerge();
 
+            $this->sendEMail();
+
             Log::connect()->debug('====== '.$this->build_key_id.' Build Stopped Success ======');
 
             Cache::connect()->set('khsci_up_status', 0);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function sendEMail()
+    {
+        $build_status_changed = Build::buildStatusIsChanged((int) $this->rid, $this->branch);
+
+        $email_list = null;
+
+        $on_success = null;
+
+        $on_failure = null;
+
+        $config = (object) json_decode($this->config, true);
+
+        $email = $config->notifications['email'] ?? null;
+
+        if ($email) {
+            // email 指令存在
+            $recipients = $email['recipients'] ?? null;
+
+            if ($recipients) {
+                // recipients 指令存在
+                $on_success = $email['on_success'] ?? null;
+                $on_failure = $email['on_failure'] ?? null;
+
+                $email_list = $recipients;
+            } else {
+                $email_list = $email;
+            }
+        }
+
+        if (CI::BUILD_STATUS_PASSED === $this->build_status) {
+            // 构建成功
+            if ('never' === $on_success) {
+
+                return;
+            }
+        } else {
+            // 构建失败
+            if ('never' === $on_failure) {
+
+                return;
+            }
+        }
+
+        if (!(is_null($on_success) && is_null($on_failure && $build_status_changed))) {
+
+            return;
+        }
+
+        // 构建成功
+
+        $subject = 'user/repo#build_id(branch-commit_id)';
+
+        $body = '';
+
+        try {
+            $mail = ($this->khsci)->mail;
+
+            foreach (json_decode(getenv('CI_EMAIL_ADDRESS_JSON')) as $k => $v) {
+                $mail->addAddress($k, $v);
+            }
+
+            foreach (json_decode(getenv('CI_EMAIL_CC_JSON'), true) as $k) {
+                $mail->addCC($k); // 抄送
+            }
+
+            foreach (json_decode(getenv('CI_EMAIL_BCC_JSON'), true) as $k) {
+                $mail->addBCC($k); // 暗抄送
+            }
+
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body = $body;
+
+            $mail->send();
+            Log::debug(__FILE__, __LINE__, 'Message has been sent');
+        } catch (Exception $e) {
+            Log::debug(
+                __FILE__,
+                __LINE__,
+                'Message could not be sent. Mailer Error: ', $mail->ErrorInfo
+            );
+        }
+
     }
 
     /**
@@ -194,7 +286,10 @@ EOF;
             );
         }
 
+        $output = array_values($output);
+
         $this->git_type = $output[1];
+        $this->branch = $output[5];
         $this->build_key_id = (int) $output[0];
         $this->pull_request_id = (int) $output[7];
         $this->rid = (int) $output[2];
@@ -208,43 +303,35 @@ EOF;
     }
 
     /**
-     * @param array $output buildDB
-     *
      * @throws Exception
      */
-    private function checkCIRoot(array $output): void
+    private function checkCIRoot(): void
     {
         $ci_root = Env::get('CI_ROOT');
-
-        Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
 
         while ($ci_root) {
 
             Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root');
 
-            $git_type = $output[1];
-            $rid = $output[2];
-            $commit_id = $output[3];
-            $event_type = $output[6];
-
-            $admin = Repo::getAdmin($git_type, (int) $rid);
+            $admin = Repo::getAdmin($this->git_type, (int) $this->rid);
             $admin_array = json_decode($admin, true);
 
             $ci_root_array = json_decode($ci_root, true);
-            $root = $ci_root_array[$git_type];
+            $root = $ci_root_array[$this->git_type];
 
             foreach ($root as $k) {
-                $uid = User::getUid($git_type, $k);
+                $uid = User::getUid($this->git_type, $k);
 
                 if (in_array($uid, $admin_array)) {
+
                     return;
                 }
             }
 
             throw new CIException(
                 null,
-                $commit_id,
-                $event_type,
+                $this->commit_id,
+                $this->event_type,
                 CI::BUILD_STATUS_PASSED,
                 $this->build_key_id
             );
@@ -524,5 +611,12 @@ EOF;
     public function test()
     {
         return 1;
+    }
+
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this, $name)) {
+            $this->$name(...$arguments);
+        }
     }
 }

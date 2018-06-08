@@ -16,9 +16,9 @@ class CodingController
      */
     public function __invoke()
     {
-        $khsci = new KhsCI();
+        $khsci = new KhsCI([], 'coding');
 
-        $output = $khsci->webhooks->startCodingServer();
+        $output = $khsci->webhooks->Server();
 
         return [$output];
     }

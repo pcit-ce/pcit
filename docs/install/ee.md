@@ -20,15 +20,21 @@ $ ./lnmp-docker.sh khsci-up
 
 编辑 `khsci/conf/khsci.conf`
 
+## 新建 GitHub OAuth App
+
+在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/applications/new) 新建 OAuth App
+
+部分重要信息填写如下：
+
+* `Authorization callback URL` OAuth 回调地址 https://ci.example.com:port/oauth/github
+
 ## 新建 GitHub App
 
-在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 新建 GitHub App
+在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps/new) 新建 GitHub App
 
 部分重要信息填写如下：
 
 * `Homepage URL` 网站域名 https://ci.example.com:port
-
-* `User authorization callback URL` OAuth 回调地址 https://ci.example.com:port/oauth/github_app
 
 * `Webhook URL` Webhooks 接收地址 https://ci.example.com:port/webhooks/github_app
 

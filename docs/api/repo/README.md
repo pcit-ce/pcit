@@ -21,7 +21,7 @@ This returns a list of repositories an owner has access to.
 | :----- | :------------------------------------|
 | `GET`  | `/owner/{git_type}/{username}/repos` |
 
-**Example:** `GET` `/owner/github_app/khs1994-php/repos`
+**Example:** `GET` `/owner/github/khs1994-php/repos`
 
 ## Find
 

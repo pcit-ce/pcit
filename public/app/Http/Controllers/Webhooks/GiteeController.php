@@ -14,9 +14,9 @@ class GiteeController
      */
     public function __invoke()
     {
-        $khsci = new KhsCI();
+        $khsci = new KhsCI([],'gitee');
 
-        $output = $khsci->webhooks->startGiteeServer();
+        $output = $khsci->webhooks->Server();
 
         return [$output];
     }

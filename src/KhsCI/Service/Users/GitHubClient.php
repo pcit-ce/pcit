@@ -91,7 +91,7 @@ class GitHubClient
     {
         $url = $this->api_url.'/user/orgs';
 
-        $this->curl->get($url);
+        return $this->curl->get($url);
     }
 
     /**

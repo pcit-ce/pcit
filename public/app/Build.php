@@ -140,6 +140,26 @@ class Build extends DBModel
     }
 
     /**
+     * @param int    $rid
+     * @param string $branch
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function buildStatusIsChanged(int $rid, string $branch)
+    {
+        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip") ORDER BY id DESC LIMIT 2';
+
+        $output = DB::select($sql, [$rid, $branch]);
+
+        if ($output[0] === $output[1]) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $git_type
      * @param int    $rid
      *

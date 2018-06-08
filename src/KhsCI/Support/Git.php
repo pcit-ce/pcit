@@ -16,14 +16,11 @@ class Git
 
     const SUPPORT_GITHUB = 'github';
 
-    const SUPPORT_GITHUB_APP = 'github_app';
-
     const SUPPORT_GIT_ARRAY = [
         'aliyun',
         'coding',
         'gitee',
         'github',
-        'github_app',
     ];
 
     /**
@@ -72,14 +69,6 @@ class Git
                 }
 
                 break;
-            case 'github_app':
-                $url = 'https://github.com/'.$repo_full_name;
-
-                if ($ssh) {
-                    $url = 'git@githun.com:'.$repo_full_name;
-                }
-
-                break;
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -113,10 +102,7 @@ class Git
                 $url = null;
 
                 break;
-            case 'github_app':
-                $url = null;
 
-                break;
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -157,10 +143,7 @@ class Git
                 $url = null;
 
                 break;
-            case 'github_app':
-                $url = null;
 
-                break;
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -197,11 +180,6 @@ class Git
 
                 break;
             case 'github':
-                $url = null;
-
-                break;
-
-            case 'github_app':
                 $url = null;
 
                 break;
@@ -247,11 +225,6 @@ class Git
                 $url = 'https://raw.githubusercontent.com/'.$repo_full_name.'/'.$commit_id.'/'.$file_name;
 
                 break;
-
-            case 'github_app':
-                $url = 'https://raw.githubusercontent.com/'.$repo_full_name.'/'.$commit_id.'/'.$file_name;
-
-                break;
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -290,10 +263,7 @@ class Git
                 $url = 'api.github.com';
 
                 break;
-            case 'github_app':
-                $url = 'api.github.com';
 
-                break;
             default:
                 throw new Exception('Not Support', 500);
         }

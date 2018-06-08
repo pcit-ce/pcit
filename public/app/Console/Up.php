@@ -141,11 +141,11 @@ class Up
     {
         $rid = Build::getRid((int) $build_key_id);
 
-        $repo_full_name = Repo::getRepoFullName('github_app', (int) $rid);
+        $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
-        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
+        $khsci = new KhsCI(['github_access_token' => $access_token], 'github');
 
         $output_array = Build::find((int) $build_key_id);
 
@@ -155,7 +155,7 @@ class Up
 
         $event_type = $output_array['event_type'];
 
-        $details_url = Env::get('CI_HOST').'/github_app/'.$repo_full_name.'/builds/'.$build_key_id;
+        $details_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
 
         $config = JSON::beautiful(Build::getConfig((int) $build_key_id));
 
@@ -322,8 +322,8 @@ class Up
 
             $this->updateGitHubAppChecks(
                 (int) Build::getCurrentBuildKeyId(
-                    'github_app', (int) Repo::getRid(
-                    'github_app', ...explode('/', (string) $git_repo_full_name)
+                    'github', (int) Repo::getRid(
+                    'github', ...explode('/', (string) $git_repo_full_name)
                 )
                 ),
                 $name,
@@ -357,7 +357,7 @@ class Up
      */
     private function updateStatus(int $last_insert_id): void
     {
-        if ('github_app' === $this->git_type) {
+        if ('github' === $this->git_type) {
             if ($this->config_array) {
                 $this->updateGitHubAppChecks($last_insert_id);
             } else {
@@ -383,12 +383,6 @@ class Up
             }
 
             return;
-        }
-
-        if ($this->config_array) {
-            $this->updateGitHubStatus($last_insert_id);
-        } else {
-            Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
         }
     }
 
@@ -685,7 +679,7 @@ EOF;
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
-        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
+        $khsci = new KhsCI(['github_access_token' => $access_token], 'github');
 
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
@@ -737,7 +731,7 @@ EOF;
 
         $installation_id = $obj->installation->id ?? null;
 
-        $khsci = new KhsCI(['github_app_access_token' => $access_token], 'github_app');
+        $khsci = new KhsCI(['github_access_token' => $access_token]);
 
         if ('edited' === $action) {
             echo 'Edit Issue Comment SKIP';
@@ -1245,7 +1239,7 @@ EOF;
 
         $accessToken = null;
 
-        User::updateUserInfo('github_app', $sender_id, $sender_username, $email, $pic, $accessToken);
+        User::updateUserInfo('github', $sender_id, $sender_username, $email, $pic, $accessToken);
 
         if ('created' === $action) {
             $repo = $obj->repositories;
@@ -1285,7 +1279,7 @@ id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,i
 EOF;
 
             DB::insert($sql, [
-                    'github_app', $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
+                    'github', $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
                 ]
             );
         }
@@ -1303,7 +1297,7 @@ EOF;
         $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
 
         $output = DB::delete($sql, [
-            'github_app', $installation_id,
+            'github', $installation_id,
         ]);
 
         return $output;

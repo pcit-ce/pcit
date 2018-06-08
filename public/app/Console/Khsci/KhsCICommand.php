@@ -41,7 +41,7 @@ class KhsCICommand
             'g',
             InputOption::VALUE_OPTIONAL,
             'Git Type',
-            'github_app',
+            'github',
         ];
     }
 
@@ -130,8 +130,8 @@ class KhsCICommand
                                    string $entrypoint,
                                    ?string $data,
                                    bool $auth = false,
-                                   int $target_code = 200
-    ) {
+                                   int $target_code = 200)
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -200,7 +200,8 @@ class KhsCICommand
                                       ?string $data,
                                       bool $auth = false,
                                       int $target_code = 200
-    ) {
+    )
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -234,7 +235,8 @@ class KhsCICommand
                                      bool $auth = false,
                                      bool $json = false,
                                      int $target_code = 200
-    ) {
+    )
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
