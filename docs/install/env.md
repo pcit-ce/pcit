@@ -29,9 +29,6 @@
 * `CI_GITHUB_CALLBACK_URL` String GitHub OAuth 应用回调地址
 
 * `CI_GITHUB_APP_NAME` String GitHub App 应用名称
-* `CI_GITHUB_APP_CLIENT_ID` String GitHub App OAuth ID
-* `CI_GITHUB_APP_CLIENT_SECRET` String GitHub App OAuth Secret
-* `CI_GITHUB_APP_CALLBACK_URL` String GitHub App OAuth 回调地址
 * `CI_GITHUB_APP_ID` String GitHub App ID
 * `CI_GITHUB_APP_PRIVATE_FILE` String GitHub App 私钥文件名，需要在设置页面生成，之后放到 `public/private_key/` 目录中
 

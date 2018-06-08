@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Users;
 
 use App\GetAccessToken;
 use App\Http\Controllers\APITokenController;
+use App\User;
 use Exception;
 use KhsCI\KhsCI;
 
@@ -26,7 +27,21 @@ class OrganizationsController
 
         $khsci = new KhsCI([$git_type.'_access_token' => GetAccessToken::getAccessTokenByUid($git_type, (int) $uid)]);
 
-        return $khsci->user_basic_info->listOrgs();
+        $orgs = $khsci->user_basic_info->listOrgs();
+
+        foreach (json_decode($orgs, true) as $k) {
+            $org_id = $k['id'];
+
+            $org_name = $k['login'];
+
+            $org_pic = $k['avatar_url'];
+
+            User::updateUserInfo($git_type, $org_id, $org_name, null, $org_pic, null, true);
+
+            User::setOrgAdmin($git_type, $org_id, $uid);
+        }
+
+        return User::getOrgByAdmin($git_type, $uid);
     }
 
     /**

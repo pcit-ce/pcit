@@ -31,19 +31,16 @@ class SiteMapController
                 'coding' => $host.'/oauth/coding/login',
                 'gitee' => $host.'/oauth/gitee/login',
                 'github' => $host.'/oauth/github/login',
-                'github_apps' => $host.'/oauth/github_app/login',
             ],
             'logout' => [
                 'coding' => $host.'/coding/logout',
                 'gitee' => $host.'/gitee/logout',
                 'github' => $host.'/github/logout',
-                'github_apps' => $host.'/github_app/logout',
             ],
             'profile' => [
                 'coding' => $host.'/profile/coding/{username}',
                 'gitee' => $host.'/profile/gitee/{username}',
                 'github' => $host.'/profile/github/{username}',
-                'github_app' => $host.'/profile/github_app/{username}',
             ],
             'webhoks@admin' => [
                 'list@get' => [
@@ -76,7 +73,6 @@ class SiteMapController
                 'coding' => $host.'/webhooks/coding',
                 'gitee' => $host.'/webhooks/gitee',
                 'github' => $host.'/webhooks/github',
-                'github_app' => $host.'/webhooks/github_app',
                 'aliyun_docker_registry' => $host.'/webhooks/aliyun_docker_registry',
             ],
             'repo' => [

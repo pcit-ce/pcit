@@ -69,14 +69,46 @@ class User extends DBModel
         }
     }
 
-    public static function setOrgAdmin()
+    /**
+     * @param string $git_type
+     * @param int    $org_id
+     * @param        $admin_uid
+     *
+     * @throws Exception
+     */
+    public static function setOrgAdmin(string $git_type, int $org_id, int $admin_uid)
     {
+        $sql = <<<EOF
+UPDATE user SET admin='[]' WHERE git_type=? AND uid=? AND JSON_VALID(admin) IS NULL
+EOF;
 
+        DB::update($sql, [$git_type, $org_id]);
+
+        $sql = <<<EOF
+UPDATE user SET admin=JSON_MERGE_PRESERVE(admin,?) 
+
+WHERE git_type=? AND uid=? AND NOT JSON_CONTAINS(admin,JSON_QUOTE(?))
+EOF;
+        DB::update($sql, ["[\"$admin_uid\"]", $git_type, $org_id, $admin_uid]);
     }
 
     public static function deleteOrgAdmin()
     {
 
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $admin_uid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getOrgByAdmin(string $git_type, int $admin_uid)
+    {
+        $sql = 'SELECT * FROM user WHERE git_type=? AND JSON_CONTAINS(admin,JSON_QUOTE(?)) AND type=?';
+
+        return DB::select($sql, [$git_type, $admin_uid, 'org']);
     }
 
     /**
