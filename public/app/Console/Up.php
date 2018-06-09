@@ -82,6 +82,8 @@ class Up
                                               string $state = null,
                                               string $description = null): void
     {
+        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id.' ...');
+
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -101,9 +103,7 @@ class Up
                 $description ?? 'The analysis or builds is pending'
             );
 
-        $log_message = 'Create GitHub commit Status '.$build_key_id;
-
-        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$log_message);
+        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id);
     }
 
     /**
@@ -139,6 +139,8 @@ class Up
                                                  array $actions = null,
                                                  bool $force_create = false): void
     {
+        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run '.$build_key_id.' ...');
+
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -150,9 +152,7 @@ class Up
         $output_array = Build::find((int) $build_key_id);
 
         $branch = $output_array['branch'];
-
         $commit_id = $output_array['commit_id'];
-
         $event_type = $output_array['event_type'];
 
         $details_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
@@ -191,7 +191,7 @@ class Up
             );
         }
 
-        $log_message = 'Create GitHub App Check Run '.$build_key_id;
+        $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
 
         Log::debug(__FILE__, __LINE__, $log_message);
 
@@ -262,7 +262,7 @@ class Up
     /**
      * @throws Exception
      */
-    public function webhooks(): void
+    private function webhooks(): void
     {
         $webhooks = (new KhsCI())->webhooks;
 
@@ -391,6 +391,8 @@ class Up
      */
     public function ping(string $content)
     {
+        Log::debug(__FILE__, __LINE__, 'receive ping event');
+
         $obj = json_decode($content);
 
         $rid = $obj->repository->id ?? 0;
@@ -680,6 +682,8 @@ EOF;
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+
+        Log::debug(__FILE__, __LINE__, $issue_number.' opened');
 
         return;
     }
