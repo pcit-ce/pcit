@@ -4,7 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS `repo` (
   `id`                 BIGINT       AUTO_INCREMENT,
-  `git_type`           VARCHAR(20) COMMENT 'github github_app coding gitee',
+  `git_type`           VARCHAR(20) COMMENT 'github coding gitee',
   `rid`                BIGINT UNSIGNED,
   `repo_prefix`        VARCHAR(100),
   `repo_name`          VARCHAR(100),

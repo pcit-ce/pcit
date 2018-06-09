@@ -43,10 +43,6 @@ Route::get('oauth/github/login', 'Users\OAuthGitHubController@getLoginUrl');
 
 Route::get('oauth/github', 'Users\OAuthGitHubController@getAccessToken');
 
-Route::get('oauth/github_app/login', 'Users\OAuthGitHubAppController@getLoginUrl');
-
-Route::get('oauth/github_app', 'Users\OAuthGitHubAppController@getAccessToken');
-
 Route::get('oauth/gitee/login', 'Users\OAuthGiteeController@getLoginUrl');
 
 Route::get('oauth/gitee', 'Users\OAuthGiteeController@getAccessToken');

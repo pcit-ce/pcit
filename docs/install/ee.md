@@ -36,7 +36,7 @@ $ ./lnmp-docker.sh khsci-up
 
 * `Homepage URL` 网站域名 https://ci.example.com:port
 
-* `Webhook URL` Webhooks 接收地址 https://ci.example.com:port/webhooks/github_app
+* `Webhook URL` Webhooks 接收地址 https://ci.example.com:port/webhooks/github
 
 创建完毕之后，生成应用私钥
 

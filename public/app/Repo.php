@@ -74,7 +74,7 @@ class Repo extends DBModel
     {
         $sql = 'SELECT installation_id FROM repo WHERE repo_full_name=? AND git_type=? ORDER BY id DESC LIMIT 1';
 
-        return DB::select($sql, [$repo_full_name, 'github_app'], true);
+        return DB::select($sql, [$repo_full_name, 'github'], true);
     }
 
     /**
@@ -88,7 +88,7 @@ class Repo extends DBModel
     {
         $sql = 'SELECT installation_id FROM repo WHERE rid=? AND git_type=? ORDER BY id DESC LIMIT 1';
 
-        return DB::select($sql, [$rid, 'github_app'], true);
+        return DB::select($sql, [$rid, 'github'], true);
     }
 
     /**

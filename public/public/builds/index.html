@@ -135,10 +135,6 @@
     let commitUrl;
 
     switch (git_type) {
-      case 'github_app':
-        commitUrl = 'https://github.com/' + username + '/' + repo + '/commit/' + commit_id;
-
-        break;
 
       case 'github':
         commitUrl = 'https://github.com/' + username + '/' + repo + '/commit/' + commit_id;
@@ -157,7 +153,7 @@
     let prUrl;
 
     switch (git_type) {
-      case 'github_app':
+      case 'github':
         prUrl = `https://github.com/${username}/${repo}/pull/${pull_request_id}`;
 
         break;

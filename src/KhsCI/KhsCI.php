@@ -113,13 +113,6 @@ class KhsCI extends Container
                     'Accept' => 'application/vnd.github.machine-man-preview+json',
                 ],
             ];
-        } elseif ($this['config']['github_app']['access_token'] ?? false) {
-            $this['curl_config'] = [null, false,
-                [
-                    'Authorization' => 'token '.$this['config']['github_app']['access_token'],
-                    'Accept' => 'application/vnd.github.machine-man-preview+json',
-                ],
-            ];
         } elseif ($this['config']['gitee']['access_token'] ?? false) {
             $this['curl_config'] = [null, false,
                 [
