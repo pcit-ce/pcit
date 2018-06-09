@@ -15,5 +15,7 @@ class WeChatTest extends TestCase
     public function test(): void
     {
         $a = Encrypt::get('khs1994');
+
+        var_dump($a);
     }
 }

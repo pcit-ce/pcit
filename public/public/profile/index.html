@@ -26,6 +26,11 @@
 </div>
 <hr>
 <br>
+<div id="orgs">
+  <form class="orgs">
+  </form>
+</div>
+<hr>
 <div id="repos">
 
 </div>
@@ -34,18 +39,26 @@
 
   let ci_host = "https://" + document.location.host + "/";
 
-  let git_type = (location.href.split('/'))[4];
+  let url_array = location.href.split('/');
 
-  function list(data) {
+  let git_type = url_array[4];
+
+  let username = url_array[5];
+
+  function showUserBasicInfo(data) {
     $("#username").text("Welcome " + data.username).addClass(data.type);
-
     let git_type = data.git_type;
 
     $("title").text(git_type + ' - ' + data.username + " - Profile - KhsCI");
+  }
 
-    $.each(data.repos, function (repo, status) {
+  function list(data) {
+    $.each(data, function (num, repo) {
 
       let button = $("<button></button>");
+      let status = repo.build_status;
+      let repo_name = repo.repo_full_name;
+
 
       button.attr("onclick", 'open_or_close(this)');
 
@@ -57,26 +70,55 @@
         button.css('color', 'red');
       }
 
-      console.log(repo);
-      console.log(status);
+      button.attr("id", repo_name);
+      button.css('text-align', 'right');
+
+      if ('github' === git_type) {
+        button.hide();
+      }
 
       // <p id="username/repo">username/repo</p>
-      let p = $("<a></a>").text(repo);
+      let p = $("<a></a>").text(repo_name);
 
-      p.attr("id", repo);
-      p.attr('href', ci_host + git_type + '/' + repo);
+      p.attr("id", repo_name);
+      p.attr('href', ci_host + git_type + '/' + repo_name);
       p.attr('target', '_blank');
-      button.attr("id", repo);
-      button.css('text-align', 'right');
       p.css('display', 'inline');
 
       let settings = $("<a></a>");
 
       settings.text('Setting');
-      settings.attr('href', ci_host + git_type + "/" + repo + "/settings");
+      settings.attr('href', ci_host + git_type + "/" + repo_name + "/settings");
       settings.attr('target', '_blank');
       $("#repos").append(button).append('&nbsp;&nbsp;').append(settings).append('&nbsp;&nbsp;').append(p).append('<br>');
-    })
+    });
+
+    $("#repos").css('left-margin', '1000px');
+  }
+
+  function showOrg(data) {
+    $.each(data, function (num, org) {
+      let org_name = org.username;
+      $(".orgs").append(`<label onclick="click_org(this.innerHTML)">${org_name}</label> || `)
+    });
+
+  }
+
+  function click_org(org_name) {
+    $.ajax({
+      type: "GET",
+      url: "/api/repos/" + git_type + "/" + org_name,
+      headers: {
+        'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+      },
+      success: function (data) {
+        history.pushState({}, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
+        history.replaceState(null, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
+
+        $('#repos').empty();
+        list(data);
+      }
+    });
   }
 
   $(document).ready(function () {
@@ -88,18 +130,20 @@
         'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
       },
       success: function (data) {
-        list(data[0]);
-      }
-    });
-
-    $.ajax({
-      type: "GET",
-      url: "/api/orgs",
-      headers: {
-        'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
-      },
-      success: function (data) {
-
+        showUserBasicInfo(data[0]);
+        if (data[0].username === username) {
+          showOrg(data);
+          $.ajax({
+            type: "GET",
+            url: "/api/orgs",
+            headers: {
+              'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+            },
+            success: function (data) {
+              showOrg(data);
+            }
+          });
+        }
       }
     });
 
@@ -110,7 +154,7 @@
         'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
       },
       success: function (data) {
-
+        list(data);
       }
     });
 

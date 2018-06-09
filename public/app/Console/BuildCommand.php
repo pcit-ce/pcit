@@ -106,6 +106,8 @@ class BuildCommand
 
             $this->saveLog();
 
+            Log::debug(__FILE__, __LINE__, $e->__toString());
+
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_INACTIVE:
                     $this->build_status = CI::BUILD_STATUS_INACTIVE;
@@ -126,8 +128,6 @@ class BuildCommand
                     $this->build_status = CI::BUILD_STATUS_ERRORED;
                     $this->setBuildStatusErrored();
             }
-
-            Log::debug(__FILE__, __LINE__, $e->__toString());
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
@@ -316,9 +316,13 @@ EOF;
                 $uid = User::getUid($this->git_type, $k);
 
                 if (in_array($uid, $admin_array)) {
+
+                    Log::debug(__FILE__, __LINE__, 'This repo is ci root\'s repo, building...');
                     return;
                 }
             }
+
+            Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip');
 
             throw new CIException(
                 null,
