@@ -129,6 +129,20 @@ EOF;
 
     /**
      * @param string $git_type
+     * @param string $org_name
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function delete(string $git_type, string $org_name)
+    {
+        $sql = 'DELETE FROM user WHERE git_type=? AND username=?';
+
+        return DB::delete($sql, [$git_type, $org_name]);
+    }
+
+    /**
+     * @param string $git_type
      * @param string $username
      *
      * @return array|string
@@ -140,5 +154,19 @@ EOF;
         $sql = 'SELECT uid FROM user WHERE git_type=? and username=?';
 
         return DB::select($sql, [$git_type, $username], true);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $uid
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getUsername(string $git_type, int $uid)
+    {
+        $sql = 'SELECT username FROM user WHERE git_type=? and uid=?';
+
+        return DB::select($sql, [$git_type, $uid], true);
     }
 }

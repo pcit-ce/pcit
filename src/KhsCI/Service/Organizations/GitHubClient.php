@@ -123,4 +123,24 @@ class GitHubClient
 
         return $this->curl->delete($url);
     }
+
+    /**
+     * @param string $org_name
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function exists(string $org_name)
+    {
+        $url = $this->api_url.'/orgs/'.$org_name;
+
+        $this->curl->get($url);
+
+        if (404 === $this->curl->getCode()) {
+
+            return false;
+        }
+
+        return true;
+    }
 }

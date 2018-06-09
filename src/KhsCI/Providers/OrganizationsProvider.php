@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
-use KhsCI\Service\Users\GitHubClient;
+use KhsCI\Service\Organizations\GitHubClient;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

@@ -142,7 +142,7 @@ class APITokenController
      *
      * @throws Exception
      */
-    public static function find(string $git_type = null, string $username, int $uid)
+    public static function find(string $git_type = null, string $username = null, int $uid = null)
     {
         $json = file_get_contents('php://input');
 

@@ -93,7 +93,11 @@ class KhsCICommand
 
         $endpoints_url = $input->getOption('api-endpoint');
 
-        $token = $array['endpoints'][$endpoints_url][$git_type];
+        $token = $array['endpoints'][$endpoints_url][$git_type] ?? null;
+
+        if (!$token) {
+            throw new Exception('Please exec login command first');
+        }
 
         if ($header) {
             return ['Authorization' => "token $token"];
@@ -199,8 +203,8 @@ class KhsCICommand
                                       string $entrypoint,
                                       ?string $data,
                                       bool $auth = false,
-                                      int $target_code = 200
-    ) {
+                                      int $target_code = 200)
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];
@@ -233,8 +237,8 @@ class KhsCICommand
                                      ?string $data,
                                      bool $auth = false,
                                      bool $json = false,
-                                     int $target_code = 200
-    ) {
+                                     int $target_code = 200)
+    {
         $endpoints_url = $input->getOption('api-endpoint');
 
         $header = [];

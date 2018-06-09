@@ -34,5 +34,18 @@ class SyncController
 
             User::setOrgAdmin($git_type, (int) $org_id, (int) $uid);
         }
+
+        // check org status
+
+        $orgs = User::getOrgByAdmin($git_type, $uid);
+
+        foreach ($orgs as $k) {
+            $org_name = $k['username'];
+            $output = $khsci->github_orgs->exists($org_name);
+
+            if (!$output) {
+                User::delete($git_type, $org_name);
+            }
+        }
     }
 }

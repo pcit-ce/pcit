@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\APITokenController;
 use App\Repo;
+use App\User;
 use Exception;
 
 class RepositoriesController
@@ -20,13 +21,15 @@ class RepositoriesController
     /**
      * This returns a list of repositories the current user has access to.
      *
-     * /repos/
+     * /repos
      *
      * @throws Exception
      */
     public function __invoke()
     {
-        return Repo::allByAdmin(...APITokenController::getUser());
+        list($git_type, $uid) = APITokenController::getUser();
+
+        return Repo::allByRepoPrefix($git_type, User::getUsername($git_type, $uid));
     }
 
     /**

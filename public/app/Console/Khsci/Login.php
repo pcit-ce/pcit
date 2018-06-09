@@ -72,6 +72,8 @@ class Login extends Command
 
             file_put_contents($file_name, JSON::beautiful(json_encode($array)));
 
+            $output->writeln('Login Success');
+
             return;
         }
 
@@ -86,5 +88,7 @@ class Login extends Command
                 ]
             )
         ));
+
+        $output->writeln('Login Success');
     }
 }
