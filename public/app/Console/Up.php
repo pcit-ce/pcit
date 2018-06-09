@@ -195,8 +195,6 @@ class Up
 
         Log::debug(__FILE__, __LINE__, $log_message);
 
-        echo $log_message;
-
         Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
     }
 
@@ -315,8 +313,6 @@ class Up
             $git_repo_full_name = $aliyun_docker_registry["$aliyun_docker_registry_name"];
 
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
-
-            echo $name;
 
             Log::debug(__FILE__, __LINE__, $name);
 
@@ -706,7 +702,7 @@ EOF;
         $sender_username = $sender->login;
 
         if (strpos($sender_username, '[bot]')) {
-            echo 'Bot issue comment SKIP';
+            Log::debug(__FILE__, __LINE__, 'Bot issue comment SKIP');
 
             return;
         }
@@ -734,7 +730,7 @@ EOF;
         $khsci = new KhsCI(['github_access_token' => $access_token]);
 
         if ('edited' === $action) {
-            echo 'Edit Issue Comment SKIP';
+            Log::debug(__FILE__, __LINE__, 'Edit Issue Comment SKIP');
 
             return;
         }
@@ -751,8 +747,6 @@ EOF;
                 $debug_info = 'Delete Issue Comment SUCCESS';
 
                 Log::debug(__FILE__, __LINE__, $debug_info);
-
-                echo $debug_info;
             }
 
             return;
@@ -782,8 +776,6 @@ EOF;
         Log::debug(__FILE__, __LINE__, $debug_info);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-
-        echo $debug_info;
     }
 
     /**

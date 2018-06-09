@@ -41,7 +41,7 @@ class Build extends DBModel
      */
     public static function getStartAt(int $build_key_id)
     {
-        $sql = 'SELECT started_at FROM builds WHERE id=?';
+        $sql = 'SELECT started_at FROM builds WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -56,7 +56,7 @@ class Build extends DBModel
      */
     public static function updateStopAt(int $build_key_id, int $time = null)
     {
-        $sql = 'UPDATE builds SET finished_at = ? WHERE id=?';
+        $sql = 'UPDATE builds SET finished_at = ? WHERE id=? LIMIT 1';
 
         $time = $time ?? time();
 
@@ -76,7 +76,7 @@ class Build extends DBModel
      */
     public static function getStopAt(int $build_key_id)
     {
-        $sql = 'SELECT finished_at FROM builds WHERE id=?';
+        $sql = 'SELECT finished_at FROM builds WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -90,7 +90,7 @@ class Build extends DBModel
      */
     public static function getGitType(int $build_key_id)
     {
-        $sql = 'SELECT git_type FROM builds WHERE id=?';
+        $sql = 'SELECT git_type FROM builds WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -104,7 +104,7 @@ class Build extends DBModel
      */
     public static function getRid(int $build_key_id)
     {
-        $sql = 'SELECT rid FROM builds WHERE id=?';
+        $sql = 'SELECT rid FROM builds WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -211,7 +211,7 @@ EOF;
      */
     public static function getCheckRunId(int $build_key_id, bool $throw = false)
     {
-        $sql = 'SELECT check_run_id FROM builds WHERE id=?';
+        $sql = 'SELECT check_run_id FROM builds WHERE id=? LIMIT 1';
 
         $output = DB::select($sql, [$build_key_id], true);
 
@@ -230,7 +230,7 @@ EOF;
      */
     public static function updateCheckRunId(?int $check_run_id, int $build_key_id): void
     {
-        $sql = 'UPDATE builds SET check_run_id=? WHERE id=?';
+        $sql = 'UPDATE builds SET check_run_id=? WHERE id=? LIMIT 1';
 
         DB::update($sql, [$check_run_id, $build_key_id]);
     }
@@ -244,7 +244,7 @@ EOF;
      */
     public static function getLog(int $build_key_id)
     {
-        $sql = 'SELECT build_log FROM builds WHERE id=?';
+        $sql = 'SELECT build_log FROM builds WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -271,7 +271,7 @@ EOF;
      */
     public static function getConfig(int $build_key_id)
     {
-        $sql = 'SELECT config FROM builds WHERE id=?';
+        $sql = 'SELECT config FROM builds WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -285,7 +285,7 @@ EOF;
      */
     public static function getBuildStatusByBuildKeyId(int $build_key_id)
     {
-        $sql = 'SELECT build_status FROM builds WHERE id=?';
+        $sql = 'SELECT build_status FROM builds WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -423,7 +423,7 @@ EOF;
                                        string $commit_id,
                                        int $pull_request_number)
     {
-        $sql = 'SELECT auto_merge FROM builds WHERE git_type=? AND rid =? AND event_type=? AND pull_request_id=? AND commit_id=?';
+        $sql = 'SELECT auto_merge FROM builds WHERE git_type=? AND rid =? AND event_type=? AND pull_request_id=? AND commit_id=? LIMIT 1';
 
         return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, $pull_request_number, $commit_id], true);
     }

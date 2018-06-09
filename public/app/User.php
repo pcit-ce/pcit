@@ -120,7 +120,7 @@ EOF;
      */
     public static function exists(string $git_type, string $username)
     {
-        $sql = 'SELECT id FROM user WHERE username=? AND git_type=?';
+        $sql = 'SELECT id FROM user WHERE username=? AND git_type=? LIMIT 1';
 
         $user_key_id = DB::select($sql, [$username, $git_type], true) ?? false;
 
@@ -151,7 +151,7 @@ EOF;
      */
     public static function getUid(string $git_type, string $username)
     {
-        $sql = 'SELECT uid FROM user WHERE git_type=? and username=?';
+        $sql = 'SELECT uid FROM user WHERE git_type=? and username=? LIMIT 1';
 
         return DB::select($sql, [$git_type, $username], true);
     }
@@ -165,7 +165,7 @@ EOF;
      */
     public static function getUsername(string $git_type, int $uid)
     {
-        $sql = 'SELECT username FROM user WHERE git_type=? and uid=?';
+        $sql = 'SELECT username FROM user WHERE git_type=? and uid=? LIMIT 1';
 
         return DB::select($sql, [$git_type, $uid], true);
     }

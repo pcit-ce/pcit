@@ -58,7 +58,7 @@ EOF;
             throw new Exception('Not Found', 404);
         }
 
-        $sql = "SELECT $setting_name FROM repo WHERE git_type=? AND rid=?";
+        $sql = "SELECT $setting_name FROM repo WHERE git_type=? AND rid=? LIMIT 1";
 
         return DB::select($sql, [$git_type, $rid], true);
     }
@@ -79,7 +79,7 @@ EOF;
             throw new Exception('Not Found', 404);
         }
 
-        $sql = "UPDATE repo SET $setting_name=? WHERE git_type=? AND rid=?";
+        $sql = "UPDATE repo SET $setting_name=? WHERE git_type=? AND rid=? LIMIT 1";
 
         return DB::update($sql, [$setting_value, $git_type, $rid]);
     }
