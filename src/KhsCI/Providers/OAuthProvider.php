@@ -29,9 +29,5 @@ class OAuthProvider implements ServiceProviderInterface
         $pimple['oauth_github'] = function ($app) use ($curl) {
             return new GitHubClient($app['config']['github'], $curl);
         };
-
-        $pimple['oauth_github_app'] = function ($app) use ($curl) {
-            return new GitHubAppClient($app['config']['github_app'], $curl);
-        };
     }
 }

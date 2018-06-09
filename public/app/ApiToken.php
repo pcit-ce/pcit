@@ -22,7 +22,7 @@ class ApiToken extends DBModel
      */
     public static function get(string $git_type, int $uid)
     {
-        $sql = 'SELECT api_token FROM api_token WHERE git_type=? AND uid=?';
+        $sql = 'SELECT api_token FROM api_token WHERE git_type=? AND uid=? LIMIT 1';
 
         return DB::select($sql, [$git_type, $uid], true);
     }

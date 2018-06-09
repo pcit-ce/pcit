@@ -82,6 +82,8 @@ class Up
                                               string $state = null,
                                               string $description = null): void
     {
+        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id.' ...');
+
         $rid = Build::getRid($build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -101,9 +103,7 @@ class Up
                 $description ?? 'The analysis or builds is pending'
             );
 
-        $log_message = 'Create GitHub commit Status '.$build_key_id;
-
-        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$log_message);
+        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id);
     }
 
     /**
@@ -139,6 +139,8 @@ class Up
                                                  array $actions = null,
                                                  bool $force_create = false): void
     {
+        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run '.$build_key_id.' ...');
+
         $rid = Build::getRid((int) $build_key_id);
 
         $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
@@ -150,9 +152,7 @@ class Up
         $output_array = Build::find((int) $build_key_id);
 
         $branch = $output_array['branch'];
-
         $commit_id = $output_array['commit_id'];
-
         $event_type = $output_array['event_type'];
 
         $details_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
@@ -191,11 +191,9 @@ class Up
             );
         }
 
-        $log_message = 'Create GitHub App Check Run '.$build_key_id;
+        $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
 
         Log::debug(__FILE__, __LINE__, $log_message);
-
-        echo $log_message;
 
         Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
     }
@@ -264,7 +262,7 @@ class Up
     /**
      * @throws Exception
      */
-    public function webhooks(): void
+    private function webhooks(): void
     {
         $webhooks = (new KhsCI())->webhooks;
 
@@ -315,8 +313,6 @@ class Up
             $git_repo_full_name = $aliyun_docker_registry["$aliyun_docker_registry_name"];
 
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
-
-            echo $name;
 
             Log::debug(__FILE__, __LINE__, $name);
 
@@ -395,6 +391,8 @@ class Up
      */
     public function ping(string $content)
     {
+        Log::debug(__FILE__, __LINE__, 'receive ping event');
+
         $obj = json_decode($content);
 
         $rid = $obj->repository->id ?? 0;
@@ -685,6 +683,8 @@ EOF;
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
 
+        Log::debug(__FILE__, __LINE__, $issue_number.' opened');
+
         return;
     }
 
@@ -706,7 +706,7 @@ EOF;
         $sender_username = $sender->login;
 
         if (strpos($sender_username, '[bot]')) {
-            echo 'Bot issue comment SKIP';
+            Log::debug(__FILE__, __LINE__, 'Bot issue comment SKIP');
 
             return;
         }
@@ -734,7 +734,7 @@ EOF;
         $khsci = new KhsCI(['github_access_token' => $access_token]);
 
         if ('edited' === $action) {
-            echo 'Edit Issue Comment SKIP';
+            Log::debug(__FILE__, __LINE__, 'Edit Issue Comment SKIP');
 
             return;
         }
@@ -751,8 +751,6 @@ EOF;
                 $debug_info = 'Delete Issue Comment SUCCESS';
 
                 Log::debug(__FILE__, __LINE__, $debug_info);
-
-                echo $debug_info;
             }
 
             return;
@@ -782,8 +780,6 @@ EOF;
         Log::debug(__FILE__, __LINE__, $debug_info);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-
-        echo $debug_info;
     }
 
     /**

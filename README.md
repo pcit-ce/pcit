@@ -1,6 +1,6 @@
 # KhsCI
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![Build Status](https://ci.khs1994.com/github_app/khs1994-php/khsci/status?branch=master)](https://ci.khs1994.com/github_app/khs1994-php/khsci) [![codecov](https://codecov.io/gh/khs1994-php/khsci/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/khsci)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/khsci/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/khsci) [![codecov](https://codecov.io/gh/khs1994-php/khsci/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/khsci)
 
 **国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的 CI/CD 系统**
 

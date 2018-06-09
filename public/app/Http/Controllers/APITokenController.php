@@ -12,6 +12,7 @@ use Exception;
 use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\JWT;
+use KhsCI\Support\Log;
 use KhsCI\Support\Request;
 
 class APITokenController
@@ -212,6 +213,8 @@ class APITokenController
         $token = hash('sha256', explode('.', $jwt)[1]);
 
         ApiToken::add($token, (string) $git_type, (int) $uid);
+
+        Log::debug(__FILE__, __LINE__, 'generate github app token');
 
         return $token;
     }

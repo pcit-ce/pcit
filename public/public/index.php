@@ -8,16 +8,11 @@ ob_start();
 
 $start_time = microtime(true);
 
+use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Route;
 
-require_once __DIR__.'/../../vendor/autoload.php';
-
-function open_error(): void
-{
-    ini_set('display_errors', 'on');
-    ini_set('error_reporting', (string) constant('E_ALL'));
-}
+require __DIR__.'/../../vendor/autoload.php';
 
 // read .env.* file.
 
@@ -41,9 +36,7 @@ date_default_timezone_set(getenv('CI_TZ'));
 
 // Open Debug?
 
-$debug = getenv('CI_DEBUG') ?? false;
-
-'true' === $debug && open_error();
+'true' === Env::get('CI_DEBUG', false) && \KhsCI\Support\CI::enableDebug();
 
 // SPL Autoload
 
