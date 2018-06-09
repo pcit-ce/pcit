@@ -9,6 +9,8 @@ use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
 
+'true' === Env::get('CI_DEBUG', false) && \KhsCI\Support\CI::enableDebug();
+
 $cli = new Application('Tencent AI CLI', 'v18.06');
 
 (new \NunoMaduro\Collision\Provider())->register();

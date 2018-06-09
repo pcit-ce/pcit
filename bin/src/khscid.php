@@ -9,6 +9,8 @@ use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
 
+'true' === Env::get('CI_DEBUG', false) && \KhsCI\Support\CI::enableDebug();
+
 spl_autoload_register(function ($class): void {
     $class = str_replace('\\', \DIRECTORY_SEPARATOR, $class);
     $file = __DIR__.\DIRECTORY_SEPARATOR.$class.'.php';
