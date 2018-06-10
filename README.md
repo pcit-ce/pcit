@@ -18,10 +18,6 @@
 
 * [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/docs#about-khsci-ce-and-ee)
 
-## 诚邀各位 PHP 开发者加入本项目
-
-欢迎各位通过 Pull_Request 参入贡献本项目。
-
 ## PHP CaaS
 
 **Powered By [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)**
@@ -30,15 +26,15 @@
 
 **KhsCI** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** 三部分组成
 
-* **Webhooks Server** 接收 GitHub App POST 过来的数据
+* **Webhooks Server** 接收 Git POST 过来的数据
 
-* **Daemon CLI** 后端常驻 (守护) 程序，处理 GitHub App POST 过来的数据并返回给 `GitHub App`
+* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git POST 过来的数据，在 Docker 单机或集群中执行构建过程，之后将结果 post 到 GitHub
 
-* **CLI** 提供各种实用的功能，例如 命令行操作 GitHub，命令行中英互译，等
+* **CLI** 提供各种实用的功能，例如 命令行操作 GitHub，命令行调用 Tencent AI 开放能力，等
 
 * [什么是 GitHub App](https://github.com/khs1994-php/khsci/issues/51)
 
-用户安装 `GitHub App`，即可使用，无需 **额外** 注册、登录、跳转。唯一需要做的就是仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 文件。
+用户安装 `GitHub App`，即可使用本项目 ，无需 **额外** 注册、登录、跳转。唯一需要做的就是仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 文件。
 
 所以想体验 **KhsCI** 有 **两种** 方案:
 
@@ -51,6 +47,8 @@
 [Install GitHub App](https://github.com/khs1994-php/khsci/tree/master/docs)
 
 ## Self-Hosting (KhsCI EE)
+
+* ~~PHP~~
 
 * ~~MySQL~~
 
@@ -80,12 +78,6 @@ $ ./lnmp-docker.sh khsci-up
 
 更多信息请查看 https://github.com/khs1994-php/khsci/blob/master/docs/install/ee.md
 
-## Thanks
-
-* [Drone CI](https://drone.io)
-
-* [Travis CI](https://travis-ci.com)
-
 ## 子项目
 
 * [Docker PHP](https://github.com/khs1994-docker/libdocker)
@@ -98,11 +90,7 @@ $ ./lnmp-docker.sh khsci-up
 
 * [Wechat PHP](https://github.com/khs1994-php/libwechat)
 
-* [QQ PHP]()
-
 * [DingTalk PHP]()
-
-* [Baidu xiongzhang PHP](https://github.com/khs1994-php/xiongzhang)
 
 * [GitHub CLI]()
 
@@ -110,37 +98,15 @@ $ ./lnmp-docker.sh khsci-up
 
 * [Coding CLI]()
 
-* [Aliyun CLI]()
-
-* [Tgit CLI]()
-
 * [GitLab CLI]()
 
 * [Gogs CLI]()
 
-## CI/CD
+## Thanks
 
-* [Drone](https://www.khs1994.com/categories/CI/Drone/)
+* [Drone CI](https://drone.io)
 
-* [Travis CI](https://travis-ci.org/khs1994-php/khsci)
-
-* [Style CI](https://styleci.io/repos/119219872)
-
-* [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)
-
-* [Renovate](https://github.com/marketplace/renovate)
-
-* [Dependabot](https://github.com/marketplace/dependabot)
-
-* [Aliyun CodePipeline](https://www.aliyun.com/product/codepipeline)
-
-* [Tencent Cloud Continuous Integration](https://cloud.tencent.com/product/cci)
-
-* [Docker Build Powered By Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
-
-* [Docker Build Powered By Docker Cloud](https://cloud.docker.com)
-
-* [Docker Build Powered By Aliyun Container Service](https://www.aliyun.com/product/containerservice)
+* [Travis CI](https://travis-ci.com)
 
 ### Other CI/CD on GitHub
 

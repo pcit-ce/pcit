@@ -41,7 +41,9 @@ date_default_timezone_set(getenv('CI_TZ'));
 
 // Open Debug?
 
-'true' === Env::get('CI_DEBUG', false) && \KhsCI\Support\CI::enableDebug();
+$debug = Env::get('CI_DEBUG', false) === true;
+
+$debug && \KhsCI\Support\CI::enableDebug();
 
 // SPL Autoload
 
@@ -96,7 +98,7 @@ try {
 
 // 路由控制器填写错误
 
-if ('true' === Env::get('CI_DEBUG', false)) {
+if ('true' === $debug) {
     Response::json([
         'code' => 404,
         'obj' => Route::$obj ?? null,
