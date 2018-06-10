@@ -20,7 +20,7 @@
 
 ### 2018/06/05
 
-* [*] Pull_request 增加 **merge** label，KhsCI 测试通过之后可以自动 merge
+* [x] Pull_request 增加 **merge** label，KhsCI 测试通过之后可以自动 merge
 
 ### 2018/06/03
 
@@ -86,7 +86,7 @@
 
 ### 2018/05/27
 
-* [*] GitHub App 提供的 OAuth 获取不到用户名下的组织列表，所以网站登录使用 OAuth App。
+* [x] GitHub App 提供的 OAuth 获取不到用户名下的组织列表，所以网站登录使用 OAuth App。
 
 ### 2018/05/26
 

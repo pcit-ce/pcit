@@ -136,11 +136,15 @@ class Installations
      */
     public function getAccessToken(int $installation_id, string $private_key_path)
     {
+        Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token ...');
+
         $redis = Cache::connect();
 
         $access_token = $redis->get("github_app_{$installation_id}_access_token");
 
         if ($access_token) {
+            Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token from cache success');
+
             return $access_token;
         }
 
@@ -165,6 +169,8 @@ class Installations
 
         $redis->set("github_app_{$installation_id}_access_token", $access_token, 58 * 60);
 
+        Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token from github success');
+
         return $access_token;
     }
 
@@ -180,6 +186,7 @@ class Installations
         $jwt = Cache::connect()->get('github_app_jwt');
 
         if ($jwt) {
+
             return $jwt;
         }
 

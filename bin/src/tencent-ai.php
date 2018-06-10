@@ -3,6 +3,7 @@
 <?php
 
 use App\Console\TencentAI\Chat;
+use App\Console\TencentAI\OCR;
 use App\Console\TencentAI\Translate;
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
@@ -30,5 +31,7 @@ if (!file_exists(__DIR__.'/../../public/'.$env_file)) {
 $cli->add(new Translate());
 
 $cli->add(new Chat());
+
+$cli->add(new OCR());
 
 $cli->run();

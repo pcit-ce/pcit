@@ -299,6 +299,8 @@ class Up
      */
     private function aliyunDockerRegistry(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive Aliyun Docker Registry Webhooks');
+
         $obj = json_decode($content);
 
         $aliyun_docker_registry_name = $obj->repository->repo_full_name;
@@ -424,6 +426,8 @@ EOF;
      */
     public function push(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive push event');
+
         $obj = json_decode($content);
 
         $rid = $obj->repository->id;
@@ -610,6 +614,8 @@ EOF;
      */
     public function issues(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive issue event');
+
         $obj = json_decode($content);
 
         $action = $obj->action;
@@ -697,6 +703,8 @@ EOF;
      */
     public function issue_comment(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive issue comment event');
+
         $obj = json_decode($content);
 
         $action = $obj->action;
@@ -794,6 +802,8 @@ EOF;
      */
     public function pull_request(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive pull request event');
+
         $obj = json_decode($content);
 
         $action = $obj->action;
@@ -897,6 +907,8 @@ EOF;
      */
     public function pull_request_assigned(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive pull request assigned event');
+
         $obj = json_decode($content);
 
         $pull_request = $obj->pull_request;
@@ -950,6 +962,8 @@ EOF;
      */
     public function pull_request_labeled(string $content, bool $unlabeled = false): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive pull request labeled event');
+
         $obj = json_decode($content);
 
         $label = $obj->label;
@@ -1023,6 +1037,8 @@ EOF;
      */
     public function tag(string $tag, string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive tag event');
+
         $obj = json_decode($content);
 
         $rid = $obj->repository->id;
@@ -1126,6 +1142,8 @@ EOF;
      */
     public function delete(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive delete event');
+
         $obj = json_decode($content);
 
         $ref_type = $obj->ref_type;
@@ -1164,6 +1182,8 @@ EOF;
      */
     public function member(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive member event');
+
         $obj = json_decode($content);
 
         $action = $obj->action;
@@ -1212,6 +1232,8 @@ EOF;
      */
     public function installation(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive installation event');
+
         $obj = json_decode($content);
 
         $action = $obj->action;
@@ -1311,6 +1333,8 @@ EOF;
      */
     public function installation_repositories(string $content): void
     {
+        Log::debug(__FILE__, __LINE__, 'Receive installation repositories event');
+
         $obj = json_decode($content);
 
         $action = $obj->action;
@@ -1429,6 +1453,9 @@ EOF;
      */
     public function check_run(string $content): void
     {
+
+        Log::debug(__FILE__, __LINE__, 'Receive check run event');
+
         $obj = json_decode($content);
 
         $action = $obj->action;

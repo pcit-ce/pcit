@@ -5,29 +5,15 @@ declare(strict_types=1);
 namespace App\Console\TencentAI;
 
 use Exception;
-use KhsCI\KhsCI;
 use KhsCI\Support\JSON;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Translate extends Command
 {
     private static $ai;
-
-    /**
-     * Translate constructor.
-     *
-     * @param null|string $name
-     *
-     * @throws Exception
-     */
-    public function __construct(?string $name = null)
-    {
-        parent::__construct($name);
-
-        self::$ai = (new KhsCI())->tencent_ai;
-    }
 
     public function configure(): void
     {
@@ -38,7 +24,7 @@ Text translation interface provides automatic translation capabilities, can help
 EOF
         );
 
-        $this->addArgument('source_language');
+        $this->addArgument('source_language', InputArgument::REQUIRED, 'Source language');
     }
 
     /**
@@ -53,7 +39,7 @@ EOF
     {
         $source_language = $input->getArgument('source_language');
 
-        $output_array = self::$ai->translate()->aILabText($source_language);
+        $output_array = TencentAICommand::get()->translate()->aILabText($source_language);
 
         $output->writeln(JSON::beautiful(json_encode($output_array, JSON_UNESCAPED_UNICODE)));
     }

@@ -19,10 +19,6 @@ use KhsCI\Support\Env;
 use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
 
-/**
- * @method setUniqueId($name = 'unique_id', $value)
- * @method setBuildKeyId($name = 'build_key_id', $value)
- */
 class BuildCommand
 {
     private $commit_id;
