@@ -310,7 +310,7 @@ class Build
             );
         }
 
-        $this->system_env = $system_env;
+        $this->system_env = array_merge($system_env, $this->system_env);
 
         Log::debug(__FILE__, __LINE__, json_encode($this->system_env));
 

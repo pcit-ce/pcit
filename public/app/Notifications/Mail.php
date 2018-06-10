@@ -30,17 +30,29 @@ class Mail
         try {
 
             foreach ($address as $k => $v) {
+                if (is_int($k)) {
+                    $k = $v;
+                    $v = explode('@', $k)[0];
+                }
                 $mail->addAddress($k, $v);
             }
 
             if ($cc) {
                 foreach ($cc as $k => $v) {
+                    if (is_int($k)) {
+                        $k = $v;
+                        $v = explode('@', $k)[0];
+                    }
                     $mail->addCC($k, $v); // 抄送
                 }
             }
 
             if ($bcc) {
                 foreach ($bcc as $k => $v) {
+                    if (is_int($k)) {
+                        $k = $v;
+                        $v = explode('@', $k)[0];
+                    }
                     $mail->addBCC($k, $v); // 暗抄送
                 }
             }

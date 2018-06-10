@@ -427,4 +427,30 @@ EOF;
 
         return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, $pull_request_number, $commit_id], true);
     }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getCommitterEmail(int $build_key_id)
+    {
+        $sql = 'SELECT committer_email FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id]);
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     * @throws Exception
+     */
+    public static function getCommitterName(int $build_key_id)
+    {
+        $sql = 'SELECT committer_name FROM builds WHERE id=?';
+
+        return DB::select($sql, [$build_key_id]);
+    }
 }

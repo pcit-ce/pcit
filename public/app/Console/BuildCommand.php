@@ -138,7 +138,10 @@ class BuildCommand
             $this->weChatTemplate($this->description);
 
             // mail
-            $this->sendEMail();
+            // pr skip
+            if ($this->event_type !== CI::BUILD_EVENT_PR) {
+                $this->sendEMail();
+            }
 
             // check pr auto merge
             $this->autoMerge();
@@ -205,9 +208,22 @@ class BuildCommand
      */
     private function sendEMail(): void
     {
+        if (!Env::get('CI_EMAIL_PASSWORD', false)) {
+
+            Log::debug(__FILE__, __LINE__, 'mail settings not found, send Mail skip');
+
+            return;
+        }
+
+        $committer_email = Build::getCommitterEmail((int) $this->build_key_id);
+
+        $committer_name = Build::getCommitterName((int) $this->build_key_id);
+
+        $repo_full_name = Repo::getRepoFullName($this->git_type, (int) $this->rid);
+
         $build_status_changed = Build::buildStatusIsChanged((int) $this->rid, $this->branch);
 
-        $email_list = null;
+        $email_list = [];
 
         $on_success = null;
 
@@ -250,11 +266,16 @@ class BuildCommand
 
         // 构建成功
 
-        $subject = 'user/repo#build_id(branch-commit_id)';
+        $subject = ucfirst($this->build_status).' : '.$repo_full_name.'#'.
+            $this->build_key_id.' ('.$this->branch.'-'.substr($this->commit_id, 0, 7).')';
 
-        $body = '';
+        $body = ''.$subject;
 
-        $address = [];
+        $address = $email_list;
+
+        array_push($address, $committer_email.'='.$committer_name);
+
+        array_unique($address);
 
         Mail::send($address, $subject, $body);
     }
