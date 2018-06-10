@@ -14,6 +14,11 @@ use KhsCI\Support\Route;
 
 require __DIR__.'/../../vendor/autoload.php';
 
+function aa()
+{
+    echo 1;
+}
+
 // read .env.* file.
 
 try {
@@ -91,7 +96,7 @@ try {
 
 // 路由控制器填写错误
 
-if ('true' === $debug) {
+if ('true' === Env::get('CI_DEBUG', false)) {
     Response::json([
         'code' => 404,
         'obj' => Route::$obj ?? null,

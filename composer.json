@@ -35,6 +35,7 @@
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
     "symfony/console": "^3.4",
+    "symfony/var-dumper": "^3.4",
     "vlucas/phpdotenv": "*"
   },
   "require-dev": {

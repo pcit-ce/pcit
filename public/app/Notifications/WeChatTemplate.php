@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console;
+namespace App\Notifications;
 
 use App\Build;
 use App\Repo;

@@ -7,6 +7,8 @@ namespace App\Console;
 use App\Build;
 use App\Build as BuildDB;
 use App\GetAccessToken;
+use App\Notifications\Mail;
+use App\Notifications\WeChatTemplate;
 use App\Repo;
 use App\User;
 use Exception;
@@ -65,26 +67,30 @@ class BuildCommand
         $build = $this->khsci->build;
 
         try {
+            // get build info
             $output = array_values($this->getBuildDB());
 
-            Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
-
+            // check ci root
             $this->checkCIRoot();
 
             unset($output[10]);
 
+            // update build status in progress
             $this->setStatusInProgress();
 
-            $repo_full_name = Repo::getRepoFullName($this->git_type, (int) $this->rid);
+            // push repo full name
+            array_push($output, Repo::getRepoFullName($this->git_type, (int) $this->rid));
 
-            array_push($output, $repo_full_name);
+            // push env
+            array_push($output, $this->getEnv());
 
-            // 清理构建环境
+            // clear build environment
             $build->systemDelete('1');
+
+            // exec build
             $build(...$output);
         } catch (CIException $e) {
             // 没有 build_key_id，即数据库没有待构项目，跳过
-
             $this->build_key_id = $e->getCode();
 
             if (01404 === $this->build_key_id) {
@@ -100,30 +106,14 @@ class BuildCommand
             // $e->getCode() is build key id.
             BuildDB::updateStopAt($this->build_key_id);
 
+            // save build log
             $this->saveLog();
 
             Log::debug(__FILE__, __LINE__, $e->__toString());
 
-            switch ($e->getMessage()) {
-                case CI::BUILD_STATUS_INACTIVE:
-                    $this->build_status = CI::BUILD_STATUS_INACTIVE;
-                    $this->setBuildStatusInactive();
+            // exec after build
+            $this->updateBuildStatus($e->getMessage());
 
-                    break;
-                case CI::BUILD_STATUS_FAILED:
-                    $this->build_status = CI::BUILD_STATUS_FAILED;
-                    $this->setBuildStatusFailed();
-
-                    break;
-                case CI::BUILD_STATUS_PASSED:
-                    $this->build_status = CI::BUILD_STATUS_PASSED;
-                    $this->setBuildStatusPassed();
-
-                    break;
-                default:
-                    $this->build_status = CI::BUILD_STATUS_ERRORED;
-                    $this->setBuildStatusErrored();
-            }
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString());
         } finally {
@@ -137,23 +127,77 @@ class BuildCommand
             $this->build_key_id && $this->build_status &&
             BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
 
-            Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description &&
-            $this->weChatTemplate($this->description);
-
             $build->systemDelete($this->unique_id, true);
 
             if (!$this->unique_id) {
                 return;
             }
 
-            $this->autoMerge();
+            // wechat
+            Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description &&
+            $this->weChatTemplate($this->description);
 
-            // $this->sendEMail();
+            // mail
+            $this->sendEMail();
+
+            // check pr auto merge
+            $this->autoMerge();
 
             Log::connect()->debug('====== '.$this->build_key_id.' Build Stopped Success ======');
 
             Cache::connect()->set('khsci_up_status', 0);
         }
+    }
+
+    /**
+     * @param string $build_stats
+     *
+     * @throws Exception
+     */
+    private function updateBuildStatus(string $build_stats)
+    {
+        switch ($build_stats) {
+            case CI::BUILD_STATUS_INACTIVE:
+                $this->build_status = CI::BUILD_STATUS_INACTIVE;
+                $this->setBuildStatusInactive();
+
+                break;
+            case CI::BUILD_STATUS_FAILED:
+                $this->build_status = CI::BUILD_STATUS_FAILED;
+                $this->setBuildStatusFailed();
+
+                break;
+            case CI::BUILD_STATUS_PASSED:
+                $this->build_status = CI::BUILD_STATUS_PASSED;
+                $this->setBuildStatusPassed();
+
+                break;
+            default:
+                $this->build_status = CI::BUILD_STATUS_ERRORED;
+                $this->setBuildStatusErrored();
+        }
+    }
+
+    /**
+     * get user set build env
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function getEnv()
+    {
+        $env = [];
+
+        $env_array = \App\Env::list($this->git_type, $this->rid);
+
+        foreach ($env_array as $k) {
+            $name = $k['name'];
+            $value = $k['value'];
+
+            $env[] = $name.'='.$value;
+        }
+
+        return $env;
     }
 
     /**
@@ -210,34 +254,9 @@ class BuildCommand
 
         $body = '';
 
-        try {
-            $mail = ($this->khsci)->mail;
+        $address = [];
 
-            foreach (json_decode(getenv('CI_EMAIL_ADDRESS_JSON')) as $k => $v) {
-                $mail->addAddress($k, $v);
-            }
-
-            foreach (json_decode(getenv('CI_EMAIL_CC_JSON'), true) as $k) {
-                $mail->addCC($k); // 抄送
-            }
-
-            foreach (json_decode(getenv('CI_EMAIL_BCC_JSON'), true) as $k) {
-                $mail->addBCC($k); // 暗抄送
-            }
-
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body = $body;
-
-            $mail->send();
-            Log::debug(__FILE__, __LINE__, 'Message has been sent');
-        } catch (Exception $e) {
-            Log::debug(
-                __FILE__,
-                __LINE__,
-                'Message could not be sent. Mailer Error: ', $mail->ErrorInfo
-            );
-        }
+        Mail::send($address, $subject, $body);
     }
 
     /**
@@ -252,7 +271,7 @@ id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_n
 
 FROM
 
-builds WHERE build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id DESC;
+builds WHERE build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id DESC LIMIT 1;
 EOF;
 
         $output = DB::select($sql, [
@@ -288,6 +307,8 @@ EOF;
         $this->commit_id = $output[3];
 
         $this->config = JSON::beautiful($this->config);
+
+        Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
 
         return $output;
     }

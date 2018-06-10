@@ -64,9 +64,9 @@ class Build
      * @param null|string $config
      * @param null|string $pull_request_source
      * @param null|string $repo_full_name
+     * @param array       $env_vars
      *
      * @throws CIException
-     * @throws Exception
      */
     public function __invoke($build_key_id,
                              string $git_type,
@@ -79,7 +79,8 @@ class Build
                              ?string $tag_name = null,
                              ?string $config,
                              ?string $pull_request_source,
-                             ?string $repo_full_name): void
+                             ?string $repo_full_name,
+                             array $env_vars = []): void
     {
         try {
             $this->build_key_id = (int) $build_key_id;
@@ -99,6 +100,7 @@ class Build
             $this->git_type = $git_type;
             $this->pull_request_source = $pull_request_source;
             $this->repo_full_name = $repo_full_name;
+            $this->system_env = array_merge($this->system_env, $env_vars);
 
             Log::debug(__FILE__, __LINE__, json_encode([
                 'unique_id' => $this->unique_id,
