@@ -12,7 +12,7 @@ use KhsCI\Support\HTTP;
  *
  * @see https://developer.github.com/v3/repos/deployments/
  */
-class GitHub
+class GitHubClient
 {
     const API_URL = 'https://api.github.com';
 

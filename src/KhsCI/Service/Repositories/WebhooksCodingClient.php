@@ -7,7 +7,7 @@ namespace KhsCI\Service\Repositories;
 use Exception;
 use KhsCI\Service\CICommon;
 
-class CodingWebhooksClient
+class WebhooksCodingClient
 {
     use CICommon;
 

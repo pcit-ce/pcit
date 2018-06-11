@@ -9,7 +9,7 @@ use Exception;
 use KhsCI\Support\Log;
 use TencentAI\TencentAI;
 
-class Issues
+class GitHubClient
 {
     /**
      * @var Curl

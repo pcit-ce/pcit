@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace KhsCI\Providers;
 
 use Curl\Curl;
-use KhsCI\Service\OAuth\CodingClient;
-use KhsCI\Service\OAuth\GiteeClient;
-use KhsCI\Service\OAuth\GitHubAppClient;
-use KhsCI\Service\OAuth\GitHubClient;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -18,16 +14,9 @@ class OAuthProvider implements ServiceProviderInterface
     {
         $curl = new Curl();
 
-        $pimple['oauth_coding'] = function ($app) use ($curl) {
-            return new CodingClient($app['config']['coding'], $curl);
-        };
-
-        $pimple['oauth_gitee'] = function ($app) use ($curl) {
-            return new GiteeClient($app['config']['gitee'], $curl);
-        };
-
-        $pimple['oauth_github'] = function ($app) use ($curl) {
-            return new GitHubClient($app['config']['github'], $curl);
+        $pimple['oauth'] = function ($app) use ($curl) {
+            $class = 'KhsCI\Service\OAuth\\'.$app->class_name;
+            return new $class($app['config']['coding'], $curl);
         };
     }
 }

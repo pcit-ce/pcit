@@ -12,7 +12,7 @@ use KhsCI\Service\CICommon;
  *
  * @see https://developer.github.com/v3/repos/releases/
  */
-class Releases
+class ReleasesGitHubClient
 {
     use CICommon;
 

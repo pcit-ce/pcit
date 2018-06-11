@@ -13,7 +13,7 @@ use KhsCI\Support\Log;
  *
  * @see  https://developer.github.com/v3/issues/assignees/
  */
-class Assignees
+class AssigneesGitHubClient
 {
     private $curl;
 

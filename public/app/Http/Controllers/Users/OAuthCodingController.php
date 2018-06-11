@@ -16,21 +16,7 @@ class OAuthCodingController
     /**
      * @var CodingClient
      */
-    protected static $oauth;
-
     protected static $git_type = 'coding';
-
-    /**
-     * OAuthCodingController constructor.
-     *
-     * @throws Exception
-     */
-    public function __construct()
-    {
-        $khsci = new KhsCI();
-
-        static::$oauth = $khsci->oauth_coding;
-    }
 
     /**
      * OAuth 第一步获取登录 URL.

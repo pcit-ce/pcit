@@ -14,7 +14,7 @@ use KhsCI\Support\Log;
  *
  * @see https://developer.github.com/v3/repos/statuses/
  */
-class Status
+class StatusGitHubClient
 {
     private $curl;
 

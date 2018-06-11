@@ -116,13 +116,19 @@ class Repo extends DBModel
      * @param string $git_type
      * @param int    $rid
      *
+     * @param bool   $collaborators
+     *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getAdmin(string $git_type, int $rid)
+    public static function getAdmin(string $git_type, int $rid, bool $collaborators = false)
     {
         $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1';
+
+        if ($collaborators) {
+            $sql = 'SELECT repo_collaborators FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1';
+        }
 
         return DB::select($sql, [$git_type, $rid], true);
     }
@@ -132,14 +138,20 @@ class Repo extends DBModel
      * @param int    $rid
      * @param int    $uid
      *
+     * @param bool   $collaborators
+     *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function checkAdmin(string $git_type, int $rid, int $uid)
+    public static function checkAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false)
     {
         $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,json_quote(?))';
 
+        if ($collaborators) {
+            $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_collaborators,json_quote(?))';
+
+        }
         return DB::select($sql, [$git_type, $rid, $uid]);
     }
 
@@ -148,22 +160,30 @@ class Repo extends DBModel
      * @param int    $rid
      * @param int    $uid
      *
+     * @param bool   $collaborators
+     *
      * @throws Exception
      */
-    public static function updateAdmin(string $git_type, int $rid, int $uid): void
+    public static function updateAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false): void
     {
-        $sql = <<<EOF
-UPDATE repo SET repo_admin=?
+        $type = 'repo_admin';
 
-WHERE git_type=? AND rid=? AND JSON_VALID(repo_admin) IS NULL
+        if ($collaborators) {
+            $type = 'repo_collaborators';
+        }
+
+        $sql = <<<EOF
+UPDATE repo SET $type=?
+
+WHERE git_type=? AND rid=? AND JSON_VALID($type) IS NULL
 EOF;
 
         DB::update($sql, ['[]', $git_type, $rid]);
 
         $sql = <<<EOF
-UPDATE repo SET repo_admin=JSON_MERGE_PRESERVE(repo_admin,?) 
+UPDATE repo SET $type=JSON_MERGE_PRESERVE($type,?) 
 
-WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS(repo_admin,JSON_QUOTE(?))
+WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS($type,JSON_QUOTE(?))
 EOF;
 
         DB::update($sql, ["[\"$uid\"]", $git_type, $rid, $uid]);
@@ -174,14 +194,22 @@ EOF;
      * @param int    $rid
      * @param int    $uid
      *
+     * @param bool   $collaborators
+     *
      * @throws Exception
      */
-    public static function deleteAdmin(string $git_type, int $rid, int $uid): void
+    public static function deleteAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false): void
     {
-        $sql = <<<EOF
-UPDATE repo SET repo_admin=JSON_REMOVE(repo_admin,JSON_UNQUOTE(JSON_SEARCH(repo_admin,'one',?)))
+        $type = 'repo_admin';
 
-WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,JSON_QUOTE(?))
+        if ($collaborators) {
+            $type = 'repo_collaborators';
+        }
+
+        $sql = <<<EOF
+UPDATE repo SET $type=JSON_REMOVE($type,JSON_UNQUOTE(JSON_SEARCH($type,'one',?)))
+
+WHERE git_type=? AND rid=? AND JSON_CONTAINS($type,JSON_QUOTE(?))
 
 EOF;
 
@@ -192,13 +220,21 @@ EOF;
      * @param string $git_type
      * @param int    $uid
      *
+     * @param bool   $collaborators
+     *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function allByAdmin(string $git_type, int $uid)
+    public static function allByAdmin(string $git_type, int $uid, bool $collaborators = false)
     {
-        $sql = 'SELECT rid,repo_full_name FROM repo WHERE git_type=? AND JSON_CONTAINS(repo_admin,JSON_QUOTE(?))';
+        $type = 'repo_admin';
+
+        if ($collaborators) {
+            $type = 'repo_collaborators';
+        }
+
+        $sql = 'SELECT rid,repo_full_name FROM repo WHERE git_type=? AND JSON_CONTAINS($type,JSON_QUOTE(?))';
 
         return DB::select($sql, [$git_type, $uid]);
     }
@@ -235,16 +271,96 @@ EOF;
     }
 
     /**
-     * @param int $uid
+     * @param int  $uid
+     *
+     * @param bool $collaborators
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getActiveByAdmin(int $uid)
+    public static function getActiveByAdmin(int $uid, bool $collaborators = false)
     {
-        $sql = 'SELECT rid FROM repo WHERE JSON_CONTAINS(repo_admin,JSON_QUOTE(?)) AND build_activate=1 AND webhooks_status=1';
+        $type = 'repo_admin';
+
+        if ($collaborators) {
+            $type = 'repo_collaborators';
+        }
+
+        $sql = "SELECT rid FROM repo WHERE JSON_CONTAINS($type,JSON_QUOTE(?)) AND build_activate=1 AND webhooks_status=1";
 
         return DB::select($sql, [$uid]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function exists(string $git_type, int $rid)
+    {
+        $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=?';
+
+        return DB::select($sql, [$git_type, $rid], true);
+    }
+
+    /**
+     * @param string   $git_type
+     * @param int      $rid
+     * @param string   $repo_prefix
+     * @param string   $repo_name
+     * @param string   $repo_full_name
+     * @param int|null $insert_admin
+     * @param int|null $insert_collaborators
+     * @param string   $default_branch
+     *
+     * @throws Exception
+     */
+    public static function updateRepoInfo(string $git_type,
+                                          int $rid,
+                                          string $repo_prefix,
+                                          string $repo_name,
+                                          string $repo_full_name,
+                                          ?int $insert_admin,
+                                          ?int $insert_collaborators,
+                                          string $default_branch)
+    {
+        if ($repo_key_id = self::exists($git_type, $rid)) {
+            $sql = <<<'EOF'
+UPDATE repo SET
+
+git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
+EOF;
+            DB::update($sql, [
+                $git_type, $rid, $repo_prefix, $repo_name,
+                $repo_full_name, time(), $repo_key_id,
+            ]);
+
+            return;
+        }
+
+        $sql = <<<EOF
+INSERT INTO repo(
+id,git_type, rid, repo_prefix, repo_name, repo_full_name,
+webhooks_status, build_activate,default_branch,
+last_sync
+) VALUES(null,?,?,?,?,?,?,?,?,?)
+EOF;
+
+        DB::insert($sql, [
+            $git_type, $rid, $repo_prefix, $repo_name, $repo_full_name,
+            $default_branch, time(),
+        ]);
+
+        if ($insert_admin) {
+            self::updateAdmin($git_type, $rid, $insert_admin);
+        }
+
+        if ($insert_collaborators) {
+            self::updateAdmin($git_type, $rid, $insert_collaborators, true);
+        }
     }
 }

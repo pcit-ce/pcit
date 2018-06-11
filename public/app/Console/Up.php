@@ -355,6 +355,8 @@ class Up
      */
     private function updateStatus(int $last_insert_id): void
     {
+        Log::debug(__FILE__, __LINE__, 'Update status ...');
+
         if ('github' === $this->git_type) {
             if ($this->config_array) {
                 $this->updateGitHubAppChecks($last_insert_id);

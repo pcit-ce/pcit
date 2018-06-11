@@ -19,7 +19,7 @@ use KhsCI\Support\DB;
 use KhsCI\Support\Git;
 use KhsCI\Support\Log;
 
-class Build
+class Client
 {
     private $git_type;
 

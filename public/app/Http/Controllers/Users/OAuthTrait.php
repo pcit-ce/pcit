@@ -22,6 +22,17 @@ trait OAuthTrait
     protected static $oauth;
 
     /**
+     * OAuthTrait constructor.
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $khsci = new KhsCI([], static::$git_type);
+
+        static::$oauth = $khsci->oauth;
+    }
+
+    /**
      * @param null|string $state
      *
      * @throws Exception

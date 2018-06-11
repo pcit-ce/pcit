@@ -7,7 +7,7 @@ namespace KhsCI\Service\Repositories;
 use Curl\Curl;
 use Exception;
 
-class Webhooks
+class GitHubClient
 {
     private $api_url;
 

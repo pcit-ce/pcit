@@ -4,13 +4,6 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
-use KhsCI\Service\Issue\Assignees;
-use KhsCI\Service\Issue\Comments;
-use KhsCI\Service\Issue\Events;
-use KhsCI\Service\Issue\Issues;
-use KhsCI\Service\Issue\Labels;
-use KhsCI\Service\Issue\Milestones;
-use KhsCI\Service\Issue\Timeline;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -19,31 +12,40 @@ class IssueProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['issue'] = function ($app) {
-            return new Issues($app['curl'], $app['config']['api_url'], $app['tencent_ai']);
+            $class = 'KhsCI\Service\Issue\\'.$app->class_name;
+
+            return new $class($app['curl'], $app['config']['api_url'], $app['tencent_ai']);
         };
 
         $pimple['issue_assignees'] = function ($app) {
-            return new Assignees($app['curl'], $app['config']['api_url']);
+            $class = 'KhsCI\Service\Issue\Assignees'.$app->class_name;
+
+            return new $class($app['curl'], $app['config']['api_url']);
         };
 
         $pimple['issue_comments'] = function ($app) {
-            return new Comments($app['curl'], $app['config']['api_url'], $app['tencent_ai']);
+            $class = 'KhsCI\Service\Issue\Comments'.$app->class_name;
+            return new $class($app['curl'], $app['config']['api_url'], $app['tencent_ai']);
         };
 
         $pimple['issue_events'] = function ($app) {
-            return new Events();
+            $class = 'KhsCI\Service\Issue\Events'.$app->class_name;
+            return new $class();
         };
 
         $pimple['issue_labels'] = function ($app) {
-            return new Labels();
+            $class = 'KhsCI\Service\Issue\Labels'.$app->class_name;
+            return new $class();
         };
 
         $pimple['issue_milestones'] = function ($app) {
-            return new Milestones();
+            $class = 'KhsCI\Service\Issue\Milestones'.$app->class_name;
+            return new $class();
         };
 
         $pimple['issue_timeline'] = function ($app) {
-            return new Timeline($app['curl'], $app['config']['api_url']);
+            $class = 'KhsCI\Service\Issue\Timeline'.$app->class_name;
+            return new $class($app['curl'], $app['config']['api_url']);
         };
     }
 }

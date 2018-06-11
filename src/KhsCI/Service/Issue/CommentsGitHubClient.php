@@ -11,7 +11,7 @@ use KhsCI\Support\Log;
 use TencentAI\Error\TencentAIError;
 use TencentAI\TencentAI;
 
-class Comments
+class CommentsGitHubClient
 {
     /**
      * @var Curl
