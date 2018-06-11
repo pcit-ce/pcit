@@ -16,7 +16,7 @@ use KhsCI\Support\Log;
  *
  * @see https://developer.github.com/v3/apps/installations/
  */
-class Installations
+class Client
 {
     private $curl;
 

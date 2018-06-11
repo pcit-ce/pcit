@@ -48,10 +48,6 @@ class SyncController
         // sync orgs
 
         $this->getOrgs();
-
-        // sync orgs repos
-
-        $this->getOrgsRepo();
     }
 
     /**
@@ -77,9 +73,17 @@ class SyncController
      */
     private function getRepo()
     {
-        $output = $this->khsci->user_basic_info->getRepos(1, false);
+        $page = 0;
 
-        $this->parseRepo($output);
+        do {
+            $page++;
+
+            $json = $this->khsci->user_basic_info->getRepos($page, false);
+
+            $num_pre_page = count(json_decode($json));
+
+            $this->parseRepo($json);
+        } while ($num_pre_page >= 30);
     }
 
     /**
@@ -108,7 +112,7 @@ class SyncController
 
         foreach ($orgs as $k) {
             $org_name = $k['username'];
-            $output = $this->khsci->github_orgs->exists($org_name);
+            $output = $this->khsci->orgs->exists($org_name);
 
             if (!$output) {
                 User::delete($this->git_type, $org_name);
@@ -127,9 +131,17 @@ class SyncController
      */
     private function getOrgsRepo(string $org_name)
     {
-        $json = $this->khsci->orgs->listRepo($org_name);
+        $page = 0;
 
-        $this->parseRepo($json);
+        do {
+            $page++;
+
+            $json = $this->khsci->orgs->listRepo($org_name, 1);
+
+            $num_pre_page = count(json_decode($json));
+
+            $this->parseRepo($json);
+        } while ($num_pre_page >= 30);
     }
 
     /**
@@ -146,10 +158,13 @@ class SyncController
                 $obj_repo = $obj[$i] ?? false;
 
                 if (false === $obj_repo) {
+
                     break;
                 }
 
-                $full_name = $obj_repo->full_name ?? false;
+                $repo_full_name = $obj_repo->full_name;
+
+                list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
 
                 $default_branch = $obj_repo->default_branch;
 
@@ -162,12 +177,28 @@ class SyncController
                  */
                 $admin = $obj_repo->permissions->admin ?? $obj_repo->permission->admin ?? null;
 
-                $value = [$full_name, $default_branch, $admin];
+                $insert_collaborators = null;
+                $insert_admin = null;
 
-                $id = $obj_repo->id;
+                if ($admin) {
+                    // uid 是管理员
+                    $insert_admin = $this->uid;
+                } else {
+                    // uid 是协作者
+                    $insert_collaborators = $this->uid;
+                }
 
-                Repo::updateRepoInfo();
+                $rid = $obj_repo->id;
 
+                Repo::updateRepoInfo($this->git_type,
+                    (int) $rid,
+                    $repo_prefix,
+                    $repo_name,
+                    $repo_full_name,
+                    $insert_admin,
+                    $insert_collaborators,
+                    $default_branch
+                );
             }
         }
     }

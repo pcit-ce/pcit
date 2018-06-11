@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
-use KhsCI\Service\GitHubApp\Installations;
+use KhsCI\Service\GitHubApp\Client;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -13,7 +13,7 @@ class GitHubAppProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['github_apps_installations'] = function ($app) {
-            return new Installations($app['curl'], $app['config']['api_url']);
+            return new Client($app['curl'], $app['config']['api_url']);
         };
     }
 }

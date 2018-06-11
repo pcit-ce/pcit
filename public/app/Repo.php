@@ -304,27 +304,39 @@ EOF;
     {
         $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=?';
 
-        return DB::select($sql, [$git_type, $rid], true) !== null;
+        return DB::select($sql, [$git_type, $rid], true);
     }
 
     /**
+     * @param string   $git_type
+     * @param int      $rid
+     * @param string   $repo_prefix
+     * @param string   $repo_name
+     * @param string   $repo_full_name
+     * @param int|null $insert_admin
+     * @param int|null $insert_collaborators
+     * @param string   $default_branch
+     *
      * @throws Exception
      */
-    public static function updateRepoInfo()
+    public static function updateRepoInfo(string $git_type,
+                                          int $rid,
+                                          string $repo_prefix,
+                                          string $repo_name,
+                                          string $repo_full_name,
+                                          ?int $insert_admin,
+                                          ?int $insert_collaborators,
+                                          string $default_branch)
     {
-
-
-        if (self::exists()) {
-
-
+        if ($repo_key_id = self::exists($git_type, $rid)) {
             $sql = <<<'EOF'
 UPDATE repo SET
 
 git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
 EOF;
             DB::update($sql, [
-                $git_type, $rid, $repoPrefix, $repoName,
-                $repo_full_name, $time, $repo_key_id,
+                $git_type, $rid, $repo_prefix, $repo_name,
+                $repo_full_name, time(), $repo_key_id,
             ]);
 
             return;
@@ -333,15 +345,22 @@ EOF;
         $sql = <<<EOF
 INSERT INTO repo(
 id,git_type, rid, repo_prefix, repo_name, repo_full_name,
-webhooks_status, build_activate, repo_admin, repo_collaborators, default_branch,
+webhooks_status, build_activate,default_branch,
 last_sync
-) VALUES(null,?,?,?,?,?,?,?,JSON_ARRAY(?),JSON_ARRAY(?),?,?)
+) VALUES(null,?,?,?,?,?,?,?,?,?)
 EOF;
 
         DB::insert($sql, [
-            $git_type, $rid, $repoPrefix, $repoName, $repo_full_name,
-            $webhooksStatus, $buildActivate, $insert_admin, $insert_collaborators, $default_branch, $time,
+            $git_type, $rid, $repo_prefix, $repo_name, $repo_full_name,
+            $default_branch, time(),
         ]);
 
+        if ($insert_admin) {
+            self::updateAdmin($git_type, $rid, $insert_admin);
+        }
+
+        if ($insert_collaborators) {
+            self::updateAdmin($git_type, $rid, $insert_collaborators, true);
+        }
     }
 }
