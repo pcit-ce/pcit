@@ -9,9 +9,9 @@ use KhsCI\Support\Log;
 
 trait CICommon
 {
-    private $curl;
+    protected $curl;
 
-    private $api_url;
+    protected $api_url;
 
     /**
      * CICommon constructor.

@@ -10,6 +10,5 @@ use KhsCI\Support\Session;
 
 class CodingController extends GitHubController
 {
-
     protected $git_type = 'coding';
 }

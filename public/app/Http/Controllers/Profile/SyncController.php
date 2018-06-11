@@ -94,6 +94,10 @@ class SyncController
     {
         $orgs = $this->khsci->user_basic_info->listOrgs();
 
+        if (!$orgs) {
+            return;
+        }
+
         foreach (json_decode($orgs, true) as $k) {
             $org_id = $k['id'];
 

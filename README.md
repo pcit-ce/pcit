@@ -78,6 +78,12 @@ $ ./lnmp-docker.sh khsci-up
 
 更多信息请查看 https://github.com/khs1994-php/khsci/blob/master/docs/install/ee.md
 
+## Support
+
+![](https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg)
+
+扫码关注 **KhsCI** 微信公众平台，寻求 **KhsCI** 团队支持。
+
 ## 子项目
 
 * [Docker PHP](https://github.com/khs1994-docker/libdocker)

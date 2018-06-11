@@ -9,12 +9,12 @@ use Exception;
 
 class GitHubClient
 {
-    private $api_url = null;
+    protected $api_url = null;
 
     /**
      * @var Curl
      */
-    private $curl;
+    protected $curl;
 
     public function __construct(Curl $curl, string $api_url)
     {

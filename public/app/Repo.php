@@ -344,10 +344,9 @@ EOF;
 
         $sql = <<<EOF
 INSERT INTO repo(
-id,git_type, rid, repo_prefix, repo_name, repo_full_name,
-webhooks_status, build_activate,default_branch,
+id,git_type, rid, repo_prefix, repo_name, repo_full_name,default_branch,
 last_sync
-) VALUES(null,?,?,?,?,?,?,?,?,?)
+) VALUES(null,?,?,?,?,?,?,?)
 EOF;
 
         DB::insert($sql, [

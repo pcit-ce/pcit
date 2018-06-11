@@ -6,6 +6,7 @@ namespace KhsCI\Service\Users;
 
 use Exception;
 use KhsCI\Service\CICommon;
+use KhsCI\Support\Log;
 
 class CodingClient extends GitHubClient
 {
@@ -68,8 +69,42 @@ class CodingClient extends GitHubClient
 
         $json = $this->curl->get($url);
 
+        $json_obj = json_decode($json);
+
+        if (0 !== $json_obj->code) {
+            Log::debug(__FILE__, __LINE__, 'Coding user repo not found');
+
+            throw new Exception('Not Found', 404);
+        }
+
+        $repo = (array) $json_obj->data->list;
+
+        $array = [];
+
+        foreach ($repo as $k) {
+            $id = $k->id;
+            $repo_path = explode('/', $k->backend_project_path);
+            $full_name = $repo_path[2].'/'.$repo_path[4];
+            $default_branch = '';
+
+            $array[] = [
+                'id' => $id,
+                'full_name' => $full_name,
+                'default_branch' => $default_branch,
+                'permissions' => ['admin' => true]
+            ];
+        }
+
         if ($raw) {
+
             return $json;
         }
+
+        return json_encode($array);
+    }
+
+    public function listOrgs()
+    {
+        return [];
     }
 }
