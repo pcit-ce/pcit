@@ -23,32 +23,32 @@ use WeChat\WeChat;
  *
  * $a = $container['a'];
  *
- * @property Service\GitHubApp\Installations      $github_apps_installations
- * @property Service\OAuth\GitHubClient           $oauth
- * @property Service\Issue\Assignees              $issue_assignees
- * @property Service\Issue\Comments               $issue_comments
- * @property Service\Issue\Events                 $issue_events
- * @property Service\Issue\Issues                 $issue
- * @property Service\Issue\Labels                 $issue_labels
- * @property Service\Issue\Milestones             $issue_milestones
- * @property Service\Issue\Timeline               $issue_timeline
- * @property Service\Organizations\GitHubClient   $orgs
- * @property Service\Repositories\Collaborators   $repo_collaborators
- * @property Service\Repositories\Status          $repo_status
- * @property Service\Repositories\Webhooks        $repo_webhooks
- * @property PHPMailer                            $mail
- * @property Service\PullRequest\GitHubClient     $pull_request
- * @property Service\Webhooks\GitHubClient        $webhooks
- * @property Service\Build\Build                  $build
- * @property TencentAI                            $tencent_ai
- * @property Service\Users\GitHubClient           $user_basic_info
- * @property Service\Checks\Run                   $check_run
- * @property Service\Checks\Suites                $check_suites
- * @property Service\Checks\MarkDown              $check_md
- * @property Curl                                 $curl
- * @property Docker                               $docker
- * @property WeChat                               $wechat
- * @property Service\WeChat\Template\WeChatClient $wechat_template_message
+ * @property Service\GitHubApp\Installations                $github_apps_installations
+ * @property Service\OAuth\GitHubClient                     $oauth
+ * @property Service\Issue\AssigneesGitHubClient            $issue_assignees
+ * @property Service\Issue\CommentsGitHubClient             $issue_comments
+ * @property Service\Issue\EventsGitHubClient               $issue_events
+ * @property Service\Issue\GitHubClient                     $issue
+ * @property Service\Issue\LabelsGitHubClient               $issue_labels
+ * @property Service\Issue\MilestonesGitHubClient           $issue_milestones
+ * @property Service\Issue\TimelineGitHubClient             $issue_timeline
+ * @property Service\Organizations\GitHubClient             $orgs
+ * @property Service\Repositories\CollaboratorsGitHubClient $repo_collaborators
+ * @property Service\Repositories\StatusGitHubClient        $repo_status
+ * @property Service\Repositories\WebhooksCodingClient      $repo_webhooks
+ * @property PHPMailer                                      $mail
+ * @property Service\PullRequest\GitHubClient               $pull_request
+ * @property Service\Webhooks\GitHubClient                  $webhooks
+ * @property Service\Build\Build                            $build
+ * @property TencentAI                                      $tencent_ai
+ * @property Service\Users\GitHubClient                     $user_basic_info
+ * @property Service\Checks\Run                             $check_run
+ * @property Service\Checks\Suites                          $check_suites
+ * @property Service\Checks\MarkDown                        $check_md
+ * @property Curl                                           $curl
+ * @property Docker                                         $docker
+ * @property WeChat                                         $wechat
+ * @property Service\WeChat\Template\WeChatClient           $wechat_template_message
  */
 class KhsCI extends Container
 {

@@ -79,36 +79,7 @@ class SyncController
     {
         $output = $this->khsci->user_basic_info->getRepos(1, false);
 
-        if ($obj = json_decode($output)) {
-            for ($i = 0; $i < 30; ++$i) {
-                $obj_repo = $obj[$i] ?? false;
-
-                if (false === $obj_repo) {
-                    break;
-                }
-
-                $full_name = $obj_repo->full_name ?? false;
-
-                $default_branch = $obj_repo->default_branch;
-
-                /**
-                 * 获取 repo 全名，默认分支，是否为管理员（拥有全部权限）.
-                 *
-                 * gitee permission
-                 *
-                 * github *s
-                 */
-                $admin = $obj_repo->permissions->admin ?? $obj_repo->permission->admin ?? null;
-
-                $value = [$full_name, $default_branch, $admin];
-
-                $id = $obj_repo->id;
-
-                $array[$id] = $value;
-            }
-        }
-
-        Repo::updateRepoInfo();
+        $this->parseRepo($output);
     }
 
     /**
@@ -149,9 +120,55 @@ class SyncController
 
     /**
      * Sync orgs repos
+     *
+     * @param string $org_name
+     *
+     * @throws Exception
      */
-    private function getOrgsRepo()
+    private function getOrgsRepo(string $org_name)
     {
-        $this->khsci->github_orgs->listRepo($org_name);
+        $json = $this->khsci->orgs->listRepo($org_name);
+
+        $this->parseRepo($json);
+    }
+
+    /**
+     * parse repo json output
+     *
+     * @param string $json
+     *
+     * @throws Exception
+     */
+    private function parseRepo(string $json)
+    {
+        if ($obj = json_decode($json)) {
+            for ($i = 0; $i < 30; ++$i) {
+                $obj_repo = $obj[$i] ?? false;
+
+                if (false === $obj_repo) {
+                    break;
+                }
+
+                $full_name = $obj_repo->full_name ?? false;
+
+                $default_branch = $obj_repo->default_branch;
+
+                /**
+                 * 获取 repo 全名，默认分支，是否为管理员（拥有全部权限）.
+                 *
+                 * gitee permission
+                 *
+                 * github *s
+                 */
+                $admin = $obj_repo->permissions->admin ?? $obj_repo->permission->admin ?? null;
+
+                $value = [$full_name, $default_branch, $admin];
+
+                $id = $obj_repo->id;
+
+                Repo::updateRepoInfo();
+
+            }
+        }
     }
 }
