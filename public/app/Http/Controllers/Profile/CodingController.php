@@ -8,40 +8,8 @@ use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Session;
 
-class CodingController
+class CodingController extends GitHubController
 {
-    /**
-     * @param mixed ...$arg
-     *
-     * @return array
-     *
-     * @throws Exception
-     */
-    public function __invoke(...$arg)
-    {
-        $uid = Session::get('coding.uid');
-        $username = Session::get('coding.username');
-        $arg[0] === $username && $username = $arg[0];
-        $pic = Session::get('coding.pic');
-        $access_token = Session::get('coding.access_token');
 
-        $khsci = new KhsCI(['coding_access_token' => $access_token], 'coding');
-
-        $json = json_decode($khsci->user_basic_info->getRepos(1, true))->data ?? false;
-
-        $num = $json->totalRow ?? false;
-        $array = [];
-        for ($i = 0; $i < $num; ++$i) {
-            $list = ($json->list)[$i];
-            $array[] = $list->owner_user_name.'/'.$list->name;
-        }
-
-        return [
-            'code' => 200,
-            'uid' => $uid,
-            'username' => $arg[0],
-            'pic' => $pic,
-            'repos' => $array,
-        ];
-    }
+    protected $git_type = 'coding';
 }

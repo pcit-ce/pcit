@@ -16,12 +16,28 @@ class Git
 
     const SUPPORT_GITHUB = 'github';
 
+    const SUPPORT_GOGS = 'gogs';
+
     const SUPPORT_GIT_ARRAY = [
         'aliyun',
         'coding',
         'gitee',
         'github',
+        'gogs',
     ];
+
+    /**
+     * @param $git_type
+     *
+     * @throws Exception
+     */
+    public static function checkGit($git_type)
+    {
+        if (!in_array($git_type, self::SUPPORT_GIT_ARRAY)) {
+
+            Throw new Exception('Not Found', 404);
+        }
+    }
 
     /**
      * @param string $type
@@ -35,6 +51,8 @@ class Git
     public static function getUrl(string $type, string $repo_full_name, bool $ssh = false)
     {
         list($username, $repo) = explode('/', $repo_full_name);
+
+        self::checkGit($type);
 
         switch ($type) {
             case 'aliyun':
@@ -89,27 +107,20 @@ class Git
     {
         $base_url = self::getUrl($type, $repo_full_name);
 
-        switch ($type) {
-            case 'coding':
-                $url = null;
+        self::checkGit($type);
 
-                break;
+        switch ($type) {
+
             case 'gitee':
                 $url = $base_url.'/pulls/'.$pull_id;
 
                 break;
-            case 'github':
-                $url = null;
-
-                break;
 
             default:
-                throw new Exception('Not Support', 500);
+                $url = $base_url.'/pull/'.$pull_id;
         }
 
-        $common_url = $base_url.'/pull/'.$pull_id;
-
-        return $url ?? $common_url;
+        return $url;
     }
 
     /**
@@ -125,32 +136,19 @@ class Git
     {
         $base_url = self::getUrl($type, $repo_full_name);
 
-        switch ($type) {
-            case 'aliyun':
-                $url = null;
+        self::checkGit($type);
 
-                break;
+        switch ($type) {
             case 'coding':
                 $url = $base_url.'/topic/'.$issue_id;
 
                 break;
-            case 'gitee':
-
-                $url = null;
-
-                break;
-            case 'github':
-                $url = null;
-
-                break;
 
             default:
-                throw new Exception('Not Support', 500);
+                $url = $base_url.'/issues/'.$issue_id;
         }
 
-        $common_url = $base_url.'/issues/'.$issue_id;
-
-        return $url ?? $common_url;
+        return $url;
     }
 
     /**
@@ -166,31 +164,14 @@ class Git
     {
         $base_url = self::getUrl($type, $repo_full_name);
 
+        self::checkGit($type);
+
         switch ($type) {
-            case 'aliyun':
-                $url = null;
-
-                break;
-            case 'coding':
-                $url = null;
-
-                break;
-            case 'gitee':
-                $url = null;
-
-                break;
-            case 'github':
-                $url = null;
-
-                break;
-
             default:
-                throw new Exception('Not Support', 500);
+                $url = $base_url.'/commit/'.$commit_id;
         }
 
-        $common_url = $base_url.'/commit/'.$commit_id;
-
-        return $url ?? $common_url;
+        return $url;
     }
 
     /**
@@ -208,30 +189,18 @@ class Git
                                      string $commit_id,
                                      string $file_name)
     {
+        self::checkGit($type);
+
         switch ($type) {
-            case 'aliyun':
-                $url = null;
-
-                break;
-            case 'coding':
-                $url = null;
-
-                break;
-            case 'gitee':
-                $url = null;
-
-                break;
             case 'github':
                 $url = 'https://raw.githubusercontent.com/'.$repo_full_name.'/'.$commit_id.'/'.$file_name;
 
                 break;
             default:
-                throw new Exception('Not Support', 500);
+                $url = self::getUrl($type, $repo_full_name).'/raw/'.$commit_id.'/'.$file_name;
         }
 
-        $common_url = self::getUrl($type, $repo_full_name).'/raw/'.$commit_id.'/'.$file_name;
-
-        return $url ?? $common_url;
+        return $url;
     }
 
     /**
@@ -243,6 +212,8 @@ class Git
      */
     public static function getApiUrl(string $git_type)
     {
+        self::checkGit($git_type);
+
         switch ($git_type) {
             case 'aliyun':
                 $url = '';
@@ -269,5 +240,31 @@ class Git
         }
 
         return 'https://'.$url;
+    }
+
+    /**
+     * @param string $git_type
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function getClassName(string $git_type)
+    {
+
+        self::checkGit($git_type);
+
+        switch ($git_type) {
+
+            case 'github':
+                $class_name = 'GitHub';
+
+                break;
+
+            default:
+                $class_name = ucfirst($git_type);
+        }
+
+        return $class_name;
     }
 }

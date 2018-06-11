@@ -12,7 +12,7 @@ use KhsCI\Support\Session;
 
 class GitHubController
 {
-    private static $git_type = 'github';
+    protected $git_type = 'github';
 
     /**
      * @param mixed ...$args
@@ -23,7 +23,7 @@ class GitHubController
      */
     public function __invoke(...$args)
     {
-        $git_type = static::$git_type;
+        $git_type = $this->git_type;
 
         $username_from_web = $args[0];
         $access_token = Session::get($git_type.'.access_token');

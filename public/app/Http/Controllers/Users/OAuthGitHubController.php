@@ -24,20 +24,6 @@ class OAuthGitHubController
 
     use OAuthTrait;
 
-    /**
-     * OAuthGitHubController constructor.
-     *
-     * @throws Exception
-     */
-    public function __construct()
-    {
-        $khsci = new KhsCI();
-
-        $method = 'oauth_'.static::$git_type;
-
-        static::$oauth = $khsci->$method;
-    }
-
     public function getLoginUrl(): void
     {
         $git_type = static::$git_type;

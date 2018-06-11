@@ -13,14 +13,10 @@ class UserProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['user_basic_info'] = function ($app) {
-            $git_type = $app['git_type'];
-            if ('github' === $git_type) {
-                return new GitHubClient($app['curl'], $app['config']['api_url']);
-            }
 
-            $obj = 'KhsCI\Service\Users\\'.ucfirst($git_type).'Client';
+            $class = 'KhsCI\Service\Users\\'.$app->class_name;
 
-            return new $obj($app['curl'], $app['config']['api_url']);
+            return new $class($app['curl'], $app['config']['api_url']);
         };
     }
 }
