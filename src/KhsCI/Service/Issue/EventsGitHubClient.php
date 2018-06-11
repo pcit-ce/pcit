@@ -9,7 +9,7 @@ namespace KhsCI\Service\Issue;
  *
  * @see https://developer.github.com/v3/issues/events/
  */
-class Events
+class EventsGitHubClient
 {
     /**
      * List events for an issue.

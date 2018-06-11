@@ -12,7 +12,7 @@ use KhsCI\Service\CICommon;
  *
  * @see https://developer.github.com/v3/issues/labels/
  */
-class Labels
+class LabelsGitHubClient
 {
     use CICommon;
 
