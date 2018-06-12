@@ -272,40 +272,47 @@ class Up
 
         $webhooks = (new KhsCI())->webhooks;
 
-        Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');
+        while (true) {
+            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');
 
-        $json_raw = $webhooks->getCache();
+            $json_raw = $webhooks->getCache();
 
-        Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
+            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
 
-        if (!$json_raw) {
-            Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
+            if (!$json_raw) {
+                Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
 
-            return;
+                return;
+            }
+
+            Log::debug(__FILE__, __LINE__, 'continue');
+
+            list($git_type, $event_type, $json) = json_decode($json_raw, true);
+
+            Log::debug(__FILE__, __LINE__, 'continue');
+
+            if ('aliyun_docker_registry' === $git_type) {
+                $this->aliyunDockerRegistry($json);
+
+                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success');
+
+                return;
+            }
+
+            Log::debug(__FILE__, __LINE__, 'continue');
+
+            $this->git_type = $git_type;
+
+            try {
+                Log::debug(__FILE__, __LINE__, "$event_type");
+                $this->$event_type($json);
+                Log::debug(__FILE__, __LINE__, 'exec success');
+            } catch (Error | Exception $e) {
+                Log::debug(__FILE__, __LINE__, 'continue');
+                Log::debug(__FILE__, __LINE__, 'exec error');
+                $webhooks->pushErrorCache($json_raw);
+            }
         }
-
-        Log::debug(__FILE__, __LINE__, 'continue');
-
-        list($git_type, $event_type, $json) = json_decode($json_raw, true);
-
-        if ('aliyun_docker_registry' === $git_type) {
-            $this->aliyunDockerRegistry($json);
-
-            Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success');
-
-            return;
-        }
-
-        $this->git_type = $git_type;
-
-        try {
-            $this->$event_type($json);
-            Log::debug(__FILE__, __LINE__, 'exec success');
-        } catch (Error | Exception $e) {
-            Log::debug(__FILE__, __LINE__, 'exec error');
-            $webhooks->pushErrorCache($json_raw);
-        }
-
     }
 
     /**
@@ -1422,42 +1429,42 @@ EOF;
      *
      * @throws Exception
      */
-    //    public function check_suite(string $content): void
-    //    {
-    //        return;
-    //
-    //        $obj = json_decode($content);
-    //
-    //        $rid = $obj->repository->id;
-    //
-    //        $action = $obj->action;
-    //
-    //        $check_suite = $obj->check_suite;
-    //
-    //        $check_suite_id = $check_suite->id;
-    //
-    //        $branch = $check_suite->head_branch;
-    //
-    //        $commit_id = $check_suite->head_sha;
-    //
-    //        $installation_id = $obj->installation->id ?? null;
-    //
-    //        $sql = <<<EOF
-    //INSERT INTO builds(
-    //action,event_type,git_type,check_suites_id,branch,commit_id
-    //) VALUES (?,?,?,?,?,?);
-    //EOF;
-    //
-    //        //        $last_insert_id = DB::insert($sql, [
-    //        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
-    //        //        ]);
-    //
-    //        if ('rerequested' === $action) {
-    //            $check_run_id = '';
-    //        }
-    //
-    //        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-    //    }
+    public function check_suite(string $content): void
+    {
+        return;
+
+        $obj = json_decode($content);
+
+        $rid = $obj->repository->id;
+
+        $action = $obj->action;
+
+        $check_suite = $obj->check_suite;
+
+        $check_suite_id = $check_suite->id;
+
+        $branch = $check_suite->head_branch;
+
+        $commit_id = $check_suite->head_sha;
+
+        $installation_id = $obj->installation->id ?? null;
+
+        $sql = <<<EOF
+    INSERT INTO builds(
+    action,event_type,git_type,check_suites_id,branch,commit_id
+    ) VALUES (?,?,?,?,?,?);
+EOF;
+
+        //        $last_insert_id = DB::insert($sql, [
+        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
+        //        ]);
+
+        if ('rerequested' === $action) {
+            $check_run_id = '';
+        }
+
+        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    }
 
     /**
      * Action.
