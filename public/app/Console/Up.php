@@ -293,7 +293,6 @@ class Up
 
             try {
                 $this->$event_type($json);
-                $webhooks->pushSuccessCache($json_raw);
                 Log::debug(__FILE__, __LINE__, 'exec success');
             } catch (Error | Exception $e) {
                 Log::debug(__FILE__, __LINE__, 'exec error');
