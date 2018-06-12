@@ -62,6 +62,8 @@ class BuildCommand
      */
     public function build(): void
     {
+        Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
+
         $this->khsci = new KhsCI();
 
         $build = $this->khsci->build;

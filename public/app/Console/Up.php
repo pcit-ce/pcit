@@ -46,6 +46,7 @@ class Up
             try {
                 Http::get(Env::get('CI_DOCKER_HOST').'/info');
             } catch (\Throwable $e) {
+                Log::debug(__FILE__, __LINE__, 'Docker connect error, skip build');
                 $docker_build_skip = true;
             }
 
