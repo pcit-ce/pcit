@@ -282,6 +282,8 @@ class Up
             if ('aliyun_docker_registry' === $git_type) {
                 $this->aliyunDockerRegistry($json);
 
+                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success');
+
                 return;
             }
 
@@ -290,10 +292,13 @@ class Up
             try {
                 $this->$event_type($json);
                 $webhooks->pushSuccessCache($json_raw);
+                Log::debug(__FILE__, __LINE__, 'exec success');
             } catch (Error | Exception $e) {
                 $webhooks->pushErrorCache($json_raw);
             }
         }
+
+        Log::debug(__FILE__, __LINE__, 'exec success');
     }
 
     /**
@@ -500,6 +505,8 @@ EOF;
         }
 
         $this->updateStatus((int) $last_insert_id);
+
+        Log::debug(__FILE__, __LINE__, 'push event success');
     }
 
     /**
