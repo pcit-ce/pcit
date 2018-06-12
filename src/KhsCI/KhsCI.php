@@ -23,7 +23,7 @@ use WeChat\WeChat;
  *
  * $a = $container['a'];
  *
- * @property Service\GitHubApp\Installations                $github_apps_installations
+ * @property Service\GitHubApp\Client                       $github_apps_installations
  * @property Service\OAuth\GitHubClient                     $oauth
  * @property Service\Issue\AssigneesGitHubClient            $issue_assignees
  * @property Service\Issue\CommentsGitHubClient             $issue_comments
@@ -39,7 +39,7 @@ use WeChat\WeChat;
  * @property PHPMailer                                      $mail
  * @property Service\PullRequest\GitHubClient               $pull_request
  * @property Service\Webhooks\GitHubClient                  $webhooks
- * @property Service\Build\Build                            $build
+ * @property Service\Build\Client                           $build
  * @property TencentAI                                      $tencent_ai
  * @property Service\Users\GitHubClient                     $user_basic_info
  * @property Service\Checks\Run                             $check_run

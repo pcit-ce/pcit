@@ -110,9 +110,4 @@ class SiteMapController
             ],
         ];
     }
-
-    public function __call($name, $arguments): void
-    {
-        var_dump($name, $arguments);
-    }
 }
