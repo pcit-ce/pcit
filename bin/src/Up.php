@@ -45,16 +45,16 @@ class Up extends Command
 
         set_time_limit(0);
 
-        if (PHP_OS === 'Linux') {
-            // http://www.laruence.com/2009/06/11/930.html
-
-            while (1) {
-                $this->process_execute();
-                sleep(3);
-            }
-
-            exit;
-        }
+//        if (PHP_OS === 'Linux') {
+//            // http://www.laruence.com/2009/06/11/930.html
+//
+//            while (1) {
+//                $this->process_execute();
+//                sleep(3);
+//            }
+//
+//            exit;
+//        }
 
         while (1) {
             $up = new \App\Console\Up();
