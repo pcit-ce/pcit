@@ -272,40 +272,40 @@ class Up
 
         $webhooks = (new KhsCI())->webhooks;
 
-        while (true) {
-            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');
+        Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');
 
-            Cache::close();
-            $json_raw = $webhooks->getCache();
+        $json_raw = $webhooks->getCache();
 
-            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
+        Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
 
-            if (!$json_raw) {
-                Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
+        if (!$json_raw) {
+            Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
 
-                return;
-            }
-
-            list($git_type, $event_type, $json) = json_decode($json_raw, true);
-
-            if ('aliyun_docker_registry' === $git_type) {
-                $this->aliyunDockerRegistry($json);
-
-                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success');
-
-                return;
-            }
-
-            $this->git_type = $git_type;
-
-            try {
-                $this->$event_type($json);
-                Log::debug(__FILE__, __LINE__, 'exec success');
-            } catch (Error | Exception $e) {
-                Log::debug(__FILE__, __LINE__, 'exec error');
-                $webhooks->pushErrorCache($json_raw);
-            }
+            return;
         }
+
+        Log::debug(__FILE__, __LINE__, 'continue');
+
+        list($git_type, $event_type, $json) = json_decode($json_raw, true);
+
+        if ('aliyun_docker_registry' === $git_type) {
+            $this->aliyunDockerRegistry($json);
+
+            Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success');
+
+            return;
+        }
+
+        $this->git_type = $git_type;
+
+        try {
+            $this->$event_type($json);
+            Log::debug(__FILE__, __LINE__, 'exec success');
+        } catch (Error | Exception $e) {
+            Log::debug(__FILE__, __LINE__, 'exec error');
+            $webhooks->pushErrorCache($json_raw);
+        }
+
     }
 
     /**
