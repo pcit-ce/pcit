@@ -1429,42 +1429,42 @@ EOF;
      *
      * @throws Exception
      */
-    public function check_suite(string $content): void
-    {
-        return;
+    //    public function check_suite(): void
+    //    {
+    //        return;
 
-        $obj = json_decode($content);
-
-        $rid = $obj->repository->id;
-
-        $action = $obj->action;
-
-        $check_suite = $obj->check_suite;
-
-        $check_suite_id = $check_suite->id;
-
-        $branch = $check_suite->head_branch;
-
-        $commit_id = $check_suite->head_sha;
-
-        $installation_id = $obj->installation->id ?? null;
-
-        $sql = <<<EOF
-    INSERT INTO builds(
-    action,event_type,git_type,check_suites_id,branch,commit_id
-    ) VALUES (?,?,?,?,?,?);
-EOF;
-
-        //        $last_insert_id = DB::insert($sql, [
-        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
-        //        ]);
-
-        if ('rerequested' === $action) {
-            $check_run_id = '';
-        }
-
-        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-    }
+    //        $obj = json_decode($content);
+    //
+    //        $rid = $obj->repository->id;
+    //
+    //        $action = $obj->action;
+    //
+    //        $check_suite = $obj->check_suite;
+    //
+    //        $check_suite_id = $check_suite->id;
+    //
+    //        $branch = $check_suite->head_branch;
+    //
+    //        $commit_id = $check_suite->head_sha;
+    //
+    //        $installation_id = $obj->installation->id ?? null;
+    //
+    //        $sql = <<<EOF
+    //    INSERT INTO builds(
+    //    action,event_type,git_type,check_suites_id,branch,commit_id
+    //    ) VALUES (?,?,?,?,?,?);
+    //EOF;
+    //
+    //        $last_insert_id = DB::insert($sql, [
+    //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
+    //        ]);
+    //
+    //        if ('rerequested' === $action) {
+    //            $check_run_id = '';
+    //        }
+    //
+    //        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    //    }
 
     /**
      * Action.
@@ -1532,8 +1532,18 @@ EOF;
         $this->updateStatus((int) $external_id);
     }
 
+    /**
+     * @param $name
+     * @param $arguments
+     *
+     * @return mixed
+     */
     public function __call($name, $arguments)
     {
-        return $this->$name(...$arguments);
+        if (method_exists($this, $name)) {
+            return $this->$name(...$arguments);
+        }
+
+        return 0;
     }
 }
