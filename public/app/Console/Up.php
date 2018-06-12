@@ -296,6 +296,7 @@ class Up
                 $webhooks->pushSuccessCache($json_raw);
                 Log::debug(__FILE__, __LINE__, 'exec success');
             } catch (Error | Exception $e) {
+                Log::debug(__FILE__, __LINE__, 'exec error');
                 $webhooks->pushErrorCache($json_raw);
             }
         }
