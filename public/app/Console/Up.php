@@ -268,9 +268,13 @@ class Up
      */
     private function webhooks(): void
     {
+        Log::debug(__FILE__, __LINE__, 'start exec webhooks');
+
         $webhooks = (new KhsCI())->webhooks;
 
         while (1) {
+            Log::debug(__FILE__, __LINE__, 'start exec webhooks redis list');
+
             $json_raw = $webhooks->getCache();
 
             if (!$json_raw) {
@@ -299,8 +303,6 @@ class Up
                 $webhooks->pushErrorCache($json_raw);
             }
         }
-
-        Log::debug(__FILE__, __LINE__, 'exec success');
     }
 
     /**
