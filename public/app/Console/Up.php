@@ -279,6 +279,8 @@ class Up
 
             Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
 
+            Log::debug(__FILE__, __LINE__, "$json_raw");
+
             if (!$json_raw) {
                 Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
 
