@@ -16,7 +16,8 @@ class OAuthProvider implements ServiceProviderInterface
 
         $pimple['oauth'] = function ($app) use ($curl) {
             $class = 'KhsCI\Service\OAuth\\'.$app->class_name;
-            return new $class($app['config']['coding'], $curl);
+            $git_type = $app->git_type;
+            return new $class($app['config'][$git_type], $curl);
         };
     }
 }

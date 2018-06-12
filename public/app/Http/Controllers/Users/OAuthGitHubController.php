@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Users;
 
 use Exception;
-use KhsCI\KhsCI;
 use KhsCI\Service\OAuth\CodingClient;
 use KhsCI\Service\OAuth\GiteeClient;
-use KhsCI\Service\OAuth\GitHubAppClient;
 use KhsCI\Service\OAuth\GitHubClient;
 use KhsCI\Support\Response;
 use KhsCI\Support\Session;
@@ -16,7 +14,7 @@ use KhsCI\Support\Session;
 class OAuthGitHubController
 {
     /**
-     * @var GitHubAppClient|GitHubClient|CodingClient|GiteeClient
+     * @var GitHubClient|GitHubClient|CodingClient|GiteeClient
      */
     protected static $oauth;
 

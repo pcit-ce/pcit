@@ -47,6 +47,10 @@ class Log
      */
     public static function debug(string $file, int $line, string $debug_info, array $context = []): void
     {
+        if (!(Env::get('CI_DEBUG', false))) {
+            return;
+        }
+
         $debug_info = json_encode([
             'file' => $file,
             'line' => $line,

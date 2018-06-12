@@ -13,6 +13,8 @@ class OAuthCodingController
 {
     use OAuthTrait;
 
+    protected static $oauth;
+
     /**
      * @var CodingClient
      */
