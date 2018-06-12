@@ -40,17 +40,21 @@ class Up
             // 从 Webhooks 缓存中拿出数据，进行处理
             $this->webhooks();
 
+            Log::debug(__FILE__, __LINE__, 'Docker connect ...');
+
             // Docker 构建队列
             $docker_build_skip = false;
 
             try {
                 Http::get(Env::get('CI_DOCKER_HOST').'/info');
             } catch (\Throwable $e) {
+                Log::debug(__FILE__, __LINE__, 'Docker connect error, skip build');
                 $docker_build_skip = true;
             }
 
             if (!$docker_build_skip) {
                 echo '[D]...';
+                Log::debug(__FILE__, __LINE__, 'Docker connect success, building ...');
 
                 (new BuildCommand())->build();
             }
@@ -191,11 +195,11 @@ class Up
             );
         }
 
+        Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
+
         $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
 
         Log::debug(__FILE__, __LINE__, $log_message);
-
-        Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
     }
 
     /**
@@ -264,29 +268,48 @@ class Up
      */
     private function webhooks(): void
     {
+        Log::debug(__FILE__, __LINE__, 'start exec webhooks');
+
         $webhooks = (new KhsCI())->webhooks;
 
-        while (1) {
+        while (true) {
+            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');
+
             $json_raw = $webhooks->getCache();
 
+            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
+
             if (!$json_raw) {
-                break;
-            }
-
-            list($git_type, $event_type, $json) = json_decode($json_raw, true);
-
-            if ('aliyun_docker_registry' === $git_type) {
-                $this->aliyunDockerRegistry($json);
+                Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
 
                 return;
             }
 
+            Log::debug(__FILE__, __LINE__, 'continue');
+
+            list($git_type, $event_type, $json) = json_decode($json_raw, true);
+
+            Log::debug(__FILE__, __LINE__, 'continue');
+
+            if ('aliyun_docker_registry' === $git_type) {
+                $this->aliyunDockerRegistry($json);
+
+                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success');
+
+                return;
+            }
+
+            Log::debug(__FILE__, __LINE__, 'continue');
+
             $this->git_type = $git_type;
 
             try {
+                Log::debug(__FILE__, __LINE__, "$event_type");
                 $this->$event_type($json);
-                $webhooks->pushSuccessCache($json_raw);
+                Log::debug(__FILE__, __LINE__, 'exec success');
             } catch (Error | Exception $e) {
+                Log::debug(__FILE__, __LINE__, 'continue');
+                Log::debug(__FILE__, __LINE__, 'exec error');
                 $webhooks->pushErrorCache($json_raw);
             }
         }
@@ -347,7 +370,6 @@ class Up
     }
 
     /**
-     * 需要更新状态的，存入缓存队列.
      *
      * @param int $last_insert_id
      *
@@ -381,9 +403,9 @@ class Up
 
                 Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
             }
-
-            return;
         }
+
+        Log::debug(__FILE__, __LINE__, 'update status success');
     }
 
     /**
@@ -497,6 +519,8 @@ EOF;
         }
 
         $this->updateStatus((int) $last_insert_id);
+
+        Log::debug(__FILE__, __LINE__, 'push event success');
     }
 
     /**
@@ -1405,10 +1429,10 @@ EOF;
      *
      * @throws Exception
      */
-    //    public function check_suite(string $content): void
+    //    public function check_suite(): void
     //    {
     //        return;
-    //
+
     //        $obj = json_decode($content);
     //
     //        $rid = $obj->repository->id;
@@ -1426,20 +1450,20 @@ EOF;
     //        $installation_id = $obj->installation->id ?? null;
     //
     //        $sql = <<<EOF
-    //INSERT INTO builds(
-    //action,event_type,git_type,check_suites_id,branch,commit_id
-    //) VALUES (?,?,?,?,?,?);
+    //    INSERT INTO builds(
+    //    action,event_type,git_type,check_suites_id,branch,commit_id
+    //    ) VALUES (?,?,?,?,?,?);
     //EOF;
     //
-    //        //        $last_insert_id = DB::insert($sql, [
-    //        //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
-    //        //        ]);
+    //        $last_insert_id = DB::insert($sql, [
+    //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
+    //        ]);
     //
     //        if ('rerequested' === $action) {
     //            $check_run_id = '';
     //        }
     //
-    //        // Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    //        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
     //    }
 
     /**
@@ -1508,8 +1532,18 @@ EOF;
         $this->updateStatus((int) $external_id);
     }
 
+    /**
+     * @param $name
+     * @param $arguments
+     *
+     * @return mixed
+     */
     public function __call($name, $arguments)
     {
-        return $this->$name(...$arguments);
+        if (method_exists($this, $name)) {
+            return $this->$name(...$arguments);
+        }
+
+        return 0;
     }
 }
