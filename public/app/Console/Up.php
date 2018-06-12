@@ -52,6 +52,7 @@ class Up
 
             if (!$docker_build_skip) {
                 echo '[D]...';
+                Log::debug(__FILE__, __LINE__, 'Docker connect success, building ...');
 
                 (new BuildCommand())->build();
             }
@@ -179,13 +180,13 @@ class Up
         $check_run_id = Build::getCheckRunId((int) $build_key_id);
 
         if ($check_run_id and !$force_create) {
-            $output = $khsci->check_run->update(
+            $khsci->check_run->update(
                 $repo_full_name, $check_run_id, $name, $branch, $commit_id, $details_url,
                 (string) $build_key_id, $status, $started_at ?? time(),
                 $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
             );
         } else {
-            $output = $khsci->check_run->create(
+            $khsci->check_run->create(
                 $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
                 $started_at ?? time(),
                 $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
@@ -195,8 +196,6 @@ class Up
         $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
 
         Log::debug(__FILE__, __LINE__, $log_message);
-
-        Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
     }
 
     /**
@@ -271,6 +270,8 @@ class Up
             $json_raw = $webhooks->getCache();
 
             if (!$json_raw) {
+                Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
+
                 break;
             }
 
@@ -348,7 +349,6 @@ class Up
     }
 
     /**
-     * 需要更新状态的，存入缓存队列.
      *
      * @param int $last_insert_id
      *
@@ -382,9 +382,9 @@ class Up
 
                 Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
             }
-
-            return;
         }
+
+        Log::debug(__FILE__, __LINE__, 'update status success');
     }
 
     /**
