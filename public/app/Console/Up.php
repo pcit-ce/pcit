@@ -182,18 +182,20 @@ class Up
         $check_run_id = Build::getCheckRunId((int) $build_key_id);
 
         if ($check_run_id and !$force_create) {
-            $khsci->check_run->update(
+            $output = $khsci->check_run->update(
                 $repo_full_name, $check_run_id, $name, $branch, $commit_id, $details_url,
                 (string) $build_key_id, $status, $started_at ?? time(),
                 $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
             );
         } else {
-            $khsci->check_run->create(
+            $output = $khsci->check_run->create(
                 $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
                 $started_at ?? time(),
                 $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
             );
         }
+
+        Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
 
         $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
 
