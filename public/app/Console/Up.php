@@ -273,9 +273,11 @@ class Up
         $webhooks = (new KhsCI())->webhooks;
 
         while (1) {
-            Log::debug(__FILE__, __LINE__, 'start exec webhooks redis list');
+            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');
 
             $json_raw = $webhooks->getCache();
+
+            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
 
             if (!$json_raw) {
                 Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
