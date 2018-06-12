@@ -123,6 +123,8 @@ class BuildCommand
 
             if (01404 === $this->build_key_id) {
                 // 数据库不存在项目，跳出
+                Log::debug(__FILE__, __LINE__, 'Docker Build stop by BuildDB empty');
+
                 return;
             }
 
@@ -132,6 +134,8 @@ class BuildCommand
             $build->systemDelete($this->unique_id, true);
 
             if (!$this->unique_id) {
+                Log::debug(__FILE__, __LINE__, 'Docker build stop by unique id is empty');
+
                 return;
             }
 

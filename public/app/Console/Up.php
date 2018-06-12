@@ -40,6 +40,8 @@ class Up
             // 从 Webhooks 缓存中拿出数据，进行处理
             $this->webhooks();
 
+            Log::debug(__FILE__, __LINE__, 'Docker connect ...');
+
             // Docker 构建队列
             $docker_build_skip = false;
 
@@ -272,7 +274,7 @@ class Up
             if (!$json_raw) {
                 Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
 
-                break;
+                return;
             }
 
             list($git_type, $event_type, $json) = json_decode($json_raw, true);
