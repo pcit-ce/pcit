@@ -20,13 +20,19 @@
 
 ## What is Continuous Integration (CI)?
 
+* https://www.mindtheproduct.com/2016/02/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/
+
 持续集成 (CI) 是一种软件开发实践，即团队开发成员经常集成他们的工作，而不是在开发周期结束时进行集成，通过每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建（包括编译，发布，自动化测试）来验证，从而尽早地发现集成错误。
 
 持续集成 (CI) 的目标是通过以较小的增量进行 **开发** 和 **测试** 来构建更健康的软件。
 
-作为一个持续集成系统，KhsCI 通过自动 **构建** 和 **测试** 代码变更来支持团队的软件开发过程，为代码变更的构建状态提供即时的反馈。KhsCI 还可以通过管理部署和通知来自动化开发过程的其他部分。
-
 ![ci](https://user-images.githubusercontent.com/16733187/41330207-9416717c-6f04-11e8-961f-c606303e7bb5.jpg)
+
+作为一个持续集成系统，**KhsCI** 通过自动 **构建** 和 **测试** 代码变更来支持团队的软件开发过程，为代码变更的构建状态提供即时的反馈。KhsCI 还可以通过管理部署和通知来自动化开发过程的其他部分。
+
+当您提交代码到 Git，KhsCI 会进行构建，将您的 Git 仓库克隆到一个容器环境中，并执行一系列构建和测试代码的任务。如果其中一项或多项任务失败，则认为构建失败。如果没有任何任务失败，构建被认为通过，KhsCI 可以将您的代码部署到 Web 服务器、应用程序主机或容器集群中。
+
+KhsCI 还可以使您的 **交付工作** 的其他部分实现自动化。这意味着您可以使用构建阶段相互依赖工作，设置通知，在构建之后准备部署以及执行许多其他任务。
 
 ## What is Cloud Native?
 
@@ -60,7 +66,7 @@ Cloud native computing uses an open source software stack to be:
 
 [Install GitHub App](https://github.com/khs1994-php/khsci/tree/master/docs)
 
-> You can [DONATE](https://zan.khs1994.com) KhsCI, MAYBE KhsCI CE will support free full CI features(build test deployment and more) 
+> You can [DONATE](https://zan.khs1994.com) KhsCI, MAYBE KhsCI CE will support free full CI features(build test deployment and more)
 
 ## Self-Hosting (KhsCI EE)
 
@@ -120,17 +126,21 @@ $ ./lnmp-docker.sh khsci-up
 
 * [Gitee CLI]()
 
-* [Coding CLI]()
-
 * [GitLab CLI]()
 
 * [Gogs CLI]()
 
 ## Thanks
 
-* [Drone CI](https://drone.io)
+* [PHP](https://www.php.net)
+
+* [Docker](https://www.docker.com)
+
+* [Kubernetes](https://kubernetes.io/)
 
 * [Travis CI](https://travis-ci.com)
+
+* [Drone CI](https://drone.io)
 
 ### Other CI/CD on GitHub
 
