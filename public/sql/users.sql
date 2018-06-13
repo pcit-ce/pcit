@@ -22,3 +22,6 @@ ALTER TABLE user
 
 ALTER TABLE user
   ADD COLUMN `type` varchar(100) DEFAULT 'user';
+
+ALTER TABLE user
+  ADD COLUMN `installation_id` BIGINT DEFAULT 0;

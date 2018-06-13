@@ -446,7 +446,11 @@ EOF;
 
         $obj = json_decode($content);
 
-        $rid = $obj->repository->id;
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
+        $username = $repository->owner->login;
+
         $ref = $obj->ref;
         $ref_array = explode('/', $ref);
 
@@ -501,6 +505,7 @@ EOF;
         $last_insert_id = DB::insert($sql, $data);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
         $this->config_array = $config_array;
 
@@ -640,7 +645,10 @@ EOF;
 
         $issue = $obj->issue;
 
-        $rid = $obj->repository->id;
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
+        $username = $repository->owner->login;
 
         $issue_id = $issue->id;
         $issue_number = $issue->number;
@@ -706,6 +714,7 @@ EOF;
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
         Log::debug(__FILE__, __LINE__, $issue_number.' opened');
 
@@ -750,7 +759,10 @@ EOF;
         $created_at = Date::parse($comment->created_at);
         $updated_at = Date::parse($comment->updated_at);
 
-        $rid = $obj->repository->id;
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
+        $username = $repository->owner->login;
 
         $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
@@ -806,6 +818,7 @@ EOF;
         Log::debug(__FILE__, __LINE__, $debug_info);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
     }
 
     /**
@@ -845,6 +858,7 @@ EOF;
         $pull_request_head = $pull_request->head;
 
         $rid = $pull_request_base->repo->id;
+        $username = $pull_request_base->user->login;
         $repo_full_name = $pull_request_base->repo->full_name;
         $commit_message = $pull_request->title;
         $commit_id = $pull_request_head->sha;
@@ -889,6 +903,7 @@ EOF;
         );
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
         $this->config_array = $config_array;
 
@@ -1059,7 +1074,10 @@ EOF;
 
         $obj = json_decode($content);
 
-        $rid = $obj->repository->id;
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
+        $username = $repository->owner->login;
 
         $branch = $this->ref2branch($obj->base_ref);
 
@@ -1096,6 +1114,7 @@ EOF;
         ]);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
         $this->config_array = $config_array;
 
@@ -1166,16 +1185,20 @@ EOF;
 
         $ref_type = $obj->ref_type;
 
-        $rid = $obj->repository->id;
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
+        $username = $repository->owner->login;
 
         $installation_id = $obj->installation->id ?? null;
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
 
-            DB::delete($sql, [$this->git_type, $obj->ref, $rid]);
+            DB::delete($sql, [$this->git_type, $obj->ref, (int) $rid]);
         }
     }
 
@@ -1211,7 +1234,9 @@ EOF;
         $member_uid = $member->id;
         // $member_pic = $member->avatar_url;
 
-        $rid = $obj->repository->id;
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
 
         // $installation_id = $obj->installation->id ?? null;
 
@@ -1228,7 +1253,10 @@ EOF;
     //    {
     //        $obj = json_decode($content);
     //
-    //        $rid = $obj->repository->id;
+    //        $repository = $obj->repository;
+    //
+    //        $rid = $repository->id;
+    //        $username = $repository->owner->name;
     //
     //        $installation_id = $obj->installation->id ?? null;
     //    }
@@ -1256,10 +1284,24 @@ EOF;
 
         $action = $obj->action;
 
-        $installation_id = $obj->installation->id;
+        $installation = $obj->installation;
+
+        $installation_id = $installation->id;
+
+        $account = $installation->account;
+
+        $uid = $account->id;
+
+        $username = $account->login;
+
+        $pic = $account->avatar_url;
+
+        $org = $account->type === 'Organization';
+
+        User::updateUserInfo($this->git_type, $uid, $username, null, $pic, null, $org);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
         // 可视为仓库管理员.
-
         $sender = $obj->sender;
 
         $sender_id = $sender->id;
@@ -1275,9 +1317,10 @@ EOF;
         User::updateUserInfo('github', $sender_id, $sender_username, $email, $pic, $accessToken);
 
         if ('created' === $action) {
+
             $repo = $obj->repositories;
 
-            $this->installation_action_created($installation_id, $repo, $sender_id);
+            $this->installation_action_created($installation_id, $repo, $sender_id, $username);
 
             return;
         }
@@ -1286,13 +1329,14 @@ EOF;
     }
 
     /**
-     * @param int   $installation_id
-     * @param array $repo
-     * @param int   $sender_id
+     * @param int    $installation_id
+     * @param array  $repo
+     * @param int    $sender_id
+     * @param string $username
      *
      * @throws Exception
      */
-    private function installation_action_created(int $installation_id, array $repo, int $sender_id): void
+    private function installation_action_created(int $installation_id, array $repo, int $sender_id, string $username): void
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
@@ -1302,19 +1346,9 @@ EOF;
 
             list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
 
-            $sql = <<<EOF
-INSERT INTO repo(
-
-id,git_type,rid,repo_prefix,repo_name,repo_full_name,repo_admin,default_branch,installation_id,last_sync
-
-) VALUES(null,?,?,?,?,?,JSON_ARRAY(?),'master',?,?)
-
-EOF;
-
-            DB::insert($sql, [
-                    'github', $rid, $repo_prefix, $repo_name, $repo_full_name, $sender_id, $installation_id, time(),
-                ]
-            );
+            Repo::updateRepoInfo($this->git_type, $rid, $repo_prefix, $repo_name, $repo_full_name,
+                $sender_id, null, 'master');
+            User::updateInstallationId($this->git_type, (int) $installation_id, $username);
         }
     }
 
@@ -1327,13 +1361,7 @@ EOF;
      */
     private function installation_action_deleted(int $installation_id)
     {
-        $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
-
-        $output = DB::delete($sql, [
-            'github', $installation_id,
-        ]);
-
-        return $output;
+        return Repo::deleteByInstallationId($this->git_type, $installation_id);
     }
 
     /**
@@ -1357,7 +1385,13 @@ EOF;
 
         $action = $obj->action;
 
-        $installation_id = $obj->installation->id;
+        $installation = $obj->installation;
+
+        $installation_id = $installation->id;
+
+        $account = $installation->account;
+
+        $username = $account->login;
 
         $repo_type = 'repositories_'.$action;
 
@@ -1366,7 +1400,7 @@ EOF;
         $sender = $obj->sender->id;
 
         if ('added' === $action) {
-            $this->installation_action_created($installation_id, $repo, $sender);
+            $this->installation_action_created($installation_id, $repo, $sender, $username);
 
             return;
         }
@@ -1385,9 +1419,7 @@ EOF;
         foreach ($repo as $k) {
             $rid = $k->id;
 
-            $sql = 'DELETE FROM repo WHERE installation_id=? AND rid=?';
-
-            DB::delete($sql, [$installation_id, $rid]);
+            Repo::deleteByRid($this->git_type, (int) $rid, (int) $installation_id);
         }
     }
 
@@ -1480,7 +1512,10 @@ EOF;
 
         $installation_id = $obj->installation->id ?? null;
 
-        $rid = $obj->repository->id;
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
+        $username = $repository->owner->login;
 
         if ('rerequested' === $action or 'requested_action' === $action) {
             $check_run = $obj->check_run;
@@ -1516,6 +1551,7 @@ EOF;
         // $this->skip(null, (int) $external_id, $branch, $config);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+        User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
         if ($this->config_array) {
             Build::updateBuildStatus((int) $external_id, 'pending');

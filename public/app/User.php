@@ -169,4 +169,17 @@ EOF;
 
         return DB::select($sql, [$git_type, $uid], true);
     }
+
+    /**
+     * @param int    $installation_id
+     * @param string $username
+     *
+     * @throws Exception
+     */
+    public static function updateInstallationId(string $git_type, int $installation_id, string $username)
+    {
+        $sql = 'UPDATE user SET installation_id=? WHERE git_type=? AND username=?';
+
+        DB::update($sql, [$installation_id, $git_type, $username]);
+    }
 }

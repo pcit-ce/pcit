@@ -234,7 +234,7 @@ EOF;
             $type = 'repo_collaborators';
         }
 
-        $sql = 'SELECT rid,repo_full_name FROM repo WHERE git_type=? AND JSON_CONTAINS($type,JSON_QUOTE(?))';
+        $sql = "SELECT rid,repo_full_name FROM repo WHERE git_type=? AND JSON_CONTAINS($type,JSON_QUOTE(?))";
 
         return DB::select($sql, [$git_type, $uid]);
     }
@@ -361,5 +361,37 @@ EOF;
         if ($insert_collaborators) {
             self::updateAdmin($git_type, $rid, $insert_collaborators, true);
         }
+    }
+
+    /**
+     * 用户卸载了 GitHub App
+     *
+     * @param string $git_type
+     * @param        $installation_id
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function deleteByInstallationId(string $git_type, int $installation_id)
+    {
+        $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
+
+        return DB::delete($sql, [$git_type, $installation_id,]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     * @param int    $installation_id
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public static function deleteByRid(string $git_type, int $rid, int $installation_id)
+    {
+        $sql = 'DELETE FROM repo WHERE git_type=? AND rid=? AND installation_id=?';
+
+        return DB::delete($sql, [$git_type, $rid, $installation_id]);
     }
 }
