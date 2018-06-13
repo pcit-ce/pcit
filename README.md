@@ -2,51 +2,69 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/khsci/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/khsci) [![codecov](https://codecov.io/gh/khs1994-php/khsci/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/khsci)
 
-**国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的 CI/CD 系统**
+**国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的开源云原生 CI/CD 系统**
 
-* [支持文档](https://docs.ci.khs1994.com)
+* [Support Docs](https://docs.ci.khs1994.com)
 
 * [Changelog](https://github.com/khs1994-php/khsci/blob/master/CHANGELOG.md)
 
-* [问题反馈](https://github.com/khs1994-php/khsci/issues)
+* [Feedback](https://github.com/khs1994-php/khsci/issues)
 
 * [API](https://ci.khs1994.com/api)
 
-* [API 文档](https://api.ci.khs1994.com)
+* [API Docs](https://api.ci.khs1994.com)
 
-* [捐赠](https://zan.khs1994.com)
+* [Donate](https://zan.khs1994.com)
 
 * [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/docs#about-khsci-ce-and-ee)
 
-## PHP CaaS
+## What is Continuous Integration (CI)?
 
-**Powered By [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)**
+持续集成 (CI) 是一种软件开发实践，即团队开发成员经常集成他们的工作，而不是在开发周期结束时进行集成，通过每个成员每天至少集成一次，也就意味着每天可能会发生多次集成。每次集成都通过自动化的构建（包括编译，发布，自动化测试）来验证，从而尽早地发现集成错误。
+
+持续集成 (CI) 的目标是通过以较小的增量进行 **开发** 和 **测试** 来构建更健康的软件。
+
+作为一个持续集成系统，KhsCI 通过自动 **构建** 和 **测试** 代码变更来支持团队的软件开发过程，为代码变更的构建状态提供即时的反馈。KhsCI 还可以通过管理部署和通知来自动化开发过程的其他部分。
+
+![ci](https://user-images.githubusercontent.com/16733187/41330207-9416717c-6f04-11e8-961f-c606303e7bb5.jpg)
+
+## What is Cloud Native?
+
+Cloud native computing uses an open source software stack to be:
+
+1. **Containerized.** Each part (applications, processes, etc) is packaged in its own container. This facilitates reproducibility, transparency, and resource isolation.
+2. **Dynamically orchestrated.** Containers are actively scheduled and managed to optimize resource utilization.
+3. **Microservices oriented.** Applications are segmented into microservices. This significantly increases the overall agility and maintainability of applications.
 
 ## About KhsCI
 
 **KhsCI** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** 三部分组成
 
-* **Webhooks Server** 接收 Git POST 过来的数据
+* **Webhooks Server** 接收 Git 数据
 
-* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git POST 过来的数据，在 Docker 单机或集群中执行构建过程，之后将结果 post 到 GitHub
+* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 数据，在 Docker 单机或集群（Swarm、Kubernetes）中执行构建、测试、容器化部署的自动化过程。
 
 * **CLI** 提供各种实用的功能，例如 命令行操作 GitHub，命令行调用 Tencent AI 开放能力，等
 
-* [什么是 GitHub App](https://github.com/khs1994-php/khsci/issues/51)
+## 使用方法
 
-用户安装 `GitHub App`，即可使用本项目 ，无需 **额外** 注册、登录、跳转。唯一需要做的就是仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 文件。
+* 点击 [KhsCI](https://github.com/apps/khsci) 安装 **KhsCI** `GitHub App`
 
-所以想体验 **KhsCI** 有 **两种** 方案:
+* Git 仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 来配置 CI 规则（**需要私有部署 KhsCI**）。
 
-**一是** 直接安装 [GitHub App KhsCI](https://github.com/khs1994-php/khsci/tree/master/docs)，体验 Demo（暂不提供 `Docker` 构建，仅提供 **Issue**、**Pull Requests** 相关功能）。
-
-**二是** 自己部署 `PHP` 后端，自己新建 `GitHub App`，安装自己的 `GitHub App`（支持 `Docker` 构建）。
+* 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
 
 ## Try Demo (KhsCI CE)
 
+> KhsCI CE not support CI Feature(build test deployment) now, only support issues bot comments.As known as Public Cloud
+
 [Install GitHub App](https://github.com/khs1994-php/khsci/tree/master/docs)
 
+> You can [DONATE](https://zan.khs1994.com) KhsCI, MAYBE KhsCI CE will support free full CI features(build test deployment and more) 
+
 ## Self-Hosting (KhsCI EE)
+
+> Only KhsCI EE Support Full CI Features(build test deployment and more). As known as Private Cloud
 
 * ~~PHP~~
 
@@ -84,7 +102,7 @@ $ ./lnmp-docker.sh khsci-up
 
 扫码关注 **KhsCI** 微信公众平台，寻求 **KhsCI** 团队支持。
 
-## 子项目
+## Projects for KhsCI
 
 * [Docker PHP](https://github.com/khs1994-docker/libdocker)
 

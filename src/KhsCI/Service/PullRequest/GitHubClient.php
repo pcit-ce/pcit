@@ -275,4 +275,84 @@ class GitHubClient
 
         throw new Exception($output, $http_return_code);
     }
+
+    public function listReviews()
+    {
+
+    }
+
+    public function getReview()
+    {
+
+    }
+
+    public function deletePendingReview()
+    {
+
+    }
+
+    public function getCommentsForReview()
+    {
+
+    }
+
+    public function createReview()
+    {
+
+    }
+
+    public function submitReview()
+    {
+
+    }
+
+    public function dismissReview()
+    {
+
+    }
+
+    public function listComments()
+    {
+
+    }
+
+    public function ListCommentsInRepository()
+    {
+
+    }
+
+    public function getComment()
+    {
+
+    }
+
+    public function createComment()
+    {
+
+    }
+
+    public function editComment()
+    {
+
+    }
+
+    public function deleteComment()
+    {
+
+    }
+
+    public function listReviewRequests()
+    {
+
+    }
+
+    public function createReviewRequest()
+    {
+
+    }
+
+    public function deleteReviewRequest()
+    {
+
+    }
 }

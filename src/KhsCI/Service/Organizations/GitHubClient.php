@@ -28,6 +28,27 @@ class GitHubClient
     }
 
     /**
+     * Edit an organization
+     *
+     * @param string $org_name
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function edit(string $org_name)
+    {
+        $url = $this->api_url.'/orgs/'.$org_name;
+
+        $data = [
+
+        ];
+
+        $data = json_encode($data);
+
+        return $this->curl->patch($url, $data);
+    }
+
+    /**
      * 获取组织的仓库列表.
      *
      * @param string $org_name

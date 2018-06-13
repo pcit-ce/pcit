@@ -112,9 +112,9 @@ class GitHubClient
     }
 
     /**
-     * @param string $repo_full_name
+     * @param string $repo_full_name repo full name
      * @param int    $issue_number
-     * @param string $title
+     * @param string $title          issue title
      * @param string $body
      * @param string $state          State of the issue. Either open or closed.
      * @param int    $milestone
