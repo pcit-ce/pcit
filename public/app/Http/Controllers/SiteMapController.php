@@ -20,6 +20,7 @@ class SiteMapController
             'team' => $host.'/team',
             'blog' => $host.'/blog',
             'docs' => $host.'/docs',
+            'wechat' => $host.'/wechat',
             'status' => $host.'/status',
             'feedback' => 'https://github.com/khs1994-php/khsci/issues',
             'tests' => [
@@ -99,9 +100,12 @@ class SiteMapController
             'ico' => [
                 'canceled' => $host.'/ico/canceled',
                 'errored' => $host.'/ico/errored',
-                'failing' => $host.'/ico/failing',
-                'passing' => $host.'/ico/passing',
+                'failing' => $host.'/ico/failed',
+                'in progress' => $host.'/ico/in_progress',
+                'missconfig' => $host.'/ico/missconfig',
+                'passing' => $host.'/ico/passed',
                 'pending' => $host.'/ico/pending',
+                'unknown' => $host.'/ico/unknown',
             ],
             'deployment@github' => [
                 'list@get' => $host.'/deployment/list',

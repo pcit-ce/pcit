@@ -31,6 +31,10 @@ Route::get('team', 'TeamController');
 
 Route::get('docs', 'DocsController');
 
+Route::get('wechat', 'WeChatController');
+
+Route::get('blog', 'BlogController');
+
 /* OAuth login*/
 
 Route::get('oauth', 'Users\LoginController@index');
@@ -197,10 +201,12 @@ Route::delete('api/build/{build_id}/log', 'Builds\LogController@delete');
 
 Route::get('ico/canceled', 'Status\ShowStatusByICOController@canceled');
 Route::get('ico/errored', 'Status\ShowStatusByICOController@errored');
-Route::get('ico/failing', 'Status\ShowStatusByICOController@failing');
-Route::get('ico/passing', 'Status\ShowStatusByICOController@passing');
+Route::get('ico/failed', 'Status\ShowStatusByICOController@failed');
+Route::get('ico/in_progress', 'Status\ShowStatusByICOController@in_progress');
+Route::get('ico/missconfig', 'Status\ShowStatusByICOController@missconfig');
+Route::get('ico/passed', 'Status\ShowStatusByICOController@passed');
 Route::get('ico/pending', 'Status\ShowStatusByICOController@pending');
-
+Route::get('ico/unknown', 'Status\ShowStatusByICOController@unknown');
 /* API Token */
 
 Route::post('api/user/token', 'APITokenController@find');

@@ -37,6 +37,12 @@ class SyncController
             [$this->git_type.'_access_token' => $this->access_token], $this->git_type
         );
 
+        if ('github' === $this->git_type) {
+            $this->getOrgs();
+
+            return;
+        }
+
         // sync user basic info
 
         $this->getUserBasicInfo();
