@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Users;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Users;
 
 class GiteeClient extends GitHubClient
 {
-
 }

@@ -13,14 +13,14 @@ class Log
     private static $log;
 
     /**
-     * Detailed debug information
+     * Detailed debug information.
      */
     private static $debug = 100;
 
     const DEBUG = 'debug';
 
     /**
-     * Interesting events
+     * Interesting events.
      *
      * Examples: User logs in, SQL logs.
      */
@@ -29,14 +29,14 @@ class Log
     const INFO = 'info';
 
     /**
-     * Uncommon events
+     * Uncommon events.
      */
     private static $notice = 250;
 
     const NOTICE = 'notice';
 
     /**
-     * Exceptional occurrences that are not errors
+     * Exceptional occurrences that are not errors.
      *
      * Examples: Use of deprecated APIs, poor use of an API,
      * undesirable things that are not necessarily wrong.
@@ -46,14 +46,14 @@ class Log
     const WARNING = 'warning';
 
     /**
-     * Runtime errors
+     * Runtime errors.
      */
     private static $error = 400;
 
     const ERROR = 'error';
 
     /**
-     * Critical conditions
+     * Critical conditions.
      *
      * Example: Application component unavailable, unexpected exception.
      */
@@ -62,7 +62,7 @@ class Log
     const CRITICAL = 'critical';
 
     /**
-     * Action must be taken immediately
+     * Action must be taken immediately.
      *
      * Example: Entire website down, database unavailable, etc.
      * This should trigger the SMS alerts and wake you up.
@@ -77,7 +77,6 @@ class Log
     private static $emergency = 600;
 
     const EMERGENCY = 'emergency';
-
 
     /**
      * @param string      $name

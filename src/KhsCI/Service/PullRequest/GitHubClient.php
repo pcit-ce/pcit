@@ -276,83 +276,67 @@ class GitHubClient
         throw new Exception($output, $http_return_code);
     }
 
-    public function listReviews()
+    public function listReviews(): void
     {
-
     }
 
-    public function getReview()
+    public function getReview(): void
     {
-
     }
 
-    public function deletePendingReview()
+    public function deletePendingReview(): void
     {
-
     }
 
-    public function getCommentsForReview()
+    public function getCommentsForReview(): void
     {
-
     }
 
-    public function createReview()
+    public function createReview(): void
     {
-
     }
 
-    public function submitReview()
+    public function submitReview(): void
     {
-
     }
 
-    public function dismissReview()
+    public function dismissReview(): void
     {
-
     }
 
-    public function listComments()
+    public function listComments(): void
     {
-
     }
 
-    public function ListCommentsInRepository()
+    public function ListCommentsInRepository(): void
     {
-
     }
 
-    public function getComment()
+    public function getComment(): void
     {
-
     }
 
-    public function createComment()
+    public function createComment(): void
     {
-
     }
 
-    public function editComment()
+    public function editComment(): void
     {
-
     }
 
-    public function deleteComment()
+    public function deleteComment(): void
     {
-
     }
 
-    public function listReviewRequests()
+    public function listReviewRequests(): void
     {
-
     }
 
-    public function createReviewRequest()
+    public function createReviewRequest(): void
     {
-
     }
 
-    public function deleteReviewRequest()
+    public function deleteReviewRequest(): void
     {
-
     }
 }

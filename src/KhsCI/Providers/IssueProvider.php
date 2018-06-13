@@ -25,26 +25,31 @@ class IssueProvider implements ServiceProviderInterface
 
         $pimple['issue_comments'] = function ($app) {
             $class = 'KhsCI\Service\Issue\Comments'.$app->class_name;
+
             return new $class($app['curl'], $app['config']['api_url'], $app['tencent_ai']);
         };
 
         $pimple['issue_events'] = function ($app) {
             $class = 'KhsCI\Service\Issue\Events'.$app->class_name;
+
             return new $class();
         };
 
         $pimple['issue_labels'] = function ($app) {
             $class = 'KhsCI\Service\Issue\Labels'.$app->class_name;
+
             return new $class();
         };
 
         $pimple['issue_milestones'] = function ($app) {
             $class = 'KhsCI\Service\Issue\Milestones'.$app->class_name;
+
             return new $class();
         };
 
         $pimple['issue_timeline'] = function ($app) {
             $class = 'KhsCI\Service\Issue\Timeline'.$app->class_name;
+
             return new $class($app['curl'], $app['config']['api_url']);
         };
     }

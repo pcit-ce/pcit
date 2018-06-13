@@ -115,7 +115,6 @@ class BuildCommand
 
             // exec after build
             $this->updateBuildStatus($e->getMessage());
-
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::ERROR);
         } finally {
@@ -145,7 +144,7 @@ class BuildCommand
 
             // mail
             // pr skip
-            if ($this->event_type !== CI::BUILD_EVENT_PR) {
+            if (CI::BUILD_EVENT_PR !== $this->event_type) {
                 $this->sendEMail();
             }
 
@@ -163,7 +162,7 @@ class BuildCommand
      *
      * @throws Exception
      */
-    private function updateBuildStatus(string $build_stats)
+    private function updateBuildStatus(string $build_stats): void
     {
         switch ($build_stats) {
             case CI::BUILD_STATUS_INACTIVE:
@@ -188,9 +187,10 @@ class BuildCommand
     }
 
     /**
-     * get user set build env
+     * get user set build env.
      *
      * @return array
+     *
      * @throws Exception
      */
     private function getEnv()
@@ -212,10 +212,17 @@ class BuildCommand
     /**
      * @throws Exception
      */
+    private function getSystemConfig(): void
+    {
+        Repo::getConfig($this->git_type, $this->rid);
+    }
+
+    /**
+     * @throws Exception
+     */
     private function sendEMail(): void
     {
         if (!Env::get('CI_EMAIL_PASSWORD', false)) {
-
             Log::debug(__FILE__, __LINE__, 'mail settings not found, send Mail skip', [], Log::INFO);
 
             return;
@@ -360,8 +367,8 @@ EOF;
                 $uid = User::getUid($this->git_type, $k);
 
                 if (in_array($uid, $admin_array)) {
-
                     Log::debug(__FILE__, __LINE__, 'This repo is ci root\'s repo, building...', [], Log::INFO);
+
                     return;
                 }
             }

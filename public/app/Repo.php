@@ -115,7 +115,6 @@ class Repo extends DBModel
     /**
      * @param string $git_type
      * @param int    $rid
-     *
      * @param bool   $collaborators
      *
      * @return array|string
@@ -137,7 +136,6 @@ class Repo extends DBModel
      * @param string $git_type
      * @param int    $rid
      * @param int    $uid
-     *
      * @param bool   $collaborators
      *
      * @return array|string
@@ -150,8 +148,8 @@ class Repo extends DBModel
 
         if ($collaborators) {
             $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_collaborators,json_quote(?))';
-
         }
+
         return DB::select($sql, [$git_type, $rid, $uid]);
     }
 
@@ -159,7 +157,6 @@ class Repo extends DBModel
      * @param string $git_type
      * @param int    $rid
      * @param int    $uid
-     *
      * @param bool   $collaborators
      *
      * @throws Exception
@@ -193,7 +190,6 @@ EOF;
      * @param string $git_type
      * @param int    $rid
      * @param int    $uid
-     *
      * @param bool   $collaborators
      *
      * @throws Exception
@@ -219,7 +215,6 @@ EOF;
     /**
      * @param string $git_type
      * @param int    $uid
-     *
      * @param bool   $collaborators
      *
      * @return array|string
@@ -272,7 +267,6 @@ EOF;
 
     /**
      * @param int  $uid
-     *
      * @param bool $collaborators
      *
      * @return array|string
@@ -326,7 +320,7 @@ EOF;
                                           string $repo_full_name,
                                           ?int $insert_admin,
                                           ?int $insert_collaborators,
-                                          string $default_branch)
+                                          string $default_branch): void
     {
         if ($repo_key_id = self::exists($git_type, $rid)) {
             $sql = <<<'EOF'
@@ -364,19 +358,20 @@ EOF;
     }
 
     /**
-     * 用户卸载了 GitHub App
+     * 用户卸载了 GitHub App.
      *
      * @param string $git_type
      * @param        $installation_id
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function deleteByInstallationId(string $git_type, int $installation_id)
     {
         $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
 
-        return DB::delete($sql, [$git_type, $installation_id,]);
+        return DB::delete($sql, [$git_type, $installation_id]);
     }
 
     /**
@@ -393,5 +388,25 @@ EOF;
         $sql = 'DELETE FROM repo WHERE git_type=? AND rid=? AND installation_id=?';
 
         return DB::delete($sql, [$git_type, $rid, $installation_id]);
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $rid
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getConfig(string $git_type, int $rid)
+    {
+        $sql = <<<EOF
+SELECT 
+builds_only_with_khsci_yml,build_pushes,build_pull_requests,maximum_number_of_builds,
+auto_cancel_branch_builds,auto_cancel_pull_request_builds
+FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1
+EOF;
+
+        return DB::select($sql, [$git_type, $rid]);
     }
 }

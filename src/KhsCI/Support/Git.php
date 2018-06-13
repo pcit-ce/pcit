@@ -31,11 +31,10 @@ class Git
      *
      * @throws Exception
      */
-    public static function checkGit($git_type)
+    public static function checkGit($git_type): void
     {
         if (!in_array($git_type, self::SUPPORT_GIT_ARRAY)) {
-
-            Throw new Exception('Not Found', 404);
+            throw new Exception('Not Found', 404);
         }
     }
 
@@ -110,7 +109,6 @@ class Git
         self::checkGit($type);
 
         switch ($type) {
-
             case 'gitee':
                 $url = $base_url.'/pulls/'.$pull_id;
 
@@ -251,11 +249,9 @@ class Git
      */
     public static function getClassName(string $git_type)
     {
-
         self::checkGit($git_type);
 
         switch ($git_type) {
-
             case 'github':
                 $class_name = 'GitHub';
 

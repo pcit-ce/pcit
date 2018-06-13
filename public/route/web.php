@@ -132,7 +132,7 @@ Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
 
 Route::get('api/orgs', 'Users\OrganizationsController');
 
-Route::get('api/orgs/{git_type}/{org_name}', 'Users\OrganizationsController@find');
+Route::get('api/org/{git_type}/{org_name}', 'Users\OrganizationsController@find');
 
 /* Builds */
 

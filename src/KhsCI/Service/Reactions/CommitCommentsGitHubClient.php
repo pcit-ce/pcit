@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Reactions;
 
-class CommitComments
+class CommitCommentsGitHubClient
 {
 }

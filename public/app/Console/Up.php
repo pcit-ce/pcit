@@ -268,7 +268,7 @@ class Up
      */
     private function webhooks(): void
     {
-        Log::debug(__FILE__, __LINE__, 'start exec webhooks');
+        Log::debug(__FILE__, __LINE__, 'start handle webhooks');
 
         $webhooks = (new KhsCI())->webhooks;
 
@@ -290,7 +290,7 @@ class Up
             if ('aliyun_docker_registry' === $git_type) {
                 $this->aliyunDockerRegistry($json);
 
-                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success', [], Log::INFO);
+                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry handle success', [], Log::INFO);
 
                 return;
             }
@@ -299,9 +299,9 @@ class Up
 
             try {
                 $this->$event_type($json);
-                Log::debug(__FILE__, __LINE__, 'exec success', [], Log::INFO);
+                Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle success', [], Log::INFO);
             } catch (Error | Exception $e) {
-                Log::debug(__FILE__, __LINE__, 'exec error', [], Log::ERROR);
+                Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle error', [], Log::ERROR);
                 $webhooks->pushErrorCache($json_raw);
             }
         }
@@ -362,7 +362,6 @@ class Up
     }
 
     /**
-     *
      * @param int $last_insert_id
      *
      * @throws Exception
@@ -517,7 +516,7 @@ EOF;
 
         $this->updateStatus((int) $last_insert_id);
 
-        Log::debug(__FILE__, __LINE__, 'push event success', [], Log::INFO);
+        Log::debug(__FILE__, __LINE__, 'exec push event success', [], Log::INFO);
     }
 
     /**
@@ -1296,7 +1295,7 @@ EOF;
 
         $pic = $account->avatar_url;
 
-        $org = $account->type === 'Organization';
+        $org = 'Organization' === $account->type;
 
         User::updateUserInfo($this->git_type, $uid, $username, null, $pic, null, $org);
         User::updateInstallationId($this->git_type, (int) $installation_id, $username);
@@ -1317,7 +1316,6 @@ EOF;
         User::updateUserInfo('github', $sender_id, $sender_username, $email, $pic, $accessToken);
 
         if ('created' === $action) {
-
             $repo = $obj->repositories;
 
             $this->installation_action_created($installation_id, $repo, $sender_id, $username);

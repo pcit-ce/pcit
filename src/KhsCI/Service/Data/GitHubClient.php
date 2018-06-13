@@ -6,83 +6,67 @@ namespace KhsCI\Service\Data;
 
 class GitHubClient
 {
-    public function getBlobs()
+    public function getBlobs(): void
     {
-
     }
 
-    public function createBlobs()
+    public function createBlobs(): void
     {
-
     }
 
-    public function getCommits()
+    public function getCommits(): void
     {
-
     }
 
-    public function createCommit()
+    public function createCommit(): void
     {
-
     }
 
-    public function commitSignatureVerification()
+    public function commitSignatureVerification(): void
     {
-
     }
 
-    public function getRef()
+    public function getRef(): void
     {
-
     }
 
-    public function allRef()
+    public function allRef(): void
     {
-
     }
 
-    public function createRef()
+    public function createRef(): void
     {
-
     }
 
-    public function updateRef()
+    public function updateRef(): void
     {
-
     }
 
-    public function deleteRef()
+    public function deleteRef(): void
     {
-
     }
 
-    public function getTag()
+    public function getTag(): void
     {
-
     }
 
-    public function createTag()
+    public function createTag(): void
     {
-
     }
 
-    public function tagSignatureVerification()
+    public function tagSignatureVerification(): void
     {
-
     }
 
-    public function getTree()
+    public function getTree(): void
     {
-
     }
 
-    public function getTreeRecursively()
+    public function getTreeRecursively(): void
     {
-
     }
 
-    public function createTree()
+    public function createTree(): void
     {
-
     }
 }

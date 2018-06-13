@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Organizations;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Organizations;
 
 class CodingClient extends GitHubClient
 {
-
 }

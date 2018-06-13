@@ -10,7 +10,7 @@ class DocsController
     {
         return [
             'code' => 200,
-            'data' => 'https://github.com/khs1994-php/khsci/tree/master/docs'
+            'data' => 'https://github.com/khs1994-php/khsci/tree/master/docs',
         ];
     }
 }

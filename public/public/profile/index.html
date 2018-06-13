@@ -26,6 +26,9 @@
 </div>
 <hr>
 <br>
+<div id="user">
+</div>
+<hr>
 <div id="orgs">
   <form class="orgs">
   </form>
@@ -50,9 +53,14 @@
     let git_type = data.git_type;
 
     $("title").text(git_type + ' - ' + data.username + " - Profile - KhsCI");
+    $("#user").empty().append(
+      "<span onclick='click_user()'>" + data.username + "</span> || <strong>API Token</strong> "
+      + Cookies.get(git_type + '_api_token')
+    );
   }
 
   function list(data) {
+    $("#repos").empty();
     $.each(data, function (num, repo) {
 
       let button = $("<button></button>");
@@ -92,8 +100,6 @@
       settings.attr('target', '_blank');
       $("#repos").append(button).append('&nbsp;&nbsp;').append(settings).append('&nbsp;&nbsp;').append(p).append('<br>');
     });
-
-    $("#repos").css('left-margin', '1000px');
   }
 
   function showOrg(data) {
@@ -104,21 +110,89 @@
 
   }
 
-  function click_org(org_name) {
+  function click_user() {
     $.ajax({
       type: "GET",
-      url: "/api/repos/" + git_type + "/" + org_name,
+      url: "/api/user",
       headers: {
         'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
       },
       success: function (data) {
-        history.pushState({}, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
-        history.replaceState(null, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
+        let installation_id = data[0].installation_id;
+        let username = data[0].username;
 
-        $('#repos').empty();
-        list(data);
+        $.ajax({
+          type: "GET",
+          url: "/api/repos",
+          headers: {
+            'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+          },
+          success: function (data) {
+            history.pushState({}, username, ci_host + 'profile/' + git_type + '/' + username);
+            history.replaceState(null, username, ci_host + 'profile/' + git_type + '/' + username);
+            list(data);
+
+            if (git_type !== 'github') {
+              return;
+            }
+
+            if (installation_id) {
+              var content = "<h3>Manage repositories on GitHub</h3>";
+            } else {
+              content = `
+            <p>GitHub Apps Integration</p>
+
+            <p>Activate the GitHub Apps integration to start testing and deploying on KhsCI</p>
+        `
+            }
+
+            $("#repos").append(content);
+          }
+        });
       }
     });
+  }
+
+  function click_org(org_name) {
+    $.ajax({
+      type: "GET",
+      url: "/api/org/" + git_type + "/" + org_name,
+      headers: {
+        'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+      },
+      success: function (data) {
+        let installation_id = data[0].installation_id;
+
+        $.ajax({
+          type: "GET",
+          url: "/api/repos/" + git_type + "/" + org_name,
+          headers: {
+            'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+          },
+          success: function (data) {
+            history.pushState({}, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
+            history.replaceState(null, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
+            list(data);
+
+            if (git_type !== 'github') {
+              return;
+            }
+
+            if (installation_id) {
+              var content = "<h3>Manage repositories on GitHub</h3>";
+            } else {
+              content = `
+            <p>GitHub Apps Integration</p>
+
+            <p>Activate the GitHub Apps integration to start testing and deploying on KhsCI</p>
+        `
+            }
+
+            $("#repos").append(content);
+          }
+        });
+      }
+    })
   }
 
   $(document).ready(function () {
@@ -132,7 +206,6 @@
       success: function (data) {
         showUserBasicInfo(data[0]);
         if (data[0].username === username) {
-          showOrg(data);
           $.ajax({
             type: "GET",
             url: "/api/orgs",

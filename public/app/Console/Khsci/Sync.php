@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Sync extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sync');
 
@@ -26,6 +26,7 @@ class Sync extends Command
      * @param OutputInterface $output
      *
      * @return int|null|void
+     *
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)

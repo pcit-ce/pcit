@@ -22,7 +22,7 @@ class APIController
                     'update@patch' => $ci_host.'/user/beta_feature/{beta_feature.id}',
                     'delete' => $ci_host.'/user/beta_feature/{beta_feature.id}',
                 ],
-                'active' => $ci_host.'/user/{git_type}/{username}/active', # 返回某用户（或组织）处于活跃状态的仓库列表
+                'active' => $ci_host.'/user/{git_type}/{username}/active', // 返回某用户（或组织）处于活跃状态的仓库列表
             ],
             'repo' => [
                 'current_user_repositories_url' => $ci_host.'/repos',

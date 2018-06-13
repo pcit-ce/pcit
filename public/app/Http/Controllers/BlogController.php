@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
+namespace App\Http\Controllers;
 
 class BlogController
 {
@@ -9,8 +10,7 @@ class BlogController
     {
         return [
             'code' => 200,
-            'data' => 'https://ci.khs1994.com/blog'
+            'data' => 'https://ci.khs1994.com/blog',
         ];
     }
-
 }
