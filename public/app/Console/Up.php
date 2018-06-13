@@ -60,7 +60,7 @@ class Up
             }
             echo '[W]';
         } catch (\Throwable $e) {
-            Log::debug(__FILE__, __LINE__, $e->__toString());
+            Log::debug(__FILE__, __LINE__, $e->__toString(), [], LOG::ERROR);
         } finally {
             $this->closeResource();
         }
@@ -86,7 +86,7 @@ class Up
                                               string $state = null,
                                               string $description = null): void
     {
-        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id.' ...');
+        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id.' ...', [], Log::INFO);
 
         $rid = Build::getRid($build_key_id);
 
@@ -107,7 +107,7 @@ class Up
                 $description ?? 'The analysis or builds is pending'
             );
 
-        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id);
+        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id, [], Log::INFO);
     }
 
     /**
@@ -143,7 +143,7 @@ class Up
                                                  array $actions = null,
                                                  bool $force_create = false): void
     {
-        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run '.$build_key_id.' ...');
+        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run '.$build_key_id.' ...', [], Log::INFO);
 
         $rid = Build::getRid((int) $build_key_id);
 
@@ -199,7 +199,7 @@ class Up
 
         $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
 
-        Log::debug(__FILE__, __LINE__, $log_message);
+        Log::debug(__FILE__, __LINE__, $log_message, [], Log::INFO);
     }
 
     /**
@@ -214,7 +214,7 @@ class Up
     {
         if (null !== $rid) {
             $repo_full_name = Repo::getRepoFullName($this->git_type, $rid);
-            Log::debug(__FILE__, __LINE__, $this->git_type." $rid is $repo_full_name");
+            Log::debug(__FILE__, __LINE__, $this->git_type." $rid is $repo_full_name", [], Log::INFO);
 
             $url = Git::getRawUrl($this->git_type, $repo_full_name, $commit_id, '.khsci.yml');
         } else {
@@ -225,13 +225,13 @@ class Up
         $yaml_file_content = HTTP::get($url);
 
         if (404 === Http::getCode()) {
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml");
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml", [], Log::INFO);
 
             return [];
         }
 
         if (!$yaml_file_content) {
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml");
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml", [], Log::INFO);
 
             return [];
         }
@@ -239,7 +239,7 @@ class Up
         $config = yaml_parse($yaml_file_content);
 
         if (!$config) {
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id .khsci.yml parse error");
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id .khsci.yml parse error", [], Log::INFO);
 
             return [];
         }
@@ -290,7 +290,7 @@ class Up
             if ('aliyun_docker_registry' === $git_type) {
                 $this->aliyunDockerRegistry($json);
 
-                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success');
+                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry success', [], Log::INFO);
 
                 return;
             }
@@ -299,9 +299,9 @@ class Up
 
             try {
                 $this->$event_type($json);
-                Log::debug(__FILE__, __LINE__, 'exec success');
+                Log::debug(__FILE__, __LINE__, 'exec success', [], Log::INFO);
             } catch (Error | Exception $e) {
-                Log::debug(__FILE__, __LINE__, 'exec error');
+                Log::debug(__FILE__, __LINE__, 'exec error', [], Log::ERROR);
                 $webhooks->pushErrorCache($json_raw);
             }
         }
@@ -314,7 +314,7 @@ class Up
      */
     private function aliyunDockerRegistry(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive Aliyun Docker Registry Webhooks');
+        Log::debug(__FILE__, __LINE__, 'Receive Aliyun Docker Registry Webhooks', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -331,7 +331,7 @@ class Up
 
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
 
-            Log::debug(__FILE__, __LINE__, $name);
+            Log::debug(__FILE__, __LINE__, $name, [], Log::INFO);
 
             $this->updateGitHubAppChecks(
                 (int) Build::getCurrentBuildKeyId(
@@ -369,7 +369,7 @@ class Up
      */
     private function updateStatus(int $last_insert_id): void
     {
-        Log::debug(__FILE__, __LINE__, 'Update status ...');
+        Log::debug(__FILE__, __LINE__, 'Update status ...', [], Log::INFO);
 
         if ('github' === $this->git_type) {
             if ($this->config_array) {
@@ -397,7 +397,7 @@ class Up
             }
         }
 
-        Log::debug(__FILE__, __LINE__, 'update status success');
+        Log::debug(__FILE__, __LINE__, 'update status success', [], Log::INFO);
     }
 
     /**
@@ -409,7 +409,7 @@ class Up
      */
     public function ping(string $content)
     {
-        Log::debug(__FILE__, __LINE__, 'receive ping event');
+        Log::debug(__FILE__, __LINE__, 'receive ping event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -442,7 +442,7 @@ EOF;
      */
     public function push(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive push event');
+        Log::debug(__FILE__, __LINE__, 'Receive push event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -517,7 +517,7 @@ EOF;
 
         $this->updateStatus((int) $last_insert_id);
 
-        Log::debug(__FILE__, __LINE__, 'push event success');
+        Log::debug(__FILE__, __LINE__, 'push event success', [], Log::INFO);
     }
 
     /**
@@ -536,13 +536,13 @@ EOF;
     {
         // check commit message
         if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $commit_message)) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message');
+            Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message', [], Log::INFO);
 
             return true;
         }
 
         if (null === $config) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because config is empty');
+            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because config is empty', [], Log::INFO);
 
             return false;
         }
@@ -552,7 +552,7 @@ EOF;
         $branches = $yaml_obj->branches ?? null;
 
         if (null === $branches) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty');
+            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty', [], Log::INFO);
 
             return false;
         }
@@ -562,7 +562,7 @@ EOF;
         $branches_include = $branches['include'] ?? [];
 
         if ([] === $branches_exclude and [] === $branches_include) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty');
+            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty', [], Log::INFO);
 
             return false;
         }
@@ -572,7 +572,7 @@ EOF;
             if ((new KhsCI())->build::check($branches_exclude, $branch)) {
                 $message = "config exclude branch $branch, build skip  ";
 
-                Log::debug(__FILE__, __LINE__, $message);
+                Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
 
                 return true;
             }
@@ -583,7 +583,7 @@ EOF;
             if ((new KhsCI())->build::check($branches_include, $branch)) {
                 $message = "config include branch $branch, building  ";
 
-                Log::debug(__FILE__, __LINE__, $message);
+                Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
 
                 return false;
             }
@@ -637,7 +637,7 @@ EOF;
      */
     public function issues(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive issue event');
+        Log::debug(__FILE__, __LINE__, 'Receive issue event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -716,7 +716,7 @@ EOF;
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
         User::updateInstallationId($this->git_type, (int) $installation_id, $username);
 
-        Log::debug(__FILE__, __LINE__, $issue_number.' opened');
+        Log::debug(__FILE__, __LINE__, $issue_number.' opened', [], Log::INFO);
 
         return;
     }
@@ -730,7 +730,7 @@ EOF;
      */
     public function issue_comment(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive issue comment event');
+        Log::debug(__FILE__, __LINE__, 'Receive issue comment event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -741,7 +741,7 @@ EOF;
         $sender_username = $sender->login;
 
         if (strpos($sender_username, '[bot]')) {
-            Log::debug(__FILE__, __LINE__, 'Bot issue comment SKIP');
+            Log::debug(__FILE__, __LINE__, 'Bot issue comment SKIP', [], Log::INFO);
 
             return;
         }
@@ -772,7 +772,7 @@ EOF;
         $khsci = new KhsCI(['github_access_token' => $access_token]);
 
         if ('edited' === $action) {
-            Log::debug(__FILE__, __LINE__, 'Edit Issue Comment SKIP');
+            Log::debug(__FILE__, __LINE__, 'Edit Issue Comment SKIP', [], Log::INFO);
 
             return;
         }
@@ -788,7 +788,7 @@ EOF;
             if (1 === $output) {
                 $debug_info = 'Delete Issue Comment SUCCESS';
 
-                Log::debug(__FILE__, __LINE__, $debug_info);
+                Log::debug(__FILE__, __LINE__, $debug_info, [], Log::INFO);
             }
 
             return;
@@ -815,7 +815,7 @@ EOF;
 
         $debug_info = 'Create Bot Issue Comment By Issue Comment ADD';
 
-        Log::debug(__FILE__, __LINE__, $debug_info);
+        Log::debug(__FILE__, __LINE__, $debug_info, [], Log::INFO);
 
         Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
         User::updateInstallationId($this->git_type, (int) $installation_id, $username);
@@ -833,7 +833,7 @@ EOF;
      */
     public function pull_request(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive pull request event');
+        Log::debug(__FILE__, __LINE__, 'Receive pull request event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -940,7 +940,7 @@ EOF;
      */
     public function pull_request_assigned(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive pull request assigned event');
+        Log::debug(__FILE__, __LINE__, 'Receive pull request assigned event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -995,7 +995,7 @@ EOF;
      */
     public function pull_request_labeled(string $content, bool $unlabeled = false): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive pull request labeled event');
+        Log::debug(__FILE__, __LINE__, 'Receive pull request labeled event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -1036,7 +1036,7 @@ EOF;
             Log::debug(
                 __FILE__,
                 __LINE__,
-                $this->git_type.' '.$rid.' '.$commit_id.' pull_request is unlabeled');
+                $this->git_type.' '.$rid.' '.$commit_id.' pull_request is unlabeled', [], Log::INFO);
 
             return;
         }
@@ -1044,7 +1044,7 @@ EOF;
         Log::debug(
             __FILE__,
             __LINE__,
-            $this->git_type.' '.$rid.' '.$commit_id.' pull_request is labeled');
+            $this->git_type.' '.$rid.' '.$commit_id.' pull_request is labeled', [], Log::INFO);
 
         // 创建一条评论
 
@@ -1070,7 +1070,7 @@ EOF;
      */
     public function tag(string $tag, string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive tag event');
+        Log::debug(__FILE__, __LINE__, 'Receive tag event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -1179,7 +1179,7 @@ EOF;
      */
     public function delete(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive delete event');
+        Log::debug(__FILE__, __LINE__, 'Receive delete event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -1223,7 +1223,7 @@ EOF;
      */
     public function member(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive member event');
+        Log::debug(__FILE__, __LINE__, 'Receive member event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -1240,7 +1240,7 @@ EOF;
 
         // $installation_id = $obj->installation->id ?? null;
 
-        Log::debug(__FILE__, __LINE__, "$action $rid $member_uid");
+        Log::debug(__FILE__, __LINE__, "$action $rid $member_uid", [], Log::INFO);
 
         'added' === $action && Repo::updateAdmin($this->git_type, (int) $rid, (int) $member_uid);
         'removed' === $action && Repo::deleteAdmin($this->git_type, (int) $rid, (int) $member_uid);
@@ -1278,7 +1278,7 @@ EOF;
      */
     public function installation(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive installation event');
+        Log::debug(__FILE__, __LINE__, 'Receive installation event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -1379,7 +1379,7 @@ EOF;
      */
     public function installation_repositories(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive installation repositories event');
+        Log::debug(__FILE__, __LINE__, 'Receive installation repositories event', [], Log::INFO);
 
         $obj = json_decode($content);
 
@@ -1503,8 +1503,7 @@ EOF;
      */
     public function check_run(string $content): void
     {
-
-        Log::debug(__FILE__, __LINE__, 'Receive check run event');
+        Log::debug(__FILE__, __LINE__, 'Receive check run event', [], Log::INFO);
 
         $obj = json_decode($content);
 

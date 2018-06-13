@@ -13,6 +13,73 @@ class Log
     private static $log;
 
     /**
+     * Detailed debug information
+     */
+    private static $debug = 100;
+
+    const DEBUG = 'debug';
+
+    /**
+     * Interesting events
+     *
+     * Examples: User logs in, SQL logs.
+     */
+    private static $info = 200;
+
+    const INFO = 'info';
+
+    /**
+     * Uncommon events
+     */
+    private static $notice = 250;
+
+    const NOTICE = 'notice';
+
+    /**
+     * Exceptional occurrences that are not errors
+     *
+     * Examples: Use of deprecated APIs, poor use of an API,
+     * undesirable things that are not necessarily wrong.
+     */
+    private static $warning = 300;
+
+    const WARNING = 'warning';
+
+    /**
+     * Runtime errors
+     */
+    private static $error = 400;
+
+    const ERROR = 'error';
+
+    /**
+     * Critical conditions
+     *
+     * Example: Application component unavailable, unexpected exception.
+     */
+    private static $critical = 500;
+
+    const CRITICAL = 'critical';
+
+    /**
+     * Action must be taken immediately
+     *
+     * Example: Entire website down, database unavailable, etc.
+     * This should trigger the SMS alerts and wake you up.
+     */
+    private static $alter = 550;
+
+    const ALTER = 'alter';
+
+    /**
+     * Urgent alert.
+     */
+    private static $emergency = 600;
+
+    const EMERGENCY = 'emergency';
+
+
+    /**
      * @param string      $name
      * @param string|null $log_path
      *
@@ -42,12 +109,19 @@ class Log
      * @param int    $line
      * @param string $debug_info
      * @param array  $context
+     * @param string $level
      *
      * @throws Exception
      */
-    public static function debug(string $file, int $line, string $debug_info, array $context = []): void
+    public static function debug(string $file,
+                                 int $line,
+                                 string $debug_info,
+                                 array $context = [],
+                                 $level = 'debug'): void
     {
-        if (!(Env::get('CI_DEBUG', false))) {
+        $log_level = Env::get('CI_LOG_LEVEL', 'debug');
+
+        if (self::$$log_level > self::$$level) {
             return;
         }
 
@@ -57,11 +131,16 @@ class Log
             'info' => $debug_info,
         ]);
 
-        self::connect()->debug($debug_info, $context);
+        self::connect()->$level($debug_info, $context);
     }
 
     public static function close(): void
     {
         self::$log = null;
+    }
+
+    public function __get($name)
+    {
+        return 'debug';
     }
 }
