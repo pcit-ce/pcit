@@ -128,7 +128,9 @@ class SyncController
                 User::delete($this->git_type, $org_name);
             }
 
-            $this->getOrgsRepo($org_name);
+            if ('github' !== $this->git_type) {
+                $this->getOrgsRepo($org_name);
+            }
         }
     }
 
