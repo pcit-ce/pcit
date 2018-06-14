@@ -636,11 +636,12 @@ EOF;
      */
     public function issues(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive issue event', [], Log::INFO);
-
         $obj = json_decode($content);
 
         $action = $obj->action;
+
+        Log::debug(__FILE__, __LINE__, 'Receive issue event is '.$action, [], Log::INFO);
+
 
         $issue = $obj->issue;
 
@@ -832,11 +833,11 @@ EOF;
      */
     public function pull_request(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive pull request event', [], Log::INFO);
-
         $obj = json_decode($content);
 
         $action = $obj->action;
+
+        Log::debug(__FILE__, __LINE__, 'Receive pull request event is '.$action, [], Log::INFO);
 
         if (!in_array($action, ['opened', 'synchronize'])) {
             // 'assigned' === $action && $this->pull_request_assigned($content);
@@ -1222,11 +1223,11 @@ EOF;
      */
     public function member(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive member event', [], Log::INFO);
-
         $obj = json_decode($content);
 
         $action = $obj->action;
+
+        Log::debug(__FILE__, __LINE__, 'Receive member event is '.$action, [], Log::INFO);
 
         $member = $obj->member;
         // $member_username = $member->login;
@@ -1277,11 +1278,15 @@ EOF;
      */
     public function installation(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive installation event', [], Log::INFO);
-
         $obj = json_decode($content);
 
         $action = $obj->action;
+
+        Log::debug(
+            __FILE__,
+            __LINE__,
+            'Receive installation event is '.$action, [], Log::INFO
+        );
 
         $installation = $obj->installation;
 
@@ -1377,11 +1382,16 @@ EOF;
      */
     public function installation_repositories(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive installation repositories event', [], Log::INFO);
-
         $obj = json_decode($content);
 
         $action = $obj->action;
+
+        Log::debug(
+            __FILE__,
+            __LINE__,
+            'Receive installation repositories event is '.$action,
+            [], Log::INFO
+        );
 
         $installation = $obj->installation;
 
@@ -1501,11 +1511,15 @@ EOF;
      */
     public function check_run(string $content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive check run event', [], Log::INFO);
-
         $obj = json_decode($content);
 
         $action = $obj->action;
+
+        Log::debug(
+            __FILE__,
+            __LINE__,
+            'Receive check run event is '.$action, [], Log::INFO
+        );
 
         $installation_id = $obj->installation->id ?? null;
 

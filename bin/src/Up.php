@@ -41,7 +41,7 @@ class Up extends Command
 
         \KhsCI\Support\DB::close();
 
-        Log::debug(__FILE__, __LINE__, 'Start Memory is '.memory_get_usage());
+        Log::debug(__FILE__, __LINE__, 'Start Memory is '.memory_get_usage(), [], Log::INFO);
 
         set_time_limit(0);
 
