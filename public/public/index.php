@@ -14,7 +14,7 @@ use KhsCI\Support\Route;
 
 require __DIR__.'/../../vendor/autoload.php';
 
-function aa()
+function aa(): void
 {
     echo 1;
 }
@@ -41,7 +41,7 @@ date_default_timezone_set(getenv('CI_TZ'));
 
 // Open Debug?
 
-$debug = Env::get('CI_DEBUG', false) === true;
+$debug = true === Env::get('CI_DEBUG', false);
 
 $debug && \KhsCI\Support\CI::enableDebug();
 

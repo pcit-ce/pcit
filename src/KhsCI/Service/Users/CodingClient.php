@@ -91,12 +91,11 @@ class CodingClient extends GitHubClient
                 'id' => $id,
                 'full_name' => $full_name,
                 'default_branch' => $default_branch,
-                'permissions' => ['admin' => true]
+                'permissions' => ['admin' => true],
             ];
         }
 
         if ($raw) {
-
             return $json;
         }
 

@@ -125,7 +125,7 @@ class CI
         return $env === $current_env;
     }
 
-    public static function enableDebug()
+    public static function enableDebug(): void
     {
         ini_set('display_errors', 'on');
         ini_set('error_reporting', (string) constant('E_ALL'));

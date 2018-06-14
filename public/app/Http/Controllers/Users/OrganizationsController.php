@@ -26,18 +26,19 @@ class OrganizationsController
     /**
      * Returns an individual organization.
      *
-     * /org/{organization_name}
+     * /org/{git_type}/{organization_name}
      *
+     * @param string $git_type
      * @param string $org_name
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public function find(string $org_name)
+    public function find(string $git_type, string $org_name)
     {
         $khsci = new KhsCI();
 
-        return $khsci->github_orgs->getBasicInfo($org_name);
+        return User::getUserInfo($git_type, $org_name);
     }
 }

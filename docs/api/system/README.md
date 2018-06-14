@@ -12,5 +12,17 @@
 
 | Method | URL                     |
 | :----- | :-----------------------|
-| `GET`    | `/ci/pending` |
+| `GET`    | `/ci/pending`         |
+
+## 获取 GitHub App 安装地址
+
+| Method | URL                                   |
+| :----- | :-----------------------              |
+| `GET`    | `/ci/github_app_installation/{uid}` |
+
+## 获取 GitHub App 设置地址
+
+| Method | URL                                    |
+| :----- | :-----------------------               |
+| `GET`    | `/ci/github_app_settings/{org_name}` |
 

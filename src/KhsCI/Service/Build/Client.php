@@ -109,7 +109,7 @@ class Client
                 'commit_id' => $commit_id,
                 'pull_request_id' => $pull_request_id,
                 'tag_name' => $tag_name,
-                'git_type' => $git_type,
+                'git_type' => $git_type, [], Log::EMERGENCY,
             ]));
 
             // 是否启用构建
@@ -142,7 +142,13 @@ class Client
         $build_activate = DB::select($sql, [$rid, $gitType], true);
 
         if (0 === $build_activate) {
-            Log::debug(__FILE__, __LINE__, $this->build_key_id.' is inactive');
+            Log::debug(
+                __FILE__,
+                __LINE__,
+                $this->build_key_id.' is inactive',
+                [],
+                Log::EMERGENCY
+            );
 
             throw new Exception(CI::BUILD_STATUS_INACTIVE);
         }
@@ -160,7 +166,7 @@ class Client
      */
     private function parseImage(string $image, ?array $config)
     {
-        Log::debug(__FILE__, __LINE__, 'Parse Image '.$image);
+        Log::debug(__FILE__, __LINE__, 'Parse Image '.$image, [], Log::EMERGENCY);
 
         $arg = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $image, $output);
 
@@ -185,7 +191,7 @@ class Client
                 $image = str_replace($var_secret, $var, $image);
             }
         }
-        Log::debug(__FILE__, __LINE__, 'Parse Image output is '.$image);
+        Log::debug(__FILE__, __LINE__, 'Parse Image output is '.$image, [], Log::EMERGENCY);
 
         return $image;
     }
@@ -205,8 +211,8 @@ class Client
         $commit_id = $this->commit_id;
         $event_type = $this->event_type;
 
-        Log::debug(__FILE__, __LINE__, 'Create Volume '.$unique_id);
-        Log::debug(__FILE__, __LINE__, 'Create Network '.$unique_id);
+        Log::debug(__FILE__, __LINE__, 'Create Volume '.$unique_id, [], Log::EMERGENCY);
+        Log::debug(__FILE__, __LINE__, 'Create Network '.$unique_id, [], Log::EMERGENCY);
 
         $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
 
@@ -312,7 +318,7 @@ class Client
 
         $this->system_env = array_merge($system_env, $this->system_env);
 
-        Log::debug(__FILE__, __LINE__, json_encode($this->system_env));
+        Log::debug(__FILE__, __LINE__, json_encode($this->system_env), [], Log::EMERGENCY);
 
         $docker = (new KhsCI())->docker;
 
@@ -320,11 +326,11 @@ class Client
         $docker_image = $docker->image;
         $docker_network = $docker->network;
 
-        Log::debug(__FILE__, __LINE__, 'pull image plugins/git');
+        Log::debug(__FILE__, __LINE__, 'pull image plugins/git', [], Log::EMERGENCY);
 
         $image_pull_output = $docker_image->pull('plugins/git');
 
-        Log::debug(__FILE__, __LINE__, $image_pull_output);
+        Log::debug(__FILE__, __LINE__, $image_pull_output, [], Log::EMERGENCY);
 
         $docker_network->create($unique_id);
 
@@ -402,7 +408,7 @@ class Client
                                  Image $docker_image): void
     {
         foreach ($pipeline as $setup => $array) {
-            Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup);
+            Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup, [], Log::EMERGENCY);
 
             $image = $array['image'];
             $commands = $array['commands'] ?? null;
@@ -416,7 +422,7 @@ class Client
                         Log::debug(
                             __FILE__,
                             __LINE__,
-                            "Pipeline $event Is Not Current ".$this->event_type.'. Skip'
+                            "Pipeline $event Is Not Current ".$this->event_type.'. Skip', [], Log::EMERGENCY
                         );
 
                         continue;
@@ -425,7 +431,7 @@ class Client
                     Log::debug(
                         __FILE__,
                         __LINE__,
-                        "Pipeline Event $event not in ".implode(' | ', $event).'. skip');
+                        "Pipeline Event $event not in ".implode(' | ', $event).'. skip', [], Log::EMERGENCY);
 
                     continue;
                 }
@@ -443,10 +449,12 @@ class Client
 
             $ci_script = $this->parseCommand($setup, $image, $commands);
 
+            $env = array_merge(["CI_SCRIPT=$ci_script"], $env, $this->system_env);
+
+            Log::debug(__FILE__, __LINE__, json_encode($env), [], Log::INFO);
+
             $docker_container
-                ->setEnv(array_merge([
-                    "CI_SCRIPT=$ci_script",
-                ], $env, $this->system_env))
+                ->setEnv($env)
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
                 ->setEntrypoint(['/bin/sh', '-c'])
                 ->setLabels(['com.khs1994.ci.pipeline' => $unique_id])
@@ -473,7 +481,7 @@ class Client
             Log::debug(
                 __FILE__,
                 __LINE__,
-                'Run Container By Image '.$image.', Container Id is '.$container_id
+                'Run Container By Image '.$image.', Container Id is '.$container_id, [], Log::EMERGENCY
             );
 
             $this->docker_container_logs($docker_container, $container_id);
@@ -492,7 +500,7 @@ class Client
     private function parseCommand(string $setup, string $image, ?array $commands)
     {
         if (null === $commands) {
-            return;
+            return null;
         }
 
         $content = '\n';
@@ -517,7 +525,7 @@ class Client
 
         $ci_script = base64_encode(stripcslashes($content));
 
-        Log::debug(__FILE__, __LINE__, 'Command base64encode is '.$ci_script);
+        Log::debug(__FILE__, __LINE__, 'Command base64encode is '.$ci_script, [], Log::EMERGENCY);
 
         return $ci_script;
     }
@@ -535,7 +543,7 @@ class Client
         $redis = Cache::connect();
 
         if ('/bin/drone-git' === json_decode($docker_container->inspect($container_id))->Path) {
-            Log::debug(__FILE__, __LINE__, 'Drop prev logs');
+            Log::debug(__FILE__, __LINE__, 'Drop prev logs', [], Log::EMERGENCY);
 
             $redis->hDel('build_log', $this->build_key_id);
         }
@@ -594,7 +602,7 @@ class Client
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    Log::debug(__FILE__, __LINE__, "Container $container_id ExitCode is not 0");
+                    Log::debug(__FILE__, __LINE__, "Container $container_id ExitCode is $exitCode, not 0", [], Log::ERROR);
 
                     throw new Exception(CI::BUILD_STATUS_ERRORED);
                 }
@@ -696,7 +704,7 @@ class Client
         Log::debug(
             __FILE__,
             __LINE__,
-            'Run Git Clone Container By Image '.$image.', Container Id is '.$container_id
+            'Run Git Clone Container By Image '.$image.', Container Id is '.$container_id, [], Log::EMERGENCY
         );
 
         $this->docker_container_logs($docker_container, $container_id);
@@ -759,7 +767,7 @@ class Client
             Log::debug(
                 __FILE__,
                 __LINE__,
-                "Run $service_name By Image $image, Container Id Is $container_id"
+                "Run $service_name By Image $image, Container Id Is $container_id", [], Log::EMERGENCY
             );
         }
     }
@@ -815,13 +823,13 @@ class Client
 
             $docker_volume->remove($unique_id);
 
-            Log::connect()->debug('Build Stoped Delete Volume '.$unique_id);
+            Log::connect()->emergency('Build Stoped Delete Volume '.$unique_id);
 
             // clean network
 
             $docker_network->remove($unique_id);
 
-            Log::connect()->debug('Build Stoped Delete Network '.$unique_id);
+            Log::connect()->emergency('Build Stoped Delete Network '.$unique_id);
         }
     }
 
@@ -844,7 +852,7 @@ class Client
                 continue;
             }
 
-            Log::connect()->debug('Delete Container '.$id);
+            Log::connect()->emergency('Delete Container '.$id);
 
             $container->delete($id, true, true);
         }

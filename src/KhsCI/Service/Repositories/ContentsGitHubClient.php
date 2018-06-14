@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Repositories;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Repositories;
 
 class ContentsGitHubClient
 {
-
 }

@@ -57,11 +57,11 @@ class SyncController
     }
 
     /**
-     * sync user basic info
+     * sync user basic info.
      *
      * @throws Exception
      */
-    private function getUserBasicInfo()
+    private function getUserBasicInfo(): void
     {
         list('uid' => $uid,
             'name' => $name,
@@ -73,16 +73,16 @@ class SyncController
     }
 
     /**
-     * Sync user repos
+     * Sync user repos.
      *
      * @throws Exception
      */
-    private function getRepo()
+    private function getRepo(): void
     {
         $page = 0;
 
         do {
-            $page++;
+            ++$page;
 
             $json = $this->khsci->user_basic_info->getRepos($page, false);
 
@@ -93,10 +93,11 @@ class SyncController
     }
 
     /**
-     * Sync orgs
+     * Sync orgs.
+     *
      * @throws Exception
      */
-    private function getOrgs()
+    private function getOrgs(): void
     {
         $orgs = $this->khsci->user_basic_info->listOrgs();
 
@@ -135,18 +136,18 @@ class SyncController
     }
 
     /**
-     * Sync orgs repos
+     * Sync orgs repos.
      *
      * @param string $org_name
      *
      * @throws Exception
      */
-    private function getOrgsRepo(string $org_name)
+    private function getOrgsRepo(string $org_name): void
     {
         $page = 0;
 
         do {
-            $page++;
+            ++$page;
 
             $json = $this->khsci->orgs->listRepo($org_name, 1);
 
@@ -157,20 +158,19 @@ class SyncController
     }
 
     /**
-     * parse repo json output
+     * parse repo json output.
      *
      * @param string $json
      *
      * @throws Exception
      */
-    private function parseRepo(string $json)
+    private function parseRepo(string $json): void
     {
         if ($obj = json_decode($json)) {
             for ($i = 0; $i < 30; ++$i) {
                 $obj_repo = $obj[$i] ?? false;
 
                 if (false === $obj_repo) {
-
                     break;
                 }
 

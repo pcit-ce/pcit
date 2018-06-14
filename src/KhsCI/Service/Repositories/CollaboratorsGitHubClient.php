@@ -27,7 +27,7 @@ class CollaboratorsGitHubClient
     }
 
     /**
-     * List collaborators
+     * List collaborators.
      *
      * @param string $repo_full_name
      *
@@ -43,12 +43,13 @@ class CollaboratorsGitHubClient
     }
 
     /**
-     * Check if a user is a collaborator
+     * Check if a user is a collaborator.
      *
      * @param string $repo_full_name
      * @param string $user
      *
      * @return bool
+     *
      * @throws Exception
      */
     public function exists(string $repo_full_name, string $user)
@@ -71,7 +72,7 @@ class CollaboratorsGitHubClient
     }
 
     /**
-     * Review a user's permission level
+     * Review a user's permission level.
      *
      * @param string $repo_full_name Repository name
      * @param string $user
@@ -89,18 +90,16 @@ class CollaboratorsGitHubClient
     }
 
     /**
-     * Add user as a collaborator
+     * Add user as a collaborator.
      */
-    public function add()
+    public function add(): void
     {
-
     }
 
     /**
-     * Remove user as a collaborator
+     * Remove user as a collaborator.
      */
-    public function remove()
+    public function remove(): void
     {
-
     }
 }

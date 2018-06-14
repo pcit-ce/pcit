@@ -22,17 +22,18 @@ class GitHubClient
      */
     public function getBasicInfo(string $org_name)
     {
-        $url = $this->api_url.'/orgs'.$org_name;
+        $url = $this->api_url.'/orgs/'.$org_name;
 
         return $this->curl->get($url);
     }
 
     /**
-     * Edit an organization
+     * Edit an organization.
      *
      * @param string $org_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function edit(string $org_name)
@@ -40,7 +41,6 @@ class GitHubClient
         $url = $this->api_url.'/orgs/'.$org_name;
 
         $data = [
-
         ];
 
         $data = json_encode($data);
@@ -149,6 +149,7 @@ class GitHubClient
      * @param string $org_name
      *
      * @return bool
+     *
      * @throws Exception
      */
     public function exists(string $org_name)
@@ -158,7 +159,6 @@ class GitHubClient
         $this->curl->get($url);
 
         if (404 === $this->curl->getCode()) {
-
             return false;
         }
 

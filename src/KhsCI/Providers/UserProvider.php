@@ -12,7 +12,6 @@ class UserProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['user_basic_info'] = function ($app) {
-
             $class = 'KhsCI\Service\Users\\'.$app->class_name;
 
             return new $class($app['curl'], $app['config']['api_url']);

@@ -26,6 +26,9 @@
 </div>
 <hr>
 <br>
+<div id="user">
+</div>
+<hr>
 <div id="orgs">
   <form class="orgs">
   </form>
@@ -47,12 +50,16 @@
 
   function showUserBasicInfo(data) {
     $("#username").text("Welcome " + data.username).addClass(data.type);
-    let git_type = data.git_type;
 
     $("title").text(git_type + ' - ' + data.username + " - Profile - KhsCI");
+    $("#user").empty().append(
+      "<span onclick='click_user()'>" + data.username + "</span> || <strong>API Token</strong> "
+      + Cookies.get(git_type + '_api_token')
+    );
   }
 
   function list(data) {
+    $("#repos").empty();
     $.each(data, function (num, repo) {
 
       let button = $("<button></button>");
@@ -92,8 +99,6 @@
       settings.attr('target', '_blank');
       $("#repos").append(button).append('&nbsp;&nbsp;').append(settings).append('&nbsp;&nbsp;').append(p).append('<br>');
     });
-
-    $("#repos").css('left-margin', '1000px');
   }
 
   function showOrg(data) {
@@ -104,7 +109,93 @@
 
   }
 
-  function click_org(org_name) {
+  function showGitHubAppSettings(org_name, installation_id) {
+    let settings_url;
+    let content;
+    $.ajax({
+      type: "GET",
+      url: "/api/ci/github_app_settings/" + org_name,
+      success: function (data) {
+        settings_url = data;
+        content = `
+        <p></p>
+        <p></p>
+        GitHub Apps Integration
+
+        <a href="${settings_url}/${installation_id}" target="_blank">Manage repositories on GitHub</a>
+
+        `;
+
+        $("#repos").append(content);
+      }
+    });
+  }
+
+  function showGitHubAppInstall(uid) {
+    let installation_url;
+    let content;
+
+    $.ajax({
+      type: "GET",
+      url: "/api/ci/github_app_installation/" + uid,
+      success: function (data) {
+
+        installation_url = data;
+        content = `
+            <p>GitHub Apps Integration</p>
+
+            <p><a href="${installation_url}" target="_blank">Activate</a> the GitHub Apps integration to start testing and deploying on KhsCI</p>
+        `;
+        $("#repos").append(content);
+      },
+      error: function (data) {
+        alert(data);
+      }
+    });
+  }
+
+  function click_user() {
+    $.ajax({
+      type: "GET",
+      url: "/api/user",
+      headers: {
+        'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+      },
+      success: function (data) {
+        let installation_id = data[0].installation_id;
+        let uid = data[0].uid;
+
+        $.ajax({
+          type: "GET",
+          url: "/api/repos",
+          headers: {
+            'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+          },
+          success: function (data) {
+            history.pushState({}, username, ci_host + 'profile/' + git_type + '/' + username);
+            history.replaceState(null, username, ci_host + 'profile/' + git_type + '/' + username);
+            list(data);
+
+            if (git_type !== 'github') {
+
+              return 1;
+            }
+
+            if (installation_id) {
+              showGitHubAppSettings(null, installation_id);
+            } else {
+              showGitHubAppInstall(uid);
+            }
+          }
+        });
+      }
+    });
+  }
+
+  function show_org(data, org_name) {
+    let installation_id = data[0].installation_id;
+    let uid = data[0].uid;
+
     $.ajax({
       type: "GET",
       url: "/api/repos/" + git_type + "/" + org_name,
@@ -114,11 +205,33 @@
       success: function (data) {
         history.pushState({}, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
         history.replaceState(null, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
-
-        $('#repos').empty();
         list(data);
+
+        if (git_type !== 'github') {
+
+          return 1;
+        }
+
+        if (installation_id) {
+          showGitHubAppSettings(org_name, installation_id);
+        } else {
+          showGitHubAppInstall(uid);
+        }
       }
     });
+  }
+
+  function click_org(org_name) {
+    $.ajax({
+      type: "GET",
+      url: "/api/org/" + git_type + "/" + org_name,
+      headers: {
+        'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+      },
+      success: function (data) {
+        show_org(data, org_name);
+      }
+    })
   }
 
   $(document).ready(function () {
@@ -132,7 +245,6 @@
       success: function (data) {
         showUserBasicInfo(data[0]);
         if (data[0].username === username) {
-          showOrg(data);
           $.ajax({
             type: "GET",
             url: "/api/orgs",

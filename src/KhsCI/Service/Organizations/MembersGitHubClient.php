@@ -6,88 +6,71 @@ namespace KhsCI\Service\Organizations;
 
 class MembersGitHubClient
 {
-    public function list()
+    public function list(): void
     {
-
     }
 
-    public function checkMembership()
+    public function checkMembership(): void
     {
-
     }
 
-    public function add()
+    public function add(): void
     {
-
     }
 
-    public function remove()
+    public function remove(): void
     {
-
     }
 
-    public function listPublic()
+    public function listPublic(): void
     {
-
     }
 
-    public function checkPublicMembership()
+    public function checkPublicMembership(): void
     {
-
     }
 
-    public function publicizeUserMembership()
+    public function publicizeUserMembership(): void
     {
-
     }
 
-    public function concealUserMembership()
+    public function concealUserMembership(): void
     {
-
     }
 
-    public function getMembership()
+    public function getMembership(): void
     {
-
     }
 
-    public function updateMembership()
+    public function updateMembership(): void
     {
-
     }
 
-    public function removeMembership()
+    public function removeMembership(): void
     {
-
     }
 
-    public function listInvitationTeams()
+    public function listInvitationTeams(): void
     {
-
     }
 
-    public function listPendingInvitations()
+    public function listPendingInvitations(): void
     {
-
     }
 
-    public function createInvitation()
+    public function createInvitation(): void
     {
-
     }
 
-    public function listYourMemberships()
+    public function listYourMemberships(): void
     {
-
     }
 
-    public function getYourMembership()
+    public function getYourMembership(): void
     {
-
     }
 
-    public function editYourMembership()
+    public function editYourMembership(): void
     {
-
     }
 }

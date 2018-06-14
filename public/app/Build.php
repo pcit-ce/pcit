@@ -432,6 +432,7 @@ EOF;
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getCommitterEmail(int $build_key_id)
@@ -445,6 +446,7 @@ EOF;
      * @param int $build_key_id
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getCommitterName(int $build_key_id)

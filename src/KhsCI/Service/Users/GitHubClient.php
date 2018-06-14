@@ -91,7 +91,15 @@ class GitHubClient
     {
         $url = $this->api_url.'/user/orgs';
 
-        return $this->curl->get($url);
+        $output = $this->curl->get($url);
+
+        $http_return_code = $this->curl->getCode();
+
+        if (200 !== $http_return_code) {
+            throw new Exception($output, $http_return_code);
+        }
+
+        return $output;
     }
 
     /**

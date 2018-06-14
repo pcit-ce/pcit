@@ -19,6 +19,7 @@ trait OAuthTrait
 
     /**
      * OAuthTrait constructor.
+     *
      * @throws Exception
      */
     public function __construct()

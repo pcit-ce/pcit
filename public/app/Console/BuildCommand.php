@@ -111,13 +111,12 @@ class BuildCommand
             // save build log
             $this->saveLog();
 
-            Log::debug(__FILE__, __LINE__, $e->__toString());
+            Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::INFO);
 
             // exec after build
             $this->updateBuildStatus($e->getMessage());
-
         } catch (\Throwable  $e) {
-            Log::debug(__FILE__, __LINE__, $e->__toString());
+            Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::ERROR);
         } finally {
             Up::runWebhooks();
 
@@ -134,7 +133,7 @@ class BuildCommand
             $build->systemDelete($this->unique_id, true);
 
             if (!$this->unique_id) {
-                Log::debug(__FILE__, __LINE__, 'Docker build stop by unique id is empty');
+                Log::debug(__FILE__, __LINE__, 'Docker build stop by unique id is empty', [], Log::INFO);
 
                 return;
             }
@@ -145,14 +144,14 @@ class BuildCommand
 
             // mail
             // pr skip
-            if ($this->event_type !== CI::BUILD_EVENT_PR) {
+            if (CI::BUILD_EVENT_PR !== $this->event_type) {
                 $this->sendEMail();
             }
 
             // check pr auto merge
             $this->autoMerge();
 
-            Log::connect()->debug('====== '.$this->build_key_id.' Build Stopped Success ======');
+            Log::connect()->emergency('====== '.$this->build_key_id.' Build Stopped Success ======');
 
             Cache::connect()->set('khsci_up_status', 0);
         }
@@ -163,7 +162,7 @@ class BuildCommand
      *
      * @throws Exception
      */
-    private function updateBuildStatus(string $build_stats)
+    private function updateBuildStatus(string $build_stats): void
     {
         switch ($build_stats) {
             case CI::BUILD_STATUS_INACTIVE:
@@ -188,9 +187,10 @@ class BuildCommand
     }
 
     /**
-     * get user set build env
+     * get user set build env.
      *
      * @return array
+     *
      * @throws Exception
      */
     private function getEnv()
@@ -212,11 +212,18 @@ class BuildCommand
     /**
      * @throws Exception
      */
+    private function getSystemConfig(): void
+    {
+        Repo::getConfig($this->git_type, $this->rid);
+    }
+
+    /**
+     * @throws Exception
+     */
     private function sendEMail(): void
     {
         if (!Env::get('CI_EMAIL_PASSWORD', false)) {
-
-            Log::debug(__FILE__, __LINE__, 'mail settings not found, send Mail skip');
+            Log::debug(__FILE__, __LINE__, 'mail settings not found, send Mail skip', [], Log::INFO);
 
             return;
         }
@@ -335,7 +342,7 @@ EOF;
 
         $this->config = JSON::beautiful($this->config);
 
-        Log::connect()->debug('====== '.$this->build_key_id.' Build Start Success ======');
+        Log::connect()->emergency('====== '.$this->build_key_id.' Build Start Success ======');
 
         return $output;
     }
@@ -348,7 +355,7 @@ EOF;
         $ci_root = Env::get('CI_ROOT');
 
         while ($ci_root) {
-            Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root');
+            Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root', [], Log::INFO);
 
             $admin = Repo::getAdmin($this->git_type, (int) $this->rid);
             $admin_array = json_decode($admin, true);
@@ -360,13 +367,13 @@ EOF;
                 $uid = User::getUid($this->git_type, $k);
 
                 if (in_array($uid, $admin_array)) {
+                    Log::debug(__FILE__, __LINE__, 'This repo is ci root\'s repo, building...', [], Log::INFO);
 
-                    Log::debug(__FILE__, __LINE__, 'This repo is ci root\'s repo, building...');
                     return;
                 }
             }
 
-            Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip');
+            Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip', [], Log::WARNING);
 
             throw new CIException(
                 null,
@@ -404,7 +411,7 @@ EOF;
      */
     public function autoMerge(): void
     {
-        Log::debug(__FILE__, __LINE__, 'check auto merge');
+        Log::debug(__FILE__, __LINE__, 'check auto merge', [], Log::INFO);
 
         $build_status = $this->build_status;
 
@@ -416,7 +423,7 @@ EOF;
         );
 
         if ((CI::BUILD_STATUS_PASSED === $build_status) && $auto_merge_method) {
-            Log::debug(__FILE__, __LINE__, 'already set auto merge');
+            Log::debug(__FILE__, __LINE__, 'already set auto merge', [], Log::INFO);
 
             $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
 
@@ -427,7 +434,7 @@ EOF;
                     Log::debug(
                         __FILE__,
                         __LINE__,
-                        'already merged, skip'
+                        'already merged, skip', [], Log::WARNING
                     );
 
                     return;
@@ -445,7 +452,7 @@ EOF;
                         $this->commit_id,
                         (int) $auto_merge_method
                     );
-                Log::debug(__FILE__, __LINE__, 'auto merge success, method is '.$auto_merge_method);
+                Log::debug(__FILE__, __LINE__, 'auto merge success, method is '.$auto_merge_method, [], Log::INFO);
             } catch (\Throwable $e) {
                 Log::debug(__FILE__, __LINE__, $e->__toString());
             }
@@ -461,13 +468,13 @@ EOF;
         $output = Cache::connect()->hGet('build_log', (string) $this->build_key_id);
 
         if (!$output) {
-            Log::debug(__FILE__, __LINE__, 'Build Log empty, skip');
+            Log::debug(__FILE__, __LINE__, 'Build Log empty, skip', [], Log::WARNING);
 
             return;
         }
 
         if (!$this->unique_id) {
-            Log::debug(__FILE__, __LINE__, 'config not found, skip');
+            Log::debug(__FILE__, __LINE__, 'config not found, skip', [], Log::WARNING);
 
             return;
         }

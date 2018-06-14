@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
+namespace App\Http\Controllers;
 
 class WeChatController
 {
@@ -9,8 +10,7 @@ class WeChatController
     {
         return [
             'code' => 200,
-            'data' =>
-                'https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg'
+            'data' => 'https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg',
         ];
     }
 }

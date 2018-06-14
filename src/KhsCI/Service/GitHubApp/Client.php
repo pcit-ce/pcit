@@ -186,7 +186,6 @@ class Client
         $jwt = Cache::connect()->get('github_app_jwt');
 
         if ($jwt) {
-
             return $jwt;
         }
 

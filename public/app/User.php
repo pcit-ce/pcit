@@ -63,7 +63,7 @@ class User extends DBModel
             $org || $org = null;
             $org && $org = 'org';
 
-            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,null,?)';
+            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,null,?,null)';
             DB::insert($sql, [$git_type, $uid, $username, $email, $pic, $accessToken, $org]);
         }
     }
@@ -132,6 +132,7 @@ EOF;
      * @param string $org_name
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function delete(string $git_type, string $org_name)
@@ -161,6 +162,7 @@ EOF;
      * @param int    $uid
      *
      * @return array|string
+     *
      * @throws Exception
      */
     public static function getUsername(string $git_type, int $uid)
@@ -168,5 +170,18 @@ EOF;
         $sql = 'SELECT username FROM user WHERE git_type=? and uid=? LIMIT 1';
 
         return DB::select($sql, [$git_type, $uid], true);
+    }
+
+    /**
+     * @param int    $installation_id
+     * @param string $username
+     *
+     * @throws Exception
+     */
+    public static function updateInstallationId(string $git_type, int $installation_id, string $username): void
+    {
+        $sql = 'UPDATE user SET installation_id=? WHERE git_type=? AND username=?';
+
+        DB::update($sql, [$installation_id, $git_type, $username]);
     }
 }

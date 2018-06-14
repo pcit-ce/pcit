@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\TencentAI;
 
 use KhsCI\Support\JSON;
@@ -11,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class OCR extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('ocr');
         $this->setDescription('OCR');
@@ -24,6 +26,7 @@ class OCR extends Command
      * @param OutputInterface $output
      *
      * @return int|null|void
+     *
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -40,8 +43,7 @@ class OCR extends Command
             return;
         }
 
-        $list = TencentAICommand::get()->ocr()->general(getcwd().'/'.$input->getArgument('image'))
-        ['data']['item_list'];
+        $list = TencentAICommand::get()->ocr()->general(getcwd().'/'.$input->getArgument('image'))['data']['item_list'];
 
         $string = null;
 

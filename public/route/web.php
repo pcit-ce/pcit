@@ -132,7 +132,7 @@ Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
 
 Route::get('api/orgs', 'Users\OrganizationsController');
 
-Route::get('api/orgs/{git_type}/{org_name}', 'Users\OrganizationsController@find');
+Route::get('api/org/{git_type}/{org_name}', 'Users\OrganizationsController@find');
 
 /* Builds */
 
@@ -216,4 +216,6 @@ Route::post('wechat', 'WeChat\MessageServer');
 
 /* System */
 
-Route::get('api/ci/oauth_client_id', 'System\OAuthClientController');
+Route::get('api/ci/oauth_client_id', 'System\SystemController@getOAuthClientId');
+Route::get('api/ci/github_app_installation/{uid}', 'System\SystemController@getGitHubAppInstallationUrl');
+Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@getGitHubAppSettingsUrl');

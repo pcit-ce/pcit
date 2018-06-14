@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Miscellaneous;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Miscellaneous;
 
 class RateLimitGitHubClient
 {
-
 }

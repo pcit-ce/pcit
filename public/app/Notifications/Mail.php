@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notifications;
 
 use Exception;
@@ -23,12 +25,11 @@ class Mail
                                 string $body,
                                 bool $html = true,
                                 array $cc = [],
-                                array $bcc = [])
+                                array $bcc = []): void
     {
         $mail = (new KhsCI())->mail;
 
         try {
-
             foreach ($address as $k => $v) {
                 if (is_int($k)) {
                     $k = $v;

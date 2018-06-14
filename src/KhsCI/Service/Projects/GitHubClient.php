@@ -1,123 +1,100 @@
 <?php
 
-namespace KhsCI\Service\Projects;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Projects;
 
 class GitHubClient
 {
-    public function list()
+    public function list(): void
     {
-
     }
 
-    public function listFromOrg()
+    public function listFromOrg(): void
     {
-
     }
 
-    public function get()
+    public function get(): void
     {
-
     }
 
-    public function create()
+    public function create(): void
     {
-
     }
 
-    public function createFromOrg()
+    public function createFromOrg(): void
     {
-
     }
 
-    public function update()
+    public function update(): void
     {
-
     }
 
-    public function delete()
+    public function delete(): void
     {
-
     }
 
-    public function listCards()
+    public function listCards(): void
     {
-
     }
 
-    public function getCard()
+    public function getCard(): void
     {
-
     }
 
-    public function createCard()
+    public function createCard(): void
     {
-
     }
 
-    public function updateCard()
+    public function updateCard(): void
     {
-
     }
 
-    public function deleteCard()
+    public function deleteCard(): void
     {
-
     }
 
-    public function moveCard()
+    public function moveCard(): void
     {
-
     }
 
-    public function listCollaborators()
+    public function listCollaborators(): void
     {
-
     }
 
-    public function reviewUserPermissionLevel()
+    public function reviewUserPermissionLevel(): void
     {
-
     }
 
-    public function addCollaborator()
+    public function addCollaborator(): void
     {
-
     }
 
-    public function removeCollaborator()
+    public function removeCollaborator(): void
     {
-
     }
 
-    public function listColumns()
+    public function listColumns(): void
     {
-
     }
 
-    public function getColumn()
+    public function getColumn(): void
     {
-
     }
 
-    public function createColumn()
+    public function createColumn(): void
     {
-
     }
 
-    public function updateColumn()
+    public function updateColumn(): void
     {
-
     }
 
-    public function deleteColumn()
+    public function deleteColumn(): void
     {
-
     }
 
-    public function moveColumn()
+    public function moveColumn(): void
     {
-
     }
 }
-
