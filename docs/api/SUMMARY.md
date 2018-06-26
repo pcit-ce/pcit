@@ -2,6 +2,7 @@
 
 * [Overview](README.md)
 * [Getting Help](getting-help.md)
+* [Getting started](gettingstarted.md)
 * [Authentication](authentication.md)
 * [Builds](builds/README.md)
     * [Log](builds/log.md)

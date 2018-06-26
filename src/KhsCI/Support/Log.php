@@ -118,7 +118,7 @@ class Log
                                  array $context = [],
                                  $level = 'debug'): void
     {
-        $log_level = Env::get('CI_LOG_LEVEL', 'debug');
+        $log_level = Env::get('CI_LOG_LEVEL', 'info');
 
         if (self::$$log_level > self::$$level) {
             return;

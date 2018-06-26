@@ -197,6 +197,52 @@ class Client
     }
 
     /**
+     * Find organization installation
+     *
+     * @param string $org_name
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function findOrganizationInstallation(string $org_name)
+    {
+        $url = $this->api_url.'/orgs/'.$org_name.'/installation';
+
+        return $this->curl->get($url);
+    }
+
+    /**
+     * Find repository installation
+     *
+     * @param string $username
+     * @param string $repo
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function findRepositoryInstallation(string $username, string $repo)
+    {
+        $url = $this->api_url.'/repos/'.$username.'/'.$repo.'/installation';
+
+        return $this->curl->get($url);
+    }
+
+    /**
+     * Find user installation
+     *
+     * @param string $username
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function findUserInstallation(string $username)
+    {
+        $url = $this->api_url.'/users/'.$username.'/installation';
+
+        return $this->curl->get($url);
+    }
+
+    /**
      * 某用户或组织的 GitHub App 安装请求地址，即用户在此 URL 安装 GitHub App.
      *
      * @param int $rid
