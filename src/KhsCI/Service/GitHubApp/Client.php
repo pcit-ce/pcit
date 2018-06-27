@@ -197,11 +197,12 @@ class Client
     }
 
     /**
-     * Find organization installation
+     * Find organization installation.
      *
      * @param string $org_name
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function findOrganizationInstallation(string $org_name)
@@ -212,12 +213,13 @@ class Client
     }
 
     /**
-     * Find repository installation
+     * Find repository installation.
      *
      * @param string $username
      * @param string $repo
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function findRepositoryInstallation(string $username, string $repo)
@@ -228,11 +230,12 @@ class Client
     }
 
     /**
-     * Find user installation
+     * Find user installation.
      *
      * @param string $username
      *
      * @return mixed
+     *
      * @throws Exception
      */
     public function findUserInstallation(string $username)

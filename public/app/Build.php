@@ -125,6 +125,28 @@ class Build extends DBModel
     }
 
     /**
+     * @param string $build_status
+     * @param string $git_type
+     * @param int    $rid
+     * @param string $branch
+     * @param string $commit_id
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public static function updateBuildStatusByCommitId(string $build_status,
+                                                       string $git_type,
+                                                       int $rid,
+                                                       string $branch,
+                                                       string $commit_id)
+    {
+        $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND commit_id=?';
+
+        return DB::update($sql, [$build_status, $git_type, $rid, $commit_id]);
+    }
+
+    /**
      * @param int    $rid
      * @param string $branch
      *

@@ -642,7 +642,6 @@ EOF;
 
         Log::debug(__FILE__, __LINE__, 'Receive issue event is '.$action, [], Log::INFO);
 
-
         $issue = $obj->issue;
 
         $repository = $obj->repository;
@@ -1461,42 +1460,38 @@ EOF;
      *
      * @throws Exception
      */
-    //    public function check_suite(): void
-    //    {
-    //        return;
+    public function check_suite(string $content): void
+    {
+        $obj = json_decode($content);
 
-    //        $obj = json_decode($content);
-    //
-    //        $rid = $obj->repository->id;
-    //
-    //        $action = $obj->action;
-    //
-    //        $check_suite = $obj->check_suite;
-    //
-    //        $check_suite_id = $check_suite->id;
-    //
-    //        $branch = $check_suite->head_branch;
-    //
-    //        $commit_id = $check_suite->head_sha;
-    //
-    //        $installation_id = $obj->installation->id ?? null;
-    //
-    //        $sql = <<<EOF
-    //    INSERT INTO builds(
-    //    action,event_type,git_type,check_suites_id,branch,commit_id
-    //    ) VALUES (?,?,?,?,?,?);
-    //EOF;
-    //
-    //        $last_insert_id = DB::insert($sql, [
-    //            $action, __FUNCTION__, $this->git_type, $check_suite_id, $branch, $commit_id,
-    //        ]);
-    //
-    //        if ('rerequested' === $action) {
-    //            $check_run_id = '';
-    //        }
-    //
-    //        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
-    //    }
+        $installation_id = $obj->installation->id ?? null;
+
+        $repository = $obj->repository;
+
+        $rid = $repository->id;
+
+        // $username = $repository->owner->login;
+
+        $action = $obj->action;
+
+        Log::debug(__FILE__, __LINE__, 'Receive check suite event is '.$action,
+            [], Log::INFO);
+
+        $check_suite = $obj->check_suite;
+
+        // $check_suite_id = $check_suite->id;
+
+        $branch = $check_suite->head_branch;
+
+        $commit_id = $check_suite->head_sha;
+
+        if ('rerequested' === $action) {
+            Build::updateBuildStatusByCommitId(CI::BUILD_STATUS_PENDING,
+                $this->git_type, (int) $rid, $branch, $commit_id);
+        }
+
+        Repo::updateGitHubInstallationIdByRid((int) $rid, (int) $installation_id);
+    }
 
     /**
      * Action.

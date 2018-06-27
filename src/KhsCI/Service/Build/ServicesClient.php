@@ -1,7 +1,8 @@
 <?php
 
-namespace KhsCI\Service\Build;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Build;
 
 use Docker\Docker;
 use Exception;
@@ -22,7 +23,6 @@ class ServicesClient
     public static function runService(?array $service, string $unique_id, ?array $config, Docker $docker): void
     {
         if (null === $service) {
-
             return;
         }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace KhsCI\Service\Build;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Build;
 
 class MirrorsClient
 {
-
 }

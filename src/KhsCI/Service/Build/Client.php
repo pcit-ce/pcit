@@ -61,9 +61,9 @@ class Client
      *
      * @throws CIException
      */
-    public function __invoke(int $build_key_id,
+    public function __invoke($build_key_id,
                              string $git_type,
-                             int $rid,
+                             $rid,
                              string $commit_id,
                              string $commit_message,
                              string $branch,
@@ -270,7 +270,8 @@ class Client
             $commit_id,
             $branch,
             $unique_id,
-            $docker_container
+            $docker_container,
+            $this->build_key_id
         );
 
         // 不存在构建矩阵
@@ -288,7 +289,8 @@ class Client
                 $workdir,
                 $unique_id,
                 $docker_container,
-                $docker_image
+                $docker_image,
+                $this->build_key_id
             );
 
             throw new Exception(CI::BUILD_STATUS_PASSED);
@@ -311,7 +313,8 @@ class Client
                 $workdir,
                 $unique_id,
                 $docker_container,
-                $docker_image
+                $docker_image,
+                $this->build_key_id
             );
 
             // 清理
@@ -386,6 +389,7 @@ class Client
     }
 
     /**
+     * @param int       $build_key_id
      * @param Container $docker_container
      * @param string    $container_id
      *
@@ -393,14 +397,19 @@ class Client
      *
      * @throws Exception
      */
-    public function docker_container_logs(Container $docker_container, string $container_id)
+    public function docker_container_logs(int $build_key_id, Container $docker_container, string $container_id)
     {
         $redis = Cache::connect();
 
         if ('/bin/drone-git' === json_decode($docker_container->inspect($container_id))->Path) {
-            Log::debug(__FILE__, __LINE__, 'Drop prev logs', [], Log::EMERGENCY);
+            Log::debug(__FILE__,
+                __LINE__,
+                'Drop prev logs '.$build_key_id,
+                [],
+                Log::EMERGENCY
+            );
 
-            $redis->hDel('build_log', $this->build_key_id);
+            $redis->hDel('build_log', $build_key_id);
         }
 
         $i = -1;
@@ -440,11 +449,11 @@ class Client
                     $container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string) $this->build_key_id);
+                $prev_docker_log = $redis->hget('build_log', (string) $build_key_id);
 
                 $redis->hset(
                     'build_log',
-                    (string) $this->build_key_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
+                    (string) $build_key_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
                 );
 
                 /**

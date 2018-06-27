@@ -305,7 +305,9 @@ id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_n
 
 FROM
 
-builds WHERE 1=(SELECT build_activate FROM repo WHERE repo.rid=builds.rid) AND build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id DESC LIMIT 1;
+builds WHERE 1=(SELECT build_activate FROM repo WHERE repo.rid=builds.rid AND repo.git_type=builds.git_type LIMIT 1) 
+
+AND build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id DESC LIMIT 1;
 EOF;
 
         $output = DB::select($sql, [

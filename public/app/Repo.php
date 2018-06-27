@@ -310,6 +310,8 @@ EOF;
      * @param int|null $insert_admin
      * @param int|null $insert_collaborators
      * @param string   $default_branch
+     * @param int      $build_active
+     * @param int      $webhooks_status
      *
      * @throws Exception
      */
@@ -320,17 +322,21 @@ EOF;
                                           string $repo_full_name,
                                           ?int $insert_admin,
                                           ?int $insert_collaborators,
-                                          string $default_branch): void
+                                          string $default_branch,
+                                          int $build_active = 1,
+                                          int $webhooks_status = 1): void
     {
         if ($repo_key_id = self::exists($git_type, $rid)) {
             $sql = <<<'EOF'
 UPDATE repo SET
 
-git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=? WHERE id=?;
+git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=? 
+
+WHERE id=?;
 EOF;
             DB::update($sql, [
                 $git_type, $rid, $repo_prefix, $repo_name,
-                $repo_full_name, time(), $repo_key_id,
+                $repo_full_name, time(), $build_active, $webhooks_status, $repo_key_id,
             ]);
 
             return;
@@ -339,13 +345,13 @@ EOF;
         $sql = <<<EOF
 INSERT INTO repo(
 id,git_type, rid, repo_prefix, repo_name, repo_full_name,default_branch,
-last_sync
-) VALUES(null,?,?,?,?,?,?,?)
+last_sync,build_activate,webhooks_status
+) VALUES(null,?,?,?,?,?,?,?,?,?)
 EOF;
 
         DB::insert($sql, [
             $git_type, $rid, $repo_prefix, $repo_name, $repo_full_name,
-            $default_branch, time(),
+            $default_branch, time(), $build_active, $webhooks_status,
         ]);
 
         if ($insert_admin) {
@@ -416,6 +422,7 @@ EOF;
      * @param $repo_full_name
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function updateBuildActive(int $webhooks_status, string $git_type, string $repo_full_name)
@@ -431,6 +438,7 @@ EOF;
      * @param string $repo_full_name
      *
      * @return int
+     *
      * @throws Exception
      */
     public static function updateWebhookStatus(int $build_active, string $git_type, string $repo_full_name)

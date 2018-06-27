@@ -1,7 +1,8 @@
 <?php
 
-namespace KhsCI\Service\Build;
+declare(strict_types=1);
 
+namespace KhsCI\Service\Build;
 
 use Docker\Container\Container;
 use Docker\Image\Image;
@@ -19,6 +20,7 @@ class PipelineClient
      * @param string    $unique_id
      * @param Container $docker_container
      * @param Image     $docker_image
+     * @param int       $build_key_id
      *
      * @throws Exception
      */
@@ -29,7 +31,8 @@ class PipelineClient
                                        string $work_dir,
                                        string $unique_id,
                                        Container $docker_container,
-                                       Image $docker_image): void
+                                       Image $docker_image,
+                                       int $build_key_id): void
     {
         $client = new Client();
 
@@ -112,7 +115,7 @@ class PipelineClient
                 Log::EMERGENCY
             );
 
-            $client->docker_container_logs($docker_container, $container_id);
+            $client->docker_container_logs($build_key_id, $docker_container, $container_id);
         }
     }
 }

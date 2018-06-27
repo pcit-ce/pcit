@@ -38,7 +38,6 @@ class SystemController
         }
 
         if ($org_name) {
-
             $url = "https://github.com/organizations/{$org_name}/settings/installations";
         }
 

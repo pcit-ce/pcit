@@ -14,7 +14,7 @@ clone:
     # submodule_override:
       # hello-world: https://github.com/octocat/hello-world.git
     hosts:
-      git.t.khs1994.com: 192.168.199.100
+      - "git.t.khs1994.com:192.168.199.100"
 
 workspace:
   base: /app

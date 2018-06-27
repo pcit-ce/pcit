@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Build;
 
 use Docker\Container\Container;
@@ -20,10 +22,10 @@ class GitClient
      * @param string    $branch
      * @param string    $unique_id
      * @param Container $docker_container
-     *
-     * @return void
+     * @param int       $build_key_id
      *
      * @throws Exception
+     *
      * @see https://github.com/drone-plugins/drone-git
      */
     public static function runGit(array $git,
@@ -34,11 +36,14 @@ class GitClient
                                   string $commit_id,
                                   string $branch,
                                   string $unique_id,
-                                  Container $docker_container)
+                                  Container $docker_container,
+                                  int $build_key_id): void
     {
         $git_image = 'plugins/git';
 
         $git_config = [];
+
+        $hosts = [];
 
         if ($git) {
             $depth = $git['depth'] ?? 10;
@@ -46,7 +51,7 @@ class GitClient
             $skip_verify = $git['skip_verify'] ?? false;
             $tags = $git['tags'] ?? false;
             $submodule_override = $git['submodule_override'] ?? null;
-
+            $hosts = $git['hosts'];
             // 防止用户传入 false
             if ($depth) {
                 array_push($git_config, "PLUGIN_DEPTH=$depth");
@@ -109,8 +114,15 @@ class GitClient
         $docker_container
             ->setEnv($git_env)
             ->setLabels(['com.khs1994.ci.git' => $unique_id])
-            ->setHostConfig(["$unique_id:$workdir"]);
-
+            ->setHostConfig(
+                ["$unique_id:$workdir"],
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                $hosts);
         $container_id = $docker_container->start($docker_container->create($git_image));
 
         Log::debug(
@@ -121,6 +133,6 @@ class GitClient
             Log::EMERGENCY
         );
 
-        $client->docker_container_logs($docker_container, $container_id);
+        $client->docker_container_logs($build_key_id, $docker_container, $container_id);
     }
 }
