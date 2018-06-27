@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Webhooks\Admin;
+namespace App\Http\Controllers\Webhooks;
 
+use App\Repo;
 use Error;
 use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
-use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 use KhsCI\Support\Session;
@@ -73,7 +73,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI(['github_access_token' => $access_token], static::$gitType);
+        $khsci = new KhsCI([self::$gitType.'_access_token' => $access_token], static::$gitType);
 
         $json = $khsci->repo_webhooks->getWebhooks($raw, ...$arg);
 
@@ -113,14 +113,12 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI(['github_access_token' => $access_token], static::$gitType);
+        $khsci = new KhsCI([self::$gitType.'_access_token' => $access_token], static::$gitType);
 
-        $getWebhooksStatus = $khsci->repo_webhooks->getWebhooksStatus($webhooksUrl, ...$arg);
-
-        $sql = 'UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?';
+        $getWebhooksStatus = $khsci->repo_webhooks->getStatus($webhooksUrl, ...$arg);
 
         if (1 === $getWebhooksStatus) {
-            DB::update($sql, [1, $gitType, "$arg[1]/$arg[2]"]);
+            Repo::updateWebhookStatus(1, $gitType, "$arg[1]/$arg[2]");
 
             return ['code' => 200, 'message' => 'Success, But hook already exists on this repository'];
         }
@@ -129,7 +127,7 @@ class Controller
             $json = $khsci->repo_webhooks->setWebhooks($data, ...$arg);
         } catch (Exception $e) {
             if (422 === $e->getCode()) {
-                DB::update($sql, [1, $gitType, "$arg[1]/$arg[2]"]);
+                Repo::updateWebhookStatus(1, $gitType, "$arg[1]/$arg[2]");
 
                 return ['code' => 200, 'message' => $e->getMessage()];
             } else {
@@ -160,7 +158,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI(['github_access_token' => $access_token], static::$gitType);
+        $khsci = new KhsCI([self::$gitType.'_access_token' => $access_token], static::$gitType);
 
         return $khsci->repo_webhooks->unsetWebhooks(...$arg);
     }
@@ -176,16 +174,14 @@ class Controller
     private static function setBuildStatusCache(int $status = 0, ...$arg): void
     {
         $gitType = self::$gitType;
+
         $uid = Session::get($gitType.'.uid');
-        $redis = Cache::connect();
 
         $repoFullName = $arg[0].'/'.$arg[1];
 
-        $sql = 'UPDATE repo SET build_activate = ? WHERE git_type=? AND repo_full_name=?';
+        Repo::updateBuildActive($status, $gitType, $repoFullName);
 
-        DB::update($sql, [$status, $gitType, $repoFullName]);
-
-        $redis->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
+        Cache::connect()->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
     }
 
     /**
@@ -200,13 +196,13 @@ class Controller
     public static function activate(...$arg)
     {
         $arg = self::setGitType(...$arg);
-        /*
-         * 首先保证 Webhooks 已设置
-         */
+
+        //首先保证 Webhooks 已设置
+
         $array = self::add(self::$gitType, ...$arg);
-        /*
-         * 更新缓存 + 更新数据库
-         */
+
+        // 更新缓存 + 更新数据库
+
         self::setBuildStatusCache(CI::BUILD_ACTIVATE, ...$arg);
 
         return $array;

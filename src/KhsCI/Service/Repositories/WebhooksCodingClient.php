@@ -73,4 +73,9 @@ class WebhooksCodingClient
 
         return $this->curl->delete($url);
     }
+
+    public function getStatus(string $url, string $username, string $repo_name)
+    {
+        return 1;
+    }
 }

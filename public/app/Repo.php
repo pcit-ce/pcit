@@ -409,4 +409,34 @@ EOF;
 
         return DB::select($sql, [$git_type, $rid]);
     }
+
+    /**
+     * @param $webhooks_status
+     * @param $git_type
+     * @param $repo_full_name
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function updateBuildActive(int $webhooks_status, string $git_type, string $repo_full_name)
+    {
+        $sql = 'UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?';
+
+        return DB::update($sql, [$webhooks_status, $git_type, $repo_full_name]);
+    }
+
+    /**
+     * @param int    $build_active
+     * @param string $git_type
+     * @param string $repo_full_name
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function updateWebhookStatus(int $build_active, string $git_type, string $repo_full_name)
+    {
+        $sql = 'UPDATE repo SET build_activate = ? WHERE git_type=? AND repo_full_name=?';
+
+        return DB::update($sql, [$build_active, $git_type, $repo_full_name]);
+    }
 }
