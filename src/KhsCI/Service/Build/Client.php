@@ -6,17 +6,12 @@ namespace KhsCI\Service\Build;
 
 use App\Build as BuildDB;
 use Docker\Container\Container;
-use Docker\Docker;
-use Docker\Image\Image;
 use Exception;
 use KhsCI\CIException;
 use KhsCI\KhsCI;
-use KhsCI\Support\ArrayHelper;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
-use KhsCI\Support\DB;
-use KhsCI\Support\Git;
 use KhsCI\Support\Log;
 
 class Client
@@ -27,9 +22,9 @@ class Client
 
     private $unique_id;
 
-    private $pull_id;
+    public $pull_id;
 
-    private $tag_name;
+    public $tag_name;
 
     private $commit_id;
 
@@ -43,18 +38,16 @@ class Client
 
     private $pull_request_source;
 
+    private $rid;
+
     private $repo_full_name;
-
-    private $git_config = [];
-
-    private $git_image = 'plugins/git';
 
     private $system_env = [];
 
     /**
-     * @param             $build_key_id
+     * @param int         $build_key_id
      * @param string      $git_type
-     * @param             $rid
+     * @param int         $rid
      * @param string      $commit_id
      * @param string      $commit_message
      * @param string      $branch
@@ -68,9 +61,9 @@ class Client
      *
      * @throws CIException
      */
-    public function __invoke($build_key_id,
+    public function __invoke(int $build_key_id,
                              string $git_type,
-                             $rid,
+                             int $rid,
                              string $commit_id,
                              string $commit_message,
                              string $branch,
@@ -87,6 +80,7 @@ class Client
             $this->config = $config;
             $this->commit_id = $commit_id;
 
+            // config 不存在，。khsci.yml 文件不存在
             if ('[]' === $config) {
                 throw new Exception(CI::BUILD_STATUS_PASSED);
             }
@@ -99,6 +93,7 @@ class Client
             $this->tag_name = $tag_name;
             $this->git_type = $git_type;
             $this->pull_request_source = $pull_request_source;
+            $this->rid = $rid;
             $this->repo_full_name = $repo_full_name;
             $this->system_env = array_merge($this->system_env, $env_vars);
 
@@ -112,10 +107,7 @@ class Client
                 'git_type' => $git_type, [], Log::EMERGENCY,
             ]));
 
-            // 是否启用构建
-            $this->getRepoBuildActivateStatus((int) $rid);
-
-            $this->run($rid, $branch);
+            $this->run();
         } catch (\Throwable $e) {
             throw new CIException(
                 $this->unique_id,
@@ -123,34 +115,6 @@ class Client
                 $this->event_type,
                 $e->getMessage(), $this->build_key_id
             );
-        }
-    }
-
-    /**
-     * 检查是否启用了构建.
-     *
-     * @param int $rid
-     *
-     * @throws Exception
-     */
-    private function getRepoBuildActivateStatus(int $rid): void
-    {
-        $gitType = $this->git_type;
-
-        $sql = 'SELECT build_activate FROM repo WHERE rid=? AND git_type=?';
-
-        $build_activate = DB::select($sql, [$rid, $gitType], true);
-
-        if (0 === $build_activate) {
-            Log::debug(
-                __FILE__,
-                __LINE__,
-                $this->build_key_id.' is inactive',
-                [],
-                Log::EMERGENCY
-            );
-
-            throw new Exception(CI::BUILD_STATUS_INACTIVE);
         }
     }
 
@@ -164,7 +128,7 @@ class Client
      *
      * @throws Exception
      */
-    private function parseImage(string $image, ?array $config)
+    public function parseImage(string $image, ?array $config)
     {
         Log::debug(__FILE__, __LINE__, 'Parse Image '.$image, [], Log::EMERGENCY);
 
@@ -199,14 +163,11 @@ class Client
     /**
      * 执行构建.
      *
-     * @param        $rid
-     * @param string $branch
-     *
      * @throws Exception
      */
-    private function run($rid, string $branch): void
+    public function run(): void
     {
-        $gitType = $this->git_type;
+        $branch = $this->branch;
         $unique_id = $this->unique_id;
         $commit_id = $this->commit_id;
         $event_type = $this->event_type;
@@ -214,11 +175,7 @@ class Client
         Log::debug(__FILE__, __LINE__, 'Create Volume '.$unique_id, [], Log::EMERGENCY);
         Log::debug(__FILE__, __LINE__, 'Create Network '.$unique_id, [], Log::EMERGENCY);
 
-        $sql = 'SELECT repo_full_name FROM repo WHERE git_type=? AND rid=?';
-
-        $repo_full_name = DB::select($sql, [$gitType, $rid], true);
-
-        if (!$repo_full_name) {
+        if (!$this->repo_full_name) {
             throw new Exception(CI::BUILD_STATUS_ERRORED);
         }
 
@@ -231,46 +188,16 @@ class Client
         // 解析 .khsci.yml.
 
         $git = $yaml_obj->clone['git'] ?? null;
-        $cache = $yaml_obj->cache ?? null;
+        // $cache = $yaml_obj->cache ?? null;
         $workspace = $yaml_obj->workspace ?? null;
         $pipeline = $yaml_obj->pipeline ?? null;
         $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->matrix ?? null;
-        $config = $yaml_obj->config ?? null;
-
-        if ($git) {
-            $depth = $git['depth'] ?? 10;
-            $recursive = $git['recursive'] ?? false;
-            $skip_verify = $git['skip_verify'] ?? false;
-            $tags = $git['tags'] ?? false;
-            $submodule_override = $git['submodule_override'] ?? null;
-
-            $git_config = [];
-
-            // 防止用户传入 false
-            if ($depth) {
-                array_push($git_config, "PLUGIN_DEPTH=$depth");
-            } else {
-                array_push($git_config, 'PLUGIN_DEPTH=2');
-            }
-
-            $recursive && array_push($git_config, 'PLUGIN_RECURSIVE=true');
-
-            $skip_verify && array_push($git_config, 'PLUGIN_SKIP_VERIFY=true');
-
-            $tags && array_push($git_config, 'PLUGIN_TAGS=true');
-
-            $submodule_override && array_push(
-                $git_config, 'PLUGIN_SUBMODULE_OVERRIDE='.json_encode($submodule_override)
-            );
-
-            $this->git_config = $git_config;
-            $this->git_image = $git['image'] ?? 'plugins/git';
-        }
+        // $config = $yaml_obj->config ?? null;
 
         // 存在构建矩阵
         if ($matrix) {
-            $matrix = $this->parseMatrix($yaml_obj->matrix);
+            $matrix = MatrixClient::parseMatrix($yaml_obj->matrix);
         }
 
         /**
@@ -280,7 +207,7 @@ class Client
          */
         $base_path = $workspace['base'] ?? null;
 
-        $path = $workspace['path'] ?? $repo_full_name;
+        $path = $workspace['path'] ?? $this->repo_full_name;
 
         if ('.' === $path) {
             $path = null;
@@ -334,18 +261,35 @@ class Client
 
         $docker_network->create($unique_id);
 
-        $git_env = $this->getGitEnv($event_type, $repo_full_name, $workdir, $commit_id, $branch);
-        $this->runGit($git_env, $workdir, $unique_id, $docker_container);
+        // run git
+        GitClient::runGit($git,
+            $this->git_type,
+            $event_type,
+            $this->repo_full_name,
+            $workdir,
+            $commit_id,
+            $branch,
+            $unique_id,
+            $docker_container
+        );
 
         // 不存在构建矩阵
         if (!$matrix) {
             $this->cancel();
 
-            $this->runService($services, $unique_id, null, $docker);
+            ServicesClient::runService($services, $unique_id, null, $docker);
 
             $this->cancel();
 
-            $this->runPipeline($pipeline, null, $workdir, $unique_id, $docker_container, $docker_image);
+            PipelineClient::runPipeline($pipeline,
+                null,
+                $this->event_type,
+                $this->system_env,
+                $workdir,
+                $unique_id,
+                $docker_container,
+                $docker_image
+            );
 
             throw new Exception(CI::BUILD_STATUS_PASSED);
         }
@@ -355,11 +299,20 @@ class Client
             $this->cancel();
 
             //启动服务
-            $this->runService($services, $unique_id, $config, $docker);
+            ServicesClient::runService($services, $unique_id, $config, $docker);
 
             $this->cancel();
+
             // 构建步骤
-            $this->runPipeline($pipeline, $config, $workdir, $unique_id, $docker_container, $docker_image);
+            PipelineClient::runPipeline($pipeline,
+                $config,
+                $this->event_type,
+                $this->system_env,
+                $workdir,
+                $unique_id,
+                $docker_container,
+                $docker_image
+            );
 
             // 清理
             $this->systemDelete($unique_id);
@@ -375,7 +328,7 @@ class Client
      *
      * @throws Exception
      */
-    private function cancel(): void
+    public function cancel(): void
     {
         $output = BuildDB::getBuildStatusByBuildKeyId((int) $this->build_key_id);
 
@@ -391,104 +344,6 @@ class Client
     }
 
     /**
-     * @param array     $pipeline
-     * @param array     $config
-     * @param string    $work_dir
-     * @param string    $unique_id
-     * @param Container $docker_container
-     * @param Image     $docker_image
-     *
-     * @throws Exception
-     */
-    private function runPipeline(array $pipeline,
-                                 ?array $config,
-                                 string $work_dir,
-                                 string $unique_id,
-                                 Container $docker_container,
-                                 Image $docker_image): void
-    {
-        foreach ($pipeline as $setup => $array) {
-            Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup, [], Log::EMERGENCY);
-
-            $image = $array['image'];
-            $commands = $array['commands'] ?? null;
-            $event = $array['when']['event'] ?? null;
-            $env = $array['environment'] ?? [];
-            $status = $array['when']['status'] ?? null;
-
-            if ($event) {
-                if (is_string($event)) {
-                    if ($this->event_type !== $event) {
-                        Log::debug(
-                            __FILE__,
-                            __LINE__,
-                            "Pipeline $event Is Not Current ".$this->event_type.'. Skip', [], Log::EMERGENCY
-                        );
-
-                        continue;
-                    }
-                } elseif (is_array($event) and (!in_array($this->event_type, $event, true))) {
-                    Log::debug(
-                        __FILE__,
-                        __LINE__,
-                        "Pipeline Event $event not in ".implode(' | ', $event).'. skip', [], Log::EMERGENCY);
-
-                    continue;
-                }
-            }
-
-            if ($status) {
-                continue;
-            }
-
-            if ('ci_docker_build' === $image) {
-                continue;
-            }
-
-            $image = $this->parseImage($image, $config);
-
-            $ci_script = $this->parseCommand($setup, $image, $commands);
-
-            $env = array_merge(["CI_SCRIPT=$ci_script"], $env, $this->system_env);
-
-            Log::debug(__FILE__, __LINE__, json_encode($env), [], Log::INFO);
-
-            $docker_container
-                ->setEnv($env)
-                ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
-                ->setEntrypoint(['/bin/sh', '-c'])
-                ->setLabels(['com.khs1994.ci.pipeline' => $unique_id])
-                ->setWorkingDir($work_dir);
-
-            $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
-
-            // docker.khs1994.com:1000/username/image:1.14.0
-
-            $image_array = explode(':', $image);
-
-            // image not include :
-
-            $tag = null;
-
-            if (1 !== count($image_array)) {
-                $tag = $image_array[count($image_array) - 1];
-            }
-
-            $docker_image->pull($image, $tag ?? 'latest');
-
-            $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
-
-            Log::debug(
-                __FILE__,
-                __LINE__,
-                'Run Container By Image '.$image.', Container Id is '.$container_id, [], Log::EMERGENCY
-            );
-
-            $this->docker_container_logs($docker_container, $container_id);
-        }
-    }
-
-    /**
      * @param string     $setup
      * @param string     $image
      * @param array|null $commands
@@ -497,7 +352,7 @@ class Client
      *
      * @throws Exception
      */
-    private function parseCommand(string $setup, string $image, ?array $commands)
+    public function parseCommand(string $setup, string $image, ?array $commands)
     {
         if (null === $commands) {
             return null;
@@ -538,7 +393,7 @@ class Client
      *
      * @throws Exception
      */
-    private function docker_container_logs(Container $docker_container, string $container_id)
+    public function docker_container_logs(Container $docker_container, string $container_id)
     {
         $redis = Cache::connect();
 
@@ -618,161 +473,6 @@ class Client
     }
 
     /**
-     * @param string $event_type
-     * @param string $repo_full_name
-     * @param string $workdir
-     * @param string $commit_id
-     * @param string $branch
-     *
-     * @return array
-     *
-     * @throws Exception
-     *
-     * @see https://github.com/drone-plugins/drone-git
-     */
-    private function getGitEnv(string $event_type,
-                               string $repo_full_name,
-                               string $workdir,
-                               string $commit_id,
-                               string $branch)
-    {
-        $git_url = Git::getUrl($this->git_type, $repo_full_name);
-
-        $git_env = null;
-
-        switch ($event_type) {
-            case CI::BUILD_EVENT_PUSH:
-                $git_env = array_merge([
-                    'DRONE_REMOTE_URL='.$git_url,
-                    'DRONE_WORKSPACE='.$workdir,
-                    'DRONE_BUILD_EVENT=push',
-                    'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF='.'refs/heads/'.$branch,
-                ], $this->git_config);
-
-                break;
-            case CI::BUILD_EVENT_PR:
-                $git_env = array_merge([
-                    'DRONE_REMOTE_URL='.$git_url,
-                    'DRONE_WORKSPACE='.$workdir,
-                    'DRONE_BUILD_EVENT=pull_request',
-                    'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF=refs/pull/'.$this->pull_id.'/head',
-                ], $this->git_config);
-
-                break;
-            case  CI::BUILD_EVENT_TAG:
-                $git_env = array_merge([
-                    'DRONE_REMOTE_URL='.$git_url,
-                    'DRONE_WORKSPACE='.$workdir,
-                    'DRONE_BUILD_EVENT=tag',
-                    'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF=refs/tags/'.$this->tag_name,
-                ], $this->git_config);
-
-                break;
-        }
-
-        return $git_env;
-    }
-
-    /**
-     * 运行 Git clone.
-     *
-     * @param array     $env
-     * @param           $work_dir
-     * @param           $unique_id
-     * @param Container $docker_container
-     *
-     * @throws Exception
-     */
-    private function runGit(array $env, $work_dir, $unique_id, Container $docker_container): void
-    {
-        $image = $this->git_image;
-
-        $this->git_image = 'plugins/git';
-
-        $this->git_config = [];
-
-        $docker_container
-            ->setEnv($env)
-            ->setLabels(['com.khs1994.ci.git' => $unique_id])
-            ->setHostConfig(["$unique_id:$work_dir"]);
-
-        $container_id = $docker_container->start($docker_container->create($image));
-
-        Log::debug(
-            __FILE__,
-            __LINE__,
-            'Run Git Clone Container By Image '.$image.', Container Id is '.$container_id, [], Log::EMERGENCY
-        );
-
-        $this->docker_container_logs($docker_container, $container_id);
-    }
-
-    /**
-     * 解析矩阵.
-     *
-     * @param array $matrix
-     *
-     * @return array
-     */
-    private function parseMatrix(array $matrix)
-    {
-        return ArrayHelper::combination($matrix);
-    }
-
-    /**
-     * 运行服务.
-     *
-     * @param array  $service
-     * @param string $unique_id
-     * @param array  $config
-     * @param Docker $docker
-     *
-     * @throws Exception
-     */
-    private function runService(?array $service, string $unique_id, ?array $config, Docker $docker): void
-    {
-        if (null === $service) {
-            return;
-        }
-
-        foreach ($service as $service_name => $array) {
-            $this->cancel();
-
-            $image = $array['image'];
-            $env = $array['environment'] ?? null;
-            $entrypoint = $array['entrypoint'] ?? null;
-            $command = $array['command'] ?? null;
-
-            $image = $this->parseImage($image, $config);
-
-            $docker_image = $docker->image;
-            $docker_container = $docker->container;
-
-            $tag = explode(':', $image)[1] ?? 'latest';
-
-            $docker_image->pull($image, $tag);
-
-            $container_id = $docker_container
-                ->setEnv($env)
-                ->setEntrypoint($entrypoint)
-                ->setHostConfig(null, $unique_id)
-                ->setLabels(['com.khs1994.ci.service' => $unique_id])
-                ->create($image, $service_name, $command);
-
-            $docker_container->start($container_id);
-
-            Log::debug(
-                __FILE__,
-                __LINE__,
-                "Run $service_name By Image $image, Container Id Is $container_id", [], Log::EMERGENCY
-            );
-        }
-    }
-
-    /**
      * Remove all Docker Resource.
      *
      * @param string $unique_id
@@ -839,7 +539,7 @@ class Client
      *
      * @throws Exception
      */
-    private function deleteContainerByLabel(Container $container, string $label): void
+    public function deleteContainerByLabel(Container $container, string $label): void
     {
         $output = $container->list(true, null, false, [
             'label' => $label,
@@ -889,7 +589,7 @@ class Client
      *
      * @return bool
      */
-    private static function checkString(string $pattern, string $subject)
+    public static function checkString(string $pattern, string $subject)
     {
         if (preg_match('#'.$pattern.'#', $subject)) {
             return true;

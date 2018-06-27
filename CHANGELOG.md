@@ -2,6 +2,10 @@
 
 ## v18.06.0
 
+### 2018/06/27
+
+* [ ] 根据 Issues & Pull Requests 生成 Changelog
+
 ### 2018/06/14
 
 * [ ] API 限流 5000/h

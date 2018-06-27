@@ -201,7 +201,7 @@ config:
     docker_registry:
       khs1994/wsl: khs1994-php/khsci
 
-  mirrors:
-    - git@git.coding.net:khs1994/khsci.git
-    - https://gitee.com/khs1994-php/khsci.git
-    - git@code.aliyun.com:khs1994-php/khsci.git
+mirrors:
+  - git@git.coding.net:khs1994/khsci.git
+  - https://gitee.com/khs1994-php/khsci.git
+  - git@code.aliyun.com:khs1994-php/khsci.git
