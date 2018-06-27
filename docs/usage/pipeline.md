@@ -50,6 +50,17 @@ pipeline:
       - vendor/bin/phpunit
 ```
 
+## shell
+
+default shell is `sh`
+
+```yaml
+pipeline:
+  php:
+    image: khs1994/php-fpm:7.2.5-alpine3.7
+    shell: bash
+```
+
 ## 构建条件
 
 还可以设置构建条件，通过 `when` 指令设置。

@@ -372,7 +372,7 @@ class Client
         for ($i = 0; $i < count($commands); ++$i) {
             $command = addslashes($commands[$i]);
 
-            $content .= 'echo $ '.str_replace('$', '\\\\$', $command).'\n\n';
+            $content .= 'echo "$ '.str_replace('$', '\\\\$', $command).'"\n\n';
 
             $content .= 'echo;echo\n\n';
 

@@ -44,6 +44,7 @@ class PipelineClient
             $event = $array['when']['event'] ?? null;
             $env = $array['environment'] ?? [];
             $status = $array['when']['status'] ?? null;
+            $shell = $array['shell'] ?? 'sh';
 
             if ($event) {
                 if (is_string($event)) {
@@ -82,14 +83,16 @@ class PipelineClient
 
             Log::debug(__FILE__, __LINE__, json_encode($env), [], Log::INFO);
 
+            $shell = '/bin/'.$shell;
+
             $docker_container
                 ->setEnv($env)
                 ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
-                ->setEntrypoint(['/bin/sh', '-c'])
+                ->setEntrypoint(["$shell", '-c'])
                 ->setLabels(['com.khs1994.ci.pipeline' => $unique_id])
                 ->setWorkingDir($work_dir);
 
-            $cmd = ['echo $CI_SCRIPT | base64 -d | /bin/sh -e'];
+            $cmd = ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'];
 
             // docker.khs1994.com:1000/username/image:1.14.0
 

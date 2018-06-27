@@ -33,6 +33,7 @@ pipeline:
 
   php:
     image: khs1994/php-fpm:${PHP_VERSION}
+    shell: bash
     pull: true
     environment:
       - CI_REDIS_HOST=redis
