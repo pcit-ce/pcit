@@ -35,9 +35,13 @@ use WeChat\WeChat;
  * @property Service\Issue\TimelineGitHubClient             $issue_timeline
  * @property Service\Organizations\GitHubClient             $orgs
  * @property Service\Repositories\CollaboratorsGitHubClient $repo_collaborators
+ * @property Service\Repositories\CommitsGitHubClient       $repo_commits
+ * @property Service\Repositories\CommunityGitHubClient     $repo_community
+ * @property Service\Repositories\ContentsGitHubClient      $repo_contents
+ * @property Service\Repositories\MergingGitHubClient       $repo_merging
+ * @property Service\Repositories\ReleasesGitHubClient      $repo_releases
  * @property Service\Repositories\StatusGitHubClient        $repo_status
  * @property Service\Repositories\WebhooksCodingClient      $repo_webhooks
- * @property Service\Repositories\ReleasesGitHubClient      $repo_releases
  * @property PHPMailer                                      $mail
  * @property Service\PullRequest\GitHubClient               $pull_request
  * @property Service\Webhooks\GitHubClient                  $webhooks

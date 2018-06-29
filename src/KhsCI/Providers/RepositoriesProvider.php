@@ -25,6 +25,30 @@ class RepositoriesProvider implements ServiceProviderInterface
             return new $class($app['curl'], $app['config']['api_url']);
         };
 
+        $pimple['repo_comments'] = function ($app) use ($namespace) {
+            $class = $namespace.'Comments'.$app->class_name;
+
+            return new $class($app->curl, $app->config['api_url']);
+        };
+
+        $pimple['repo_commits'] = function ($app) use ($namespace) {
+            $class = $namespace.'Commits'.$app->class_name;
+
+            return new $class($app->curl, $app->config['api_url']);
+        };
+
+        $pimple['repo_community'] = function ($app) use ($namespace) {
+            $class = $namespace.'Community'.$app->class_name;
+
+            return new $class($app->curl, $app->config['api_url']);
+        };
+
+        $pimple['repo_contents'] = function ($app) use ($namespace) {
+            $class = $namespace.'Contents'.$app->class_name;
+
+            return new $class($app->curl, $app->config['api_url']);
+        };
+
         $pimple['repo_status'] = function ($app) use ($namespace) {
             $class = $namespace.'Status'.$app->class_name;
 
