@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace KhsCI\Service\Deployment;
 
 use Exception;
-use KhsCI\Support\HTTP;
+use KhsCI\Service\CICommon;
 
 /**
  * 展示 CI 状态
@@ -14,36 +14,24 @@ use KhsCI\Support\HTTP;
  */
 class GitHubClient
 {
-    const API_URL = 'https://api.github.com';
-
-    public $username;
-
-    public $repo;
-
-    public $urlCommon;
-
-    public function __construct($username, $repo)
-    {
-        $this->username = $username;
-        $this->repo = $repo;
-        $this->urlCommon = [self::API_URL, 'repos', $this->username, $this->repo, 'deployments'];
-    }
+    use CICommon;
 
     /**
      * List deployments.
      *
-     * @param string $sha         The SHA that was recorded at creation time. Default: <code>none<code>
-     * @param string $ref         The name of the ref. This can be a branch, tag, or SHA. Default: <code>none<code>
-     * @param string $task        The name of the task for the deployment (e.g., <code>deploy<code> or
-     *                            <code>deploy:migrations<code>). Default: <code>none<code>
-     * @param string $environment The name of the environment that was deployed to (e.g., <code>staging<code> or
-     *                            <code>production<code>). Default: <code>none<code>
+     * @param string $repo_full_name
+     * @param string $sha            The SHA that was recorded at creation time. Default: <code>none<code>
+     * @param string $ref            The name of the ref. This can be a branch, tag, or SHA. Default: <code>none<code>
+     * @param string $task           The name of the task for the deployment (e.g., <code>deploy<code> or
+     *                               <code>deploy:migrations<code>). Default: <code>none<code>
+     * @param string $environment    The name of the environment that was deployed to (e.g., <code>staging<code> or
+     *                               <code>production<code>). Default: <code>none<code>
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public function list(string $sha, string $ref, string $task, string $environment)
+    public function list(string $repo_full_name, string $sha, string $ref, string $task, string $environment)
     {
         $queryParameters = http_build_query([
             'sha' => $sha,
@@ -52,32 +40,38 @@ class GitHubClient
             'environment' => $environment,
         ]);
 
-        $url = implode('/', $this->urlCommon);
+        $url = implode('/', [
+                $this->api_url, 'repos', $repo_full_name, 'deployments',
+            ]
+        );
 
-        return HTTP::get($url.'?'.$queryParameters, null);
+        return $this->curl->get($url.'?'.$queryParameters, null);
     }
 
     /**
+     * Get a single deployment.
+     *
+     * @param string $repo_full_name
      * @param string $id
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public function getSingleInfo(string $id)
+    public function getSingleInfo(string $repo_full_name, string $id)
     {
-        $urlCommon = $this->urlCommon;
+        $url = implode('/', [
+                $this->api_url, 'repos', $repo_full_name, 'deployments', $id,
+            ]
+        );
 
-        array_push($urlCommon, $id);
-
-        $url = implode('/', $urlCommon);
-
-        return HTTP::get($url);
+        return $this->curl->get($url);
     }
 
     /**
      * Create a deployment.
      *
+     * @param string      $repo_full_name
      * @param string      $ref
      * @param string      $task
      * @param bool        $auto_merge
@@ -90,7 +84,8 @@ class GitHubClient
      *
      * @throws Exception
      */
-    public function create(string $ref,
+    public function create(string $repo_full_name,
+                           string $ref,
                            string $task = 'deploy',
                            bool $auto_merge = true,
                            array $required_contexts = null,
@@ -114,32 +109,38 @@ class GitHubClient
 
         $array = array_filter($array);
 
-        $url = implode('/', $this->urlCommon);
+        $url = implode('/', [
+                $this->api_url, 'repos', $repo_full_name, 'deployments',
+            ]
+        );
 
-        HTTP::post($url, json_encode($array));
-    }
-
-    public function update(): void
-    {
+        $this->curl->post($url, json_encode($array));
     }
 
     /**
+     * List deployment statuses.
+     *
+     * @param string $repo_full_name
      * @param string $id
+     *
+     * @return mixed
      *
      * @throws Exception
      */
-    public function getStatus(string $id): void
+    public function getStatus(string $repo_full_name, string $id)
     {
-        $urlCommon = $this->urlCommon;
+        $url = implode('/', [
+                $this->api_url, 'repos', $repo_full_name, 'deployments', $id, 'statuses',
+            ]
+        );
 
-        array_push($urlCommon, $id, 'statuses');
-
-        $url = implode('/', $urlCommon);
-
-        HTTP::get($url);
+        return $this->curl->get($url);
     }
 
     /**
+     * Get a single deployment status.
+     *
+     * @param string $repo_full_name
      * @param string $id
      * @param string $statusId
      *
@@ -147,33 +148,51 @@ class GitHubClient
      *
      * @throws Exception
      */
-    public function getSingleStatus(string $id, string $statusId)
+    public function getSingleStatus(string $repo_full_name, string $id, string $statusId)
     {
-        $urlCommon = $this->urlCommon;
+        $url = implode('/', [
+                $this->api_url, 'repos', $repo_full_name, 'deployments', $id, 'statuses', $statusId,
+            ]
+        );
 
-        array_push($urlCommon, $id, 'statuses', $statusId);
-
-        $url = implode('/', $urlCommon);
-
-        return HTTP::get($url);
+        return $this->curl->get($url);
     }
 
     /**
+     * Create a deployment status.
+     *
+     * 201
+     *
+     * @param string      $repo_full_name  repo full name
      * @param string      $id
-     * @param string      $state
-     * @param string|null $target_url
+     * @param string      $state           error, failure, inactive, pending, or success
      * @param string|null $log_url
      * @param string|null $description
      * @param string|null $environment_url
      * @param bool        $auto_inactive
+     *
+     * @return mixed
+     *
+     * @throws Exception
      */
-    public function createStatus(string $id,
+    public function createStatus(string $repo_full_name,
+                                 string $id,
                                  string $state,
-                                 string $target_url = null,
                                  string $log_url = null,
                                  string $description = null,
                                  string $environment_url = null,
-                                 bool $auto_inactive = true): void
+                                 bool $auto_inactive = true)
     {
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/deployments/'.$id.'/statuses';
+
+        $data = [
+            'state' => $state,
+            'log_url' => $log_url,
+            'description' => $description,
+            'environment_url' => $environment_url,
+            'auto_inactive' => $auto_inactive,
+        ];
+
+        return $this->curl->post($url, json_encode(array_filter($data)), ['Accept' => 'application/vnd.github.ant-man-preview+json']);
     }
 }

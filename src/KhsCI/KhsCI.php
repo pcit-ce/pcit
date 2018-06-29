@@ -23,6 +23,7 @@ use WeChat\WeChat;
  *
  * $a = $container['a'];
  *
+ * @property Service\Deployment\GitHubClient                $deployment
  * @property Service\GitHubApp\Client                       $github_apps_installations
  * @property Service\OAuth\GitHubClient                     $oauth
  * @property Service\Issue\AssigneesGitHubClient            $issue_assignees
@@ -58,6 +59,7 @@ class KhsCI extends Container
         Providers\BuildProvider::class,
         Providers\ChecksProvider::class,
         Providers\CurlProvider::class,
+        Providers\DeploymentProvider::class,
         Providers\DockerProvider::class,
         Providers\GitHubAppProvider::class,
         Providers\IssueProvider::class,
