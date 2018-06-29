@@ -24,6 +24,8 @@ use WeChat\WeChat;
  * $a = $container['a'];
  *
  * @property Service\Deployment\GitHubClient                $deployment
+ * @property Service\Gist\GitHubClient                      $gist
+ * @property Service\Gist\CommentsGitHubClient              $gist_comments
  * @property Service\GitHubApp\Client                       $github_apps_installations
  * @property Service\OAuth\GitHubClient                     $oauth
  * @property Service\Issue\AssigneesGitHubClient            $issue_assignees
@@ -65,6 +67,7 @@ class KhsCI extends Container
         Providers\CurlProvider::class,
         Providers\DeploymentProvider::class,
         Providers\DockerProvider::class,
+        Providers\GistProvider::class,
         Providers\GitHubAppProvider::class,
         Providers\IssueProvider::class,
         Providers\OAuthProvider::class,
