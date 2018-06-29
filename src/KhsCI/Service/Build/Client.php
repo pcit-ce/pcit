@@ -6,6 +6,7 @@ namespace KhsCI\Service\Build;
 
 use App\Build as BuildDB;
 use Docker\Container\Container;
+use Docker\Docker;
 use Exception;
 use KhsCI\CIException;
 use KhsCI\KhsCI;
@@ -44,6 +45,14 @@ class Client
 
     private $system_env = [];
 
+    private $pipeline;
+
+    private $workdir;
+    /**
+     * @var Docker
+     */
+    private $docker;
+
     /**
      * @param int         $build_key_id
      * @param string      $git_type
@@ -60,6 +69,7 @@ class Client
      * @param array       $env_vars
      *
      * @throws CIException
+     * @throws Exception
      */
     public function __invoke($build_key_id,
                              string $git_type,
@@ -109,6 +119,14 @@ class Client
 
             $this->run();
         } catch (\Throwable $e) {
+            switch ($e->getMessage()) {
+                case CI::BUILD_STATUS_PASSED:
+                    $this->success();
+                    break;
+                default:
+                    $this->failure();
+            }
+
             throw new CIException(
                 $this->unique_id,
                 $this->commit_id,
@@ -190,7 +208,7 @@ class Client
         $git = $yaml_obj->clone['git'] ?? null;
         // $cache = $yaml_obj->cache ?? null;
         $workspace = $yaml_obj->workspace ?? null;
-        $pipeline = $yaml_obj->pipeline ?? null;
+        $this->pipeline = $pipeline = $yaml_obj->pipeline ?? null;
         $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->matrix ?? null;
         // $config = $yaml_obj->config ?? null;
@@ -214,7 +232,7 @@ class Client
         }
 
         // --workdir.
-        $workdir = $base_path.'/'.$path;
+        $this->workdir = $workdir = $base_path.'/'.$path;
 
         $system_env = [
             'CI=true',
@@ -324,6 +342,40 @@ class Client
         // 后续根据 throw 出的异常执行对应的操作
 
         throw new Exception(CI::BUILD_STATUS_PASSED);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function success(): void
+    {
+        PipelineClient::runPipeline($this->pipeline,
+            null,
+            $this->event_type,
+            $this->system_env,
+            $this->workdir,
+            $this->unique_id,
+            $this->docker->container,
+            $this->docker->image,
+            $this->build_key_id, true
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function failure(): void
+    {
+        PipelineClient::runPipeline($this->pipeline,
+            null,
+            $this->event_type,
+            $this->system_env,
+            $this->workdir,
+            $this->unique_id,
+            $this->docker->container,
+            $this->docker->image,
+            $this->build_key_id, false, true
+        );
     }
 
     /**

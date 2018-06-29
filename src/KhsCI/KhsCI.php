@@ -36,6 +36,7 @@ use WeChat\WeChat;
  * @property Service\Repositories\CollaboratorsGitHubClient $repo_collaborators
  * @property Service\Repositories\StatusGitHubClient        $repo_status
  * @property Service\Repositories\WebhooksCodingClient      $repo_webhooks
+ * @property Service\Repositories\ReleasesGitHubClient      $repo_releases
  * @property PHPMailer                                      $mail
  * @property Service\PullRequest\GitHubClient               $pull_request
  * @property Service\Webhooks\GitHubClient                  $webhooks
@@ -52,21 +53,19 @@ use WeChat\WeChat;
  */
 class KhsCI extends Container
 {
-    /**
-     * 服务提供器数组.
-     */
+    // 服务提供器数组.
     protected $providers = [
-        Providers\CurlProvider::class,
+        Providers\BuildProvider::class,
         Providers\ChecksProvider::class,
+        Providers\CurlProvider::class,
         Providers\DockerProvider::class,
         Providers\GitHubAppProvider::class,
         Providers\IssueProvider::class,
         Providers\OAuthProvider::class,
-        Providers\BuildProvider::class,
         Providers\OrganizationsProvider::class,
-        Providers\RepositoriesProvider::class,
         Providers\PHPMailerProvider::class,
         Providers\PullRequestProvider::class,
+        Providers\RepositoriesProvider::class,
         Providers\TencentAIProvider::class,
         Providers\UserProvider::class,
         Providers\WebhooksProvider::class,
@@ -78,9 +77,7 @@ class KhsCI extends Container
      */
     private function registerProviders(): void
     {
-        /*
-         * 取得服务提供器数组.
-         */
+        // 取得服务提供器数组.
         foreach ($this->providers as $k) {
             $this->register(new $k());
         }
@@ -99,7 +96,6 @@ class KhsCI extends Container
         parent::__construct($config);
 
         // 在容器中注入类
-
         $this['git_type'] = $git_type;
 
         $this['class_name'] = Git::getClassName($git_type).'Client';
@@ -134,9 +130,7 @@ class KhsCI extends Container
 
         $this['curl_timeout'] = 100;
 
-        /*
-         * 注册服务提供器
-         */
+        // 注册服务提供器
         $this->registerProviders();
     }
 
@@ -151,9 +145,7 @@ class KhsCI extends Container
      */
     public function __get($name)
     {
-        /*
-         * $example->调用不存在属性时
-         */
+        // $example->调用不存在属性时
         if (isset($this[$name])) {
             return $this[$name];
         }

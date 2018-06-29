@@ -108,6 +108,7 @@ pipeline:
     image: khs1994/tencent_cloud_cos:v4
     when:
       status: success
+      event: tag
     file:
       README.md: khsci/tencent_cloud_cos_file_name_${KHSCI_TAG}
       Dockerfile: khsci/tencent_cloud_cos_file_name2_${KHSCI_TAG}

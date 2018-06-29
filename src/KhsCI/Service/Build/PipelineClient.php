@@ -21,6 +21,9 @@ class PipelineClient
      * @param Container $docker_container
      * @param Image     $docker_image
      * @param int       $build_key_id
+     * @param bool      $success
+     * @param bool      $failure
+     * @param bool      $changed
      *
      * @throws Exception
      */
@@ -32,7 +35,10 @@ class PipelineClient
                                        string $unique_id,
                                        Container $docker_container,
                                        Image $docker_image,
-                                       int $build_key_id): void
+                                       int $build_key_id,
+                                       bool $success = false,
+                                       bool $failure = false,
+                                       bool $changed = false): void
     {
         $client = new Client();
 
@@ -45,6 +51,12 @@ class PipelineClient
             $env = $array['environment'] ?? [];
             $status = $array['when']['status'] ?? null;
             $shell = $array['shell'] ?? 'sh';
+
+            if ($success or $failure or $changed) {
+                if (!$status) {
+                    continue;
+                }
+            }
 
             if ($event) {
                 if (is_string($event)) {
@@ -68,7 +80,23 @@ class PipelineClient
             }
 
             if ($status) {
-                continue;
+                switch ($status) {
+                    case 'success':
+                        if (!$success) {
+                            continue;
+                        }
+                        break;
+                    case 'failure':
+                        if (!$failure) {
+                            continue;
+                        }
+                        break;
+                    case 'changed':
+                        if (!$changed) {
+                            continue;
+                        }
+                        break;
+                }
             }
 
             if ('ci_docker_build' === $image) {

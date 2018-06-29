@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace KhsCI\Providers;
 
-use KhsCI\Service\Repositories\Collaborators;
-use KhsCI\Service\Repositories\Releases;
-use KhsCI\Service\Repositories\Status;
-use KhsCI\Service\Repositories\Webhooks;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -15,20 +11,30 @@ class RepositoriesProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
-        $pimple['repo_collaborators'] = function ($app) {
-            return new Collaborators($app['curl'], $app['config']['api_url']);
+        $namespace = 'KhsCI\\Service\\Repositories\\';
+
+        $pimple['repo_collaborators'] = function ($app) use ($namespace) {
+            $class = $namespace.'Collaborators'.$app->class_name;
+
+            return new $class($app['curl'], $app['config']['api_url']);
         };
 
-        $pimple['repo_status'] = function ($app) {
-            return new Status($app['curl'], $app['config']['api_url']);
+        $pimple['repo_status'] = function ($app) use ($namespace) {
+            $class = $namespace.'Status'.$app->class_name;
+
+            return new $class($app['curl'], $app['config']['api_url']);
         };
 
-        $pimple['repo_webhooks'] = function ($app) {
-            return new Webhooks($app['curl'], $app['config']['api_url']);
+        $pimple['repo_webhooks'] = function ($app) use ($namespace) {
+            $class = $namespace.'Webhooks'.$app->class_name;
+
+            return new $class($app['curl'], $app['config']['api_url']);
         };
 
-        $pimple['repo_releases'] = function ($app) {
-            return new Releases($app['curl'], $app['config']['api_url']);
+        $pimple['repo_releases'] = function ($app) use ($namespace) {
+            $class = $namespace.'Releases'.$app->class_name;
+
+            return new $class($app['curl'], $app['config']['api_url']);
         };
     }
 }
