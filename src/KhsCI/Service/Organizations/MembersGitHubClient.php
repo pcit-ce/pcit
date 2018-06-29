@@ -73,4 +73,19 @@ class MembersGitHubClient
     public function editYourMembership(): void
     {
     }
+
+    public function listOutsideCollaborators()
+    {
+
+    }
+
+    public function removeOutsideCollaborators()
+    {
+
+    }
+
+    public function ConvertMemberToOutsideCollaborator()
+    {
+
+    }
 }

@@ -1,12 +1,12 @@
-FROM khs1994/php-fpm:7.2.6-alpine3.7
+FROM khs1994/php-fpm:7.2.7-alpine3.7
 
-ENV COS_REGION=null \
-    COS_APP_ID=null \
-    COS_SECRET_ID=null \
-    COS_SECRET_KEY=null \
-    COS_BUCKET=null \
-    COS_LABEL=null \
-    COS_FILE=null
+ENV COS_V4_REGION=null \
+    COS_V4_APP_ID=null \
+    COS_V4_SECRET_ID=null \
+    COS_V4_SECRET_KEY=null \
+    COS_V4_BUCKET=null \
+    COS_V4_LABEL=null \
+    COS_V4_FILE=null
 
 WORKDIR /khsci
 

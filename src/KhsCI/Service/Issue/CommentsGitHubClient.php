@@ -19,6 +19,7 @@ class CommentsGitHubClient
     private $curl;
 
     private $api_url;
+
     /**
      * @var TencentAI
      */

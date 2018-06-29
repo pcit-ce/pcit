@@ -114,11 +114,11 @@ pipeline:
       Dockerfile: khsci/tencent_cloud_cos_file_name2_${KHSCI_TAG}
     # please set env by khsci env_var feature,don't set secret in .khsci.yml
     # environment:
-      # - COS_REGION=x
-      # - COS_APP_ID=x
-      # - COS_SECRET_ID=x
-      # - COS_SECRET_KEY=x
-      # - COS_BUCKET=x
+      # - COS_V4_REGION=x
+      # - COS_V4_APP_ID=x
+      # - COS_V4_SECRET_ID=x
+      # - COS_V4_SECRET_KEY=x
+      # - COS_V4_BUCKET=x
 
   #
   # This is failure after demo

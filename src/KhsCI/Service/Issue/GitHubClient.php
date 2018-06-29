@@ -16,6 +16,9 @@ class GitHubClient
      */
     private $curl;
 
+    /**
+     * @var string
+     */
     private $api_url;
 
     private $header = [
@@ -39,10 +42,14 @@ class GitHubClient
     /**
      * List all issues assigned to the authenticated user across all visible repositories including owned repositories,
      * member repositories, and organization repositories:.
+     *
+     * @throws Exception
      */
-    public function list(): void
+    public function list()
     {
         $url = $this->api_url.'/issues';
+
+        return $this->curl->get($url);
     }
 
     /**
