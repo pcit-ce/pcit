@@ -28,6 +28,7 @@ use WeChat\WeChat;
  * @property Service\Activity\NotificationsGitHubClient     $activity_notifications
  * @property Service\Activity\StarringGitHubClient          $activity_starring
  * @property Service\Activity\WatchingGitHubClient          $activity_watching
+ * @property Service\Data\GitHubClient                      $data
  * @property Service\Deployment\GitHubClient                $deployment
  * @property Service\Gist\GitHubClient                      $gist
  * @property Service\Gist\CommentsGitHubClient              $gist_comments
@@ -71,6 +72,7 @@ class KhsCI extends Container
         Providers\BuildProvider::class,
         Providers\ChecksProvider::class,
         Providers\CurlProvider::class,
+        Providers\DataProvider::class,
         Providers\DeploymentProvider::class,
         Providers\DockerProvider::class,
         Providers\GistProvider::class,
