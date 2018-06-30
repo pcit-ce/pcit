@@ -40,6 +40,7 @@ use WeChat\WeChat;
  * @property Service\Issue\GitHubClient                     $issue
  * @property Service\Issue\LabelsGitHubClient               $issue_labels
  * @property Service\Issue\MilestonesGitHubClient           $issue_milestones
+ * @property Service\Miscellaneous\GitHubClient             $miscellaneous
  * @property Service\Organizations\GitHubClient             $orgs
  * @property Service\Repositories\CollaboratorsGitHubClient $repo_collaborators
  * @property Service\Repositories\CommitsGitHubClient       $repo_commits
@@ -67,7 +68,7 @@ class KhsCI extends Container
 {
     // 服务提供器数组.
     protected $providers = [
-        Providers\ActivityProvider::class.
+        Providers\ActivityProvider::class,
         Providers\BuildProvider::class,
         Providers\ChecksProvider::class,
         Providers\CurlProvider::class,
@@ -77,6 +78,7 @@ class KhsCI extends Container
         Providers\GistProvider::class,
         Providers\GitHubAppProvider::class,
         Providers\IssueProvider::class,
+        Providers\MiscellaneousProvider::class,
         Providers\OAuthProvider::class,
         Providers\OrganizationsProvider::class,
         Providers\PHPMailerProvider::class,
