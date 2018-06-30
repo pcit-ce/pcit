@@ -214,4 +214,19 @@ class GitHubClient
             throw new Exception('Unlock Issue Error', $http_return_code);
         }
     }
+
+    /**
+     * @param string $repo_full_name
+     * @param int    $issue_number
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function timeline(string $repo_full_name, int $issue_number)
+    {
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/timeline';
+
+        return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.mockingbird-preview']);
+    }
 }

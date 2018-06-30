@@ -46,11 +46,5 @@ class IssueProvider implements ServiceProviderInterface
 
             return new $class();
         };
-
-        $pimple['issue_timeline'] = function ($app) {
-            $class = 'KhsCI\Service\Issue\Timeline'.$app->class_name;
-
-            return new $class($app['curl'], $app['config']['api_url']);
-        };
     }
 }
