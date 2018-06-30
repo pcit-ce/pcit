@@ -119,23 +119,19 @@ class GitHubClient
         return $this->curl->get($url);
     }
 
-    public function listBlockedUsers()
+    public function listBlockedUsers(): void
     {
-
     }
 
-    public function userIsBlocked()
+    public function userIsBlocked(): void
     {
-
     }
 
-    public function blockUser()
+    public function blockUser(): void
     {
-
     }
 
-    public function UnblockUser()
+    public function UnblockUser(): void
     {
-
     }
 }

@@ -1,0 +1,107 @@
+<?php
+
+declare(strict_types=1);
+
+namespace KhsCI\Service\Activity;
+
+use KhsCI\Service\CICommon;
+
+class StarringGitHubClient
+{
+    use CICommon;
+
+    /**
+     * List Stargazers.
+     *
+     * @param string $repo_full_name
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function list(string $repo_full_name)
+    {
+        return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/stargazers');
+    }
+
+    /**
+     * List repositories being starred.
+     *
+     * @param string $username  created or updated
+     * @param string $sort
+     * @param string $direction asc or desc
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function listRepositoriesBeingStarred(string $username = null, string $sort = 'created', string $direction = 'desc')
+    {
+        $data = [
+            'sort' => $sort,
+            'direction' => $direction,
+        ];
+
+        if ($username) {
+            return $this->curl->get($this->api_url.'/users/'.$username.'/starred?'.http_build_query($data));
+        }
+
+        return $this->curl->get($this->api_url.'/user/starred?'.http_build_query($data));
+    }
+
+    /**
+     * Check if you are starring a repository.
+     *
+     * 204 404
+     *
+     * @param string $repo_full_name
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public function checkStarringRepository(string $repo_full_name)
+    {
+        $this->curl->get($this->api_url.'/user/starred/'.$repo_full_name);
+
+        $http_return_code = $this->curl->getCode();
+
+        if (204 === $http_return_code) {
+            return true;
+        }
+
+        if (404 === $http_return_code) {
+            return false;
+        }
+
+        throw new \Exception('Error', $http_return_code);
+    }
+
+    /**
+     * Star a repository.
+     *
+     * 204
+     *
+     * @param string $repo_full_name
+     *
+     * @throws \Exception
+     */
+    public function star(string $repo_full_name): void
+    {
+        $this->curl->put($this->api_url.'/user/starred/'.$repo_full_name);
+    }
+
+    /**
+     * Unstar a repository.
+     *
+     * 204
+     *
+     * @param string $repo_full_name
+     *
+     * @throws \Exception
+     */
+    public function unstar(string $repo_full_name): void
+    {
+        $this->curl->delete($this->api_url.'/user/starred/'.$repo_full_name);
+    }
+}

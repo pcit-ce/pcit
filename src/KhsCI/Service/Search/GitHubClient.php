@@ -6,38 +6,31 @@ namespace KhsCI\Service\Search;
 
 class GitHubClient
 {
-    public function repositories()
+    public function repositories(): void
     {
-
     }
 
-    public function commits()
+    public function commits(): void
     {
-
     }
 
-    public function code()
+    public function code(): void
     {
-
     }
 
-    public function issues()
+    public function issues(): void
     {
-
     }
 
-    public function users()
+    public function users(): void
     {
-
     }
 
-    public function topics()
+    public function topics(): void
     {
-
     }
 
-    public function labels()
+    public function labels(): void
     {
-
     }
 }

@@ -10,82 +10,67 @@ class GiteeClient
 {
     use CICommon;
 
-    public function getBlob()
-    {
-
-    }
-
-    public function createBlob()
-    {
-
-    }
-
-    public function getCommit()
-    {
-
-    }
-
-    public function createCommit()
-    {
-
-    }
-
-    public function commitSignatureVerification()
-    {
-
-    }
-
-    public function getReference()
-    {
-
-    }
-
-    public function allReference()
-    {
-
-    }
-
-    public function createRerence()
-    {
-
-    }
-
-    public function updateReference()
+    public function getBlob(): void
     {
     }
 
-    public function deleteReference()
+    public function createBlob(): void
     {
-
     }
 
-    public function getTag()
+    public function getCommit(): void
     {
-
     }
 
-    public function createTag()
+    public function createCommit(): void
     {
-
     }
 
-    public function TagSignatureVerification()
+    public function commitSignatureVerification(): void
     {
-
     }
 
-    public function getTree()
+    public function getReference(): void
     {
-
     }
 
-    public function getTreeRecursively()
+    public function allReference(): void
     {
-
     }
 
-    public function createTree()
+    public function createRerence(): void
     {
+    }
 
+    public function updateReference(): void
+    {
+    }
+
+    public function deleteReference(): void
+    {
+    }
+
+    public function getTag(): void
+    {
+    }
+
+    public function createTag(): void
+    {
+    }
+
+    public function TagSignatureVerification(): void
+    {
+    }
+
+    public function getTree(): void
+    {
+    }
+
+    public function getTreeRecursively(): void
+    {
+    }
+
+    public function createTree(): void
+    {
     }
 }

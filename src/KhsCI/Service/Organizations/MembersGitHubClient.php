@@ -74,18 +74,15 @@ class MembersGitHubClient
     {
     }
 
-    public function listOutsideCollaborators()
+    public function listOutsideCollaborators(): void
     {
-
     }
 
-    public function removeOutsideCollaborators()
+    public function removeOutsideCollaborators(): void
     {
-
     }
 
-    public function ConvertMemberToOutsideCollaborator()
+    public function ConvertMemberToOutsideCollaborator(): void
     {
-
     }
 }

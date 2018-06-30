@@ -23,6 +23,11 @@ use WeChat\WeChat;
  *
  * $a = $container['a'];
  *
+ * @property Service\Activity\EventsGitHubClient            $activity_events
+ * @property Service\Activity\FeedsGitHubClient             $activity_feeds
+ * @property Service\Activity\NotificationsGitHubClient     $activity_notifications
+ * @property Service\Activity\StarringGitHubClient          $activity_starring
+ * @property Service\Activity\WatchingGitHubClient          $activity_watching
  * @property Service\Deployment\GitHubClient                $deployment
  * @property Service\Gist\GitHubClient                      $gist
  * @property Service\Gist\CommentsGitHubClient              $gist_comments
@@ -62,6 +67,7 @@ class KhsCI extends Container
 {
     // 服务提供器数组.
     protected $providers = [
+        Providers\ActivityProvider::class.
         Providers\BuildProvider::class,
         Providers\ChecksProvider::class,
         Providers\CurlProvider::class,
