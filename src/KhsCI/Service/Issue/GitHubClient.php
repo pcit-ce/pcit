@@ -81,6 +81,8 @@ class GitHubClient
     }
 
     /**
+     * Create an issue.
+     *
      * @param string $repo_full_name
      * @param string $title
      * @param string $body
@@ -119,6 +121,8 @@ class GitHubClient
     }
 
     /**
+     * Edit an issue.
+     *
      * @param string $repo_full_name repo full name
      * @param int    $issue_number
      * @param string $title          issue title
@@ -162,6 +166,8 @@ class GitHubClient
     }
 
     /**
+     * Lock an issue.
+     *
      * 204.
      *
      * @param string $repo_full_name
@@ -195,6 +201,8 @@ class GitHubClient
     }
 
     /**
+     * Unlock an issue.
+     *
      * @param string $repo_full_name
      * @param int    $issue_number
      *

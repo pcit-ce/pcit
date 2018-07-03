@@ -28,7 +28,7 @@ class GitClient
      *
      * @see https://github.com/drone-plugins/drone-git
      */
-    public static function runGit(array $git,
+    public static function runGit(?array $git,
                                   string $git_type,
                                   string $event_type,
                                   string $repo_full_name,

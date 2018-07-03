@@ -227,7 +227,7 @@ class LabelsGitHubClient
      *
      * @throws Exception
      */
-    public function getLabelsForEveryIssueInAMilestone(string $repo_full_name, int $milestones_number)
+    public function getLabelsForEveryIssueInMilestone(string $repo_full_name, int $milestones_number)
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/milestones/'.$milestones_number.'/labels';
 

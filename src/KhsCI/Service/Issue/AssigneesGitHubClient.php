@@ -37,6 +37,8 @@ class AssigneesGitHubClient
     }
 
     /**
+     * List assignees.
+     *
      * @param string $repo_full_name
      *
      * @return mixed
@@ -51,6 +53,8 @@ class AssigneesGitHubClient
     }
 
     /**
+     * Check assignee.
+     *
      * 204 404.
      *
      * @param string $repo_full_name

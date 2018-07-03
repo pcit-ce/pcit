@@ -1,4 +1,4 @@
-# KhsCI Plugin Tencent Cloud COS V5
+# KhsCI Plugin -- Tencent Cloud COS V5
 
 ## 变量
 

@@ -12,7 +12,7 @@ class DataProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['data'] = function ($app) {
-            $class = 'KhsCI\\Service\\Data'.$app->class_name;
+            $class = 'KhsCI\\Service\\Data\\'.$app->class_name;
 
             return new $class($app->curl, $app->config['api_url']);
         };

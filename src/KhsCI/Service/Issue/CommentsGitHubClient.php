@@ -264,6 +264,8 @@ EOF;
     }
 
     /**
+     * Edit a comment.
+     *
      * @param string $repo_full_name
      * @param int    $comment_id
      * @param string $body
@@ -290,6 +292,8 @@ EOF;
     }
 
     /**
+     * Delete a comment.
+     *
      * 204.
      *
      * @param string $repo_full_name

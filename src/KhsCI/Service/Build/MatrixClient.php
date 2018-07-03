@@ -15,7 +15,7 @@ class MatrixClient
      *
      * @return array
      */
-    public static function parseMatrix(array $matrix)
+    public static function parseMatrix(?array $matrix)
     {
         return ArrayHelper::combination($matrix);
     }

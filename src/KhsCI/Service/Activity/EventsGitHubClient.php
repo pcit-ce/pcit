@@ -51,6 +51,8 @@ class EventsGitHubClient
     }
 
     /**
+     * List public events for a network of repositories.
+     *
      * @param string $repo_full_name
      *
      * @return mixed

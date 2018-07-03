@@ -120,6 +120,17 @@ pipeline:
       # - COS_V4_SECRET_KEY=x
       # - COS_V4_BUCKET=x
 
+  deploy:
+    image: khsci/github_releases
+    when:
+      status: success
+      event: tag
+    # environment:
+      # - GITHUB_TOKEN=x
+    file:
+      - "CHANGELOG.md"
+      - "ROADMAP.md"
+
   #
   # This is failure after demo
   #

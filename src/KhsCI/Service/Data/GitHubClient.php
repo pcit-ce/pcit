@@ -28,9 +28,11 @@ class GitHubClient
     /**
      * Create a blob.
      *
+     * 201
+     *
      * @param string $repo_full_name repo full name
      * @param string $content        the new blob's content
-     * @param string $encoding       utf-8 base64
+     * @param string $encoding       utf-8 or base64
      *
      * @throws \Exception
      */
@@ -144,7 +146,7 @@ class GitHubClient
      *
      * @throws \Exception
      */
-    public function allRef(string $repo_full_name, bool $tags)
+    public function allRef(string $repo_full_name, bool $tags = false)
     {
         if ($tags) {
             return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/git/refs/tags');
@@ -159,7 +161,7 @@ class GitHubClient
      * 201
      *
      * @param string $repo_full_name repo full name
-     * @param string $ref            refs/heads/master
+     * @param string $ref            heads/master
      * @param string $sha
      *
      * @return mixed
@@ -169,7 +171,7 @@ class GitHubClient
     public function createRef(string $repo_full_name, string $ref, string $sha)
     {
         $data = [
-            'ref' => $ref,
+            'ref' => 'refs/'.$ref,
             'sha' => $sha,
         ];
 

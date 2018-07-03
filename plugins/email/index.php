@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 use PHPMailer\PHPMailer\PHPMailer;
 
 require __DIR__.'/vendor/autoload.php';

@@ -26,6 +26,8 @@ class WatchingGitHubClient
     }
 
     /**
+     * List repositories being watched.
+     *
      * @param string|null $username
      *
      * @return mixed
