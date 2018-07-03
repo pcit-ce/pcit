@@ -276,67 +276,307 @@ class GitHubClient
         throw new Exception($output, $http_return_code);
     }
 
-    public function listReviews(): void
+    /**
+     * List reviews on a pull request.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function listReviews(string $repo_full_name, int $pull_number)
     {
+        return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/reviews');
     }
 
-    public function getReview(): void
+    /**
+     * Get a single review.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param int    $review_id
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function getReview(string $repo_full_name, int $pull_number, int $review_id)
     {
+        return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/reviews/'.$review_id);
     }
 
-    public function deletePendingReview(): void
+    /**
+     * Delete a pending review.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param int    $review_id
+     *
+     * @throws Exception
+     */
+    public function deletePendingReview(string $repo_full_name, int $pull_number, int $review_id): void
     {
+        $this->curl->delete($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/reviews/'.$review_id);
     }
 
-    public function getCommentsForReview(): void
+    /**
+     * Get comments for a single review.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param int    $review_id
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function getCommentsForReview(string $repo_full_name, int $pull_number, int $review_id)
     {
+        return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/reviews/'.$review_id.'/comments');
     }
 
-    public function createReview(): void
+    /**
+     * Create a pull request review.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param string $commit_id
+     * @param string $body
+     * @param string $event
+     * @param array  $comments       [ 'path'=>$path,'position'=>$position,'body'=>$comments_body ]
+     *
+     * @throws Exception
+     */
+    public function createReview(string $repo_full_name, int $pull_number, string $commit_id, string $body, string $event, array $comments): void
     {
+        $data = [
+            'commit_id' => $commit_id,
+            'body' => $body,
+            'event' => $event,
+            'comments' => $comments,
+        ];
+
+        $this->curl->post($this->api_url.'/repos/'.$repo_full_name, '/pulls/'.$pull_number.'/reviews', json_encode($data));
     }
 
-    public function submitReview(): void
+    /**
+     * Submit a pull request review.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param int    $review_id
+     * @param string $body
+     * @param string $event
+     *
+     * @throws Exception
+     */
+    public function submitReview(string $repo_full_name, int $pull_number, int $review_id, string $body, string $event): void
     {
+        $data = [
+            'body' => $body,
+            'event' => $event,
+        ];
+
+        $this->curl->post($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/reviews/'.$review_id.'/events', json_encode($data));
     }
 
-    public function dismissReview(): void
+    /**
+     * Dismiss a pull request review.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param int    $review_id
+     * @param string $message
+     *
+     * @throws Exception
+     */
+    public function dismissReview(string $repo_full_name, int $pull_number, int $review_id, string $message): void
     {
+        $this->curl->put($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/reviews/'.$review_id.'/dismissals', json_encode([
+                    'message' => $message,
+                ]
+            )
+        );
     }
 
-    public function listComments(): void
+    /**
+     * List comments on a pull request.
+     *
+     * @param string $repo_full_name repo full name
+     * @param int    $pull_number
+     * @param string $sort           created or updated
+     * @param string $direction      asc or desc
+     * @param string $since
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function listComments(string $repo_full_name, int $pull_number, string $sort = 'created', ?string $direction, ?string $since)
     {
+        return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/comments?'.http_build_query([
+                    'sort' => $sort,
+                    'direction' => $direction,
+                    'since' => $since,
+                ]
+            )
+        );
     }
 
-    public function ListCommentsInRepository(): void
+    /**
+     * List comments in a repository.
+     *
+     * @param string $repo_full_name repo full name
+     * @param string $sort           created or updated
+     * @param string $direction      asc or desc
+     * @param string $since
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function ListCommentsInRepository(string $repo_full_name, string $sort, string $direction, string $since)
     {
+        return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/comments?'.http_build_query([
+                    'sort' => $sort,
+                    'direction' => $direction,
+                    'since' => $since,
+                ]
+            )
+        );
     }
 
-    public function getComment(): void
+    /**
+     * Get a single comment.
+     *
+     * @param string $repo_full_name
+     * @param int    $comment_id
+     *
+     * @return mixed
+     *
+     * @throws Exception
+     */
+    public function getComment(string $repo_full_name, int $comment_id)
     {
+        return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/comments/'.$comment_id);
     }
 
-    public function createComment(): void
+    /**
+     * Create a comment.
+     *
+     * @param string   $repo_full_name
+     * @param int      $pull_number
+     * @param string   $body
+     * @param string   $commit_id
+     * @param string   $path
+     * @param string   $position
+     * @param int|null $in_reply_to
+     *
+     * @throws Exception
+     */
+    public function createComment(string $repo_full_name,
+                                  int $pull_number,
+                                  string $body,
+                                  string $commit_id,
+                                  string $path,
+                                  string $position,
+                                  ?int $in_reply_to): void
     {
+        $data = [
+            'body' => $body,
+            'commit_id' => $commit_id,
+            'path' => $path,
+            'position' => $position,
+            'in_reply_to' => $in_reply_to,
+        ];
+
+        $this->curl->post($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/comments', json_encode($data));
     }
 
-    public function editComment(): void
+    /**
+     * Edit a comment.
+     *
+     * @param string $repo_full_name
+     * @param int    $comment_id
+     * @param string $body
+     *
+     * @throws Exception
+     */
+    public function editComment(string $repo_full_name, int $comment_id, string $body): void
     {
+        $this->curl->patch($this->api_url.'/repos/'.$repo_full_name.'/pulls/comments/'.$comment_id, [
+                'body' => $body,
+            ]
+        );
     }
 
-    public function deleteComment(): void
+    /**
+     * Delete a comment.
+     *
+     * 204
+     *
+     * @param string $repo_full_name
+     * @param int    $comment_id
+     *
+     * @throws Exception
+     */
+    public function deleteComment(string $repo_full_name, int $comment_id): void
     {
+        $this->curl->delete($this->api_url.'/repos/'.$repo_full_name.'/pulls/comments/'.$comment_id);
     }
 
-    public function listReviewRequests(): void
+    /**
+     * List review requests.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     *
+     * @throws Exception
+     */
+    public function listReviewRequests(string $repo_full_name, int $pull_number): void
     {
+        $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/requested_reviewers');
     }
 
-    public function createReviewRequest(): void
+    /**
+     * Create a review request.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param array  $reviewers
+     * @param array  $team_reviewers
+     *
+     * @throws Exception
+     */
+    public function createReviewRequest(string $repo_full_name, int $pull_number, array $reviewers, array $team_reviewers): void
     {
+        $data = [
+            'reviewers' => $reviewers,
+            'team_reviewers' => $team_reviewers,
+        ];
+
+        $this->curl->post($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/requested_reviewers', json_encode($data));
     }
 
-    public function deleteReviewRequest(): void
+    /**
+     * Delete a review request.
+     *
+     * @param string $repo_full_name
+     * @param int    $pull_number
+     * @param array  $reviewers
+     * @param array  $team_reviewers
+     *
+     * @throws Exception
+     */
+    public function deleteReviewRequest(string $repo_full_name, int $pull_number, array $reviewers, array $team_reviewers): void
     {
+        $data = [
+            'reviewers' => $reviewers,
+            'team_reviewers' => $team_reviewers,
+        ];
+
+        $this->curl->delete($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/requested_reviewers', json_encode($data));
     }
 }
