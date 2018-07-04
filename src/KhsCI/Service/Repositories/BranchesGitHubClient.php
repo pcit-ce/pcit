@@ -10,7 +10,7 @@ class BranchesGitHubClient
 {
     use CICommon;
 
-    public function list(): void
+    public function list(string $repo_full_name,bool $protected): void
     {
     }
 

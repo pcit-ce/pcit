@@ -9,14 +9,14 @@ require __DIR__.'/vendor/autoload.php';
 $mail = new PHPMailer(true);
 
 try {
-    $mail->SMTPDebug = 2;
+    $mail->SMTPDebug = 4;
     $mail->isSMTP();
     $mail->Host = getenv('CI_EMAIL_HOST');
     $mail->SMTPAuth = true;
     $mail->Username = getenv('CI_EMAIL_USERNAME');
     $mail->Password = getenv('CI_EMAIL_PASSWORD');
-    $mail->SMTPSecure = 'tls';
-    $mail->Port = 587;
+    $mail->SMTPSecure = getenv('CI_EMAIL_SMTP_SECURE');
+    $mail->Port = getenv('CI_EMAIL_SMTP_PORT');
 
     $mail->setFrom(getenv('CI_EMAIL_FROM'), getenv('CI_EMAIL_FROM_NAME'));
 
@@ -24,12 +24,16 @@ try {
         $mail->addAddress($k, $v);
     }
 
-    foreach (json_decode(getenv('CI_EMAIL_CC_JSON'), true) as $k) {
-        $mail->addCC($k); // 抄送
+    if (getenv('CI_EMAIL_CC_JSON')) {
+        foreach (json_decode(getenv('CI_EMAIL_CC_JSON'), true) as $k => $v) {
+            $mail->addCC($k, $v); // 抄送
+        }
     }
 
-    foreach (json_decode(getenv('CI_EMAIL_BCC_JSON'), true) as $k) {
-        $mail->addBCC($k); // 暗抄送
+    if (getenv('CI_EMAIL_BCC_JSON')) {
+        foreach (json_decode(getenv('CI_EMAIL_BCC_JSON'), true) as $k => $v) {
+            $mail->addBCC($k, $v); // 暗抄送
+        }
     }
 
     $mail->isHTML(true);
