@@ -407,9 +407,15 @@ EOF;
     public static function getConfig(string $git_type, int $rid)
     {
         $sql = <<<EOF
-SELECT 
-builds_only_with_khsci_yml,build_pushes,build_pull_requests,maximum_number_of_builds,
-auto_cancel_branch_builds,auto_cancel_pull_request_builds
+SELECT
+
+builds_only_with_khsci_yml,
+build_pushes,
+build_pull_requests,
+maximum_number_of_builds,
+auto_cancel_branch_builds,
+auto_cancel_pull_request_builds
+
 FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1
 EOF;
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\Build;
-use App\Build as BuildDB;
 use App\GetAccessToken;
 use App\Notifications\Mail;
 use App\Notifications\WeChatTemplate;
@@ -46,6 +45,18 @@ class BuildCommand
     private $description;
 
     private $branch;
+
+    // repo config
+
+    private $build_pushes;
+
+    private $build_pull_requests;
+
+    private $maximum_number_of_builds;
+
+    private $auto_cancel_branch_builds;
+
+    private $auto_cancel_pull_request_builds;
 
     /**
      * @var KhsCI
@@ -100,20 +111,15 @@ class BuildCommand
                 return;
             }
 
-            $this->commit_id = $e->getCommitId();
-            $this->unique_id = $e->getUniqueId();
-            $this->event_type = $e->getEventType();
-            $this->git_type = BuildDB::getGitType($this->build_key_id);
-
             // $e->getCode() is build key id.
-            BuildDB::updateStopAt($this->build_key_id);
+            Build::updateStopAt($this->build_key_id);
 
             // save build log
             $this->saveLog();
 
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::INFO);
 
-            // exec after build
+            // update build status
             $this->updateBuildStatus($e->getMessage());
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::ERROR);
@@ -128,7 +134,7 @@ class BuildCommand
             }
 
             $this->build_key_id && $this->build_status &&
-            BuildDB::updateBuildStatus($this->build_key_id, $this->build_status);
+            Build::updateBuildStatus($this->build_key_id, $this->build_status);
 
             $build->systemDelete($this->unique_id, true);
 
@@ -142,11 +148,8 @@ class BuildCommand
             Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description &&
             $this->weChatTemplate($this->description);
 
-            // mail
-            // pr skip
-            if (CI::BUILD_EVENT_PR !== $this->event_type) {
-                $this->sendEMail();
-            }
+            // mail pr skip
+            CI::BUILD_EVENT_PR !== $this->event_type && $this->sendEMail();
 
             // check pr auto merge
             $this->autoMerge();
@@ -212,12 +215,22 @@ class BuildCommand
     /**
      * @throws Exception
      */
-    private function getSystemConfig(): void
+    private function getRepoConfig(): void
     {
-        Repo::getConfig($this->git_type, $this->rid);
+        $array = Repo::getConfig($this->git_type, $this->rid);
+
+        $this->build_pushes = $array['build_pushes'];
+        $this->build_pull_requests = $array['build_pull_requests'];
+        $this->maximum_number_of_builds = $array['maximum_number_of_builds'];
+        $this->auto_cancel_branch_builds = $array['auto_cancel_branch_builds'];
+        $this->auto_cancel_pull_request_builds = $array['auto_cancel_pull_request_builds'];
     }
 
     /**
+     * PR 构建不通知.
+     *
+     * 邮件通知，谁 commit 通知谁
+     *
      * @throws Exception
      */
     private function sendEMail(): void
@@ -229,23 +242,18 @@ class BuildCommand
         }
 
         $committer_email = Build::getCommitterEmail((int) $this->build_key_id);
-
         $committer_name = Build::getCommitterName((int) $this->build_key_id);
 
         $repo_full_name = Repo::getRepoFullName($this->git_type, (int) $this->rid);
-
         $build_status_changed = Build::buildStatusIsChanged((int) $this->rid, $this->branch);
 
         $email_list = [];
-
         $on_success = null;
-
         $on_failure = null;
 
         $config = (object) json_decode($this->config, true);
 
         $email = $config->notifications['email'] ?? null;
-
         if ($email) {
             // email 指令存在
             $recipients = $email['recipients'] ?? null;
@@ -254,9 +262,10 @@ class BuildCommand
                 // recipients 指令存在
                 $on_success = $email['on_success'] ?? null;
                 $on_failure = $email['on_failure'] ?? null;
-
-                $email_list = $recipients;
+                is_array($recipients) && $email_list = $recipients;
+                is_string($recipients) && $email_list = [$recipients];
             } else {
+                // email 指令只包含 email 列表
                 $email_list = $email;
             }
         }
@@ -277,8 +286,6 @@ class BuildCommand
             return;
         }
 
-        // 构建成功
-
         $subject = ucfirst($this->build_status).' : '.$repo_full_name.'#'.
             $this->build_key_id.' ('.$this->branch.'-'.substr($this->commit_id, 0, 7).')';
 
@@ -286,11 +293,9 @@ class BuildCommand
 
         $address = $email_list;
 
-        array_push($address, $committer_email.'='.$committer_name);
+        $address = array_merge($address, [$committer_email => $committer_name]);
 
-        array_unique($address);
-
-        Mail::send($address, $subject, $body);
+        Mail::send(array_unique($address), $subject, $body);
     }
 
     /**
@@ -322,13 +327,7 @@ EOF;
         // 数据库没有结果，跳过构建，也就没有 build_key_id
 
         if (!$output) {
-            throw new CIException(
-                null,
-                null,
-                null,
-                'Build not Found, skip',
-                01404
-            );
+            throw new CIException('Build not Found, skip', 01404);
         }
 
         $output = array_values($output);
@@ -341,6 +340,13 @@ EOF;
         $this->commit_message = $output[4];
         $this->config = $output[9];
         $this->commit_id = $output[3];
+        $this->event_type = $output[6];
+
+        $this->getRepoConfig();
+
+        if (!$this->build_pull_requests and CI::BUILD_EVENT_PR === $this->event_type) {
+            // don't build pr
+        }
 
         $this->config = JSON::beautiful($this->config);
 
@@ -377,13 +383,7 @@ EOF;
 
             Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip', [], Log::WARNING);
 
-            throw new CIException(
-                null,
-                $this->commit_id,
-                $this->event_type,
-                CI::BUILD_STATUS_PASSED,
-                $this->build_key_id
-            );
+            throw new CIException(CI::BUILD_STATUS_PASSED, $this->build_key_id);
         }
     }
 
@@ -392,8 +392,8 @@ EOF;
      */
     private function setStatusInProgress(): void
     {
-        BuildDB::updateStartAt($this->build_key_id);
-        BuildDB::updateBuildStatus($this->build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
+        Build::updateStartAt($this->build_key_id);
+        Build::updateBuildStatus($this->build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
 
         if ('github' === $this->git_type) {
             Up::updateGitHubAppChecks($this->build_key_id, null,
@@ -417,7 +417,7 @@ EOF;
 
         $build_status = $this->build_status;
 
-        $auto_merge_method = BuildDB::isAutoMerge(
+        $auto_merge_method = Build::isAutoMerge(
             $this->git_type,
             (int) $this->rid,
             $this->commit_id,
@@ -432,7 +432,7 @@ EOF;
             $khsci = new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($this->rid)]);
 
             try {
-                if ($khsci->github_pull_request->isMerged($repo_array[0], $repo_array[1], $this->pull_request_id)) {
+                if ($khsci->pull_request->isMerged($repo_array[0], $repo_array[1], $this->pull_request_id)) {
                     Log::debug(
                         __FILE__,
                         __LINE__,
@@ -444,7 +444,7 @@ EOF;
 
                 $commit_message = null;
 
-                $khsci->github_pull_request
+                $khsci->pull_request
                     ->merge(
                         $repo_array[0],
                         $repo_array[1],
@@ -503,7 +503,7 @@ EOF;
 
         $log_content = Cache::connect()->get((string) $this->unique_id);
 
-        BuildDB::updateLog($this->build_key_id, $log_content);
+        Build::updateLog($this->build_key_id, $log_content);
 
         // cleanup
         unlink($folder_name.'/'.$this->unique_id);
@@ -531,8 +531,8 @@ EOF;
                 $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt($this->build_key_id),
-                (int) BuildDB::getStopAt($this->build_key_id),
+                (int) Build::getStartAt($this->build_key_id),
+                (int) Build::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
                 null,
                 null,
@@ -561,14 +561,14 @@ EOF;
 
         // GitHub App checks API
         if ('github' === $this->git_type) {
-            $build_log = BuildDB::getLog((int) $this->build_key_id);
+            $build_log = Build::getLog((int) $this->build_key_id);
 
             Up::updateGitHubAppChecks(
                 $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt($this->build_key_id),
-                (int) BuildDB::getStopAt($this->build_key_id),
+                (int) Build::getStartAt($this->build_key_id),
+                (int) Build::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
@@ -595,13 +595,13 @@ EOF;
         }
 
         if ('github' === $this->git_type) {
-            $build_log = BuildDB::getLog((int) $this->build_key_id);
+            $build_log = Build::getLog((int) $this->build_key_id);
             Up::updateGitHubAppChecks(
                 $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt($this->build_key_id),
-                (int) BuildDB::getStopAt($this->build_key_id),
+                (int) Build::getStartAt($this->build_key_id),
+                (int) Build::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE,
                 null,
                 null,
@@ -628,13 +628,13 @@ EOF;
         }
 
         if ('github' === $this->git_type) {
-            $build_log = BuildDB::getLog((int) $this->build_key_id);
+            $build_log = Build::getLog((int) $this->build_key_id);
             Up::updateGitHubAppChecks(
                 $this->build_key_id,
                 null,
                 CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-                (int) BuildDB::getStartAt($this->build_key_id),
-                (int) BuildDB::getStopAt($this->build_key_id),
+                (int) Build::getStartAt($this->build_key_id),
+                (int) Build::getStopAt($this->build_key_id),
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 null,
                 null,

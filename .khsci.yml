@@ -204,6 +204,9 @@ notifications:
     on_success: never # default: change
     on_failure: always # default: always
 
+  # email:
+    # - khs1994@khs1994.com
+
 config:
   aliyun:
     docker_registry:

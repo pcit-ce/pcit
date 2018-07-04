@@ -127,12 +127,7 @@ class Client
                     $this->failure();
             }
 
-            throw new CIException(
-                $this->unique_id,
-                $this->commit_id,
-                $this->event_type,
-                $e->getMessage(), $this->build_key_id
-            );
+            throw new CIException($e->getMessage(), $this->build_key_id);
         }
     }
 
