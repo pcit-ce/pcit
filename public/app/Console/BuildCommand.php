@@ -95,19 +95,17 @@ class BuildCommand
             array_push($output, Repo::getRepoFullName($this->git_type, (int) $this->rid));
 
             // push env
-            array_push($output, $this->getEnv());
+            array_push($output, $this->getEnv(), $this->unique_id);
 
             // clear build environment
-            $build->systemDelete('1');
+            $build->systemDelete('services');
 
             // exec build
             $build(...$output);
         } catch (CIException $e) {
-            // 没有 build_key_id，即数据库没有待构项目，跳过
-            $this->build_key_id = $e->getCode();
-
-            if (01404 === $this->build_key_id) {
+            if (01404 === $e->getCode()) {
                 // 数据库不存在项目，跳出
+                $this->build_key_id = 01404;
                 return;
             }
 
@@ -123,6 +121,8 @@ class BuildCommand
             $this->updateBuildStatus($e->getMessage());
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::ERROR);
+
+            // 出现其他错误
         } finally {
             Up::runWebhooks();
 
@@ -133,16 +133,9 @@ class BuildCommand
                 return;
             }
 
-            $this->build_key_id && $this->build_status &&
-            Build::updateBuildStatus($this->build_key_id, $this->build_status);
+            $this->build_key_id && $this->build_status && Build::updateBuildStatus($this->build_key_id, $this->build_status);
 
             $build->systemDelete($this->unique_id, true);
-
-            if (!$this->unique_id) {
-                Log::debug(__FILE__, __LINE__, 'Docker build stop by unique id is empty', [], Log::INFO);
-
-                return;
-            }
 
             // wechat
             Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description &&
@@ -332,15 +325,16 @@ EOF;
 
         $output = array_values($output);
 
-        $this->git_type = $output[1];
-        $this->branch = $output[5];
         $this->build_key_id = (int) $output[0];
-        $this->pull_request_id = (int) $output[7];
+        $this->git_type = $output[1];
         $this->rid = (int) $output[2];
-        $this->commit_message = $output[4];
-        $this->config = $output[9];
         $this->commit_id = $output[3];
+        $this->commit_message = $output[4];
+        $this->branch = $output[5];
         $this->event_type = $output[6];
+        $this->pull_request_id = (int) $output[7];
+        $this->config = $output[9];
+        $this->unique_id = session_create_id();
 
         $this->getRepoConfig();
 
@@ -384,27 +378,6 @@ EOF;
             Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip', [], Log::WARNING);
 
             throw new CIException(CI::BUILD_STATUS_PASSED, $this->build_key_id);
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function setStatusInProgress(): void
-    {
-        Build::updateStartAt($this->build_key_id);
-        Build::updateBuildStatus($this->build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
-
-        if ('github' === $this->git_type) {
-            Up::updateGitHubAppChecks($this->build_key_id, null,
-                CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
-                time(),
-                null,
-                null,
-                null,
-                null,
-                $this->khsci->check_md->in_progress('PHP', PHP_OS, $this->config)
-            );
         }
     }
 
@@ -509,6 +482,27 @@ EOF;
         unlink($folder_name.'/'.$this->unique_id);
 
         Cache::connect()->del((string) $this->unique_id);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function setStatusInProgress(): void
+    {
+        Build::updateStartAt($this->build_key_id);
+        Build::updateBuildStatus($this->build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
+
+        if ('github' === $this->git_type) {
+            Up::updateGitHubAppChecks($this->build_key_id, null,
+                CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
+                time(),
+                null,
+                null,
+                null,
+                null,
+                $this->khsci->check_md->in_progress('PHP', PHP_OS, $this->config)
+            );
+        }
     }
 
     /**

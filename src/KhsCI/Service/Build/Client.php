@@ -67,6 +67,7 @@ class Client
      * @param null|string $pull_request_source
      * @param null|string $repo_full_name
      * @param array       $env_vars
+     * @param string      $unique_id
      *
      * @throws CIException
      * @throws Exception
@@ -83,7 +84,8 @@ class Client
                              ?string $config,
                              ?string $pull_request_source,
                              ?string $repo_full_name,
-                             array $env_vars = []): void
+                             array $env_vars = [],
+                             string $unique_id): void
     {
         try {
             $this->build_key_id = (int) $build_key_id;
@@ -95,7 +97,7 @@ class Client
                 throw new Exception(CI::BUILD_STATUS_PASSED);
             }
 
-            $this->unique_id = session_create_id();
+            $this->unique_id = $unique_id;
             $this->commit_message = $commit_message;
             $this->branch = $branch;
             $this->event_type = $event_type;
@@ -261,6 +263,8 @@ class Client
         Log::debug(__FILE__, __LINE__, json_encode($this->system_env), [], Log::EMERGENCY);
 
         $docker = (new KhsCI())->docker;
+
+        $this->docker = $docker;
 
         $docker_container = $docker->container;
         $docker_image = $docker->image;
@@ -531,7 +535,7 @@ class Client
     /**
      * Remove all Docker Resource.
      *
-     * @param string $unique_id
+     * @param string $unique_id services => only cleanup services
      * @param bool   $last
      *
      * @throws Exception
@@ -554,7 +558,7 @@ class Client
 
         self::deleteContainerByLabel($docker_container, $label);
 
-        if ('1' === $unique_id) {
+        if ('services' === $unique_id) {
             // 只清理服务，退出
 
             return;
