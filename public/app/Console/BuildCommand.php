@@ -106,6 +106,7 @@ class BuildCommand
             if (01404 === $e->getCode()) {
                 // 数据库不存在项目，跳出
                 $this->build_key_id = 01404;
+
                 return;
             }
 

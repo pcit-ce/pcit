@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Build;
 
-use Docker\Container\Container;
-use Docker\Image\Image;
+use Docker\Container\Client as Container;
+use Docker\Image\Client as Image;
 use Exception;
 use KhsCI\Support\Log;
 
@@ -115,7 +115,7 @@ class PipelineClient
 
             $docker_container
                 ->setEnv($env)
-                ->setHostConfig(["$unique_id:$work_dir", 'tmp:/tmp'], $unique_id)
+                ->setBinds(["$unique_id:$work_dir", 'tmp:/tmp'])
                 ->setEntrypoint(["$shell", '-c'])
                 ->setLabels(['com.khs1994.ci.pipeline' => $unique_id])
                 ->setWorkingDir($work_dir);
@@ -136,7 +136,11 @@ class PipelineClient
 
             $docker_image->pull($image, $tag ?? 'latest');
 
-            $container_id = $docker_container->start($docker_container->create($image, null, $cmd));
+            $container_id = $docker_container
+                ->setCmd($cmd)
+                ->setImage($image)
+                ->create()
+                ->start(null);
 
             Log::debug(
                 __FILE__,

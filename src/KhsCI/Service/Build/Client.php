@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace KhsCI\Service\Build;
 
 use App\Build as BuildDB;
-use Docker\Container\Container;
+use Docker\Container\Client as Container;
 use Docker\Docker;
 use Exception;
 use KhsCI\CIException;
@@ -348,6 +348,8 @@ class Client
      */
     public function success(): void
     {
+        Log::debug(__FILE__, __LINE__, 'Handle build success', LOG::EMERGENCY);
+
         PipelineClient::runPipeline($this->pipeline,
             null,
             $this->event_type,
@@ -365,6 +367,8 @@ class Client
      */
     public function failure(): void
     {
+        Log::debug(__FILE__, __LINE__, 'Handle build failure', LOG::EMERGENCY);
+
         PipelineClient::runPipeline($this->pipeline,
             null,
             $this->event_type,
@@ -614,7 +618,7 @@ class Client
 
             Log::connect()->emergency('Delete Container '.$id);
 
-            $container->delete($id, true, true);
+            $container->remove($id, true, true);
         }
     }
 

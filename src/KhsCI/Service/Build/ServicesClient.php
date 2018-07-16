@@ -48,11 +48,12 @@ class ServicesClient
             $container_id = $docker_container
                 ->setEnv($env)
                 ->setEntrypoint($entrypoint)
-                ->setHostConfig(null, $unique_id)
                 ->setLabels(['com.khs1994.ci.service' => $unique_id])
-                ->create($image, $service_name, $command);
-
-            $docker_container->start($container_id);
+                ->setImage($image)
+                ->setContainerName($service_name)
+                ->setCmd($command)
+                ->create()
+                ->start(null);
 
             Log::debug(
                 __FILE__,

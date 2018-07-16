@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Build;
 
-use Docker\Container\Container;
+use Docker\Container\Client as Container;
 use Exception;
 use KhsCI\Support\CI;
 use KhsCI\Support\Git;
@@ -111,19 +111,14 @@ class GitClient
                 break;
         }
 
-        $docker_container
+        $container_id = $docker_container
             ->setEnv($git_env)
             ->setLabels(['com.khs1994.ci.git' => $unique_id])
-            ->setHostConfig(
-                ["$unique_id:$workdir"],
-                null,
-                null,
-                null,
-                false,
-                null,
-                null,
-                $hosts);
-        $container_id = $docker_container->start($docker_container->create($git_image));
+            ->setBinds(["$unique_id:$workdir"])
+            ->setExtraHosts($hosts)
+            ->setImage($git_image)
+            ->create()
+            ->start(null);
 
         Log::debug(
             __FILE__,
