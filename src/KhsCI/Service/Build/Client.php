@@ -121,6 +121,9 @@ class Client
 
             $this->run();
         } catch (\Throwable $e) {
+
+            Log::debug(__FILE__, __LINE__, $e->__toString(), [], LOG::EMERGENCY);
+
             switch ($e->getMessage()) {
                 case CI::BUILD_STATUS_PASSED:
                     $this->success();
@@ -351,7 +354,7 @@ class Client
      */
     public function success(): void
     {
-        Log::debug(__FILE__, __LINE__, 'Handle build success', LOG::EMERGENCY);
+        Log::debug(__FILE__, __LINE__, 'Handle build success', [], LOG::EMERGENCY);
 
         PipelineClient::runPipeline($this->pipeline,
             null,
@@ -372,7 +375,7 @@ class Client
      */
     public function failure(): void
     {
-        Log::debug(__FILE__, __LINE__, 'Handle build failure', LOG::EMERGENCY);
+        Log::debug(__FILE__, __LINE__, 'Handle build failure', [], LOG::EMERGENCY);
 
         PipelineClient::runPipeline($this->pipeline,
             null,

@@ -123,6 +123,7 @@ class BuildCommand
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::ERROR);
 
+            $this->updateBuildStatus(CI::BUILD_STATUS_ERRORED);
             // 出现其他错误
         } finally {
             Up::runWebhooks();
