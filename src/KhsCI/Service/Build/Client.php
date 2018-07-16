@@ -288,7 +288,8 @@ class Client
             $branch,
             $unique_id,
             $docker_container,
-            $this->build_key_id
+            $this->build_key_id,
+            $this
         );
 
         // 不存在构建矩阵
@@ -307,7 +308,8 @@ class Client
                 $unique_id,
                 $docker_container,
                 $docker_image,
-                $this->build_key_id
+                $this->build_key_id,
+                $this
             );
 
             throw new Exception(CI::BUILD_STATUS_PASSED);
@@ -331,7 +333,8 @@ class Client
                 $unique_id,
                 $docker_container,
                 $docker_image,
-                $this->build_key_id
+                $this->build_key_id,
+                $this
             );
 
             // 清理
@@ -358,7 +361,9 @@ class Client
             $this->unique_id,
             $this->docker->container,
             $this->docker->image,
-            $this->build_key_id, true
+            $this->build_key_id,
+            $this,
+            true
         );
     }
 
@@ -377,7 +382,7 @@ class Client
             $this->unique_id,
             $this->docker->container,
             $this->docker->image,
-            $this->build_key_id, false, true
+            $this->build_key_id, $this, false, true
         );
     }
 

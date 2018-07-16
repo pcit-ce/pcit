@@ -12,6 +12,38 @@ use KhsCI\Support\Log;
 
 class GitClient
 {
+    public static function parseGit()
+    {
+        $git_config = [];
+
+        $depth = $git['depth'] ?? 10;
+        $recursive = $git['recursive'] ?? false;
+        $skip_verify = $git['skip_verify'] ?? false;
+        $tags = $git['tags'] ?? false;
+        $submodule_override = $git['submodule_override'] ?? null;
+        $hosts = $git['hosts'] ?? [];
+        // 防止用户传入 false
+        if ($depth) {
+            array_push($git_config, "PLUGIN_DEPTH=$depth");
+        } else {
+            array_push($git_config, 'PLUGIN_DEPTH=2');
+        }
+
+        $recursive && array_push($git_config, 'PLUGIN_RECURSIVE=true');
+
+        $skip_verify && array_push($git_config, 'PLUGIN_SKIP_VERIFY=true');
+
+        $tags && array_push($git_config, 'PLUGIN_TAGS=true');
+
+        $submodule_override && array_push(
+            $git_config, 'PLUGIN_SUBMODULE_OVERRIDE='.json_encode($submodule_override)
+        );
+
+        $git_image = $git['image'] ?? 'plugins/git';
+
+        return [$git_config, $git_image, $hosts];
+    }
+
     /**
      * @param array     $git
      * @param string    $git_type
@@ -23,6 +55,7 @@ class GitClient
      * @param string    $unique_id
      * @param Container $docker_container
      * @param int       $build_key_id
+     * @param Client    $client
      *
      * @throws Exception
      *
@@ -37,46 +70,19 @@ class GitClient
                                   string $branch,
                                   string $unique_id,
                                   Container $docker_container,
-                                  int $build_key_id): void
+                                  int $build_key_id,
+                                  Client $client): void
     {
         $git_image = 'plugins/git';
-
         $git_config = [];
-
         $hosts = [];
+        $git_env = null;
 
         if ($git) {
-            $depth = $git['depth'] ?? 10;
-            $recursive = $git['recursive'] ?? false;
-            $skip_verify = $git['skip_verify'] ?? false;
-            $tags = $git['tags'] ?? false;
-            $submodule_override = $git['submodule_override'] ?? null;
-            $hosts = $git['hosts'];
-            // 防止用户传入 false
-            if ($depth) {
-                array_push($git_config, "PLUGIN_DEPTH=$depth");
-            } else {
-                array_push($git_config, 'PLUGIN_DEPTH=2');
-            }
-
-            $recursive && array_push($git_config, 'PLUGIN_RECURSIVE=true');
-
-            $skip_verify && array_push($git_config, 'PLUGIN_SKIP_VERIFY=true');
-
-            $tags && array_push($git_config, 'PLUGIN_TAGS=true');
-
-            $submodule_override && array_push(
-                $git_config, 'PLUGIN_SUBMODULE_OVERRIDE='.json_encode($submodule_override)
-            );
-
-            $git_image = $git['image'] ?? 'plugins/git';
+            list($git_config, $git_image, $hosts) = self::parseGit();
         }
 
-        $client = new Client();
-
         $git_url = Git::getUrl($git_type, $repo_full_name);
-
-        $git_env = null;
 
         switch ($event_type) {
             case CI::BUILD_EVENT_PUSH:

@@ -24,6 +24,7 @@ class PipelineClient
      * @param bool      $success
      * @param bool      $failure
      * @param bool      $changed
+     * @param Client    $client
      *
      * @throws Exception
      */
@@ -36,12 +37,11 @@ class PipelineClient
                                        Container $docker_container,
                                        Image $docker_image,
                                        int $build_key_id,
+                                       Client $client,
                                        bool $success = false,
                                        bool $failure = false,
                                        bool $changed = false): void
     {
-        $client = new Client();
-
         foreach ($pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup, [], Log::EMERGENCY);
 
