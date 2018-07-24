@@ -40,15 +40,29 @@ class RunContainer
 
         $jobs = Job::getByBuildKeyID($build_key_id);
 
+        // 遍历所有 jobs
         foreach ($jobs as $job_id) {
-            self::job((int) $job_id);
+            try {
+                self::job((int) $job_id);
+            } catch (\Throwable $e) {
+                // 某一 job 失败
+                if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
+                    $this->after($job_id, 'failure');
+                    $this->after($job_id, 'changed');
+                }
+            } finally {
+                Cleanup::systemDelete((string) $job_id, true);
+                Job::updateStopAt($job_id);
+            }
         }
 
         // 所有 job 执行完毕
-        throw new CIException(CI::BUILD_STATUS_PASSED);
+        throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
     }
 
     /**
+     * 执行某一具体的 job.
+     *
      * @param int $job_id
      *
      * @throws \Exception
@@ -67,30 +81,72 @@ class RunContainer
             $container_config = Cache::connect()->rPop((string) $job_id);
 
             if (!$container_config) {
-                // 某一 job 执行完毕
-                // success
-                // changed
-                // 清理
-                Cleanup::systemDelete((string) $job_id, true);
+                break;
             }
 
             $labels = (json_decode($container_config, true))['Labels'];
 
-            $no_status = $labels['com.khs1994.ci.pipeline.status.no_status'] ?? false;
+            $success = $labels['com.khs1994.ci.pipeline.status.success'] ?? false;
+            $failure = $labels['com.khs1994.ci.pipeline.status.failure'] ?? false;
+            $changed = $labels['com.khs1994.ci.pipeline.status.changed'] ?? false;
 
-            $is_git = $labels['com.khs1994.ci.git'] ?? false;
-
-            if (!$no_status or !$is_git) {
-                Cache::connect()->lPush($job_id.'_after', $container_config);
+            if ($success) {
+                Cache::connect()->lPush($job_id.'_success', $container_config);
                 continue;
             }
 
-            $container_id = $this->docker_container
-                ->setCreateJson($container_config)
-                ->create(false)
-                ->start(null);
+            if ($failure) {
+                Cache::connect()->lPush($job_id.'_failure', $container_config);
+                continue;
+            }
 
-            LogClient::get($job_id, $this->docker_container, $container_id);
+            if ($changed) {
+                Cache::connect()->lPush($job_id.'_changed', $container_config);
+                continue;
+            }
+
+            $this->runJob($job_id, $container_config);
+        }
+
+        // 某一 job success
+        $this->after($job_id, 'success');
+        $this->after($job_id, 'changed');
+    }
+
+    /**
+     * @param int    $job_id
+     * @param string $container_config
+     *
+     * @throws \Exception
+     */
+    public function runJob(int $job_id, string $container_config): void
+    {
+        $container_id = $this->docker_container
+            ->setCreateJson($container_config)
+            ->create(false)
+            ->start(null);
+
+        LogClient::get($job_id, $this->docker_container, $container_id);
+    }
+
+    /**
+     * @param int $job_id
+     * @param     $status
+     *
+     * @throws \Exception
+     */
+    private function after(int $job_id, $status): void
+    {
+        // 获取上一次 build 的状况
+
+        while (1) {
+            $container_config = Cache::connect()->rPop($job_id.'_'.$status);
+
+            if (!$container_config) {
+                break;
+            }
+
+            $this->runJob($job_id, $container_config);
         }
     }
 

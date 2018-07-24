@@ -118,7 +118,7 @@ class Client
     public function config(): void
     {
         if (!$this->repo_full_name or !$this->config) {
-            throw new Exception(CI::BUILD_STATUS_ERRORED);
+            throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
         }
 
         // 解析 .khsci.yml.

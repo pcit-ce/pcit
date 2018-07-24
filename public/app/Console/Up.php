@@ -165,7 +165,7 @@ class Up
 
         $status_use_in_title = $status;
 
-        if (CI::BUILD_STATUS_IN_PROGRESS === $status) {
+        if (CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS === $status) {
             $status_use_in_title = 'in Progress';
         }
 
@@ -390,7 +390,7 @@ class Up
                         )
                 );
 
-                Build::updateBuildStatus($last_insert_id, CI::BUILD_STATUS_SKIP);
+                Build::updateBuildStatus($last_insert_id, 'skip');
             }
         }
 
@@ -596,7 +596,7 @@ EOF;
      */
     private function writeSkipToDB(int $build_key_id): void
     {
-        Build::updateBuildStatus($build_key_id, CI::BUILD_STATUS_SKIP);
+        Build::updateBuildStatus($build_key_id, 'skip');
     }
 
     /**
@@ -1462,7 +1462,7 @@ EOF;
         $commit_id = $check_suite->head_sha;
 
         if ('rerequested' === $action) {
-            Build::updateBuildStatusByCommitId(CI::BUILD_STATUS_PENDING,
+            Build::updateBuildStatusByCommitId('pending',
                 $this->git_type, (int) $rid, $branch, $commit_id);
         }
 

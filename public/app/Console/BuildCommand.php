@@ -127,7 +127,7 @@ class BuildCommand
         } catch (\Throwable  $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::ERROR);
 
-            $this->updateBuildStatus(CI::BUILD_STATUS_ERRORED);
+            $this->updateBuildStatus(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
             // 出现其他错误
         } finally {
             Up::runWebhooks();
@@ -167,23 +167,23 @@ class BuildCommand
     private function updateBuildStatus(string $build_stats): void
     {
         switch ($build_stats) {
-            case CI::BUILD_STATUS_INACTIVE:
-                $this->build_status = CI::BUILD_STATUS_INACTIVE;
+            case 'inactive':
+                $this->build_status = 'inactive';
                 $this->setBuildStatusInactive();
 
                 break;
-            case CI::BUILD_STATUS_FAILED:
-                $this->build_status = CI::BUILD_STATUS_FAILED;
+            case CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE:
+                $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE;
                 $this->setBuildStatusFailed();
 
                 break;
-            case CI::BUILD_STATUS_PASSED:
-                $this->build_status = CI::BUILD_STATUS_PASSED;
+            case CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS:
+                $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS;
                 $this->setBuildStatusPassed();
 
                 break;
             default:
-                $this->build_status = CI::BUILD_STATUS_ERRORED;
+                $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED;
                 $this->setBuildStatusErrored();
         }
     }
@@ -269,7 +269,7 @@ class BuildCommand
             }
         }
 
-        if (CI::BUILD_STATUS_PASSED === $this->build_status) {
+        if (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $this->build_status) {
             // 构建成功
             if ('never' === $on_success) {
                 return;
@@ -316,7 +316,7 @@ AND build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id DESC 
 EOF;
 
         $output = DB::select($sql, [
-            CI::BUILD_STATUS_PENDING,
+            'pending',
             CI::BUILD_EVENT_PUSH,
             CI::BUILD_EVENT_TAG,
             CI::BUILD_EVENT_PR,
@@ -344,7 +344,7 @@ EOF;
             $this->config) = $output;
 
         if (!$this->config) {
-            throw new CIException(CI::BUILD_STATUS_PASSED);
+            throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
         }
 
         $this->build_key_id = (int) $build_key_id;
@@ -394,7 +394,7 @@ EOF;
 
             Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip', [], Log::WARNING);
 
-            throw new CIException(CI::BUILD_STATUS_PASSED, $this->build_key_id);
+            throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, $this->build_key_id);
         }
     }
 
@@ -414,7 +414,7 @@ EOF;
         // TODO
         $auto_merge_method = '';
 
-        if ((CI::BUILD_STATUS_PASSED === $build_status) && $auto_merge_label) {
+        if ((CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $build_status) && $auto_merge_label) {
             Log::debug(__FILE__, __LINE__, 'already set auto merge', [], Log::INFO);
 
             $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
@@ -505,7 +505,7 @@ EOF;
     private function setStatusInProgress(): void
     {
         Build::updateStartAt($this->build_key_id);
-        Build::updateBuildStatus($this->build_key_id, CI::BUILD_STATUS_IN_PROGRESS);
+        Build::updateBuildStatus($this->build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS);
 
         if ('github' === $this->git_type) {
             Up::updateGitHubAppChecks($this->build_key_id, null,
@@ -526,14 +526,6 @@ EOF;
     private function setBuildStatusInactive(): void
     {
         $this->description = 'This Repo is Inactive';
-
-        if ('github_' === $this->git_type) {
-            Up::updateGitHubStatus(
-                $this->build_key_id,
-                CI::GITHUB_STATUS_FAILURE,
-                $this->description
-            );
-        }
 
         if ('github' === $this->git_type) {
             Up::updateGitHubAppChecks(
@@ -558,15 +550,6 @@ EOF;
     private function setBuildStatusErrored(): void
     {
         $this->description = 'The '.Env::get('CI_NAME').' build could not complete due to an error';
-
-        // 通知 GitHub commit Status
-        if ('github_' === $this->git_type) {
-            Up::updateGitHubStatus(
-                $this->build_key_id,
-                CI::GITHUB_STATUS_ERROR,
-                $this->description
-            );
-        }
 
         // GitHub App checks API
         if ('github' === $this->git_type) {
@@ -595,14 +578,6 @@ EOF;
     {
         $this->description = 'The '.Env::get('CI_NAME').' build is failed';
 
-        if ('github_' === $this->git_type) {
-            Up::updateGitHubStatus(
-                $this->build_key_id,
-                CI::GITHUB_STATUS_FAILURE,
-                $this->description
-            );
-        }
-
         if ('github' === $this->git_type) {
             $build_log = Job::getLog((int) $this->build_key_id);
             Up::updateGitHubAppChecks(
@@ -627,14 +602,6 @@ EOF;
     private function setBuildStatusPassed(): void
     {
         $this->description = 'The '.Env::get('CI_NAME').' build passed';
-
-        if ('github_' === $this->git_type) {
-            Up::updateGitHubStatus(
-                $this->build_key_id,
-                CI::GITHUB_STATUS_SUCCESS,
-                $this->description
-            );
-        }
 
         if ('github' === $this->git_type) {
             $build_log = Job::getLog((int) $this->build_key_id);

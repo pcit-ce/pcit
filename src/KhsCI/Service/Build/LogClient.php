@@ -94,7 +94,7 @@ class LogClient
                 if (0 !== $exitCode) {
                     Log::debug(__FILE__, __LINE__, "Container $container_id ExitCode is $exitCode, not 0", [], Log::ERROR);
 
-                    throw new Exception(CI::BUILD_STATUS_ERRORED);
+                    throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }
 
                 break;

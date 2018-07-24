@@ -244,9 +244,9 @@ EOF;
 
         return DB::select($sql, [
             $git_type, $rid,
-            CI::BUILD_STATUS_PENDING,
-            CI::BUILD_STATUS_SKIP,
-            CI::BUILD_STATUS_INACTIVE,
+            'pending',
+            'skip',
+            'inactive',
             CI::BUILD_EVENT_PR,
         ], true);
     }

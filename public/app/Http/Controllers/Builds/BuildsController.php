@@ -125,7 +125,7 @@ class BuildsController
     {
         APITokenController::check((int) $build_id);
 
-        Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_CANCELED);
+        Build::updateBuildStatus((int) $build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
     }
 
     /**
@@ -141,7 +141,7 @@ class BuildsController
     {
         APITokenController::check((int) $build_id);
 
-        Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_PENDING);
+        Build::updateBuildStatus((int) $build_id, 'pending');
         Build::updateStartAt((int) $build_id, 0);
         Build::updateStopAt((int) $build_id, 0);
     }

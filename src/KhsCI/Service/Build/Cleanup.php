@@ -61,13 +61,13 @@ class Cleanup
 
             $docker_volume->remove($id);
 
-            Log::connect()->emergency('Build Stoped Delete Volume '.$id);
+            Log::connect()->emergency('Build Stopped Delete Volume '.$id);
 
             // clean network
 
             $docker_network->remove($id);
 
-            Log::connect()->emergency('Build Stoped Delete Network '.$id);
+            Log::connect()->emergency('Build Stopped Delete Network '.$id);
         }
     }
 
