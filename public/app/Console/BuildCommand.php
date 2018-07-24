@@ -99,7 +99,7 @@ class BuildCommand
             array_push($output, $this->repo_full_name = Repo::getRepoFullName($this->git_type, (int) $this->rid));
 
             // push env and unique_id
-            array_push($output, $this->getEnv(), $this->unique_id);
+            array_push($output, $this->getEnv());
 
             // clear build environment
             $build_cleanup->systemDelete(null, false, true);
@@ -341,8 +341,11 @@ EOF;
             $this->event_type,
             $pull_request_number,
             $this->tag,
-            $this->config,
-            ) = $output;
+            $this->config) = $output;
+
+        if (!$this->config) {
+            throw new CIException(CI::BUILD_STATUS_PASSED);
+        }
 
         $this->build_key_id = (int) $build_key_id;
         $this->rid = (int) $rid;

@@ -18,6 +18,7 @@ class PipelineClient
      * @param array     $system_env
      * @param string    $work_dir
      * @param Container $docker_container
+     * @param int       $build_key_id
      * @param int       $job_id
      *
      * @throws Exception
@@ -28,6 +29,7 @@ class PipelineClient
                                   array $system_env,
                                   string $work_dir,
                                   Container $docker_container,
+                                  int $build_key_id,
                                   int $job_id): void
     {
         foreach ($pipeline as $setup => $array) {
@@ -66,7 +68,7 @@ class PipelineClient
 
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setBinds(["$job_id:$work_dir", 'tmp:/tmp'])
+                ->setBinds(["$build_key_id:$work_dir", 'tmp:/tmp'])
                 ->setEntrypoint(["$shell", '-c'])
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => $job_id,
@@ -75,7 +77,7 @@ class PipelineClient
                     'com.khs1994.ci.pipeline.status.failure' => $failure,
                     'com.khs1994.ci.pipeline.status.success' => $success,
                     'com.khs1994.ci.pipeline.status.changed' => $changed,
-                    'com.khs1994.ci' => $job_id
+                    'com.khs1994.ci' => $job_id,
                 ])
                 ->setWorkingDir($work_dir)
                 ->setCmd($cmd)
@@ -84,12 +86,12 @@ class PipelineClient
                     'EndpointsConfig' => [
                         "$job_id" => [
                             'Aliases' => [
-                                $setup
-                            ]
-                        ]
-                    ]
+                                $setup,
+                            ],
+                        ],
+                    ],
                 ])
-                ->setCreateJson()
+                ->setCreateJson(null)
                 ->getCreateJson();
 
             Cache::connect()->lPush((string) $job_id, $container_config);
@@ -101,6 +103,7 @@ class PipelineClient
      * @param string $event_type
      *
      * @return bool
+     *
      * @throws Exception
      */
     private static function parseEvent($event, string $event_type)
@@ -144,8 +147,9 @@ class PipelineClient
         }
 
         if (is_string($status)) {
-            if (in_array($status, ['failure', 'success', 'changed']))
+            if (in_array($status, ['failure', 'success', 'changed'])) {
                 return $status === $target;
+            }
         }
 
         if (is_array($status)) {

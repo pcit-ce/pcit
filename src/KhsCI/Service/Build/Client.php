@@ -77,23 +77,17 @@ class Client
                              array $env_vars): void
     {
         $this->build_key_id = (int) $build_key_id;
-        $this->config = $config;
+        $this->git_type = $git_type;
+        $this->rid = $rid;
         $this->commit_id = $commit_id;
-
-        // config 不存在，。khsci.yml 文件不存在
-        if ('[]' === $config) {
-            throw new CIException(CI::BUILD_STATUS_PASSED);
-        }
-
         $this->commit_message = $commit_message;
         $this->branch = $branch;
         $this->event_type = $event_type;
         $this->pull_number = $pull_request_number;
         $this->tag = $tag;
-        $this->git_type = $git_type;
-        $this->rid = $rid;
+        $this->config = $config;
         $this->repo_full_name = $repo_full_name;
-        $this->system_env = array_merge($this->system_env, $env_vars ?? []);
+        $this->system_env = array_merge($this->system_env, $env_vars);
 
         Log::debug(__FILE__, __LINE__, json_encode([
             'build_key_id' => $build_key_id,
@@ -109,23 +103,19 @@ class Client
             $this->config();
 
             // 运行容器
-            RunContainer::run($this->build_key_id);
+            (new RunContainer())->run($this->build_key_id);
         } catch (\Throwable $e) {
             throw new CIException($e->getMessage());
         }
     }
 
     /**
-     * 生成 config
+     * 生成 config.
      *
      * @throws Exception
      */
     public function config(): void
     {
-        $branch = $this->branch;
-        $commit_id = $this->commit_id;
-        $event_type = $this->event_type;
-
         if (!$this->repo_full_name or !$this->config) {
             throw new Exception(CI::BUILD_STATUS_ERRORED);
         }
@@ -152,38 +142,10 @@ class Client
             $path = null;
         }
 
-        // --workdir.
         $this->workdir = $workdir = $base_path.'/'.$path;
 
         // ci system env
-        $system_env = [
-            'CI=true',
-            'KHSCI=true',
-            'CONTINUOUS_INTEGRATION=true',
-            'KHSCI_BRANCH='.$this->branch,
-            'KHSCI_TAG='.$this->tag,
-            'KHSCI_BUILD_DIR='.$workdir,
-            'KHSCI_BUILD_ID='.$this->build_key_id,
-            'KHSCI_COMMIT='.$this->commit_id,
-            'KHSCI_COMMIT_MESSAGE='.$this->commit_message,
-            'KHSCI_EVENT_TYPE='.$this->event_type,
-            'KHSCI_PULL_REQUEST=false',
-            'KHSCI_REPO_SLUG='.$this->repo_full_name,
-        ];
-
-        if ($this->pull_number) {
-            array_merge($system_env,
-                [
-                    'KHSCI_PULL_REQUEST=true',
-                    'KHSCI_PULL_REQUEST_BRANCH='.$this->branch,
-                    'KHSCI_PULL_REQUEST_SHA='.$this->commit_id,
-                ]
-            );
-        }
-
-        $this->system_env = array_merge($system_env, $this->system_env);
-
-        Log::debug(__FILE__, __LINE__, json_encode($this->system_env), [], Log::EMERGENCY);
+        $this->systemEnv();
 
         // get docker
         $docker = (new KhsCI())->docker;
@@ -193,11 +155,11 @@ class Client
         // set git config
         GitClient::config($git,
             $this->git_type,
-            $event_type,
+            $this->event_type,
             $this->repo_full_name,
             $workdir,
-            $commit_id,
-            $branch,
+            $this->commit_id,
+            $this->branch,
             $docker_container,
             $this->build_key_id,
             $this
@@ -239,6 +201,43 @@ class Client
                 (int) $job_id
             );
         }
+    }
+
+    /**
+     * 生成 CI 系统环境变量.
+     *
+     * @throws Exception
+     */
+    public function systemEnv(): void
+    {
+        $system_env = [
+            'CI=true',
+            'KHSCI=true',
+            'CONTINUOUS_INTEGRATION=true',
+            'KHSCI_BRANCH='.$this->branch,
+            'KHSCI_TAG='.$this->tag,
+            'KHSCI_BUILD_DIR='.$this->workdir,
+            'KHSCI_BUILD_ID='.$this->build_key_id,
+            'KHSCI_COMMIT='.$this->commit_id,
+            'KHSCI_COMMIT_MESSAGE='.$this->commit_message,
+            'KHSCI_EVENT_TYPE='.$this->event_type,
+            'KHSCI_PULL_REQUEST=false',
+            'KHSCI_REPO_SLUG='.$this->repo_full_name,
+        ];
+
+        if ($this->pull_number) {
+            array_merge($system_env,
+                [
+                    'KHSCI_PULL_REQUEST=true',
+                    'KHSCI_PULL_REQUEST_BRANCH='.$this->branch,
+                    'KHSCI_PULL_REQUEST_SHA='.$this->commit_id,
+                ]
+            );
+        }
+
+        $this->system_env = array_merge($system_env, $this->system_env);
+
+        Log::debug(__FILE__, __LINE__, json_encode($this->system_env), [], Log::EMERGENCY);
     }
 
     /**

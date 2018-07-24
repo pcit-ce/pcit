@@ -27,7 +27,6 @@ class GitHubClient
     public $cache_key = 'webhooks';
 
     /**
-     *
      * @return bool|int
      *
      * @throws Exception
@@ -52,6 +51,7 @@ class GitHubClient
      * @param string $content
      *
      * @return bool
+     *
      * @throws Exception
      */
     private function secret(string $content)

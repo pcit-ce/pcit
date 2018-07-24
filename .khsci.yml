@@ -12,9 +12,9 @@ clone:
     # skip_verify: false
     # tags: false
     # submodule_override:
-      # hello-world: https://github.com/octocat/hello-world.git
+    # hello-world: https://github.com/octocat/hello-world.git
     hosts:
-      - "git.t.khs1994.com:192.168.199.100"
+    - "git.t.khs1994.com:192.168.199.100"
 
 workspace:
   base: /app
@@ -33,26 +33,23 @@ pipeline:
 
   php:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
-    shell: bash
     pull: true
     environment:
-      - CI_REDIS_HOST=redis
-      - CI_REDIS_PORT=6379
-      - CI_MYSQL_HOST=mysql
-      - CI_MYSQL_PORT=3306
-      - CI_MYSQL_USERNAME=root
-      - CI_MYSQL_PASSWORD=mytest
-      - CI_MYSQL_DBNAME=test
+    - CI_REDIS_HOST=redis
+    - CI_REDIS_PORT=6379
+    - CI_MYSQL_HOST=mysql
+    - CI_MYSQL_PORT=3306
+    - CI_MYSQL_USERNAME=root
+    - CI_MYSQL_PASSWORD=mytest
+    - CI_MYSQL_DBNAME=test
     commands:
-      - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
-      - pwd
-      - composer install
-      # - composer update
-      # 服务初始化需要时间，这里延迟执行
-      - sleep 30
-      - vendor/bin/phpunit --coverage-clover=coverage.xml
-      # set env CODECOV_TOKEN=XXX
-      - bash <(curl -s https://codecov.io/bash)
+    - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+    - pwd
+    - composer install
+    # - composer update
+    # 服务初始化需要时间，这里延迟执行
+    - sleep 30
+    - vendor/bin/phpunit --coverage-clover=coverage.xml
     when:
       # platform: linux/amd64
       # platform:  [ linux/*, windows/amd64 ]
@@ -91,18 +88,27 @@ pipeline:
     tags: 7.2.7-swarm-${CI_TAG}
     # target: php
     build_args:
-       - a:1
+    - a:1
     # dockerfile: Dockerfile
     # dockerfile: path/to/Dockerfile
     when:
       event: tag
     environment:
-      - DOCKER_USERNAME=username
-      - DOCKER_PASSWORD=password
+    - DOCKER_USERNAME=username
+    - DOCKER_PASSWORD=password
 
   #
   # This is success after demo
   #
+
+  upload:
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    shell: bash
+    when:
+      statue: success
+    commands:
+    # set env CODECOV_TOKEN=XXX
+    - bash <(curl -s https://codecov.io/bash)
 
   success:
     image: khs1994/tencent_cloud_cos:v4
@@ -112,8 +118,8 @@ pipeline:
     file:
       README.md: khsci/tencent_cloud_cos_file_name_${KHSCI_TAG}
       Dockerfile: khsci/tencent_cloud_cos_file_name2_${KHSCI_TAG}
-    # please set env by khsci env_var feature,don't set secret in .khsci.yml
-    # environment:
+      # please set env by khsci env_var feature,don't set secret in .khsci.yml
+      # environment:
       # - COS_V4_REGION=x
       # - COS_V4_APP_ID=x
       # - COS_V4_SECRET_ID=x
@@ -125,11 +131,11 @@ pipeline:
     when:
       status: success
       event: tag
-    # environment:
+      # environment:
       # - GITHUB_TOKEN=x
     file:
-      - "CHANGELOG.md"
-      - "ROADMAP.md"
+    - "CHANGELOG.md"
+    - "ROADMAP.md"
 
   #
   # This is failure after demo
@@ -153,8 +159,8 @@ services:
   mysql:
     image: mysql:${MYSQL_VERSION}
     environment:
-      - MYSQL_DATABASE=test
-      - MYSQL_ROOT_PASSWORD=mytest
+    - MYSQL_DATABASE=test
+    - MYSQL_ROOT_PASSWORD=mytest
     # entrypoint: [ "mysqld" ]
     command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
@@ -174,19 +180,19 @@ services:
 
 matrix:
   PHP_VERSION:
-    - 7.2.7
-    - 7.1.19
+  - 7.2.7
+  - 7.1.19
   NGINX_VERSION:
-    - 1.15.1
+  - 1.15.1
   REDIS_VERSION:
-    - 5.0-rc3-alpine
+  - 5.0-rc3-alpine
   MYSQL_VERSION:
-    # - 8.0.11
-    - 5.7.22
+  # - 8.0.11
+  - 5.7.22
   MONGODB_VERSION:
-    - 3.7.3
+  - 3.7.3
   POSTGRESQL_VERSION:
-    - 10.3-alpine
+  - 10.3-alpine
 
 branches:
   include: [ master ]
@@ -197,11 +203,11 @@ branches:
 notifications:
   email:
     recipients:
-      - khs1994@khs1994.com
+    - khs1994@khs1994.com
     on_success: never # default: change
     on_failure: always # default: always
 
-  # email:
+    # email:
     # - khs1994@khs1994.com
 
 config:
@@ -215,6 +221,6 @@ config:
       khs1994/wsl: khs1994-php/khsci
 
 mirrors:
-  - git@git.coding.net:khs1994/khsci.git
-  - https://gitee.com/khs1994-php/khsci.git
-  - git@code.aliyun.com:khs1994-php/khsci.git
+- git@git.coding.net:khs1994/khsci.git
+- https://gitee.com/khs1994-php/khsci.git
+- git@code.aliyun.com:khs1994-php/khsci.git

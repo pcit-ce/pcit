@@ -121,7 +121,7 @@ class GitClient
             ->setBinds(["$build_key_id:$workdir"])
             ->setExtraHosts($hosts)
             ->setImage($git_image)
-            ->setCreateJson()
+            ->setCreateJson(null)
             ->getCreateJson();
 
         Cache::connect()->lpush($build_key_id, json_encode($config));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Build;
 
 use Docker\Container\Client as Container;
@@ -12,7 +14,19 @@ use KhsCI\Support\Log;
 class LogClient
 {
     /**
-     * @param int       $build_key_id
+     * @param $job_id
+     *
+     * @throws Exception
+     */
+    public static function drop($job_id): void
+    {
+        Log::debug(__FILE__, __LINE__, 'Drop prev logs '.$job_id, [], Log::EMERGENCY);
+
+        Cache::connect()->hDel('build_log', $job_id);
+    }
+
+    /**
+     * @param int       $job_id
      * @param Container $docker_container
      * @param string    $container_id
      *
@@ -20,20 +34,9 @@ class LogClient
      *
      * @throws Exception
      */
-    public function docker_container_logs(int $build_key_id, Container $docker_container, string $container_id)
+    public static function get(int $job_id, Container $docker_container, string $container_id)
     {
         $redis = Cache::connect();
-
-        if ('/bin/drone-git' === json_decode($docker_container->inspect($container_id))->Path) {
-            Log::debug(__FILE__,
-                __LINE__,
-                'Drop prev logs '.$build_key_id,
-                [],
-                Log::EMERGENCY
-            );
-
-            $redis->hDel('build_log', $build_key_id);
-        }
 
         $i = -1;
 
@@ -72,11 +75,11 @@ class LogClient
                     $container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string) $build_key_id);
+                $prev_docker_log = $redis->hget('build_log', (string) $job_id);
 
                 $redis->hset(
                     'build_log',
-                    (string) $build_key_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
+                    (string) $job_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
                 );
 
                 /**

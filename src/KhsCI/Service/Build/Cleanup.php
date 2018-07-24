@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace KhsCI\Service\Build;
 
+use Docker\Container\Client as Container;
 use Exception;
 use KhsCI\KhsCI;
-use Docker\Container\Client as Container;
 use KhsCI\Support\Log;
 
 class Cleanup
@@ -12,7 +14,7 @@ class Cleanup
     /**
      * Remove all Docker Resource.
      *
-     * @param string $id services => only cleanup services
+     * @param string $id           services => only cleanup services
      * @param bool   $last
      * @param bool   $service_only
      *
@@ -75,7 +77,7 @@ class Cleanup
      *
      * @throws Exception
      */
-    public static function deleteContainerByLabel(Container $container, string $label): void
+    private static function deleteContainerByLabel(Container $container, string $label): void
     {
         $output = $container->list(true, null, false, [
             'label' => $label,

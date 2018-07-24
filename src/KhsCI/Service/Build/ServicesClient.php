@@ -50,12 +50,12 @@ class ServicesClient
                     'EndpointsConfig' => [
                         "$job_id" => [
                             'Aliases' => [
-                                $service_name
-                            ]
-                        ]
-                    ]
+                                $service_name,
+                            ],
+                        ],
+                    ],
                 ])
-                ->setCreateJson()
+                ->setCreateJson(null)
                 ->getCreateJson();
 
             Cache::connect()->lPush((string) $job_id.'_services', $container_config);
