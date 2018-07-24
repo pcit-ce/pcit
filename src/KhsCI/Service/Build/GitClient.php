@@ -53,7 +53,7 @@ class GitClient
      * @param string    $commit_id
      * @param string    $branch
      * @param Container $docker_container
-     * @param int       $build_key_id
+     * @param int       $job_id
      * @param Client    $client
      *
      * @throws Exception
@@ -68,7 +68,7 @@ class GitClient
                                   string $commit_id,
                                   string $branch,
                                   Container $docker_container,
-                                  int $build_key_id,
+                                  int $job_id,
                                   Client $client): void
     {
         $git_image = 'plugins/git';
@@ -117,13 +117,13 @@ class GitClient
 
         $config = $docker_container
             ->setEnv($git_env)
-            ->setLabels(['com.khs1994.ci.git' => $build_key_id, 'com.khs1994.ci' => $build_key_id])
-            ->setBinds(["$build_key_id:$workdir"])
+            ->setLabels(['com.khs1994.ci.git' => $job_id, 'com.khs1994.ci' => $job_id])
+            ->setBinds(["$job_id:$workdir"])
             ->setExtraHosts($hosts)
             ->setImage($git_image)
             ->setCreateJson(null)
             ->getCreateJson();
 
-        Cache::connect()->lpush($build_key_id, json_encode($config));
+        Cache::connect()->lpush($job_id, json_encode($config));
     }
 }

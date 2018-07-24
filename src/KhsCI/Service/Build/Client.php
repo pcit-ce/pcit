@@ -41,6 +41,7 @@ class Client
     private $pipeline;
 
     private $workdir;
+
     /**
      * @var Docker
      */
@@ -152,24 +153,24 @@ class Client
         $this->docker = $docker;
         $docker_container = $docker->container;
 
-        // set git config
-        GitClient::config($git,
-            $this->git_type,
-            $this->event_type,
-            $this->repo_full_name,
-            $workdir,
-            $this->commit_id,
-            $this->branch,
-            $docker_container,
-            $this->build_key_id,
-            $this
-        );
-
         // 解析构建矩阵
         $matrix = MatrixClient::parseMatrix($matrix);
 
         // 不存在构建矩阵
         if (!$matrix) {
+            // set git config
+            GitClient::config($git,
+                $this->git_type,
+                $this->event_type,
+                $this->repo_full_name,
+                $workdir,
+                $this->commit_id,
+                $this->branch,
+                $docker_container,
+                $this->build_key_id,
+                $this
+            );
+
             $job_id = Job::create($this->build_key_id);
 
             ServicesClient::config($services, (int) $job_id, null, $docker);
@@ -187,6 +188,19 @@ class Client
         // 矩阵构建循环
         foreach ($matrix as $k => $config) {
             $job_id = Job::create($this->build_key_id);
+
+            // set git config
+            GitClient::config($git,
+                $this->git_type,
+                $this->event_type,
+                $this->repo_full_name,
+                $workdir,
+                $this->commit_id,
+                $this->branch,
+                $docker_container,
+                (int) $job_id,
+                $this
+            );
 
             //启动服务
             ServicesClient::config($services, (int) $job_id, $config, $docker);

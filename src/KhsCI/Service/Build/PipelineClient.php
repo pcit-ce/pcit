@@ -18,7 +18,6 @@ class PipelineClient
      * @param array     $system_env
      * @param string    $work_dir
      * @param Container $docker_container
-     * @param int       $build_key_id
      * @param int       $job_id
      *
      * @throws Exception
@@ -29,7 +28,6 @@ class PipelineClient
                                   array $system_env,
                                   string $work_dir,
                                   Container $docker_container,
-                                  int $build_key_id,
                                   int $job_id): void
     {
         foreach ($pipeline as $setup => $array) {
@@ -68,7 +66,7 @@ class PipelineClient
 
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setBinds(["$build_key_id:$work_dir", 'tmp:/tmp'])
+                ->setBinds(["$job_id:$work_dir", 'tmp:/tmp'])
                 ->setEntrypoint(["$shell", '-c'])
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => $job_id,

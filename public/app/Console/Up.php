@@ -53,12 +53,10 @@ class Up
             }
 
             if (!$docker_build_skip) {
-                echo '[D]...';
                 Log::debug(__FILE__, __LINE__, 'Docker connect success, building ...');
 
                 (new BuildCommand())->build();
             }
-            echo '[W]';
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], LOG::ERROR);
         } finally {

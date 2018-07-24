@@ -6,7 +6,6 @@ namespace KhsCI\Service\Build;
 
 use App\Job;
 use Docker\Container\Client as Container;
-use Docker\Image\Client as Image;
 use Docker\Network\Client as Network;
 use KhsCI\CIException;
 use KhsCI\KhsCI;
@@ -16,11 +15,6 @@ use KhsCI\Support\Log;
 
 class RunContainer
 {
-    /**
-     * @var Image
-     */
-    private $docker_image;
-
     /**
      * @var Container
      */
@@ -49,57 +43,54 @@ class RunContainer
         foreach ($jobs as $job_id) {
             self::job((int) $job_id);
         }
+
+        // 所有 job 执行完毕
+        throw new CIException(CI::BUILD_STATUS_PASSED);
     }
 
     /**
      * @param int $job_id
      *
-     * @throws CIException
      * @throws \Exception
      */
     private function job(int $job_id): void
     {
         LogClient::drop($job_id);
 
+        $this->runService($job_id);
+
+        $this->docker_network->create((string) $job_id);
+
+        Log::debug(__FILE__, __LINE__, 'Create Network '.$job_id, [], Log::EMERGENCY);
+
         while (1) {
             $container_config = Cache::connect()->rPop((string) $job_id);
 
             if (!$container_config) {
-                Cleanup::systemDelete($job_id, true);
+                // 某一 job 执行完毕
+                // success
+                // changed
+                // 清理
+                Cleanup::systemDelete((string) $job_id, true);
             }
 
-            $no_status = (json_decode($container_config, true))['Labels']['com.khs1994.ci.pipeline.status.no_status'];
+            $labels = (json_decode($container_config, true))['Labels'];
 
-            if (!$no_status) {
+            $no_status = $labels['com.khs1994.ci.pipeline.status.no_status'] ?? false;
+
+            $is_git = $labels['com.khs1994.ci.git'] ?? false;
+
+            if (!$no_status or !$is_git) {
+                Cache::connect()->lPush($job_id.'_after', $container_config);
                 continue;
             }
 
-            $this->docker_network->create($job_id);
+            $container_id = $this->docker_container
+                ->setCreateJson($container_config)
+                ->create(false)
+                ->start(null);
 
-            Log::debug(__FILE__, __LINE__, 'Create Network '.$job_id, [], Log::EMERGENCY);
-
-            $this->runService($job_id);
-
-            try {
-                $container_id = $this->docker_container
-                    ->setCreateJson($container_config)
-                    ->create(false)
-                    ->start(null);
-
-                LogClient::get($job_id, $this->docker_container, $container_id);
-            } catch (\Throwable $e) {
-                Log::debug(__FILE__, __LINE__, $e->__toString(), [], LOG::EMERGENCY);
-
-                switch ($e->getMessage()) {
-                    case CI::BUILD_STATUS_PASSED:
-                        $this->runSuccess();
-                        break;
-                    default:
-                        $this->runFailure();
-                }
-
-                throw new CIException($e->getMessage(), $job_id);
-            }
+            LogClient::get($job_id, $this->docker_container, $container_id);
         }
     }
 
