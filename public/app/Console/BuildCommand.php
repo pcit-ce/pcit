@@ -6,6 +6,7 @@ namespace App\Console;
 
 use App\Build;
 use App\GetAccessToken;
+use App\Job;
 use App\Notifications\Mail;
 use App\Notifications\WeChatTemplate;
 use App\Repo;
@@ -32,9 +33,13 @@ class BuildCommand
 
     private $build_key_id;
 
-    private $pull_request_id;
+    private $pull_request_number;
+
+    private $tag;
 
     private $rid;
+
+    private $repo_full_name;
 
     private $git_type;
 
@@ -75,30 +80,29 @@ class BuildCommand
     {
         Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
 
-        $this->khsci = new KhsCI();
-
-        $build = $this->khsci->build;
-
         try {
             // get build info
             $output = array_values($this->getBuildDB());
 
+            $this->khsci = new KhsCI();
+
+            $build = $this->khsci->build;
+            $build_cleanup = $this->khsci->build_cleanup;
+
             // check ci root
             $this->checkCIRoot();
-
-            unset($output[10]);
 
             // update build status in progress
             $this->setStatusInProgress();
 
             // push repo full name
-            array_push($output, Repo::getRepoFullName($this->git_type, (int) $this->rid));
+            array_push($output, $this->repo_full_name = Repo::getRepoFullName($this->git_type, (int) $this->rid));
 
-            // push env
+            // push env and unique_id
             array_push($output, $this->getEnv(), $this->unique_id);
 
             // clear build environment
-            $build->systemDelete('services');
+            $build_cleanup->systemDelete(null, false, true);
 
             // exec build
             $build(...$output);
@@ -137,7 +141,7 @@ class BuildCommand
 
             $this->build_key_id && $this->build_status && Build::updateBuildStatus($this->build_key_id, $this->build_status);
 
-            $build->systemDelete($this->unique_id, true);
+            $build_cleanup->systemDelete($this->unique_id, true);
 
             // wechat
             Env::get('CI_WECHAT_TEMPLATE_ID', false) && $this->description &&
@@ -147,7 +151,7 @@ class BuildCommand
             CI::BUILD_EVENT_PR !== $this->event_type && $this->sendEMail();
 
             // check pr auto merge
-            $this->autoMerge();
+            // $this->autoMerge();
 
             Log::connect()->emergency('====== '.$this->build_key_id.' Build Stopped Success ======');
 
@@ -301,7 +305,8 @@ class BuildCommand
         $sql = <<<'EOF'
 SELECT
 
-id,git_type,rid,commit_id,commit_message,branch,event_type,pull_request_id,tag_name,config,check_run_id,pull_request_source
+id,git_type,rid,commit_id,commit_message,branch,event_type,
+pull_request_number,tag,config
 
 FROM
 
@@ -327,15 +332,22 @@ EOF;
 
         $output = array_values($output);
 
-        $this->build_key_id = (int) $output[0];
-        $this->git_type = $output[1];
-        $this->rid = (int) $output[2];
-        $this->commit_id = $output[3];
-        $this->commit_message = $output[4];
-        $this->branch = $output[5];
-        $this->event_type = $output[6];
-        $this->pull_request_id = (int) $output[7];
-        $this->config = $output[9];
+        list($build_key_id,
+            $this->git_type,
+            $rid,
+            $this->commit_id,
+            $this->commit_message,
+            $this->branch,
+            $this->event_type,
+            $pull_request_number,
+            $this->tag,
+            $this->config,
+            ) = $output;
+
+        $this->build_key_id = (int) $build_key_id;
+        $this->rid = (int) $rid;
+        $this->pull_request_number = (int) $pull_request_number;
+
         $this->unique_id = session_create_id();
 
         $this->getRepoConfig();
@@ -392,22 +404,20 @@ EOF;
 
         $build_status = $this->build_status;
 
-        $auto_merge_method = Build::isAutoMerge(
-            $this->git_type,
-            (int) $this->rid,
-            $this->commit_id,
-            $this->pull_request_id
-        );
+        $khsci = new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($this->rid)]);
 
-        if ((CI::BUILD_STATUS_PASSED === $build_status) && $auto_merge_method) {
+        $auto_merge_label = $khsci->issue_labels->listLabelsOnIssue($this->repo_full_name, $this->pull_request_number);
+
+        // TODO
+        $auto_merge_method = '';
+
+        if ((CI::BUILD_STATUS_PASSED === $build_status) && $auto_merge_label) {
             Log::debug(__FILE__, __LINE__, 'already set auto merge', [], Log::INFO);
 
             $repo_array = explode('/', Repo::getRepoFullName($this->git_type, $this->rid));
 
-            $khsci = new KhsCI([$this->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($this->rid)]);
-
             try {
-                if ($khsci->pull_request->isMerged($repo_array[0], $repo_array[1], $this->pull_request_id)) {
+                if ($khsci->pull_request->isMerged($repo_array[0], $repo_array[1], $this->pull_request_number)) {
                     Log::debug(
                         __FILE__,
                         __LINE__,
@@ -423,7 +433,7 @@ EOF;
                     ->merge(
                         $repo_array[0],
                         $repo_array[1],
-                        $this->pull_request_id,
+                        $this->pull_request_number,
                         $this->commit_message,
                         $commit_message,
                         $this->commit_id,
@@ -478,7 +488,7 @@ EOF;
 
         $log_content = Cache::connect()->get((string) $this->unique_id);
 
-        Build::updateLog($this->build_key_id, $log_content);
+        Job::updateLog($this->build_key_id, $log_content);
 
         // cleanup
         unlink($folder_name.'/'.$this->unique_id);
@@ -557,7 +567,7 @@ EOF;
 
         // GitHub App checks API
         if ('github' === $this->git_type) {
-            $build_log = Build::getLog((int) $this->build_key_id);
+            $build_log = Job::getLog((int) $this->build_key_id);
 
             Up::updateGitHubAppChecks(
                 $this->build_key_id,
@@ -591,7 +601,7 @@ EOF;
         }
 
         if ('github' === $this->git_type) {
-            $build_log = Build::getLog((int) $this->build_key_id);
+            $build_log = Job::getLog((int) $this->build_key_id);
             Up::updateGitHubAppChecks(
                 $this->build_key_id,
                 null,
@@ -624,7 +634,7 @@ EOF;
         }
 
         if ('github' === $this->git_type) {
-            $build_log = Build::getLog((int) $this->build_key_id);
+            $build_log = Job::getLog((int) $this->build_key_id);
             Up::updateGitHubAppChecks(
                 $this->build_key_id,
                 null,

@@ -54,6 +54,7 @@ use WeChat\WeChat;
  * @property Service\PullRequest\GitHubClient               $pull_request
  * @property Service\Webhooks\GitHubClient                  $webhooks
  * @property Service\Build\Client                           $build
+ * @property Service\Build\Cleanup                          $build_cleanup
  * @property TencentAI                                      $tencent_ai
  * @property Service\Users\GitHubClient                     $user_basic_info
  * @property Service\Checks\Run                             $check_run

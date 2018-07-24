@@ -884,7 +884,7 @@ EOF;
 INSERT INTO builds(
 
 git_type,event_type,created_at,action,
-commit_id,commit_message,committer_username,pull_request_id,
+commit_id,commit_message,committer_username,pull_request_number,
 branch,rid,config,internal,pull_request_source
 
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
@@ -962,14 +962,6 @@ EOF;
         //
         //        $assignee_type = $assignee->type;
 
-        Build::setAutoMerge(
-            $this->git_type,
-            (int) $rid,
-            (int) Env::get('CI_AUTO_MERGE_METHOD', 1),
-            $commit_id,
-            (int) $pull_number
-        );
-
         // 创建一条评论
 
         $comment_body = <<<EOF
@@ -1016,20 +1008,6 @@ EOF;
         $commit_id = $pull_request_head->sha;
 
         $pull_number = $obj->number;
-
-        $auto_merge_method = (int) Env::get('CI_AUTO_MERGE_METHOD', 2);
-
-        if ($unlabeled) {
-            $auto_merge_method = 0;
-        }
-
-        Build::setAutoMerge(
-            $this->git_type,
-            (int) $rid,
-            $auto_merge_method,
-            $commit_id,
-            (int) $pull_number
-        );
 
         if ($unlabeled) {
             Log::debug(
@@ -1096,7 +1074,7 @@ EOF;
         $sql = <<<'EOF'
 INSERT INTO builds(
 
-git_type,event_type,branch,tag_name,
+git_type,event_type,branch,tag,
 commit_id,commit_message,committer_name,committer_email,
 committer_username,rid,created_at,config
 

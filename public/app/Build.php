@@ -12,6 +12,50 @@ use KhsCI\Support\DBModel;
 class Build extends DBModel
 {
     /**
+     * @param int  $build_key_id
+     * @param int  $time
+     * @param bool $started_at
+     * @param bool $finished_at
+     * @param bool $created_at
+     * @param bool $deleted_at
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    private static function updateTime(int $build_key_id,
+                                       int $time = null,
+                                       bool $started_at = true,
+                                       bool $finished_at = false,
+                                       bool $created_at = false,
+                                       bool $deleted_at = false)
+    {
+        $column = null;
+
+        $started_at && $column = 'started_at';
+
+        $finished_at && $column = '';
+
+        $created_at && $column = '';
+
+        $deleted_at && $column = '';
+
+        if (!$column) {
+            throw new Exception('500', 500);
+        }
+
+        $sql = "UPDATE builds SET $column = ? WHERE id=?";
+
+        $time = $time ?? time();
+
+        if (0 === $time) {
+            $time = null;
+        }
+
+        return DB::update($sql, [$time, $build_key_id]);
+    }
+
+    /**
      * @param int $build_key_id
      * @param int $time
      *
@@ -21,15 +65,7 @@ class Build extends DBModel
      */
     public static function updateStartAt(int $build_key_id, int $time = null)
     {
-        $sql = 'UPDATE builds SET started_at = ? WHERE id=?';
-
-        $time = $time ?? time();
-
-        if (0 === $time) {
-            $time = null;
-        }
-
-        return DB::update($sql, [$time, $build_key_id]);
+        return self::updateTime($build_key_id, $time, true);
     }
 
     /**
@@ -56,15 +92,7 @@ class Build extends DBModel
      */
     public static function updateStopAt(int $build_key_id, int $time = null)
     {
-        $sql = 'UPDATE builds SET finished_at = ? WHERE id=? LIMIT 1';
-
-        $time = $time ?? time();
-
-        if (0 === $time) {
-            $time = null;
-        }
-
-        return DB::update($sql, [$time, $build_key_id]);
+        return self::updateTime($build_key_id, $time, false, true);
     }
 
     /**
@@ -264,33 +292,6 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getLog(int $build_key_id)
-    {
-        $sql = 'SELECT build_log FROM builds WHERE id=? LIMIT 1';
-
-        return DB::select($sql, [$build_key_id], true);
-    }
-
-    /**
-     * @param int    $build_key_id
-     * @param string $build_log
-     *
-     * @throws Exception
-     */
-    public static function updateLog(int $build_key_id, string $build_log): void
-    {
-        $sql = 'UPDATE builds SET build_log=? WHERE id=?';
-
-        DB::update($sql, [$build_log, $build_key_id]);
-    }
-
-    /**
-     * @param int $build_key_id
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
     public static function getConfig(int $build_key_id)
     {
         $sql = 'SELECT config FROM builds WHERE id=? LIMIT 1';
@@ -336,7 +337,7 @@ EOF;
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,
+SELECT id,branch,commit_id,tag,commit_message,
 compare,committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type
 FROM builds WHERE
 id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
@@ -366,8 +367,8 @@ EOF;
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,compare,
-committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
+SELECT id,branch,commit_id,tag,commit_message,compare,
+committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_number
 FROM builds WHERE
 id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip')
 ORDER BY id DESC LIMIT $limit
@@ -398,56 +399,14 @@ EOF;
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,compare,
-committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
+SELECT id,branch,commit_id,tag,commit_message,compare,
+committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_number
 FROM builds
 WHERE id<=$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) )
 AND git_type=? AND event_type IN(?,?) AND build_status NOT IN('skip') ORDER BY id DESC LIMIT $limit;
 EOF;
 
         return DB::select($sql, ["\"$uid\"", $git_type, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
-    }
-
-    /**
-     * @param string $git_type
-     * @param int    $rid
-     * @param int    $auto_merge_mode
-     * @param string $commit_id
-     * @param int    $pull_request_number
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
-    public static function setAutoMerge(string $git_type,
-                                        int $rid,
-                                        int $auto_merge_mode,
-                                        string $commit_id,
-                                        int $pull_request_number)
-    {
-        $sql = 'UPDATE builds SET auto_merge=? WHERE git_type=? AND rid =? AND event_type=? AND pull_request_id=? AND commit_id=?';
-
-        return DB::update($sql, [$auto_merge_mode, $git_type, $rid, CI::BUILD_EVENT_PR, $pull_request_number, $commit_id]);
-    }
-
-    /**
-     * @param string $git_type
-     * @param int    $rid
-     * @param string $commit_id
-     * @param int    $pull_request_number
-     *
-     * @return string
-     *
-     * @throws Exception
-     */
-    public static function isAutoMerge(string $git_type,
-                                       int $rid,
-                                       string $commit_id,
-                                       int $pull_request_number)
-    {
-        $sql = 'SELECT auto_merge FROM builds WHERE git_type=? AND rid =? AND event_type=? AND pull_request_id=? AND commit_id=? LIMIT 1';
-
-        return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, $pull_request_number, $commit_id], true);
     }
 
     /**

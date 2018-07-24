@@ -6,7 +6,7 @@ namespace KhsCI\Service\Build;
 
 use Docker\Docker;
 use Exception;
-use KhsCI\Support\Log;
+use KhsCI\Support\Cache;
 
 class ServicesClient
 {
@@ -14,54 +14,51 @@ class ServicesClient
      * 运行服务.
      *
      * @param array  $service
-     * @param string $unique_id
+     * @param int    $job_id
      * @param array  $config
      * @param Docker $docker
      *
      * @throws Exception
      */
-    public static function runService(?array $service, string $unique_id, ?array $config, Docker $docker): void
+    public static function config(?array $service, int $job_id, ?array $config, Docker $docker): void
     {
         if (null === $service) {
             return;
         }
 
-        $client = new Client();
-
         foreach ($service as $service_name => $array) {
-            $client->cancel();
-
             $image = $array['image'];
             $env = $array['environment'] ?? null;
             $entrypoint = $array['entrypoint'] ?? null;
             $command = $array['command'] ?? null;
 
-            $image = $client->parseImage($image, $config);
+            $image = ParseClient::image($image, $config);
 
-            $docker_image = $docker->image;
             $docker_container = $docker->container;
 
-            $tag = explode(':', $image)[1] ?? 'latest';
-
-            $docker_image->pull($image, $tag);
-
-            $container_id = $docker_container
+            $container_config = $docker_container
                 ->setEnv($env)
                 ->setEntrypoint($entrypoint)
-                ->setLabels(['com.khs1994.ci.service' => $unique_id])
+                ->setLabels([
+                    'com.khs1994.ci.service' => $job_id,
+                    'com.khs1994.ci.service.name' => $service_name,
+                    'com.khs1994.ci' => $job_id,
+                ])
                 ->setImage($image)
-                ->setContainerName($service_name)
                 ->setCmd($command)
-                ->create()
-                ->start(null);
+                ->setNetworkingConfig([
+                    'EndpointsConfig' => [
+                        "$job_id" => [
+                            'Aliases' => [
+                                $service_name
+                            ]
+                        ]
+                    ]
+                ])
+                ->setCreateJson()
+                ->getCreateJson();
 
-            Log::debug(
-                __FILE__,
-                __LINE__,
-                "Run $service_name By Image $image, Container Id Is $container_id",
-                [],
-                Log::EMERGENCY
-            );
+            Cache::connect()->lPush((string) $job_id.'_services', $container_config);
         }
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Webhooks;
 
-use Error;
 use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\Env;
@@ -28,34 +27,49 @@ class GitHubClient
     public $cache_key = 'webhooks';
 
     /**
-     * @param string|null $secret
      *
      * @return bool|int
      *
      * @throws Exception
      */
-    public function Server(string $secret = null)
+    public function Server()
     {
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
         $content = file_get_contents('php://input');
 
-        if (Env::get('CI_WEBHOOKS_DEBUG', false)) {
-            return $this->pushCache($type, $content);
+        if ($this->secret($content)) {
+            try {
+                return $this->pushCache($type, $content);
+            } catch (\Throwable $e) {
+                throw new Exception($e->getMessage(), $e->getCode());
+            }
         }
 
-        $secret = $secret ?? Env::get('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
+        throw new Exception('', 402);
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private function secret(string $content)
+    {
+        if (Env::get('CI_WEBHOOKS_DEBUG', false)) {
+            return true;
+        }
+
+        $secret = Env::get('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
 
         $signature = Request::getHeader('X-Hub-Signature');
+
         list($algo, $github_hash) = explode('=', $signature, 2);
 
         $serverHash = hash_hmac($algo, $content, $secret);
 
         if ($github_hash === $serverHash) {
-            try {
-                return $this->pushCache($type, $content);
-            } catch (Error | Exception $e) {
-                throw new Exception($e->getMessage(), $e->getCode());
-            }
+            return true;
         }
 
         throw new Exception('', 402);

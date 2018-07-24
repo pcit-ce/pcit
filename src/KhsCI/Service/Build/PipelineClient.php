@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace KhsCI\Service\Build;
 
 use Docker\Container\Client as Container;
-use Docker\Image\Client as Image;
 use Exception;
+use KhsCI\Support\Cache;
 use KhsCI\Support\Log;
 
 class PipelineClient
@@ -17,30 +17,18 @@ class PipelineClient
      * @param string    $event_type
      * @param array     $system_env
      * @param string    $work_dir
-     * @param string    $unique_id
      * @param Container $docker_container
-     * @param Image     $docker_image
-     * @param int       $build_key_id
-     * @param bool      $success
-     * @param bool      $failure
-     * @param bool      $changed
-     * @param Client    $client
+     * @param int       $job_id
      *
      * @throws Exception
      */
-    public static function runPipeline(array $pipeline,
-                                       ?array $config,
-                                       string $event_type,
-                                       array $system_env,
-                                       string $work_dir,
-                                       string $unique_id,
-                                       Container $docker_container,
-                                       Image $docker_image,
-                                       int $build_key_id,
-                                       Client $client,
-                                       bool $success = false,
-                                       bool $failure = false,
-                                       bool $changed = false): void
+    public static function config(array $pipeline,
+                                  ?array $config,
+                                  string $event_type,
+                                  array $system_env,
+                                  string $work_dir,
+                                  Container $docker_container,
+                                  int $job_id): void
     {
         foreach ($pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup, [], Log::EMERGENCY);
@@ -52,60 +40,21 @@ class PipelineClient
             $status = $array['when']['status'] ?? null;
             $shell = $array['shell'] ?? 'sh';
 
-            if ($success or $failure or $changed) {
-                if (!$status) {
-                    continue;
-                }
-            }
-
-            if ($event) {
-                if (is_string($event)) {
-                    if ($event_type !== $event) {
-                        Log::debug(
-                            __FILE__,
-                            __LINE__,
-                            "Pipeline $event Is Not Current ".$event_type.'. Skip', [], Log::EMERGENCY
-                        );
-
-                        continue;
-                    }
-                } elseif (is_array($event) and (!in_array($event_type, $event, true))) {
-                    Log::debug(
-                        __FILE__,
-                        __LINE__,
-                        "Pipeline Event $event not in ".implode(' | ', $event).'. skip', [], Log::EMERGENCY);
-
-                    continue;
-                }
-            }
-
-            if ($status) {
-                switch ($status) {
-                    case 'success':
-                        if (!$success) {
-                            continue;
-                        }
-                        break;
-                    case 'failure':
-                        if (!$failure) {
-                            continue;
-                        }
-                        break;
-                    case 'changed':
-                        if (!$changed) {
-                            continue;
-                        }
-                        break;
-                }
-            }
-
-            if ('ci_docker_build' === $image) {
+            if (!self::parseEvent($event, $event_type)) {
                 continue;
             }
 
-            $image = $client->parseImage($image, $config);
+            $no_status = false;
+            $failure = self::parseStatus($status, 'failure');
+            $success = self::parseStatus($status, 'success');
+            $changed = self::parseStatus($status, 'changed');
 
-            $ci_script = $client->parseCommand($setup, $image, $commands);
+            if (!$status) {
+                $no_status = true;
+            }
+
+            $image = ParseClient::image($image, $config);
+            $ci_script = ParseClient::command($setup, $image, $commands);
 
             $env = array_merge(["CI_SCRIPT=$ci_script"], $env, $system_env);
 
@@ -113,44 +62,100 @@ class PipelineClient
 
             $shell = '/bin/'.$shell;
 
-            $docker_container
-                ->setEnv($env)
-                ->setBinds(["$unique_id:$work_dir", 'tmp:/tmp'])
-                ->setEntrypoint(["$shell", '-c'])
-                ->setLabels(['com.khs1994.ci.pipeline' => $unique_id])
-                ->setWorkingDir($work_dir);
-
             $cmd = ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'];
 
-            // docker.khs1994.com:1000/username/image:1.14.0
-
-            $image_array = explode(':', $image);
-
-            // image not include :
-
-            $tag = null;
-
-            if (1 !== count($image_array)) {
-                $tag = $image_array[count($image_array) - 1];
-            }
-
-            $docker_image->pull($image, $tag ?? 'latest');
-
-            $container_id = $docker_container
+            $container_config = $docker_container
+                ->setEnv($env)
+                ->setBinds(["$job_id:$work_dir", 'tmp:/tmp'])
+                ->setEntrypoint(["$shell", '-c'])
+                ->setLabels([
+                    'com.khs1994.ci.pipeline' => $job_id,
+                    'com.khs1994.ci.pipeline.name' => $setup,
+                    'com.khs1994.ci.pipeline.status.no_status' => $no_status,
+                    'com.khs1994.ci.pipeline.status.failure' => $failure,
+                    'com.khs1994.ci.pipeline.status.success' => $success,
+                    'com.khs1994.ci.pipeline.status.changed' => $changed,
+                    'com.khs1994.ci' => $job_id
+                ])
+                ->setWorkingDir($work_dir)
                 ->setCmd($cmd)
                 ->setImage($image)
-                ->create()
-                ->start(null);
+                ->setNetworkingConfig([
+                    'EndpointsConfig' => [
+                        "$job_id" => [
+                            'Aliases' => [
+                                $setup
+                            ]
+                        ]
+                    ]
+                ])
+                ->setCreateJson()
+                ->getCreateJson();
 
-            Log::debug(
-                __FILE__,
-                __LINE__,
-                'Run Container By Image '.$image.', Container Id is '.$container_id,
-                [],
-                Log::EMERGENCY
-            );
-
-            $client->docker_container_logs($build_key_id, $docker_container, $container_id);
+            Cache::connect()->lPush((string) $job_id, $container_config);
         }
+    }
+
+    /**
+     * @param        $event
+     * @param string $event_type
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private static function parseEvent($event, string $event_type)
+    {
+        if ($event) {
+            if (is_string($event)) {
+                if ($event_type !== $event) {
+                    Log::debug(
+                        __FILE__,
+                        __LINE__,
+                        "Pipeline $event Is Not Current ".$event_type.'. Skip', [], Log::EMERGENCY
+                    );
+
+                    return false;
+                }
+            } elseif (is_array($event) and (!in_array($event_type, $event, true))) {
+                Log::debug(
+                    __FILE__,
+                    __LINE__,
+                    "Pipeline Event $event not in ".implode(' | ', $event).'. skip', [], Log::EMERGENCY);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $status
+     * @param $target
+     *
+     * @return bool
+     */
+    private static function parseStatus($status, $target)
+    {
+        if (!$status) {
+            return false;
+        }
+
+        if (is_string($status)) {
+            if (in_array($status, ['failure', 'success', 'changed']))
+                return $status === $target;
+        }
+
+        if (is_array($status)) {
+            foreach ($status as $k) {
+                if ($k === $target) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

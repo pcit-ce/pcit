@@ -6,13 +6,13 @@ namespace KhsCI\Service\Build;
 
 use Docker\Container\Client as Container;
 use Exception;
+use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Git;
-use KhsCI\Support\Log;
 
 class GitClient
 {
-    public static function parseGit()
+    private static function parseGit()
     {
         $git_config = [];
 
@@ -52,7 +52,6 @@ class GitClient
      * @param string    $workdir
      * @param string    $commit_id
      * @param string    $branch
-     * @param string    $unique_id
      * @param Container $docker_container
      * @param int       $build_key_id
      * @param Client    $client
@@ -61,14 +60,13 @@ class GitClient
      *
      * @see https://github.com/drone-plugins/drone-git
      */
-    public static function runGit(?array $git,
+    public static function config(?array $git,
                                   string $git_type,
                                   string $event_type,
                                   string $repo_full_name,
                                   string $workdir,
                                   string $commit_id,
                                   string $branch,
-                                  string $unique_id,
                                   Container $docker_container,
                                   int $build_key_id,
                                   Client $client): void
@@ -101,7 +99,7 @@ class GitClient
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=pull_request',
                     'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF=refs/pull/'.$client->pull_id.'/head',
+                    'DRONE_COMMIT_REF=refs/pull/'.$client->pull_number.'/head',
                 ], $git_config);
 
                 break;
@@ -111,29 +109,21 @@ class GitClient
                     'DRONE_WORKSPACE='.$workdir,
                     'DRONE_BUILD_EVENT=tag',
                     'DRONE_COMMIT_SHA='.$commit_id,
-                    'DRONE_COMMIT_REF=refs/tags/'.$client->tag_name,
+                    'DRONE_COMMIT_REF=refs/tags/'.$client->tag,
                 ], $git_config);
 
                 break;
         }
 
-        $container_id = $docker_container
+        $config = $docker_container
             ->setEnv($git_env)
-            ->setLabels(['com.khs1994.ci.git' => $unique_id])
-            ->setBinds(["$unique_id:$workdir"])
+            ->setLabels(['com.khs1994.ci.git' => $build_key_id, 'com.khs1994.ci' => $build_key_id])
+            ->setBinds(["$build_key_id:$workdir"])
             ->setExtraHosts($hosts)
             ->setImage($git_image)
-            ->create()
-            ->start(null);
+            ->setCreateJson()
+            ->getCreateJson();
 
-        Log::debug(
-            __FILE__,
-            __LINE__,
-            'Run Git Clone Container By Image '.$git_image.', Container Id is '.$container_id,
-            [],
-            Log::EMERGENCY
-        );
-
-        $client->docker_container_logs($build_key_id, $docker_container, $container_id);
+        Cache::connect()->lpush($build_key_id, json_encode($config));
     }
 }
