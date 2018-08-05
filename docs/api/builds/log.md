@@ -8,9 +8,9 @@ This returns a single log.
 
 | Method | URL                     |
 | :----- | :---------------------- |
-| `GET`  | `/build/{build.id}/log` |
+| `GET`  | `/job/{job.id}/log` |
 
-**Example:** `GET` `/build/666/log`
+**Example:** `GET` `/job/666/log`
 
 **Response**
 
@@ -39,6 +39,6 @@ This removes the contents of a log. It gets replace with the message: `Log remov
 
 | Method    | URL                     |
 | :-----    | :---------------------- |
-| `DELETE`  | `/build/{build.id}/log` |
+| `DELETE`  | `/job/{job.id}/log` |
 
-**Example:** `DELETE` `/build/666/log`
+**Example:** `DELETE` `/job/666/log`

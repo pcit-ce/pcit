@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\APITokenController;
 use App\User;
 use Exception;
 use KhsCI\KhsCI;
@@ -20,7 +19,7 @@ class OrganizationsController
      */
     public function __invoke()
     {
-        return User::getOrgByAdmin(...APITokenController::getUser());
+        return User::getOrgByAdmin(...JWTController::getUser());
     }
 
     /**

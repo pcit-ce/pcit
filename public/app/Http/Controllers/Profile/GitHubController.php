@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\User;
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
@@ -44,7 +44,7 @@ class GitHubController
             exit;
         }
 
-        $api_token = APITokenController::find($git_type, $username, (int) $uid);
+        $api_token = JWTController::generate($git_type, $username, (int) $uid);
 
         setcookie(
             $git_type.'_api_token',

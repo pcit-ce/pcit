@@ -16,7 +16,7 @@ class Cleanup
      *
      * @param string $id           services => only cleanup services
      * @param bool   $last
-     * @param bool   $service_only
+     * @param bool   $service_only only cleanup service container
      *
      * @throws Exception
      */

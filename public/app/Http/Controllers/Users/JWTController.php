@@ -2,20 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
-use App\ApiToken;
 use App\Build;
 use App\Repo;
 use Curl\Curl;
 use Exception;
-use KhsCI\Support\Env;
 use KhsCI\Support\Git;
 use KhsCI\Support\JWT;
-use KhsCI\Support\Log;
 use KhsCI\Support\Request;
 
-class APITokenController
+class JWTController
 {
     /**
      * 从请求头获取 token.
@@ -46,9 +43,15 @@ class APITokenController
     public static function getUser()
     {
         $token = self::getToken();
-        $array = ApiToken::getGitTypeAndUid((string) $token);
 
-        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
+        list('git_type' => $git_type, 'uid' => $uid, 'exp' => $exp) = (array) JWT::decode(
+            $token,
+            __DIR__.'/../../../../private_key/pub.key'
+        );
+
+        if ($exp < time()) {
+            throw new Exception('JWT Token timeout', 401);
+        }
 
         return [$git_type, (int) $uid];
     }
@@ -64,10 +67,7 @@ class APITokenController
      */
     public static function check(int $build_key_id)
     {
-        $token = self::getToken();
-        $array = ApiToken::getGitTypeAndUid((string) $token);
-
-        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
+        list($git_type, $uid) = self::getUser();
 
         // 由构建 ID 得到仓库 ID，及 git 类型
         $rid = Build::getRid($build_key_id);
@@ -102,10 +102,7 @@ class APITokenController
      */
     public static function checkByRepo(string $username, string $repo_name)
     {
-        $token = self::getToken();
-        $array = ApiToken::getGitTypeAndUid((string) $token);
-
-        list('git_type' => $git_type, 'uid' => $uid) = $array[0];
+        list($git_type, $uid) = self::getUser();
 
         // 上面获取到了 token 的 uid
         $rid = Repo::getRid($git_type, $username, $repo_name);
@@ -121,18 +118,6 @@ class APITokenController
     }
 
     /**
-     * 获取 token 对应的信息.
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getGitTypeAndUid()
-    {
-        return ApiToken::getGitTypeAndUid(self::getToken());
-    }
-
-    /**
      * 生成 API Token.
      *
      * @param string|null $git_type
@@ -143,13 +128,13 @@ class APITokenController
      *
      * @throws Exception
      */
-    public static function find(string $git_type = null, string $username = null, int $uid = null)
+    public static function generate(string $git_type = null, string $username = null, int $uid = null)
     {
-        $json = file_get_contents('php://input');
-
-        if (!$json) {
-            return self::getAccessTokenByUid($git_type, $username, $uid);
+        if ($git_type) {
+            goto a;
         }
+
+        $json = file_get_contents('php://input');
 
         $obj = json_decode($json);
 
@@ -183,39 +168,14 @@ class APITokenController
             throw new Exception('Requires authentication', 401);
         }
 
-        return self::getAccessTokenByUid((string) $git_type, (string) $username, (int) $uid);
-    }
-
-    /**
-     * @param string $git_type
-     * @param string $username
-     * @param int    $uid
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    private static function getAccessTokenByUid(string $git_type, string $username, int $uid)
-    {
-        $token_from_db = ApiToken::get((string) $git_type, $uid);
-
-        if ($token_from_db) {
-            return $token_from_db;
-        }
-
-        $jwt = JWT::encode(
-            __DIR__.'/../../../public/../private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE'),
+        // 验证通过 返回 jwt
+        a:
+        return JWT::encode(
+            __DIR__.'/../../../../private_key/'.getenv('CI_GITHUB_APP_PRIVATE_FILE'),
             (string) $git_type,
             (string) $username,
-            (int) $uid
+            (int) $uid,
+            time() + 100 * 24 * 60 * 60
         );
-
-        $token = hash('sha256', explode('.', $jwt)[1]);
-
-        ApiToken::add($token, (string) $git_type, (int) $uid);
-
-        Log::debug(__FILE__, __LINE__, 'generate github app token');
-
-        return $token;
     }
 }

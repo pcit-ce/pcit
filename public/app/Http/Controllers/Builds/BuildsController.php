@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
 use KhsCI\Support\CI;
@@ -27,7 +27,7 @@ class BuildsController
 
         $limit = (int) $_GET['limit'] ?? null;
 
-        list('git_type' => $git_type, 'uid' => $uid) = (APITokenController::getGitTypeAndUid())[0];
+        list($git_type, $uid) = JWTController::getUser();
 
         $array = Build::allByAdmin($git_type, (int) $uid, $before, $limit);
 
@@ -123,7 +123,7 @@ class BuildsController
      */
     public function cancel($build_id): void
     {
-        APITokenController::check((int) $build_id);
+        JWTController::check((int) $build_id);
 
         Build::updateBuildStatus((int) $build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
     }
@@ -139,7 +139,7 @@ class BuildsController
      */
     public function restart($build_id): void
     {
-        APITokenController::check((int) $build_id);
+        JWTController::check((int) $build_id);
 
         Build::updateBuildStatus((int) $build_id, 'pending');
         Build::updateStartAt((int) $build_id, 0);

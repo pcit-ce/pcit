@@ -50,9 +50,18 @@ class RunContainer
                     $this->after($job_id, 'failure');
                     $this->after($job_id, 'changed');
                 }
-            } finally {
+
+                // 某一 job success
+                if (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
+                    $this->after($job_id, 'success');
+                    $this->after($job_id, 'changed');
+                }
+
+                // 清理某一 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);
                 Job::updateStopAt($job_id);
+
+                throw new CIException($e->getMessage());
             }
         }
 
@@ -108,9 +117,7 @@ class RunContainer
             $this->runJob($job_id, $container_config);
         }
 
-        // 某一 job success
-        $this->after($job_id, 'success');
-        $this->after($job_id, 'changed');
+        throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
     }
 
     /**

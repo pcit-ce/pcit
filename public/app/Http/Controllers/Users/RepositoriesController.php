@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\APITokenController;
 use App\Repo;
 use App\User;
 use Exception;
@@ -27,7 +26,7 @@ class RepositoriesController
      */
     public function __invoke()
     {
-        list($git_type, $uid) = APITokenController::getUser();
+        list($git_type, $uid) = JWTController::getUser();
 
         return Repo::allByRepoPrefix($git_type, User::getUsername($git_type, $uid));
     }

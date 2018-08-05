@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\Setting;
 use Exception;
 
@@ -23,7 +23,7 @@ class SettingsController
      */
     public function __invoke(...$args)
     {
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
         return Setting::list($git_type, $rid);
     }
@@ -43,7 +43,7 @@ class SettingsController
     {
         list($username, $repo_name, $setting_name) = $args;
 
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
         return Setting::get($git_type, $rid, $setting_name);
     }
@@ -71,7 +71,7 @@ class SettingsController
     {
         list($username, $repo_name, $setting_name) = $args;
 
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
         $json = file_get_contents('php://input');
 

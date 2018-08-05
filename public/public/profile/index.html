@@ -9,13 +9,11 @@
 </head>
 <body>
 <header>
-  This Is Header
-  <br>
-  <br>
+
 </header>
 <div id="userinfo">
   <p id="username"></p>
-  <button id="sync" onclick="sync()">Sync</button>
+  <button id="sync" onclick="sync()">Sync</button> <span>&nbsp;新建了 Git 仓库，没有看到？请点击 Sync 按钮</span>
 </div>
 <br>
 
@@ -142,9 +140,9 @@
 
         installation_url = data;
         content = `
-            <p>GitHub Apps Integration</p>
+            <p>GitHub Apps Integration 【GitHub App 集成】</p>
 
-            <p><a href="${installation_url}" target="_blank">Activate</a> the GitHub Apps integration to start testing and deploying on KhsCI</p>
+            <p><a href="${installation_url}" target="_blank">Activate</a> the GitHub Apps integration to start testing and deploying on KhsCI 【 找不到项目！请点击 Activate 启用 】</p>
         `;
         $("#repos").append(content);
       },
@@ -280,7 +278,7 @@
         success: function (data) {
           $('.tip').after(
             `<p>
-<strong>Missing an organization?</strong>
+<strong>Missing an organization? <code>【 找不到你的组织？ 】</code></strong>
 <a href="${data}" target="_blank"> Review and add </a> your authorized organizations.
 </p>`
           );

@@ -74,41 +74,6 @@ class Up
     }
 
     /**
-     * @param int    $build_key_id Build table primary id
-     * @param string $state        Default is pending
-     * @param string $description
-     *
-     * @throws Exception
-     */
-    public static function updateGitHubStatus(int $build_key_id,
-                                              string $state = null,
-                                              string $description = null): void
-    {
-        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id.' ...', [], Log::INFO);
-
-        $rid = Build::getRid($build_key_id);
-
-        $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
-
-        list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
-
-        $build_output_array = Build::find($build_key_id);
-
-        (new KhsCI(['github_access_token' => GetAccessToken::byRepoFullName($repo_full_name)]))
-            ->repo_status->create(
-                $repo_prefix,
-                $repo_name,
-                $build_output_array['commit_id'],
-                $state ?? 'pending',
-                Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id,
-                'continuous-integration/'.Env::get('CI_NAME').'/'.$build_output_array['event_type'],
-                $description ?? 'The analysis or builds is pending'
-            );
-
-        Log::debug(__FILE__, __LINE__, 'Create GitHub commit Status '.$build_key_id, [], Log::INFO);
-    }
-
-    /**
      * @param int         $build_key_id
      * @param string|null $name
      * @param string      $status

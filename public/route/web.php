@@ -193,9 +193,19 @@ Route::post('api/repo/{username}/{repo_name}/unstar', 'Builds\StarController@uns
 
 /* Log */
 
-Route::get('api/build/{build_id}/log', 'Builds\LogController');
+Route::get('api/job/{job_id}/log', 'Builds\LogController');
 
-Route::delete('api/build/{build_id}/log', 'Builds\LogController@delete');
+Route::delete('api/job/{job_id}/log', 'Builds\LogController@delete');
+
+/* Job */
+
+Route::get('api/jobs', 'Builds\JobController@list');
+
+Route::get('api/job/{job_id}', 'Builds\JobController@find');
+
+Route::post('api/job/{job_id}/cancel', 'Builds\JobController@cancel');
+
+Route::post('api/job/{job_id}/restart', 'Builds\JobController@restart');
 
 /* ICO */
 
@@ -209,7 +219,7 @@ Route::get('ico/pending', 'Status\ShowStatusByICOController@pending');
 Route::get('ico/unknown', 'Status\ShowStatusByICOController@unknown');
 /* API Token */
 
-Route::post('api/user/token', 'APITokenController@find');
+Route::post('api/user/token', 'Users\JWTController@generate');
 
 Route::get('wechat', 'WeChat\MessageServer');
 Route::post('wechat', 'WeChat\MessageServer');

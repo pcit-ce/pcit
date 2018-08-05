@@ -21,7 +21,7 @@ class KhsCICommand
     public static function getConfigFileName()
     {
         if ('WINNT' === PHP_OS) {
-            $home = 'C:/Users/'.exec('echo %username%');
+            $home = getenv('USERPROFILE');
         } else {
             $home = exec('echo $HOME');
         }

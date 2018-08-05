@@ -58,6 +58,16 @@ Cloud native computing uses an open source software stack to be:
 
 * Git 仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 来配置 CI 规则（**需要私有部署 KhsCI**）。
 
+```yaml
+pipeline:
+  
+  php:
+    imge: khs1994/php:7.2.8-fpm-alpine
+    commands:
+      - composer install
+      - vendor/bin/phpunit
+```
+
 * 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
 
 ## Try Demo (KhsCI CE)
