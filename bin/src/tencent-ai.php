@@ -2,9 +2,9 @@
 
 <?php
 
-use App\Console\TencentAI\Chat;
-use App\Console\TencentAI\OCR;
-use App\Console\TencentAI\Translate;
+use App\Console\TencentAI\ChatCommand;
+use App\Console\TencentAI\OCRCommand;
+use App\Console\TencentAI\TranslateCommand;
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
 
@@ -28,10 +28,10 @@ if (!file_exists(__DIR__.'/../../public/'.$env_file)) {
 
 (new \Dotenv\Dotenv(__DIR__.'/../../public', $env_file))->load();
 
-$cli->add(new Translate());
+$cli->add(new TranslateCommand());
 
-$cli->add(new Chat());
+$cli->add(new ChatCommand());
 
-$cli->add(new OCR());
+$cli->add(new OCRCommand());
 
 $cli->run();

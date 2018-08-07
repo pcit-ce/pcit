@@ -2,14 +2,14 @@
 
 <?php
 
-use App\Console\Khsci\Init;
-use App\Console\Khsci\Login;
-use App\Console\Khsci\Logout;
-use App\Console\Khsci\Repo\Env as EnvCommand;
+use App\Console\Khsci\InitCommand;
+use App\Console\Khsci\LoginCommand;
+use App\Console\Khsci\LogoutCommand;
+use App\Console\Khsci\Repo\EnvCommand;
 use App\Console\Khsci\Repo\SettingCommand;
-use App\Console\Khsci\Sync;
-use App\Console\Khsci\Token;
-use App\Console\Khsci\Whoami;
+use App\Console\Khsci\SyncCommand;
+use App\Console\Khsci\TokenCommand;
+use App\Console\Khsci\WhoamiCommand;
 use Dotenv\Dotenv;
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;
@@ -34,20 +34,20 @@ date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
 
 $cli = new Application('KhsCI CLI', 'v18.06');
 
-$cli->add(new Login());
+$cli->add(new LoginCommand());
 
-$cli->add(new Logout());
+$cli->add(new LogoutCommand());
 
-$cli->add(new Token());
+$cli->add(new TokenCommand());
 
 $cli->add(new EnvCommand());
 
-$cli->add(new Whoami());
+$cli->add(new WhoamiCommand());
 
 $cli->add(new SettingCommand());
 
-$cli->add(new Init());
+$cli->add(new InitCommand());
 
-$cli->add(new Sync());
+$cli->add(new SyncCommand());
 
 $cli->run();

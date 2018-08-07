@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Profile;
 
 use App\GetAccessToken;
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use App\User;
 use Exception;
@@ -29,7 +29,7 @@ class SyncController
      */
     public function __invoke(): void
     {
-        list($this->git_type, $this->uid) = APITokenController::getUser();
+        list($this->git_type, $this->uid) = JwtController::getUser();
 
         $this->access_token = GetAccessToken::getAccessTokenByUid($this->git_type, (int) $this->uid);
 
@@ -176,8 +176,6 @@ class SyncController
 
                 $repo_full_name = $obj_repo->full_name;
 
-                list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
-
                 $default_branch = $obj_repo->default_branch;
 
                 /**
@@ -204,8 +202,6 @@ class SyncController
 
                 Repo::updateRepoInfo($this->git_type,
                     (int) $rid,
-                    $repo_prefix,
-                    $repo_name,
                     $repo_full_name,
                     $insert_admin,
                     $insert_collaborators,

@@ -7,7 +7,7 @@ namespace App\Console;
 use App\Build;
 use App\GetAccessToken;
 use App\Job;
-use App\Notifications\Mail;
+use App\Mail\Mail;
 use App\Notifications\WeChatTemplate;
 use App\Repo;
 use App\User;

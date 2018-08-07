@@ -7,6 +7,7 @@ namespace App;
 use Exception;
 use KhsCI\Support\DB;
 use KhsCI\Support\DBModel;
+use KhsCI\Support\Log;
 
 class Repo extends DBModel
 {
@@ -23,7 +24,7 @@ class Repo extends DBModel
      */
     public static function getRid(string $git_type, string $username, string $repo)
     {
-        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=? ORDER BY id DESC LIMIT 1';
+        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
         $id = DB::select($sql, [$git_type, $username, $repo], true);
 
@@ -41,7 +42,7 @@ class Repo extends DBModel
      */
     public static function getDefaultBranch(string $git_type, string $username, string $repo)
     {
-        $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=? ORDER BY id DESC LIMIT 1';
+        $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
         $default_branch = DB::select($sql, [$git_type, $username, $repo], true);
 
@@ -65,51 +66,71 @@ class Repo extends DBModel
 
     /**
      * @param string $repo_full_name
+     * @param string $git_type
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name)
+    public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name, $git_type = 'github')
     {
-        $sql = 'SELECT installation_id FROM repo WHERE repo_full_name=? AND git_type=? ORDER BY id DESC LIMIT 1';
+        $username = (explode('/', $repo_full_name))[0];
 
-        return DB::select($sql, [$repo_full_name, 'github'], true);
+        $sql = 'SELECT installation_id FROM user WHERE username=? AND git_type=? ORDER BY id DESC LIMIT 1';
+
+        return DB::select($sql, [$username, $git_type], true);
     }
 
     /**
-     * @param int $rid
+     * @param int    $rid
+     * @param string $git_type
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getGitHubInstallationIdByRid(int $rid)
+    public static function getGitHubInstallationIdByRid(int $rid, $git_type = 'github')
     {
-        $sql = 'SELECT installation_id FROM repo WHERE rid=? AND git_type=? ORDER BY id DESC LIMIT 1';
+        $repo_full_name = self::getRepoFullName($git_type, $rid);
 
-        return DB::select($sql, [$rid, 'github'], true);
+        return self::getGitHubInstallationIdByRepoFullName($repo_full_name, $git_type);
     }
 
     /**
-     * @param int $rid
-     * @param int $installation_id
+     * @param string $git_type
+     * @param int    $rid
+     * @param string $repo_full_name
+     * @param int    $installation_id
      *
      * @throws Exception
      */
-    public static function updateGitHubInstallationIdByRid(int $rid, ?int $installation_id): void
+    public static function updateGitHubInstallationIdByRid(string $git_type,
+                                                           int $rid,
+                                                           string $repo_full_name,
+                                                           ?int $installation_id): void
     {
         if (null === $installation_id) {
             return;
         }
 
+        $username = explode('/', $repo_full_name)[0];
+
         $installation_id_in_db = self::getGitHubInstallationIdByRid($rid);
 
-        if ((int) $installation_id_in_db !== $installation_id) {
-            $sql = 'UPDATE repo SET installation_id=? WHERE rid=?';
+        // user table not found installation_id
+        if (!$installation_id_in_db) {
+            Log::debug(null, null, 'repo not found, insert...', [], Log::INFO);
 
-            DB::update($sql, [$installation_id, $rid]);
+            self::updateRepoInfo($git_type, $rid, $repo_full_name, null, null);
         }
+
+        if ((int) $installation_id_in_db !== $installation_id) {
+            $sql = 'UPDATE repo SET installation_id=?,repo_full_name=? WHERE rid=?';
+
+            DB::update($sql, [$installation_id, $repo_full_name, $rid]);
+        }
+
+        User::updateInstallationId($git_type, $installation_id, $username);
     }
 
     /**
@@ -242,11 +263,11 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByRepoPrefix(string $git_type, string $username)
+    public static function allByUsername(string $git_type, string $username)
     {
-        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_prefix=?';
+        $sql = "SELECT * FROM repo WHERE git_type=? AND repo_full_name LIKE \"$username/%\"";
 
-        return DB::select($sql, [$git_type, $username]);
+        return DB::select($sql, [$git_type]);
     }
 
     /**
@@ -260,7 +281,7 @@ EOF;
      */
     public static function findByRepoFullName(string $git_type, string $username, string $repo_name)
     {
-        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
+        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?)';
 
         return DB::select($sql, [$git_type, $username, $repo_name]);
     }
@@ -304,8 +325,6 @@ EOF;
     /**
      * @param string   $git_type
      * @param int      $rid
-     * @param string   $repo_prefix
-     * @param string   $repo_name
      * @param string   $repo_full_name
      * @param int|null $insert_admin
      * @param int|null $insert_collaborators
@@ -317,12 +336,10 @@ EOF;
      */
     public static function updateRepoInfo(string $git_type,
                                           int $rid,
-                                          string $repo_prefix,
-                                          string $repo_name,
                                           string $repo_full_name,
                                           ?int $insert_admin,
                                           ?int $insert_collaborators,
-                                          string $default_branch,
+                                          string $default_branch = 'master',
                                           int $build_active = 1,
                                           int $webhooks_status = 1): void
     {
@@ -330,13 +347,12 @@ EOF;
             $sql = <<<'EOF'
 UPDATE repo SET
 
-git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=? 
+git_type=?,rid=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=? 
 
 WHERE id=?;
 EOF;
             DB::update($sql, [
-                $git_type, $rid, $repo_prefix, $repo_name,
-                $repo_full_name, time(), $build_active, $webhooks_status, $repo_key_id,
+                $git_type, $rid, $repo_full_name, time(), $build_active, $webhooks_status, $repo_key_id,
             ]);
 
             return;
@@ -344,13 +360,13 @@ EOF;
 
         $sql = <<<EOF
 INSERT INTO repo(
-id,git_type, rid, repo_prefix, repo_name, repo_full_name,default_branch,
+id,git_type, rid, repo_full_name,default_branch,
 last_sync,build_activate,webhooks_status
-) VALUES(null,?,?,?,?,?,?,?,?,?)
+) VALUES(null,?,?,?,?,?,?,?)
 EOF;
 
         DB::insert($sql, [
-            $git_type, $rid, $repo_prefix, $repo_name, $repo_full_name,
+            $git_type, $rid, $repo_full_name,
             $default_branch, time(), $build_active, $webhooks_status,
         ]);
 
@@ -394,32 +410,6 @@ EOF;
         $sql = 'DELETE FROM repo WHERE git_type=? AND rid=? AND installation_id=?';
 
         return DB::delete($sql, [$git_type, $rid, $installation_id]);
-    }
-
-    /**
-     * @param string $git_type
-     * @param int    $rid
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getConfig(string $git_type, int $rid)
-    {
-        $sql = <<<EOF
-SELECT
-
-builds_only_with_khsci_yml,
-build_pushes,
-build_pull_requests,
-maximum_number_of_builds,
-auto_cancel_branch_builds,
-auto_cancel_pull_request_builds
-
-FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1
-EOF;
-
-        return DB::select($sql, [$git_type, $rid]);
     }
 
     /**

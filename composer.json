@@ -50,7 +50,8 @@
     "sort-packages": true
   },
   "suggest": {
-    "ext-xdebug": "*"
+    "ext-xdebug": "*",
+    "ext-pcntl": "*"
   },
   "autoload": {
     "psr-4": {

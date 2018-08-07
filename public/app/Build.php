@@ -436,4 +436,200 @@ EOF;
 
         return DB::select($sql, [$build_key_id]);
     }
+
+    /**
+     * @param $git_type
+     * @param $branch
+     * @param $tag
+     * @param $commit_id
+     * @param $commit_message
+     * @param $committer_name
+     * @param $committer_email
+     * @param $committer_username
+     * @param $author_name
+     * @param $author_email
+     * @param $author_username
+     * @param $rid
+     * @param $event_time
+     * @param $config
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insertTag($git_type,
+                                     $branch,
+                                     $tag,
+                                     $commit_id,
+                                     $commit_message,
+                                     $committer_name,
+                                     $committer_email,
+                                     $committer_username,
+                                     $author_name,
+                                     $author_email,
+                                     $author_username,
+                                     $rid,
+                                     $event_time,
+                                     $config)
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,branch,tag,
+commit_id,commit_message,
+committer_name,committer_email,committer_username,
+author_name,author_email,author_username,
+rid,created_at,config
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+            $git_type, 'tag', $branch, $tag,
+            $commit_id, $commit_message,
+            $committer_name, $committer_email, $committer_username,
+            $author_name, $author_email, $author_username,
+            $rid, $event_time, $config,
+        ]);
+
+        return $last_insert_id;
+    }
+
+    /**
+     * @param $git_type
+     * @param $event_type
+     * @param $branch
+     * @param $compare
+     * @param $commit_id
+     * @param $commit_message
+     * @param $committer_name
+     * @param $committer_email
+     * @param $committer_username
+     * @param $author_name
+     * @param $author_email
+     * @param $author_username
+     * @param $rid
+     * @param $event_time
+     * @param $config
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insert($git_type,
+                                  $event_type,
+                                  $branch,
+                                  $compare,
+                                  $commit_id,
+                                  $commit_message,
+                                  $committer_name,
+                                  $committer_email,
+                                  $committer_username,
+                                  $author_name,
+                                  $author_email,
+                                  $author_username,
+                                  $rid,
+                                  $event_time,
+                                  $config)
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,branch,compare,
+commit_id,commit_message,
+committer_name,committer_email,committer_username,
+author_name,author_email,author_username,
+rid,created_at,config
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+            $git_type, $event_type, $branch, $compare,
+            $commit_id, $commit_message,
+            $committer_name, $committer_email, $committer_username,
+            $author_name, $author_email, $author_username,
+            $rid, $event_time, $config,
+        ]);
+
+        return $last_insert_id;
+    }
+
+    /**
+     * @param $git_type
+     * @param $rid
+     * @param $created_at
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insertPing($git_type, $rid, $created_at)
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,rid,created_at
+
+) VALUES(?,?,?,?);
+EOF;
+        $data = [
+            $git_type, 'ping', $rid, $created_at,
+        ];
+
+        return DB::insert($sql, $data);
+    }
+
+    /**
+     * @param $git_type
+     * @param $event_time
+     * @param $action
+     * @param $commit_id
+     * @param $commit_message
+     * @param $committer_uid
+     * @param $pull_request_number
+     * @param $branch
+     * @param $rid
+     * @param $config
+     * @param $internal
+     * @param $pull_request_source
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insertPullRequest($git_type,
+                                             $event_time,
+                                             $action,
+                                             $commit_id,
+                                             $commit_message,
+                                             $committer_uid,
+                                             $pull_request_number,
+                                             $branch,
+                                             $rid,
+                                             $config,
+                                             $internal,
+                                             $pull_request_source)
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,created_at,action,
+commit_id,commit_message,pull_request_number,
+committer_name,committer_email,committer_username,
+branch,rid,config,internal,pull_request_source
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+                $git_type, 'pull_request', $event_time, $action,
+                $commit_id, $commit_message, $committer_uid, $pull_request_number,
+                $branch, $rid, $config, $internal, $pull_request_source,
+            ]
+        );
+
+        return $last_insert_id;
+    }
 }

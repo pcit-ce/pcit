@@ -11,7 +11,7 @@ use KhsCI\Support\DBModel;
 
 class Setting extends DBModel
 {
-    protected static $table = 'repo';
+    protected static $table = 'settings';
 
     protected static $setting_array = CI::CI_SETTING_ARRAY;
 
@@ -29,7 +29,6 @@ class Setting extends DBModel
     {
         $sql = <<<EOF
 SELECT 
-builds_only_with_khsci_yml,
 build_pushes,
 build_pull_requests,
 maximum_number_of_builds,

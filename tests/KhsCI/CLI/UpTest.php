@@ -10,13 +10,13 @@ use KhsCI\Tests\KhsCITestCase;
 class UpTest extends KhsCITestCase
 {
     /**
-     * @var \App\Console\Up
+     * @var \App\Console\UpCommand
      */
     private $up;
 
     protected function setUp(): void
     {
-        $this->up = new \App\Console\Up();
+        $this->up = new \App\Console\UpCommand();
     }
 
     /**

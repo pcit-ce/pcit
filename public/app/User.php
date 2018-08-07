@@ -173,6 +173,7 @@ EOF;
     }
 
     /**
+     * @param string $git_type
      * @param int    $installation_id
      * @param string $username
      *
@@ -180,8 +181,12 @@ EOF;
      */
     public static function updateInstallationId(string $git_type, int $installation_id, string $username): void
     {
-        $sql = 'UPDATE user SET installation_id=? WHERE git_type=? AND username=?';
+        if (self::exists($git_type, $username)) {
+            $sql = 'UPDATE user SET installation_id=? WHERE git_type=? AND username=?';
 
-        DB::update($sql, [$installation_id, $git_type, $username]);
+            DB::update($sql, [$installation_id, $git_type, $username]);
+
+            return;
+        }
     }
 }

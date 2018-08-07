@@ -76,4 +76,102 @@ class Issue extends DBModel
     {
         $sql = 'UPDATE issues SET assignees=JSON_MERGE_PRESERVE(labels,?) WHERE git_type=? AND issue_id=?';
     }
+
+    /**
+     * @param $git_type
+     * @param $rid
+     * @param $issue_id
+     * @param $issue_number
+     * @param $action
+     * @param $title
+     * @param $body
+     * @param $sender_username
+     * @param $sender_uid
+     * @param $sender_pic
+     * @param $state
+     * @param $locked
+     * @param $created_at
+     * @param $closed_at
+     * @param $updated_at
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insert($git_type,
+                                  $rid,
+                                  $issue_id,
+                                  $issue_number,
+                                  $action,
+                                  $title,
+                                  $body,
+                                  $sender_username,
+                                  $sender_uid,
+                                  $sender_pic,
+                                  $state,
+                                  $locked,
+                                  $created_at,
+                                  $closed_at,
+                                  $updated_at)
+    {
+        $sql = <<<'EOF'
+INSERT INTO issues(
+
+id,git_type,rid,issue_id,issue_number,action,title,body,sender_username,sender_uid,sender_pic,
+state,locked,created_at,closed_at,updated_at
+
+) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+                'github', $rid, $issue_id, $issue_number, $action, $title, $body,
+                $sender_uid, $state, (int) $locked, $created_at, $closed_at, $updated_at,
+            ]
+        );
+
+        User::updateUserInfo($git_type, $sender_uid, $sender_username, null, $sender_pic, null);
+
+        return $last_insert_id;
+    }
+
+    /**
+     * @param $git_type
+     * @param $rid
+     * @param $issue_id
+     * @param $comment_id
+     * @param $issue_number
+     * @param $body
+     * @param $sender_uid
+     * @param $created_at
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insertComment($git_type,
+                                         $rid,
+                                         $issue_id,
+                                         $comment_id,
+                                         $issue_number,
+                                         $body,
+                                         $sender_uid,
+                                         $created_at)
+    {
+        $sql = <<<'EOF'
+INSERT INTO issues(
+
+id,git_type,rid,issue_id,comment_id,issue_number,body,
+sender_uid,created_at
+
+) VALUES(null,?,?,?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+                $git_type, $rid, $issue_id, $comment_id, $issue_number, $body,
+                $sender_uid, $created_at,
+            ]
+        );
+
+        return $last_insert_id;
+    }
 }
