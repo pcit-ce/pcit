@@ -38,9 +38,13 @@ class JWTController
     }
 
     /**
+     * @param bool $returnGitTypeFirst
+     *
+     * @return array
+     *
      * @throws Exception
      */
-    public static function getUser()
+    public static function getUser(bool $returnGitTypeFirst = true)
     {
         $token = self::getToken();
 
@@ -51,6 +55,10 @@ class JWTController
 
         if ($exp < time()) {
             throw new Exception('JWT Token timeout', 401);
+        }
+
+        if (!$returnGitTypeFirst) {
+            return [(int) $uid, $git_type];
         }
 
         return [$git_type, (int) $uid];
@@ -79,7 +87,7 @@ class JWTController
         }
 
         // 检查 token uid 是否为仓库管理员
-        $output = Repo::checkAdmin($git_type, (int) $rid, (int) $uid);
+        $output = Repo::checkAdmin((int) $rid, (int) $uid, $git_type);
 
         if ($output) {
             return [$rid, $git_type, $uid];
@@ -108,7 +116,7 @@ class JWTController
         $rid = Repo::getRid($git_type, $username, $repo_name);
 
         // 比对管理员列表
-        $output = Repo::checkAdmin($git_type, (int) $rid, (int) $uid);
+        $output = Repo::checkAdmin((int) $rid, (int) $uid, $git_type);
 
         if ($output) {
             return [(int) $rid, $git_type, (int) $uid];

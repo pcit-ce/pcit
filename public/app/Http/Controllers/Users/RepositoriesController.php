@@ -26,9 +26,9 @@ class RepositoriesController
      */
     public function __invoke()
     {
-        list($git_type, $uid) = JWTController::getUser();
+        list($uid, $git_type) = JWTController::getUser(false);
 
-        return Repo::allByRepoPrefix($git_type, User::getUsername($git_type, $uid));
+        return Repo::allByUsername(User::getUsername($uid, $git_type), $git_type);
     }
 
     /**
@@ -45,7 +45,7 @@ class RepositoriesController
      */
     public function list(string $git_type, string $username)
     {
-        return Repo::allByRepoPrefix($git_type, $username);
+        return Repo::allByUsername($username, $git_type);
     }
 
     /**
@@ -63,6 +63,6 @@ class RepositoriesController
      */
     public function find(string $git_type, string $username, string $repo_name)
     {
-        return Repo::findByRepoFullName($git_type, $username, $repo_name);
+        return Repo::findByRepoFullName($username, $repo_name, $git_type);
     }
 }

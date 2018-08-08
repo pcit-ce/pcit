@@ -6,6 +6,9 @@ namespace KhsCI\Support\Webhooks\GitHub;
 
 use KhsCI\Support\Date;
 use KhsCI\Support\Log;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Author;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Committer;
 
 class Push
 {
@@ -48,15 +51,9 @@ class Push
 
         $commit_message = $head_commit->message;
         $commit_timestamp = Date::parse($head_commit->timestamp);
-        $author = $head_commit->author;
-        $author_name = $author->name;
-        $author_email = $author->email;
-        $author_username = $author->username;
 
+        $author = $head_commit->author;
         $committer = $head_commit->committer;
-        $committer_name = $committer->name;
-        $committer_email = $committer->email;
-        $committer_username = $committer->username;
 
         $installation_id = $obj->installation->id ?? null;
 
@@ -70,12 +67,8 @@ class Push
             'commit_message' => $commit_message,
             'compare' => $compare,
             'event_time' => $commit_timestamp,
-            'author_name' => $author_name,
-            'author_email' => $author_email,
-            'author_username' => $author_username,
-            'committer_name' => $committer_name,
-            'committer_email' => $committer_email,
-            'committer_username' => $committer_username,
+            'author' => (new Author($author)),
+            'committer' => (new Committer($committer)),
             'installation_id' => $installation_id,
             'account' => (new Account($repository_owner, $org)),
         ];
@@ -110,14 +103,7 @@ class Push
         $repository_owner = $repository->owner;
 
         $author = $head_commit->author;
-        $author_name = $author->name;
-        $author_email = $author->email;
-        $author_username = $author->username;
-
         $committer = $head_commit->committer;
-        $committer_username = $committer->username;
-        $committer_name = $committer->name;
-        $committer_email = $committer->email;
 
         $event_time = Date::parse($head_commit->timestamp);
 
@@ -134,12 +120,8 @@ class Push
             'commit_id' => $commit_id,
             'commit_message' => $commit_message,
             'event_time' => $event_time,
-            'author_name' => $author_name,
-            'author_email' => $author_email,
-            'author_username' => $author_username,
-            'committer_name' => $committer_name,
-            'committer_email' => $committer_email,
-            'committer_username' => $committer_username,
+            'author' => (new Author($author)),
+            'committer' => (new Committer($committer)),
             'account' => (new Account($repository_owner, $org)),
         ];
     }

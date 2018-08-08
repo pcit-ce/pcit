@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KhsCI\Support\Webhooks\GitHub;
 
 use KhsCI\Support\Log;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
 
 class Installation
 {
@@ -39,7 +40,6 @@ class Installation
 
         return [
             'installation_id' => $installation_id,
-            'org' => $org,
             'sender_username' => $sender_username,
             'sender_uid' => $sender_uid,
             'sender_pic' => $sender_pic,
@@ -83,7 +83,6 @@ class Installation
         return [
             'installation_id' => $installation_id,
             'repo' => $repo,
-            'org' => $org,
             'sender_username' => $sender_username,
             'sender_uid' => $sender_uid,
             'sender_pic' => $sender_pic,

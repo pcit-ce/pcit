@@ -19,7 +19,7 @@ class OrganizationsController
      */
     public function __invoke()
     {
-        return User::getOrgByAdmin(...JWTController::getUser());
+        return User::getOrgByAdmin(...JWTController::getUser(false));
     }
 
     /**
@@ -38,6 +38,6 @@ class OrganizationsController
     {
         $khsci = new KhsCI();
 
-        return User::getUserInfo($git_type, $org_name);
+        return User::getUserInfo($org_name, 0, $git_type);
     }
 }

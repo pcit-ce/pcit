@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Support\Webhooks\GitHub;
+namespace KhsCI\Support\Webhooks\GitHub\UserBasicInfo;
 
 /**
  * User or Org info.

@@ -7,7 +7,7 @@ namespace App;
 use Exception;
 use KhsCI\Support\DB;
 use KhsCI\Support\DBModel;
-use KhsCI\Support\Webhooks\GitHub\Account;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
 
 class User extends DBModel
 {

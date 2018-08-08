@@ -6,6 +6,7 @@ namespace KhsCI\Support\Webhooks\GitHub;
 
 use KhsCI\Support\Date;
 use KhsCI\Support\Log;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
 
 class Issues
 {

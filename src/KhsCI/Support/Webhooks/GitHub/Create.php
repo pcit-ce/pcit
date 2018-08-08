@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace KhsCI\Support\Webhooks\GitHub;
 
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
+
 class Create
 {
     /**

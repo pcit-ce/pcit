@@ -53,7 +53,7 @@ class GitHubAppChecks
 
         $rid = Build::getRid((int) $build_key_id);
 
-        $repo_full_name = Repo::getRepoFullName('github', (int) $rid);
+        $repo_full_name = Repo::getRepoFullName((int) $rid);
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 

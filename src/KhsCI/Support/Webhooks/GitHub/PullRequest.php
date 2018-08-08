@@ -6,6 +6,7 @@ namespace KhsCI\Support\Webhooks\GitHub;
 
 use KhsCI\Support\Date;
 use KhsCI\Support\Log;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
 
 class PullRequest
 {
@@ -25,11 +26,11 @@ class PullRequest
         Log::debug(null, null, 'Receive event', ['pull request' => $action], Log::INFO);
 
         if (!in_array($action, ['opened', 'synchronize'])) {
-            'assigned' === $action && self::assigned($json_content);
-            'labeled' === $action && self::labeled($json_content);
-            'unlabeled' === $action && self::labeled($json_content, true);
+            'assigned' === $action && $array = self::assigned($json_content);
+            'labeled' === $action && $array = self::labeled($json_content);
+            'unlabeled' === $action && $array = self::labeled($json_content, true);
 
-            return [];
+            return $array ?? [];
         }
 
         $pull_request = $obj->pull_request;
@@ -39,12 +40,16 @@ class PullRequest
         // head 向 base 提交 PR
         $pull_request_base = $pull_request->base;
         $pull_request_head = $pull_request->head;
+
         $rid = $pull_request_base->repo->id;
         $repo_full_name = $pull_request_base->repo->full_name;
+
         $commit_message = $pull_request->title;
         $commit_id = $pull_request_head->sha;
+
         $committer_username = $pull_request->user->login;
         $committer_uid = $pull_request->user->id;
+
         $pull_request_number = $obj->number;
         $branch = $pull_request->base->ref;
         $installation_id = $obj->installation->id ?? null;
@@ -55,16 +60,15 @@ class PullRequest
         $repository_owner = $repository->owner;
 
         // 检查内外部 PR
-        $internal = true;
 
-        if ($pull_request_head->repo->id !== $pull_request_base->repo->id) {
-            $internal = false;
-        }
+        $internal = ($pull_request_head->repo->id !== $pull_request_base->repo->id) ? true : false;
 
         $pull_request_source = $pull_request_head->repo->full_name;
 
         $org = ($obj->organization ?? false) ? true : false;
 
+        // 谁开启 PR
+        // 谁推送的 commit 多个
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -141,6 +145,7 @@ class PullRequest
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
+            'action' => $action,
             'label_name' => $label_name,
             'account' => (new Account($repository_owner, $org)),
         ];
@@ -182,6 +187,7 @@ class PullRequest
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
+            'action' => $action,
             'account' => (new Account($repository_owner, $org)),
         ];
     }

@@ -38,7 +38,7 @@ class WeChatTemplate
             'commit_id' => $commit_id
             ) = $output;
 
-        $repo_full_name = Repo::getRepoFullName($git_type, (int) $rid);
+        $repo_full_name = Repo::getRepoFullName((int) $rid, $git_type);
 
         $output = $khsci->wechat_template_message->sendTemplateMessage(
             $build_status,

@@ -38,12 +38,8 @@ class Push
             'branch' => $branch,
             'commit_id' => $commit_id,
             'commit_message' => $commit_message,
-            'committer_name' => $committer_name,
-            'committer_email' => $committer_email,
-            'committer_username' => $committer_username,
-            'author_name' => $author_name,
-            'author_email' => $author_email,
-            'author_username' => $author_username,
+            'committer' => $committer,
+            'author' => $author,
             'compare' => $compare,
             'event_time' => $event_time,
             'account' => $account,
@@ -59,8 +55,8 @@ class Push
         $config = json_encode($config_array);
 
         $last_insert_id = Build::insert('push', $branch, $compare, $commit_id,
-            $commit_message, $committer_name, $committer_email, $committer_username,
-            $author_name, $author_email, $author_username,
+            $commit_message, $committer->name, $committer->email, $committer->username,
+            $author->name, $author->email, $author->username,
             $rid, $event_time, $config);
 
         if (Skip::handle($commit_message, (int) $last_insert_id, $branch, $config)) {
@@ -89,12 +85,8 @@ class Push
             'tag' => $tag,
             'commit_id' => $commit_id,
             'commit_message' => $commit_message,
-            'committer_name' => $committer_name,
-            'committer_email' => $committer_email,
-            'committer_username' => $committer_username,
-            'author_name' => $author_name,
-            'author_email' => $author_email,
-            'author_username' => $author_username,
+            'committer' => $committer,
+            'author' => $author,
             'event_time' => $event_time,
             'account' => $account,
         ] = $array;
@@ -109,8 +101,8 @@ class Push
 
         $last_insert_id = Build::insertTag(
             $branch, $tag, $commit_id, $commit_message,
-            $committer_name, $committer_email, $committer_username,
-            $author_name, $author_email, $author_username,
+            $committer->name, $committer->email, $committer->username,
+            $author->name, $author->email, $author->username,
             $rid, $event_time, $config
         );
 

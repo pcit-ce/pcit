@@ -31,7 +31,7 @@ class SyncController
     {
         list($this->git_type, $this->uid) = JwtController::getUser();
 
-        $this->access_token = GetAccessToken::getAccessTokenByUid($this->git_type, (int) $this->uid);
+        $this->access_token = GetAccessToken::getAccessTokenByUid((int) $this->uid, $this->git_type);
 
         $this->khsci = new KhsCI(
             [$this->git_type.'_access_token' => $this->access_token], $this->git_type
@@ -119,7 +119,7 @@ class SyncController
 
         // check org status
 
-        $orgs = User::getOrgByAdmin($this->git_type, $this->uid);
+        $orgs = User::getOrgByAdmin($this->uid, $this->git_type);
 
         foreach ($orgs as $k) {
             $org_name = $k['username'];
