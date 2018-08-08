@@ -28,10 +28,8 @@ class Installation
         $installation_id = $installation->id;
 
         $account = $installation->account;
-        $account = $account->login;
-        $account_uid = $account->id;
-        $account_pic = $account->avatar_url;
 
+        // sender 可视为管理员
         $sender = $obj->sender;
         $sender_username = $sender->login;
         $sender_uid = $sender->id;
@@ -41,13 +39,11 @@ class Installation
 
         return [
             'installation_id' => $installation_id,
-            'account' => $account,
-            'account_uid' => $account_uid,
-            'account_pic' => $account_pic,
             'org' => $org,
             'sender_username' => $sender_username,
             'sender_uid' => $sender_uid,
             'sender_pic' => $sender_pic,
+            'account' => (new Account($account, $org)),
         ];
     }
 
@@ -71,10 +67,8 @@ class Installation
         $installation_id = $installation->id;
 
         $account = $installation->account;
-        $account = $account->login;
-        $account_uid = $account->id;
-        $account_pic = $account->avatar_url;
 
+        // sender 可视为管理员
         $sender = $obj->sender;
         $sender_username = $sender->login;
         $sender_uid = $sender->id;
@@ -89,13 +83,11 @@ class Installation
         return [
             'installation_id' => $installation_id,
             'repo' => $repo,
-            'account' => $account,
-            'account_uid' => $account_uid,
-            'account_pic' => $account_pic,
             'org' => $org,
             'sender_username' => $sender_username,
             'sender_uid' => $sender_uid,
             'sender_pic' => $sender_pic,
+            'account' => (new Account($account, $org)),
         ];
     }
 }

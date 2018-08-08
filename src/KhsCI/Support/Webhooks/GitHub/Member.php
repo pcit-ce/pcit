@@ -33,6 +33,9 @@ class Member
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
 
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
+
         $installation_id = $obj->installation->id ?? null;
 
         Log::debug(null, null, "$action $rid $member_uid", [], Log::INFO);
@@ -42,6 +45,9 @@ class Member
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'member_uid' => $member_uid,
+            'member_username' => $member_username,
+            'member_pic' => $member_pic,
+            'account' => (new Account($repository_owner)),
         ];
     }
 }

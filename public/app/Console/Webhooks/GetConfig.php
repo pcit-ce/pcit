@@ -23,7 +23,7 @@ class GetConfig
      */
     public static function handle(int $rid, string $commit_id, $git_type = 'github')
     {
-        $repo_full_name = Repo::getRepoFullName($git_type, $rid);
+        $repo_full_name = Repo::getRepoFullName($rid, $git_type);
 
         Log::debug(__FILE__, __LINE__, "${git_type} ${rid} is $repo_full_name", [], Log::INFO);
 

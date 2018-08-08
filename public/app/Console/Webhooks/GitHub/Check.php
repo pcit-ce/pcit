@@ -25,15 +25,19 @@ class Check
             'repo_full_name' => $repo_full_name,
             'branch' => $branch,
             'commit_id' => $commit_id,
-            'action' => $action
+            'action' => $action,
+            'account' => $account,
+            'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Check::suite($json_content);
+
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
         if ('rerequested' === $action) {
             Build::updateBuildStatusByCommitId(
-                'pending', 'github', (int) $rid, $branch, $commit_id);
+                'pending', (int) $rid, $branch, $commit_id);
         }
-
-        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
     }
 
     /**
@@ -53,7 +57,12 @@ class Check
             'check_suite_id' => $check_suite_id,
             'check_run_id' => $check_run_id,
             'branch' => $branch,
-            'username' => $username
+            'account_username' => $account_username,
+            'account_uid' => $account_uid,
+            'account_name' => $account_name,
+            'account_email' => $account_email,
+            'account_pic' => $account_pic,
+            'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Check::run($json_content);
 
         if ('rerequested' === $action or 'requested_action' === $action) {
@@ -62,7 +71,7 @@ class Check
                     // 用户点击了某一 run 的 re-run
 
                     Build::updateBuildStatusByCommitId(
-                        'pending', 'github', (int) $rid, $branch, $commit_id);
+                        'pending', (int) $rid, $branch, $commit_id);
                     break;
 
                 case 'requested_action':
@@ -74,8 +83,9 @@ class Check
             return;
         }
 
-        User::updateInstallationId((int) $installation_id, $username);
-        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
+        User::updateUserInfo((int) $account_uid, $account_name, $account_username, $account_email, $account_pic, $org);
+        User::updateInstallationId((int) $installation_id, $account_username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
         $config = Build::getConfig((int) $external_id);
 

@@ -19,12 +19,13 @@ class Delete
             'installation_id' => $installation_id,
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
-            'username' => $username,
             'ref_type' => $ref_type,
+            'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Delete::handle($json_content);
 
-        User::updateInstallationId((int) $installation_id, $username);
-        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';

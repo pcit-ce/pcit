@@ -46,19 +46,19 @@ class Push
             'author_username' => $author_username,
             'compare' => $compare,
             'event_time' => $event_time,
-            'username' => $username
+            'account' => $account,
         ] = $array;
 
         // user table not include user info
-        User::updateUserInfo($uid, $name, $username, null, $pic, $org);
-        User::updateInstallationId((int) $installation_id, $username);
-        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
-        $config_array = GetConfig::handle($rid, $commit_id);
+        $config_array = GetConfig::handle((int) $rid, $commit_id);
 
         $config = json_encode($config_array);
 
-        $last_insert_id = Build::insert('github', 'push', $branch, $compare, $commit_id,
+        $last_insert_id = Build::insert('push', $branch, $compare, $commit_id,
             $commit_message, $committer_name, $committer_email, $committer_username,
             $author_name, $author_email, $author_username,
             $rid, $event_time, $config);
@@ -96,18 +96,19 @@ class Push
             'author_email' => $author_email,
             'author_username' => $author_username,
             'event_time' => $event_time,
-            'username' => $username,
+            'account' => $account,
         ] = $array;
 
-        User::updateInstallationId((int) $installation_id, $username);
-        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
-        $config_array = GetConfig::handle($rid, $commit_id);
+        $config_array = GetConfig::handle((int) $rid, $commit_id);
 
         $config = json_encode($config_array);
 
         $last_insert_id = Build::insertTag(
-            'github', $branch, $tag, $commit_id, $commit_message,
+            $branch, $tag, $commit_id, $commit_message,
             $committer_name, $committer_email, $committer_username,
             $author_name, $author_email, $author_username,
             $rid, $event_time, $config

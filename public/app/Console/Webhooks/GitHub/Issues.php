@@ -46,7 +46,9 @@ class Issues
             'closed_at' => $closed_at,
             'updated_at' => $updated_at,
             'assigness' => $assignees,
-            'labels' => $labels
+            'labels' => $labels,
+            'account' => $account,
+            'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::handle($json_content);
 
         if ($assignees) {
@@ -82,8 +84,9 @@ class Issues
 
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
-        User::updateInstallationId((int) $installation_id, $username);
-        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
         Log::debug(__FILE__, __LINE__, $issue_number.' opened', [], Log::INFO);
 
@@ -108,7 +111,9 @@ class Issues
             'updated_at' => $updated_at,
             'sender_uid' => $sender_uid,
             'body' => $body,
-            'created_at' => $created_at
+            'created_at' => $created_at,
+            'account' => $account,
+            'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::comment($json_content);
 
         $repo_full_name = Repo::getRepoFullName($rid);
@@ -147,7 +152,8 @@ class Issues
 
         Log::debug(__FILE__, __LINE__, $debug_info, [], Log::INFO);
 
-        User::updateInstallationId((int) $installation_id, $username);
-        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
     }
 }

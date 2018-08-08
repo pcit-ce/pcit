@@ -30,7 +30,9 @@ class Issues
 
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
-        $username = $repository->owner->login;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
 
         $issue_id = $issue->id;
         $issue_number = $issue->number;
@@ -70,7 +72,7 @@ class Issues
             'created_at' => $created_at,
             'updated_at' => $updated_at,
             'closed_at' => $closed_at,
-            'username' => $username,
+            'account' => (new Account($repository_owner)),
         ];
     }
 
@@ -116,7 +118,9 @@ class Issues
 
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
-        $username = $repository->owner->login;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
 
         $installation_id = $obj->installation->id ?? null;
 
@@ -133,7 +137,7 @@ class Issues
             'body' => $body,
             'created_at' => $created_at,
             'updated_at' => $updated_at,
-            'username' => $username,
+            'account' => (new Account($repository_owner)),
             'action' => $action,
         ];
     }

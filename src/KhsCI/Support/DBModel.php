@@ -100,6 +100,8 @@ class DBModel
 
             DB::insert($sql, [$v]);
         }
+
+        static::$set_array = [];
     }
 
     public function __set($name, $value): void

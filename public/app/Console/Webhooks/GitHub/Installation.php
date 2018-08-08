@@ -23,19 +23,15 @@ class Installation
             'sender_uid' => $sender_uid,
             'sender_username' => $sender_username,
             'sender_pic' => $sender_pic,
-            'account_uid' => $account_uid,
             'account' => $account,
-            'account_pic' => $account_pic,
             'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Installation::handle($json_content);
 
         // 仓库管理员信息
-        User::updateUserInfo(
-            $sender_uid, null, $sender_username, null, $sender_pic);
+        User::updateUserInfo((int) $sender_uid, null, $sender_username, null, $sender_pic);
 
-        // 仓库所属用户或组织信息
-        User::updateUserInfo($account_uid, null, $account, null, $account_pic, $org);
-        User::updateInstallationId((int) $installation_id, $account);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
 
         if ('created' === $action) {
             self::create($installation_id, $repositories, $sender_uid, $account);
@@ -49,14 +45,13 @@ class Installation
     /**
      * 用户首次安装了 GitHub App.
      *
-     * @param int    $installation_id
-     * @param array  $repo
-     * @param int    $sender_uid
-     * @param string $account
+     * @param int   $installation_id
+     * @param array $repo
+     * @param int   $sender_uid
      *
      * @throws \Exception
      */
-    public static function create(int $installation_id, array $repo, int $sender_uid, string $account): void
+    public static function create(int $installation_id, array $repo, int $sender_uid): void
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
@@ -64,8 +59,7 @@ class Installation
 
             $repo_full_name = $k->full_name;
 
-            User::updateInstallationId((int) $installation_id, $account);
-            Repo::updateRepoInfo($rid, $repo_full_name, $sender_uid, null);
+            Repo::updateRepoInfo((int) $rid, $repo_full_name, $sender_uid, null);
         }
     }
 
@@ -99,18 +93,16 @@ class Installation
             'sender_uid' => $sender_uid,
             'sender_username' => $sender_username,
             'sender_pic' => $sender_pic,
-            'account_uid' => $account_uid,
-            'account' => $account,
-            'account_pic' => $account_pic,
+            'account' => $account
         ] = \KhsCI\Support\Webhooks\GitHub\Installation::repositories($json_content);
 
         if ('added' === $action) {
-            self::create($installation_id, $repo, $sender_uid, $account);
+            self::create((int) $installation_id, $repo, $sender_uid);
 
             return;
         }
 
-        self::repositories_action_removed($installation_id, $repo);
+        self::repositories_action_removed((int) $installation_id, $repo);
     }
 
     /**

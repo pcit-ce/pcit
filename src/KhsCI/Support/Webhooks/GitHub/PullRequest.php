@@ -49,6 +49,11 @@ class PullRequest
         $branch = $pull_request->base->ref;
         $installation_id = $obj->installation->id ?? null;
 
+        $repository = $obj->repository;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
+
         // 检查内外部 PR
         $internal = true;
 
@@ -71,6 +76,7 @@ class PullRequest
             'branch' => $branch,
             'internal' => $internal,
             'pull_request_source' => $pull_request_source,
+            'account' => (new Account($repository_owner)),
         ];
     }
 
@@ -105,6 +111,11 @@ class PullRequest
 
         $pull_request_number = $obj->number;
 
+        $repository = $obj->repository;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
+
         $installation_id = $obj->installation->id ?? null;
 
         if ($unlabeled) {
@@ -127,6 +138,7 @@ class PullRequest
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
             'label_name' => $label_name,
+            'account' => (new Account($repository_owner)),
         ];
     }
 
@@ -150,6 +162,11 @@ class PullRequest
         $rid = $pull_request_base->repo->id;
         $repo_full_name = $pull_request_base->repo->full_name;
 
+        $repository = $obj->repository;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
+
         $pull_request_number = $obj->number;
 
         $installation_id = $obj->installation->id ?? null;
@@ -159,6 +176,7 @@ class PullRequest
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
+            'account' => (new Account($repository_owner)),
         ];
     }
 }

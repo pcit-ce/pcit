@@ -20,13 +20,17 @@ class Check
         $obj = json_decode($json_content);
 
         $installation_id = $obj->installation->id ?? null;
+
         $repository = $obj->repository;
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
-        $username = $repository->owner->login;
+
         $action = $obj->action;
 
         Log::debug(null, null, 'Receive event', ['Check Suite' => $action], Log::INFO);
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
 
         $check_suite = $obj->check_suite;
         $check_suite_id = $check_suite->id;
@@ -41,7 +45,7 @@ class Check
             'branch' => $branch,
             'commit_id' => $commit_id,
             'check_suite_id' => $check_suite_id,
-            'username' => $username,
+            'account' => (new Account($repository_owner)),
         ];
     }
 
@@ -61,17 +65,14 @@ class Check
         Log::debug(null, null, 'Receive event', ['Check Run' => $action], Log::INFO);
 
         $installation_id = $obj->installation->id ?? null;
-
         $repository = $obj->repository;
-
         $rid = $repository->id;
-
         $repo_full_name = $repository->full_name;
 
-        $username = $repository->owner->login;
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
 
         $check_run = $obj->check_run;
-        $check_suite = $check_run->check_suite;
 
         $check_run_id = $check_run->id;
         $commit_id = $check_run->head_sha;
@@ -87,11 +88,11 @@ class Check
             'repo_full_name' => $repo_full_name,
             'action' => $action,
             'branch' => $branch,
-            'username' => $username,
-            'check_run_id' => $check_run_id,
             'commit_id' => $commit_id,
-            'external_id' => $external_id,
             'check_suite_id' => $check_suite_id,
+            'check_run_id' => $check_run_id,
+            'external_id' => $external_id,
+            'account' => (new Account($repository_owner)),
         ];
     }
 }

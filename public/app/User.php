@@ -7,6 +7,7 @@ namespace App;
 use Exception;
 use KhsCI\Support\DB;
 use KhsCI\Support\DBModel;
+use KhsCI\Support\Webhooks\GitHub\Account;
 
 class User extends DBModel
 {
@@ -33,41 +34,62 @@ class User extends DBModel
     }
 
     /**
-     * @param int         $uid
-     * @param string      $name
-     * @param string      $username
-     * @param string|null $email
-     * @param string|null $pic
-     * @param bool        $org
-     * @param string      $git_type
+     * @param int |Account $uid
+     * @param string       $name
+     * @param string       $username
+     * @param string|null  $email
+     * @param string|null  $pic
+     * @param bool         $org
+     * @param string       $git_type
      *
      * @throws Exception
      */
-    public static function updateUserInfo(int $uid,
-                                          ?string $name,
-                                          string $username,
-                                          ?string $email,
-                                          string $pic,
+    public static function updateUserInfo($uid,
+                                          string $name = null,
+                                          string $username = null,
+                                          string $email = null,
+                                          string $pic = null,
                                           bool $org = false,
                                           string $git_type = 'github'): void
     {
-        $user_key_id = self::exists($git_type, $username);
+        if ($uid instanceof Account) {
+            $uid = $uid->uid;
+            $name = $uid->name;
+            $username = $uid->username;
+            $email = $uid->email;
+            $pic = $uid->pic;
+            $org = $uid->org;
+        }
 
         $name = $name ?? $username;
 
+        $type = $org ? 'org' : 'user';
+
+        if (!$email) {
+            // 信息不包含 email
+            $sql = '';
+        }
+
+        if (!$name) {
+            // 信息不包含昵称
+            $sql = '';
+        }
+
+        $user_key_id = self::exists($username, $git_type);
+
         if ($user_key_id) {
-            $sql = 'UPDATE user SET git_type=?,uid=?,name=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
+            $sql = 'UPDATE user SET git_type=?,uid=?,name=?,username=?,email=?,pic=?,type=? WHERE id=?';
             DB::update($sql, [
-                    $git_type, $uid, $name, $username, $email, $pic, $user_key_id,
+                    $git_type, $uid, $name, $username, $email, $pic, $user_key_id, $type,
                 ]
             );
-        } else {
-            $org || $org = null;
-            $org && $org = 'org';
 
-            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,?,null,?,null)';
-            DB::insert($sql, [$git_type, $uid, $name, $username, $email, $pic, $org]);
+            return;
         }
+
+        $sql = 'INSERT INTO user(git_type, uid, name, username, email, pic, type) VALUES(?,?,?,?,?,?,?)';
+
+        DB::insert($sql, [$git_type, $uid, $name, $username, $email, $pic, $type]);
     }
 
     /**
@@ -197,7 +219,7 @@ EOF;
      */
     public static function updateInstallationId(int $installation_id, string $username, string $git_type = 'github'): void
     {
-        if (self::exists($git_type, $username)) {
+        if (self::exists($username, $git_type)) {
             $sql = 'UPDATE user SET installation_id=? WHERE git_type=? AND username=?';
 
             DB::update($sql, [$installation_id, $git_type, $username]);

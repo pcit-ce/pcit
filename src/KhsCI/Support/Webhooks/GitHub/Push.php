@@ -26,7 +26,9 @@ class Push
 
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
-        $username = $repository->owner->login;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
 
         $ref = $obj->ref;
         $ref_array = explode('/', $ref);
@@ -58,8 +60,13 @@ class Push
 
         $installation_id = $obj->installation->id ?? null;
 
+        $org = $obj->organization ?? false;
+
+        if ($org) {
+            $org = true;
+        }
+
         return [
-            'installation_id' => $installation_id,
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'branch' => $branch,
@@ -73,7 +80,9 @@ class Push
             'committer_name' => $committer_name,
             'committer_email' => $committer_email,
             'committer_username' => $committer_username,
-            'username' => $username,
+            'installation_id' => $installation_id,
+            'account' => (new Account($repository_owner)),
+            'org' => $org,
         ];
     }
 
@@ -95,13 +104,15 @@ class Push
 
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
-        $username = $repository->owner->login;
 
         $branch = self::ref2branch($obj->base_ref);
 
         $head_commit = $obj->head_commit;
         $commit_id = $head_commit->id;
         $commit_message = $head_commit->message;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
 
         $author = $head_commit->author;
         $author_name = $author->name;
@@ -116,6 +127,12 @@ class Push
         $event_time = Date::parse($head_commit->timestamp);
 
         $installation_id = $obj->installation->id ?? null;
+
+        $org = $obj->organization ?? false;
+
+        if ($org) {
+            $org = true;
+        }
 
         return [
             'installation_id' => $installation_id,
@@ -132,7 +149,8 @@ class Push
             'committer_name' => $committer_name,
             'committer_email' => $committer_email,
             'committer_username' => $committer_username,
-            'username' => $username,
+            'account' => (new Account($repository_owner)),
+            'org' => $org,
         ];
     }
 

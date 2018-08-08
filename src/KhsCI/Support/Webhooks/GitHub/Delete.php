@@ -27,7 +27,9 @@ class Delete
 
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
-        $username = $repository->owner->login;
+
+        // 仓库所属用户或组织的信息
+        $repository_owner = $repository->owner;
 
         $installation_id = $obj->installation->id ?? null;
 
@@ -35,6 +37,7 @@ class Delete
             'installation_id' => $installation_id,
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
+            'account' => (new Account($repository_owner)),
         ];
     }
 }
