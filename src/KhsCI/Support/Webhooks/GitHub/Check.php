@@ -37,6 +37,8 @@ class Check
         $branch = $check_suite->head_branch;
         $commit_id = $check_suite->head_sha;
 
+        $org = $obj->organization ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -45,7 +47,7 @@ class Check
             'branch' => $branch,
             'commit_id' => $commit_id,
             'check_suite_id' => $check_suite_id,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 
@@ -82,6 +84,8 @@ class Check
         $check_suite_id = $check_suite->id;
         $branch = $check_suite->head_branch;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -92,7 +96,7 @@ class Check
             'check_suite_id' => $check_suite_id,
             'check_run_id' => $check_run_id,
             'external_id' => $external_id,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 }

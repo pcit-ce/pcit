@@ -23,8 +23,7 @@ class Installation
             'sender_uid' => $sender_uid,
             'sender_username' => $sender_username,
             'sender_pic' => $sender_pic,
-            'account' => $account,
-            'org' => $org
+            'account' => $account
         ] = \KhsCI\Support\Webhooks\GitHub\Installation::handle($json_content);
 
         // 仓库管理员信息

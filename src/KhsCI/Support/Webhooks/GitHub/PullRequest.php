@@ -63,6 +63,8 @@ class PullRequest
 
         $pull_request_source = $pull_request_head->repo->full_name;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -76,7 +78,7 @@ class PullRequest
             'branch' => $branch,
             'internal' => $internal,
             'pull_request_source' => $pull_request_source,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 
@@ -118,6 +120,8 @@ class PullRequest
 
         $installation_id = $obj->installation->id ?? null;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         if ($unlabeled) {
             Log::debug(null, null, 'Receive event', ['pull_request' => 'unlabeled'], Log::INFO);
 
@@ -138,7 +142,7 @@ class PullRequest
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
             'label_name' => $label_name,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 
@@ -171,12 +175,14 @@ class PullRequest
 
         $installation_id = $obj->installation->id ?? null;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 }

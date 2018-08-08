@@ -53,36 +53,39 @@ class User extends DBModel
                                           string $git_type = 'github'): void
     {
         if ($uid instanceof Account) {
-            $uid = $uid->uid;
             $name = $uid->name;
             $username = $uid->username;
             $email = $uid->email;
             $pic = $uid->pic;
             $org = $uid->org;
-        }
 
-        $name = $name ?? $username;
+            $uid = $uid->uid;
+        }
 
         $type = $org ? 'org' : 'user';
-
-        if (!$email) {
-            // 信息不包含 email
-            $sql = '';
-        }
-
-        if (!$name) {
-            // 信息不包含昵称
-            $sql = '';
-        }
 
         $user_key_id = self::exists($username, $git_type);
 
         if ($user_key_id) {
-            $sql = 'UPDATE user SET git_type=?,uid=?,name=?,username=?,email=?,pic=?,type=? WHERE id=?';
-            DB::update($sql, [
-                    $git_type, $uid, $name, $username, $email, $pic, $user_key_id, $type,
-                ]
-            );
+            DB::beginTransaction();
+
+            // git_type uid username
+            $sql = 'UPDATE user SET git_type=?,uid=?,username=?,type=? WHERE id=?';
+            DB::update($sql, [$git_type, $uid, $username, $type, $user_key_id]);
+
+            // name
+            $sql = 'UPDATE user SET name=? WHERE id=? AND JSON_QUOTE(?) IS NOT NULL';
+            DB::update($sql, [$name, $user_key_id, $name]);
+
+            // email
+            $sql = 'UPDATE user SET email=? WHERE id=? AND JSON_QUOTE(?) IS NOT NULL';
+            DB::update($sql, [$email, $user_key_id, $email]);
+
+            //pic
+            $sql = 'UPDATE user SET pic=? WHERE id=? AND JSON_QUOTE(?) IS NOT NULL';
+            DB::update($sql, [$pic, $user_key_id, $pic]);
+
+            DB::commit();
 
             return;
         }

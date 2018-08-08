@@ -40,6 +40,8 @@ class Member
 
         Log::debug(null, null, "$action $rid $member_uid", [], Log::INFO);
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -47,7 +49,7 @@ class Member
             'member_uid' => $member_uid,
             'member_username' => $member_username,
             'member_pic' => $member_pic,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 }

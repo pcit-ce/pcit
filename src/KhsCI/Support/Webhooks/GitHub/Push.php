@@ -60,11 +60,7 @@ class Push
 
         $installation_id = $obj->installation->id ?? null;
 
-        $org = $obj->organization ?? false;
-
-        if ($org) {
-            $org = true;
-        }
+        $org = ($obj->organization ?? false) ? true : false;
 
         return [
             'rid' => $rid,
@@ -81,8 +77,7 @@ class Push
             'committer_email' => $committer_email,
             'committer_username' => $committer_username,
             'installation_id' => $installation_id,
-            'account' => (new Account($repository_owner)),
-            'org' => $org,
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 
@@ -128,11 +123,7 @@ class Push
 
         $installation_id = $obj->installation->id ?? null;
 
-        $org = $obj->organization ?? false;
-
-        if ($org) {
-            $org = true;
-        }
+        $org = ($obj->organization ?? false) ? true : false;
 
         return [
             'installation_id' => $installation_id,
@@ -149,8 +140,7 @@ class Push
             'committer_name' => $committer_name,
             'committer_email' => $committer_email,
             'committer_username' => $committer_username,
-            'account' => (new Account($repository_owner)),
-            'org' => $org,
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 

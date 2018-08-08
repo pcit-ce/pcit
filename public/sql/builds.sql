@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `builds` (
   `config`              JSON,
   `action`              VARCHAR(100),
   `check_suites_id`     BIGINT,
-  `check_run_id`        BIGINT,
+  `check_run_id`        JSON,
   `internal`            INT UNSIGNED DEFAULT 1,
   `private`             INT          DEFAULT 0,
   PRIMARY KEY (`id`),

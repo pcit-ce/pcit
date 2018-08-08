@@ -23,6 +23,8 @@ class Create
 
         $repository = $obj->repository;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         // 仓库所属用户或组织的信息
         $repository_owner = $repository->owner;
 
@@ -30,7 +32,7 @@ class Create
             'installation_id' => $installation_id,
             'rid' => $rid,
             'ref_type' => $ref_type,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 }

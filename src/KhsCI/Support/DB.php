@@ -185,6 +185,24 @@ class DB
         return $pdo->exec($sql);
     }
 
+    /**
+     * @throws Exception
+     */
+    public static function beginTransaction(): void
+    {
+        self::connect()->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+        self::connect()->beginTransaction();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function commit(): void
+    {
+        self::connect()->commit();
+        self::connect()->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+    }
+
     public static function createUser(): void
     {
     }

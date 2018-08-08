@@ -54,6 +54,8 @@ class Issues
 
         $installation_id = $obj->installation->id ?? null;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -72,7 +74,7 @@ class Issues
             'created_at' => $created_at,
             'updated_at' => $updated_at,
             'closed_at' => $closed_at,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 
@@ -124,6 +126,8 @@ class Issues
 
         $installation_id = $obj->installation->id ?? null;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -137,7 +141,7 @@ class Issues
             'body' => $body,
             'created_at' => $created_at,
             'updated_at' => $updated_at,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
             'action' => $action,
         ];
     }

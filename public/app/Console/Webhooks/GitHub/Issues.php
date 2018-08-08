@@ -45,10 +45,9 @@ class Issues
             'created_at' => $created_at,
             'closed_at' => $closed_at,
             'updated_at' => $updated_at,
-            'assigness' => $assignees,
+            'assignees' => $assignees,
             'labels' => $labels,
             'account' => $account,
-            'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::handle($json_content);
 
         if ($assignees) {
@@ -113,7 +112,6 @@ class Issues
             'body' => $body,
             'created_at' => $created_at,
             'account' => $account,
-            'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::comment($json_content);
 
         $repo_full_name = Repo::getRepoFullName($rid);

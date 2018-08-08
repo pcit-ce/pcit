@@ -33,11 +33,13 @@ class Delete
 
         $installation_id = $obj->installation->id ?? null;
 
+        $org = ($obj->organization ?? false) ? true : false;
+
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
-            'account' => (new Account($repository_owner)),
+            'account' => (new Account($repository_owner, $org)),
         ];
     }
 }

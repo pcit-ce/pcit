@@ -27,17 +27,13 @@ class Check
             'commit_id' => $commit_id,
             'action' => $action,
             'account' => $account,
-            'org' => $org
         ] = \KhsCI\Support\Webhooks\GitHub\Check::suite($json_content);
 
         User::updateUserInfo($account);
         User::updateInstallationId((int) $installation_id, $account->username);
         Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
-        if ('rerequested' === $action) {
-            Build::updateBuildStatusByCommitId(
-                'pending', (int) $rid, $branch, $commit_id);
-        }
+        'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
     }
 
     /**
@@ -57,12 +53,7 @@ class Check
             'check_suite_id' => $check_suite_id,
             'check_run_id' => $check_run_id,
             'branch' => $branch,
-            'account_username' => $account_username,
-            'account_uid' => $account_uid,
-            'account_name' => $account_name,
-            'account_email' => $account_email,
-            'account_pic' => $account_pic,
-            'org' => $org
+            'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Check::run($json_content);
 
         if ('rerequested' === $action or 'requested_action' === $action) {
@@ -83,8 +74,8 @@ class Check
             return;
         }
 
-        User::updateUserInfo((int) $account_uid, $account_name, $account_username, $account_email, $account_pic, $org);
-        User::updateInstallationId((int) $installation_id, $account_username);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
         Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
         $config = Build::getConfig((int) $external_id);
@@ -95,6 +86,7 @@ class Check
 
         if ($skip) {
             Skip::writeSkipToDB($external_id);
+
             throw new \Exception('skip', 200);
         }
 

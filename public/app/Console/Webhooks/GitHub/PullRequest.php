@@ -59,7 +59,6 @@ class PullRequest
             'internal' => $internal,
             'pull_request_source' => $pull_request_source,
             'account' => $account,
-            'org' => $org
         ] = $array;
 
         User::updateUserInfo($account);
