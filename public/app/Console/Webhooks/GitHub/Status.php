@@ -1,12 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Created by PhpStorm.
- * User: SYSTEM
- * Date: 2018/8/6
- * Time: 19:38.
- */
 
 namespace App\Console\Webhooks\GitHub;
 

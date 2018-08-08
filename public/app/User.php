@@ -21,7 +21,7 @@ class User extends DBModel
      *
      * @throws Exception
      */
-    public static function getUserInfo(string $git_type, ?string $username, int $uid = 0)
+    public static function getUserInfo(?string $username, int $uid = 0, $git_type = 'github')
     {
         $sql = 'SELECT * FROM user WHERE git_type=? AND username=?';
 
@@ -33,39 +33,55 @@ class User extends DBModel
     }
 
     /**
-     * @param string      $git_type
      * @param int         $uid
+     * @param string      $name
      * @param string      $username
      * @param string|null $email
      * @param string|null $pic
-     * @param string|null $accessToken
      * @param bool        $org
+     * @param string      $git_type
      *
      * @throws Exception
      */
-    public static function updateUserInfo(string $git_type,
-                                          int $uid,
+    public static function updateUserInfo(int $uid,
+                                          ?string $name,
                                           string $username,
                                           ?string $email,
-                                          ?string $pic,
-                                          ?string $accessToken,
-                                          bool $org = false): void
+                                          string $pic,
+                                          bool $org = false,
+                                          string $git_type = 'github'): void
     {
         $user_key_id = self::exists($git_type, $username);
 
+        $name = $name ?? $username;
+
         if ($user_key_id) {
-            $sql = 'UPDATE user SET git_type=?,uid=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
+            $sql = 'UPDATE user SET git_type=?,uid=?,name=?,username=?,email=?,pic=?,access_token=? WHERE id=?';
             DB::update($sql, [
-                    $git_type, $uid, $username, $email, $pic, $accessToken, $user_key_id,
+                    $git_type, $uid, $name, $username, $email, $pic, $user_key_id,
                 ]
             );
         } else {
             $org || $org = null;
             $org && $org = 'org';
 
-            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,null,?,null)';
-            DB::insert($sql, [$git_type, $uid, $username, $email, $pic, $accessToken, $org]);
+            $sql = 'INSERT INTO user VALUES(null,?,?,?,?,?,?,?,null,?,null)';
+            DB::insert($sql, [$git_type, $uid, $name, $username, $email, $pic, $org]);
         }
+    }
+
+    /**
+     * @param string $git_type
+     * @param int    $uid
+     * @param string $access_token
+     *
+     * @throws Exception
+     */
+    public static function updateAccessToken(int $uid, string $access_token, string $git_type = 'github'): void
+    {
+        $sql = 'UPDATE user SET access_token=? WHERE git_type=? AND uid=?';
+
+        DB::insert($sql, [$access_token, $git_type, $uid]);
     }
 
     /**
@@ -75,7 +91,7 @@ class User extends DBModel
      *
      * @throws Exception
      */
-    public static function setOrgAdmin(string $git_type, int $org_id, int $admin_uid): void
+    public static function setOrgAdmin(int $org_id, int $admin_uid, string $git_type = 'github'): void
     {
         $sql = <<<EOF
 UPDATE user SET org_admin=? WHERE git_type=? AND uid=? AND JSON_VALID(org_admin) IS NULL
@@ -103,7 +119,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getOrgByAdmin(string $git_type, int $admin_uid)
+    public static function getOrgByAdmin(int $admin_uid, string $git_type = 'github')
     {
         $sql = 'SELECT * FROM user WHERE git_type=? AND JSON_CONTAINS(org_admin,JSON_QUOTE(?)) AND type=?';
 
@@ -118,7 +134,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function exists(string $git_type, string $username)
+    public static function exists(string $username, string $git_type = 'github')
     {
         $sql = 'SELECT id FROM user WHERE username=? AND git_type=? LIMIT 1';
 
@@ -135,7 +151,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function delete(string $git_type, string $org_name)
+    public static function delete(string $org_name, string $git_type = 'github')
     {
         $sql = 'DELETE FROM user WHERE git_type=? AND username=?';
 
@@ -150,7 +166,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getUid(string $git_type, string $username)
+    public static function getUid(string $username, string $git_type = 'github')
     {
         $sql = 'SELECT uid FROM user WHERE git_type=? and username=? LIMIT 1';
 
@@ -165,7 +181,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getUsername(string $git_type, int $uid)
+    public static function getUsername(int $uid, string $git_type)
     {
         $sql = 'SELECT username FROM user WHERE git_type=? and uid=? LIMIT 1';
 
@@ -179,7 +195,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function updateInstallationId(string $git_type, int $installation_id, string $username): void
+    public static function updateInstallationId(int $installation_id, string $username, string $git_type = 'github'): void
     {
         if (self::exists($git_type, $username)) {
             $sql = 'UPDATE user SET installation_id=? WHERE git_type=? AND username=?';

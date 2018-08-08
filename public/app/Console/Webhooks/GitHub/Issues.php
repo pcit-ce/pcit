@@ -74,7 +74,7 @@ class Issues
             return;
         }
 
-        $repo_full_name = Repo::getRepoFullName('github', $rid);
+        $repo_full_name = Repo::getRepoFullName($rid);
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
@@ -82,8 +82,8 @@ class Issues
 
         $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
-        User::updateInstallationId('github', (int) $installation_id, $username);
+        User::updateInstallationId((int) $installation_id, $username);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
 
         Log::debug(__FILE__, __LINE__, $issue_number.' opened', [], Log::INFO);
 
@@ -111,7 +111,7 @@ class Issues
             'created_at' => $created_at
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::comment($json_content);
 
-        $repo_full_name = Repo::getRepoFullName('github', $rid);
+        $repo_full_name = Repo::getRepoFullName($rid);
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
         $khsci = new KhsCI(['github_access_token' => $access_token]);
@@ -123,7 +123,7 @@ class Issues
         }
 
         if ('deleted' === $action) {
-            $output = Issue::comment_deleted('github', $issue_id, $comment_id, $updated_at);
+            $output = Issue::comment_deleted($issue_id, $comment_id, $updated_at);
 
             if (1 === $output) {
                 $debug_info = 'Delete Issue Comment SUCCESS';
@@ -147,7 +147,7 @@ class Issues
 
         Log::debug(__FILE__, __LINE__, $debug_info, [], Log::INFO);
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
-        User::updateInstallationId('github', (int) $installation_id, $username);
+        User::updateInstallationId((int) $installation_id, $username);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
     }
 }

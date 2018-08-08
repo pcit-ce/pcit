@@ -21,11 +21,11 @@ class Issue extends DBModel
      *
      * @throws Exception
      */
-    public static function comment_edited(string $git_type,
-                                          int $issue_id,
+    public static function comment_edited(int $issue_id,
                                           int $comment_id,
                                           int $updated_at,
-                                          string $body)
+                                          string $body,
+                                          string $git_type = 'github')
     {
         $sql = 'UPDATE issues SET body=?,updated_at=? WHERE git_type=? AND issue_id=? AND comment_id=?';
 
@@ -48,10 +48,10 @@ class Issue extends DBModel
      *
      * @throws Exception
      */
-    public static function comment_deleted(string $git_type,
-                                           int $issue_id,
+    public static function comment_deleted(int $issue_id,
                                            int $comment_id,
-                                           int $deleted_at)
+                                           int $deleted_at,
+                                           string $git_type = 'github')
     {
         $sql = 'UPDATE issues SET deleted_at=? WHERE git_type=? AND issue_id=? AND comment_id=?';
 
@@ -98,8 +98,7 @@ class Issue extends DBModel
      *
      * @throws Exception
      */
-    public static function insert($git_type,
-                                  $rid,
+    public static function insert($rid,
                                   $issue_id,
                                   $issue_number,
                                   $action,
@@ -112,7 +111,8 @@ class Issue extends DBModel
                                   $locked,
                                   $created_at,
                                   $closed_at,
-                                  $updated_at)
+                                  $updated_at,
+                                  string $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO issues(
@@ -129,7 +129,7 @@ EOF;
             ]
         );
 
-        User::updateUserInfo($git_type, $sender_uid, $sender_username, null, $sender_pic, null);
+        User::updateUserInfo($sender_uid, null, $sender_username, null, $sender_pic, false, $git_type);
 
         return $last_insert_id;
     }
@@ -148,14 +148,14 @@ EOF;
      *
      * @throws Exception
      */
-    public static function insertComment($git_type,
-                                         $rid,
+    public static function insertComment($rid,
                                          $issue_id,
                                          $comment_id,
                                          $issue_number,
                                          $body,
                                          $sender_uid,
-                                         $created_at)
+                                         $created_at,
+                                         $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO issues(

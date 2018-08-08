@@ -31,11 +31,11 @@ class Installation
 
         // 仓库管理员信息
         User::updateUserInfo(
-            'github', $sender_uid, $sender_username, null, $sender_pic, null);
+            $sender_uid, null, $sender_username, null, $sender_pic);
 
         // 仓库所属用户或组织信息
-        User::updateUserInfo('github', $account_uid, $account, null, $account_pic, null, $org);
-        User::updateInstallationId('github', (int) $installation_id, $account);
+        User::updateUserInfo($account_uid, null, $account, null, $account_pic, $org);
+        User::updateInstallationId((int) $installation_id, $account);
 
         if ('created' === $action) {
             self::create($installation_id, $repositories, $sender_uid, $account);
@@ -64,8 +64,8 @@ class Installation
 
             $repo_full_name = $k->full_name;
 
-            Repo::updateRepoInfo('github', $rid, $repo_full_name, $sender_uid, null);
-            User::updateInstallationId('github', (int) $installation_id, $account);
+            User::updateInstallationId((int) $installation_id, $account);
+            Repo::updateRepoInfo($rid, $repo_full_name, $sender_uid, null);
         }
     }
 

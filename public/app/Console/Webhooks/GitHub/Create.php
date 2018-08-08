@@ -22,7 +22,7 @@ class Create
             'ref_type' => $ref_type,
         ] = \KhsCI\Support\Webhooks\GitHub\Create::handle($json_content);
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
 
         switch ($ref_type) {
             case 'branch':

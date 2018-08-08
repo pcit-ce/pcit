@@ -23,13 +23,13 @@ class Delete
             'ref_type' => $ref_type,
         ] = \KhsCI\Support\Webhooks\GitHub\Delete::handle($json_content);
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
-        User::updateInstallationId('github', (int) $installation_id, $username);
+        User::updateInstallationId((int) $installation_id, $username);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
 
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
 
-            DB::delete($sql, ['github', $obj->ref, (int) $rid]);
+            DB::delete($sql, ['github', $ref_type, (int) $rid]);
         }
     }
 }

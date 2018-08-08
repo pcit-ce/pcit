@@ -21,7 +21,7 @@ class Member
             'member_uid' => $member_uid
         ] = \KhsCI\Support\Webhooks\GitHub\Member::handle($json_content);
 
-        'added' === $action && Repo::updateAdmin('github', (int) $rid, (int) $member_uid);
-        'removed' === $action && Repo::deleteAdmin('github', (int) $rid, (int) $member_uid);
+        'added' === $action && Repo::updateAdmin((int) $rid, (int) $member_uid);
+        'removed' === $action && Repo::deleteAdmin((int) $rid, (int) $member_uid);
     }
 }

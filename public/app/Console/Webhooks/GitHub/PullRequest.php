@@ -61,8 +61,8 @@ class PullRequest
             'username' => $username
         ] = $array;
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
-        User::updateInstallationId('github', (int) $installation_id, $username);
+        User::updateInstallationId((int) $installation_id, $username);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
 
         $config_array = GetConfig::handle($rid, $commit_id);
 

@@ -112,9 +112,9 @@ class SyncController
 
             $org_pic = $k['avatar_url'];
 
-            User::updateUserInfo($this->git_type, (int) $org_id, $org_name, null, $org_pic, null, true);
+            User::updateUserInfo((int) $org_id, null, $org_name, null, $org_pic, true, $this->git_type);
 
-            User::setOrgAdmin($this->git_type, (int) $org_id, (int) $this->uid);
+            User::setOrgAdmin((int) $org_id, (int) $this->uid, $this->git_type);
         }
 
         // check org status
@@ -200,12 +200,12 @@ class SyncController
 
                 $rid = $obj_repo->id;
 
-                Repo::updateRepoInfo($this->git_type,
-                    (int) $rid,
+                Repo::updateRepoInfo((int) $rid,
                     $repo_full_name,
                     $insert_admin,
                     $insert_collaborators,
-                    $default_branch
+                    $default_branch,
+                    $this->git_type
                 );
             }
         }

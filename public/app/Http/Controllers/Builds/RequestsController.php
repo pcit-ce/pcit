@@ -30,7 +30,7 @@ class RequestsController
 
         JWTController::checkByRepo(...$args);
 
-        $rid = Repo::getRid($git_type, $username, $repo_name);
+        $rid = Repo::getRid($username, $repo_name, $git_type);
 
         $output = Build::listByRid((int) $rid);
 

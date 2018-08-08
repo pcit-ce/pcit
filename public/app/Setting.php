@@ -25,7 +25,7 @@ class Setting extends DBModel
      *
      * @throws Exception
      */
-    public static function list(string $git_type, int $rid)
+    public static function list(int $rid, string $git_type = 'github')
     {
         $sql = <<<EOF
 SELECT 
@@ -34,7 +34,7 @@ build_pull_requests,
 maximum_number_of_builds,
 auto_cancel_branch_builds,
 auto_cancel_pull_request_builds
-FROM repo WHERE git_type=? AND rid=?
+FROM settings WHERE git_type=? AND rid=?
 EOF;
 
         return DB::select($sql, [$git_type, $rid]);
@@ -51,7 +51,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function get(string $git_type, int $rid, string $setting_name)
+    public static function get(int $rid, string $setting_name, string $git_type = 'github')
     {
         if (!in_array($setting_name, self::$setting_array)) {
             throw new Exception('Not Found', 404);
@@ -72,7 +72,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function update(string $git_type, int $rid, string $setting_name, string $setting_value)
+    public static function update(int $rid, string $setting_name, string $setting_value, string $git_type = 'github')
     {
         if (!in_array($setting_name, self::$setting_array)) {
             throw new Exception('Not Found', 404);

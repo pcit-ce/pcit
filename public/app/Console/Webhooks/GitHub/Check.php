@@ -21,11 +21,11 @@ class Check
     {
         [
             'installation_id' => $installation_id,
-            'action' => $action,
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'branch' => $branch,
-            'commit_id' => $commit_id
+            'commit_id' => $commit_id,
+            'action' => $action
         ] = \KhsCI\Support\Webhooks\GitHub\Check::suite($json_content);
 
         if ('rerequested' === $action) {
@@ -33,7 +33,7 @@ class Check
                 'pending', 'github', (int) $rid, $branch, $commit_id);
         }
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
     }
 
     /**
@@ -74,8 +74,8 @@ class Check
             return;
         }
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
-        User::updateInstallationId('github', (int) $installation_id, $username);
+        User::updateInstallationId((int) $installation_id, $username);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
 
         $config = Build::getConfig((int) $external_id);
 

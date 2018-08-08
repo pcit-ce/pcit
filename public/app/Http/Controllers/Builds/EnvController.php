@@ -57,7 +57,7 @@ class EnvController
             'env_var.public' => $public
             ) = json_decode($json, true);
 
-        return Env::create($git_type, (int) $rid, $name, $value, $public);
+        return Env::create((int) $rid, $name, $value, $public, $git_type);
     }
 
     /**

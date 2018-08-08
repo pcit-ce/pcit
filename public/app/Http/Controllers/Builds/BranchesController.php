@@ -63,7 +63,7 @@ class BranchesController
 
         $rid = Repo::getRid($git_type, $username, $repo_name);
 
-        $output = Build::allByBranch($git_type, (int) $rid, $branch_name, $before, $limit);
+        $output = Build::allByBranch((int) $rid, $branch_name, $before, $limit, $git_type);
 
         if ($output) {
             return $output;

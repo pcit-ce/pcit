@@ -7,7 +7,6 @@ namespace App;
 use Exception;
 use KhsCI\Support\DB;
 use KhsCI\Support\DBModel;
-use KhsCI\Support\Log;
 
 class Repo extends DBModel
 {
@@ -22,7 +21,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getRid(string $git_type, string $username, string $repo)
+    public static function getRid(string $username, string $repo, $git_type = 'github')
     {
         $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
@@ -40,7 +39,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getDefaultBranch(string $git_type, string $username, string $repo)
+    public static function getDefaultBranch(string $username, string $repo, $git_type = 'github')
     {
         $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
@@ -57,7 +56,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getRepoFullName(string $git_type, int $rid)
+    public static function getRepoFullName(int $rid, $git_type = 'github')
     {
         $sql = 'SELECT repo_full_name FROM repo WHERE rid=? AND git_type=? ORDER BY id DESC LIMIT 1';
 
@@ -91,46 +90,9 @@ class Repo extends DBModel
      */
     public static function getGitHubInstallationIdByRid(int $rid, $git_type = 'github')
     {
-        $repo_full_name = self::getRepoFullName($git_type, $rid);
+        $repo_full_name = self::getRepoFullName($rid, $git_type);
 
         return self::getGitHubInstallationIdByRepoFullName($repo_full_name, $git_type);
-    }
-
-    /**
-     * @param string $git_type
-     * @param int    $rid
-     * @param string $repo_full_name
-     * @param int    $installation_id
-     *
-     * @throws Exception
-     */
-    public static function updateGitHubInstallationIdByRid(string $git_type,
-                                                           int $rid,
-                                                           string $repo_full_name,
-                                                           ?int $installation_id): void
-    {
-        if (null === $installation_id) {
-            return;
-        }
-
-        $username = explode('/', $repo_full_name)[0];
-
-        $installation_id_in_db = self::getGitHubInstallationIdByRid($rid);
-
-        // user table not found installation_id
-        if (!$installation_id_in_db) {
-            Log::debug(null, null, 'repo not found, insert...', [], Log::INFO);
-
-            self::updateRepoInfo($git_type, $rid, $repo_full_name, null, null);
-        }
-
-        if ((int) $installation_id_in_db !== $installation_id) {
-            $sql = 'UPDATE repo SET installation_id=?,repo_full_name=? WHERE rid=?';
-
-            DB::update($sql, [$installation_id, $repo_full_name, $rid]);
-        }
-
-        User::updateInstallationId($git_type, $installation_id, $username);
     }
 
     /**
@@ -142,7 +104,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getAdmin(string $git_type, int $rid, bool $collaborators = false)
+    public static function getAdmin(int $rid, bool $collaborators = false, $git_type = 'github')
     {
         $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1';
 
@@ -163,7 +125,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function checkAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false)
+    public static function checkAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github')
     {
         $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,json_quote(?))';
 
@@ -182,7 +144,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function updateAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false): void
+    public static function updateAdmin(int $rid, int $uid, $git_type = 'github', bool $collaborators = false): void
     {
         $type = 'repo_admin';
 
@@ -215,7 +177,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function deleteAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false): void
+    public static function deleteAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github'): void
     {
         $type = 'repo_admin';
 
@@ -242,7 +204,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByAdmin(string $git_type, int $uid, bool $collaborators = false)
+    public static function allByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
         $type = 'repo_admin';
 
@@ -263,7 +225,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByUsername(string $git_type, string $username)
+    public static function allByUsername(string $username, $git_type = 'github')
     {
         $sql = "SELECT * FROM repo WHERE git_type=? AND repo_full_name LIKE \"$username/%\"";
 
@@ -279,7 +241,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function findByRepoFullName(string $git_type, string $username, string $repo_name)
+    public static function findByRepoFullName(string $username, string $repo_name, $git_type = 'github')
     {
         $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?)';
 
@@ -287,14 +249,15 @@ EOF;
     }
 
     /**
-     * @param int  $uid
-     * @param bool $collaborators
+     * @param int    $uid
+     * @param bool   $collaborators
+     * @param string $git_type
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getActiveByAdmin(int $uid, bool $collaborators = false)
+    public static function getActiveByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
         $type = 'repo_admin';
 
@@ -302,9 +265,9 @@ EOF;
             $type = 'repo_collaborators';
         }
 
-        $sql = "SELECT rid FROM repo WHERE JSON_CONTAINS($type,JSON_QUOTE(?)) AND build_activate=1 AND webhooks_status=1";
+        $sql = "SELECT rid FROM repo WHERE JSON_CONTAINS($type,JSON_QUOTE(?)) AND git_type=? AND build_activate=1 AND webhooks_status=1";
 
-        return DB::select($sql, [$uid]);
+        return DB::select($sql, [$uid, $git_type]);
     }
 
     /**
@@ -315,7 +278,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function exists(string $git_type, int $rid)
+    public static function exists(int $rid, $git_type = 'github')
     {
         $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=?';
 
@@ -334,16 +297,16 @@ EOF;
      *
      * @throws Exception
      */
-    public static function updateRepoInfo(string $git_type,
-                                          int $rid,
+    public static function updateRepoInfo(int $rid,
                                           string $repo_full_name,
                                           ?int $insert_admin,
                                           ?int $insert_collaborators,
                                           string $default_branch = 'master',
                                           int $build_active = 1,
-                                          int $webhooks_status = 1): void
+                                          int $webhooks_status = 1,
+                                          $git_type = 'github'): void
     {
-        if ($repo_key_id = self::exists($git_type, $rid)) {
+        if ($repo_key_id = self::exists($rid, $git_type)) {
             $sql = <<<'EOF'
 UPDATE repo SET
 
@@ -371,11 +334,11 @@ EOF;
         ]);
 
         if ($insert_admin) {
-            self::updateAdmin($git_type, $rid, $insert_admin);
+            self::updateAdmin($rid, $insert_admin, $git_type);
         }
 
         if ($insert_collaborators) {
-            self::updateAdmin($git_type, $rid, $insert_collaborators, true);
+            self::updateAdmin($rid, $insert_collaborators, $git_type, true);
         }
     }
 

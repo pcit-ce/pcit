@@ -164,10 +164,10 @@ class Build extends DBModel
      * @throws Exception
      */
     public static function updateBuildStatusByCommitId(string $build_status,
-                                                       string $git_type,
                                                        int $rid,
                                                        string $branch,
-                                                       string $commit_id)
+                                                       string $commit_id,
+                                                       $git_type = 'github')
     {
         $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND commit_id=?';
 
@@ -218,7 +218,7 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function getBranches(string $git_type, int $rid)
+    public static function getBranches(int $rid, $git_type = 'github')
     {
         $sql = 'SELECT DISTINCT branch FROM builds WHERE git_type=? AND rid=?';
 
@@ -235,7 +235,7 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function getCurrentBuildKeyId(string $git_type, int $rid)
+    public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
         $sql = <<<EOF
 SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) AND event_type NOT IN (?)
@@ -326,11 +326,11 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByBranch(string $git_type,
-                                       int $rid,
+    public static function allByBranch(int $rid,
                                        string $branch_name,
                                        ?int $before,
-                                       ?int $limit)
+                                       ?int $limit,
+                                       $git_type = 'github')
     {
         $before = $before ?? self::getLastKeyId();
 
@@ -360,7 +360,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByRid(string $git_type, int $rid, ?int $before, ?int $limit, bool $pr)
+    public static function allByRid(int $rid, ?int $before, ?int $limit, bool $pr, $git_type = 'github')
     {
         $before = $before ?? self::getLastKeyId();
 
@@ -392,7 +392,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByAdmin(string $git_type, int $uid, ?int $before, ?int $limit)
+    public static function allByAdmin(int $uid, ?int $before, ?int $limit, $git_type = 'github')
     {
         $before = $before ?? self::getLastKeyId();
 
@@ -457,8 +457,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function insertTag($git_type,
-                                     $branch,
+    public static function insertTag($branch,
                                      $tag,
                                      $commit_id,
                                      $commit_message,
@@ -470,7 +469,8 @@ EOF;
                                      $author_username,
                                      $rid,
                                      $event_time,
-                                     $config)
+                                     $config,
+                                     $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -516,8 +516,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function insert($git_type,
-                                  $event_type,
+    public static function insert($event_type,
                                   $branch,
                                   $compare,
                                   $commit_id,
@@ -530,7 +529,8 @@ EOF;
                                   $author_username,
                                   $rid,
                                   $event_time,
-                                  $config)
+                                  $config,
+                                  $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -564,7 +564,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function insertPing($git_type, $rid, $created_at)
+    public static function insertPing($rid, $created_at, $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -598,8 +598,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function insertPullRequest($git_type,
-                                             $event_time,
+    public static function insertPullRequest($event_time,
                                              $action,
                                              $commit_id,
                                              $commit_message,
@@ -609,7 +608,8 @@ EOF;
                                              $rid,
                                              $config,
                                              $internal,
-                                             $pull_request_source)
+                                             $pull_request_source,
+                                             $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO builds(

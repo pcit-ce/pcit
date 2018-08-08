@@ -49,6 +49,6 @@ class BetaFeatureController
      */
     public function delete(...$args): void
     {
-        APITokenController::getUser();
+        JWTController::getUser();
     }
 }

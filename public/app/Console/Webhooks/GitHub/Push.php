@@ -27,6 +27,8 @@ class Push
 
         if ($tag) {
             self::tag($array);
+
+            return;
         }
 
         [
@@ -47,8 +49,10 @@ class Push
             'username' => $username
         ] = $array;
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
-        User::updateInstallationId('github', (int) $installation_id, $username);
+        // user table not include user info
+        User::updateUserInfo($uid, $name, $username, null, $pic, $org);
+        User::updateInstallationId((int) $installation_id, $username);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
 
         $config_array = GetConfig::handle($rid, $commit_id);
 
@@ -95,8 +99,8 @@ class Push
             'username' => $username,
         ] = $array;
 
-        Repo::updateGitHubInstallationIdByRid('github', (int) $rid, $repo_full_name, (int) $installation_id);
-        User::updateInstallationId('github', (int) $installation_id, $username);
+        User::updateInstallationId((int) $installation_id, $username);
+        Repo::updateRepoInfo($rid, $repo_full_name, null, null);
 
         $config_array = GetConfig::handle($rid, $commit_id);
 

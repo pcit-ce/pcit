@@ -114,7 +114,7 @@ class UpCommand
                 $this->$event_type($json);
                 Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle success', [], Log::INFO);
             } catch (Error | Exception $e) {
-                Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle error', [], Log::ERROR);
+                Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle error', [$e->__toString()], Log::ERROR);
                 $webhooks->pushErrorCache($json_raw);
             }
         }
