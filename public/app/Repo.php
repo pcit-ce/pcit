@@ -352,27 +352,29 @@ EOF;
      *
      * @throws Exception
      */
-    public static function deleteByInstallationId(string $git_type, int $installation_id)
+    public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
-        $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
+        $sql = <<<EOF
+            DELETE repo FROM user LEFT JOIN repo ON repo.repo_full_name LIKE CONCAT(user.username,"/%") 
+            where user.installation_id = ?
+EOF;
 
         return DB::delete($sql, [$git_type, $installation_id]);
     }
 
     /**
-     * @param string $git_type
      * @param int    $rid
-     * @param int    $installation_id
+     * @param string $git_type
      *
      * @return int
      *
      * @throws Exception
      */
-    public static function deleteByRid(string $git_type, int $rid, int $installation_id)
+    public static function deleteByRid(int $rid, $git_type = 'github')
     {
-        $sql = 'DELETE FROM repo WHERE git_type=? AND rid=? AND installation_id=?';
+        $sql = 'DELETE FROM repo WHERE rid =? AND git_type=?';
 
-        return DB::delete($sql, [$git_type, $rid, $installation_id]);
+        return DB::delete($sql, [$rid, $git_type]);
     }
 
     /**

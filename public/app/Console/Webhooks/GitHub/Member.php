@@ -9,6 +9,8 @@ use App\Repo;
 class Member
 {
     /**
+     * `added` `deleted` `edited` `removed`.
+     *
      * @param $json_content
      *
      * @throws \Exception
@@ -18,6 +20,7 @@ class Member
         [
             'action' => $action,
             'rid' => $rid,
+            'repo_full_name' => $repo_full_name,
             'member_uid' => $member_uid
         ] = \KhsCI\Support\Webhooks\GitHub\Member::handle($json_content);
 

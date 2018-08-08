@@ -31,8 +31,8 @@ class Issues
         [
             'installation_id' => $installation_id,
             'action' => $action,
-            'username' => $username,
             'rid' => $rid,
+            'repo_full_name' => $repo_full_name,
             'issue_id' => $issue_id,
             'issue_number' => $issue_number,
             'title' => $title,
@@ -50,17 +50,9 @@ class Issues
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::handle($json_content);
 
-        if ($assignees) {
-            foreach ($assignees as $k) {
-                Issue::updateAssignees($k, 'github', $issue_id);
-            }
-        }
+        $assignees && Issue::updateAssignees($assignees, 'github', $issue_id);
 
-        if ($labels) {
-            foreach ($labels as $k) {
-                Issue::updateLabels($k, 'github', $issue_id);
-            }
-        }
+        $labels && Issue::updateLabels($labels, 'github', $issue_id);
 
         if (in_array($action, ['opened', 'edited', 'closed' or 'reopened'])) {
             Issue::insert(
@@ -75,13 +67,7 @@ class Issues
             return;
         }
 
-        $repo_full_name = Repo::getRepoFullName($rid);
-
-        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
-
-        $khsci = new KhsCI(['github_access_token' => $access_token], 'github');
-
-        $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+        self::createComment($rid, $repo_full_name, $issue_number, $body);
 
         User::updateUserInfo($account);
         User::updateInstallationId((int) $installation_id, $account->username);
@@ -93,6 +79,8 @@ class Issues
     }
 
     /**
+     * "created", "edited", or "deleted".
+     *
      * @param $json_content
      *
      * @throws \Exception
@@ -100,9 +88,9 @@ class Issues
     public static function comment($json_content): void
     {
         [
-            'installation' => $installation_id,
-            'username' => $username,
+            'installation_id' => $installation_id,
             'rid' => $rid,
+            'repo_full_name' => $repo_full_name,
             'action' => $action,
             'issue_id' => $issue_id,
             'comment_id' => $comment_id,
@@ -114,10 +102,9 @@ class Issues
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::comment($json_content);
 
-        $repo_full_name = Repo::getRepoFullName($rid);
-        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
-
-        $khsci = new KhsCI(['github_access_token' => $access_token]);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
         if ('edited' === $action) {
             Log::debug(__FILE__, __LINE__, 'Edit Issue Comment SKIP', [], Log::INFO);
@@ -137,21 +124,28 @@ class Issues
             return;
         }
 
-        $last_insert_id = Issue::insertComment(
-            'github', $rid, $issue_id, $comment_id, $issue_number, $body,
-            $sender_uid, $created_at
-        );
+        $last_insert_id = Issue::insertComment($rid, $issue_id, $comment_id, $issue_number, $body, $sender_uid, $created_at);
 
         Cache::connect()->lPush(self::$cache_key_github_issue, $last_insert_id);
 
-        $khsci->issue_comments->create($repo_full_name, $issue_number, $body);
+        self::createComment($rid, $repo_full_name, $issue_number, $body);
 
-        $debug_info = 'Create Bot Issue Comment By Issue Comment ADD';
+        Log::debug(__FILE__, __LINE__, 'Create AI Bot Issue Comment', [], Log::INFO);
+    }
 
-        Log::debug(__FILE__, __LINE__, $debug_info, [], Log::INFO);
+    /**
+     * @param $rid
+     * @param $repo_full_name
+     * @param $issue_number
+     * @param $body
+     *
+     * @throws \Exception
+     */
+    private static function createComment($rid, $repo_full_name, $issue_number, $body): void
+    {
+        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        (new KhsCI(['github_access_token' => $access_token]))
+            ->issue_comments->create($repo_full_name, $issue_number, $body);
     }
 }

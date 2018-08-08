@@ -45,10 +45,10 @@ class User extends DBModel
      * @throws Exception
      */
     public static function updateUserInfo($uid,
-                                          string $name = null,
+                                          ?string $name = null,
                                           string $username = null,
-                                          string $email = null,
-                                          string $pic = null,
+                                          ?string $email = null,
+                                          ?string $pic = null,
                                           bool $org = false,
                                           string $git_type = 'github'): void
     {

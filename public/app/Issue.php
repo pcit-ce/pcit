@@ -63,18 +63,47 @@ class Issue extends DBModel
         ]);
     }
 
-    public static function updateLabels(string $label,
+    /**
+     * @param array  $labels
+     * @param string $git_type
+     * @param int    $issue_id
+     *
+     * @throws Exception
+     */
+    public static function updateLabels(array $labels,
                                         string $git_type,
                                         int $issue_id): void
     {
-        $sql = 'UPDATE issues SET labels=JSON_MERGE_PRESERVE(labels,?) WHERE git_type=? AND issue_id=?';
+        DB::beginTransaction();
+
+        foreach ($labels as $k) {
+            $sql = 'UPDATE issues SET labels=JSON_MERGE_PRESERVE(labels,?) WHERE git_type=? AND issue_id=?';
+            DB::update($sql, [$k, $git_type, $issue_id]);
+        }
+
+        DB::commit();
     }
 
-    public static function updateAssignees(string $assignees,
+    /**
+     * @param array  $assignees
+     * @param string $git_type
+     * @param int    $issue_id
+     *
+     * @throws Exception
+     */
+    public static function updateAssignees(array $assignees,
                                            string $git_type,
                                            int $issue_id): void
     {
-        $sql = 'UPDATE issues SET assignees=JSON_MERGE_PRESERVE(labels,?) WHERE git_type=? AND issue_id=?';
+        DB::beginTransaction();
+
+        foreach ($assignees as $k) {
+            $sql = 'UPDATE issues SET assignees=JSON_MERGE_PRESERVE(labels,?) WHERE git_type=? AND issue_id=?';
+
+            DB::update($sql, [$assignees, $git_type, $issue_id]);
+        }
+
+        DB::commit();
     }
 
     /**

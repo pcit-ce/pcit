@@ -70,7 +70,7 @@ class PullRequest
         $config = json_encode($config_array);
 
         $last_insert_id = Build::insertPullRequest(
-            'github', $event_time, $action,
+            $event_time, $action,
             $commit_id, $commit_message, $committer_uid, $pull_request_number,
             $branch, $rid, $config, $internal, $pull_request_source
         );

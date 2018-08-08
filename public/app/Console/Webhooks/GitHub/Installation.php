@@ -10,6 +10,10 @@ use App\User;
 class Installation
 {
     /**
+     * created 用户点击安装按钮.
+     *
+     * deleted 用户卸载了 GitHub Apps
+     *
      * @param $json_content
      *
      * @throws \Exception
@@ -20,20 +24,17 @@ class Installation
             'installation_id' => $installation_id,
             'action' => $action,
             'repo' => $repositories,
-            'sender_uid' => $sender_uid,
-            'sender_username' => $sender_username,
-            'sender_pic' => $sender_pic,
+            'sender' => $sender,
             'account' => $account
         ] = \KhsCI\Support\Webhooks\GitHub\Installation::handle($json_content);
 
         // 仓库管理员信息
-        User::updateUserInfo((int) $sender_uid, null, $sender_username, null, $sender_pic);
-
+        User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
         User::updateUserInfo($account);
         User::updateInstallationId((int) $installation_id, $account->username);
 
         if ('created' === $action) {
-            self::create($installation_id, $repositories, $sender_uid, $account);
+            self::create($repositories, $sender->uid);
 
             return;
         }
@@ -44,13 +45,12 @@ class Installation
     /**
      * 用户首次安装了 GitHub App.
      *
-     * @param int   $installation_id
      * @param array $repo
      * @param int   $sender_uid
      *
      * @throws \Exception
      */
-    public static function create(int $installation_id, array $repo, int $sender_uid): void
+    public static function create(array $repo, int $sender_uid): void
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
@@ -73,11 +73,15 @@ class Installation
      */
     public static function delete(int $installation_id)
     {
-        return Repo::deleteByInstallationId('github', $installation_id);
+        return Repo::deleteByInstallationId($installation_id);
     }
 
     /**
      * 用户对仓库的操作.
+     *
+     * added 用户增加仓库
+     *
+     * removed 移除仓库
      *
      * @param $json_content
      *
@@ -89,35 +93,36 @@ class Installation
             'installation_id' => $installation_id,
             'action' => $action,
             'repo' => $repo,
-            'sender_uid' => $sender_uid,
-            'sender_username' => $sender_username,
-            'sender_pic' => $sender_pic,
+            'sender' => $sender,
             'account' => $account
         ] = \KhsCI\Support\Webhooks\GitHub\Installation::repositories($json_content);
 
+        User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+
         if ('added' === $action) {
-            self::create((int) $installation_id, $repo, $sender_uid);
+            self::create($repo, $sender->uid);
 
             return;
         }
 
-        self::repositories_action_removed((int) $installation_id, $repo);
+        self::repositories_action_removed($repo);
     }
 
     /**
      * 用户在设置页面移除了仓库.
      *
-     * @param int   $installation_id
      * @param array $repo
      *
      * @throws \Exception
      */
-    private static function repositories_action_removed(int $installation_id, array $repo): void
+    private static function repositories_action_removed(array $repo): void
     {
         foreach ($repo as $k) {
             $rid = $k->id;
 
-            Repo::deleteByRid('github', (int) $rid, (int) $installation_id);
+            Repo::deleteByRid((int) $rid);
         }
     }
 }

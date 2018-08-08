@@ -6,6 +6,7 @@ namespace KhsCI\Support\Webhooks\GitHub;
 
 use KhsCI\Support\Log;
 use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Sender;
 
 class Installation
 {
@@ -32,17 +33,13 @@ class Installation
 
         // sender 可视为管理员
         $sender = $obj->sender;
-        $sender_username = $sender->login;
-        $sender_uid = $sender->id;
-        $sender_pic = $sender->avatar_url;
 
         $org = 'Organization' === $account->type;
 
         return [
             'installation_id' => $installation_id,
-            'sender_username' => $sender_username,
-            'sender_uid' => $sender_uid,
-            'sender_pic' => $sender_pic,
+            'action' => $action,
+            'sender' => (new Sender($sender)),
             'account' => (new Account($account, $org)),
         ];
     }
@@ -70,9 +67,6 @@ class Installation
 
         // sender 可视为管理员
         $sender = $obj->sender;
-        $sender_username = $sender->login;
-        $sender_uid = $sender->id;
-        $sender_pic = $sender->avatar_url;
 
         $repo_type = 'repositories_'.$action;
 
@@ -82,10 +76,9 @@ class Installation
 
         return [
             'installation_id' => $installation_id,
+            'action' => $action,
             'repo' => $repo,
-            'sender_username' => $sender_username,
-            'sender_uid' => $sender_uid,
-            'sender_pic' => $sender_pic,
+            'sender' => (new Sender($sender)),
             'account' => (new Account($account, $org)),
         ];
     }

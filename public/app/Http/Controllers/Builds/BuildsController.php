@@ -29,7 +29,7 @@ class BuildsController
 
         list($git_type, $uid) = JWTController::getUser();
 
-        $array = Build::allByAdmin($git_type, (int) $uid, $before, $limit);
+        $array = Build::allByAdmin((int) $uid, $before, $limit, $git_type);
 
         return $array;
     }
@@ -83,7 +83,7 @@ class BuildsController
     {
         list($git_type, $username, $repo_name) = $args;
 
-        $build_key_id = Build::getCurrentBuildKeyId($git_type, (int) Repo::getRid(...$args));
+        $build_key_id = Build::getCurrentBuildKeyId((int) Repo::getRid(...$args), $git_type);
 
         return self::find($build_key_id);
     }

@@ -11,6 +11,8 @@ use KhsCI\Support\DB;
 class Delete
 {
     /**
+     * @param $json_content
+     *
      * @throws \Exception
      */
     public static function handle($json_content): void

@@ -25,7 +25,6 @@ class Delete
         $ref_type = $obj->ref_type;
 
         $repository = $obj->repository;
-
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
 

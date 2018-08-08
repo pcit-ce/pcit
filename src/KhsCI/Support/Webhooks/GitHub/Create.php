@@ -17,13 +17,13 @@ class Create
     {
         $obj = json_decode($json_content);
 
+        $repository = $obj->repository;
         $rid = $obj->repository->id;
+        $repo_full_name = $repository->full_name;
 
         $ref_type = $obj->ref_type;
 
         $installation_id = $obj->installation->id ?? null;
-
-        $repository = $obj->repository;
 
         $org = ($obj->organization ?? false) ? true : false;
 
@@ -33,6 +33,7 @@ class Create
         return [
             'installation_id' => $installation_id,
             'rid' => $rid,
+            'repo_full_name' => $repo_full_name,
             'ref_type' => $ref_type,
             'account' => (new Account($repository_owner, $org)),
         ];

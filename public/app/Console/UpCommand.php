@@ -133,11 +133,9 @@ class UpCommand
     /**
      * @param string $content
      *
-     * @return string
-     *
      * @throws Exception
      */
-    public function ping(string $content)
+    public function ping(string $content): void
     {
         Ping::handle($content);
     }
@@ -256,9 +254,9 @@ class UpCommand
     }
 
     /**
-     * @param string $content
+     * action `added` `deleted` `edited` `removed`.
      *
-     *                       action `added` `deleted` `edited` `removed`
+     * @param string $content
      *
      * @throws Exception
      */

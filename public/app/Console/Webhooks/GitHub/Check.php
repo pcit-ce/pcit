@@ -13,6 +13,12 @@ use App\User;
 class Check
 {
     /**
+     * completed.
+     *
+     * requested 用户推送分支
+     *
+     * rerequested 用户点击了重新运行按钮
+     *
      * @param $json_content
      *
      * @throws \Exception
@@ -37,6 +43,8 @@ class Check
     }
 
     /**
+     * created updated rerequested requested_action.
+     *
      * @param $json_content
      *
      * @throws \Exception
@@ -56,20 +64,11 @@ class Check
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Check::run($json_content);
 
-        if ('rerequested' === $action or 'requested_action' === $action) {
-            switch ($action) {
-                case 'rerequested':
-                    // 用户点击了某一 run 的 re-run
-
-                    Build::updateBuildStatusByCommitId(
-                        'pending', (int) $rid, $branch, $commit_id);
-                    break;
-
-                case 'requested_action':
-                    // 用户点击了按钮，CI 推送修复补丁
-
-                    break;
-            }
+        if ('rerequested' === $action) {
+            // 用户点击了某一 run 的 re-run
+            Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
+        } elseif ('requested_action' === $action) {
+            // 用户点击了按钮，CI 推送修复补丁
         } else {
             return;
         }

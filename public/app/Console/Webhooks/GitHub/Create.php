@@ -10,6 +10,8 @@ use App\User;
 class Create
 {
     /**
+     * Create "repository", "branch", or "tag".
+     *
      * @param $json_content
      *
      * @throws \Exception
@@ -28,9 +30,12 @@ class Create
         User::updateInstallationId((int) $installation_id, $account->username);
         Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
 
-        switch ($ref_type) {
-            case 'branch':
-                $branch = $ref_type;
+        if ('branch' === $ref_type) {
+            $branch = $ref_type;
+        } elseif ('repository' === $ref_type) {
+            $repository = $ref_type;
+        } elseif ('tag' === $ref_type) {
+            $tag = $ref_type;
         }
     }
 }
