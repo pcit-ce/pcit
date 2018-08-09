@@ -6,8 +6,6 @@ namespace App\Console\Webhooks\GitHub;
 
 use App\GetAccessToken;
 use App\Issue;
-use App\Repo;
-use App\User;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\Log;
@@ -69,9 +67,9 @@ class Issues
 
         self::createComment($rid, $repo_full_name, $issue_number, $body);
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        (new Subject())
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->handle();
 
         Log::debug(__FILE__, __LINE__, $issue_number.' opened', [], Log::INFO);
 
@@ -102,9 +100,9 @@ class Issues
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Issues::comment($json_content);
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        (new Subject())
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->handle();
 
         if ('edited' === $action) {
             Log::debug(__FILE__, __LINE__, 'Edit Issue Comment SKIP', [], Log::INFO);

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Webhooks\GitHub;
 
-use App\Repo;
-use App\User;
-
 class Create
 {
     /**
@@ -26,9 +23,9 @@ class Create
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Create::handle($json_content);
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        (new Subject())
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->handle();
 
         if ('branch' === $ref_type) {
             $branch = $ref_type;

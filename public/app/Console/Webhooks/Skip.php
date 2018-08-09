@@ -11,31 +11,55 @@ use KhsCI\Support\Log;
 
 class Skip
 {
+    private $commit_message;
+    private $build_key_id;
+    private $branch;
+    private $config;
+
     /**
-     * 检查 commit 信息跳过构建. branch 匹配构建.
+     * Skip constructor.
      *
      * @param null|string $commit_message
      * @param int         $build_key_id
-     * @param string      $branch
-     * @param string      $config
+     * @param string|null $branch
+     * @param string|null $config
+     */
+    public function __construct(?string $commit_message,
+                                int $build_key_id,
+                                string $branch = null,
+                                string $config = null)
+    {
+        $this->commit_message = $commit_message;
+        $this->build_key_id = $build_key_id;
+        $this->branch = $branch;
+        $this->config = $config;
+    }
+
+    /**
+     * 检查 commit 信息跳过构建. branch 匹配构建.
      *
-     * @return bool
      *
      * @throws Exception
      */
-    public static function handle(?string $commit_message, int $build_key_id, string $branch = null, string $config = null)
+    public function handle(): void
     {
+        $build_key_id = $this->build_key_id;
+        $config = $this->config;
+        $branch = $this->branch;
+
         // check commit message
-        if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $commit_message)) {
+        if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $this->commit_message)) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message', [], Log::INFO);
 
-            return true;
+            self::writeSkipToDB($build_key_id);
+
+            return;
         }
 
         if (null === $config) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because config is empty', [], Log::INFO);
 
-            return false;
+            return;
         }
 
         $yaml_obj = (object) json_decode($config, true);
@@ -45,7 +69,7 @@ class Skip
         if (null === $branches) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty', [], Log::INFO);
 
-            return false;
+            return;
         }
 
         $branches_exclude = $branches['exclude'] ?? [];
@@ -55,7 +79,7 @@ class Skip
         if ([] === $branches_exclude and [] === $branches_include) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty', [], Log::INFO);
 
-            return false;
+            return;
         }
 
         // 匹配排除分支
@@ -65,7 +89,9 @@ class Skip
 
                 Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
 
-                return true;
+                self::writeSkipToDB($build_key_id);
+
+                return;
             }
         }
 
@@ -76,11 +102,9 @@ class Skip
 
                 Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
 
-                return false;
+                return;
             }
         }
-
-        return false;
     }
 
     /**
@@ -91,5 +115,7 @@ class Skip
     public static function writeSkipToDB(int $build_key_id): void
     {
         Build::updateBuildStatus($build_key_id, 'skip');
+
+        throw new Exception('skip');
     }
 }

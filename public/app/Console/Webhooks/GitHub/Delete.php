@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Webhooks\GitHub;
 
-use App\Repo;
-use App\User;
 use KhsCI\Support\DB;
 
 class Delete
@@ -25,9 +23,9 @@ class Delete
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Delete::handle($json_content);
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        (new Subject())
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->handle();
 
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';

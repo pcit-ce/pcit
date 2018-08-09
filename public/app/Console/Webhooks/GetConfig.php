@@ -12,17 +12,27 @@ use KhsCI\Support\Log;
 
 class GetConfig
 {
+    private $rid;
+    private $commit_id;
+    private $git_type;
+
+    public function __construct(int $rid, string $commit_id, $git_type = 'github')
+    {
+        $this->rid = $rid;
+        $this->commit_id = $commit_id;
+        $this->git_type = $git_type;
+    }
+
     /**
-     * @param int    $rid       repo id
-     * @param string $commit_id commit id or url(only test)
-     * @param string $git_type
-     *
      * @return mixed
      *
      * @throws Exception
      */
-    public static function handle(int $rid, string $commit_id, $git_type = 'github')
+    public function handle()
     {
+        $rid = $this->rid;
+        $commit_id = $this->commit_id;
+        $git_type = $this->git_type;
         $repo_full_name = Repo::getRepoFullName($rid, $git_type);
 
         Log::debug(__FILE__, __LINE__, "${git_type} ${rid} is $repo_full_name", [], Log::INFO);

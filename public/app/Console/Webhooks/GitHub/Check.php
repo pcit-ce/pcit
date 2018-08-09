@@ -7,8 +7,6 @@ namespace App\Console\Webhooks\GitHub;
 use App\Build;
 use App\Console\Webhooks\Skip;
 use App\Notifications\GitHubAppChecks;
-use App\Repo;
-use App\User;
 
 class Check
 {
@@ -35,9 +33,9 @@ class Check
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Check::suite($json_content);
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        (new Subject())
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->handle();
 
         'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
     }
@@ -73,21 +71,14 @@ class Check
             return;
         }
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
-
         $config = Build::getConfig((int) $external_id);
 
         $config_array = json_decode($config, true);
 
-        $skip = Skip::handle(null, (int) $external_id, $branch, $config);
-
-        if ($skip) {
-            Skip::writeSkipToDB($external_id);
-
-            throw new \Exception('skip', 200);
-        }
+        (new Subject())
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->register(new Skip(null, (int) $external_id, $branch, $config))
+            ->handle();
 
         if ($config_array) {
             Build::updateBuildStatus((int) $external_id, 'pending');

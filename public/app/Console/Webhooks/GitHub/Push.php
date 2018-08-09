@@ -8,8 +8,6 @@ use App\Build;
 use App\Console\Webhooks\GetConfig;
 use App\Console\Webhooks\Skip;
 use App\Notifications\GitHubAppChecks;
-use App\Repo;
-use App\User;
 use KhsCI\Support\Log;
 
 class Push
@@ -46,11 +44,11 @@ class Push
         ] = $array;
 
         // user table not include user info
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        $subject = new Subject();
 
-        $config_array = GetConfig::handle((int) $rid, $commit_id);
+        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name));
+
+        $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
 
         $config = json_encode($config_array);
 
@@ -59,11 +57,8 @@ class Push
             $author->name, $author->email, $author->username,
             $rid, $event_time, $config);
 
-        if (Skip::handle($commit_message, (int) $last_insert_id, $branch, $config)) {
-            Skip::writeSkipToDB((int) $last_insert_id);
-
-            throw new \Exception('skip', 200);
-        }
+        $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
+            ->handle();
 
         GitHubAppChecks::send((int) $last_insert_id);
 
@@ -91,11 +86,11 @@ class Push
             'account' => $account,
         ] = $array;
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        $subject = new Subject();
 
-        $config_array = GetConfig::handle((int) $rid, $commit_id);
+        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name));
+
+        $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
 
         $config = json_encode($config_array);
 

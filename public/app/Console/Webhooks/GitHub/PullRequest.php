@@ -9,8 +9,6 @@ use App\Console\Webhooks\GetConfig;
 use App\Console\Webhooks\Skip;
 use App\GetAccessToken;
 use App\Notifications\GitHubAppChecks;
-use App\Repo;
-use App\User;
 use KhsCI\KhsCI;
 
 class PullRequest
@@ -61,11 +59,11 @@ class PullRequest
             'account' => $account,
         ] = $array;
 
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-        Repo::updateRepoInfo((int) $rid, $repo_full_name, null, null);
+        $subject = new Subject();
 
-        $config_array = GetConfig::handle($rid, $commit_id);
+        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name));
+
+        $config_array = $subject->register(new GetConfig($rid, $commit_id))->handle()->config_array;
 
         $config = json_encode($config_array);
 
@@ -75,11 +73,8 @@ class PullRequest
             $branch, $rid, $config, $internal, $pull_request_source
         );
 
-        if (Skip::handle($commit_message, (int) $last_insert_id, $branch, $config)) {
-            Skip::writeSkipToDB((int) $last_insert_id);
-
-            return;
-        }
+        $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
+            ->handle();
 
         if ('opened' !== $action) {
             return;
@@ -103,6 +98,7 @@ EOF;
      * @param int $rid
      * @param     $repo_full_name
      * @param     $pull_request_number
+     * @param     $comment_body
      *
      * @throws \Exception
      */
