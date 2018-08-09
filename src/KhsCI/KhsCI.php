@@ -58,7 +58,6 @@ use WeChat\WeChat;
  * @property Service\Users\GitHubClient                     $user_basic_info
  * @property Service\Checks\Run                             $check_run
  * @property Service\Checks\Suites                          $check_suites
- * @property Service\Checks\MarkDown                        $check_md
  * @property Curl                                           $curl
  * @property Docker                                         $docker
  * @property WeChat                                         $wechat
