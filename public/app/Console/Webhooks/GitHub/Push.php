@@ -8,7 +8,6 @@ use App\Build;
 use App\Console\Webhooks\GetConfig;
 use App\Console\Webhooks\Skip;
 use App\Notifications\GitHubAppChecks;
-use KhsCI\Support\Log;
 
 class Push
 {
@@ -61,8 +60,6 @@ class Push
             ->handle();
 
         GitHubAppChecks::send((int) $last_insert_id);
-
-        Log::debug(__FILE__, __LINE__, 'exec push event success', [], Log::INFO);
     }
 
     /**

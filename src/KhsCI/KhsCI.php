@@ -11,7 +11,6 @@ use KhsCI\Support\Config;
 use KhsCI\Support\Git;
 use PHPMailer\PHPMailer\PHPMailer;
 use Pimple\Container;
-use TencentAI\TencentAI;
 use WeChat\WeChat;
 
 /**
@@ -55,7 +54,7 @@ use WeChat\WeChat;
  * @property Service\Webhooks\GitHubClient                  $webhooks
  * @property Service\Build\Client                           $build
  * @property Service\Build\Cleanup                          $build_cleanup
- * @property TencentAI                                      $tencent_ai
+ * @property \TencentAI\Application                         $tencent_ai
  * @property Service\Users\GitHubClient                     $user_basic_info
  * @property Service\Checks\Run                             $check_run
  * @property Service\Checks\Suites                          $check_suites

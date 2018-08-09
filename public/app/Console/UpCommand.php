@@ -17,10 +17,9 @@ use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\DB;
-use KhsCI\Support\Env;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
-use TencentAI\TencentAI;
+use TencentAI\Application;
 
 class UpCommand
 {
@@ -35,22 +34,11 @@ class UpCommand
             // 从 Webhooks 缓存中拿出数据，进行处理
             $this->webhooks();
 
-            Log::debug(__FILE__, __LINE__, 'Docker connect ...');
-
             // Docker 构建队列
-            $docker_build_skip = false;
-
             try {
-                Http::get(Env::get('CI_DOCKER_HOST').'/info');
-            } catch (\Throwable $e) {
-                Log::debug(__FILE__, __LINE__, 'Docker connect error, skip build');
-                $docker_build_skip = true;
-            }
-
-            if (!$docker_build_skip) {
-                Log::debug(__FILE__, __LINE__, 'Docker connect success, building ...');
-
                 (new BuildCommand())->build();
+            } catch (\Throwable $e) {
+                Log::debug(__FILE__, __LINE__, 'Docker connect error');
             }
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], LOG::ERROR);
@@ -59,16 +47,21 @@ class UpCommand
         }
     }
 
+    /**
+     * 关闭资源.
+     */
     public function closeResource(): void
     {
         DB::close();
         Cache::close();
         HTTP::close();
         Log::close();
-        TencentAI::close();
+        Application::close();
     }
 
     /**
+     * 外部调用服务
+     *
      * @throws Exception
      */
     public static function runWebhooks(): void
@@ -77,6 +70,8 @@ class UpCommand
     }
 
     /**
+     * 从缓存中拿出 webhooks 数据，并进行处理.
+     *
      * @throws Exception
      */
     private function webhooks(): void

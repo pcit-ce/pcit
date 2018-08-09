@@ -78,13 +78,17 @@ class BuildCommand
      */
     public function build(): void
     {
+        $this->khsci = new KhsCI();
+
+        Log::debug(__FILE__, __LINE__, 'Docker connect ...');
+
+        $this->khsci->docker->system->ping(1);
+
         Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
 
         try {
             // get build info
             $output = array_values($this->getBuildDB());
-
-            $this->khsci = new KhsCI();
 
             $build = $this->khsci->build;
             $build_cleanup = $this->khsci->build_cleanup;
