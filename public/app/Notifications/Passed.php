@@ -57,7 +57,7 @@ EOF;
      * @throws Exception
      */
     public function __construct(int $build_key_id,
-                                string $config,
+                                string $config = null,
                                 string $build_log = null,
                                 string $language = null,
                                 string $os = null,
@@ -72,7 +72,7 @@ EOF;
 
         $this->os = $os ?? PHP_OS;
 
-        $this->build_log = Job::getLog((int) $this->build_key_id) ??
+        $this->build_log = $build_log ?? Job::getLog((int) $this->build_key_id) ??
             'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/';
 
         $this->git_type = $git_type;

@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Console\BuildFunction;
+namespace App\Console\Events;
 
 use App\GetAccessToken;
 use App\Repo;
 use KhsCI\KhsCI;
+use KhsCI\Service\Build\BuildData;
 use KhsCI\Support\CI;
 use KhsCI\Support\Log;
 
@@ -17,7 +18,7 @@ class AutoMerge
      */
     public $build;
 
-    public function __construct(Build $build)
+    public function __construct(BuildData $build)
     {
         $this->build = $build;
     }

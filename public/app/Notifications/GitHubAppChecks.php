@@ -81,9 +81,12 @@ class GitHubAppChecks
 
         $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status_use_in_title);
 
-        $summary = $summary ?? 'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)';
+        $summary = $summary ??
+            'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)';
 
-        $text = $text ?? $khsci->check_md->queued('PHP', PHP_OS, $config);
+        $text = $text ??
+            (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
+                ->markdown();
 
         $check_run_id = Build::getCheckRunId((int) $build_key_id);
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Build;
 
-abstract class BuildDataInterface
+abstract class BuildData
 {
     public $commit_id;
 

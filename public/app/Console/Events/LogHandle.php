@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\BuildFunction;
+namespace App\Console\Events;
 
 use App\Job;
 use KhsCI\Support\Cache;

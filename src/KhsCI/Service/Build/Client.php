@@ -6,7 +6,6 @@ namespace KhsCI\Service\Build;
 
 use App\Job;
 use Exception;
-use KhsCI\KhsCI;
 use KhsCI\Service\Build\Events\GitClient;
 use KhsCI\Service\Build\Events\PipelineClient;
 use KhsCI\Service\Build\Events\ServicesClient;

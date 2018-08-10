@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\BuildFunction;
+namespace App\Console\Events;
 
 class Subject
 {
