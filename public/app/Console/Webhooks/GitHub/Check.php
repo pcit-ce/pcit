@@ -6,6 +6,7 @@ namespace App\Console\Webhooks\GitHub;
 
 use App\Build;
 use App\Console\Webhooks\Skip;
+use App\Job;
 use App\Notifications\GitHubAppChecks;
 
 class Check
@@ -31,12 +32,14 @@ class Check
             'commit_id' => $commit_id,
             'action' => $action,
             'account' => $account,
+            'check_suite_id' => $check_suite_id
         ] = \KhsCI\Support\Webhooks\GitHub\Check::suite($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
             ->handle();
 
+        'request' === $account && Build::updateCheckSuiteId((int) $rid, $commit_id, (int) $check_suite_id);
         'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
     }
 
@@ -62,14 +65,15 @@ class Check
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Check::run($json_content);
 
-        if ('rerequested' === $action) {
-            // 用户点击了某一 run 的 re-run
-            Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
-        } elseif ('requested_action' === $action) {
-            // 用户点击了按钮，CI 推送修复补丁
-        } else {
+        if (in_array($action, ['created', 'updated'])) {
             return;
         }
+
+        // 用户点击了某一 run 的 re-run
+        'rerequested' === $action && Job::updateBuildStatus($external_id, 'pending');
+
+        // 用户点击了按钮，CI 推送修复补丁
+        // 'requested_action' === $action &&
 
         $config = Build::getConfig((int) $external_id);
 

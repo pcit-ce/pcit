@@ -528,4 +528,24 @@ EOF;
 
         return $last_insert_id;
     }
+
+    /**
+     * @param int    $rid
+     * @param string $commit_id
+     * @param int    $check_suite_id
+     * @param string $git_type
+     *
+     * @throws Exception
+     */
+    public static function updateCheckSuiteId(int $rid,
+                                              string $commit_id,
+                                              int $check_suite_id,
+                                              string $git_type = 'github'): void
+    {
+        $sql = 'UPDATE builds SET check_suites_id=? WHERE rid=? AND commit_id=? AND git_type=? ';
+
+        DB::update($sql, [
+            $check_suite_id, $rid, $commit_id, $git_type,
+        ]);
+    }
 }

@@ -318,7 +318,7 @@ EOF;
                 $git_type, $rid, $repo_full_name, time(), $build_active, $webhooks_status, $repo_key_id,
             ]);
 
-            return;
+            goto a;
         }
 
         $sql = <<<EOF
@@ -332,6 +332,8 @@ EOF;
             $git_type, $rid, $repo_full_name,
             $default_branch, time(), $build_active, $webhooks_status,
         ]);
+
+        a:
 
         if ($insert_admin) {
             self::updateAdmin($rid, $insert_admin, $git_type);
