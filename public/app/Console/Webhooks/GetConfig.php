@@ -39,7 +39,7 @@ class GetConfig
 
         $url = Git::getRawUrl($git_type, $repo_full_name, $commit_id, '.khsci.yml');
 
-        $yaml_file_content = HTTP::get($url);
+        $yaml_file_content = HTTP::get($url, null, [], 20);
 
         if (404 === Http::getCode()) {
             Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml", [], Log::INFO);

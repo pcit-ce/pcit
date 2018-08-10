@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications;
+namespace App\Notifications\GitHubChecksConclusion;
 
 use App\Build;
 use App\Job;
+use App\Notifications\GitHubAppChecks;
 use Exception;
 use KhsCI\Support\CI;
 
@@ -32,7 +33,7 @@ Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master
 
 EOF;
 
-    public $build_key_id;
+    public $job_key_id;
 
     public $config;
 
@@ -47,23 +48,23 @@ EOF;
     /**
      * Passed constructor.
      *
-     * @param int         $build_key_id
+     * @param int         $job_key_id
      * @param string      $config
-     * @param string      $language
      * @param null|string $build_log
+     * @param string      $language
      * @param null|string $os
      * @param string      $git_type
      *
      * @throws Exception
      */
-    public function __construct(int $build_key_id,
+    public function __construct(int $job_key_id,
                                 string $config = null,
                                 string $build_log = null,
                                 string $language = null,
                                 string $os = null,
                                 $git_type = 'github')
     {
-        $this->build_key_id = $build_key_id;
+        $this->job_key_id = $job_key_id;
 
         $this->config = $config ??
             'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/';
@@ -72,7 +73,7 @@ EOF;
 
         $this->os = $os ?? PHP_OS;
 
-        $this->build_log = $build_log ?? Job::getLog((int) $this->build_key_id) ??
+        $this->build_log = $build_log ?? Job::getLog((int) $this->job_key_id) ??
             'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/';
 
         $this->git_type = $git_type;
@@ -83,18 +84,20 @@ EOF;
      */
     public function handle(): void
     {
-        if (!('github' === $this->git_type)) {
+        if ('github' !== $this->git_type) {
             return;
         }
 
-        $build_key_id = $this->build_key_id;
+        $job_key_id = $this->job_key_id;
+
+        Build::updateBuildStatus($this->job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
 
         GitHubAppChecks::send(
-            $build_key_id,
+            $job_key_id,
             null,
             CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-            (int) Build::getStartAt($build_key_id),
-            (int) Build::getStopAt($build_key_id),
+            (int) Build::getStartAt($job_key_id),
+            (int) Build::getStopAt($job_key_id),
             CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
             null,
             null,

@@ -8,7 +8,6 @@ use App\Build;
 use App\Console\Webhooks\GetConfig;
 use App\Console\Webhooks\Skip;
 use App\GetAccessToken;
-use App\Notifications\GitHubAppChecks;
 use KhsCI\KhsCI;
 
 class PullRequest
@@ -80,7 +79,7 @@ class PullRequest
             return;
         }
 
-        GitHubAppChecks::send((int) $last_insert_id);
+        Build::updateBuildStatus((int) $last_insert_id, 'pending');
 
         $comment_body = <<<EOF
 You can add label **merge**, when test is pass, I will merge this Pull_request auto        

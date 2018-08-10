@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications;
+namespace App\Notifications\GitHubChecksConclusion;
 
-use App\Build;
+use App\Job;
+use App\Notifications\GitHubAppChecks;
 use Exception;
 use KhsCI\Support\CI;
 
@@ -15,11 +16,11 @@ class InProgress extends Passed
      */
     public function handle(): void
     {
-        Build::updateStartAt($this->build_key_id);
-        Build::updateBuildStatus($this->build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS);
+        Job::updateStartAt($this->job_key_id);
+        Job::updateBuildStatus($this->job_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS);
 
         if ('github' === $this->git_type) {
-            GitHubAppChecks::send($this->build_key_id, null,
+            GitHubAppChecks::send($this->job_key_id, null,
                 CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
                 time(),
                 null,

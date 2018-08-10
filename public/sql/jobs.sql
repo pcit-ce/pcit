@@ -4,7 +4,6 @@
 
 CREATE TABLE IF NOT EXISTS `jobs` (
   `id`            BIGINT AUTO_INCREMENT KEY,
-  `number`        FLOAT,
   `allow_failure` INT,
   `state`         VARCHAR(20),
   `started_at`    BIGINT,
@@ -12,8 +11,10 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `created_at`    BIGINT,
   `updated_at`    BIGINT,
   `deleted_at`    BIGINT UNSIGNED,
-  `build`         BIGINT,
+  `build_id`      BIGINT,
   `build_log`     LONGTEXT,
+  `check_run_id`  BIGINT,
   `config`        TEXT,
+  `env_vars`      VARCHAR(255),
   `private`       INT    DEFAULT 0
 );

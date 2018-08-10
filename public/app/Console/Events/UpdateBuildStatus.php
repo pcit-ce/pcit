@@ -4,41 +4,69 @@ declare(strict_types=1);
 
 namespace App\Console\Events;
 
+use App\Notifications\Cancelled;
+use App\Notifications\Failed;
+use App\Notifications\InProgress;
+use App\Notifications\Passed;
+use KhsCI\Support\CI;
+
 class UpdateBuildStatus
 {
     public $build_status;
 
-    public $build;
+    public $build_log;
 
-    public function __construct(Build $build, string $build_status)
+    private $job_key_id;
+
+    private $config;
+
+    public function __construct(int $job_key_id,
+                                string $config,
+                                string $build_status,
+                                $build_log = null)
     {
-        $this->build = $build;
+        $this->job_key_id = $job_key_id;
+
+        $this->config = $config;
 
         $this->build_status = $build_status;
+
+        $this->build_log = $build_log;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function handle(): void
     {
+        $job_key_id = $this->job_key_id;
+        $config = $this->config;
+        $build_log = $this->build_log;
+
         switch ($this->build_status) {
             case 'inactive':
                 $this->build_status = 'inactive';
-                $this->setBuildStatusInactive();
+                \App\Build::updateBuildStatus($job_key_id, 'skip');
+
+                break;
+            case CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS:
+                $this->build_status = CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS;
+                (new InProgress($job_key_id, $config, $build_log))->handle();
 
                 break;
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE;
-                (new Failed())->handle();
-                $this->setBuildStatusFailed();
+                (new Failed($job_key_id, $config, $build_log))->handle();
 
                 break;
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS;
-                (new Passed())->handle();
+                (new Passed($job_key_id, $config, $build_log))->handle();
 
                 break;
             default:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED;
-                (new Cancelled())->handle();
+                (new Cancelled($job_key_id, $config, $build_log))->handle();
         }
     }
 }

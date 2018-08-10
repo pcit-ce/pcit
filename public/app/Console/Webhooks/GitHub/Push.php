@@ -7,7 +7,6 @@ namespace App\Console\Webhooks\GitHub;
 use App\Build;
 use App\Console\Webhooks\GetConfig;
 use App\Console\Webhooks\Skip;
-use App\Notifications\GitHubAppChecks;
 
 class Push
 {
@@ -59,7 +58,7 @@ class Push
         $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
             ->handle();
 
-        GitHubAppChecks::send((int) $last_insert_id);
+        Build::updateBuildStatus((int) $last_insert_id, 'pending');
     }
 
     /**
@@ -98,6 +97,6 @@ class Push
             $rid, $event_time, $config
         );
 
-        GitHubAppChecks::send((int) $last_insert_id);
+        Build::updateBuildStatus((int) $last_insert_id, 'pending');
     }
 }

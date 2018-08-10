@@ -47,7 +47,7 @@ class Job extends DBModel
     public static function create(int $job_id)
     {
         $sql = <<<EOF
-INSERT INTO jobs(id,allow_failure,state,created_at,build,private) 
+INSERT INTO jobs(id,allow_failure,state,created_at,build_id,private) 
 
 values(null,?,?,?,?,?)
 EOF;
@@ -64,7 +64,21 @@ EOF;
      */
     public static function getByBuildKeyID(int $job_id)
     {
-        $sql = 'SELECT id FROM jobs WHERE build=?';
+        $sql = 'SELECT id FROM jobs WHERE build_id=? LIMIT 1';
+
+        return DB::select($sql, [$job_id]);
+    }
+
+    /**
+     * @param int $job_id
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getRid(int $job_id)
+    {
+        $sql = 'SELECT builds.rid FROM jobs RIGHT JOIN builds ON jobs.build_id=builds.id WHERE jobs.id=? LIMIT 1';
 
         return DB::select($sql, [$job_id]);
     }
@@ -165,5 +179,49 @@ EOF;
         $sql = 'SELECT finished_at FROM jobs WHERE id=? LIMIT 1';
 
         return DB::select($sql, [$job_id], true);
+    }
+
+    /**
+     * @param int    $job_key_id
+     * @param string $status
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public static function updateBuildStatus(int $job_key_id, ?string $status)
+    {
+        $sql = 'UPDATE jobs SET state=? WHERE id=?';
+
+        return DB::update($sql, [$status, $job_key_id]);
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function getCheckRunId(int $build_key_id)
+    {
+        $sql = 'SELECT check_run_id FROM jobs WHERE id=? LIMIT 1';
+
+        $output = DB::select($sql, [$build_key_id], true);
+
+        return $output;
+    }
+
+    /**
+     * @param int $check_run_id
+     * @param int $build_key_id
+     *
+     * @throws Exception
+     */
+    public static function updateCheckRunId(?int $check_run_id, int $build_key_id): void
+    {
+        $sql = 'UPDATE jobs SET check_run_id=? WHERE id=?';
+
+        DB::update($sql, [$check_run_id, $build_key_id]);
     }
 }

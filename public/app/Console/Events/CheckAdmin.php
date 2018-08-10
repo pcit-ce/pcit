@@ -7,6 +7,7 @@ namespace App\Console\Events;
 use App\Repo;
 use App\User;
 use KhsCI\CIException;
+use KhsCI\Service\Build\BuildData;
 use KhsCI\Support\CI;
 use KhsCI\Support\Env;
 use KhsCI\Support\Log;
@@ -18,7 +19,7 @@ class CheckAdmin
      */
     public $build;
 
-    public function __construct(Build $build)
+    public function __construct(BuildData $build)
     {
         $this->build = $build;
     }
@@ -37,6 +38,11 @@ class CheckAdmin
             Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root', [], Log::INFO);
 
             $admin = Repo::getAdmin((int) $build->rid, true, $build->git_type);
+
+            if (!$admin) {
+                goto a;
+            }
+
             $admin_array = json_decode($admin, true);
 
             $ci_root_array = json_decode($ci_root, true);
@@ -53,6 +59,8 @@ class CheckAdmin
             }
 
             Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip', [], Log::WARNING);
+
+            a:
 
             throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, $build->build_key_id);
         }

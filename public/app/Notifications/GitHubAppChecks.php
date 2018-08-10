@@ -6,9 +6,12 @@ namespace App\Notifications;
 
 use App\Build;
 use App\GetAccessToken;
+use App\Job;
+use App\Notifications\GitHubChecksConclusion\Queued;
 use App\Repo;
 use Exception;
 use KhsCI\KhsCI;
+use KhsCI\Service\Checks\RunData;
 use KhsCI\Support\CI;
 use KhsCI\Support\Env;
 use KhsCI\Support\JSON;
@@ -17,7 +20,7 @@ use KhsCI\Support\Log;
 class GitHubAppChecks
 {
     /**
-     * @param int         $build_key_id
+     * @param int         $job_key_id
      * @param string|null $name
      * @param string      $status
      * @param int         $started_at
@@ -35,7 +38,7 @@ class GitHubAppChecks
      *
      * @throws Exception
      */
-    public static function send(int $build_key_id,
+    public static function send(int $job_key_id,
                                 string $name = null,
                                 string $status = null,
                                 int $started_at = null,
@@ -49,9 +52,11 @@ class GitHubAppChecks
                                 array $actions = null,
                                 bool $force_create = false): void
     {
-        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run '.$build_key_id.' ...', [], Log::INFO);
+        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run '.$job_key_id.' ...', [], Log::INFO);
 
-        $rid = Build::getRid((int) $build_key_id);
+        $rid = Job::getRid((int) $job_key_id);
+
+        $build_key_id = (int) Job::getByBuildKeyID($job_key_id);
 
         $repo_full_name = Repo::getRepoFullName((int) $rid);
 
@@ -77,7 +82,8 @@ class GitHubAppChecks
             $status_use_in_title = 'in Progress';
         }
 
-        $name = $name ?? 'Build Event is '.ucfirst($event_type).' '.ucfirst($status_use_in_title);
+        $name = $name ??
+            'Build Event is '.ucfirst($event_type).' '.ucfirst($status_use_in_title).$build_key_id.$job_key_id;
 
         $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status_use_in_title);
 
@@ -88,23 +94,36 @@ class GitHubAppChecks
             (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
                 ->markdown();
 
-        $check_run_id = Build::getCheckRunId((int) $build_key_id);
+        $check_run_id = Job::getCheckRunId((int) $build_key_id);
+
+        $run_data = new RunData(
+            $repo_full_name,
+            $name,
+            $branch,
+            $commit_id,
+            $details_url,
+            $job_key_id,
+            $status,
+            $started_at,
+            $completed_at,
+            $conclusion,
+            $title,
+            $summary,
+            $text,
+            $annotations,
+            $images,
+            $actions
+        );
+
+        $run_data->check_run_id = $check_run_id;
 
         if ($check_run_id and !$force_create) {
-            $output = $khsci->check_run->update(
-                $repo_full_name, $check_run_id, $name, $branch, $commit_id, $details_url,
-                (string) $build_key_id, $status, $started_at ?? time(),
-                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
-            );
+            $output = $khsci->check_run->update($run_data);
         } else {
-            $output = $khsci->check_run->create(
-                $repo_full_name, $name, $branch, $commit_id, $details_url, (string) $build_key_id, $status,
-                $started_at ?? time(),
-                $completed_at, $conclusion, $title, $summary, $text, $annotations, $images, $actions
-            );
+            $output = $khsci->check_run->create($run_data);
         }
 
-        Build::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
+        Job::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
 
         $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
 

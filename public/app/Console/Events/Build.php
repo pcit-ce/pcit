@@ -101,11 +101,11 @@ EOF;
     {
         $array = Setting::list($this->rid, $this->git_type);
 
-        $this->build_pushes = $array['build_pushes'];
-        $this->build_pull_requests = $array['build_pull_requests'];
-        $this->maximum_number_of_builds = $array['maximum_number_of_builds'];
-        $this->auto_cancel_branch_builds = $array['auto_cancel_branch_builds'];
-        $this->auto_cancel_pull_request_builds = $array['auto_cancel_pull_request_builds'];
+        $this->build_pushes = $array['build_pushes'] ?? 1;
+        $this->build_pull_requests = $array['build_pull_requests'] ?? 1;
+        $this->maximum_number_of_builds = $array['maximum_number_of_builds'] ?? 1;
+        $this->auto_cancel_branch_builds = $array['auto_cancel_branch_builds'] ?? 1;
+        $this->auto_cancel_pull_request_builds = $array['auto_cancel_pull_request_builds'] ?? 1;
     }
 
     /**

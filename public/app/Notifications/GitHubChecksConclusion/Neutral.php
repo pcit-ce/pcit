@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications;
+namespace App\Notifications\GitHubChecksConclusion;
 
-class Queued extends Passed
+class Neutral extends Passed
 {
     /**
      * @return string
@@ -28,6 +28,12 @@ $this->config
 ```
 
 </details>
+
+# Build Log
+
+```bash
+$this->build_log
+```
 
 EOF;
     }

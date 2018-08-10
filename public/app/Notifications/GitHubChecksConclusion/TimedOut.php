@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications;
+namespace App\Notifications\GitHubChecksConclusion;
 
-class Neutral extends Passed
+class TimedOut extends Passed
 {
     /**
      * @return string

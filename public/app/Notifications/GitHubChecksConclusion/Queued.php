@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Notifications;
+namespace App\Notifications\GitHubChecksConclusion;
 
-class ActionRequired extends Passed
+class Queued extends Passed
 {
     /**
      * @return string
      */
-    public function handle()
+    public function markdown()
     {
         return self::$header.<<<EOF
 
@@ -28,12 +28,6 @@ $this->config
 ```
 
 </details>
-
-# Build Log
-
-```bash
-$this->build_log
-```
 
 EOF;
     }
