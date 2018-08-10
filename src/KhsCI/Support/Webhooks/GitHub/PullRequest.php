@@ -61,7 +61,7 @@ class PullRequest
 
         // 检查内外部 PR
 
-        $internal = ($pull_request_head->repo->id !== $pull_request_base->repo->id) ? true : false;
+        $internal = ($pull_request_head->repo->id !== $pull_request_base->repo->id) ? 0 : 1;
 
         $pull_request_source = $pull_request_head->repo->full_name;
 
@@ -73,6 +73,7 @@ class PullRequest
             'installation_id' => $installation_id,
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
+            'action' => $action,
             'event_time' => $event_time,
             'commit_message' => $commit_message,
             'commit_id' => $commit_id,
@@ -135,6 +136,7 @@ class PullRequest
                 'repo_full_name' => $repo_full_name,
                 'pull_request_number' => $pull_request_number,
                 'label_name' => $label_name,
+                'action' => 'unlabeled',
             ];
         }
 
@@ -145,7 +147,7 @@ class PullRequest
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
-            'action' => $action,
+            'action' => 'labeled',
             'label_name' => $label_name,
             'account' => (new Account($repository_owner, $org)),
         ];
@@ -187,7 +189,7 @@ class PullRequest
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
-            'action' => $action,
+            'action' => 'assigned',
             'account' => (new Account($repository_owner, $org)),
         ];
     }

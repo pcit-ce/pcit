@@ -477,32 +477,34 @@ EOF;
     }
 
     /**
-     * @param $git_type
-     * @param $event_time
-     * @param $action
-     * @param $commit_id
-     * @param $commit_message
-     * @param $committer_uid
-     * @param $pull_request_number
-     * @param $branch
-     * @param $rid
-     * @param $config
-     * @param $internal
-     * @param $pull_request_source
+     * @param        $event_time
+     * @param        $action
+     * @param        $commit_id
+     * @param        $commit_message
+     * @param int    $committer_uid
+     * @param        $committer_username
+     * @param        $pull_request_number
+     * @param        $branch
+     * @param        $rid
+     * @param        $config
+     * @param        $internal
+     * @param        $pull_request_source
+     * @param string $git_type
      *
      * @return string
      *
      * @throws Exception
      */
     public static function insertPullRequest($event_time,
-                                             $action,
-                                             $commit_id,
-                                             $commit_message,
-                                             $committer_uid,
+                                             string $action,
+                                             string $commit_id,
+                                             string $commit_message,
+                                             int $committer_uid,
+                                             string $committer_username,
                                              $pull_request_number,
-                                             $branch,
+                                             string $branch,
                                              $rid,
-                                             $config,
+                                             string $config,
                                              $internal,
                                              $pull_request_source,
                                              $git_type = 'github')
@@ -512,16 +514,17 @@ INSERT INTO builds(
 
 git_type,event_type,created_at,action,
 commit_id,commit_message,pull_request_number,
-committer_name,committer_email,committer_username,
+committer_uid,committer_username,
 branch,rid,config,internal,pull_request_source
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
 
         $last_insert_id = DB::insert($sql, [
                 $git_type, 'pull_request', $event_time, $action,
-                $commit_id, $commit_message, $committer_uid, $pull_request_number,
+                $commit_id, $commit_message, $pull_request_number,
+                $committer_uid, $committer_username,
                 $branch, $rid, $config, $internal, $pull_request_source,
             ]
         );

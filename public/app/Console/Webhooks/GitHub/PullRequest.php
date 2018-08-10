@@ -50,6 +50,7 @@ class PullRequest
             'commit_id' => $commit_id,
             'event_time' => $event_time,
             'commit_message' => $commit_message,
+            'committer_username' => $committer_username,
             'committer_uid' => $committer_uid,
             'pull_request_number' => $pull_request_number,
             'branch' => $branch,
@@ -67,8 +68,8 @@ class PullRequest
         $config = json_encode($config_array);
 
         $last_insert_id = Build::insertPullRequest(
-            $event_time, $action,
-            $commit_id, $commit_message, $committer_uid, $pull_request_number,
+            $event_time, $action, $commit_id, $commit_message,
+            (int) $committer_uid, $committer_username, $pull_request_number,
             $branch, $rid, $config, $internal, $pull_request_source
         );
 

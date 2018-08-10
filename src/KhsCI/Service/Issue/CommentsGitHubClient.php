@@ -9,7 +9,6 @@ use Exception;
 use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
 use TencentAI\Error\TencentAIError;
-use TencentAI\TencentAI;
 
 class CommentsGitHubClient
 {
@@ -21,11 +20,11 @@ class CommentsGitHubClient
     private $api_url;
 
     /**
-     * @var TencentAI
+     * @var \TencentAI\Application
      */
     private $tencent_ai;
 
-    public function __construct(Curl $curl, string $api_url, TencentAI $tencent_ai)
+    public function __construct(Curl $curl, string $api_url, \TencentAI\Application $tencent_ai)
     {
         $this->curl = $curl;
 

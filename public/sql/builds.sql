@@ -4,7 +4,6 @@
 
 CREATE TABLE IF NOT EXISTS `builds` (
   `id`                  BIGINT       AUTO_INCREMENT,
-  `number`              FLOAT,
   `git_type`            VARCHAR(20)  DEFAULT 'github_app',
   `rid`                 BIGINT UNSIGNED,
   `event_type`          VARCHAR(20)  DEFAULT 'push'
