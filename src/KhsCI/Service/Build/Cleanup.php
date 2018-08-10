@@ -79,9 +79,7 @@ class Cleanup
      */
     private static function deleteContainerByLabel(Container $container, string $label): void
     {
-        $output = $container->list(true, null, false, [
-            'label' => $label,
-        ]);
+        $output = $container->list(true, null, false, ['label' => $label]);
 
         foreach (json_decode($output) as $k) {
             $id = $k->Id;

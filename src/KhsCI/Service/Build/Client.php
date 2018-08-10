@@ -5,109 +5,53 @@ declare(strict_types=1);
 namespace KhsCI\Service\Build;
 
 use App\Job;
-use Docker\Docker;
 use Exception;
-use KhsCI\CIException;
 use KhsCI\KhsCI;
+use KhsCI\Service\Build\Events\GitClient;
+use KhsCI\Service\Build\Events\PipelineClient;
+use KhsCI\Service\Build\Events\ServicesClient;
+use KhsCI\Service\Build\Events\Subject;
+use KhsCI\Service\Build\Events\SystemEnv;
 use KhsCI\Support\CI;
 use KhsCI\Support\Log;
 
 class Client
 {
-    private $git_type;
-
-    private $build_key_id;
-
-    public $pull_number;
-
-    public $tag;
-
-    private $commit_id;
-
-    private $commit_message;
-
-    private $branch;
-
-    private $event_type;
-
-    private $config;
-
-    private $rid;
-
-    private $repo_full_name;
-
-    private $system_env = [];
-
-    private $pipeline;
-
-    private $workdir;
-
     /**
-     * @var Docker
+     * @var BuildData
      */
-    private $docker;
+    public $build;
+
+    public $system_env = [];
+
+    public $pipeline;
+
+    public $workdir;
+
+    public $job_id;
 
     /**
-     * @param int         $build_key_id
-     * @param string      $git_type
-     * @param int         $rid
-     * @param string      $commit_id
-     * @param string      $commit_message
-     * @param string      $branch
-     * @param string      $event_type
-     * @param string      $pull_request_number
-     * @param string      $tag
-     * @param null|string $config
-     * @param null|string $repo_full_name
-     * @param array       $env_vars
+     * @param $build
      *
-     * @throws CIException
      * @throws Exception
      */
-    public function __invoke($build_key_id,
-                             string $git_type,
-                             $rid,
-                             string $commit_id,
-                             string $commit_message,
-                             string $branch,
-                             string $event_type,
-                             $pull_request_number,
-                             ?string $tag,
-                             ?string $config,
-                             ?string $repo_full_name,
-                             array $env_vars): void
+    public function handle(BuildData $build): void
     {
-        $this->build_key_id = (int) $build_key_id;
-        $this->git_type = $git_type;
-        $this->rid = $rid;
-        $this->commit_id = $commit_id;
-        $this->commit_message = $commit_message;
-        $this->branch = $branch;
-        $this->event_type = $event_type;
-        $this->pull_number = $pull_request_number;
-        $this->tag = $tag;
-        $this->config = $config;
-        $this->repo_full_name = $repo_full_name;
-        $this->system_env = array_merge($this->system_env, $env_vars);
+        $this->build = $build;
 
-        Log::debug(__FILE__, __LINE__, json_encode([
-            'build_key_id' => $build_key_id,
-            'event_type' => $event_type,
-            'commit_id' => $commit_id,
-            'pull_request_id' => $pull_request_number,
-            'tag' => $tag,
-            'git_type' => $git_type, [], Log::EMERGENCY,
-        ]));
+        $this->system_env = array_merge($this->system_env, $this->build->env);
 
-        try {
-            // 生成容器配置
-            $this->config();
+        Log::debug(__FILE__, __LINE__, 'Generate Container Config', [
+            'build_key_id' => $this->build->build_key_id,
+            'event_type' => $this->build->event_type,
+            'commit_id' => $this->build->commit_id,
+            'pull_request_id' => $this->build->pull_request_number,
+            'tag' => $this->build->tag,
+            'git_type' => $this->build->git_type, ], Log::EMERGENCY
+        );
 
-            // 运行容器
-            (new RunContainer())->run($this->build_key_id);
-        } catch (\Throwable $e) {
-            throw new CIException($e->getMessage());
-        }
+        // 生成容器配置
+        $this->config();
     }
 
     /**
@@ -117,14 +61,14 @@ class Client
      */
     public function config(): void
     {
-        if (!$this->repo_full_name or !$this->config) {
+        if (!$this->build->repo_full_name or !$this->build->config) {
             throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
         }
 
         // 解析 .khsci.yml.
-        $yaml_obj = (object) json_decode($this->config, true);
+        $yaml_obj = json_decode($this->build->config);
 
-        $git = $yaml_obj->clone['git'] ?? null;
+        $git = $yaml_obj->clone->git ?? null;
         $cache = $yaml_obj->cache ?? null;
         $workspace = $yaml_obj->workspace ?? null;
         $pipeline = $yaml_obj->pipeline ?? null;
@@ -135,9 +79,9 @@ class Client
         $this->pipeline = $pipeline;
 
         //项目根目录
-        $base_path = $workspace['base'] ?? null;
+        $base_path = $workspace->base ?? null;
 
-        $path = $workspace['path'] ?? $this->repo_full_name;
+        $path = $workspace->path ?? $this->build->repo_full_name;
 
         if ('.' === $path) {
             $path = null;
@@ -146,151 +90,40 @@ class Client
         $this->workdir = $workdir = $base_path.'/'.$path;
 
         // ci system env
-        $this->systemEnv();
-
-        // get docker
-        $docker = (new KhsCI())->docker;
-        $this->docker = $docker;
-        $docker_container = $docker->container;
+        $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
 
         // 解析构建矩阵
-        $matrix = MatrixClient::parseMatrix($matrix);
+        $matrix = MatrixClient::parseMatrix((array) $matrix);
 
         // 不存在构建矩阵
         if (!$matrix) {
-            // set git config
-            GitClient::config($git,
-                $this->git_type,
-                $this->event_type,
-                $this->repo_full_name,
-                $workdir,
-                $this->commit_id,
-                $this->branch,
-                $docker_container,
-                $this->build_key_id,
-                $this
-            );
+            $this->job_id = Job::create($this->build->build_key_id);
 
-            $job_id = Job::create($this->build_key_id);
+            (new Subject())
+                // git
+                ->register(new GitClient($git, $this->build, $this))
+                // services
+                ->register(new ServicesClient($services, (int) $this->job_id, null))
+                // pipeline
+                ->register(new PipelineClient($pipeline, $this->build, $this, null))
+                ->handle();
 
-            ServicesClient::config($services, (int) $job_id, null, $docker);
-
-            PipelineClient::config($pipeline,
-                null,
-                $this->event_type,
-                $this->system_env,
-                $workdir,
-                $docker_container,
-                (int) $job_id
-            );
+            return;
         }
 
         // 矩阵构建循环
-        foreach ($matrix as $k => $config) {
-            $job_id = Job::create($this->build_key_id);
+        foreach ($matrix as $k => $matrix_config) {
+            $this->job_id = Job::create($this->build->build_key_id);
 
             // set git config
-            GitClient::config($git,
-                $this->git_type,
-                $this->event_type,
-                $this->repo_full_name,
-                $workdir,
-                $this->commit_id,
-                $this->branch,
-                $docker_container,
-                (int) $job_id,
-                $this
-            );
-
-            //启动服务
-            ServicesClient::config($services, (int) $job_id, $config, $docker);
-
-            // 构建步骤
-            PipelineClient::config($pipeline,
-                $config,
-                $this->event_type,
-                $this->system_env,
-                $workdir,
-                $docker_container,
-                (int) $job_id
-            );
+            (new Subject())
+                // git
+                ->register(new GitClient($git, $this->build, $this))
+                // services
+                ->register(new ServicesClient($services, (int) $this->job_id, $matrix_config))
+                // pipeline
+                ->register(new PipelineClient($pipeline, $this->build, $this, $matrix_config))
+                ->handle();
         }
-    }
-
-    /**
-     * 生成 CI 系统环境变量.
-     *
-     * @throws Exception
-     */
-    public function systemEnv(): void
-    {
-        $system_env = [
-            'CI=true',
-            'KHSCI=true',
-            'CONTINUOUS_INTEGRATION=true',
-            'KHSCI_BRANCH='.$this->branch,
-            'KHSCI_TAG='.$this->tag,
-            'KHSCI_BUILD_DIR='.$this->workdir,
-            'KHSCI_BUILD_ID='.$this->build_key_id,
-            'KHSCI_COMMIT='.$this->commit_id,
-            'KHSCI_COMMIT_MESSAGE='.$this->commit_message,
-            'KHSCI_EVENT_TYPE='.$this->event_type,
-            'KHSCI_PULL_REQUEST=false',
-            'KHSCI_REPO_SLUG='.$this->repo_full_name,
-        ];
-
-        if ($this->pull_number) {
-            array_merge($system_env,
-                [
-                    'KHSCI_PULL_REQUEST=true',
-                    'KHSCI_PULL_REQUEST_BRANCH='.$this->branch,
-                    'KHSCI_PULL_REQUEST_SHA='.$this->commit_id,
-                ]
-            );
-        }
-
-        $this->system_env = array_merge($system_env, $this->system_env);
-
-        Log::debug(__FILE__, __LINE__, json_encode($this->system_env), [], Log::EMERGENCY);
-    }
-
-    /**
-     * @param string|array $pattern
-     * @param string       $subject
-     *
-     * @return bool
-     *
-     * @throws Exception
-     */
-    public static function check($pattern, string $subject)
-    {
-        if (is_string($pattern)) {
-            return self::checkString($pattern, $subject);
-        }
-
-        if (is_array($pattern)) {
-            foreach ($pattern as $k) {
-                if (self::checkString($k, $subject)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $pattern
-     * @param string $subject
-     *
-     * @return bool
-     */
-    public static function checkString(string $pattern, string $subject)
-    {
-        if (preg_match('#'.$pattern.'#', $subject)) {
-            return true;
-        }
-
-        return false;
     }
 }

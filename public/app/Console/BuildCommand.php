@@ -117,7 +117,7 @@ class BuildCommand
 
             Log::connect()->emergency('====== '.$buildData->build_key_id.' Build Stopped Success ======');
 
-            Cache::connect()->set('khsci_up_status', 0);
+            Cache::store()->set('khsci_up_status', 0);
         }
     }
 

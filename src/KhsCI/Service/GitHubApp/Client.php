@@ -138,7 +138,7 @@ class Client
     {
         Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token ...');
 
-        $redis = Cache::connect();
+        $redis = Cache::store();
 
         $access_token = $redis->get("github_app_{$installation_id}_access_token");
 
@@ -183,7 +183,7 @@ class Client
      */
     private function getJWT(string $private_key_path)
     {
-        $jwt = Cache::connect()->get('github_app_jwt');
+        $jwt = Cache::store()->get('github_app_jwt');
 
         if ($jwt) {
             return $jwt;
@@ -191,7 +191,7 @@ class Client
 
         $jwt = JWT::getJWT($private_key_path, (int) Env::get('CI_GITHUB_APP_ID'));
 
-        Cache::connect()->set('github_app_jwt', $jwt, 8 * 60);
+        Cache::store()->set('github_app_jwt', $jwt, 8 * 60);
 
         return $jwt;
     }

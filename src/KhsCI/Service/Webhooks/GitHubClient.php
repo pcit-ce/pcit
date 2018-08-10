@@ -87,7 +87,7 @@ class GitHubClient
      */
     private function pushCache(string $type, $content)
     {
-        return Cache::connect()->lpush($this->cache_key, json_encode([$this->git_type, $type, $content]));
+        return Cache::store()->lpush($this->cache_key, json_encode([$this->git_type, $type, $content]));
     }
 
     /**
@@ -99,7 +99,7 @@ class GitHubClient
      */
     public function getCache()
     {
-        return Cache::connect()->rPop($this->cache_key);
+        return Cache::store()->rPop($this->cache_key);
     }
 
     /**
@@ -113,7 +113,7 @@ class GitHubClient
      */
     public function rollback(string $content)
     {
-        return Cache::connect()->lPush($this->cache_key, $content);
+        return Cache::store()->lPush($this->cache_key, $content);
     }
 
     /**
@@ -127,7 +127,7 @@ class GitHubClient
      */
     public function pushSuccessCache(string $content)
     {
-        return Cache::connect()->lPush($this->cache_key.'_success', $content);
+        return Cache::store()->lPush($this->cache_key.'_success', $content);
     }
 
     /**
@@ -149,7 +149,7 @@ class GitHubClient
      */
     public function pushErrorCache(string $content)
     {
-        return Cache::connect()->lPush($this->cache_key.'_error', $content);
+        return Cache::store()->lPush($this->cache_key.'_error', $content);
     }
 
     /**

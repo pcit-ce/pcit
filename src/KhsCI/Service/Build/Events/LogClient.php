@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\Build;
+namespace KhsCI\Service\Build\Events;
 
-use Docker\Container\Client as Container;
 use Exception;
+use KhsCI\KhsCI;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Date;
@@ -13,6 +13,16 @@ use KhsCI\Support\Log;
 
 class LogClient
 {
+    private $container_id;
+
+    private $job_id;
+
+    public function __construct(int $job_id, string $container_id)
+    {
+        $this->job_id = $job_id;
+        $this->container_id = $container_id;
+    }
+
     /**
      * @param $job_id
      *
@@ -22,21 +32,17 @@ class LogClient
     {
         Log::debug(__FILE__, __LINE__, 'Drop prev logs '.$job_id, [], Log::EMERGENCY);
 
-        Cache::connect()->hDel('build_log', $job_id);
+        Cache::store()->hDel('build_log', $job_id);
     }
 
     /**
-     * @param int       $job_id
-     * @param Container $docker_container
-     * @param string    $container_id
-     *
      * @return array
      *
      * @throws Exception
      */
-    public static function get(int $job_id, Container $docker_container, string $container_id)
+    public function handle()
     {
-        $redis = Cache::connect();
+        $redis = Cache::store();
 
         $i = -1;
 
@@ -44,10 +50,12 @@ class LogClient
         $finishedAt = null;
         $until_time = 0;
 
+        $docker_container = (new KhsCI())->docker->container;
+
         while (1) {
             $i = $i + 1;
 
-            $image_status_obj = json_decode($docker_container->inspect($container_id))->State;
+            $image_status_obj = json_decode($docker_container->inspect($this->container_id))->State;
             $status = $image_status_obj->Status;
             $startedAt = Date::parse($image_status_obj->StartedAt);
 
@@ -61,7 +69,7 @@ class LogClient
                 }
 
                 $image_log = $docker_container->logs(
-                    $container_id, false, true, true,
+                    $this->container_id, false, true, true,
                     $since_time, $until_time, true
                 );
 
@@ -72,14 +80,14 @@ class LogClient
                 continue;
             } else {
                 $image_log = $docker_container->logs(
-                    $container_id, false, true, true, 0, 0, true
+                    $this->container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('build_log', (string) $job_id);
+                $prev_docker_log = $redis->hget('build_log', (string) $this->job_id);
 
                 $redis->hset(
                     'build_log',
-                    (string) $job_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
+                    (string) $this->job_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
                 );
 
                 /**
@@ -92,7 +100,7 @@ class LogClient
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    Log::debug(__FILE__, __LINE__, "Container $container_id ExitCode is $exitCode, not 0", [], Log::ERROR);
+                    Log::debug(__FILE__, __LINE__, "Container $this->container_id ExitCode is $exitCode, not 0", [], Log::ERROR);
 
                     throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }

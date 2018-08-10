@@ -24,6 +24,7 @@
     "ext-curl": "*",
     "ext-json": "*",
     "ext-yaml": "*",
+    "ext-redis":"*",
     "doctrine/cache": "^1.6",
     "firebase/php-jwt": "^5.0",
     "khs1994/curl": "dev-master",

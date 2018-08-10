@@ -19,7 +19,7 @@ class WeChatProvider implements ServiceProviderInterface
                 $app['config']['wechat']['app_id'],
                 $app['config']['wechat']['app_secret'],
                 $app['config']['wechat']['token'],
-                Cache::connect(),
+                Cache::store(),
                 $app['config']['tencent_ai']['app_id'],
                 $app['config']['tencent_ai']['app_key']
             );

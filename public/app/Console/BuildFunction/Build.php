@@ -8,59 +8,14 @@ use App\Repo;
 use App\Setting;
 use Exception;
 use KhsCI\CIException;
+use KhsCI\Service\Build\BuildData;
 use KhsCI\Support\CI;
 use KhsCI\Support\DB;
 use KhsCI\Support\JSON;
 use KhsCI\Support\Log;
 
-class Build
+class Build extends BuildData
 {
-    public $commit_id;
-
-    public $commit_message;
-
-    public $unique_id;
-
-    public $event_type;
-
-    public $build_key_id;
-
-    public $pull_request_number;
-
-    public $tag;
-
-    /**
-     * @var int
-     */
-    public $rid;
-
-    public $repo_full_name;
-
-    /**
-     * @var string
-     */
-    public $git_type;
-
-    public $config;
-
-    public $build_status;
-
-    public $description;
-
-    public $branch;
-
-    // repo config
-
-    public $build_pushes;
-
-    public $build_pull_requests;
-
-    public $maximum_number_of_builds;
-
-    public $auto_cancel_branch_builds;
-
-    public $auto_cancel_pull_request_builds;
-
     /**
      * @return Build
      *
@@ -156,11 +111,9 @@ EOF;
     /**
      * get user set build env.
      *
-     * @return array
-     *
      * @throws Exception
      */
-    private function getEnv()
+    private function getEnv(): void
     {
         $env = [];
 
@@ -173,6 +126,6 @@ EOF;
             $env[] = $name.'='.$value;
         }
 
-        return $env;
+        $this->env = $env;
     }
 }

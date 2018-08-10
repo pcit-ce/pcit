@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\Build;
+namespace KhsCI\Service\Build\Agent;
 
 use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
 use KhsCI\CIException;
 use KhsCI\KhsCI;
+use KhsCI\Service\Build\Cleanup;
+use KhsCI\Service\Build\Events\LogClient;
 use KhsCI\Support\Cache;
 use KhsCI\Support\CI;
 use KhsCI\Support\Log;
@@ -87,7 +89,7 @@ class RunContainer
         Log::debug(__FILE__, __LINE__, 'Create Network '.$job_id, [], Log::EMERGENCY);
 
         while (1) {
-            $container_config = Cache::connect()->rPop((string) $job_id);
+            $container_config = Cache::store()->rPop((string) $job_id);
 
             if (!$container_config) {
                 break;
@@ -100,17 +102,17 @@ class RunContainer
             $changed = $labels['com.khs1994.ci.pipeline.status.changed'] ?? false;
 
             if ($success) {
-                Cache::connect()->lPush($job_id.'_success', $container_config);
+                Cache::store()->lPush($job_id.'_success', $container_config);
                 continue;
             }
 
             if ($failure) {
-                Cache::connect()->lPush($job_id.'_failure', $container_config);
+                Cache::store()->lPush($job_id.'_failure', $container_config);
                 continue;
             }
 
             if ($changed) {
-                Cache::connect()->lPush($job_id.'_changed', $container_config);
+                Cache::store()->lPush($job_id.'_changed', $container_config);
                 continue;
             }
 
@@ -133,7 +135,7 @@ class RunContainer
             ->create(false)
             ->start(null);
 
-        LogClient::get($job_id, $this->docker_container, $container_id);
+        (new LogClient($job_id, $container_id))->handle();
     }
 
     /**
@@ -147,7 +149,7 @@ class RunContainer
         // 获取上一次 build 的状况
 
         while (1) {
-            $container_config = Cache::connect()->rPop($job_id.'_'.$status);
+            $container_config = Cache::store()->rPop($job_id.'_'.$status);
 
             if (!$container_config) {
                 break;
@@ -165,7 +167,7 @@ class RunContainer
     private function runService($job_id): void
     {
         while (1) {
-            $container_config = Cache::connect()->rPop((string) $job_id.'_services');
+            $container_config = Cache::store()->rPop((string) $job_id.'_services');
 
             if (!$container_config) {
                 break;

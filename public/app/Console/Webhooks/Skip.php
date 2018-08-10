@@ -6,7 +6,6 @@ namespace App\Console\Webhooks;
 
 use App\Build;
 use Exception;
-use KhsCI\KhsCI;
 use KhsCI\Support\Log;
 
 class Skip
@@ -84,7 +83,7 @@ class Skip
 
         // 匹配排除分支
         if ($branches_exclude) {
-            if ((new KhsCI())->build::check($branches_exclude, $branch)) {
+            if (self::check($branches_exclude, $branch)) {
                 $message = "config exclude branch $branch, build skip  ";
 
                 Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
@@ -97,7 +96,7 @@ class Skip
 
         // 匹配包含分支
         if ($branches_include) {
-            if ((new KhsCI())->build::check($branches_include, $branch)) {
+            if (self::check($branches_include, $branch)) {
                 $message = "config include branch $branch, building  ";
 
                 Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
@@ -117,5 +116,45 @@ class Skip
         Build::updateBuildStatus($build_key_id, 'skip');
 
         throw new Exception('skip');
+    }
+
+    /**
+     * @param string|array $pattern
+     * @param string       $subject
+     *
+     * @return bool
+     *
+     * @throws Exception
+     */
+    private static function check($pattern, string $subject)
+    {
+        if (is_string($pattern)) {
+            return self::checkString($pattern, $subject);
+        }
+
+        if (is_array($pattern)) {
+            foreach ($pattern as $k) {
+                if (self::checkString($k, $subject)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $pattern
+     * @param string $subject
+     *
+     * @return bool
+     */
+    private static function checkString(string $pattern, string $subject)
+    {
+        if (preg_match('#'.$pattern.'#', $subject)) {
+            return true;
+        }
+
+        return false;
     }
 }

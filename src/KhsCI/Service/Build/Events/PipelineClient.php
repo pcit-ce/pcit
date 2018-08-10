@@ -2,45 +2,53 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\Build;
+namespace KhsCI\Service\Build\Events;
 
-use Docker\Container\Client as Container;
 use Exception;
+use KhsCI\KhsCI;
+use KhsCI\Service\Build\BuildData;
+use KhsCI\Service\Build\Client;
+use KhsCI\Service\Build\ParseClient;
 use KhsCI\Support\Cache;
 use KhsCI\Support\Log;
 
 class PipelineClient
 {
+    private $pipeline;
+    private $matrix_config;
+    private $build;
+    private $client;
+
+    public function __construct($pipeline, BuildData $build, Client $client, ?array $matrix_config)
+    {
+        $this->pipeline = $pipeline;
+        $this->matrix_config = $matrix_config;
+        $this->build = $build;
+        $this->client = $client;
+    }
+
     /**
-     * @param array     $pipeline
-     * @param array     $config
-     * @param string    $event_type
-     * @param array     $system_env
-     * @param string    $work_dir
-     * @param Container $docker_container
-     * @param int       $job_id
-     *
      * @throws Exception
      */
-    public static function config(array $pipeline,
-                                  ?array $config,
-                                  string $event_type,
-                                  array $system_env,
-                                  string $work_dir,
-                                  Container $docker_container,
-                                  int $job_id): void
+    public function handle(): void
     {
-        foreach ($pipeline as $setup => $array) {
+        $docker_container = (new KhsCI())->docker->container;
+
+        $job_id = $this->client->job_id;
+
+        $workdir = $this->client->workdir;
+
+        foreach ($this->pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup, [], Log::EMERGENCY);
 
-            $image = $array['image'];
-            $commands = $array['commands'] ?? null;
-            $event = $array['when']['event'] ?? null;
-            $env = $array['environment'] ?? [];
-            $status = $array['when']['status'] ?? null;
-            $shell = $array['shell'] ?? 'sh';
+            $image = $array->image;
+            $commands = $array->commands ?? null;
+            $event = $array->when->event ?? null;
+            $env = $array->environment ?? [];
+            $status = $array->when->status ?? null;
+            $shell = $array->shell ?? 'sh';
 
-            if (!self::parseEvent($event, $event_type)) {
+            if (!self::parseEvent($event, $this->build->event_type)) {
                 continue;
             }
 
@@ -53,10 +61,10 @@ class PipelineClient
                 $no_status = true;
             }
 
-            $image = ParseClient::image($image, $config);
+            $image = ParseClient::image($image, $this->matrix_config);
             $ci_script = ParseClient::command($setup, $image, $commands);
 
-            $env = array_merge(["CI_SCRIPT=$ci_script"], $env, $system_env);
+            $env = array_merge(["CI_SCRIPT=$ci_script"], $env, $this->client->system_env);
 
             Log::debug(__FILE__, __LINE__, json_encode($env), [], Log::INFO);
 
@@ -66,7 +74,7 @@ class PipelineClient
 
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setBinds(["$job_id:$work_dir", 'tmp:/tmp'])
+                ->setBinds(["$job_id:$workdir", 'tmp:/tmp'])
                 ->setEntrypoint(["$shell", '-c'])
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => $job_id,
@@ -77,7 +85,7 @@ class PipelineClient
                     'com.khs1994.ci.pipeline.status.changed' => $changed,
                     'com.khs1994.ci' => $job_id,
                 ])
-                ->setWorkingDir($work_dir)
+                ->setWorkingDir($workdir)
                 ->setCmd($cmd)
                 ->setImage($image)
                 ->setNetworkingConfig([
@@ -92,7 +100,7 @@ class PipelineClient
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            Cache::connect()->lPush((string) $job_id, $container_config);
+            Cache::store()->lPush((string) $job_id, $container_config);
         }
     }
 

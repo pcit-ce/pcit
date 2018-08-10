@@ -124,7 +124,7 @@ class Issues
 
         $last_insert_id = Issue::insertComment($rid, $issue_id, $comment_id, $issue_number, $body, $sender_uid, $created_at);
 
-        Cache::connect()->lPush(self::$cache_key_github_issue, $last_insert_id);
+        Cache::store()->lPush(self::$cache_key_github_issue, $last_insert_id);
 
         self::createComment($rid, $repo_full_name, $issue_number, $body);
 

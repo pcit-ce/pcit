@@ -181,7 +181,7 @@ class Controller
 
         Repo::updateBuildActive($status, $gitType, $repoFullName);
 
-        Cache::connect()->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
+        Cache::store()->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
     }
 
     /**
