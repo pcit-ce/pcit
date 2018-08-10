@@ -39,12 +39,14 @@ class Push
             'compare' => $compare,
             'event_time' => $event_time,
             'account' => $account,
+            'sender' => $sender
         ] = $array;
 
         // user table not include user info
         $subject = new Subject();
 
-        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name));
+        $subject->register(
+            new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $sender));
 
         $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
 
@@ -80,11 +82,13 @@ class Push
             'author' => $author,
             'event_time' => $event_time,
             'account' => $account,
+            'sender' => $sender
         ] = $array;
 
         $subject = new Subject();
 
-        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name));
+        $subject->register(
+            new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $sender));
 
         $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
 

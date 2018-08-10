@@ -7,6 +7,7 @@ namespace App\Console\Webhooks\GitHub;
 use App\Repo;
 use App\User;
 use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Sender;
 
 /**
  * 每收到 webhooks 更新数据.
@@ -19,13 +20,19 @@ class UpdateUserInfo
     private $installation_id;
     private $rid;
     private $repo_full_name;
+    private $sender;
 
-    public function __construct(Account $account, int $installation_id, $rid, $repo_full_name)
+    public function __construct(Account $account,
+                                int $installation_id,
+                                $rid,
+                                $repo_full_name,
+                                Sender $sender = null)
     {
         $this->account = $account;
         $this->installation_id = $installation_id;
         $this->rid = $rid;
         $this->repo_full_name = $repo_full_name;
+        $this->sender = $sender->uid ?? null;
     }
 
     /**
@@ -35,6 +42,6 @@ class UpdateUserInfo
     {
         User::updateUserInfo($this->account);
         User::updateInstallationId($this->installation_id, $this->account->username);
-        Repo::updateRepoInfo($this->rid, $this->repo_full_name, null, null);
+        Repo::updateRepoInfo($this->rid, $this->repo_full_name, $this->sender, null);
     }
 }

@@ -9,6 +9,7 @@ use KhsCI\Support\Log;
 use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
 use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Author;
 use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Committer;
+use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Sender;
 
 class Push
 {
@@ -71,6 +72,7 @@ class Push
             'committer' => (new Committer($committer)),
             'installation_id' => $installation_id,
             'account' => (new Account($repository_owner, $org)),
+            'sender' => (new Sender($obj->sender)),
         ];
     }
 
@@ -123,6 +125,7 @@ class Push
             'author' => (new Author($author)),
             'committer' => (new Committer($committer)),
             'account' => (new Account($repository_owner, $org)),
+            'sender' => (new Sender($obj->sender)),
         ];
     }
 

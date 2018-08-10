@@ -40,6 +40,8 @@ class CheckAdmin
             $admin = Repo::getAdmin((int) $build->rid, true, $build->git_type);
 
             if (!$admin) {
+                Log::debug(__FILE__, __LINE__, 'repo admin not found', [], LOG::WARNING);
+
                 goto a;
             }
 

@@ -31,15 +31,13 @@ class Installation
 
         $account = $installation->account;
 
-        // sender 可视为管理员
-        $sender = $obj->sender;
-
         $org = 'Organization' === $account->type;
 
         return [
             'installation_id' => $installation_id,
             'action' => $action,
-            'sender' => (new Sender($sender)),
+            // sender 可视为管理员
+            'sender' => (new Sender($obj->sender)),
             'account' => (new Account($account, $org)),
         ];
     }
@@ -65,9 +63,6 @@ class Installation
 
         $account = $installation->account;
 
-        // sender 可视为管理员
-        $sender = $obj->sender;
-
         $repo_type = 'repositories_'.$action;
 
         $repo = $obj->$repo_type;
@@ -78,7 +73,7 @@ class Installation
             'installation_id' => $installation_id,
             'action' => $action,
             'repo' => $repo,
-            'sender' => (new Sender($sender)),
+            'sender' => (new Sender($obj->sender)),
             'account' => (new Account($account, $org)),
         ];
     }
