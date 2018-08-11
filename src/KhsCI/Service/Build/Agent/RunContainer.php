@@ -89,7 +89,7 @@ class RunContainer
         Log::debug(__FILE__, __LINE__, 'Create Network '.$job_id, [], Log::EMERGENCY);
 
         while (1) {
-            $container_config = Cache::store()->rPop((string) $job_id);
+            $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
 
             if (!$container_config) {
                 break;

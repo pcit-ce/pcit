@@ -11,6 +11,11 @@ use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
 class PullRequest
 {
     /**
+     * "assigned", "unassigned",
+     * "review_requested", "review_request_removed",
+     * "labeled", "unlabeled",
+     * "opened", "synchronize", "edited", "closed", or "reopened".
+     *
      * @param $json_content
      *
      * @return array
@@ -30,7 +35,11 @@ class PullRequest
             'labeled' === $action && $array = self::labeled($json_content);
             'unlabeled' === $action && $array = self::labeled($json_content, true);
 
-            return $array ?? [];
+            if (($array ?? null)) {
+                return $array;
+            }
+
+            throw new \Exception('skip');
         }
 
         $pull_request = $obj->pull_request;

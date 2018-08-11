@@ -15,7 +15,7 @@ class ServicesClient
     private $service;
     private $matrix_config;
 
-    public function __construct(?array $service, int $job_id, ?array $matrix_config)
+    public function __construct($service, int $job_id, ?array $matrix_config)
     {
         $this->service = $service;
         $this->job_id = $job_id;

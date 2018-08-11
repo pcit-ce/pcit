@@ -50,7 +50,7 @@ class JWTController
 
         list('git_type' => $git_type, 'uid' => $uid, 'exp' => $exp) = (array) JWT::decode(
             $token,
-            __DIR__.'/../../../../private_key/pub.key'
+            __DIR__.'/../../../../storage/private_key/pub.key'
         );
 
         if ($exp < time()) {
@@ -179,7 +179,7 @@ class JWTController
         // 验证通过 返回 jwt
         a:
         return JWT::encode(
-            __DIR__.'/../../../../private_key/'.getenv('CI_GITHUB_APP_PRIVATE_FILE'),
+            __DIR__.'/../../../../storage/private_key/'.getenv('CI_GITHUB_APP_PRIVATE_FILE'),
             (string) $git_type,
             (string) $username,
             (int) $uid,

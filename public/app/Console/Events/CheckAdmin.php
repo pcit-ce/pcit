@@ -37,7 +37,7 @@ class CheckAdmin
         while ($ci_root) {
             Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root', [], Log::INFO);
 
-            $admin = Repo::getAdmin((int) $build->rid, true, $build->git_type);
+            $admin = Repo::getAdmin((int) $build->rid, false, $build->git_type);
 
             if (!$admin) {
                 Log::debug(__FILE__, __LINE__, 'repo admin not found', [], LOG::WARNING);

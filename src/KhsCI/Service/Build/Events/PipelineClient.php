@@ -100,7 +100,7 @@ class PipelineClient
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            Cache::store()->lPush((string) $job_id, $container_config);
+            Cache::store()->lPush((string) $job_id.'_pipeline', $container_config);
         }
     }
 

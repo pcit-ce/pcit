@@ -41,10 +41,12 @@ class BuildCommand
 
         \App\Build::updateBuildStatus(
             $buildData->build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS);
-
-        // exec build
-        (new KhsCI())->build->handle($buildData);
-
+        try {
+            // exec build
+            (new KhsCI())->build->handle($buildData);
+        } catch (\Throwable $e) {
+            echo $e->__toString();
+        }
         $job_ids = Job::getByBuildKeyID($buildData->build_key_id);
 
         foreach ($job_ids as $job_id) {

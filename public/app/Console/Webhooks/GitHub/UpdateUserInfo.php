@@ -22,6 +22,17 @@ class UpdateUserInfo
     private $repo_full_name;
     private $sender;
 
+    /**
+     * UpdateUserInfo constructor.
+     *
+     * @param Account     $account
+     * @param int         $installation_id
+     * @param             $rid
+     * @param             $repo_full_name
+     * @param Sender|null $sender
+     *
+     * @throws \Exception
+     */
     public function __construct(Account $account,
                                 int $installation_id,
                                 $rid,
@@ -33,6 +44,9 @@ class UpdateUserInfo
         $this->rid = $rid;
         $this->repo_full_name = $repo_full_name;
         $this->sender = $sender->uid ?? null;
+        if ($sender) {
+            User::updateUserInfo($sender->uid, null, $sender->username);
+        }
     }
 
     /**

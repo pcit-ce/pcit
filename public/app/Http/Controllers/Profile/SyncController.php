@@ -69,7 +69,7 @@ class SyncController
             'pic' => $pic
             ) = $this->khsci->user_basic_info->getUserInfo();
 
-        User::updateUserInfo($this->git_type, $this->uid, $name, $email, $pic, $this->access_token);
+        User::updateUserInfo($this->uid, null, $name, $email, $pic, false, $this->git_type);
     }
 
     /**
@@ -205,6 +205,7 @@ class SyncController
                     $insert_admin,
                     $insert_collaborators,
                     $default_branch,
+                    1, 1,
                     $this->git_type
                 );
             }

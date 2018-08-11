@@ -328,7 +328,7 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
           $.each(data, function (id, status) {
             i--;
             let event_type = 'PR # ';
-            let pull_request_id = status.pull_request_id;
+            let pull_request_id = status.pull_request_number;
             let build_id = status.id;
             let branch = status.branch;
             let committer_username = status.committer_username;

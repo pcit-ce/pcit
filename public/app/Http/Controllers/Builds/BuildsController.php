@@ -59,7 +59,7 @@ class BuildsController
         $before && $before = (int) $before;
         $limit && $limit = (int) $before;
 
-        $rid = Repo::getRid(...$args);
+        $rid = Repo::getRid($username, $repo_name, $git_type);
 
         $array = Build::allByRid((int) $rid, $before, $limit, (bool) $pr, $git_type);
 
@@ -83,7 +83,8 @@ class BuildsController
     {
         list($git_type, $username, $repo_name) = $args;
 
-        $build_key_id = Build::getCurrentBuildKeyId((int) Repo::getRid(...$args), $git_type);
+        $build_key_id = Build::getCurrentBuildKeyId(
+            (int) Repo::getRid($username, $repo_name, $git_type), $git_type);
 
         return self::find($build_key_id);
     }
