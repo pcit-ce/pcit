@@ -4,7 +4,8 @@
     "pages/logs/logs",
     "pages/about/index",
     "pages/build/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/news/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
@@ -37,7 +38,10 @@
         "text":"关于",
         "iconPath":"images/about.png",
         "selectedIconPath":"images/aboutselected.png"
-
+      },
+      {
+        "pagePath":"pages/news/index",
+        "text":"资讯"
       }
     ]
   }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Service\Build\Agent;
 
+use App\Build;
 use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
@@ -33,7 +34,7 @@ class RunContainer
      * @throws CIException
      * @throws \Exception
      */
-    public function run(int $build_key_id): void
+    public function handle(int $build_key_id): void
     {
         $docker = (new KhsCI())->docker;
 
@@ -45,18 +46,22 @@ class RunContainer
         // 遍历所有 jobs
         foreach ($jobs as $job_id) {
             try {
-                self::job((int) $job_id);
+                // 运行一个 job
+                Job::updateStartAt($job_id);
+                self::runJob((int) $job_id);
             } catch (\Throwable $e) {
                 // 某一 job 失败
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
                     $this->after($job_id, 'failure');
-                    $this->after($job_id, 'changed');
+                    Job::updateBuildStatus(
+                        $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }
 
                 // 某一 job success
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                     $this->after($job_id, 'success');
-                    $this->after($job_id, 'changed');
+                    Job::updateBuildStatus(
+                        $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
                 }
 
                 // 清理某一 job 的构建环境
@@ -78,7 +83,7 @@ class RunContainer
      *
      * @throws \Exception
      */
-    private function job(int $job_id): void
+    private function runJob(int $job_id): void
     {
         LogClient::drop($job_id);
 
@@ -86,7 +91,7 @@ class RunContainer
 
         $this->docker_network->create((string) $job_id);
 
-        Log::debug(__FILE__, __LINE__, 'Create Network '.$job_id, [], Log::EMERGENCY);
+        Log::debug(__FILE__, __LINE__, 'Create Network', [$job_id], Log::EMERGENCY);
 
         while (1) {
             $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
@@ -116,7 +121,15 @@ class RunContainer
                 continue;
             }
 
-            $this->runJob($job_id, $container_config);
+            // 将 依赖于结果运行的 job 放入缓存队列 只执行正常任务
+
+            try {
+                $this->runPipeline($job_id, $container_config);
+            } catch (\Throwable $e) {
+                if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
+                    throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+                }
+            }
         }
 
         throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
@@ -128,7 +141,7 @@ class RunContainer
      *
      * @throws \Exception
      */
-    public function runJob(int $job_id, string $container_config): void
+    public function runPipeline(int $job_id, string $container_config): void
     {
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
@@ -148,14 +161,27 @@ class RunContainer
     {
         // 获取上一次 build 的状况
 
+        Log::debug(
+            __FILE__, __LINE__, 'Run after event', [$job_id => $status], LOG::EMERGENCY);
+
+        $changed = Build::buildStatusIsChanged(
+            Job::getBuildKeyID($job_id), Job::getGitType($job_id));
+
         while (1) {
             $container_config = Cache::store()->rPop($job_id.'_'.$status);
 
             if (!$container_config) {
-                break;
+                $container_config = Cache::store()->rPop(
+                    $job_id.'_'.\KhsCI\Support\Job::JOB_STATUS_CHANGED);
+                if (!$container_config && $changed) {
+                    break;
+                }
             }
 
-            $this->runJob($job_id, $container_config);
+            try {
+                $this->runPipeline($job_id, $container_config);
+            } catch (\Throwable $e) {
+            }
         }
     }
 

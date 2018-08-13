@@ -23,18 +23,14 @@ class JWTController
      */
     private static function getToken()
     {
-        try {
-            $token = Request::getHeader('Authorization');
-            $token = explode(' ', $token)[1] ?? null;
-        } catch (\Throwable $e) {
-            throw new Exception('Requires authentication', 401);
+        $token = Request::getHeader('Authorization');
+        $token = explode(' ', $token)[1] ?? null;
+
+        if ($token) {
+            return $token;
         }
 
-        if (!$token) {
-            throw new Exception('Requires authentication', 401);
-        }
-
-        return $token;
+        throw new Exception('Requires authentication', 401);
     }
 
     /**

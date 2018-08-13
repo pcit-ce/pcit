@@ -15,6 +15,5 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `build_log`     LONGTEXT,
   `check_run_id`  BIGINT,
   `config`        TEXT,
-  `env_vars`      VARCHAR(255),
-  `private`       INT    DEFAULT 0
+  `env_vars`      VARCHAR(255)
 );

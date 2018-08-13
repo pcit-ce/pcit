@@ -58,13 +58,13 @@ EOF;
     /**
      * @param int $job_id
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
     public static function getByBuildKeyID(int $job_id)
     {
-        $sql = 'SELECT id FROM jobs WHERE build_id=? LIMIT 1';
+        $sql = 'SELECT id FROM jobs WHERE build_id=?';
 
         return DB::select($sql, [$job_id]);
     }
@@ -223,5 +223,33 @@ EOF;
         $sql = 'UPDATE jobs SET check_run_id=? WHERE id=?';
 
         DB::update($sql, [$check_run_id, $build_key_id]);
+    }
+
+    /**
+     * @param int $job_key_id
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function getGitType(int $job_key_id)
+    {
+        $sql = 'SELECT builds.git_type FROM jobs JOIN builds ON jobs.build_id = builds.id WHERE jobs.id = ? LIMIT 1';
+
+        return DB::select($sql, [$job_key_id], true);
+    }
+
+    /**
+     * @param int $job_key_id
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public static function getBuildKeyId(int $job_key_id)
+    {
+        $sql = 'SELECT build_id FROM jobs WHERE id =?';
+
+        return (int) DB::select($sql, [$job_key_id], true);
     }
 }
