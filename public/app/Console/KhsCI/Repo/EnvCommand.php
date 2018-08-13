@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Khsci\Repo;
+namespace App\Console\KhsCI\Repo;
 
-use App\Console\Khsci\KhsCICommand;
+use App\Console\KhsCI\KhsCICommand;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

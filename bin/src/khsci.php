@@ -2,14 +2,14 @@
 
 <?php
 
-use App\Console\Khsci\InitCommand;
-use App\Console\Khsci\LoginCommand;
-use App\Console\Khsci\LogoutCommand;
-use App\Console\Khsci\Repo\EnvCommand;
-use App\Console\Khsci\Repo\SettingCommand;
-use App\Console\Khsci\SyncCommand;
-use App\Console\Khsci\TokenCommand;
-use App\Console\Khsci\WhoamiCommand;
+use App\Console\KhsCI\InitCommand;
+use App\Console\KhsCI\LoginCommand;
+use App\Console\KhsCI\LogoutCommand;
+use App\Console\KhsCI\Repo\EnvCommand;
+use App\Console\KhsCI\Repo\SettingCommand;
+use App\Console\KhsCI\SyncCommand;
+use App\Console\KhsCI\TokenCommand;
+use App\Console\KhsCI\WhoamiCommand;
 use Dotenv\Dotenv;
 use KhsCI\Support\Env;
 use Symfony\Component\Console\Application;

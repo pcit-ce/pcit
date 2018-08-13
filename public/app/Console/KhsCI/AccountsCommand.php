@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Khsci\Repo;
+namespace App\Console\KhsCI;
 
 use Symfony\Component\Console\Command\Command;
 
-class EncryptFileCommand extends Command
+class AccountsCommand extends Command
 {
 }

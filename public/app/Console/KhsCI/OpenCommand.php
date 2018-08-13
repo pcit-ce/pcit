@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Khsci\Repo;
+namespace App\Console\KhsCI;
 
 use Symfony\Component\Console\Command\Command;
 
-class DisableCommand extends Command
+class OpenCommand extends Command
 {
 }

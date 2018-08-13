@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Khsci;
+namespace App\Console\KhsCI\Repo;
 
 use Symfony\Component\Console\Command\Command;
 
-class AccountsCommand extends Command
+class LogsCommand extends Command
 {
 }

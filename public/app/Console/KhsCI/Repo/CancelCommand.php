@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Khsci\Repo;
+namespace App\Console\KhsCI\Repo;
 
 use Symfony\Component\Console\Command\Command;
 

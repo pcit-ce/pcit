@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Khsci;
+namespace App\Console\KhsCI;
 
 use Exception;
 use Symfony\Component\Console\Command\Command;
