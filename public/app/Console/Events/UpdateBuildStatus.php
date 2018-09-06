@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Events;
 
-use App\Notifications\Cancelled;
-use App\Notifications\Failed;
-use App\Notifications\InProgress;
-use App\Notifications\Passed;
+use App\Notifications\GitHubChecksConclusion\Cancelled;
+use App\Notifications\GitHubChecksConclusion\Failed;
+use App\Notifications\GitHubChecksConclusion\InProgress;
+use App\Notifications\GitHubChecksConclusion\Passed;
 use KhsCI\Support\CI;
 
 class UpdateBuildStatus

@@ -20,11 +20,11 @@ class CommentsGitHubClient
     private $api_url;
 
     /**
-     * @var \TencentAI\Application
+     * @var \TencentAI\TencentAI
      */
     private $tencent_ai;
 
-    public function __construct(Curl $curl, string $api_url, \TencentAI\Application $tencent_ai)
+    public function __construct(Curl $curl, string $api_url, \TencentAI\TencentAI $tencent_ai)
     {
         $this->curl = $curl;
 
@@ -159,7 +159,7 @@ class CommentsGitHubClient
 
             $data = <<<EOF
 <blockquote>
-            
+
 $source_show_in_md
 
 </blockquote>
@@ -168,32 +168,6 @@ $translate_output
 
 ### Tencent AI Analytic Result :$emoji:
 
-<details>
-<summary><strong>中英互译 Can't Understand $lang_show_in_md ? Please Click and See JSON content </strong></summary>
-
-```json\n
-$translate
-```
-
-</details>
-
-<details>
-<summary><strong>智能闲聊</strong></summary>
-
-```json\n
-$chat
-```
-
-</details>
-
-<details>
-<summary><strong>情感分析</strong></summary>
-
-```json\n
-$polar
-```
-
-</details>
 EOF;
         }
 

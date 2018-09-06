@@ -19,7 +19,7 @@ use KhsCI\Support\Cache;
 use KhsCI\Support\DB;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
-use TencentAI\Application;
+use TencentAI\TencentAI;
 
 class UpCommand
 {
@@ -56,7 +56,7 @@ class UpCommand
         Cache::close();
         HTTP::close();
         Log::close();
-        Application::close();
+        TencentAI::close();
     }
 
     /**

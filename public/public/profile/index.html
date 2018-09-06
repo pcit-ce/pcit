@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js"></script>
+  <script src="https://lib.baomitu.com/clipboard.js/2.0.1/clipboard.min.js"></script>
   <title>KhsCI - Profile</title>
 </head>
 <body>
@@ -13,13 +14,13 @@
 </header>
 <div id="userinfo">
   <p id="username"></p>
-  <button id="sync" onclick="sync()">Sync</button> <span>&nbsp;新建了 Git 仓库，没有看到？请点击 Sync 按钮</span>
+  <button id="sync" onclick="sync()">同步账户信息</button>
 </div>
 <br>
 
 <div class="tip">
   <p id="feature">
-    <strong>Interested in trying beta features?</strong> <a href="/features">Check out what's new.</a>
+    <a href="/features" target="_blank"><button>Beta</button></a>
   </p>
 </div>
 <hr>
@@ -51,9 +52,24 @@
 
     $("title").text(git_type + ' - ' + data.username + " - Profile - KhsCI");
     $("#user").empty().append(
-      "<span onclick='click_user()'>" + data.username + "</span> || <strong>API Token</strong> "
-      + Cookies.get(git_type + '_api_token')
+      "<span onclick='click_user()'>" + data.username + "</span><br><br><strong >API authentication</strong><br><br>" +
+      "<p>使用 KhsCI API 请访问 " +
+      "<a href='https://api.ci.khs1994.com' target='_blank'>https://api.ci.khs1994.com</a></p>" +
+      "<input id='token' value='" + Cookies.get(git_type + '_api_token') + "'>" +
+      "<button class='copy_token' data-clipboard-target='#token' onclick='copy_token()'>Copy</button><br><br>"
     );
+  }
+
+  function copy_token() {
+    var clipboard = new ClipboardJS('.copy_token');
+
+    clipboard.on('success', function (e) {
+      console.info('Action:', e.action);
+      console.info('Text:', e.text);
+      console.info('Trigger:', e.trigger);
+
+      e.clearSelection();
+    });
   }
 
   function list(data) {
@@ -118,9 +134,7 @@
         content = `
         <p></p>
         <p></p>
-        GitHub Apps Integration
-
-        <a href="${settings_url}/${installation_id}" target="_blank">Manage repositories on GitHub</a>
+        <a href="${settings_url}/${installation_id}" target="_blank">在 GitHub 管理项目</a>
 
         `;
 
@@ -140,9 +154,9 @@
 
         installation_url = data;
         content = `
-            <p>GitHub Apps Integration 【GitHub App 集成】</p>
+            <p>GitHub App 集成</p>
 
-            <p><a href="${installation_url}" target="_blank">Activate</a> the GitHub Apps integration to start testing and deploying on KhsCI 【 找不到项目！请点击 Activate 启用 】</p>
+            <p><a href="${installation_url}" target="_blank">激活项目</a> 找不到项目！请点击激活项目</p>
         `;
         $("#repos").append(content);
       },
@@ -278,8 +292,7 @@
         success: function (data) {
           $('.tip').after(
             `<p>
-<strong>Missing an organization? <code>【 找不到你的组织？ 】</code></strong>
-<a href="${data}" target="_blank"> Review and add </a> your authorized organizations.
+<a href="${data}" target="_blank"> <button>授权</button></a>
 </p>`
           );
         }
