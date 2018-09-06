@@ -47,8 +47,11 @@ class RunContainer
         foreach ($jobs as $job_id) {
             try {
                 // 运行一个 job
+                Log::debug(__FILE__, __LINE__,
+                    'Handle job', ['job_id' => $job_id], Log::EMERGENCY);
+
                 Job::updateStartAt($job_id);
-                self::runJob((int) $job_id);
+                self::handleJob((int) $job_id);
             } catch (\Throwable $e) {
                 // 某一 job 失败
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
@@ -77,15 +80,17 @@ class RunContainer
     }
 
     /**
-     * 执行某一具体的 job.
+     * 判断 job 类型.
      *
      * @param int $job_id
      *
      * @throws \Exception
      */
-    private function runJob(int $job_id): void
+    private function handleJob(int $job_id): void
     {
         LogClient::drop($job_id);
+
+        Log::debug(__FILE__, __LINE__, 'Handle job type', ['job_id' => $job_id], LOg::EMERGENCY);
 
         $this->runService($job_id);
 
@@ -145,6 +150,9 @@ class RunContainer
      */
     public function runPipeline(int $job_id, string $container_config): void
     {
+        Log::debug(__FILE__, __LINE__,
+            'Run job container', ['job_id' => $job_id], Log::EMERGENCY);
+
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
             ->create(false)
@@ -165,8 +173,8 @@ class RunContainer
     {
         // 获取上一次 build 的状况
 
-        Log::debug(
-            __FILE__, __LINE__, 'Run after event', [$job_id => $status], LOG::EMERGENCY);
+        Log::debug(__FILE__, __LINE__,
+            'Run job after', [$job_id => $job_id, 'status' => $status], LOG::EMERGENCY);
 
         $changed = Build::buildStatusIsChanged(
             Job::getBuildKeyID($job_id), Job::getGitType($job_id));
@@ -199,6 +207,8 @@ class RunContainer
      */
     private function runService($job_id): void
     {
+        Log::debug(__FILE__, __LINE__, 'Run job services', ['job_id' => $job_id], Log::EMERGENCY);
+
         while (1) {
             $container_config = Cache::store()->rPop((string) $job_id.'_services');
 

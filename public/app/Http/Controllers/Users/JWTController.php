@@ -109,10 +109,10 @@ class JWTController
         list($git_type, $uid) = self::getUser();
 
         // 上面获取到了 token 的 uid
-        $rid = Repo::getRid($git_type, $username, $repo_name);
+        $rid = Repo::getRid($username, $repo_name, $git_type);
 
         // 比对管理员列表
-        $output = Repo::checkAdmin((int) $rid, (int) $uid, $git_type);
+        $output = Repo::checkAdmin((int) $rid, (int) $uid, false, $git_type);
 
         if ($output) {
             return [(int) $rid, $git_type, (int) $uid];

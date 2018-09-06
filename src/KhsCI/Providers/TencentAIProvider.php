@@ -6,14 +6,14 @@ namespace KhsCI\Providers;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use TencentAI\Application;
+use TencentAI\TencentAI;
 
 class TencentAIProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
         $pimple['tencent_ai'] = function ($app) {
-            return Application::getInstance(
+            return TencentAI::getInstance(
                 (int) $app['config']['tencent_ai']['app_id'], $app['config']['tencent_ai']['app_key']
             );
         };

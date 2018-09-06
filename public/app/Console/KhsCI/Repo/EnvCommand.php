@@ -7,6 +7,7 @@ namespace App\Console\KhsCI\Repo;
 use App\Console\KhsCI\KhsCICommand;
 use Exception;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,7 +23,7 @@ class EnvCommand extends Command
         $this->addArgument(
             'type',
             InputArgument::REQUIRED,
-            'type'
+            'type is one of list set unset or get'
         );
 
         $this->addUsage('
@@ -114,6 +115,28 @@ khsci env get   VAR_ID
                 throw new Exception('command not found', 404);
         }
 
-        $output->write($return);
+        if ('list' !== $input->getArgument('type')) {
+            $output->write('Success');
+
+            return;
+        }
+
+        $table = new Table($output);
+
+        $table->setHeaders(['id', 'name', 'value', 'public']);
+
+        foreach (json_decode($return) as $item) {
+            $row[] = [$item->id, $item->name, $item->value, $public = $item->public ? 'true' : 'false'];
+        }
+
+        if (!($row ?? null)) {
+            $output->write('env not found');
+
+            return;
+        }
+
+        $table->setRows($row);
+
+        $table->render();
     }
 }
