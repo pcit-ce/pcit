@@ -172,17 +172,17 @@ services:
 
 matrix:
   PHP_VERSION:
-  - 7.2.8
-  - 7.1.20
+  - 7.2.9
+  - 7.1.21
   NGINX_VERSION:
-  - 1.15.2
+  - 1.15.3
   REDIS_VERSION:
   - 5.0-rc4-alpine
   MYSQL_VERSION:
   # - 8.0.11
-  - 5.7.22
+  - 5.7.23
   MONGODB_VERSION:
-  - 3.7.3
+  - 4.1.2
   POSTGRESQL_VERSION:
   - 10.4-alpine
 
