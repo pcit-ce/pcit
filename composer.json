@@ -1,6 +1,6 @@
 {
   "name": "khs1994/khsci",
-  "description": "CI Based Docker Powered by PHP",
+  "description": "CI/CD System Based Docker Powered by PHP",
   "keywords": [
     "ci",
     "docker"

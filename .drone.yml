@@ -70,7 +70,7 @@ services:
 
   redis:
     image: redis:${REDIS_VERSION}-alpine
-    command: ["--bind","0.0.0.0"]
+    commands: ["--bind","0.0.0.0"]
 
 branches: master
 

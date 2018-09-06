@@ -154,7 +154,7 @@ services:
     - MYSQL_DATABASE=test
     - MYSQL_ROOT_PASSWORD=mytest
     # entrypoint: [ "mysqld" ]
-    command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
+    commands: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # postgresql:
   #   image: postgres:${POSTGRESQL_VERSION}
@@ -164,11 +164,11 @@ services:
 
   redis:
     image: redis:${REDIS_VERSION}
-    command: ["--bind", "0.0.0.0"]
+    commands: ["--bind", "0.0.0.0"]
 
   # mongodb:
   #   image: mongo:${MONGODB_VERSION}
-  #   command: [ --smallfiles ]
+  #   commands: [ --smallfiles ]
 
 matrix:
   PHP_VERSION:

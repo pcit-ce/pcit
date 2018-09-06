@@ -8,7 +8,9 @@ use KhsCI\Support\Env;
 
 require __DIR__.'/../../vendor/autoload.php';
 
-(new NunoMaduro\Collision\Provider())->register();
+if ('cli' !== \PHP_SAPI) {
+    (new NunoMaduro\Collision\Provider())->register();
+}
 
 'true' === Env::get('CI_DEBUG', false) && CI::enableDebug();
 

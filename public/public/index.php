@@ -6,23 +6,13 @@ declare(strict_types=1);
 
 ob_start();
 
-$start_time = microtime(true);
+define('KHSCI_START', microtime(true));
 
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Route;
 
-require __DIR__.'/../../vendor/autoload.php';
-
-// read .env.* file.
-
-try {
-    $env = new Dotenv\Dotenv(__DIR__.'/../', '.env'.'.'.getenv('APP_ENV'));
-    $env->load();
-} catch (Exception $e) {
-    Response::json(['message' => $e->getMessage()], $start_time);
-    exit;
-}
+require __DIR__.'/../bootstrap/app.php';
 
 ini_set('session.cookie_path', '/');
 ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
@@ -32,25 +22,11 @@ ini_set('session.cookie_secure', 'On');
 
 // session_set_cookie_params(1800 , '/', '.'..getenv('CI_SESSION_DOMAIN', true));
 
-date_default_timezone_set(getenv('CI_TZ'));
-
 // Open Debug?
 
 $debug = true === Env::get('CI_DEBUG', false);
 
-$debug && \KhsCI\Support\CI::enableDebug();
-
 // SPL Autoload
-
-spl_autoload_register(function ($class): void {
-    $class = lcfirst($class);
-    $file = __DIR__.'/../'.str_replace('\\', \DIRECTORY_SEPARATOR, $class);
-    $file = $file.'.php';
-
-    if (file_exists($file)) {
-        require_once $file;
-    }
-});
 
 if ('/index.php' === $_SERVER['REQUEST_URI']) {
     Response::redirect('dashboard');
@@ -67,7 +43,7 @@ try {
 
         switch (gettype($output)) {
             case 'array':
-                Response::json($output, $start_time);
+                Response::json($output, KHSCI_START);
 
                 break;
             case 'integer':
@@ -86,7 +62,7 @@ try {
         'code' => $e->getCode() ?? 500,
         'message' => $e->getMessage() ?? 'ERROR',
         'documentation_url' => 'https://github.com/khs1994-php/khsci/tree/master/docs/api',
-    ], $start_time);
+    ], KHSCI_START);
 
     exit;
 }
@@ -100,11 +76,11 @@ if ('true' === $debug) {
         'method' => Route::$method ?? null,
         'message' => 'Route Not Found',
         'api_url' => getenv('CI_HOST').'/api',
-    ], $start_time);
+    ], KHSCI_START);
 } else {
     Response::json([
         'code' => 404,
         'message' => 'Not Found',
         'api_url' => getenv('CI_HOST').'/api',
-    ], $start_time);
+    ], KHSCI_START);
 }

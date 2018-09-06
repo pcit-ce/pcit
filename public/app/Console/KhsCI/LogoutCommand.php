@@ -42,9 +42,9 @@ class LogoutCommand extends Command
 
             file_put_contents($file_name, JSON::beautiful(json_encode($array)));
 
-            $output->writeln('Successfully logged out!');
+            $output->writeln('<info>Successfully logged out!</info>');
         } else {
-            throw new Exception('This User Not Found', 404);
+            $output->write('<error>This User Not Found</error>>');
         }
     }
 }
