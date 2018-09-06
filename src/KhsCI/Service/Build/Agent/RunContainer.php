@@ -136,6 +136,8 @@ class RunContainer
     }
 
     /**
+     * 启动容器.
+     *
      * @param int    $job_id
      * @param string $container_config
      *
@@ -152,6 +154,8 @@ class RunContainer
     }
 
     /**
+     * 运行 成功或失败之后的任务
+     *
      * @param int $job_id
      * @param     $status
      *
@@ -181,11 +185,14 @@ class RunContainer
             try {
                 $this->runPipeline($job_id, $container_config);
             } catch (\Throwable $e) {
+                Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
             }
         }
     }
 
     /**
+     * 运行依赖的外部服务
+     *
      * @param $job_id
      *
      * @throws \Exception

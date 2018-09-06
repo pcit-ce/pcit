@@ -6,6 +6,12 @@ namespace App\Http\Controllers\Builds;
 
 class JobController
 {
+    public function __invoke(...$arg): void
+    {
+        require __DIR__.'/../../../../public/jobs/index.html';
+        exit;
+    }
+
     public function list(): void
     {
     }

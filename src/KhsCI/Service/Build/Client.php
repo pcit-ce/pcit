@@ -58,7 +58,7 @@ class Client
      *
      * @throws Exception
      */
-    public function config(): void
+    private function config(): void
     {
         if (!$this->build->repo_full_name or !$this->build->config) {
             throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);

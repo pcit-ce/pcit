@@ -198,6 +198,7 @@ Route::get('api/job/{job_id}/log', 'Builds\LogController');
 Route::delete('api/job/{job_id}/log', 'Builds\LogController@delete');
 
 /* Job */
+Route::get('{git_type}/{username}/{repo_name}/jobs/{build_id}', 'Builds\JobController');
 
 Route::get('api/jobs', 'Builds\JobController@list');
 
