@@ -1,15 +1,16 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Created by PhpStorm.
- * User: 90621
- * Date: 2018/9/6
- * Time: 12:11.
- */
 
 namespace App\Console\KhsCI\Repo;
 
-class ReposCommand
+use Symfony\Component\Console\Command\Command;
+
+class ReposCommand extends Command
 {
+    public function configure(): void
+    {
+        $this->setName('repos');
+        $this->setDescription('Lists repositories the user has certain permissions on');
+    }
 }

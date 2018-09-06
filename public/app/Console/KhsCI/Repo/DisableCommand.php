@@ -8,4 +8,9 @@ use Symfony\Component\Console\Command\Command;
 
 class DisableCommand extends Command
 {
+    public function configure(): void
+    {
+        $this->setName('disable');
+        $this->setDescription('Disables a project');
+    }
 }

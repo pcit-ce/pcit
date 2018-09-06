@@ -4,18 +4,11 @@
 
 // khscid.php is KhsCI Daemon CLI
 
+use App\Console\KhsCIDaemon\MigrateCommand;
+use App\Console\KhsCIDaemon\UpCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../public/bootstrap/app.php';
-
-spl_autoload_register(function ($class): void {
-    $class = str_replace('\\', \DIRECTORY_SEPARATOR, $class);
-    $file = __DIR__.\DIRECTORY_SEPARATOR.$class.'.php';
-
-    if (file_exists($file)) {
-        require $file;
-    }
-});
 
 try {
     /**
@@ -24,9 +17,9 @@ try {
      */
     $cli = new Application('KhsCI Daemon CLI', 'v18.06');
 
-    $cli->add(new Migrate());
+    $cli->add(new MigrateCommand());
 
-    $cli->add(new Up());
+    $cli->add(new UpCommand());
 
     $cli->run();
 } catch (Exception $e) {

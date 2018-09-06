@@ -39,7 +39,7 @@ class PipelineClient
         $workdir = $this->client->workdir;
 
         foreach ($this->pipeline as $setup => $array) {
-            Log::debug(__FILE__, __LINE__, 'This Pipeline is '.$setup, [], Log::EMERGENCY);
+            Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
 
             $image = $array->image;
             $commands = $array->commands ?? null;

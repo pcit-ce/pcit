@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Console;
+namespace App\Console\KhsCIDaemon;
 
 use App\Build as BuildEloquent;
-use App\Console\Events\Build;
+use App\Console\Events\Build as BuildEvent;
 use App\Console\Events\CheckAdmin;
 use App\Console\Events\Subject;
 use App\Console\Events\UpdateBuildStatus;
@@ -15,7 +15,7 @@ use KhsCI\KhsCI;
 use KhsCI\Support\CI;
 use KhsCI\Support\Log;
 
-class BuildCommand
+class Build
 {
     /**
      * @throws Exception
@@ -23,7 +23,7 @@ class BuildCommand
     public function build(): void
     {
         // get build info
-        $buildData = (new Build())->handle();
+        $buildData = (new BuildEvent())->handle();
 
         // 观察者模式
         $subject = new Subject();
@@ -55,7 +55,8 @@ class BuildCommand
         $job_ids = Job::getByBuildKeyID($buildData->build_key_id);
 
         foreach ($job_ids as $job_id) {
-            Log::debug(__FILE__, __LINE__, 'Handle build jobs', [], Log::EMERGENCY);
+            Log::debug(__FILE__, __LINE__,
+                'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
 
             $subject
                 // update build status in progress

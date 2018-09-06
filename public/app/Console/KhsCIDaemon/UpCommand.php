@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
+namespace App\Console\KhsCIDaemon;
+
+use Exception;
 use KhsCI\Support\Env;
 use KhsCI\Support\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Up extends Command
+class UpCommand extends Command
 {
     public function __construct(?string $name = null)
     {
@@ -33,10 +36,10 @@ class Up extends Command
         try {
             sleep(5);
 
-            \App\Console\MigrateCommand::all();
+            Migrate::all();
         } catch (Exception $e) {
             sleep(30);
-            \App\Console\MigrateCommand::all();
+            Migrate::all();
         }
 
         \KhsCI\Support\DB::close();
@@ -57,7 +60,7 @@ class Up extends Command
         }
 
         while (1) {
-            $up = new \App\Console\UpCommand();
+            $up = new Up();
             $up->up();
             unset($up);
 
@@ -78,7 +81,7 @@ class Up extends Command
         $pid = pcntl_fork();
         //子进程
         if (0 == $pid) {
-            $up = new \App\Console\UpCommand();
+            $up = new Up();
             $up->up();
 
             if (Env::get('CI_DEBUG_MEMORY', false)) {

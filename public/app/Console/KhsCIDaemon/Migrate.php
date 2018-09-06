@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Console;
+namespace App\Console\KhsCIDaemon;
 
 use Exception;
 use KhsCI\Support\DB;
 
-class MigrateCommand
+class Migrate
 {
     /**
      * @param $sql_file
@@ -17,7 +17,7 @@ class MigrateCommand
     public static function migrate(string $sql_file): void
     {
         if (in_array($sql_file, self::getSqlList(), true)) {
-            self::execFromFile(__DIR__.'/../../sql/'.$sql_file);
+            self::execFromFile(__DIR__.'/../../../sql/'.$sql_file);
         } else {
             var_dump(self::getSqlList());
         }
@@ -33,7 +33,7 @@ class MigrateCommand
         foreach (self::getSqlList() as $file) {
             echo "Migrate $file ...\n\n";
 
-            self::execFromFile(__DIR__.'/../../sql/'.$file);
+            self::execFromFile(__DIR__.'/../../../sql/'.$file);
         }
 
         return;
@@ -63,14 +63,14 @@ class MigrateCommand
      */
     private static function getSqlList()
     {
-        $array = scandir(__DIR__.'/../../sql');
+        $array = scandir(__DIR__.'/../../../sql');
 
         $array = array_filter($array, function ($k) {
             if (in_array($k, ['.', '..'], true)) {
                 return false;
             }
 
-            $spl = new \SplFileInfo(__DIR__.'/../../sql/'.$k);
+            $spl = new \SplFileInfo(__DIR__.'/../../../sql/'.$k);
 
             $ext = $spl->getExtension();
 

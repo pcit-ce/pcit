@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console;
+namespace App\Console\KhsCIDaemon;
 
 use App\Console\Webhooks\AliYunRegistry;
 use App\Console\Webhooks\GitHub\Check;
@@ -21,7 +21,7 @@ use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
 use TencentAI\TencentAI;
 
-class UpCommand
+class Up
 {
     private $git_type;
 
@@ -36,7 +36,7 @@ class UpCommand
 
             // Docker 构建队列
             try {
-                (new BuildCommand())->build();
+                (new Build())->build();
             } catch (\Throwable $e) {
                 Log::debug(__FILE__, __LINE__, 'Docker connect error');
             }

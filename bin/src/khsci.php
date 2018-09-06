@@ -2,34 +2,36 @@
 
 <?php
 
-use App\Console\KhsCI\InitCommand;
-use App\Console\KhsCI\LoginCommand;
-use App\Console\KhsCI\LogoutCommand;
-use App\Console\KhsCI\Repo\EnvCommand;
-use App\Console\KhsCI\Repo\SettingsCommand;
-use App\Console\KhsCI\SyncCommand;
-use App\Console\KhsCI\TokenCommand;
-use App\Console\KhsCI\WhoamiCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../public/bootstrap/app.php';
 
 $cli = new Application('KhsCI CLI', 'v18.06');
 
-$cli->add(new LoginCommand());
+$fh = opendir(__DIR__.'/../../public/app/Console/KhsCI/Repo');
 
-$cli->add(new LogoutCommand());
+while ($file = readdir($fh)) {
+    if ('.' === $file or '..' === $file) {
+        continue;
+    }
 
-$cli->add(new TokenCommand());
+    $class = '\App\Console\KhsCI\Repo\\'.rtrim($file, '.php');
 
-$cli->add(new EnvCommand());
+    $cli->add(new $class());
+}
 
-$cli->add(new WhoamiCommand());
+$fh = opendir(__DIR__.'/../../public/app/Console/KhsCI');
 
-$cli->add(new SettingsCommand());
+if ($fh) {
+    while (false !== ($file = readdir($fh))) {
+        if ('.' === $file or '..' === $file or 'KhsCICommand.php' === $file or 'Repo' === $file) {
+            continue;
+        }
 
-$cli->add(new InitCommand());
+        $class = '\App\Console\KhsCI\\'.rtrim($file, '.php');
 
-$cli->add(new SyncCommand());
+        $cli->add(new $class());
+    }
+}
 
 $cli->run();

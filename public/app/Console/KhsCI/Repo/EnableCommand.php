@@ -8,4 +8,9 @@ use Symfony\Component\Console\Command\Command;
 
 class EnableCommand extends Command
 {
+    public function configure(): void
+    {
+        $this->setName('enable');
+        $this->setDescription('Enables a project');
+    }
 }

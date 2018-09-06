@@ -8,4 +8,9 @@ use Symfony\Component\Console\Command\Command;
 
 class BranchesCommand extends Command
 {
+    public function configure(): void
+    {
+        $this->setName('branches');
+        $this->setDescription('Displays the most recent build for each branch');
+    }
 }

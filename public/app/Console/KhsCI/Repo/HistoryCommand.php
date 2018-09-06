@@ -8,4 +8,9 @@ use Symfony\Component\Console\Command\Command;
 
 class HistoryCommand extends Command
 {
+    public function configure(): void
+    {
+        $this->setName('history');
+        $this->setDescription('Displays a projects build history');
+    }
 }

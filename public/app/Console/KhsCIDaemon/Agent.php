@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Console;
+namespace App\Console\KhsCIDaemon;
 
 use App\Console\Events\Notification;
 use KhsCI\KhsCI;
 use KhsCI\Service\Build\Agent\RunContainer;
 use KhsCI\Support\Log;
 
-class AgentCommand
+class Agent
 {
     /**
      * @param int $build_key_id
