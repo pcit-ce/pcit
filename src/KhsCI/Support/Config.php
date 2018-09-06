@@ -42,8 +42,8 @@ class Config
                 'access_token' => $config['github_access_token'] ?? null,
             ],
             'tencent_ai' => [
-                'app_id' => getenv('CI_TENCENT_AI_APPID'),
-                'app_key' => getenv('CI_TENCENT_AI_APPKEY'),
+                'app_id' => getenv('CI_TENCENT_AI_APP_ID'),
+                'app_key' => getenv('CI_TENCENT_AI_APP_KEY'),
             ],
             'wechat' => [
                 'app_id' => getenv('CI_WECHAT_APP_ID'),

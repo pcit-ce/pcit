@@ -148,7 +148,7 @@ class Client
             return $access_token;
         }
 
-        $url = $this->api_url.'/installations/'.$installation_id.'/access_tokens';
+        $url = $this->api_url.'/app/installations/'.$installation_id.'/access_tokens';
 
         $access_token_json = $this->curl->post($url, null, [
             'Authorization' => 'Bearer '.$this->getJWT($private_key_path),

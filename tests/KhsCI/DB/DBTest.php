@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\DB\Tests;
 
-use App\Console\Migrate;
+use App\Console\MigrateCommand;
 use Exception;
 use KhsCI\Support\DB;
 use KhsCI\Tests\KhsCITestCase;
@@ -27,7 +27,7 @@ class DBTest extends KhsCITestCase
     public function testCreateDB(): void
     {
         ob_start();
-        Migrate::all();
+        MigrateCommand::all();
         ob_end_clean();
 
         $this->assertEquals(1, 1);
@@ -40,7 +40,7 @@ class DBTest extends KhsCITestCase
      */
     public function getConnection()
     {
-        return $this->createDefaultDBConnection(DB::connect(), 'test');
+        return $this->createDefaultDBConnection(DB::connection(), 'test');
     }
 
     protected function getDataSet()

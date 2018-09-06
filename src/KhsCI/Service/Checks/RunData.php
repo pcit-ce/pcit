@@ -60,38 +60,33 @@ class RunData
     }
 
     /**
-     * @param string $filename      Required. The name of the file to add an annotation to.
-     * @param string $blog_href     Required. The file's full blob URL.
-     * @param int    $start_line    Required. The start line of the annotation.
-     * @param int    $end_line      Required. The end line of the annotation.
-     * @param string $warning_level Required. The warning level of the annotation. Can be one of notice, warning, or
-     *                              failure.
-     * @param string $message       Required. A short description of the feedback for these lines of code. The maximum
-     *                              size is 64 KB.
-     * @param string $title         The title that represents the annotation. The maximum size is 255 characters.
-     * @param string $raw_details   Details about this annotation. The maximum size is 64 KB.
+     * @param string $path             Required. The path of the file to add an annotation to. For example,
+     *                                 assets/css/main.css.
+     * @param int    $start_line       Required. The start line of the annotation.
+     * @param int    $end_line         Required. The end line of the annotation.
+     * @param int    $start_column     the start column of the annotation
+     * @param int    $end_column       the end column of the annotation
+     * @param string $annotation_level Required. The level of the annotation. Can be one of notice, warning, or failure.
+     * @param string $message          Required. A short description of the feedback for these lines of code. The
+     *                                 maximum size is 64 KB.
+     * @param string $title            The title that represents the annotation. The maximum size is 255 characters.
+     * @param string $raw_details      Details about this annotation. The maximum size is 64 KB.
      *
      * @return array
      */
-    public static function createAnnotation(string $filename,
-                                            string $blog_href,
+    public static function createAnnotation(string $path,
                                             int $start_line,
                                             int $end_line,
-                                            string $warning_level,
+                                            int $start_column,
+                                            int $end_column,
+                                            string $annotation_level,
                                             string $message,
                                             string $title = null,
                                             string $raw_details = null)
     {
-        return [
-            'filename' => $filename,
-            'blog_href' => $blog_href,
-            'start_line' => $start_line,
-            'end_line' => $end_line,
-            'warning_level' => $warning_level,
-            'message' => $message,
-            'title' => $title,
-            'raw_details' => $raw_details,
-        ];
+        return compact($path, $start_line, $end_column, $start_column, $end_line, $annotation_level,
+            $message, $title, $raw_details
+        );
     }
 
     /**

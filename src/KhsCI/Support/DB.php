@@ -22,7 +22,7 @@ class DB
      *
      * @throws Exception
      */
-    public static function connect()
+    public static function connection()
     {
         if (!(self::$pdo instanceof PDO)) {
             $mysql_host = Env::get('CI_MYSQL_HOST', 'mysql');
@@ -64,7 +64,7 @@ class DB
      */
     public static function select(string $sql, ?array $data, bool $single = false)
     {
-        $pdo = self::connect();
+        $pdo = self::connection();
 
         try {
             $stmt = $pdo->prepare($sql);
@@ -101,7 +101,7 @@ class DB
      */
     public static function insert(string $sql, array $data = [])
     {
-        $pdo = self::connect();
+        $pdo = self::connection();
 
         try {
             $stmt = $pdo->prepare($sql);
@@ -155,7 +155,7 @@ class DB
      */
     private static function common(string $sql, array $data = [])
     {
-        $pdo = self::connect();
+        $pdo = self::connection();
 
         try {
             $stmt = $pdo->prepare($sql);
@@ -180,9 +180,7 @@ class DB
      */
     public static function statement(string $sql)
     {
-        $pdo = self::connect();
-
-        return $pdo->exec($sql);
+        return self::connection()->exec($sql);
     }
 
     /**
@@ -190,8 +188,8 @@ class DB
      */
     public static function beginTransaction(): void
     {
-        self::connect()->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
-        self::connect()->beginTransaction();
+        self::connection()->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+        self::connection()->beginTransaction();
     }
 
     /**
@@ -199,8 +197,16 @@ class DB
      */
     public static function commit(): void
     {
-        self::connect()->commit();
-        self::connect()->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+        self::connection()->commit();
+        self::connection()->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function rollback(): void
+    {
+        self::connection()->rollBack();
     }
 
     public static function createUser(): void
