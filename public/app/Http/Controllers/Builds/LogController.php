@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
-use App\Build;
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
+use App\Job;
 use Exception;
 
 class LogController
@@ -13,17 +13,17 @@ class LogController
     /**
      * Returns a single log.
      *
-     * /builds/{build_id}/log
+     * /job/{job_id}/log
      *
-     * @param $build_id
+     * @param $job_id
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public function __invoke($build_id)
+    public function __invoke($job_id)
     {
-        $log = Build::getLog((int) $build_id);
+        $log = Job::getLog((int) $job_id);
 
         if ($log) {
             return $log;
@@ -37,16 +37,16 @@ class LogController
      *
      * delete
      *
-     * /builds/{build_id}/log
+     * /job/{job_id}/log
      *
-     * @param $build_id
+     * @param $job_id
      *
      * @throws Exception
      */
-    public function delete($build_id): void
+    public function delete($job_id): void
     {
-        APITokenController::check((int) $build_id);
+        JWTController::check((int) $job_id);
 
-        Build::updateLog((int) $build_id, 'Log removed at '.date('c'));
+        Job::updateLog((int) $job_id, 'Log removed at '.date('c'));
     }
 }

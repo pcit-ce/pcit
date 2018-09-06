@@ -20,7 +20,7 @@ class Env extends DBModel
      *
      * @throws Exception
      */
-    public static function list(string $git_type, int $rid)
+    public static function list(int $rid, $git_type = 'github')
     {
         $sql = 'SELECT * FROM env_vars WHERE git_type=? AND rid=?';
 
@@ -38,7 +38,7 @@ class Env extends DBModel
      *
      * @throws Exception
      */
-    public static function create(string $git_type, int $rid, string $name, string $value, bool $public)
+    public static function create(int $rid, string $name, string $value, bool $public, $git_type = 'github')
     {
         $sql = 'INSERT INTO env_vars VALUES(null,?,?,?,?,?)';
 
@@ -56,7 +56,7 @@ class Env extends DBModel
      *
      * @throws Exception
      */
-    public static function update(int $id, string $git_type, int $rid, string $value, bool $public)
+    public static function update(int $id, int $rid, string $value, bool $public, $git_type = 'github')
     {
         $sql = 'UPDATE env_vars SET value=? WHERE id=? AND git_type=? AND rid=? AND public=?';
 
@@ -72,7 +72,7 @@ class Env extends DBModel
      *
      * @throws Exception
      */
-    public static function delete(int $id, string $git_type, int $rid)
+    public static function delete(int $id, int $rid, $git_type = 'github')
     {
         $sql = 'DELETE FROM env_vars WHERE id=? AND git_type=? AND rid=?';
 
@@ -89,7 +89,7 @@ class Env extends DBModel
      *
      * @throws Exception
      */
-    public static function get(int $id, string $git_type, int $rid, bool $show = false)
+    public static function get(int $id, int $rid, bool $show = false, $git_type = 'github')
     {
         $sql = 'SELECT name,value,public FROM env_vars WHERE id=? AND git_type=? AND rid=?';
 

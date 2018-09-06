@@ -6,6 +6,7 @@
 * [Authentication](authentication.md)
 * [Builds](builds/README.md)
     * [Log](builds/log.md)
+    * [Job](builds/job.md)
 * [Organization](orgs/README.md)
 * [Repositories](repo/README.md)
     * [Activate](repo/activate.md)

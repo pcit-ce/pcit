@@ -33,10 +33,10 @@ class Up extends Command
         try {
             sleep(5);
 
-            \App\Console\Migrate::all();
+            \App\Console\MigrateCommand::all();
         } catch (Exception $e) {
             sleep(30);
-            \App\Console\Migrate::all();
+            \App\Console\MigrateCommand::all();
         }
 
         \KhsCI\Support\DB::close();
@@ -57,7 +57,7 @@ class Up extends Command
         }
 
         while (1) {
-            $up = new \App\Console\Up();
+            $up = new \App\Console\UpCommand();
             $up->up();
             unset($up);
 
@@ -78,7 +78,7 @@ class Up extends Command
         $pid = pcntl_fork();
         //子进程
         if (0 == $pid) {
-            $up = new \App\Console\Up();
+            $up = new \App\Console\UpCommand();
             $up->up();
 
             if (Env::get('CI_DEBUG_MEMORY', false)) {

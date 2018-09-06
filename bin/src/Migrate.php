@@ -31,13 +31,13 @@ class Migrate extends Command
         $sql_file = $input->getArgument('sql_file');
 
         if ($sql_file) {
-            \App\Console\Migrate::migrate($sql_file);
+            \App\Console\MigrateCommand::migrate($sql_file);
 
             return;
         }
 
         if ($input->getOption('all')) {
-            \App\Console\Migrate::all();
+            \App\Console\MigrateCommand::all();
         }
     }
 }

@@ -93,7 +93,7 @@ class GetAccessToken
      *
      * @throws Exception
      */
-    public static function getAccessTokenByUid(string $git_type, int $uid)
+    public static function getAccessTokenByUid(int $uid, $git_type = 'github')
     {
         $sql = 'SELECT access_token FROM user WHERE git_type=? AND uid=? LIMIT 1';
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 
 class CronController
 {
@@ -14,12 +14,14 @@ class CronController
      * /repo/{repository.id}/crons
      *
      * @param array $args
+     *
+     * @throws \Exception
      */
     public function __invoke(...$args): void
     {
         list($username, $repo_name) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
     }
 
     /**
@@ -52,12 +54,14 @@ class CronController
      * /repo/{repository.id}/branch/{branch.name}/cron
      *
      * @param array $args
+     *
+     * @throws \Exception
      */
     public function findByBranch(...$args): void
     {
         list($username, $repo_name, $branch) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
     }
 
     /**
@@ -68,11 +72,13 @@ class CronController
      * /repo/{repository.id}/branch/{branch.name}/cron
      *
      * @param array $args
+     *
+     * @throws \Exception
      */
     public function createByBranch(...$args): void
     {
         list($username, $repo_name, $branch) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
     }
 }

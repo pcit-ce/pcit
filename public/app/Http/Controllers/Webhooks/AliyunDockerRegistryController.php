@@ -16,6 +16,6 @@ class AliyunDockerRegistryController
     {
         $content = file_get_contents('php://input');
 
-        Cache::connect()->lpush('webhooks', json_encode(['aliyun_docker_registry', 'push', $content]));
+        Cache::store()->lpush('webhooks', json_encode(['aliyun_docker_registry', 'push', $content]));
     }
 }

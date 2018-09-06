@@ -13,27 +13,6 @@ class Build extends DBModel
 {
     /**
      * @param int $build_key_id
-     * @param int $time
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
-    public static function updateStartAt(int $build_key_id, int $time = null)
-    {
-        $sql = 'UPDATE builds SET started_at = ? WHERE id=?';
-
-        $time = $time ?? time();
-
-        if (0 === $time) {
-            $time = null;
-        }
-
-        return DB::update($sql, [$time, $build_key_id]);
-    }
-
-    /**
-     * @param int $build_key_id
      *
      * @return array|string
      *
@@ -41,30 +20,9 @@ class Build extends DBModel
      */
     public static function getStartAt(int $build_key_id)
     {
-        $sql = 'SELECT started_at FROM builds WHERE id=? LIMIT 1';
+        $sql = 'SELECT started_at FROM jobs WHERE build_id=? ORDER BY id LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
-    }
-
-    /**
-     * @param int      $build_key_id
-     * @param int|null $time
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
-    public static function updateStopAt(int $build_key_id, int $time = null)
-    {
-        $sql = 'UPDATE builds SET finished_at = ? WHERE id=? LIMIT 1';
-
-        $time = $time ?? time();
-
-        if (0 === $time) {
-            $time = null;
-        }
-
-        return DB::update($sql, [$time, $build_key_id]);
     }
 
     /**
@@ -76,7 +34,7 @@ class Build extends DBModel
      */
     public static function getStopAt(int $build_key_id)
     {
-        $sql = 'SELECT finished_at FROM builds WHERE id=? LIMIT 1';
+        $sql = 'SELECT finished_at FROM jobs WHERE build_id=? ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
     }
@@ -136,10 +94,10 @@ class Build extends DBModel
      * @throws Exception
      */
     public static function updateBuildStatusByCommitId(string $build_status,
-                                                       string $git_type,
                                                        int $rid,
                                                        string $branch,
-                                                       string $commit_id)
+                                                       string $commit_id,
+                                                       $git_type = 'github')
     {
         $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND commit_id=?';
 
@@ -190,7 +148,7 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function getBranches(string $git_type, int $rid)
+    public static function getBranches(int $rid, $git_type = 'github')
     {
         $sql = 'SELECT DISTINCT branch FROM builds WHERE git_type=? AND rid=?';
 
@@ -207,7 +165,7 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function getCurrentBuildKeyId(string $git_type, int $rid)
+    public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
         $sql = <<<EOF
 SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) AND event_type NOT IN (?)
@@ -216,72 +174,11 @@ EOF;
 
         return DB::select($sql, [
             $git_type, $rid,
-            CI::BUILD_STATUS_PENDING,
-            CI::BUILD_STATUS_SKIP,
-            CI::BUILD_STATUS_INACTIVE,
+            'pending',
+            'skip',
+            'inactive',
             CI::BUILD_EVENT_PR,
         ], true);
-    }
-
-    /**
-     * @param int  $build_key_id
-     * @param bool $throw
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getCheckRunId(int $build_key_id, bool $throw = false)
-    {
-        $sql = 'SELECT check_run_id FROM builds WHERE id=? LIMIT 1';
-
-        $output = DB::select($sql, [$build_key_id], true);
-
-        if (!$output and $throw) {
-            throw new Exception('Check Run Id is null');
-        }
-
-        return $output;
-    }
-
-    /**
-     * @param int $check_run_id
-     * @param int $build_key_id
-     *
-     * @throws Exception
-     */
-    public static function updateCheckRunId(?int $check_run_id, int $build_key_id): void
-    {
-        $sql = 'UPDATE builds SET check_run_id=? WHERE id=? LIMIT 1';
-
-        DB::update($sql, [$check_run_id, $build_key_id]);
-    }
-
-    /**
-     * @param int $build_key_id
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getLog(int $build_key_id)
-    {
-        $sql = 'SELECT build_log FROM builds WHERE id=? LIMIT 1';
-
-        return DB::select($sql, [$build_key_id], true);
-    }
-
-    /**
-     * @param int    $build_key_id
-     * @param string $build_log
-     *
-     * @throws Exception
-     */
-    public static function updateLog(int $build_key_id, string $build_log): void
-    {
-        $sql = 'UPDATE builds SET build_log=? WHERE id=?';
-
-        DB::update($sql, [$build_log, $build_key_id]);
     }
 
     /**
@@ -325,19 +222,19 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByBranch(string $git_type,
-                                       int $rid,
+    public static function allByBranch(int $rid,
                                        string $branch_name,
                                        ?int $before,
-                                       ?int $limit)
+                                       ?int $limit,
+                                       $git_type = 'github')
     {
         $before = $before ?? self::getLastKeyId();
 
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,
-compare,committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type
+SELECT id,branch,commit_id,tag,commit_message,
+compare,committer_name,committer_username,build_status,event_type
 FROM builds WHERE
 id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
  ORDER BY id DESC LIMIT $limit;
@@ -359,15 +256,15 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByRid(string $git_type, int $rid, ?int $before, ?int $limit, bool $pr)
+    public static function allByRid(int $rid, ?int $before, ?int $limit, bool $pr, $git_type = 'github')
     {
         $before = $before ?? self::getLastKeyId();
 
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,compare,
-committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
+SELECT id,branch,commit_id,tag,commit_message,compare,
+committer_name,committer_username,build_status,event_type,pull_request_number
 FROM builds WHERE
 id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip')
 ORDER BY id DESC LIMIT $limit
@@ -391,63 +288,21 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByAdmin(string $git_type, int $uid, ?int $before, ?int $limit)
+    public static function allByAdmin(int $uid, ?int $before, ?int $limit, $git_type = 'github')
     {
         $before = $before ?? self::getLastKeyId();
 
         $limit = $limit ?? 25;
 
         $sql = <<<EOF
-SELECT id,branch,commit_id,tag_name,commit_message,compare,
-committer_name,committer_username,created_at,started_at,finished_at,build_status,event_type,pull_request_id
+SELECT id,branch,commit_id,tag,commit_message,compare,
+committer_name,committer_username,build_status,event_type,pull_request_number
 FROM builds
 WHERE id<=$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) )
 AND git_type=? AND event_type IN(?,?) AND build_status NOT IN('skip') ORDER BY id DESC LIMIT $limit;
 EOF;
 
         return DB::select($sql, ["\"$uid\"", $git_type, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
-    }
-
-    /**
-     * @param string $git_type
-     * @param int    $rid
-     * @param int    $auto_merge_mode
-     * @param string $commit_id
-     * @param int    $pull_request_number
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
-    public static function setAutoMerge(string $git_type,
-                                        int $rid,
-                                        int $auto_merge_mode,
-                                        string $commit_id,
-                                        int $pull_request_number)
-    {
-        $sql = 'UPDATE builds SET auto_merge=? WHERE git_type=? AND rid =? AND event_type=? AND pull_request_id=? AND commit_id=?';
-
-        return DB::update($sql, [$auto_merge_mode, $git_type, $rid, CI::BUILD_EVENT_PR, $pull_request_number, $commit_id]);
-    }
-
-    /**
-     * @param string $git_type
-     * @param int    $rid
-     * @param string $commit_id
-     * @param int    $pull_request_number
-     *
-     * @return string
-     *
-     * @throws Exception
-     */
-    public static function isAutoMerge(string $git_type,
-                                       int $rid,
-                                       string $commit_id,
-                                       int $pull_request_number)
-    {
-        $sql = 'SELECT auto_merge FROM builds WHERE git_type=? AND rid =? AND event_type=? AND pull_request_id=? AND commit_id=? LIMIT 1';
-
-        return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, $pull_request_number, $commit_id], true);
     }
 
     /**
@@ -476,5 +331,224 @@ EOF;
         $sql = 'SELECT committer_name FROM builds WHERE id=?';
 
         return DB::select($sql, [$build_key_id]);
+    }
+
+    /**
+     * @param $git_type
+     * @param $branch
+     * @param $tag
+     * @param $commit_id
+     * @param $commit_message
+     * @param $committer_name
+     * @param $committer_email
+     * @param $committer_username
+     * @param $author_name
+     * @param $author_email
+     * @param $author_username
+     * @param $rid
+     * @param $event_time
+     * @param $config
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insertTag($branch,
+                                     $tag,
+                                     $commit_id,
+                                     $commit_message,
+                                     $committer_name,
+                                     $committer_email,
+                                     $committer_username,
+                                     $author_name,
+                                     $author_email,
+                                     $author_username,
+                                     $rid,
+                                     $event_time,
+                                     $config,
+                                     $git_type = 'github')
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,branch,tag,
+commit_id,commit_message,
+committer_name,committer_email,committer_username,
+author_name,author_email,author_username,
+rid,created_at,config
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+            $git_type, 'tag', $branch, $tag,
+            $commit_id, $commit_message,
+            $committer_name, $committer_email, $committer_username,
+            $author_name, $author_email, $author_username,
+            $rid, $event_time, $config,
+        ]);
+
+        return $last_insert_id;
+    }
+
+    /**
+     * @param $git_type
+     * @param $event_type
+     * @param $branch
+     * @param $compare
+     * @param $commit_id
+     * @param $commit_message
+     * @param $committer_name
+     * @param $committer_email
+     * @param $committer_username
+     * @param $author_name
+     * @param $author_email
+     * @param $author_username
+     * @param $rid
+     * @param $event_time
+     * @param $config
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insert($event_type,
+                                  $branch,
+                                  $compare,
+                                  $commit_id,
+                                  $commit_message,
+                                  $committer_name,
+                                  $committer_email,
+                                  $committer_username,
+                                  $author_name,
+                                  $author_email,
+                                  $author_username,
+                                  $rid,
+                                  $event_time,
+                                  $config,
+                                  $git_type = 'github')
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,branch,compare,
+commit_id,commit_message,
+committer_name,committer_email,committer_username,
+author_name,author_email,author_username,
+rid,created_at,config
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+            $git_type, $event_type, $branch, $compare,
+            $commit_id, $commit_message,
+            $committer_name, $committer_email, $committer_username,
+            $author_name, $author_email, $author_username,
+            $rid, $event_time, $config,
+        ]);
+
+        return $last_insert_id;
+    }
+
+    /**
+     * @param $git_type
+     * @param $rid
+     * @param $created_at
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insertPing($rid, $created_at, $git_type = 'github')
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,rid,created_at
+
+) VALUES(?,?,?,?);
+EOF;
+        $data = [
+            $git_type, 'ping', $rid, $created_at,
+        ];
+
+        return DB::insert($sql, $data);
+    }
+
+    /**
+     * @param        $event_time
+     * @param        $action
+     * @param        $commit_id
+     * @param        $commit_message
+     * @param int    $committer_uid
+     * @param        $committer_username
+     * @param        $pull_request_number
+     * @param        $branch
+     * @param        $rid
+     * @param        $config
+     * @param        $internal
+     * @param        $pull_request_source
+     * @param string $git_type
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function insertPullRequest($event_time,
+                                             string $action,
+                                             string $commit_id,
+                                             string $commit_message,
+                                             int $committer_uid,
+                                             string $committer_username,
+                                             $pull_request_number,
+                                             string $branch,
+                                             $rid,
+                                             string $config,
+                                             $internal,
+                                             $pull_request_source,
+                                             $git_type = 'github')
+    {
+        $sql = <<<'EOF'
+INSERT INTO builds(
+
+git_type,event_type,created_at,action,
+commit_id,commit_message,pull_request_number,
+committer_uid,committer_username,
+branch,rid,config,internal,pull_request_source
+
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+
+EOF;
+
+        $last_insert_id = DB::insert($sql, [
+                $git_type, 'pull_request', $event_time, $action,
+                $commit_id, $commit_message, $pull_request_number,
+                $committer_uid, $committer_username,
+                $branch, $rid, $config, $internal, $pull_request_source,
+            ]
+        );
+
+        return $last_insert_id;
+    }
+
+    /**
+     * @param int    $rid
+     * @param string $commit_id
+     * @param int    $check_suite_id
+     * @param string $git_type
+     *
+     * @throws Exception
+     */
+    public static function updateCheckSuiteId(int $rid,
+                                              string $commit_id,
+                                              int $check_suite_id,
+                                              string $git_type = 'github'): void
+    {
+        $sql = 'UPDATE builds SET check_suites_id=? WHERE rid=? AND commit_id=? AND git_type=? ';
+
+        DB::update($sql, [
+            $check_suite_id, $rid, $commit_id, $git_type,
+        ]);
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Profile;
 
 use App\GetAccessToken;
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use App\User;
 use Exception;
@@ -29,9 +29,9 @@ class SyncController
      */
     public function __invoke(): void
     {
-        list($this->git_type, $this->uid) = APITokenController::getUser();
+        list($this->git_type, $this->uid) = JwtController::getUser();
 
-        $this->access_token = GetAccessToken::getAccessTokenByUid($this->git_type, (int) $this->uid);
+        $this->access_token = GetAccessToken::getAccessTokenByUid((int) $this->uid, $this->git_type);
 
         $this->khsci = new KhsCI(
             [$this->git_type.'_access_token' => $this->access_token], $this->git_type
@@ -69,7 +69,7 @@ class SyncController
             'pic' => $pic
             ) = $this->khsci->user_basic_info->getUserInfo();
 
-        User::updateUserInfo($this->git_type, $this->uid, $name, $email, $pic, $this->access_token);
+        User::updateUserInfo($this->uid, null, $name, $email, $pic, false, $this->git_type);
     }
 
     /**
@@ -112,14 +112,14 @@ class SyncController
 
             $org_pic = $k['avatar_url'];
 
-            User::updateUserInfo($this->git_type, (int) $org_id, $org_name, null, $org_pic, null, true);
+            User::updateUserInfo((int) $org_id, null, $org_name, null, $org_pic, true, $this->git_type);
 
-            User::setOrgAdmin($this->git_type, (int) $org_id, (int) $this->uid);
+            User::setOrgAdmin((int) $org_id, (int) $this->uid, $this->git_type);
         }
 
         // check org status
 
-        $orgs = User::getOrgByAdmin($this->git_type, $this->uid);
+        $orgs = User::getOrgByAdmin($this->uid, $this->git_type);
 
         foreach ($orgs as $k) {
             $org_name = $k['username'];
@@ -176,8 +176,6 @@ class SyncController
 
                 $repo_full_name = $obj_repo->full_name;
 
-                list($repo_prefix, $repo_name) = explode('/', $repo_full_name);
-
                 $default_branch = $obj_repo->default_branch;
 
                 /**
@@ -202,14 +200,13 @@ class SyncController
 
                 $rid = $obj_repo->id;
 
-                Repo::updateRepoInfo($this->git_type,
-                    (int) $rid,
-                    $repo_prefix,
-                    $repo_name,
+                Repo::updateRepoInfo((int) $rid,
                     $repo_full_name,
                     $insert_admin,
                     $insert_collaborators,
-                    $default_branch
+                    $default_branch,
+                    1, 1,
+                    $this->git_type
                 );
             }
         }

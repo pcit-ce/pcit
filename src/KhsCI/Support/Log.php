@@ -90,7 +90,7 @@ class Log
     {
         date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
 
-        $log_path = $log_path ?? sys_get_temp_dir().\DIRECTORY_SEPARATOR.'khsci.'.date("Y-m-d").'.log';
+        $log_path = $log_path ?? sys_get_temp_dir().\DIRECTORY_SEPARATOR.'khsci.'.date('Y-m-d').'.log';
 
         if (!(self::$log instanceof Logger)) {
             $log = new Logger($name);
@@ -112,9 +112,9 @@ class Log
      *
      * @throws Exception
      */
-    public static function debug(string $file,
-                                 int $line,
-                                 string $debug_info,
+    public static function debug(string $file = null,
+                                 int $line = null,
+                                 string $debug_info = null,
                                  array $context = [],
                                  $level = 'debug'): void
     {
@@ -124,11 +124,11 @@ class Log
             return;
         }
 
-        $debug_info = json_encode([
+        $debug_info = json_encode(array_filter([
             'file' => $file,
             'line' => $line,
             'info' => $debug_info,
-        ]);
+        ]));
 
         self::connect()->$level($debug_info, $context);
     }

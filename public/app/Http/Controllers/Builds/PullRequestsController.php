@@ -25,7 +25,7 @@ class PullRequestsController
         $repo_full_name = "$username/$repo";
 
         $sql = <<<'EOF'
-SELECT id,branch,pull_request_id,committer_username,commit_message,commit_id,build_status,started_at,stopped_at
+SELECT id,branch,pull_request_number,committer_username,commit_message,commit_id,build_status,started_at,finished_at
 
 FROM builds WHERE git_type=? AND event_type IN (?) AND rid=
 

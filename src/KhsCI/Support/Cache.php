@@ -19,7 +19,7 @@ class Cache
      *
      * @throws Exception
      */
-    public static function connect()
+    public static function store()
     {
         if (!(self::$cache instanceof Redis)) {
             $redis = new Redis();

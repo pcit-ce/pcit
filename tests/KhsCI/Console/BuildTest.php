@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Tests\Console;
 
-use App\Console\Build;
+use App\Console\BuildCommand;
 use Exception;
 use KhsCI\Tests\KhsCITestCase;
 
@@ -17,7 +17,7 @@ class BuildTest extends KhsCITestCase
      */
     public function testSaveLog(): void
     {
-        $queue = new Build();
+        $queue = new BuildCommand();
 
         $queue::setBuildKeyId(23);
 

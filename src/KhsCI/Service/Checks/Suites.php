@@ -137,17 +137,20 @@ class Suites
     }
 
     /**
+     * Rerequest check suite.
+     *
      * Triggers GitHub to create a new check suite, without pushing new code to a repository.
      *
      * @param string $repo_full_name
+     * @param int    $check_suite_id
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public function request(string $repo_full_name)
+    public function request(string $repo_full_name, int $check_suite_id)
     {
-        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suite-requests';
+        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suites/'.$check_suite_id.'/rerequest';
 
         return $this->curl->post($url, null, $this->header);
     }

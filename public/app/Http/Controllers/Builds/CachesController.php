@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 
 class CachesController
 {
@@ -14,12 +14,14 @@ class CachesController
      * /repo/{repository.id}/caches
      *
      * @param array $args
+     *
+     * @throws \Exception
      */
     public function __invoke(...$args): void
     {
         list($username, $repo_name) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
     }
 
     /**
@@ -30,11 +32,13 @@ class CachesController
      * /repo/{repository.id}/caches
      *
      * @param array $args
+     *
+     * @throws \Exception
      */
     public function delete(...$args): void
     {
         list($username, $repo_name) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
     }
 }

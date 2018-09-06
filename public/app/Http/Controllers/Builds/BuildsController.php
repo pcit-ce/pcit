@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
 use KhsCI\Support\CI;
@@ -27,9 +27,9 @@ class BuildsController
 
         $limit = (int) $_GET['limit'] ?? null;
 
-        list('git_type' => $git_type, 'uid' => $uid) = (APITokenController::getGitTypeAndUid())[0];
+        list($git_type, $uid) = JWTController::getUser();
 
-        $array = Build::allByAdmin($git_type, (int) $uid, $before, $limit);
+        $array = Build::allByAdmin((int) $uid, $before, $limit, $git_type);
 
         return $array;
     }
@@ -59,9 +59,9 @@ class BuildsController
         $before && $before = (int) $before;
         $limit && $limit = (int) $before;
 
-        $rid = Repo::getRid(...$args);
+        $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $array = Build::allByRid($git_type, (int) $rid, $before, $limit, (bool) $pr);
+        $array = Build::allByRid((int) $rid, $before, $limit, (bool) $pr, $git_type);
 
         $return_array = [];
 
@@ -83,7 +83,8 @@ class BuildsController
     {
         list($git_type, $username, $repo_name) = $args;
 
-        $build_key_id = Build::getCurrentBuildKeyId($git_type, (int) Repo::getRid(...$args));
+        $build_key_id = Build::getCurrentBuildKeyId(
+            (int) Repo::getRid($username, $repo_name, $git_type), $git_type);
 
         return self::find($build_key_id);
     }
@@ -123,9 +124,9 @@ class BuildsController
      */
     public function cancel($build_id): void
     {
-        APITokenController::check((int) $build_id);
+        JWTController::check((int) $build_id);
 
-        Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_CANCELED);
+        Build::updateBuildStatus((int) $build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
     }
 
     /**
@@ -139,9 +140,9 @@ class BuildsController
      */
     public function restart($build_id): void
     {
-        APITokenController::check((int) $build_id);
+        JWTController::check((int) $build_id);
 
-        Build::updateBuildStatus((int) $build_id, CI::BUILD_STATUS_PENDING);
+        Build::updateBuildStatus((int) $build_id, 'pending');
         Build::updateStartAt((int) $build_id, 0);
         Build::updateStopAt((int) $build_id, 0);
     }

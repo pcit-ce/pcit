@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\APITokenController;
 use App\User;
 use Exception;
 
@@ -19,9 +18,9 @@ class UserInfoController
      */
     public function __invoke()
     {
-        list($git_type, $uid) = APITokenController::getUser();
+        list($uid, $git_type) = JWTController::getUser(false);
 
-        return User::getUserInfo($git_type, null, (int) $uid);
+        return User::getUserInfo(null, (int) $uid, $git_type);
     }
 
     /**
@@ -38,9 +37,9 @@ class UserInfoController
      */
     public function find(string $git_type, string $username)
     {
-        APITokenController::getUser();
+        JWTController::getUser();
 
-        $output = User::getUserInfo($git_type, $username);
+        $output = User::getUserInfo($username, 0, $git_type);
 
         if ($output) {
             return $output;

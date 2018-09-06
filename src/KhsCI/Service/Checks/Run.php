@@ -35,68 +35,34 @@ class Run
     }
 
     /**
-     * @param string     $repo_full_name
-     * @param string     $name           Required. The name of the check (e.g., "code-coverage").
-     * @param string     $branch         Required. The name of the branch to perform a check against.
-     * @param string     $commit_id      Required. The SHA of the commit.
-     * @param string     $details_url    the URL of the integrator's site that has the full details of the check
-     * @param string     $external_id    a reference for the run on the integrator's system
-     * @param string     $status         The current status. Can be one of queued, in_progress, or completed. Default:
-     *                                   queued
-     * @param int        $started_at     the time that the check run began in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
-     * @param int        $completed_at   Required. The time the check completed in ISO 8601 format:
-     *                                   YYYY-MM-DDTHH:MM:SSZ. Required if you provide conclusion.
-     * @param string     $conclusion     Required. The final conclusion of the check. Can be one of success, failure,
-     *                                   neutral,
-     *                                   cancelled, timed_out, or action_required.
-     * @param string     $title
-     * @param string     $summary
-     * @param string     $text
-     * @param array|null $annotations    [$annotation, $annotation2]
-     * @param array|null $images         [$image, $image2]
-     * @param array|null $actions        [$action]
+     * @param RunData $run_data
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public function create(string $repo_full_name,
-                           string $name,
-                           string $branch,
-                           string $commit_id,
-                           string $details_url,
-                           string $external_id,
-                           string $status,
-                           int $started_at = null,
-                           int $completed_at = null,
-                           string $conclusion = null,
-                           string $title = null,
-                           string $summary = null,
-                           string $text = null,
-                           array $annotations = null,
-                           array $images = null,
-                           array $actions = null)
+    public function create(RunData $run_data)
     {
-        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-runs';
+        $url = $this->api_url.'/repos/'.$run_data->repo_full_name.'/check-runs';
 
         $data = array_filter([
-            'name' => $name,
-            'head_branch' => $branch,
-            'head_sha' => $commit_id,
-            'details_url' => $details_url,
-            'external_id' => $external_id,
-            'status' => $status,
-            'started_at' => Date::Int2ISO($started_at),
-            'completed_at' => Date::Int2ISO($completed_at),
-            'conclusion' => $conclusion,
+            'name' => $run_data->name,
+            'head_branch' => $run_data->branch,
+            'head_sha' => $run_data->commit_id,
+            'details_url' => $run_data->details_url,
+            'external_id' => $run_data->external_id,
+            'status' => $run_data->status,
+            'started_at' => Date::Int2ISO($run_data->started_at),
+            'completed_at' => Date::Int2ISO($run_data->completed_at),
+            'conclusion' => $run_data->conclusion,
             'output' => array_filter([
-                'title' => $title,
-                'summary' => $summary,
-                'text' => $text,
-                'annotations' => $annotations,
-                'images' => $images,
+                'title' => $run_data->title,
+                'summary' => $run_data->summary,
+                'text' => $run_data->text,
+                'annotations' => $run_data->annotations,
+                'images' => $run_data->images,
             ]),
-            'actions' => $actions,
+            'actions' => $run_data->actions,
         ]);
 
         $request = json_encode($data);
@@ -113,139 +79,34 @@ class Run
     }
 
     /**
-     * @param string $filename      Required. The name of the file to add an annotation to.
-     * @param string $blog_href     Required. The file's full blob URL.
-     * @param int    $start_line    Required. The start line of the annotation.
-     * @param int    $end_line      Required. The end line of the annotation.
-     * @param string $warning_level Required. The warning level of the annotation. Can be one of notice, warning, or
-     *                              failure.
-     * @param string $message       Required. A short description of the feedback for these lines of code. The maximum
-     *                              size is 64 KB.
-     * @param string $title         The title that represents the annotation. The maximum size is 255 characters.
-     * @param string $raw_details   Details about this annotation. The maximum size is 64 KB.
-     *
-     * @return array
-     */
-    public static function createAnnotation(string $filename,
-                                            string $blog_href,
-                                            int $start_line,
-                                            int $end_line,
-                                            string $warning_level,
-                                            string $message,
-                                            string $title = null,
-                                            string $raw_details = null)
-    {
-        return [
-            'filename' => $filename,
-            'blog_href' => $blog_href,
-            'start_line' => $start_line,
-            'end_line' => $end_line,
-            'warning_level' => $warning_level,
-            'message' => $message,
-            'title' => $title,
-            'raw_details' => $raw_details,
-        ];
-    }
-
-    /**
-     * @param string $alt       Required. The alternative text for the image.
-     * @param string $image_url Required. The full URL of the image.
-     * @param string $caption   a short image description
-     *
-     * @return array
-     */
-    public static function createImage(string $alt,
-                                       string $image_url,
-                                       string $caption)
-    {
-        return [
-            'alt' => $alt,
-            'image_url' => $image_url,
-            'caption' => $caption,
-        ];
-    }
-
-    /**
-     * @param string $label
-     * @param string $identifier
-     * @param string $description
-     *
-     * @return array
-     *
-     * @see https://developer.github.com/changes/2018-05-23-request-actions-on-checks/
-     */
-    public static function createAction(string $label = 'Fix',
-                                        string $identifier = 'fix_errors',
-                                        string $description = 'Allow us to fix these errors for you')
-    {
-        return [
-            'label' => $label,
-            'identifier' => $identifier,
-            'description' => $description,
-        ];
-    }
-
-    /**
-     * @param string     $repo_full_name
-     * @param string     $check_run_id
-     * @param string     $name
-     * @param string     $branch
-     * @param string     $commit_id
-     * @param string     $details_url
-     * @param string     $external_id
-     * @param string     $status
-     * @param int        $started_at
-     * @param int        $completed_at
-     * @param string     $conclusion
-     * @param string     $title
-     * @param string     $summary
-     * @param string     $text
-     * @param array|null $annotations    [$annotation, $annotation2]
-     * @param array|null $images         [$image, $image2]
-     * @param array|null $actions        [$action]
+     * @param RunData $run_data
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public function update(string $repo_full_name,
-                           string $check_run_id,
-                           string $name,
-                           string $branch,
-                           string $commit_id,
-                           string $details_url,
-                           string $external_id,
-                           string $status,
-                           int $started_at = null,
-                           int $completed_at = null,
-                           string $conclusion = null,
-                           string $title = null,
-                           string $summary = null,
-                           string $text = null,
-                           array $annotations = null,
-                           array $images = null,
-                           array $actions = null)
+    public function update(RunData $run_data)
     {
-        $url = $this->api_url.'/repos/'.$repo_full_name.'/check-runs/'.$check_run_id;
+        $url = $this->api_url.'/repos/'.$run_data->repo_full_name.'/check-runs/'.$run_data->check_run_id;
 
         $data = array_filter([
-            'name' => $name,
-            'head_branch' => $branch,
-            'head_sha' => $commit_id,
-            'details_url' => $details_url,
-            'external_id' => $external_id,
-            'status' => $status,
-            'started_at' => Date::Int2ISO($started_at),
-            'completed_at' => Date::Int2ISO($completed_at),
-            'conclusion' => $conclusion,
+            'name' => $run_data->name,
+            'head_branch' => $run_data->branch,
+            'head_sha' => $run_data->commit_id,
+            'details_url' => $run_data->details_url,
+            'external_id' => $run_data->external_id,
+            'status' => $run_data->status,
+            'started_at' => Date::Int2ISO($run_data->started_at),
+            'completed_at' => Date::Int2ISO($run_data->completed_at),
+            'conclusion' => $run_data->conclusion,
             'output' => array_filter([
-                'title' => $title,
-                'summary' => $summary,
-                'text' => $text,
-                'annotations' => $annotations,
-                'images' => $images,
+                'title' => $run_data->title,
+                'summary' => $run_data->summary,
+                'text' => $run_data->text,
+                'annotations' => $run_data->annotations,
+                'images' => $run_data->images,
             ]),
-            'actions' => $actions,
+            'actions' => $run_data->actions,
         ]);
 
         $request = json_encode($data);

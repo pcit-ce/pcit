@@ -27,9 +27,9 @@ class BranchesController
     {
         list($git_type, $username, $repo) = $args;
 
-        $rid = Repo::getRid($git_type, $username, $repo);
+        $rid = Repo::getRid($username, $repo, $git_type);
 
-        $branchArray = Build::getBranches($git_type, (int) $rid);
+        $branchArray = Build::getBranches((int) $rid, $git_type);
 
         $return_array = [];
 
@@ -61,9 +61,9 @@ class BranchesController
 
         list($git_type, $username, $repo_name, $branch_name) = $args;
 
-        $rid = Repo::getRid($git_type, $username, $repo_name);
+        $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $output = Build::allByBranch($git_type, (int) $rid, $branch_name, $before, $limit);
+        $output = Build::allByBranch((int) $rid, $branch_name, $before, $limit, $git_type);
 
         if ($output) {
             return $output;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
 
@@ -28,9 +28,9 @@ class RequestsController
 
         list($username, $repo_name) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
 
-        $rid = Repo::getRid($git_type, $username, $repo_name);
+        $rid = Repo::getRid($username, $repo_name, $git_type);
 
         $output = Build::listByRid((int) $rid);
 
@@ -60,12 +60,14 @@ class RequestsController
      * <pre>
      *
      * @param array $args
+     *
+     * @throws Exception
      */
     public function create(...$args): void
     {
         list($username, $repo_name) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
     }
 
     /**
@@ -83,7 +85,7 @@ class RequestsController
     {
         list($username, $repo_name, $request_id) = $args;
 
-        APITokenController::checkByRepo(...$args);
+        JWTController::checkByRepo(...$args);
 
         $output = Build::find((int) $request_id);
 

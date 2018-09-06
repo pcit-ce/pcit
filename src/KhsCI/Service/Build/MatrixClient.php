@@ -17,6 +17,10 @@ class MatrixClient
      */
     public static function parseMatrix(?array $matrix)
     {
+        if (!$matrix) {
+            return [];
+        }
+
         return ArrayHelper::combination($matrix);
     }
 }

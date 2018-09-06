@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\APITokenController;
-
 class BetaFeatureController
 {
     /**
@@ -17,7 +15,7 @@ class BetaFeatureController
      */
     public function __invoke(): void
     {
-        APITokenController::getUser();
+        JWTController::getUser();
     }
 
     /**
@@ -35,7 +33,7 @@ class BetaFeatureController
      */
     public function enable(): void
     {
-        APITokenController::getUser();
+        JWTController::getUser();
     }
 
     /**
@@ -51,6 +49,6 @@ class BetaFeatureController
      */
     public function delete(...$args): void
     {
-        APITokenController::getUser();
+        JWTController::getUser();
     }
 }

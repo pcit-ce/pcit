@@ -24,12 +24,13 @@
     "ext-curl": "*",
     "ext-json": "*",
     "ext-yaml": "*",
+    "ext-redis": "*",
     "doctrine/cache": "^1.6",
     "firebase/php-jwt": "^5.0",
-    "khs1994/curl": "dev-master",
+    "khs1994/curl": "18.06.0",
     "khs1994/docker": "dev-master",
-    "khs1994/tencent-ai": "dev-master",
-    "khs1994/wechat": "^18.06@dev",
+    "khs1994/tencent-ai": "18.06.02",
+    "khs1994/wechat": "dev-master",
     "monolog/monolog": "^1.23",
     "nunomaduro/collision": "^2.0",
     "phpmailer/phpmailer": "^6.0",
@@ -50,7 +51,8 @@
     "sort-packages": true
   },
   "suggest": {
-    "ext-xdebug": "*"
+    "ext-xdebug": "*",
+    "ext-pcntl": "*"
   },
   "autoload": {
     "psr-4": {
@@ -64,7 +66,7 @@
       "KhsCI\\Tests\\Plugins\\": "tests/Plugins/"
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "extra": {
     "branch-alias": {

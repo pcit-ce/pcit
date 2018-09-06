@@ -58,16 +58,20 @@ class HTTP
      * @param string      $url
      * @param string|null $data
      * @param array       $header
+     * @param int         $timeout
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public static function get(string $url, string $data = null, array $header = [])
+    public static function get(string $url, string $data = null, array $header = [], $timeout = 5)
     {
         $curl = self::getCurl();
+        $source_timeout = $curl->timeout;
+        $curl->setTimeout($timeout);
         $output = $curl->get($url, $data, $header);
         self::$code = $curl->getCode();
+        $curl->setTimeout($source_timeout);
 
         return $output;
     }

@@ -6,22 +6,6 @@ namespace KhsCI\Support;
 
 class CI
 {
-    const BUILD_STATUS_CANCELED = 'canceled';
-
-    const BUILD_STATUS_PENDING = 'pending';
-
-    const BUILD_STATUS_PASSED = 'passed';
-
-    const BUILD_STATUS_ERRORED = 'errored';
-
-    const BUILD_STATUS_FAILED = 'failed';
-
-    const BUILD_STATUS_SKIP = 'skip';
-
-    const BUILD_STATUS_IN_PROGRESS = 'in_progress';
-
-    const BUILD_STATUS_INACTIVE = 'inactive';
-
     const BUILD_ACTIVATE = 1;
 
     const BUILD_DEACTIVATE = 0;
@@ -33,14 +17,6 @@ class CI
     const BUILD_EVENT_PR = 'pull_request';
 
     const BUILD_EVENT_ISSUE = 'issue';
-
-    const GITHUB_STATUS_ERROR = 'error';
-
-    const GITHUB_STATUS_FAILURE = 'failure';
-
-    const GITHUB_STATUS_PENDING = 'pending';
-
-    const GITHUB_STATUS_SUCCESS = 'success';
 
     const GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS = 'success';
 
@@ -89,7 +65,6 @@ class CI
     const MEDIA_TYPE_GIST_BASE64 = 'application/vnd.github.v3.base64';
 
     const CI_SETTING_ARRAY = [
-        'builds_only_with_khsci_yml',
         'build_pushes',
         'build_pull_requests',
         'maximum_number_of_builds',

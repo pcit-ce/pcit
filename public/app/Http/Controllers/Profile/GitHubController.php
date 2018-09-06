@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use App\User;
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
@@ -44,7 +44,7 @@ class GitHubController
             exit;
         }
 
-        $api_token = APITokenController::find($git_type, $username, (int) $uid);
+        $api_token = JWTController::generate($git_type, $username, (int) $uid);
 
         setcookie(
             $git_type.'_api_token',
@@ -54,7 +54,8 @@ class GitHubController
             Env::get('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
         );
 
-        User::updateUserInfo($git_type, (int) $uid, (string) $username, (string) $email, (string) $pic, $access_token);
+        User::updateUserInfo((int) $uid, null, (string) $username, (string) $email, (string) $pic, false, $git_type);
+        User::updateAccessToken((int) $uid, $access_token, $git_type);
 
         require __DIR__.'/../../../../public/profile/index.html';
 

@@ -1,0 +1,48 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/about/index",
+    "pages/build/index",
+    "pages/profile/index",
+    "pages/news/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar":{
+    "list":[
+      {
+        "pagePath":"pages/index/index",
+        "text":"首页",
+        "iconPath":"images/home.png",
+        "selectedIconPath":"images/homeselected.png"
+      },
+      {
+          "pagePath": "pages/build/index",
+          "text": "构建",
+          "iconPath": "images/build.png",
+          "selectedIconPath": "images/buildselected.png"
+      },
+      {
+           "pagePath":"pages/profile/index",
+           "text":"个人主页",
+           "iconPath": "images/profile.png",
+           "selectedIconPath": "images/profileselected.png"
+      },
+      {
+        "pagePath":"pages/about/index",
+        "text":"关于",
+        "iconPath":"images/about.png",
+        "selectedIconPath":"images/aboutselected.png"
+      },
+      {
+        "pagePath":"pages/news/index",
+        "text":"资讯"
+      }
+    ]
+  }
+}

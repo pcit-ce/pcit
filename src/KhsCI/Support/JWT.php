@@ -40,10 +40,11 @@ class JWT
      * @param string $git_type
      * @param string $username
      * @param int    $uid
+     * @param int    $exp
      *
      * @return string
      */
-    public static function encode(string $privateKey, string $git_type, string $username, int $uid)
+    public static function encode(string $privateKey, string $git_type, string $username, int $uid, int $exp = null)
     {
         $privateKey = file_get_contents($privateKey);
 
@@ -52,7 +53,7 @@ class JWT
         $token = [
             'iss' => $ci_host,
             'iat' => time(),
-            'exp' => time() + 60 * 10,
+            'exp' => $exp ?? (time() + 60 * 10),
             'aud' => $ci_host,
             'username' => $username,
             'git_type' => $git_type,
@@ -66,14 +67,16 @@ class JWT
      * 解密 token.
      *
      * @param string $jwt
-     * @param string $privateKey
+     * @param string $publicKey
+     *
+     * @return object
      */
-    public static function decode(string $jwt, string $privateKey): void
+    public static function decode(string $jwt, string $publicKey)
     {
-        $privateKey = file_get_contents($privateKey);
+        $publicKey = file_get_contents($publicKey);
 
-        $obj = JWTService::decode($jwt, $privateKey, 'RS256');
+        $obj = JWTService::decode($jwt, $publicKey, ['RS256']);
 
-        // var_dump($obj);
+        return $obj;
     }
 }

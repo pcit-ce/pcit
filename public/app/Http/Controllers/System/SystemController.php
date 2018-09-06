@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\System;
 
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use Exception;
 use KhsCI\Support\Env;
 
@@ -17,7 +17,7 @@ class SystemController
      */
     public function getOAuthClientId()
     {
-        $git_type = (APITokenController::getUser())[0];
+        $git_type = (JWTController::getUser())[0];
 
         switch ($git_type) {
             case 'github':

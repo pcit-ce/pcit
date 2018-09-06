@@ -14,11 +14,6 @@ use KhsCI\Support\Route;
 
 require __DIR__.'/../../vendor/autoload.php';
 
-function aa(): void
-{
-    echo 1;
-}
-
 // read .env.* file.
 
 try {
@@ -88,8 +83,8 @@ try {
     }
 
     Response::json([
-        'code' => $e->getCode(),
-        'message' => $e->getMessage() ?? 500,
+        'code' => $e->getCode() ?? 500,
+        'message' => $e->getMessage() ?? 'ERROR',
         'documentation_url' => 'https://github.com/khs1994-php/khsci/tree/master/docs/api',
     ], $start_time);
 

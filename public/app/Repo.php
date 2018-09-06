@@ -21,9 +21,9 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getRid(string $git_type, string $username, string $repo)
+    public static function getRid(string $username, string $repo, $git_type = 'github')
     {
-        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=? ORDER BY id DESC LIMIT 1';
+        $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
         $id = DB::select($sql, [$git_type, $username, $repo], true);
 
@@ -39,9 +39,9 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getDefaultBranch(string $git_type, string $username, string $repo)
+    public static function getDefaultBranch(string $username, string $repo, $git_type = 'github')
     {
-        $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=? ORDER BY id DESC LIMIT 1';
+        $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
         $default_branch = DB::select($sql, [$git_type, $username, $repo], true);
 
@@ -56,7 +56,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getRepoFullName(string $git_type, int $rid)
+    public static function getRepoFullName(int $rid, $git_type = 'github')
     {
         $sql = 'SELECT repo_full_name FROM repo WHERE rid=? AND git_type=? ORDER BY id DESC LIMIT 1';
 
@@ -65,51 +65,34 @@ class Repo extends DBModel
 
     /**
      * @param string $repo_full_name
+     * @param string $git_type
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name)
+    public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name, $git_type = 'github')
     {
-        $sql = 'SELECT installation_id FROM repo WHERE repo_full_name=? AND git_type=? ORDER BY id DESC LIMIT 1';
+        $username = (explode('/', $repo_full_name))[0];
 
-        return DB::select($sql, [$repo_full_name, 'github'], true);
+        $sql = 'SELECT installation_id FROM user WHERE username=? AND git_type=? ORDER BY id DESC LIMIT 1';
+
+        return DB::select($sql, [$username, $git_type], true);
     }
 
     /**
-     * @param int $rid
+     * @param int    $rid
+     * @param string $git_type
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getGitHubInstallationIdByRid(int $rid)
+    public static function getGitHubInstallationIdByRid(int $rid, $git_type = 'github')
     {
-        $sql = 'SELECT installation_id FROM repo WHERE rid=? AND git_type=? ORDER BY id DESC LIMIT 1';
+        $repo_full_name = self::getRepoFullName($rid, $git_type);
 
-        return DB::select($sql, [$rid, 'github'], true);
-    }
-
-    /**
-     * @param int $rid
-     * @param int $installation_id
-     *
-     * @throws Exception
-     */
-    public static function updateGitHubInstallationIdByRid(int $rid, ?int $installation_id): void
-    {
-        if (null === $installation_id) {
-            return;
-        }
-
-        $installation_id_in_db = self::getGitHubInstallationIdByRid($rid);
-
-        if ((int) $installation_id_in_db !== $installation_id) {
-            $sql = 'UPDATE repo SET installation_id=? WHERE rid=?';
-
-            DB::update($sql, [$installation_id, $rid]);
-        }
+        return self::getGitHubInstallationIdByRepoFullName($repo_full_name, $git_type);
     }
 
     /**
@@ -121,7 +104,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function getAdmin(string $git_type, int $rid, bool $collaborators = false)
+    public static function getAdmin(int $rid, bool $collaborators = false, $git_type = 'github')
     {
         $sql = 'SELECT repo_admin FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1';
 
@@ -142,7 +125,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function checkAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false)
+    public static function checkAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github')
     {
         $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=? AND JSON_CONTAINS(repo_admin,json_quote(?))';
 
@@ -161,7 +144,7 @@ class Repo extends DBModel
      *
      * @throws Exception
      */
-    public static function updateAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false): void
+    public static function updateAdmin(int $rid, int $uid, $git_type = 'github', bool $collaborators = false): void
     {
         $type = 'repo_admin';
 
@@ -194,7 +177,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function deleteAdmin(string $git_type, int $rid, int $uid, bool $collaborators = false): void
+    public static function deleteAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github'): void
     {
         $type = 'repo_admin';
 
@@ -221,7 +204,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByAdmin(string $git_type, int $uid, bool $collaborators = false)
+    public static function allByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
         $type = 'repo_admin';
 
@@ -242,11 +225,11 @@ EOF;
      *
      * @throws Exception
      */
-    public static function allByRepoPrefix(string $git_type, string $username)
+    public static function allByUsername(string $username, $git_type = 'github')
     {
-        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_prefix=?';
+        $sql = "SELECT * FROM repo WHERE git_type=? AND repo_full_name LIKE \"$username/%\"";
 
-        return DB::select($sql, [$git_type, $username]);
+        return DB::select($sql, [$git_type]);
     }
 
     /**
@@ -258,22 +241,23 @@ EOF;
      *
      * @throws Exception
      */
-    public static function findByRepoFullName(string $git_type, string $username, string $repo_name)
+    public static function findByRepoFullName(string $username, string $repo_name, $git_type = 'github')
     {
-        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_prefix=? AND repo_name=?';
+        $sql = 'SELECT * FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?)';
 
         return DB::select($sql, [$git_type, $username, $repo_name]);
     }
 
     /**
-     * @param int  $uid
-     * @param bool $collaborators
+     * @param int    $uid
+     * @param bool   $collaborators
+     * @param string $git_type
      *
      * @return array|string
      *
      * @throws Exception
      */
-    public static function getActiveByAdmin(int $uid, bool $collaborators = false)
+    public static function getActiveByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
         $type = 'repo_admin';
 
@@ -281,9 +265,9 @@ EOF;
             $type = 'repo_collaborators';
         }
 
-        $sql = "SELECT rid FROM repo WHERE JSON_CONTAINS($type,JSON_QUOTE(?)) AND build_activate=1 AND webhooks_status=1";
+        $sql = "SELECT rid FROM repo WHERE JSON_CONTAINS($type,JSON_QUOTE(?)) AND git_type=? AND build_activate=1 AND webhooks_status=1";
 
-        return DB::select($sql, [$uid]);
+        return DB::select($sql, [$uid, $git_type]);
     }
 
     /**
@@ -294,7 +278,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function exists(string $git_type, int $rid)
+    public static function exists(int $rid, $git_type = 'github')
     {
         $sql = 'SELECT id FROM repo WHERE git_type=? AND rid=?';
 
@@ -304,8 +288,6 @@ EOF;
     /**
      * @param string   $git_type
      * @param int      $rid
-     * @param string   $repo_prefix
-     * @param string   $repo_name
      * @param string   $repo_full_name
      * @param int|null $insert_admin
      * @param int|null $insert_collaborators
@@ -315,51 +297,50 @@ EOF;
      *
      * @throws Exception
      */
-    public static function updateRepoInfo(string $git_type,
-                                          int $rid,
-                                          string $repo_prefix,
-                                          string $repo_name,
+    public static function updateRepoInfo(int $rid,
                                           string $repo_full_name,
                                           ?int $insert_admin,
                                           ?int $insert_collaborators,
-                                          string $default_branch,
+                                          string $default_branch = 'master',
                                           int $build_active = 1,
-                                          int $webhooks_status = 1): void
+                                          int $webhooks_status = 1,
+                                          $git_type = 'github'): void
     {
-        if ($repo_key_id = self::exists($git_type, $rid)) {
+        if ($repo_key_id = self::exists($rid, $git_type)) {
             $sql = <<<'EOF'
 UPDATE repo SET
 
-git_type=?,rid=?,repo_prefix=?,repo_name=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=? 
+git_type=?,rid=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=? 
 
 WHERE id=?;
 EOF;
             DB::update($sql, [
-                $git_type, $rid, $repo_prefix, $repo_name,
-                $repo_full_name, time(), $build_active, $webhooks_status, $repo_key_id,
+                $git_type, $rid, $repo_full_name, time(), $build_active, $webhooks_status, $repo_key_id,
             ]);
 
-            return;
+            goto a;
         }
 
         $sql = <<<EOF
 INSERT INTO repo(
-id,git_type, rid, repo_prefix, repo_name, repo_full_name,default_branch,
+id,git_type, rid, repo_full_name,default_branch,
 last_sync,build_activate,webhooks_status
-) VALUES(null,?,?,?,?,?,?,?,?,?)
+) VALUES(null,?,?,?,?,?,?,?)
 EOF;
 
         DB::insert($sql, [
-            $git_type, $rid, $repo_prefix, $repo_name, $repo_full_name,
+            $git_type, $rid, $repo_full_name,
             $default_branch, time(), $build_active, $webhooks_status,
         ]);
 
+        a:
+
         if ($insert_admin) {
-            self::updateAdmin($git_type, $rid, $insert_admin);
+            self::updateAdmin($rid, $insert_admin, $git_type);
         }
 
         if ($insert_collaborators) {
-            self::updateAdmin($git_type, $rid, $insert_collaborators, true);
+            self::updateAdmin($rid, $insert_collaborators, $git_type, true);
         }
     }
 
@@ -373,53 +354,29 @@ EOF;
      *
      * @throws Exception
      */
-    public static function deleteByInstallationId(string $git_type, int $installation_id)
+    public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
-        $sql = 'DELETE FROM repo WHERE git_type=? AND installation_id=?';
+        $sql = <<<EOF
+            DELETE repo FROM user LEFT JOIN repo ON repo.repo_full_name LIKE CONCAT(user.username,"/%") 
+            where user.installation_id = ?
+EOF;
 
         return DB::delete($sql, [$git_type, $installation_id]);
     }
 
     /**
-     * @param string $git_type
      * @param int    $rid
-     * @param int    $installation_id
+     * @param string $git_type
      *
      * @return int
      *
      * @throws Exception
      */
-    public static function deleteByRid(string $git_type, int $rid, int $installation_id)
+    public static function deleteByRid(int $rid, $git_type = 'github')
     {
-        $sql = 'DELETE FROM repo WHERE git_type=? AND rid=? AND installation_id=?';
+        $sql = 'DELETE FROM repo WHERE rid =? AND git_type=?';
 
-        return DB::delete($sql, [$git_type, $rid, $installation_id]);
-    }
-
-    /**
-     * @param string $git_type
-     * @param int    $rid
-     *
-     * @return array|string
-     *
-     * @throws Exception
-     */
-    public static function getConfig(string $git_type, int $rid)
-    {
-        $sql = <<<EOF
-SELECT
-
-builds_only_with_khsci_yml,
-build_pushes,
-build_pull_requests,
-maximum_number_of_builds,
-auto_cancel_branch_builds,
-auto_cancel_pull_request_builds
-
-FROM repo WHERE git_type=? AND rid=? ORDER BY id DESC LIMIT 1
-EOF;
-
-        return DB::select($sql, [$git_type, $rid]);
+        return DB::delete($sql, [$rid, $git_type]);
     }
 
     /**

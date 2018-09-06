@@ -9,20 +9,31 @@
 </head>
 <body>
 <header>
-  This Is Header
-  <br>
-  <br>
+
 </header>
 <div style="text-align: center;margin-top: 200px">
-  <button type="button" onclick="hello()"
+  <button id="hello" v-if="display" type="button" onclick="hello()"
           title="KhsCI Hello 能使你在两秒内登录 KhsCI，而无需密码，只需看一下">KhsCI Hello
   </button>
+  <span> Login to KhsCI </span>
   <button type="button" onclick="github()" title="Login With GitHub">GitHub</button>
   <button type="button" onclick="coding()" title="Login With Coding Coming soon">Coding</button>
   <button type="button" onclick="gitee()" title="Login With Gitee Coming soon">Gitee</button>
-  <br><br><br>
-  <a href="https://github.com/khs1994-php/khsci/tree/master/docs" target="_blank"><h1>Support Docs</h1></a>
 </div>
+
+<footer style="margin-top: 25%">
+  <ul>
+    <li>@KHSCI, Datong, Shanxi</li>
+    <br>
+    <li><a href="mailto:ci@khs1994.com">email</a></li>
+    <br>
+    <li><a href="https://github.com/khs1994-php/khsci/tree/master/docs" target="_blank">Docs</a></li>
+  </ul>
+  <ul>
+    <li><a href="https://github.com/khs1994-php/khsci/blob/master/CHANGELOG.md" target="_blank">CHANGELOG</a></li>
+  </ul>
+</footer>
+
 <script>
   function hello() {
     document.location = 'https://' + location.host + '/login/hello.html';
@@ -39,6 +50,13 @@
   function gitee() {
     document.location = 'https://' + location.host + '/oauth/gitee/login';
   }
+
+  new Vue({
+    el: "#hello",
+    data: {
+      display: false
+    }
+  })
 </script>
 </body>
 </html>

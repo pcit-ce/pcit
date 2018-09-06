@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Khsci\Tests\Checks;
 
-use App\Console\Migrate;
-use App\Console\Up;
+use App\Console\MigrateCommand;
+use App\Console\UpCommand;
 use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\CI;
@@ -20,14 +20,14 @@ class RunTest extends KhsCITestCase
     {
         parent::__construct();
 
-        Migrate::all();
+        MigrateCommand::all();
 
-        Up::setGitType('github_app');
+        UpCommand::setGitType('github_app');
 
-        Up::installation_repositories(file_get_contents(
+        UpCommand::installation_repositories(file_get_contents(
             __DIR__.'/../Webhooks/github_app/installation_repositories_add.json'));
 
-        Up::push(file_get_contents(__DIR__.'/../Webhooks/github/push.json'));
+        UpCommand::push(file_get_contents(__DIR__.'/../Webhooks/github/push.json'));
     }
 
     /**
@@ -102,9 +102,9 @@ class RunTest extends KhsCITestCase
      */
     public function testActionRequired(): void
     {
-        Up::setGitType('github_app');
+        UpCommand::setGitType('github_app');
 
-        Up::updateGitHubAppChecks('1', null, CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+        UpCommand::updateGitHubAppChecks('1', null, CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
             time(), time(), CI::GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED);
     }
 
@@ -115,9 +115,9 @@ class RunTest extends KhsCITestCase
      */
     public function testAction(): void
     {
-        Up::setGitType('github_app');
+        UpCommand::setGitType('github_app');
 
-        Up::updateGitHubAppChecks('1', null, CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
+        UpCommand::updateGitHubAppChecks('1', null, CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
             time(), time(), CI::GITHUB_CHECK_SUITE_CONCLUSION_NEUTRAL,
             null, null, null, null, null,
             [(new KhsCI())->check_run::createAction()]);
@@ -128,7 +128,7 @@ class RunTest extends KhsCITestCase
      */
     public function tearDown(): void
     {
-        Migrate::cleanup();
+        MigrateCommand::cleanup();
 
         $this->assertEquals(0, 0);
     }

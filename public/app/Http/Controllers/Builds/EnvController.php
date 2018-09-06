@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Env;
-use App\Http\Controllers\APITokenController;
+use App\Http\Controllers\Users\JWTController;
 use Exception;
 
 class EnvController
@@ -23,9 +23,9 @@ class EnvController
      */
     public function __invoke(...$args)
     {
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        return Env::list($git_type, (int) $rid);
+        return Env::list((int) $rid, $git_type);
     }
 
     /**
@@ -49,7 +49,7 @@ class EnvController
     {
         $json = file_get_contents('php://input');
 
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
         list(
             'env_var.name' => $name,
@@ -57,7 +57,7 @@ class EnvController
             'env_var.public' => $public
             ) = json_decode($json, true);
 
-        return Env::create($git_type, (int) $rid, $name, $value, $public);
+        return Env::create((int) $rid, $name, $value, $public, $git_type);
     }
 
     /**
@@ -75,9 +75,9 @@ class EnvController
     {
         list($username, $repo_name, $env_var_id) = $args;
 
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo($username, $repo_name);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo($username, $repo_name);
 
-        return Env::get((int) $env_var_id, $git_type, $rid);
+        return Env::get((int) $env_var_id, $rid, $git_type);
     }
 
     /**
@@ -99,13 +99,13 @@ class EnvController
     {
         list($username, $repo_name, $env_var_id) = $args;
 
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
         $json = file_get_contents('php://input');
 
         list('env_var.value' => $value, 'env_var.public' => $public) = json_decode($json, true);
 
-        Env::update($env_var_id, $git_type, $rid, $value, (bool) $public);
+        Env::update($env_var_id, $rid, $value, (bool) $public, $git_type);
     }
 
     /**
@@ -125,8 +125,8 @@ class EnvController
     {
         list($username, $repo_name, $env_var_id) = $args;
 
-        list($rid, $git_type, $uid) = APITokenController::checkByRepo($username, $repo_name);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo($username, $repo_name);
 
-        return Env::delete((int) $env_var_id, $git_type, $rid);
+        return Env::delete((int) $env_var_id, $rid, $git_type);
     }
 }

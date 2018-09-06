@@ -25,7 +25,7 @@ class KhsCITest extends KhsCITestCase
      */
     public function testCache(): void
     {
-        $redis = Cache::connect();
+        $redis = Cache::store();
 
         $output = $redis->set('k', 1);
 
