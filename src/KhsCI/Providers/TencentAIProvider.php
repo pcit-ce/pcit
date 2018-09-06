@@ -14,7 +14,8 @@ class TencentAIProvider implements ServiceProviderInterface
     {
         $pimple['tencent_ai'] = function ($app) {
             return TencentAI::getInstance(
-                (int) $app['config']['tencent_ai']['app_id'], $app['config']['tencent_ai']['app_key']
+                (int) $app['config']['tencent_ai']['app_id'],
+                $app['config']['tencent_ai']['app_key']
             );
         };
     }

@@ -142,4 +142,14 @@ class Log
     {
         return 'debug';
     }
+
+    /**
+     * @return Logger
+     *
+     * @throws Exception
+     */
+    public static function getMonolog()
+    {
+        return self::connect();
+    }
 }
