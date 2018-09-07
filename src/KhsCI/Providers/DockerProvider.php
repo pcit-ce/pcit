@@ -17,11 +17,22 @@ class DockerProvider implements ServiceProviderInterface
             if (Env::get('CI_DOCKER_TLS_VERIFY', false)) {
                 return Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST'),
                     true,
-                    __DIR__.'/../../../public/private_key'
+                    __DIR__.'/../../../public/storage/private_key',
+                    null,
+                    null,
+                    null,
+                    (int) Env::get('CI_DOCKER_TIMEOUT', 100)
                 ));
             }
 
-            return Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST')));
+            return Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST'),
+                false,
+                null,
+                null,
+                null,
+                null,
+                (int) Env::get('CI_DOCKER_TIMEOUT', 100)
+            ));
         };
     }
 }

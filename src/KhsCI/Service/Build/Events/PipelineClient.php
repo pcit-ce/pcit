@@ -79,11 +79,11 @@ class PipelineClient
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => "$job_id",
                     'com.khs1994.ci.pipeline.name' => $setup,
-                    'com.khs1994.ci.pipeline.status.no_status' => $no_status,
-                    'com.khs1994.ci.pipeline.status.failure' => $failure,
-                    'com.khs1994.ci.pipeline.status.success' => $success,
-                    'com.khs1994.ci.pipeline.status.changed' => $changed,
-                    'com.khs1994.ci' => $job_id,
+                    'com.khs1994.ci.pipeline.status.no_status' => (string) $no_status,
+                    'com.khs1994.ci.pipeline.status.failure' => (string) $failure,
+                    'com.khs1994.ci.pipeline.status.success' => (string) $success,
+                    'com.khs1994.ci.pipeline.status.changed' => (string) $changed,
+                    'com.khs1994.ci' => (string) $job_id,
                 ])
                 ->setWorkingDir($workdir)
                 ->setCmd($cmd)

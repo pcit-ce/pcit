@@ -40,7 +40,7 @@ class Client
 
         $this->system_env = array_merge($this->system_env, $this->build->env);
 
-        Log::debug(__FILE__, __LINE__, 'Generate Container Config', [
+        Log::debug(__FILE__, __LINE__, 'This build property', [
             'build_key_id' => $this->build->build_key_id,
             'event_type' => $this->build->event_type,
             'commit_id' => $this->build->commit_id,
@@ -74,6 +74,7 @@ class Client
         $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->matrix ?? null;
         $config = $yaml_obj->config ?? null;
+        $mirror = $yaml_obj->mirror ?? null;
 
         $this->pipeline = $pipeline;
 
@@ -96,6 +97,8 @@ class Client
 
         // 不存在构建矩阵
         if (!$matrix) {
+            Log::getMonolog()->emergency('This build is not matrix');
+
             $this->job_id = Job::create($this->build->build_key_id);
 
             (new Subject())
@@ -107,8 +110,12 @@ class Client
                 ->register(new PipelineClient($pipeline, $this->build, $this, null))
                 ->handle();
 
+            Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);
+
             return;
         }
+
+        Log::getMonolog()->emergency('This build include matrix');
 
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
@@ -123,6 +130,8 @@ class Client
                 // pipeline
                 ->register(new PipelineClient($pipeline, $this->build, $this, $matrix_config))
                 ->handle();
+
+            Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);
         }
     }
 }

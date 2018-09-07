@@ -41,7 +41,7 @@ class RunContainer
         $this->docker_container = $docker->container;
         $this->docker_network = $docker->network;
 
-        $jobs = Job::getByBuildKeyID($build_key_id);
+        $jobs = Job::getByBuildKeyID($build_key_id, true);
 
         // 遍历所有 jobs
         foreach ($jobs as $job_id) {
@@ -54,21 +54,18 @@ class RunContainer
                 Job::updateStartAt($job_id);
                 self::handleJob($job_id);
             } catch (\Throwable $e) {
-                // 某一 job 失败
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
+                    // 某一 job 失败
                     $this->after($job_id, 'failure');
-                    Job::updateBuildStatus(
-                        $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+                    Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                     // 某一 job success
                     $this->after($job_id, 'success');
-                    Job::updateBuildStatus(
-                        $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+                    Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
                 } else {
                     // 其他错误
-                    Job::updateBuildStatus(
-                        $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
-                    Job::updateStopAt($job_id);
+                    Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+                    Job::updateFinishedAt($job_id);
                     // 清理某一 job 的构建环境
                     Cleanup::systemDelete((string) $job_id, true);
                     throw new \Exception($e->getMessage(), $e->getCode());
@@ -104,15 +101,8 @@ class RunContainer
         // git container
         Log::debug(__FILE__, __LINE__, 'Run git clone container', [], Log::EMERGENCY);
 
-        try {
-            $git_container_config = Cache::store()->rPop((string) $job_id);
-            $this->runPipeline($job_id, $git_container_config);
-        } catch (\Throwable $e) {
-            Log::debug(__FILE__, __LINE__, 'Run git container error', [
-                'message' => $e->getMessage(), ], Log::EMERGENCY);
-
-            return;
-        }
+        $git_container_config = Cache::store()->rPop((string) $job_id);
+        $this->runPipeline($job_id, $git_container_config);
 
         // run service
         $this->runService($job_id);
@@ -121,6 +111,7 @@ class RunContainer
             $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
 
             if (!is_string($container_config)) {
+                Log::debug(__FILE__, __LINE__, 'Container config empty', [], Log::EMERGENCY);
                 break;
             }
 
@@ -130,25 +121,24 @@ class RunContainer
             $failure = $labels['com.khs1994.ci.pipeline.status.failure'] ?? false;
             $changed = $labels['com.khs1994.ci.pipeline.status.changed'] ?? false;
 
+            // 将依赖于结果运行的 pipeline 放入缓存队列，只执行正常任务
             if ($success) {
-                Log::debug('This job is a success after job');
+                Log::debug('This pipeline is a success after job');
                 Cache::store()->lPush($job_id.'_success', $container_config);
                 continue;
             }
 
             if ($failure) {
-                Log::debug('This job is a failure after job');
+                Log::debug('This pipeline is a failure after job');
                 Cache::store()->lPush($job_id.'_failure', $container_config);
                 continue;
             }
 
             if ($changed) {
-                Log::debug('This job is a changed after job');
+                Log::debug('This pipeline is a changed after job');
                 Cache::store()->lPush($job_id.'_changed', $container_config);
                 continue;
             }
-
-            // 将 依赖于结果运行的 job 放入缓存队列 只执行正常任务
 
             try {
                 $this->runPipeline($job_id, $container_config);
@@ -199,12 +189,11 @@ class RunContainer
      */
     private function after(int $job_id, $status): void
     {
-        // 获取上一次 build 的状况
-
         Log::debug(__FILE__, __LINE__,
             'Run job after', ['job_id' => $job_id, 'status' => $status], LOG::EMERGENCY);
 
         // TODO
+        // 获取上一次 build 的状况
         $changed = Build::buildStatusIsChanged(Job::getRid($job_id), 'master');
 
         while (1) {
@@ -228,7 +217,7 @@ class RunContainer
         }
         Log::debug(__FILE__, __LINE__, 'Run job after success', [], Log::EMERGENCY);
 
-        Job::updateStopAt($job_id);
+        Job::updateFinishedAt($job_id);
 
         Cleanup::systemDelete((string) $job_id, true);
     }

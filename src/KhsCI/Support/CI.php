@@ -32,6 +32,7 @@ class CI
     // 需要注意，有意外情况.
     const GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED = 'action_required';
 
+    // status
     const GITHUB_CHECK_SUITE_STATUS_QUEUED = 'queued';
 
     const GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS = 'in_progress';

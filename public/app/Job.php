@@ -56,17 +56,24 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
+     * @param int  $build_key_id
+     * @param bool $pending
      *
      * @return array
      *
      * @throws Exception
      */
-    public static function getByBuildKeyID(int $build_key_id)
+    public static function getByBuildKeyID(int $build_key_id, bool $pending = false)
     {
-        $sql = 'SELECT id FROM jobs WHERE build_id=? AND state=?';
+        if ($pending) {
+            $sql = 'SELECT id FROM jobs WHERE build_id=? AND state=?';
 
-        return DB::select($sql, [$build_key_id, 'pending']);
+            return DB::select($sql, [$build_key_id, 'pending']);
+        }
+
+        $sql = 'SELECT id FROM jobs WHERE build_id=?';
+
+        return DB::select($sql, [$build_key_id]);
     }
 
     /**
@@ -168,7 +175,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function updateStopAt(int $job_id, int $time = null)
+    public static function updateFinishedAt(int $job_id, int $time = null)
     {
         return self::updateTime($job_id, $time, false, true);
     }
@@ -180,7 +187,7 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getStopAt(int $job_id)
+    public static function getFinishedAt(int $job_id)
     {
         $sql = 'SELECT finished_at FROM jobs WHERE id=? LIMIT 1';
 

@@ -117,7 +117,10 @@ class GitClient
 
         $config = $docker_container
             ->setEnv($git_env)
-            ->setLabels(['com.khs1994.ci.git' => (string) $client->job_id, 'com.khs1994.ci' => (string) $client->job_id])
+            ->setLabels([
+                'com.khs1994.ci.git' => (string) $client->job_id,
+                'com.khs1994.ci' => (string) $client->job_id,
+            ])
             ->setBinds(["$client->job_id:$client->workdir"])
             ->setExtraHosts($hosts)
             ->setImage($git_image)
