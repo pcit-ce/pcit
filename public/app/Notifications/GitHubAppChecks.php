@@ -52,7 +52,8 @@ class GitHubAppChecks
                                 array $actions = null,
                                 bool $force_create = false): void
     {
-        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run '.$job_key_id.' ...', [], Log::INFO);
+        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run', [
+            'job_key_id' => $job_key_id, ], Log::INFO);
 
         $rid = Job::getRid((int) $job_key_id);
 
@@ -125,9 +126,11 @@ class GitHubAppChecks
 
         Job::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
 
-        $log_message = 'Create GitHub App Check Run '.$build_key_id.' success';
+        $log_message = 'Create GitHub App Check Run success';
 
-        Log::debug(__FILE__, __LINE__, $log_message, [], Log::INFO);
+        Log::debug(__FILE__, __LINE__, $log_message, [
+            'job_key_id' => $job_key_id,
+            'build_key_id' => $build_key_id, ], Log::INFO);
     }
 
     /**

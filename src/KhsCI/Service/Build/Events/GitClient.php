@@ -124,6 +124,6 @@ class GitClient
             ->setCreateJson(null)
             ->getCreateJson();
 
-        Cache::store()->lpush($client->job_id, json_encode($config));
+        Cache::store()->lpush($client->job_id, $config);
     }
 }

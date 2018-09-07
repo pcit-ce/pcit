@@ -56,17 +56,17 @@ EOF;
     }
 
     /**
-     * @param int $job_id
+     * @param int $build_key_id
      *
      * @return array
      *
      * @throws Exception
      */
-    public static function getByBuildKeyID(int $job_id)
+    public static function getByBuildKeyID(int $build_key_id)
     {
-        $sql = 'SELECT id FROM jobs WHERE build_id=?';
+        $sql = 'SELECT id FROM jobs WHERE build_id=? AND state=?';
 
-        return DB::select($sql, [$job_id]);
+        return DB::select($sql, [$build_key_id, 'pending']);
     }
 
     /**

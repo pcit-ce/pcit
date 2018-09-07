@@ -69,11 +69,10 @@ class RunContainer
                     Job::updateBuildStatus(
                         $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
                     Job::updateStopAt($job_id);
+                    // 清理某一 job 的构建环境
+                    Cleanup::systemDelete((string) $job_id, true);
                     throw new \Exception($e->getMessage(), $e->getCode());
                 }
-
-                // 清理某一 job 的构建环境
-                //Cleanup::systemDelete((string) $job_id, true);
             }
         }
 
@@ -105,7 +104,15 @@ class RunContainer
         // git container
         Log::debug(__FILE__, __LINE__, 'Run git clone container', [], Log::EMERGENCY);
 
-        $this->runPipeline($job_id, Cache::store()->rPop((string) $job_id));
+        try {
+            $git_container_config = Cache::store()->rPop((string) $job_id);
+            $this->runPipeline($job_id, $git_container_config);
+        } catch (\Throwable $e) {
+            Log::debug(__FILE__, __LINE__, 'Run git container error', [
+                'message' => $e->getMessage(), ], Log::EMERGENCY);
+
+            return;
+        }
 
         // run service
         $this->runService($job_id);
@@ -222,6 +229,8 @@ class RunContainer
         Log::debug(__FILE__, __LINE__, 'Run job after success', [], Log::EMERGENCY);
 
         Job::updateStopAt($job_id);
+
+        Cleanup::systemDelete((string) $job_id, true);
     }
 
     /**
