@@ -97,11 +97,18 @@ class RunContainer
 
         Log::debug(__FILE__, __LINE__, 'Handle job by type', ['job_id' => $job_id], LOg::EMERGENCY);
 
+        // create network
+        Log::debug(__FILE__, __LINE__, 'Create Network', [$job_id], Log::EMERGENCY);
+
         $this->docker_network->create((string) $job_id);
 
-        $this->runService($job_id);
+        // git container
+        Log::debug(__FILE__, __LINE__, 'Run git clone container', [], Log::EMERGENCY);
 
-        Log::debug(__FILE__, __LINE__, 'Create Network', [$job_id], Log::EMERGENCY);
+        $this->runPipeline($job_id, Cache::store()->rPop((string) $job_id));
+
+        // run service
+        $this->runService($job_id);
 
         while (1) {
             $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
@@ -117,16 +124,19 @@ class RunContainer
             $changed = $labels['com.khs1994.ci.pipeline.status.changed'] ?? false;
 
             if ($success) {
+                Log::debug('This job is a success after job');
                 Cache::store()->lPush($job_id.'_success', $container_config);
                 continue;
             }
 
             if ($failure) {
+                Log::debug('This job is a failure after job');
                 Cache::store()->lPush($job_id.'_failure', $container_config);
                 continue;
             }
 
             if ($changed) {
+                Log::debug('This job is a changed after job');
                 Cache::store()->lPush($job_id.'_changed', $container_config);
                 continue;
             }
@@ -139,6 +149,8 @@ class RunContainer
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
                     throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }
+
+                Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
             }
         }
 
@@ -156,7 +168,8 @@ class RunContainer
     public function runPipeline(int $job_id, string $container_config): void
     {
         Log::debug(__FILE__, __LINE__,
-            'Run job container', ['job_id' => $job_id], Log::EMERGENCY);
+            'Run job container', ['job_id' => $job_id,
+                'container_config' => $container_config, ], Log::EMERGENCY);
 
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
@@ -182,7 +195,7 @@ class RunContainer
         // 获取上一次 build 的状况
 
         Log::debug(__FILE__, __LINE__,
-            'Run job after', [$job_id => $job_id, 'status' => $status], LOG::EMERGENCY);
+            'Run job after', ['job_id' => $job_id, 'status' => $status], LOG::EMERGENCY);
 
         // TODO
         $changed = Build::buildStatusIsChanged(Job::getRid($job_id), 'master');
@@ -206,6 +219,7 @@ class RunContainer
                 Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
             }
         }
+        Log::debug(__FILE__, __LINE__, 'Run job after success', [], Log::EMERGENCY);
 
         Job::updateStopAt($job_id);
     }
