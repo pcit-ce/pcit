@@ -84,7 +84,7 @@ class Skip
         // 匹配排除分支
         if ($branches_exclude) {
             if (self::check($branches_exclude, $branch)) {
-                $message = "config exclude branch $branch, build skip";
+                $message = ".khsci.yml exclude branch $branch, build skip";
 
                 Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
 
@@ -97,7 +97,7 @@ class Skip
         // 匹配包含分支
         if ($branches_include) {
             if (self::check($branches_include, $branch)) {
-                $message = "config include branch $branch, building";
+                $message = ".khsci.yml include branch $branch, building";
 
                 Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
 

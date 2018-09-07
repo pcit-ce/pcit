@@ -29,53 +29,41 @@ class RunContainer
     private $docker_network;
 
     /**
-     * @param int $build_key_id
+     * @param int $job_id
      *
      * @throws CIException
      * @throws \Exception
      */
-    public function handle(int $build_key_id): void
+    public function handle(int $job_id): void
     {
         $docker = (new KhsCI())->docker;
-
         $this->docker_container = $docker->container;
         $this->docker_network = $docker->network;
 
-        $jobs = Job::getByBuildKeyID($build_key_id, true);
+        Log::debug(__FILE__, __LINE__, 'Handle job start...', ['job_id' => $job_id], Log::EMERGENCY);
 
-        // 遍历所有 jobs
-        foreach ($jobs as $job_id) {
-            $job_id = (int) $job_id['id'];
-
-            Log::debug(__FILE__, __LINE__, 'Handle job', ['job_id' => $job_id], Log::EMERGENCY);
-
-            try {
-                // 运行一个 job
-                Job::updateStartAt($job_id);
-                self::handleJob($job_id);
-            } catch (\Throwable $e) {
-                if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
-                    // 某一 job 失败
-                    $this->after($job_id, 'failure');
-                    Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
-                } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
-                    // 某一 job success
-                    $this->after($job_id, 'success');
-                    Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
-                } else {
-                    // 其他错误
-                    Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
-                    Job::updateFinishedAt($job_id);
-                    // 清理某一 job 的构建环境
-                    Cleanup::systemDelete((string) $job_id, true);
-                    throw new \Exception($e->getMessage(), $e->getCode());
-                }
+        try {
+            // 运行一个 job
+            Job::updateStartAt($job_id);
+            self::handleJob($job_id);
+        } catch (\Throwable $e) {
+            if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
+                // 某一 job 失败
+                $this->after($job_id, 'failure');
+                Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+            } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
+                // 某一 job success
+                $this->after($job_id, 'success');
+                Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+            } else {
+                // 其他错误
+                Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+                Job::updateFinishedAt($job_id);
+                // 清理某一 job 的构建环境
+                Cleanup::systemDelete((string) $job_id, true);
+                throw new \Exception($e->getMessage(), $e->getCode());
             }
         }
-
-        // 所有 job 执行完毕
-        Log::debug(__FILE__, __LINE__, 'Handle build all job success', [
-            'build_key_id' => $build_key_id, ], Log::EMERGENCY);
 
         throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
     }
@@ -147,7 +135,9 @@ class RunContainer
                     throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }
 
-                Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
+                Log::getMonolog()->emergency($e->getMessage());
+
+                throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
             }
         }
 

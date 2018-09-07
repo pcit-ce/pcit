@@ -35,7 +35,9 @@ class GetConfig
         $git_type = $this->git_type;
         $repo_full_name = Repo::getRepoFullName($rid, $git_type);
 
-        Log::debug(__FILE__, __LINE__, 'Parse rid', [$git_type => [$rid => $repo_full_name]], Log::INFO);
+        Log::debug(__FILE__, __LINE__, 'Parse repo id', [
+            'git_type' => $git_type, 'rid' => $rid, 'repo_full_name' => $repo_full_name, ],
+            Log::INFO);
 
         $url = Git::getRawUrl($git_type, $repo_full_name, $commit_id, '.khsci.yml');
 

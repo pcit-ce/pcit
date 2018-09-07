@@ -49,7 +49,7 @@ class Build
             // exec build
             (new KhsCI())->build->handle($buildData);
 
-            $job_ids = Job::getByBuildKeyID($buildData->build_key_id);
+            $job_ids = Job::getByBuildKeyID($buildData->build_key_id, true);
 
             foreach ($job_ids as $job_id) {
                 $job_id = $job_id['id'];
@@ -63,7 +63,19 @@ class Build
                     )
                     ->handle();
 
-                (new KhsCI())->build_agent->handle((int) $buildData->build_key_id);
+                try {
+                    (new KhsCI())->build_agent->handle((int) $job_id);
+                } catch (\Throwable $e) {
+                    Log::debug(__FILE__, __LINE__,
+                        'Handle job success', [
+                            'job_id' => $job_id,
+                            'message' => $e->getMessage(),
+                        ], Log::EMERGENCY);
+
+                    $subject->register(
+                        new UpdateBuildStatus((int) $job_id, $buildData->config, $e->getMessage())
+                    )->handle();
+                }
             }
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [
