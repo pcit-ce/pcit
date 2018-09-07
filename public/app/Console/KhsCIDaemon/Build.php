@@ -55,16 +55,18 @@ class Build
         $job_ids = Job::getByBuildKeyID($buildData->build_key_id);
 
         foreach ($job_ids as $job_id) {
+            $job_id = $job_id['id'];
             Log::debug(__FILE__, __LINE__,
                 'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
 
             $subject
                 // update build status in progress
                 ->register(
-                    new UpdateBuildStatus($job_id, $buildData->config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS)
-                );
+                    new UpdateBuildStatus((int) $job_id, $buildData->config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS)
+                )
+                ->handle();
 
-            (new KhsCI())->build_agent->handle($buildData->build_key_id);
+            (new KhsCI())->build_agent->handle((int) $buildData->build_key_id);
         }
     }
 }

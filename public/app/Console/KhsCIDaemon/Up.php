@@ -38,7 +38,7 @@ class Up
             try {
                 (new Build())->build();
             } catch (\Throwable $e) {
-                Log::debug(__FILE__, __LINE__, 'Docker connect error');
+                Log::debug(__FILE__, __LINE__, $e->__toString(), []);
             }
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], LOG::ERROR);

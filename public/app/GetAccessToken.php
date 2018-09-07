@@ -79,7 +79,7 @@ class GetAccessToken
 
         $access_token = $khsci->github_apps_installations->getAccessToken(
             (int) $installation_id,
-            __DIR__.'/../private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
+            __DIR__.'/../storage/private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
         );
 
         return $access_token;

@@ -45,6 +45,7 @@ class RunContainer
 
         // 遍历所有 jobs
         foreach ($jobs as $job_id) {
+            $job_id = $job_id['id'];
             try {
                 // 运行一个 job
                 Log::debug(__FILE__, __LINE__,

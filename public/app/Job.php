@@ -80,7 +80,7 @@ EOF;
     {
         $sql = 'SELECT builds.rid FROM jobs RIGHT JOIN builds ON jobs.build_id=builds.id WHERE jobs.id=? LIMIT 1';
 
-        return DB::select($sql, [$job_id]);
+        return DB::select($sql, [$job_id], true);
     }
 
     /**

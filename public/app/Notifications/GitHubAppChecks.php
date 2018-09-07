@@ -56,7 +56,7 @@ class GitHubAppChecks
 
         $rid = Job::getRid((int) $job_key_id);
 
-        $build_key_id = (int) Job::getByBuildKeyID($job_key_id);
+        $build_key_id = (int) Job::getBuildKeyID($job_key_id);
 
         $repo_full_name = Repo::getRepoFullName((int) $rid);
 
@@ -102,7 +102,7 @@ class GitHubAppChecks
             $branch,
             $commit_id,
             $details_url,
-            $job_key_id,
+            (string) $job_key_id,
             $status,
             $started_at,
             $completed_at,
