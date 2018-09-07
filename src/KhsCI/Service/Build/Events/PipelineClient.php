@@ -77,7 +77,7 @@ class PipelineClient
                 ->setBinds(["$job_id:$workdir", 'tmp:/tmp'])
                 ->setEntrypoint(["$shell", '-c'])
                 ->setLabels([
-                    'com.khs1994.ci.pipeline' => $job_id,
+                    'com.khs1994.ci.pipeline' => "$job_id",
                     'com.khs1994.ci.pipeline.name' => $setup,
                     'com.khs1994.ci.pipeline.status.no_status' => $no_status,
                     'com.khs1994.ci.pipeline.status.failure' => $failure,

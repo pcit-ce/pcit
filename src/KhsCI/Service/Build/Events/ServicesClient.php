@@ -47,9 +47,9 @@ class ServicesClient
                 ->setEnv($env)
                 ->setEntrypoint($entrypoint)
                 ->setLabels([
-                    'com.khs1994.ci.service' => $this->job_id,
+                    'com.khs1994.ci.service' => (string) $this->job_id,
                     'com.khs1994.ci.service.name' => $service_name,
-                    'com.khs1994.ci' => $this->job_id,
+                    'com.khs1994.ci' => (string) $this->job_id,
                 ])
                 ->setImage($image)
                 ->setCmd($command)

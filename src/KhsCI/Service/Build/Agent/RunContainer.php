@@ -48,6 +48,7 @@ class RunContainer
             $job_id = (int) $job_id['id'];
 
             Log::debug(__FILE__, __LINE__, 'Handle job', ['job_id' => $job_id], Log::EMERGENCY);
+
             try {
                 // 运行一个 job
                 Job::updateStartAt($job_id);
@@ -58,24 +59,28 @@ class RunContainer
                     $this->after($job_id, 'failure');
                     Job::updateBuildStatus(
                         $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
-                }
-
-                // 某一 job success
-                if (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
+                } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
+                    // 某一 job success
                     $this->after($job_id, 'success');
                     Job::updateBuildStatus(
                         $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+                } else {
+                    // 其他错误
+                    Job::updateBuildStatus(
+                        $job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+                    Job::updateStopAt($job_id);
+                    throw new \Exception($e->getMessage(), $e->getCode());
                 }
 
                 // 清理某一 job 的构建环境
-                Cleanup::systemDelete((string) $job_id, true);
-                Job::updateStopAt($job_id);
-
-                throw new CIException($e->getMessage());
+                //Cleanup::systemDelete((string) $job_id, true);
             }
         }
 
         // 所有 job 执行完毕
+        Log::debug(__FILE__, __LINE__, 'Handle build all job success', [
+            'build_key_id' => $build_key_id, ], Log::EMERGENCY);
+
         throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
     }
 
@@ -92,9 +97,9 @@ class RunContainer
 
         Log::debug(__FILE__, __LINE__, 'Handle job by type', ['job_id' => $job_id], LOg::EMERGENCY);
 
-        $this->runService($job_id);
-
         $this->docker_network->create((string) $job_id);
+
+        $this->runService($job_id);
 
         Log::debug(__FILE__, __LINE__, 'Create Network', [$job_id], Log::EMERGENCY);
 
@@ -201,6 +206,8 @@ class RunContainer
                 Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
             }
         }
+
+        Job::updateStopAt($job_id);
     }
 
     /**
@@ -221,12 +228,13 @@ class RunContainer
                 break;
             }
 
-            $this->docker_container
+            $container_id = $this->docker_container
                 ->setCreateJson($container_config)
                 ->create(false)
                 ->start(null);
-        }
 
-        Log::debug(__FILE__, __LINE__, 'Run Services success', ['job_id' => $job_id], LOG::EMERGENCY);
+            Log::debug(__FILE__, __LINE__, 'Run Services success', [
+                'job_id' => $job_id, 'container_id' => $container_id, ], LOG::EMERGENCY);
+        }
     }
 }

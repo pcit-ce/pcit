@@ -112,11 +112,11 @@ EOF;
 
         $started_at && $column = 'started_at';
 
-        $finished_at && $column = '';
+        $finished_at && $column = 'finished_at';
 
-        $created_at && $column = '';
+        $created_at && $column = 'created_at';
 
-        $deleted_at && $column = '';
+        $deleted_at && $column = 'deleted_at';
 
         if (!$column) {
             throw new Exception('500', 500);

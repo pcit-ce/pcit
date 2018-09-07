@@ -66,7 +66,8 @@ class Build
                 (new KhsCI())->build_agent->handle((int) $buildData->build_key_id);
             }
         } catch (\Throwable $e) {
-            Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
+            Log::debug(__FILE__, __LINE__, $e->__toString(), [
+                'message' => $e->getMessage(), 'code' => $e->getCode(), ], Log::EMERGENCY);
         }
     }
 }
