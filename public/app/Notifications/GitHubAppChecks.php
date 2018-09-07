@@ -84,7 +84,7 @@ class GitHubAppChecks
         }
 
         $name = $name ??
-            'Build Event is '.ucfirst($event_type).' '.ucfirst($status_use_in_title).$build_key_id.$job_key_id;
+            'Build Event is '.ucfirst($event_type).' '.ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
 
         $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status_use_in_title);
 
@@ -95,7 +95,7 @@ class GitHubAppChecks
             (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
                 ->markdown();
 
-        $check_run_id = Job::getCheckRunId((int) $build_key_id);
+        $check_run_id = Job::getCheckRunId((int) $job_key_id);
 
         $run_data = new RunData(
             $repo_full_name,
@@ -119,28 +119,38 @@ class GitHubAppChecks
         $run_data->check_run_id = $check_run_id;
 
         if ($check_run_id and !$force_create) {
-            $output = $khsci->check_run->update($run_data);
+            $result = $khsci->check_run->update($run_data);
         } else {
-            $output = $khsci->check_run->create($run_data);
+            $result = $khsci->check_run->create($run_data);
         }
 
-        Job::updateCheckRunId(json_decode($output)->id ?? null, $build_key_id);
+        $check_run_id = json_decode($result)->id ?? null;
 
-        $log_message = 'Create GitHub App Check Run success';
+        $log_message = 'Create GitHub App Check run error';
+
+        if ($check_run_id) {
+            Job::updateCheckRunId(json_decode($result)->id ?? null, $job_key_id);
+
+            $log_message = 'Create GitHub App Check Run success';
+
+            $result = $check_run_id;
+        }
 
         Log::debug(__FILE__, __LINE__, $log_message, [
             'job_key_id' => $job_key_id,
-            'build_key_id' => $build_key_id, ], Log::INFO);
+            'build_key_id' => $build_key_id,
+            'result' => $result,
+        ], Log::INFO);
     }
 
     /**
-     * @param int $build_key_id
+     * @param int $job_key_id
      *
      * @throws Exception
      */
-    public static function notIncludeYaml(int $build_key_id): void
+    public static function notIncludeYaml(int $job_key_id): void
     {
-        self::send($build_key_id,
+        self::send($job_key_id,
             null, CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
             time(), time(),
             CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, null,

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\GitHubChecksConclusion;
 
-use App\Build;
+use App\Job;
 use App\Notifications\GitHubAppChecks;
 use Exception;
 use KhsCI\Support\CI;
@@ -24,8 +24,8 @@ class Cancelled extends Passed
             $this->job_key_id,
             null,
             CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-            (int) Build::getStartAt($this->job_key_id),
-            (int) Build::getStopAt($this->job_key_id),
+            (int) Job::getStartAt($this->job_key_id),
+            (int) Job::getFinishedAt($this->job_key_id),
             CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED,
             null,
             null,
