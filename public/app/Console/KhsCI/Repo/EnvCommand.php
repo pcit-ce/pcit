@@ -23,7 +23,7 @@ class EnvCommand extends Command
         $this->addArgument(
             'type',
             InputArgument::REQUIRED,
-            'type is one of list set unset or get'
+            'type is one of <comment>list</comment> <comment>set</comment> <comment>unset</comment> or <comment>get</comment>'
         );
 
         $this->addUsage('
@@ -40,6 +40,8 @@ khsci env get   VAR_ID
         $this->addOption(...KhsCICommand::getGitTypeOptionArray());
 
         $this->addOption(...KhsCICommand::getRepoOptionArray());
+
+        $this->addOption(...KhsCICommand::getRawOptionArray());
 
         $this->addOption(
             'public',
@@ -116,7 +118,13 @@ khsci env get   VAR_ID
         }
 
         if ('list' !== $input->getArgument('type')) {
-            $output->write('Success');
+            $output->write('<info>Success</info>');
+
+            return;
+        }
+
+        if ($input->getOption('raw')) {
+            $output->write($return);
 
             return;
         }
@@ -130,7 +138,7 @@ khsci env get   VAR_ID
         }
 
         if (!($row ?? null)) {
-            $output->write('env not found');
+            $output->write('<info>env not set</info>');
 
             return;
         }

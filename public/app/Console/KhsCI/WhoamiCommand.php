@@ -20,6 +20,8 @@ class WhoamiCommand extends Command
         $this->addOption(...KhsCICommand::getGitTypeOptionArray());
 
         $this->addOption(...KhsCICommand::getAPIEndpointOptionArray());
+
+        $this->addOption(...KhsCICommand::getRawOptionArray());
     }
 
     /**

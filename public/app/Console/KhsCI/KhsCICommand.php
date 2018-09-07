@@ -51,7 +51,7 @@ class KhsCICommand
             'repo',
             'r',
             InputOption::VALUE_REQUIRED,
-            'Repository to use, Example khs1994-php/khsci',
+            'Repository to use (will try to detect from current git clone) <comment>[example: "khs1994-php/khsci"]</comment>',
         ];
     }
 
@@ -61,7 +61,18 @@ class KhsCICommand
             'api-endpoint',
             'e',
             InputOption::VALUE_OPTIONAL,
-            'KhsCI API server to talk to', Env::get('CI_HOST', 'https://ci.khs1994.com'),
+            'KhsCI API server to talk to',
+            Env::get('CI_HOST', 'https://ci.khs1994.com'),
+        ];
+    }
+
+    public static function getRawOptionArray()
+    {
+        return [
+            'raw',
+            null,
+            InputOption::VALUE_NONE,
+            'output raw',
         ];
     }
 
@@ -258,6 +269,37 @@ class KhsCICommand
     }
 
     /**
+     * 通过调用系统 git 命令获取仓库名称 -r.
+     *
+     * @return bool|mixed|string
+     */
+    public static function getGitByExecCommand()
+    {
+        ob_start();
+        $system_result = system('git remote get-url origin', $return);
+        ob_end_clean();
+
+        if (0 !== $return) {
+            return false;
+        }
+
+        if (preg_match('/@/', $system_result)) {
+            $result_array = explode(':', $system_result);
+            $result = array_pop($result_array);
+
+            return $result;
+        }
+
+        $result_array = explode('/', $system_result);
+
+        $repo = array_pop($result_array);
+        $username = array_pop($result_array);
+        $result = $username.'/'.$repo;
+
+        return $result;
+    }
+
+    /**
      * @param InputInterface $input
      *
      * @return mixed
@@ -266,15 +308,15 @@ class KhsCICommand
      */
     public static function existsRepoOption(InputInterface $input)
     {
-        $repo = $input->getOption('repo');
+        $repo = $input->getOption('repo') ?? self::getGitByExecCommand();
 
-        if (!$repo) {
-            throw new Exception(
-                'Please specify the repo name via the -r option (e.g. khsci <command> -r <owner>/<repo>)',
-                500
-            );
+        if ($repo) {
+            return $repo;
         }
 
-        return $repo;
+        throw new Exception(
+            'Please specify the repo name via the -r option (e.g. khsci <command> -r <owner>/<repo>)',
+            500
+        );
     }
 }
