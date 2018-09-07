@@ -14,7 +14,7 @@ class GetAccessToken
     /**
      * @param int $rid
      *
-     * @return array|null|string
+     * @return string
      *
      * @throws Exception
      */
@@ -27,7 +27,7 @@ class GetAccessToken
      * @param null|string $repo_full_name
      * @param int|null    $rid
      *
-     * @return array|null|string
+     * @return string
      *
      * @throws Exception
      */
@@ -89,7 +89,7 @@ class GetAccessToken
      * @param string $git_type
      * @param int    $uid
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */

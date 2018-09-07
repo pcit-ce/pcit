@@ -21,7 +21,7 @@ class Setting extends DBModel
      * @param string $git_type
      * @param int    $rid
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -47,7 +47,7 @@ EOF;
      * @param int    $rid
      * @param string $setting_name
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */

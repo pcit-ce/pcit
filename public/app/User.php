@@ -18,7 +18,7 @@ class User extends DBModel
      * @param string|null $username
      * @param int         $uid
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -140,7 +140,7 @@ EOF;
      * @param string $git_type
      * @param int    $admin_uid
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -187,7 +187,7 @@ EOF;
      * @param string $git_type
      * @param string $username
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -202,7 +202,7 @@ EOF;
      * @param string $git_type
      * @param int    $uid
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */

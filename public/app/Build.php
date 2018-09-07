@@ -14,7 +14,7 @@ class Build extends DBModel
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -28,7 +28,7 @@ class Build extends DBModel
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -42,7 +42,7 @@ class Build extends DBModel
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -56,7 +56,7 @@ class Build extends DBModel
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return int
      *
      * @throws Exception
      */
@@ -64,7 +64,13 @@ class Build extends DBModel
     {
         $sql = 'SELECT rid FROM builds WHERE id=? LIMIT 1';
 
-        return DB::select($sql, [$build_key_id], true);
+        $rid = DB::select($sql, [$build_key_id], true);
+
+        if ($rid) {
+            return (int) $rid;
+        }
+
+        throw new Exception('', 404);
     }
 
     /**
@@ -108,7 +114,7 @@ class Build extends DBModel
      * @param int    $rid
      * @param string $branch
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -123,7 +129,7 @@ class Build extends DBModel
      * @param int    $rid
      * @param string $branch
      *
-     * @return array|string
+     * @return bool
      *
      * @throws Exception
      */
@@ -144,7 +150,7 @@ class Build extends DBModel
      * @param string $git_type
      * @param int    $rid
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -161,7 +167,7 @@ class Build extends DBModel
      * @param string $git_type
      * @param int    $rid
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -184,7 +190,7 @@ EOF;
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -198,7 +204,7 @@ EOF;
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -218,7 +224,7 @@ EOF;
      * @param int|null $before
      * @param int|null $limit
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -252,7 +258,7 @@ EOF;
      * @param int|null $limit
      * @param bool     $pr
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -284,7 +290,7 @@ EOF;
      * @param int|null $before
      * @param int|null $limit
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -308,7 +314,7 @@ EOF;
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -322,7 +328,7 @@ EOF;
     /**
      * @param int $build_key_id
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -349,7 +355,7 @@ EOF;
      * @param $event_time
      * @param $config
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */
@@ -408,7 +414,7 @@ EOF;
      * @param $event_time
      * @param $config
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */
@@ -456,7 +462,7 @@ EOF;
      * @param $rid
      * @param $created_at
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */
@@ -491,7 +497,7 @@ EOF;
      * @param        $pull_request_source
      * @param string $git_type
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */

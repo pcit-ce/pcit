@@ -123,7 +123,7 @@ class Issue extends DBModel
      * @param $closed_at
      * @param $updated_at
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */
@@ -173,7 +173,7 @@ EOF;
      * @param $sender_uid
      * @param $created_at
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */

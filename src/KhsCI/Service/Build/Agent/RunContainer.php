@@ -45,14 +45,13 @@ class RunContainer
 
         // 遍历所有 jobs
         foreach ($jobs as $job_id) {
-            $job_id = $job_id['id'];
+            $job_id = (int) $job_id['id'];
+
+            Log::debug(__FILE__, __LINE__, 'Handle job', ['job_id' => $job_id], Log::EMERGENCY);
             try {
                 // 运行一个 job
-                Log::debug(__FILE__, __LINE__,
-                    'Handle job', ['job_id' => $job_id], Log::EMERGENCY);
-
                 Job::updateStartAt($job_id);
-                self::handleJob((int) $job_id);
+                self::handleJob($job_id);
             } catch (\Throwable $e) {
                 // 某一 job 失败
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
@@ -91,7 +90,7 @@ class RunContainer
     {
         LogClient::drop($job_id);
 
-        Log::debug(__FILE__, __LINE__, 'Handle job type', ['job_id' => $job_id], LOg::EMERGENCY);
+        Log::debug(__FILE__, __LINE__, 'Handle job by type', ['job_id' => $job_id], LOg::EMERGENCY);
 
         $this->runService($job_id);
 
@@ -102,7 +101,7 @@ class RunContainer
         while (1) {
             $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
 
-            if (!$container_config) {
+            if (!is_string($container_config)) {
                 break;
             }
 
@@ -160,6 +159,9 @@ class RunContainer
             ->start(null);
 
         (new LogClient($job_id, $container_id))->handle();
+
+        Log::debug(__FILE__, __LINE__, 'Run job container success', [
+            'job_id' => $job_id, ], Log::EMERGENCY);
     }
 
     /**
@@ -177,18 +179,20 @@ class RunContainer
         Log::debug(__FILE__, __LINE__,
             'Run job after', [$job_id => $job_id, 'status' => $status], LOG::EMERGENCY);
 
-        $changed = Build::buildStatusIsChanged(
-            Job::getBuildKeyID($job_id), Job::getGitType($job_id));
+        // TODO
+        $changed = Build::buildStatusIsChanged(Job::getRid($job_id), 'master');
 
         while (1) {
             $container_config = Cache::store()->rPop($job_id.'_'.$status);
 
             if (!$container_config) {
-                $container_config = Cache::store()->rPop(
-                    $job_id.'_'.\KhsCI\Support\Job::JOB_STATUS_CHANGED);
+                $container_config = Cache::store()->rPop($job_id.'_'.\KhsCI\Support\Job::JOB_STATUS_CHANGED);
+
                 if (!$container_config && $changed) {
                     break;
                 }
+
+                break;
             }
 
             try {
@@ -221,8 +225,8 @@ class RunContainer
                 ->setCreateJson($container_config)
                 ->create(false)
                 ->start(null);
-
-            Log::debug(__FILE__, __LINE__, 'Run Services '.$job_id, [], LOG::EMERGENCY);
         }
+
+        Log::debug(__FILE__, __LINE__, 'Run Services success', ['job_id' => $job_id], LOG::EMERGENCY);
     }
 }

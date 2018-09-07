@@ -34,7 +34,7 @@ class Env extends DBModel
      * @param string $value
      * @param bool   $public
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */
@@ -85,7 +85,7 @@ class Env extends DBModel
      * @param int    $rid
      * @param bool   $show
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */

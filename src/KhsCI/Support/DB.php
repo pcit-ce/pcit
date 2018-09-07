@@ -95,7 +95,7 @@ class DB
      * @param string $sql
      * @param array  $data
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */
@@ -107,7 +107,7 @@ class DB
             $stmt = $pdo->prepare($sql);
             $stmt->execute($data);
             self::setDebugInfo($stmt);
-            $last = $pdo->lastInsertId();
+            $last = (int) $pdo->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
         }

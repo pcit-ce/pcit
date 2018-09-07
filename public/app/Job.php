@@ -13,7 +13,7 @@ class Job extends DBModel
     /**
      * @param int $jobs_id
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -72,7 +72,7 @@ EOF;
     /**
      * @param int $job_id
      *
-     * @return array|string
+     * @return int
      *
      * @throws Exception
      */
@@ -80,7 +80,13 @@ EOF;
     {
         $sql = 'SELECT builds.rid FROM jobs RIGHT JOIN builds ON jobs.build_id=builds.id WHERE jobs.id=? LIMIT 1';
 
-        return DB::select($sql, [$job_id], true);
+        $rid = DB::select($sql, [$job_id], true);
+
+        if ($rid) {
+            return (int) $rid;
+        }
+
+        throw new Exception('', 404);
     }
 
     /**
@@ -143,7 +149,7 @@ EOF;
     /**
      * @param int $job_id
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -170,7 +176,7 @@ EOF;
     /**
      * @param int $job_id
      *
-     * @return array|string
+     * @return int
      *
      * @throws Exception
      */
@@ -199,7 +205,7 @@ EOF;
     /**
      * @param int $build_key_id
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */

@@ -35,7 +35,7 @@ class Repo extends DBModel
      * @param string $username
      * @param string $repo
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -52,7 +52,7 @@ class Repo extends DBModel
      * @param string $git_type
      * @param int    $rid
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -67,7 +67,7 @@ class Repo extends DBModel
      * @param string $repo_full_name
      * @param string $git_type
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -84,7 +84,7 @@ class Repo extends DBModel
      * @param int    $rid
      * @param string $git_type
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -100,7 +100,7 @@ class Repo extends DBModel
      * @param int    $rid
      * @param bool   $collaborators
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */
@@ -121,7 +121,7 @@ class Repo extends DBModel
      * @param int    $uid
      * @param bool   $collaborators
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -200,7 +200,7 @@ EOF;
      * @param int    $uid
      * @param bool   $collaborators
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -221,7 +221,7 @@ EOF;
      * @param string $git_type
      * @param string $username
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -237,7 +237,7 @@ EOF;
      * @param string $username
      * @param string $repo_name
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -253,7 +253,7 @@ EOF;
      * @param bool   $collaborators
      * @param string $git_type
      *
-     * @return array|string
+     * @return array
      *
      * @throws Exception
      */
@@ -274,7 +274,7 @@ EOF;
      * @param string $git_type
      * @param int    $rid
      *
-     * @return array|string
+     * @return string
      *
      * @throws Exception
      */

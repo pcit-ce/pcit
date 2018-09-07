@@ -48,25 +48,25 @@ class Build
         try {
             // exec build
             (new KhsCI())->build->handle($buildData);
+
+            $job_ids = Job::getByBuildKeyID($buildData->build_key_id);
+
+            foreach ($job_ids as $job_id) {
+                $job_id = $job_id['id'];
+                Log::debug(__FILE__, __LINE__,
+                    'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
+
+                $subject
+                    // update build status in progress
+                    ->register(
+                        new UpdateBuildStatus((int) $job_id, $buildData->config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS)
+                    )
+                    ->handle();
+
+                (new KhsCI())->build_agent->handle((int) $buildData->build_key_id);
+            }
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
-        }
-
-        $job_ids = Job::getByBuildKeyID($buildData->build_key_id);
-
-        foreach ($job_ids as $job_id) {
-            $job_id = $job_id['id'];
-            Log::debug(__FILE__, __LINE__,
-                'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
-
-            $subject
-                // update build status in progress
-                ->register(
-                    new UpdateBuildStatus((int) $job_id, $buildData->config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS)
-                )
-                ->handle();
-
-            (new KhsCI())->build_agent->handle((int) $buildData->build_key_id);
         }
     }
 }
