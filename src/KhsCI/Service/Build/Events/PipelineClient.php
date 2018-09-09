@@ -115,7 +115,7 @@ class PipelineClient
     private static function parseEvent($event, string $event_type)
     {
         if ($event) {
-            if (is_string($event)) {
+            if (\is_string($event)) {
                 if ($event_type !== $event) {
                     Log::debug(
                         __FILE__,
@@ -125,7 +125,7 @@ class PipelineClient
 
                     return false;
                 }
-            } elseif (is_array($event) and (!in_array($event_type, $event, true))) {
+            } elseif (\is_array($event) and (!\in_array($event_type, $event, true))) {
                 Log::debug(
                     __FILE__,
                     __LINE__,
@@ -152,13 +152,13 @@ class PipelineClient
             return false;
         }
 
-        if (is_string($status)) {
-            if (in_array($status, ['failure', 'success', 'changed'])) {
+        if (\is_string($status)) {
+            if (\in_array($status, ['failure', 'success', 'changed'])) {
                 return $status === $target;
             }
         }
 
-        if (is_array($status)) {
+        if (\is_array($status)) {
             foreach ($status as $k) {
                 if ($k === $target) {
                     return true;

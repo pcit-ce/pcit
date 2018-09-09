@@ -33,7 +33,7 @@ class Route
     private static function make($action, ...$arg): void
     {
         if ($action instanceof Closure) {
-            self::$output = call_user_func($action, ...$arg);
+            self::$output = \call_user_func($action, ...$arg);
 
             throw new Exception('Finish', 200);
         }
@@ -110,9 +110,9 @@ class Route
         } else { // 有 {id}
             $urlArray = explode('/', $url);
 
-            if (count($targetUrlArray) === count($urlArray)) {
+            if (\count($targetUrlArray) === \count($urlArray)) {
                 if (!(false === ($int = array_search('{git_type}', $targetUrlArray)))) {
-                    if (!in_array($urlArray[$int], Git::SUPPORT_GIT_ARRAY)) {
+                    if (!\in_array($urlArray[$int], Git::SUPPORT_GIT_ARRAY)) {
                         return;
                     }
                 }

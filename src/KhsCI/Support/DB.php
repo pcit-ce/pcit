@@ -77,7 +77,7 @@ class DB
         }
 
         if ($single) {
-            if (1 === count($output)) {
+            if (1 === \count($output)) {
                 foreach ($output[0] as $k => $v) {
                     return $v;
                 }

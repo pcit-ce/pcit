@@ -7,6 +7,7 @@ namespace App\Console\KhsCIDaemon;
 use App\Build as BuildEloquent;
 use App\Console\Events\Build as BuildEvent;
 use App\Console\Events\CheckAdmin;
+use App\Console\Events\LogHandle;
 use App\Console\Events\Subject;
 use App\Console\Events\UpdateBuildStatus;
 use App\Job;
@@ -74,7 +75,9 @@ class Build
 
                     $subject->register(
                         new UpdateBuildStatus((int) $job_id, $buildData->config, $e->getMessage())
-                    )->handle();
+                    )
+                        ->register(new LogHandle($job_id))
+                        ->handle();
                 }
             }
         } catch (\Throwable $e) {

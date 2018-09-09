@@ -28,7 +28,7 @@ class Response
         header("X-Runtime-rack: $time");
         $code = $array['code'] ?? 200;
 
-        if (in_array($code, self::HTTP_CODE, true)) {
+        if (\in_array($code, self::HTTP_CODE, true)) {
             http_response_code($code);
 
             unset($array['code']);

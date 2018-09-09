@@ -128,11 +128,11 @@ class Skip
      */
     private static function check($pattern, string $subject)
     {
-        if (is_string($pattern)) {
+        if (\is_string($pattern)) {
             return self::checkString($pattern, $subject);
         }
 
-        if (is_array($pattern)) {
+        if (\is_array($pattern)) {
             foreach ($pattern as $k) {
                 if (self::checkString($k, $subject)) {
                     return true;

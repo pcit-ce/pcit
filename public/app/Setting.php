@@ -53,7 +53,7 @@ EOF;
      */
     public static function get(int $rid, string $setting_name, string $git_type = 'github')
     {
-        if (!in_array($setting_name, self::$setting_array)) {
+        if (!\in_array($setting_name, self::$setting_array)) {
             throw new Exception('Not Found', 404);
         }
 
@@ -74,7 +74,7 @@ EOF;
      */
     public static function update(int $rid, string $setting_name, string $setting_value, string $git_type = 'github')
     {
-        if (!in_array($setting_name, self::$setting_array)) {
+        if (!\in_array($setting_name, self::$setting_array)) {
             throw new Exception('Not Found', 404);
         }
 

@@ -94,8 +94,8 @@ class CI
 
         if (null === $env) {
             return $current_env;
-        } elseif (is_array($env)) {
-            return in_array($current_env, $env);
+        } elseif (\is_array($env)) {
+            return \in_array($current_env, $env);
         }
 
         return $env === $current_env;
@@ -104,7 +104,7 @@ class CI
     public static function enableDebug(): void
     {
         ini_set('display_errors', 'on');
-        ini_set('error_reporting', (string) constant('E_ALL'));
+        ini_set('error_reporting', (string) \constant('E_ALL'));
         ini_set('log_errors', 'on');
         ini_set('error_log', sys_get_temp_dir().'/khsci.log');
     }

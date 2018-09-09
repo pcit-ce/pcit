@@ -19,7 +19,7 @@ class JSON
     {
         $result = '';
         $pos = 0;
-        $strLen = strlen($json);
+        $strLen = \strlen($json);
         $indentStr = '    ';
         $newLine = "\n";
         $prevChar = '';

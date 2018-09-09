@@ -149,7 +149,7 @@ class ReleasesGitHubClient
                          bool $prerelease = false,
                          $method = 'patch'): void
     {
-        $this->create(...func_get_args());
+        $this->create(...\func_get_args());
     }
 
     /**

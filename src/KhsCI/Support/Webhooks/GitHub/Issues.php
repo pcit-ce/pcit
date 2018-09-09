@@ -102,7 +102,7 @@ class Issues
         $sender = $comment->user;
         $sender_username = $sender->login;
 
-        if (strpos($sender_username, '[bot]') or in_array($sender_username, self::$skip_list)) {
+        if (strpos($sender_username, '[bot]') or \in_array($sender_username, self::$skip_list)) {
             Log::debug(__FILE__, __LINE__, 'Bot issue comment SKIP', [], Log::INFO);
 
             throw new \Exception('skip', 200);

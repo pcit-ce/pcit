@@ -39,7 +39,7 @@ class ParseClient
 
                 $var = '';
 
-                if (in_array($k, array_keys($config), true)) {
+                if (\in_array($k, array_keys($config), true)) {
                     $var = $config["$k"];
                 }
 
@@ -74,7 +74,7 @@ class ParseClient
 
         $content .= '\n\necho;echo\n\n';
 
-        for ($i = 0; $i < count($commands); ++$i) {
+        for ($i = 0; $i < \count($commands); ++$i) {
             $command = addslashes($commands[$i]);
 
             $content .= 'echo "$ '.str_replace('$', '\\\\$', $command).'"\n\n';

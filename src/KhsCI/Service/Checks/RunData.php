@@ -84,8 +84,9 @@ class RunData
                                             string $title = null,
                                             string $raw_details = null)
     {
-        return compact($path, $start_line, $end_column, $start_column, $end_line, $annotation_level,
-            $message, $title, $raw_details
+        return compact('path', 'start_line', 'end_line',
+            'start_column', 'end_column', 'annotation_level',
+            'message', 'title', 'raw_details'
         );
     }
 
@@ -96,9 +97,7 @@ class RunData
      *
      * @return array
      */
-    public static function createImage(string $alt,
-                                       string $image_url,
-                                       string $caption)
+    public static function createImage(string $alt, string $image_url, string $caption)
     {
         return [
             'alt' => $alt,

@@ -60,7 +60,7 @@ class Mail
     private static function parseAddress(array $address): void
     {
         foreach ($address as $k => $v) {
-            if (is_int($k)) {
+            if (\is_int($k)) {
                 $k = $v;
                 $v = explode('@', $k)[0];
             }
@@ -72,7 +72,7 @@ class Mail
     private static function parseCC(array $cc): void
     {
         foreach ($cc as $k => $v) {
-            if (is_int($k)) {
+            if (\is_int($k)) {
                 $k = $v;
                 $v = explode('@', $k)[0];
             }
@@ -83,7 +83,7 @@ class Mail
     private static function parseBCC(array $bcc): void
     {
         foreach ($bcc as $k => $v) {
-            if (is_int($k)) {
+            if (\is_int($k)) {
                 $k = $v;
                 $v = explode('@', $k)[0];
             }

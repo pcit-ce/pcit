@@ -98,7 +98,7 @@ class RunContainer
         while (1) {
             $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
 
-            if (!is_string($container_config)) {
+            if (!\is_string($container_config)) {
                 Log::debug(__FILE__, __LINE__, 'Container config empty', [], Log::EMERGENCY);
                 break;
             }

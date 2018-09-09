@@ -41,8 +41,8 @@ class SendMail
                 // recipients 指令存在
                 $on_success = $email['on_success'] ?? null;
                 $on_failure = $email['on_failure'] ?? null;
-                is_array($recipients) && $email_list = $recipients;
-                is_string($recipients) && $email_list = [$recipients];
+                \is_array($recipients) && $email_list = $recipients;
+                \is_string($recipients) && $email_list = [$recipients];
             } else {
                 // email 指令只包含 email 列表
                 $email_list = $email;

@@ -82,7 +82,7 @@ class DBModel
 
         if (!$table) {
             $table = StringSupport::uncamelize(
-                array_slice(explode('\\', static::class), -1, 1)[0].'s');
+                \array_slice(explode('\\', static::class), -1, 1)[0].'s');
         }
 
         return $table;

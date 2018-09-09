@@ -10,14 +10,11 @@ use KhsCI\Support\Log;
 
 class LogHandle
 {
-    /**
-     * @var Build
-     */
-    private $build;
+    private $job_id;
 
-    public function __construct(Build $build)
+    public function __construct(int $job_id)
     {
-        $this->build = $build;
+        $this->job_id = $job_id;
     }
 
     /**
@@ -25,19 +22,11 @@ class LogHandle
      */
     public function handle(): void
     {
-        $build = $this->build;
-
         // 日志美化
-        $output = Cache::store()->hGet('build_log', (string) $build->build_key_id);
+        $output = Cache::store()->hGet('build_log', (string) $this->job_id);
 
         if (!$output) {
             Log::debug(__FILE__, __LINE__, 'Build Log empty, skip', [], Log::WARNING);
-
-            return;
-        }
-
-        if (!$build->unique_id) {
-            Log::debug(__FILE__, __LINE__, 'config not found, skip', [], Log::WARNING);
 
             return;
         }
@@ -46,29 +35,31 @@ class LogHandle
 
         !is_dir($folder_name) && mkdir($folder_name);
 
-        file_put_contents($folder_name.'/'.$build->unique_id, "$output");
+        file_put_contents($folder_name.'/'.$this->job_id, "$output");
 
-        $fh = fopen($folder_name.'/'.$build->unique_id, 'r');
+        $fh = fopen($folder_name.'/'.$this->job_id, 'rb');
 
-        Cache::store()->del((string) $build->unique_id);
+        $redis_key = (string) $this->job_id.'_log';
+
+        Cache::store()->del($redis_key);
 
         while (!feof($fh)) {
             $one_line_content = fgets($fh);
 
             $one_line_content = substr("$one_line_content", 8);
 
-            Cache::store()->append((string) $build->unique_id, $one_line_content);
+            Cache::store()->append($redis_key, $one_line_content);
         }
 
         fclose($fh);
 
-        $log_content = Cache::store()->get((string) $build->unique_id);
+        $log_content = Cache::store()->get($redis_key);
 
-        Job::updateLog($build->build_key_id, $log_content);
+        Job::updateLog($this->job_id, $log_content);
 
         // cleanup
-        unlink($folder_name.'/'.$build->unique_id);
+        unlink($folder_name.'/'.$this->job_id);
 
-        Cache::store()->del((string) $build->unique_id);
+        Cache::store()->del($redis_key);
     }
 }

@@ -8,7 +8,7 @@ class Request
 {
     public static function getAllHeaders()
     {
-        if (!function_exists('getallheaders')) {
+        if (!\function_exists('getallheaders')) {
             $headers = [];
 
             foreach ($_SERVER as $name => $value) {

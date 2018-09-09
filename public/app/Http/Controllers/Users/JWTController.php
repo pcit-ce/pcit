@@ -144,7 +144,7 @@ class JWTController
 
         $git_type = $obj->git_type ?? false;
 
-        if (!in_array($git_type, Git::SUPPORT_GIT_ARRAY)) {
+        if (!\in_array($git_type, Git::SUPPORT_GIT_ARRAY)) {
             throw new Exception('Not Found', 404);
         }
 

@@ -86,7 +86,7 @@ class SyncController
 
             $json = $this->khsci->user_basic_info->getRepos($page, false);
 
-            $num_pre_page = count(json_decode($json));
+            $num_pre_page = \count(json_decode($json));
 
             $this->parseRepo($json);
         } while ($num_pre_page >= 30);
@@ -151,7 +151,7 @@ class SyncController
 
             $json = $this->khsci->orgs->listRepo($org_name, 1);
 
-            $num_pre_page = count(json_decode($json));
+            $num_pre_page = \count(json_decode($json));
 
             $this->parseRepo($json);
         } while ($num_pre_page >= 30);

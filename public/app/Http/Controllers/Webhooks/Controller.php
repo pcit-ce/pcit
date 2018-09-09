@@ -105,7 +105,7 @@ class Controller
 
         $dataObj = json_decode($data);
 
-        if ((!$data) or (!is_object($dataObj)) or 0 !== json_last_error()) {
+        if ((!$data) or (!\is_object($dataObj)) or 0 !== json_last_error()) {
             throw new Exception('Invalid request, must include JSON', 422);
         }
 

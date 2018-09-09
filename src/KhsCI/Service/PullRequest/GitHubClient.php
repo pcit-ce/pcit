@@ -147,7 +147,7 @@ class GitHubClient
                            bool $maintainer_can_modify = true)
     {
         $this->is_update = true;
-        $output = $this->create(...func_get_args());
+        $output = $this->create(...\func_get_args());
         $this->is_update = false;
 
         return $output;

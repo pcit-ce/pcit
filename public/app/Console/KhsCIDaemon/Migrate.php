@@ -16,7 +16,7 @@ class Migrate
      */
     public static function migrate(string $sql_file): void
     {
-        if (in_array($sql_file, self::getSqlList(), true)) {
+        if (\in_array($sql_file, self::getSqlList(), true)) {
             self::execFromFile(__DIR__.'/../../../sql/'.$sql_file);
         } else {
             var_dump(self::getSqlList());
@@ -66,7 +66,7 @@ class Migrate
         $array = scandir(__DIR__.'/../../../sql');
 
         $array = array_filter($array, function ($k) {
-            if (in_array($k, ['.', '..'], true)) {
+            if (\in_array($k, ['.', '..'], true)) {
                 return false;
             }
 

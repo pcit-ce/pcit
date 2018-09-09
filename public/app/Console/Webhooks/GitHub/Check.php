@@ -65,7 +65,7 @@ class Check
             'account' => $account,
         ] = \KhsCI\Support\Webhooks\GitHub\Check::run($json_content);
 
-        if (in_array($action, ['created', 'updated'])) {
+        if (\in_array($action, ['created', 'updated'])) {
             return;
         }
 

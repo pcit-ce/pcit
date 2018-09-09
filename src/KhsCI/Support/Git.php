@@ -33,7 +33,7 @@ class Git
      */
     public static function checkGit($git_type): void
     {
-        if (!in_array($git_type, self::SUPPORT_GIT_ARRAY)) {
+        if (!\in_array($git_type, self::SUPPORT_GIT_ARRAY)) {
             throw new Exception('Not Found', 404);
         }
     }
