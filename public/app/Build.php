@@ -139,7 +139,7 @@ class Build extends DBModel
 
         $output = DB::select($sql, [$rid, $branch]);
 
-        if ($output[0] === $output[1] ?? null) {
+        if (($output[1] ?? null) === $output[0]) {
             return false;
         }
 

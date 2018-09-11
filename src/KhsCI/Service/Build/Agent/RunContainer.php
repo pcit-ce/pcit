@@ -51,6 +51,7 @@ class RunContainer
                 // 某一 job 失败
                 $this->after($job_id, 'failure');
                 Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+                throw new CIException($e->getMessage(), $e->getCode());
             } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                 // 某一 job success
                 $this->after($job_id, 'success');
@@ -205,7 +206,7 @@ class RunContainer
                 Log::debug(__FILE__, __LINE__, $e->__toString(), [], Log::EMERGENCY);
             }
         }
-        Log::debug(__FILE__, __LINE__, 'Run job after success', [], Log::EMERGENCY);
+        Log::debug(__FILE__, __LINE__, 'Run job after finished', ['status' => $status], Log::EMERGENCY);
 
         Job::updateFinishedAt($job_id);
 

@@ -16,4 +16,4 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `check_run_id`  BIGINT,
   `config`        TEXT,
   `env_vars`      VARCHAR(255)
-);
+) AUTO_INCREMENT=10;

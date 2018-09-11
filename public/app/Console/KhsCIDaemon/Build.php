@@ -73,11 +73,11 @@ class Build
                             'message' => $e->getMessage(),
                         ], Log::EMERGENCY);
 
-                    $subject->register(
-                        new UpdateBuildStatus((int) $job_id, $buildData->config, $e->getMessage())
-                    )
-                        ->register(new LogHandle($job_id))
-                        ->handle();
+                    $subject
+                        ->register(new LogHandle((int) $job_id))
+                        ->register(
+                            new UpdateBuildStatus((int) $job_id, $buildData->config, $e->getMessage())
+                        )->handle();
                 }
             }
         } catch (\Throwable $e) {

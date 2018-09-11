@@ -26,10 +26,14 @@ class LogHandle
         $output = Cache::store()->hGet('build_log', (string) $this->job_id);
 
         if (!$output) {
-            Log::debug(__FILE__, __LINE__, 'Build Log empty, skip', [], Log::WARNING);
+            Log::debug(__FILE__, __LINE__,
+                'job Log empty, skip', ['job_id' => $this->job_id], Log::WARNING);
 
             return;
         }
+
+        Log::debug(__FILE__, __LINE__,
+            'Handle job log', ['job_id' => $this->job_id], Log::EMERGENCY);
 
         $folder_name = sys_get_temp_dir().'/.khsci';
 
