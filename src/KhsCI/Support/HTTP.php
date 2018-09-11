@@ -67,7 +67,7 @@ class HTTP
     public static function get(string $url, string $data = null, array $header = [], $timeout = 5)
     {
         $curl = self::getCurl();
-        $source_timeout = $curl->timeout;
+        $source_timeout = $curl->timeout ?? 0;
         $curl->setTimeout($timeout);
         $output = $curl->get($url, $data, $header);
         self::$code = $curl->getCode();
