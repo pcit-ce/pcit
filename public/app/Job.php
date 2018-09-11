@@ -38,21 +38,21 @@ class Job extends DBModel
     }
 
     /**
-     * @param int $job_id
+     * @param int $build_id
      *
      * @return string
      *
      * @throws Exception
      */
-    public static function create(int $job_id)
+    public static function create(int $build_id)
     {
         $sql = <<<EOF
-INSERT INTO jobs(id,allow_failure,state,created_at,build_id,private) 
+INSERT INTO jobs(id,allow_failure,state,created_at,build_id) 
 
-values(null,?,?,?,?,?)
+values(null,?,?,?,?)
 EOF;
 
-        return DB::insert($sql, [0, 'pending', time(), $job_id, 0]);
+        return DB::insert($sql, [0, 'pending', time(), $build_id]);
     }
 
     /**
