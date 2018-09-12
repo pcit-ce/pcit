@@ -7,21 +7,37 @@ namespace KhsCI\Service\Checks;
 class RunData
 {
     public $repo_full_name;
+
     public $name;
+
     public $branch;
+
     public $commit_id;
+
     public $details_url;
+
     public $external_id;
+
     public $status;
+
     public $started_at = null;
+
     public $completed_at = null;
+
     public $conclusion = null;
+
     public $title = null;
+
     public $summary = null;
+
     public $text = null;
+
     public $annotations = null;
+
     public $images = null;
+
     public $actions = null;
+
     public $check_run_id;
 
     public function __construct(string $repo_full_name,

@@ -7,7 +7,9 @@ namespace KhsCI\Support\Webhooks\GitHub\UserBasicInfo;
 class Sender
 {
     public $uid;
+
     public $username;
+
     public $pic;
 
     public function __construct($sender)

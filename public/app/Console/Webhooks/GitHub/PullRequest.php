@@ -82,7 +82,7 @@ class PullRequest
 
         Build::updateBuildStatus((int) $last_insert_id, 'pending');
 
-        $comment_body = <<<EOF
+        $comment_body = <<<'EOF'
 You can add label **merge**, when test is pass, I will merge this Pull_request auto        
 
 
@@ -123,7 +123,7 @@ EOF;
         ] = $array;
         // 创建一条评论
 
-        $comment_body = <<<EOF
+        $comment_body = <<<'EOF'
 You already assigned me, when test is pass, I will merge this Pull_request auto        
 
 
@@ -151,7 +151,7 @@ EOF;
 
         ] = $array;
 
-        $comment_body = <<<EOF
+        $comment_body = <<<'EOF'
 You already add label **merge**, when test is pass, I will merge this Pull_request auto        
 
 

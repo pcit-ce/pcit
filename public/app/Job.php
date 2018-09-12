@@ -46,7 +46,7 @@ class Job extends DBModel
      */
     public static function create(int $build_id)
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT INTO jobs(id,allow_failure,state,created_at,build_id) 
 
 values(null,?,?,?,?)

@@ -321,7 +321,7 @@ EOF;
             goto a;
         }
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT INTO repo(
 id,git_type, rid, repo_full_name,default_branch,
 last_sync,build_activate,webhooks_status
@@ -356,7 +356,7 @@ EOF;
      */
     public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
             DELETE repo FROM user LEFT JOIN repo ON repo.repo_full_name LIKE CONCAT(user.username,"/%") 
             where user.installation_id = ?
 EOF;

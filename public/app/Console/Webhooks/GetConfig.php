@@ -13,7 +13,9 @@ use KhsCI\Support\Log;
 class GetConfig
 {
     private $rid;
+
     private $commit_id;
+
     private $git_type;
 
     public function __construct(int $rid, string $commit_id, $git_type = 'github')

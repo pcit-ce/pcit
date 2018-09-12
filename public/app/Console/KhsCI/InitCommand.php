@@ -34,7 +34,7 @@ class InitCommand extends Command
             throw new Exception('.khsci.yml exists, skip', 500);
         }
 
-        $content = <<<EOF
+        $content = <<<'EOF'
 #
 # @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
 #
@@ -65,7 +65,7 @@ pipeline:
   #
 
   php:
-    image: khs1994/php-fpm:\${PHP_VERSION}
+    image: khs1994/php-fpm:${PHP_VERSION}
     pull: true
     environment:
       - a=1
@@ -94,7 +94,7 @@ pipeline:
 
 services:
   mysql:
-    image: mysql:\${MYSQL_VERSION}
+    image: mysql:${MYSQL_VERSION}
     environment:
       - MYSQL_DATABASE=test
       - MYSQL_ROOT_PASSWORD=mytest
@@ -102,17 +102,17 @@ services:
     command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # postgresql:
-  #   image: postgres:\${POSTGRESQL_VERSION}
+  #   image: postgres:${POSTGRESQL_VERSION}
   #   environment:
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_DB=test
 
   redis:
-    image: redis:\${REDIS_VERSION}
+    image: redis:${REDIS_VERSION}
     command: ["--bind", "0.0.0.0"]
 
   # mongodb:
-  #   image: mongo:\${MONGODB_VERSION}
+  #   image: mongo:${MONGODB_VERSION}
   #   command: [ --smallfiles ]
 
 matrix:

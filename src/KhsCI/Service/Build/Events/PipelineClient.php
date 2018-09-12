@@ -15,8 +15,11 @@ use KhsCI\Support\Log;
 class PipelineClient
 {
     private $pipeline;
+
     private $matrix_config;
+
     private $build;
+
     private $client;
 
     public function __construct($pipeline, BuildData $build, Client $client, ?array $matrix_config)
@@ -153,7 +156,7 @@ class PipelineClient
         }
 
         if (\is_string($status)) {
-            if (\in_array($status, ['failure', 'success', 'changed'])) {
+            if (\in_array($status, ['failure', 'success', 'changed'], true)) {
                 return $status === $target;
             }
         }

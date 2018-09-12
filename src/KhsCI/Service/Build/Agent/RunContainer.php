@@ -51,6 +51,7 @@ class RunContainer
                 // 某一 job 失败
                 $this->after($job_id, 'failure');
                 Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+
                 throw new CIException($e->getMessage(), $e->getCode());
             } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                 // 某一 job success
@@ -62,6 +63,7 @@ class RunContainer
                 Job::updateFinishedAt($job_id);
                 // 清理某一 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);
+
                 throw new \Exception($e->getMessage(), $e->getCode());
             }
         }
@@ -101,6 +103,7 @@ class RunContainer
 
             if (!\is_string($container_config)) {
                 Log::debug(__FILE__, __LINE__, 'Container config empty', [], Log::EMERGENCY);
+
                 break;
             }
 
@@ -114,18 +117,21 @@ class RunContainer
             if ($success) {
                 Log::debug('This pipeline is a success after job');
                 Cache::store()->lPush($job_id.'_success', $container_config);
+
                 continue;
             }
 
             if ($failure) {
                 Log::debug('This pipeline is a failure after job');
                 Cache::store()->lPush($job_id.'_failure', $container_config);
+
                 continue;
             }
 
             if ($changed) {
                 Log::debug('This pipeline is a changed after job');
                 Cache::store()->lPush($job_id.'_changed', $container_config);
+
                 continue;
             }
 

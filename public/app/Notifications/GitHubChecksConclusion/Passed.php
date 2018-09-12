@@ -12,7 +12,7 @@ use KhsCI\Support\CI;
 
 class Passed
 {
-    protected static $header = <<<EOF
+    protected static $header = <<<'EOF'
 # About KhsCI
 
 **China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI**

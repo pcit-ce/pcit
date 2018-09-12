@@ -80,7 +80,7 @@ class UpCommand extends Command
         //创建子进程
         $pid = pcntl_fork();
         //子进程
-        if (0 == $pid) {
+        if (0 === $pid) {
             $up = new Up();
             $up->up();
 

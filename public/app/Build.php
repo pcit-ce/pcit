@@ -173,7 +173,7 @@ class Build extends DBModel
      */
     public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) AND event_type NOT IN (?)
 ORDER BY id DESC LIMIT 1
 EOF;

@@ -12,7 +12,9 @@ use KhsCI\Support\Cache;
 class ServicesClient
 {
     private $job_id;
+
     private $service;
+
     private $matrix_config;
 
     public function __construct($service, int $job_id, ?array $matrix_config)

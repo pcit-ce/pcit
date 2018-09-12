@@ -73,6 +73,7 @@ khsci env get   VAR_ID
                     'repo/'.$repo.'/env_vars',
                     null,
                     true);
+
                 break;
 
             case 'set':
@@ -99,6 +100,7 @@ khsci env get   VAR_ID
                     null,
                     true
                 );
+
                 break;
 
             case 'get':

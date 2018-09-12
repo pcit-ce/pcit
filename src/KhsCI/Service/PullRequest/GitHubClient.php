@@ -239,12 +239,15 @@ class GitHubClient
         switch ($merge_method) {
             case 1:
                 $merge_method = 'merge';
+
                 break;
             case 2:
                 $merge_method = 'squash';
+
                 break;
             case 3:
                 $merge_method = 'rebase';
+
                 break;
         }
 
