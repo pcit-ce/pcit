@@ -95,7 +95,7 @@ class CI
         if (null === $env) {
             return $current_env;
         } elseif (\is_array($env)) {
-            return \in_array($current_env, $env);
+            return \in_array($current_env, $env, true);
         }
 
         return $env === $current_env;

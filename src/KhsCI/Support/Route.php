@@ -111,8 +111,8 @@ class Route
             $urlArray = explode('/', $url);
 
             if (\count($targetUrlArray) === \count($urlArray)) {
-                if (!(false === ($int = array_search('{git_type}', $targetUrlArray)))) {
-                    if (!\in_array($urlArray[$int], Git::SUPPORT_GIT_ARRAY)) {
+                if (!(false === ($int = array_search('{git_type}', $targetUrlArray, true)))) {
+                    if (!\in_array($urlArray[$int], Git::SUPPORT_GIT_ARRAY, true)) {
                         return;
                     }
                 }

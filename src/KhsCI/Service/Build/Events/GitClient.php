@@ -15,7 +15,9 @@ use KhsCI\Support\Git;
 class GitClient
 {
     private $git;
+
     private $build;
+
     private $client;
 
     public function __construct($git, BuildData $build, Client $client)

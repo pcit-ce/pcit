@@ -231,6 +231,7 @@ class ReleasesGitHubClient
             foreach (json_decode($asset) as $k) {
                 if ($label === $k->label) {
                     $this->deleteAsset($repo_full_name, $k->id);
+
                     break;
                 }
             }

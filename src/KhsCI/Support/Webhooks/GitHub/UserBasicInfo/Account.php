@@ -10,10 +10,15 @@ namespace KhsCI\Support\Webhooks\GitHub\UserBasicInfo;
 class Account
 {
     public $uid;
+
     public $name;
+
     public $username;
+
     public $email;
+
     public $pic;
+
     public $org;
 
     public function __construct($repository_owner, bool $org = false)

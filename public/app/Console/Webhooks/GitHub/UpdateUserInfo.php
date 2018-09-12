@@ -17,9 +17,13 @@ use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Sender;
 class UpdateUserInfo
 {
     private $account;
+
     private $installation_id;
+
     private $rid;
+
     private $repo_full_name;
+
     private $sender;
 
     /**

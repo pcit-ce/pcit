@@ -30,7 +30,7 @@ class PullRequest
 
         Log::debug(null, null, 'Receive event', ['pull request' => $action], Log::INFO);
 
-        if (!\in_array($action, ['opened', 'synchronize'])) {
+        if (!\in_array($action, ['opened', 'synchronize'], true)) {
             'assigned' === $action && $array = self::assigned($json_content);
             'labeled' === $action && $array = self::labeled($json_content);
             'unlabeled' === $action && $array = self::labeled($json_content, true);

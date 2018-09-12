@@ -52,7 +52,7 @@ class Issues
 
         $labels && Issue::updateLabels($labels, 'github', $issue_id);
 
-        if (\in_array($action, ['opened', 'edited', 'closed' or 'reopened'])) {
+        if (\in_array($action, ['opened', 'edited', 'closed' or 'reopened'], true)) {
             Issue::insert(
                 'github', $rid, $issue_id, $issue_number, $action, $title, $body,
                 $sender_username, $sender_uid, $sender_pic,

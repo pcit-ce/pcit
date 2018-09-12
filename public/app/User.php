@@ -118,13 +118,13 @@ class User extends DBModel
      */
     public static function setOrgAdmin(int $org_id, int $admin_uid, string $git_type = 'github'): void
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 UPDATE user SET org_admin=? WHERE git_type=? AND uid=? AND JSON_VALID(org_admin) IS NULL
 EOF;
 
         DB::update($sql, ['[]', $git_type, $org_id]);
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 UPDATE user SET org_admin=JSON_MERGE_PRESERVE(org_admin,?) 
 
 WHERE git_type=? AND uid=? AND NOT JSON_CONTAINS(org_admin,JSON_QUOTE(?))

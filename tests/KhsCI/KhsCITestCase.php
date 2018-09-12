@@ -69,7 +69,7 @@ class KhsCITestCase extends TestCase
 
         // repo
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT INTO repo VALUES(
 
 null,'github_app',1,'khs1994-php','khsci'
@@ -92,7 +92,7 @@ EOF;
 
         // builds
 
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 INSERT INTO builds VALUES(
 null,'github_app',1,'push','master',null,null,null,null,1,'commit message [skip ci]','admin',
 'khs1994@khs1994.com','admin',?,null,null,null,'skip','[]',null,null,null,null,null,null

@@ -10,6 +10,7 @@ use KhsCI\Service\OAuth\CodingClient;
 class OAuthCodingController extends OAuthGitHubController
 {
     use OAuthTrait;
+
     /**
      * @var CodingClient
      */

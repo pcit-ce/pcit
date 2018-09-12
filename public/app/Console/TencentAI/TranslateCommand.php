@@ -19,7 +19,7 @@ class TranslateCommand extends Command
     {
         $this->setName('translate');
 
-        $this->setDescription(<<<EOF
+        $this->setDescription(<<<'EOF'
 Text translation interface provides automatic translation capabilities, can help you quickly complete a text translation, support for Chinese, English, german, French, Japanese, Korean, Spanish and Cantonese.
 EOF
         );

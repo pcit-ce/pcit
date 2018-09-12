@@ -11,8 +11,11 @@ use KhsCI\Support\Log;
 class Skip
 {
     private $commit_message;
+
     private $build_key_id;
+
     private $branch;
+
     private $config;
 
     /**

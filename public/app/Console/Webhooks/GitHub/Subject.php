@@ -12,6 +12,7 @@ use App\Console\Webhooks\GetConfig;
 class Subject
 {
     private $observers = [];
+
     /**
      * @var array
      */
@@ -32,6 +33,7 @@ class Subject
         foreach ($this->observers as $obj) {
             if ($obj instanceof GetConfig) {
                 $this->config_array = $obj->handle();
+
                 continue;
             }
 

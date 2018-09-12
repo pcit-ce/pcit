@@ -49,6 +49,7 @@ class GetAccessToken
 
             if ($output) {
                 $accessToken = $output;
+
                 break;
             }
         }
