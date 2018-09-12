@@ -28,7 +28,7 @@
     "doctrine/cache": "^1.6",
     "firebase/php-jwt": "^5.0",
     "khs1994/curl": "~18.06.0",
-    "khs1994/docker": "dev-master",
+    "khs1994/docker": "~18.06.02",
     "khs1994/tencent-ai": "~18.06.02",
     "khs1994/wechat": "dev-master",
     "monolog/monolog": "^1.23",
@@ -66,7 +66,7 @@
       "KhsCI\\Tests\\Plugins\\": "tests/Plugins/"
     }
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
     "branch-alias": {
