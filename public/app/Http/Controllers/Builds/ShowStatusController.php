@@ -20,6 +20,10 @@ class ShowStatusController
     {
         $branch = $_GET['branch'] ?? null;
 
+        list($git_type, $username, $repo) = $arg;
+
+        $arg = [$username, $repo, $git_type];
+
         if (!$branch) {
             $branch = Repo::getDefaultBranch(...$arg) ?? 'master';
         }

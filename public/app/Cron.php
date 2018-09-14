@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Cron;
+namespace App;
 
 use KhsCI\Support\DBModel;
 

@@ -29,7 +29,7 @@
     "firebase/php-jwt": "^5.0",
     "khs1994/curl": "~18.06.0",
     "khs1994/docker": "~18.06.02",
-    "khs1994/tencent-ai": "~18.06.02",
+    "khs1994/tencent-ai": "~18.06.03",
     "khs1994/wechat": "dev-master",
     "monolog/monolog": "^1.23",
     "nunomaduro/collision": "^2.0",
