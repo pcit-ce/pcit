@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Tests;
 
-use App\Console\Migrate;
+use App\Console\KhsCIDaemon\Migrate;
 use App\User;
 use Dotenv\Dotenv;
 use Exception;
@@ -60,23 +60,18 @@ class KhsCITestCase extends TestCase
     public function insertDB(): void
     {
         // User
+        User::updateUserInfo(1, null, 'admin', 'khs1994@khs1994.com', null, false, 'githu');
 
-        User::updateUserInfo('github_app', 1, 'admin', 'khs1994@khs1994.com', null, null);
+        User::updateUserInfo(2, null, 'other', 'other@khs1994.com', null, false, 'github');
 
-        User::updateUserInfo('github_app', 2, 'other', 'other@khs1994.com', null, null);
-
-        User::updateUserInfo('github_app', 3, 'three', 'three@khs1994.com', null, null);
+        User::updateUserInfo(3, null, 'three', 'three@khs1994.com', null, false, 'github');
 
         // repo
-
         $sql = <<<'EOF'
 INSERT INTO repo VALUES(
-
-null,'github_app',1,'khs1994-php','khsci'
-,'khs1994-php/khsci',1,1,?,null,'master','1',1,null,null,null,null,null,null,null
+null,'github',1,'khs1994-php','khsci','khs1994-php/khsci',1,1,?,null,'master'
 ),(
-null,'github_app',2,'khs1994-php','other'
-,'khs1994-php/other',1,1,?,null,'master','1',1,null,null,null,null,null,null,null
+null,'github',2,'khs1994-php','other','khs1994-php/other',1,1,?,null,'master'
 )
 EOF;
 

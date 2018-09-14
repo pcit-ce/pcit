@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\SSE;
+namespace App\Http\Controllers\Demo\SSE;
 
 class SSEController
 {

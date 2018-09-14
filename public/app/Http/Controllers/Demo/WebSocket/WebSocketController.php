@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\WebSocket;
+namespace App\Http\Controllers\Demo\WebSocket;
 
 class WebSocketController
 {
