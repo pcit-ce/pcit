@@ -6,7 +6,7 @@ use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../public/bootstrap/app.php';
 
-$cli = new Application('KhsCI CLI', 'v18.06');
+$cli = new Application('PCIT CLI', 'v18.06');
 
 $fh = opendir(__DIR__.'/../../public/app/Console/KhsCI/Repo');
 

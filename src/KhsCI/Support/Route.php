@@ -9,8 +9,6 @@ use Error;
 use Exception;
 
 /**
- * Class Route.
- *
  * @method static get(string $url, Closure | string $action)
  * @method static post(string $url, Closure | string $action)
  * @method static delete(string $url, Closure | string $action)

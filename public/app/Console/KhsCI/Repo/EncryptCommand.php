@@ -11,6 +11,6 @@ class EncryptCommand extends Command
     public function configure(): void
     {
         $this->setName('encrypt');
-        $this->setDescription('Encrypts values for the .khsci.yml');
+        $this->setDescription('Encrypts values for the .pcit.yml');
     }
 }

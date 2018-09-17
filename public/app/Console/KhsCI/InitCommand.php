@@ -15,7 +15,7 @@ class InitCommand extends Command
     {
         $this->setName('init');
 
-        $this->setDescription('Generates a .khsci.yml');
+        $this->setDescription('Generates a .pcit.yml');
     }
 
     /**

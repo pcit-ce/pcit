@@ -19,17 +19,9 @@ use Symfony\Component\Finder\Finder;
 $iterator = Finder::create()
     ->files()
     ->name('*.php')
-    ->exclude('docs')
-    ->exclude('examples')
-    ->exclude('miniapp')
-    ->exclude('config')
-    ->exclude('demo')
-    ->exclude('resource')
-    ->exclude('tests')
-    ->exclude('vendor')
-    ->exclude('build')
-    ->exclude('cache')
-    ->in($dir = __DIR__);
+    // ->exclude('docs')
+    ->in(__DIR__.'/src')
+    ->in(__DIR__.'/public');
 
 // $versions = GitVersionCollection::create($dir)
 //     ->addFromTags('18.*.*')// add tag

@@ -1,14 +1,14 @@
-# KhsCI
+# PCIT (PHP CI TOOLKIT) PHP 持续集成工具
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/khsci.svg?style=social&label=Stars)](https://github.com/khs1994-php/khsci) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/khsci.svg)](https://packagist.org/packages/khs1994/khsci) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/khsci/all.svg)](https://github.com/khs1994-php/khsci/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/khsci/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/khsci) [![codecov](https://codecov.io/gh/khs1994-php/khsci/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/khsci)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/pcit.svg?style=social&label=Stars)](https://github.com/khs1994-php/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/pcit/all.svg)](https://github.com/khs1994-php/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/pcit/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/pcit) [![codecov](https://codecov.io/gh/khs1994-php/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/pcit)
 
 **国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的开源云原生 CI/CD 系统**
 
 * [Support Docs](https://docs.ci.khs1994.com)
 
-* [Changelog](https://github.com/khs1994-php/khsci/blob/master/CHANGELOG.md)
+* [Changelog](https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md)
 
-* [Feedback](https://github.com/khs1994-php/khsci/issues)
+* [Feedback](https://github.com/khs1994-php/pcit/issues)
 
 * [API](https://ci.khs1994.com/api)
 
@@ -16,7 +16,7 @@
 
 * [Donate](https://zan.khs1994.com)
 
-* [KhsCI EE](https://github.com/khs1994-php/khsci/tree/master/docs#about-khsci-ce-and-ee)
+* [KhsCI EE](https://github.com/khs1994-php/pcit/tree/master/docs#about-pcit-ce-and-ee)
 
 ## What is Continuous Integration (CI)?
 
@@ -54,9 +54,9 @@ Cloud native computing uses an open source software stack to be:
 
 ## 使用方法
 
-* 点击 [KhsCI](https://github.com/apps/khsci) 安装 **KhsCI** `GitHub App`
+* 点击 [KhsCI](https://github.com/apps/pcit) 安装 **KhsCI** `GitHub App`
 
-* Git 仓库根目录包含 [`.khsci.yml`](https://github.com/khs1994-php/khsci/tree/master/yml_examples) 来配置 CI 规则（**需要私有部署 KhsCI**）。
+* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/khs1994-php/pcit/tree/master/yml_examples) 来配置 CI 规则（**需要私有部署 KhsCI**）。
 
 ```yaml
 pipeline:
@@ -74,7 +74,7 @@ pipeline:
 
 > KhsCI CE not support CI Feature(build test deployment) now, only support issues bot comments.As known as Public Cloud
 
-[Install GitHub App](https://github.com/khs1994-php/khsci/tree/master/docs)
+[Install GitHub App](https://github.com/khs1994-php/pcit/tree/master/docs)
 
 > You can [DONATE](https://zan.khs1994.com) KhsCI, MAYBE KhsCI CE will support free full CI features(build test deployment and more)
 
@@ -99,18 +99,18 @@ To install **KhsCI EE** in your host, simply:
 
 $ git clone --recursive https://github.com/khs1994-docker/lnmp.git ~/lnmp
 
-$ composer create-project khs1994/khsci:dev-master ~/lnmp/app/khsci
+$ composer create-project khs1994/pcit:dev-master ~/lnmp/app/pcit
 
 $ cd lnmp
 
-# read lnmp/khsci/README.md, then exec
+# read lnmp/pcit/README.md, then exec
 
-$ ./lnmp-docker.sh khsci-up
+$ ./lnmp-docker.sh pcit-up
 ```
 
 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 GitHub App， 填入相关信息，在你的 Git 仓库安装注册好的 GitHub App 即可。
 
-更多信息请查看 https://github.com/khs1994-php/khsci/blob/master/docs/install/ee.md
+更多信息请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
 
 ## Support
 

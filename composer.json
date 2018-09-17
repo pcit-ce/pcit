@@ -1,11 +1,11 @@
 {
-  "name": "khs1994/khsci",
-  "description": "CI/CD System Based Docker Powered by PHP",
+  "name": "khs1994/pcit",
+  "description": "A CI/CD System Based Docker Written by PHP",
   "keywords": [
     "ci",
     "docker"
   ],
-  "homepage": "https://github.com/khs1994-php/khsci",
+  "homepage": "https://github.com/khs1994-php/pcit",
   "type": "project",
   "license": "MIT",
   "authors": [
@@ -16,15 +16,15 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/khs1994-php/khsci/issues"
+    "issues": "https://github.com/khs1994-php/pcit/issues"
   },
   "require": {
     "php": ">=7.1",
     "ext-PDO": "*",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-yaml": "*",
     "ext-redis": "*",
+    "ext-yaml": "*",
     "doctrine/cache": "^1.6",
     "firebase/php-jwt": "^5.0",
     "khs1994/curl": "~18.06.0",
@@ -37,6 +37,7 @@
     "pimple/pimple": "~3.0",
     "symfony/console": "^3.4",
     "symfony/var-dumper": "^3.4",
+    "symfony/yaml": "^3.4",
     "vlucas/phpdotenv": "*"
   },
   "require-dev": {

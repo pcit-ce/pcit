@@ -1,3 +1,3 @@
 # Overview
 
-Welcome to the **KhsCI** API documentation.
+Welcome to the **PCIT** API documentation.

@@ -1,4 +1,4 @@
-# KhsCI Documents
+# PCIT Documents
 
 **KhsCI** 划分为 **CE** 和 **EE** 两大版本。
 
@@ -12,11 +12,11 @@
 
 ### 安装 KhsCI GitHub App
 
-在 https://github.com/apps/khsci 点击右边的 `Install` 按钮，在稍后跳转的页面中选择你新建的 **仓库**
+在 https://github.com/apps/pcit 点击右边的 `Install` 按钮，在稍后跳转的页面中选择你新建的 **仓库**
 
 ### 体验 Issue 内容中英互译
 
-在你的 **仓库** 新建一个 Issue (内容不能为空)，提交之后，可以看到 `khsci[bot]` 回复了这个 Issue
+在你的 **仓库** 新建一个 Issue (内容不能为空)，提交之后，可以看到 `pcit[bot]` 回复了这个 Issue
 
 ## KhsCI EE
 
@@ -34,9 +34,9 @@
 $ git clone https://github.com/khs1994-docker/php-demo
 ```
 
-#### 编辑 `.khsci.yml` 文件
+#### 编辑 `.pcit.yml` 文件
 
-为降低入门难度，参考了 `Drone CI` 与 `Travis CI` 构建配置模板，**KhsCI** 的构建配置文件名为 `.khsci.yml`
+为降低入门难度，参考了 `Drone CI` 与 `Travis CI` 构建配置模板，**KhsCI** 的构建配置文件名为 `.pcit.yml`
 
 #### 推送到 GitHub
 
@@ -58,7 +58,7 @@ $ git push origin master
 
 **KhsCI** 由 **PHP 后端**（Webhooks Server + Daemon CLI）和 **GitHub App** 组成。
 
-[Coming Soon !](https://github.com/khs1994-php/khsci/blob/master/docs/install/ee.md)
+[Coming Soon !](https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md)
 
 # About KhsCI CE and EE
 

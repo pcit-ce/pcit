@@ -41,18 +41,18 @@ class GetConfig
             'git_type' => $git_type, 'rid' => $rid, 'repo_full_name' => $repo_full_name, ],
             Log::INFO);
 
-        $url = Git::getRawUrl($git_type, $repo_full_name, $commit_id, '.khsci.yml');
+        $url = Git::getRawUrl($git_type, $repo_full_name, $commit_id, '.pcit.yml');
 
         $yaml_file_content = HTTP::get($url, null, [], 20);
 
         if (404 === Http::getCode()) {
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml", [], Log::INFO);
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .pcit.yml", [], Log::INFO);
 
             return [];
         }
 
         if (!$yaml_file_content) {
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .khsci.yml", [], Log::INFO);
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include .pcit.yml", [], Log::INFO);
 
             return [];
         }
@@ -60,7 +60,7 @@ class GetConfig
         $config = yaml_parse($yaml_file_content);
 
         if (!$config) {
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id .khsci.yml parse error", [], Log::INFO);
+            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id .pcit.yml parse error", [], Log::INFO);
 
             return [];
         }
