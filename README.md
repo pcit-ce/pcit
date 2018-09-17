@@ -16,7 +16,7 @@
 
 * [Donate](https://zan.khs1994.com)
 
-* [KhsCI EE](https://github.com/khs1994-php/pcit/tree/master/docs#about-pcit-ce-and-ee)
+* [PCIT EE](https://github.com/khs1994-php/pcit/tree/master/docs#about-pcit-ce-and-ee)
 
 ## What is Continuous Integration (CI)?
 
@@ -28,11 +28,11 @@
 
 ![ci](https://user-images.githubusercontent.com/16733187/41330207-9416717c-6f04-11e8-961f-c606303e7bb5.jpg)
 
-作为一个持续集成系统，**KhsCI** 通过自动 **构建** 和 **测试** 代码变更来支持团队的软件开发过程，为代码变更的构建状态提供即时的反馈。KhsCI 还可以通过管理部署和通知来自动化开发过程的其他部分。
+作为一个持续集成系统，**PCIT** 通过自动 **构建** 和 **测试** 代码变更来支持团队的软件开发过程，为代码变更的构建状态提供即时的反馈。PCIT 还可以通过管理部署和通知来自动化开发过程的其他部分。
 
-当您提交代码到 Git，KhsCI 会进行构建，将您的 Git 仓库克隆到一个容器环境中，并执行一系列构建和测试代码的任务。如果其中一项或多项任务失败，则认为构建失败。如果没有任何任务失败，构建被认为通过，KhsCI 可以将您的代码部署到 Web 服务器、应用程序主机或容器集群中。
+当您提交代码到 Git，PCIT 会进行构建，将您的 Git 仓库克隆到一个容器环境中，并执行一系列构建和测试代码的任务。如果其中一项或多项任务失败，则认为构建失败。如果没有任何任务失败，构建被认为通过，PCIT 可以将您的代码部署到 Web 服务器、应用程序主机或容器集群中。
 
-KhsCI 还可以使您的 **交付工作** 的其他部分实现自动化。这意味着您可以使用构建阶段相互依赖工作，设置通知，在构建之后准备部署以及执行许多其他任务。
+PCIT 还可以使您的 **交付工作** 的其他部分实现自动化。这意味着您可以使用构建阶段相互依赖工作，设置通知，在构建之后准备部署以及执行许多其他任务。
 
 ## What is Cloud Native?
 
@@ -42,9 +42,9 @@ Cloud native computing uses an open source software stack to be:
 2. **Dynamically orchestrated.** Containers are actively scheduled and managed to optimize resource utilization.
 3. **Microservices oriented.** Applications are segmented into microservices. This significantly increases the overall agility and maintainability of applications.
 
-## About KhsCI
+## About PCIT
 
-**KhsCI** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** 三部分组成
+**PCIT** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** 三部分组成
 
 * **Webhooks Server** 接收 Git 数据
 
@@ -54,9 +54,9 @@ Cloud native computing uses an open source software stack to be:
 
 ## 使用方法
 
-* 点击 [KhsCI](https://github.com/apps/pcit) 安装 **KhsCI** `GitHub App`
+* 点击 [PCIT-CE](https://github.com/apps/pcit-ce) 安装 **PCIT CE** `GitHub App`
 
-* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/khs1994-php/pcit/tree/master/yml_examples) 来配置 CI 规则（**需要私有部署 KhsCI**）。
+* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/khs1994-php/pcit/tree/master/yml_examples) 来配置 CI 规则（**需要私有部署 PCIT**）。
 
 ```yaml
 pipeline:
@@ -70,17 +70,17 @@ pipeline:
 
 * 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
 
-## Try Demo (KhsCI CE)
+## Try Demo (PCIT CE)
 
-> KhsCI CE not support CI Feature(build test deployment) now, only support issues bot comments.As known as Public Cloud
+> PCIT CE not support CI Feature(build test deployment) now, only support issues bot comments.As known as Public Cloud
 
 [Install GitHub App](https://github.com/khs1994-php/pcit/tree/master/docs)
 
-> You can [DONATE](https://zan.khs1994.com) KhsCI, MAYBE KhsCI CE will support free full CI features(build test deployment and more)
+> You can [DONATE](https://zan.khs1994.com) PCIT, MAYBE PCIT CE will support free full CI features(build test deployment and more)
 
-## Self-Hosting (KhsCI EE)
+## Self-Hosting (PCIT EE)
 
-> Only KhsCI EE Support Full CI Features(build test deployment and more). As known as Private Cloud
+> Only PCIT EE Support Full CI Features(build test deployment and more). As known as Private Cloud
 
 * ~~PHP~~
 
@@ -92,7 +92,7 @@ pipeline:
 
 * **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) and [Website SSL/TLS Certificates](https://github.com/Neilpang/acme.sh)
 
-To install **KhsCI EE** in your host, simply:
+To install **PCIT EE** in your host, simply:
 
 ```bash
 # install khs1994-docker/lnmp
@@ -116,9 +116,9 @@ $ ./lnmp-docker.sh pcit-up
 
 ![](https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg)
 
-扫码关注 **KhsCI** 微信公众平台，寻求 **KhsCI** 团队支持。
+扫码关注 **PCIT** 微信公众平台，寻求 **PCIT** 团队支持。
 
-## Projects for KhsCI
+## Projects for PCIT
 
 * [Docker PHP](https://github.com/khs1994-docker/libdocker)
 

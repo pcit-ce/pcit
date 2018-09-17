@@ -18,8 +18,8 @@ class MessageServer
     {
         $khsci = new KhsCI();
 
-        return $khsci->wechat->server->push(function () {
+        return $khsci->wechat->server->pushHandler(function ($message) {
             return null;
-        })->serve();
+        })->register();
     }
 }
