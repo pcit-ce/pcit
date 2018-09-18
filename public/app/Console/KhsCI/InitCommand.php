@@ -28,15 +28,15 @@ class InitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $current_file = getcwd().'/.khsci.yml';
+        $current_file = getcwd().'/.pcit.yml';
 
         if (file_exists($current_file)) {
-            throw new Exception('.khsci.yml exists, skip', 500);
+            throw new Exception('.pcit.yml exists, skip', 500);
         }
 
         $content = <<<'EOF'
 #
-# @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
+# @see https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
 #
         
 clone:
@@ -140,15 +140,15 @@ config:
   aliyun:
     docker_registry:
       # registry: git_repo_full_name
-      # khs1994/wsl: khs1994-php/khsci
+      # khs1994/wsl: khs1994-php/pcit
 
   tencent_cloud:
     docker_registry:
-      # khs1994/wsl: khs1994-php/khsci      
+      # khs1994/wsl: khs1994-php/pcit    
 EOF;
 
         file_put_contents($current_file, $content);
 
-        return $output->write('.khsci.yml Generate Success');
+        return $output->write('.pcit.yml Generate Success');
     }
 }

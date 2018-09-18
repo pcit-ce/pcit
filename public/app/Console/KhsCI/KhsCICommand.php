@@ -26,7 +26,7 @@ class KhsCICommand
             $home = exec('echo $HOME');
         }
 
-        $folder_name = $home.'/.khsci';
+        $folder_name = $home.'/.pcit';
 
         if (!is_dir($folder_name)) {
             mkdir($folder_name);
@@ -51,7 +51,7 @@ class KhsCICommand
             'repo',
             'r',
             InputOption::VALUE_REQUIRED,
-            'Repository to use (will try to detect from current git clone) <comment>[example: "khs1994-php/khsci"]</comment>',
+            'Repository to use (will try to detect from current git clone) <comment>[example: "khs1994-php/pcit"]</comment>',
         ];
     }
 
@@ -61,7 +61,7 @@ class KhsCICommand
             'api-endpoint',
             'e',
             InputOption::VALUE_OPTIONAL,
-            'KhsCI API server to talk to',
+            'PCIT API server to talk to',
             Env::get('CI_HOST', 'https://ci.khs1994.com'),
         ];
     }
@@ -315,7 +315,7 @@ class KhsCICommand
         }
 
         throw new Exception(
-            'Please specify the repo name via the -r option (e.g. khsci <command> -r <owner>/<repo>)',
+            'Please specify the repo name via the -r option (e.g. pcit <command> -r <owner>/<repo>)',
             500
         );
     }

@@ -94,21 +94,24 @@ pipeline:
     # dockerfile: path/to/Dockerfile
     when:
       event: tag
-    environment:
-    - DOCKER_USERNAME=username
-    - DOCKER_PASSWORD=password
+    # please set env in settings
+    # environment:
+    # - DOCKER_USERNAME=username
+    # - DOCKER_PASSWORD=password
 
   # This is success after demo
   after_success:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    image: bash
     shell: bash
     when:
       statue: success
+    # please set env in settings
+    # environment:
+    #   - CODECOV_TOKEN=XXX
     commands:
-    # set env CODECOV_TOKEN=XXX
-    - bash <(curl -s https://codecov.io/bash)
+      - bash <(curl -s https://codecov.io/bash)
 
-  #  success:
+  #  upload_file:
   #    image: khs1994/tencent_cloud_cos:v4
   #    when:
   #      status: success
@@ -124,7 +127,7 @@ pipeline:
   #      # - COS_V4_SECRET_KEY=x
   #      # - COS_V4_BUCKET=x
 
-  #  deploy:
+  #  github_releases:
   #    image: khs1994/github_releases
   #    when:
   #      status: success

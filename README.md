@@ -14,6 +14,8 @@
 
 * [API Docs](https://api.ci.khs1994.com)
 
+* [Plugins](https://github.com/khs1994-php/pcit/tree/master/plugins)
+
 * [Donate](https://zan.khs1994.com)
 
 * [PCIT EE](https://github.com/khs1994-php/pcit/tree/master/docs#about-pcit-ce-and-ee)
@@ -42,9 +44,9 @@ Cloud native computing uses an open source software stack to be:
 2. **Dynamically orchestrated.** Containers are actively scheduled and managed to optimize resource utilization.
 3. **Microservices oriented.** Applications are segmented into microservices. This significantly increases the overall agility and maintainability of applications.
 
-## 关于 PCIT
+## PCIT 架构
 
-**PCIT** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** + 开放平台（插件、API）四部分组成
+**PCIT** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** + **开放平台**（`插件`、`API`）四部分组成
 
 * **Webhooks Server** 接收 Git 数据
 
@@ -81,9 +83,15 @@ pipeline:
 
 > 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
 
+### 特色
+
+* 无账号体系，采用（OAuth2）保障用户数据安全
+
+* 不提供繁杂的图形化配置界面，一切 CI 规则均可通过 `.pcit.yml` 文件定义
+
 ## 尝试 Demo (PCIT CE)
 
-PCIT 社区版(CE) 目前不支持持续集成功能（公有云），仅支持 Issues 机器中英互译。
+由于项目云计算资源有限，PCIT 提供了 PCIT 社区版(CE) 以供用户体验 Demo。暂时不支持 **持续集成** 功能（公有云），仅支持 [Issues 中英互译](https://github.com/khs1994-php/pcit/issues/95)。
 
 [安装 GitHub App](https://github.com/khs1994-php/pcit/tree/master/docs)
 
@@ -108,7 +116,10 @@ PCIT 社区版(CE) 目前不支持持续集成功能（公有云），仅支持 
 ```bash
 # install khs1994-docker/lnmp
 
-$ git clone --recursive https://github.com/khs1994-docker/lnmp.git ~/lnmp
+$ git clone https://github.com/khs1994-docker/lnmp.git ~/lnmp
+
+# 中国镜像
+# $ git clone https://gitee.com/khs1994-docker/lnmp.git ~/lnmp
 
 $ composer create-project khs1994/pcit ~/lnmp/app/pcit
 
@@ -119,7 +130,13 @@ $ cd lnmp
 $ ./lnmp-docker pcit-up
 ```
 
-在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 GitHub App， 填入相关信息，在你的 Git 仓库安装注册好的 GitHub App 即可。
+* 在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App，用于 **OAuth2** 账号体系
+
+* 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 GitHub App
+
+* 编辑 `~/lnmp/app/public/.env.development` 文件中的变量
+
+* 在你的 Git 仓库安装注册好的 GitHub App 即可。
 
 更多信息请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
 

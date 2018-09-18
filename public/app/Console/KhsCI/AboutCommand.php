@@ -13,14 +13,14 @@ class AboutCommand extends Command
     public function configure(): void
     {
         $this->setName('about');
-        $this->setDescription('Shows the short information about KhsCI');
+        $this->setDescription('Shows the short information about PCIT');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): void
     {
-        $output->write('<info>KhsCI - Test, Build & Deploy Code</info>
+        $output->write('<info>PCIT - Test, Build & Deploy Code</info>
         
-<comment>KhsCI is a CI/CD system based Docker and TencentAI.
+<comment>PCIT is a CI/CD system based Docker and TencentAI.
 See https://ci.khs1994.com for more information.</comment>
         ');
     }
