@@ -1,4 +1,4 @@
-# PCIT (PHP CI TOOLKIT) 使用 PHP 编写的持续集成工具
+# PCIT (PHP CI TOOLKIT) PHP 持续集成工具
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-php/pcit.svg?style=social&label=Stars)](https://github.com/khs1994-php/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/pcit/all.svg)](https://github.com/khs1994-php/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/pcit/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/pcit) [![codecov](https://codecov.io/gh/khs1994-php/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/pcit)
 
@@ -18,7 +18,7 @@
 
 * [PCIT EE](https://github.com/khs1994-php/pcit/tree/master/docs#about-pcit-ce-and-ee)
 
-## 什么是持续集成 Continuous Integration (CI)?
+## What is Continuous Integration (CI)?
 
 * https://www.mindtheproduct.com/2016/02/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/
 
@@ -34,7 +34,7 @@
 
 PCIT 还可以使您的 **交付工作** 的其他部分实现自动化。这意味着您可以使用构建阶段相互依赖工作，设置通知，在构建之后准备部署以及执行许多其他任务。
 
-## 什么是云原生 Cloud Native?
+## What is Cloud Native?
 
 Cloud native computing uses an open source software stack to be:
 
@@ -42,17 +42,15 @@ Cloud native computing uses an open source software stack to be:
 2. **Dynamically orchestrated.** Containers are actively scheduled and managed to optimize resource utilization.
 3. **Microservices oriented.** Applications are segmented into microservices. This significantly increases the overall agility and maintainability of applications.
 
-## 关于 PCIT
+## About PCIT
 
-**PCIT** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** + 开放平台（插件、API）四部分组成
+**PCIT** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** 三部分组成
 
 * **Webhooks Server** 接收 Git 数据
 
 * **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 数据，在 Docker 单机或集群（Swarm、Kubernetes）中执行构建、测试、容器化部署的自动化过程。
 
 * **CLI** 提供各种实用的功能，例如 命令行操作 GitHub，命令行调用 Tencent AI 开放能力，等
-
-* **开放平台** 包含用于功能扩展的 **插件** 和 **RESTFul API**，与开发者一道构建 PCIT 生态系统
 
 ## 使用方法
 
@@ -79,19 +77,19 @@ pipeline:
       - echo "build is success"    
 ```
 
-> 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
+* 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
 
-## 尝试 Demo (PCIT CE)
+## Try Demo (PCIT CE)
 
-PCIT 社区版(CE) 目前不支持持续集成功能（公有云），仅支持 Issues 机器中英互译。
+> PCIT CE not support CI Feature(build test deployment) now, only support issues bot comments.As known as Public Cloud
 
-[安装 GitHub App](https://github.com/khs1994-php/pcit/tree/master/docs)
+[Install GitHub App](https://github.com/khs1994-php/pcit/tree/master/docs)
 
-> 可以通过 [捐赠](https://zan.khs1994.com) PCIT 项目，资助本项目购买云计算资源以支持社区版的持续集成功能。
+> You can [DONATE](https://zan.khs1994.com) PCIT, MAYBE PCIT CE will support free full CI features(build test deployment and more)
 
-## 私有部署 (PCIT EE)
+## Self-Hosting (PCIT EE)
 
-> 仅 PCIT EE （私有云）支持全部的 CI 功能(构建 测试 部署)。
+> Only PCIT EE Support Full CI Features(build test deployment and more). As known as Private Cloud
 
 * ~~PHP~~
 
@@ -103,7 +101,7 @@ PCIT 社区版(CE) 目前不支持持续集成功能（公有云），仅支持 
 
 * **ONLY** need [Docker](https://github.com/yeasy/docker_practice/tree/master/install) and [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) and [Website SSL/TLS Certificates](https://github.com/Neilpang/acme.sh)
 
-你可以通过以下方法私有部署 **PCIT EE** :
+To install **PCIT EE** in your host, simply:
 
 ```bash
 # install khs1994-docker/lnmp
@@ -123,13 +121,13 @@ $ ./lnmp-docker pcit-up
 
 更多信息请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
 
-## 开发团队支持
+## Support
 
 ![](https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg)
 
 扫码关注 **PCIT** 微信公众平台，寻求 **PCIT** 团队支持。
 
-## PCIT 子项目
+## Projects for PCIT
 
 * [Docker PHP SDK](https://github.com/khs1994-docker/libdocker)
 
@@ -147,7 +145,7 @@ $ ./lnmp-docker pcit-up
 
 * [Gogs CLI]()
 
-## 致谢
+## Thanks
 
 * [PHP](https://www.php.net)
 
@@ -159,7 +157,7 @@ $ ./lnmp-docker pcit-up
 
 * [Drone CI](https://drone.io)
 
-### GitHub 上的其他 CI/CD 项目
+### Other CI/CD on GitHub
 
 * https://github.com/topics/continuous-integration?l=php&o=desc&s=stars
 
