@@ -13,23 +13,23 @@ use KhsCI\Support\CI;
 class Passed
 {
     protected static $header = <<<'EOF'
-# About KhsCI
+# About PCIT (PHP CI TOOLKIT)
 
 **China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI**
 
 **Author** @khs1994
 
-* [GitHub App](https://github.com/apps/khsci)
+* [GitHub App](https://github.com/apps/pcit-ce)
 
 * [Official Website](https://ci.khs1994.com)
 
-* [Support Documents](https://github.com/khs1994-php/khsci/tree/master/docs)
+* [Support Documents](https://github.com/khs1994-php/pcit/tree/master/docs)
 
-* [Community Support](https://github.com/khs1994-php/khsci/issues)
+* [Community Support](https://github.com/khs1994-php/pcit/issues)
 
-# Try KhsCI ?
+# Try PCIT ?
 
-Please See [KhsCI Support Docs](https://github.com/khs1994-php/khsci/tree/master/docs)
+Please See [PCIT Support Docs](https://github.com/khs1994-php/pcit/tree/master/docs)
 
 EOF;
 
@@ -67,14 +67,14 @@ EOF;
         $this->job_key_id = $job_key_id;
 
         $this->config = $config ??
-            'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/';
+            'This repo not include .pcit.yml file or build log is empty, please see https://docs.ci.khs1994.com/usage/';
 
         $this->language = $language ?? 'PHP';
 
         $this->os = $os ?? PHP_OS;
 
         $this->build_log = $build_log ?? Job::getLog((int) $this->job_key_id) ??
-            'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/';
+            'This repo not include .pcit.yml file or build log is empty, please see https://docs.ci.khs1994.com/usage/';
 
         $this->git_type = $git_type;
     }

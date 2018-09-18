@@ -14,7 +14,7 @@ clone:
     # submodule_override:
     #   hello-world: https://github.com/octocat/hello-world.git
     hosts:
-    - "git.t.khs1994.com:192.168.199.100"
+      - "git.t.khs1994.com:192.168.199.100"
 
 workspace:
   base: /app
@@ -23,9 +23,9 @@ workspace:
 
 cache:
   directories:
-  - cache
-  # - vendor
-  - .php_cs.cache
+    - cache
+    # - vendor
+    - .php_cs.cache
 
 pipeline:
   # before_install:
@@ -41,19 +41,19 @@ pipeline:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
     pull: true
     environment:
-    - CI_REDIS_HOST=redis
-    - CI_REDIS_PORT=6379
-    - CI_MYSQL_HOST=mysql
-    - CI_MYSQL_PORT=3306
-    - CI_MYSQL_USERNAME=root
-    - CI_MYSQL_PASSWORD=mytest
-    - CI_MYSQL_DBNAME=test
+      - CI_REDIS_HOST=redis
+      - CI_REDIS_PORT=6379
+      - CI_MYSQL_HOST=mysql
+      - CI_MYSQL_PORT=3306
+      - CI_MYSQL_USERNAME=root
+      - CI_MYSQL_PASSWORD=mytest
+      - CI_MYSQL_DBNAME=test
     commands:
-    - pwd
-    - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
-    # 服务初始化需要时间，这里延迟执行
-    - sleep 30
-    - vendor/bin/phpunit --coverage-clover=coverage.xml
+      - pwd
+      - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+      # 服务初始化需要时间，这里延迟执行
+      - sleep 30
+      - vendor/bin/phpunit --coverage-clover=coverage.xml
     when:
       # platform: linux/amd64
       # platform: [ linux/*, windows/amd64 ]
@@ -89,7 +89,7 @@ pipeline:
     tags: 7.2.7-swarm-${CI_TAG}
     # target: php
     build_args:
-    - a:1
+      - a:1
     # dockerfile: Dockerfile
     # dockerfile: path/to/Dockerfile
     when:
@@ -160,8 +160,8 @@ services:
   mysql:
     image: mysql:${MYSQL_VERSION}
     environment:
-    - MYSQL_DATABASE=test
-    - MYSQL_ROOT_PASSWORD=mytest
+      - MYSQL_DATABASE=test
+      - MYSQL_ROOT_PASSWORD=mytest
     # entrypoint: [ "mysqld" ]
     commands: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
@@ -181,19 +181,19 @@ services:
 
 matrix:
   PHP_VERSION:
-  - 7.2.9
-  - 7.1.21
+    - 7.2.9
+    - 7.1.21
   NGINX_VERSION:
-  - 1.15.3
+    - 1.15.3
   REDIS_VERSION:
-  - 5.0-rc4-alpine
+    - 5.0-rc4-alpine
   MYSQL_VERSION:
-  # - 8.0.11
-  - 5.7.23
+    - 5.7.23
+    # - 8.0.11
   MONGODB_VERSION:
-  - 4.1.2
+    - 4.1.2
   POSTGRESQL_VERSION:
-  - 10.4-alpine
+    - 10.4-alpine
 
 branches:
   include: [ master ]
@@ -204,7 +204,7 @@ branches:
 notifications:
   email:
     recipients:
-    - khs1994@khs1994.com
+      - khs1994@khs1994.com
     on_success: never # default: change
     on_failure: always # default: always
 
@@ -222,6 +222,6 @@ config:
       khs1994/wsl: khs1994-php/khsci
 
 mirrors:
-- git@git.coding.net:khs1994/khsci.git
-- https://gitee.com/khs1994-php/khsci.git
-- git@code.aliyun.com:khs1994-php/khsci.git
+  - git@git.coding.net:khs1994/khsci.git
+  - https://gitee.com/khs1994-php/khsci.git
+  - git@code.aliyun.com:khs1994-php/khsci.git

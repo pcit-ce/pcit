@@ -9,6 +9,7 @@ use Exception;
 use KhsCI\Support\Git;
 use KhsCI\Support\HTTP;
 use KhsCI\Support\Log;
+use Symfony\Component\Yaml\Yaml;
 
 class GetConfig
 {
@@ -57,7 +58,8 @@ class GetConfig
             return [];
         }
 
-        $config = yaml_parse($yaml_file_content);
+        // yaml_parse($yaml_file_content)
+        $config = Yaml::parse($yaml_file_content);
 
         if (!$config) {
             Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id .pcit.yml parse error", [], Log::INFO);
