@@ -10,7 +10,7 @@ use KhsCI\Support\Env;
 use KhsCI\Support\Response;
 use KhsCI\Support\Route;
 
-require __DIR__.'/bootstrap/app.php';
+require __DIR__.'/../bootstrap/app.php';
 
 ini_set('session.cookie_path', '/');
 ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
@@ -34,7 +34,7 @@ if ('/index.php' === $_SERVER['REQUEST_URI']) {
 // Route.
 
 try {
-    require_once __DIR__.'/route/web.php';
+    require_once __DIR__.'/../route/web.php';
 } catch (Exception | Error $e) {
     if ('Finish' === $e->getMessage()) {
         $output = Route::$output;

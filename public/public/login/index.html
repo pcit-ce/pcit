@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <title>KhsCI Login</title>
+  <title>PCIT Login</title>
 </head>
 <body>
 <header>
@@ -13,9 +13,13 @@
 </header>
 <div style="text-align: center;margin-top: 200px">
   <button id="hello" v-if="display" type="button" onclick="hello()"
-          title="KhsCI Hello 能使你在两秒内登录 KhsCI，而无需密码，只需看一下">KhsCI Hello
+          title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">PCIT Hello
   </button>
-  <span> Login to KhsCI </span>
+  <div>
+    <span class="tips"> Login to PCIT </span>
+    <p>PCIT 没有自己的账号体系，你可以使用 GitHub,Gitee,Gogs,Coding 的账号进行登录</p>
+    <p>点击登录按钮意味着您同意我们的服务条款和隐私政策</p>
+  </div>
   <button type="button" onclick="github()" title="Login With GitHub">GitHub</button>
   <button type="button" onclick="coding()" title="Login With Coding Coming soon">Coding</button>
   <button type="button" onclick="gitee()" title="Login With Gitee Coming soon">Gitee</button>
@@ -23,14 +27,12 @@
 
 <footer style="margin-top: 25%">
   <ul>
-    <li>@KHSCI, Datong, Shanxi</li>
-    <br>
-    <li><a href="mailto:ci@khs1994.com">email</a></li>
-    <br>
-    <li><a href="https://github.com/khs1994-php/khsci/tree/master/docs" target="_blank">Docs</a></li>
+    <li>@PCIT, Datong, Shanxi<br><br></li>
+    <li><a href="mailto:ci@khs1994.com">email</a><br><br></li>
+    <li><a href="https://github.com/khs1994-php/pcit/tree/master/docs" target="_blank">Docs</a></li>
   </ul>
   <ul>
-    <li><a href="https://github.com/khs1994-php/khsci/blob/master/CHANGELOG.md" target="_blank">CHANGELOG</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md" target="_blank">CHANGELOG</a></li>
   </ul>
 </footer>
 

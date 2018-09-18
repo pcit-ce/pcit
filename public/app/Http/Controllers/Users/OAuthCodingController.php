@@ -8,8 +8,6 @@ use KhsCI\Service\OAuth\CodingClient;
 
 class OAuthCodingController extends OAuthKernel
 {
-    use OAuthTrait;
-
     /**
      * @var CodingClient
      */

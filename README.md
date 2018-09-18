@@ -60,12 +60,21 @@ Cloud native computing uses an open source software stack to be:
 
 ```yaml
 pipeline:
-  
-  php:
-    image: khs1994/php:7.2.8-fpm-alpine
+
+  install:
+    image: khs1994/php:7.2.10-fpm-alpine
     commands:
-      - composer install
+      - composer install  
+
+  script:
+    image: khs1994/php:7.2.10-fpm-alpine
+    commands:
       - vendor/bin/phpunit
+
+  after_success:
+    image: bash
+    commands:
+      - echo "build is success"    
 ```
 
 * 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
