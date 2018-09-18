@@ -87,17 +87,9 @@ class Check
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'action' => $action,
-            'branch' => $branch,
-            'commit_id' => $commit_id,
-            'check_suite_id' => $check_suite_id,
-            'check_run_id' => $check_run_id,
-            'external_id' => $external_id,
-            'account' => (new Account($repository_owner, $org)),
-        ];
+        $account = (new Account($repository_owner, $org));
+
+        return compact('installation_id', 'rid', 'repo_full_name', 'action',
+            'branch', 'commit_id', 'check_suite_id', 'check_run_id', 'external_id', 'account');
     }
 }

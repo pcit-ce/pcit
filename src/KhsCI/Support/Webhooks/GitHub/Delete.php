@@ -35,11 +35,9 @@ class Delete
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'account' => (new Account($repository_owner, $org)),
-        ];
+        $account = (new Account($repository_owner, $org));
+
+        return compact('installation_id', 'rid', 'repo_full_name',
+            'account', 'ref_type');
     }
 }

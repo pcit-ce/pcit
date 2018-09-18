@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 ob_start();
 
-define('KHSCI_START', microtime(true));
+define('PCIT_START', microtime(true));
 
 use KhsCI\Support\Env;
 use KhsCI\Support\Response;
@@ -41,7 +41,7 @@ try {
 
         switch (gettype($output)) {
             case 'array':
-                Response::json($output, KHSCI_START);
+                Response::json($output, PCIT_START);
 
                 break;
             case 'integer':
@@ -56,29 +56,23 @@ try {
         exit;
     }
 
-    Response::json([
+    Response::json(array_filter([
         'code' => $e->getCode() ?? 500,
         'message' => $e->getMessage() ?? 'ERROR',
-        'documentation_url' => 'https://github.com/khs1994-php/khsci/tree/master/docs/api',
-    ], KHSCI_START);
+        'documentation_url' => 'https://github.com/khs1994-php/pcit/tree/master/docs/api',
+        'file' => $debug ? $e->getFile() : null,
+        'line' => $debug ? $e->getLine() : null,
+    ]), PCIT_START);
 
     exit;
 }
 
 // 路由控制器填写错误
 
-if ('true' === $debug) {
-    Response::json([
-        'code' => 404,
-        'obj' => Route::$obj ?? null,
-        'method' => Route::$method ?? null,
-        'message' => 'Route Not Found',
-        'api_url' => getenv('CI_HOST').'/api',
-    ], KHSCI_START);
-} else {
-    Response::json([
-        'code' => 404,
-        'message' => 'Not Found',
-        'api_url' => getenv('CI_HOST').'/api',
-    ], KHSCI_START);
-}
+Response::json(array_filter([
+    'code' => 404,
+    'message' => 'Not Found',
+    'api_url' => getenv('CI_HOST').'/api',
+    'obj' => $debug ? Route::$obj ?? null : null,
+    'method' => $debug ? Route::$method ?? null : null,
+]), PCIT_START);

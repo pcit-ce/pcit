@@ -89,7 +89,7 @@ class GitHubAppChecks
         $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status_use_in_title);
 
         $summary = $summary ??
-            'This Repository Build Powered By [KhsCI](https://github.com/khs1994-php/khsci)';
+            'This Repository Build Powered By [PCIT](https://github.com/khs1994-php/pcit)';
 
         $text = $text ??
             (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
@@ -161,7 +161,7 @@ class GitHubAppChecks
                     'PHP',
                     PHP_OS,
                     null,
-                    'This repo not include .khsci.yml file, please see https://docs.ci.khs1994.com/usage/'
+                    'This repo not include .pcit.yml file, please see https://docs.ci.khs1994.com/usage/'
                 )
         );
     }
