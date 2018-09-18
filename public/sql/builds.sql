@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `builds` (
   `author_pic`          VARCHAR(255),
   `created_at`          BIGINT,
   `deleted_at`          BIGINT UNSIGNED,
-  `config`              JSON,
+  `config`              TEXT,
   `action`              VARCHAR(100),
   `check_suites_id`     BIGINT,
   `internal`            INT UNSIGNED DEFAULT 1,
@@ -38,3 +38,6 @@ CREATE TABLE IF NOT EXISTS `builds` (
   PRIMARY KEY (`id`),
   UNIQUE KEY (`git_type`, `rid`, `event_type`, `branch`, `commit_id`)
 );
+
+ALTER TABLE builds
+  MODIFY config TEXT;

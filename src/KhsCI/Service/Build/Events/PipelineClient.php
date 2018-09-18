@@ -55,14 +55,11 @@ class PipelineClient
                 continue;
             }
 
-            $no_status = false;
             $failure = self::parseStatus($status, 'failure');
             $success = self::parseStatus($status, 'success');
             $changed = self::parseStatus($status, 'changed');
 
-            if (!$status) {
-                $no_status = true;
-            }
+            $no_status = $status ? false : true;
 
             $image = ParseClient::image($image, $this->matrix_config);
             $ci_script = ParseClient::command($setup, $image, $commands);
