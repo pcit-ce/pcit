@@ -7,47 +7,55 @@ clone:
     #   test/resource: http://192.168.199.100/khs1994/image.git
 
 workspace:
-  base: /khsci
+  base: /pcit
   path: .
 
 pipeline:
-  php:
+  install:
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+  commands:
+    - pwd
+    - composer install
+    # - composer update
+
+  script:
     pull: true
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
     environment:
-    - CI_REDIS_HOST=redis
-    - CI_REDIS_PORT=6379
-    - CI_MYSQL_HOST=mysql
-    - CI_MYSQL_PORT=3306
-    - CI_MYSQL_USERNAME=root
-    - CI_MYSQL_PASSWORD=mytest
-    - CI_MYSQL_DBNAME=test
+      - CI_REDIS_HOST=redis
+      - CI_REDIS_PORT=6379
+      - CI_MYSQL_HOST=mysql
+      - CI_MYSQL_PORT=3306
+      - CI_MYSQL_USERNAME=root
+      - CI_MYSQL_PASSWORD=mytest
+      - CI_MYSQL_DBNAME=test
     commands:
-    - mv $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
-    - pwd
-    - composer install
-    - sleep 30
-    - vendor/bin/phpunit --coverage-clover=coverage.xml
+      - pwd
+      - mv $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+      - sleep 30
+      - vendor/bin/phpunit --coverage-clover=coverage.xml
     when:
       branch: master
       event: [push,pull_request,tag,deployment]
-    # volumes:
-    # - /tmp:/tmp
-    # privileged: true
+      # volumes:
+      # - /tmp:/tmp
+      # privileged: true
 
-  #    codecov:
-  #      image: plugins/codecov
-  #      # token: your-codecov-token
-  #      files:
-  #      - "*.xml"
-  #      paths:
-  #      - tests/output/coverage
-  #      secrets: [ codecov_token ]
+  codecov:
+    image: plugins/codecov
+    # token: your-codecov-token
+    files:
+      - "*.xml"
+    paths:
+      - tests/output/coverage
+    secrets: [ codecov_token ]
+    when:
+      status: success
 
   publish:
     image: plugins/docker
     registry: docker.khs1994.com
-    repo: khs1994/khsci
+    repo: khs1994/pcit
     tags: latest
     when:
       event: deployment
@@ -65,8 +73,8 @@ services:
   mysql:
     image: mysql:${MYSQL_VERSION}
     environment:
-    - MYSQL_DATABASE=test
-    - MYSQL_ROOT_PASSWORD=mytest
+      - MYSQL_DATABASE=test
+      - MYSQL_ROOT_PASSWORD=mytest
 
   redis:
     image: redis:${REDIS_VERSION}-alpine
@@ -76,9 +84,9 @@ branches: master
 
 matrix:
   PHP_VERSION:
-  - 7.2.9
-  - 7.1.21
+    - 7.2.10
+    - 7.1.22
   MYSQL_VERSION:
-  - 5.7.23
+    - 5.7.23
   REDIS_VERSION:
-  - 5.0-rc4
+    - 5.0-rc5
