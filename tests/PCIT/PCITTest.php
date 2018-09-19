@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Tests;
+namespace PCIT\Tests;
 
 use Exception;
 use KhsCI\Support\Cache;
 use KhsCI\Support\DB;
 
-class KhsCITest extends KhsCITestCase
+class PCITTest extends PCITTestCase
 {
     /**
      * @return \KhsCI\KhsCI

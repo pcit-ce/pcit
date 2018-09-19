@@ -2,7 +2,7 @@
 <phpunit>
     <testsuites>
         <testsuite name="Feature">
-            <directory>tests/KhsCI</directory>
+            <directory>tests/PCIT</directory>
             <directory>tests/Plugins</directory>
         </testsuite>
     </testsuites>

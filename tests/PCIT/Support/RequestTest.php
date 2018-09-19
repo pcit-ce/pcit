@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Tests\Support;
+namespace PCIT\Tests\Support;
 
 use KhsCI\Support\Request;
-use KhsCI\Tests\KhsCITestCase;
+use PCIT\Tests\PCITTestCase;
 
-class RequestTest extends KhsCITestCase
+class RequestTest extends PCITTestCase
 {
     public function testParseLink(): void
     {

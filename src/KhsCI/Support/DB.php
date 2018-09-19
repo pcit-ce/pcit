@@ -38,6 +38,21 @@ class DB
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$pdo = $pdo;
             } catch (PDOException $e) {
+                if (1049 === $e->getCode()) {
+                    // 当数据库不存在时，尝试新建数据库
+                    try {
+                        $dsn = sprintf(
+                            'mysql:host=%s;port=%s;dbname=%s', $mysql_host, $mysql_port, 'mysql');
+                        $pdo = new PDO($dsn, $mysql_username, $mysql_password);
+
+                        $pdo->exec('create database '.$mysql_dbname);
+
+                        return self::connection();
+                    } catch (PDOException $e) {
+                        throw new Exception('Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
+                    }
+                }
+
                 throw new Exception(
                     'Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
             }

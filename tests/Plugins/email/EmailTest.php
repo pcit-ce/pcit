@@ -14,6 +14,9 @@ class EmailTest extends TestCase
         (new Dotenv(__DIR__))->load();
     }
 
+    /**
+     * @group dont-test
+     */
     public function testSend(): void
     {
         require __DIR__.'/../../../plugins/email/index.php';

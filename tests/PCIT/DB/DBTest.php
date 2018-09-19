@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\DB\Tests;
+namespace PCIT\DB\Tests;
 
 use App\Console\KhsCIDaemon\Migrate;
 use Exception;
 use KhsCI\Support\DB;
-use KhsCI\Tests\KhsCITestCase;
+use PCIT\Tests\PCITTestCase;
 use PHPUnit\DbUnit\TestCaseTrait;
 
 /**
@@ -17,7 +17,7 @@ use PHPUnit\DbUnit\TestCaseTrait;
  *
  * Class DBTest
  */
-class DBTest extends KhsCITestCase
+class DBTest extends PCITTestCase
 {
     use TestCaseTrait;
 

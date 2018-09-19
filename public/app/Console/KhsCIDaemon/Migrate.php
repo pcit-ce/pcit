@@ -52,6 +52,7 @@ class Migrate
             try {
                 DB::statement($k);
             } catch (\Throwable $e) {
+                echo $e->getMessage().$e->getCode();
             }
         }
     }

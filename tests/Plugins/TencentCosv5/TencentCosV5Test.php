@@ -15,7 +15,7 @@ class TencentCosV5Test extends TestCase
     }
 
     /**
-     * @group DON'TTEST
+     * @group dont-test
      */
     public function test(): void
     {

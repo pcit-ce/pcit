@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Tests\Service\Users;
+namespace PCIT\Tests\Service\Users;
 
 use KhsCI\Support\Env;
 use KhsCI\Tests\KhsCITestCase;

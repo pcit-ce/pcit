@@ -59,8 +59,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "KhsCI\\Tests\\": "tests/KhsCI/",
-      "KhsCI\\Tests\\Plugins\\": "tests/Plugins/"
+      "PCIT\\Tests\\": "tests/PCIT/",
+      "PCIT\\Tests\\Plugins\\": "tests/Plugins/"
     }
   },
   "minimum-stability": "dev",

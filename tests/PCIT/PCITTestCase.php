@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Tests;
+namespace PCIT\Tests;
 
 use App\Console\KhsCIDaemon\Migrate;
 use App\User;
@@ -12,7 +12,7 @@ use KhsCI\KhsCI;
 use KhsCI\Support\DB;
 use PHPUnit\Framework\TestCase;
 
-class KhsCITestCase extends TestCase
+class PCITTestCase extends TestCase
 {
     private static $test;
 
@@ -47,6 +47,7 @@ class KhsCITestCase extends TestCase
         if (file_exists(__DIR__.'/../../public/.env.testing')) {
             (new Dotenv(__DIR__.'/../../public', '.env.testing'))->load();
         }
+
         ob_start();
         Migrate::all();
         ob_end_clean();

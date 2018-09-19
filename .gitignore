@@ -30,3 +30,5 @@ coverage.xml
 
 build
 cache
+
+vim.exe.stackdump
