@@ -1,4 +1,4 @@
-FROM khs1994/php-fpm:7.2.7-alpine3.7
+FROM khs1994/php:7.2.10-fpm-alpine
 
 ENV CI_EMAIL_HOST=null \
     CI_EMAIL_USERNAME=null \
@@ -10,9 +10,9 @@ ENV CI_EMAIL_HOST=null \
     CI_EMAIL_OBJECT=null \
     CI_EMAIL_BODY=null
 
-WORKDIR /khsci
+WORKDIR /pcit
 
-COPY composer.json index.php .env.example /khsci/
+COPY composer.json index.php .env.example /pcit/
 
 RUN composer install \
     && rm -rf \tmp\cache

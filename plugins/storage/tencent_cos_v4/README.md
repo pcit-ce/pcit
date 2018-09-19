@@ -1,4 +1,4 @@
-# KhsCI Plugin -- Tencent Cloud COS V4
+# PCIT Plugin -- Tencent Cloud COS V4
 
 ## 变量
 

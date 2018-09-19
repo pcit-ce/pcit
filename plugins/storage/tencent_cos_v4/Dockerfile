@@ -8,9 +8,9 @@ ENV COS_V4_REGION=null \
     COS_V4_LABEL=null \
     COS_V4_FILE=null
 
-WORKDIR /khsci
+WORKDIR /pcit
 
-COPY composer.json index.php .env.example /khsci/
+COPY composer.json index.php .env.example /pcit/
 
 RUN composer install \
     && rm -rf \tmp\cache

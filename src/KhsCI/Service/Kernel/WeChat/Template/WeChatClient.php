@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Service\WeChat\Template;
+namespace KhsCI\Service\Kernel\WeChat\Template;
 
-use KhsCI\KhsCI;
+use KhsCI\KhsCI as PCIT;
 
 class WeChatClient
 {
@@ -14,7 +14,7 @@ class WeChatClient
 
     private $openId;
 
-    public function __construct(KhsCI $app)
+    public function __construct(PCIT $app)
     {
         $this->template_id = $app['config']['wechat']['template_id'];
 

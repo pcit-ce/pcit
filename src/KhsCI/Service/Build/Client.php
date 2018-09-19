@@ -6,9 +6,10 @@ namespace KhsCI\Service\Build;
 
 use App\Job;
 use Exception;
-use KhsCI\Service\Build\Events\GitClient;
-use KhsCI\Service\Build\Events\PipelineClient;
-use KhsCI\Service\Build\Events\ServicesClient;
+use KhsCI\Service\Build\Events\Git;
+use KhsCI\Service\Build\Events\Matrix;
+use KhsCI\Service\Build\Events\Pipeline;
+use KhsCI\Service\Build\Events\Services;
 use KhsCI\Service\Build\Events\Subject;
 use KhsCI\Service\Build\Events\SystemEnv;
 use KhsCI\Support\CI;
@@ -74,7 +75,6 @@ class Client
         $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->matrix ?? null;
         $config = $yaml_obj->config ?? null;
-        $mirror = $yaml_obj->mirror ?? null;
 
         $this->pipeline = $pipeline;
 
@@ -93,7 +93,7 @@ class Client
         $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
 
         // 解析构建矩阵
-        $matrix = MatrixClient::parseMatrix((array) $matrix);
+        $matrix = Matrix::parseMatrix((array) $matrix);
 
         // 不存在构建矩阵
         if (!$matrix) {
@@ -103,11 +103,11 @@ class Client
 
             (new Subject())
                 // git
-                ->register(new GitClient($git, $this->build, $this))
+                ->register(new Git($git, $this->build, $this))
                 // services
-                ->register(new ServicesClient($services, (int) $this->job_id, null))
+                ->register(new Services($services, (int) $this->job_id, null))
                 // pipeline
-                ->register(new PipelineClient($pipeline, $this->build, $this, null))
+                ->register(new Pipeline($pipeline, $this->build, $this, null))
                 ->handle();
 
             Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);
@@ -124,11 +124,11 @@ class Client
             // set git config
             (new Subject())
                 // git
-                ->register(new GitClient($git, $this->build, $this))
+                ->register(new Git($git, $this->build, $this))
                 // services
-                ->register(new ServicesClient($services, (int) $this->job_id, $matrix_config))
+                ->register(new Services($services, (int) $this->job_id, $matrix_config))
                 // pipeline
-                ->register(new PipelineClient($pipeline, $this->build, $this, $matrix_config))
+                ->register(new Pipeline($pipeline, $this->build, $this, $matrix_config))
                 ->handle();
 
             Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);

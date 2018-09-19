@@ -15,5 +15,5 @@
 * **Pages类** GitHub pages、Gitee Pages
 * **Releases** GitHub Release、Gitee Releases
 * **Docker** 构建 Docker 镜像
-* **发布类** NPM、PYPI、RUBYGEM
+* **包管理类** NPM、PYPI、RUBYGEM
 * **Kubernetes** Helm
