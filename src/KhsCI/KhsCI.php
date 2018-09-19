@@ -9,6 +9,7 @@ use Docker\Docker;
 use Exception;
 use KhsCI\Support\Config;
 use KhsCI\Support\Git;
+use KhsCI\Support\Request;
 use PHPMailer\PHPMailer\PHPMailer;
 use Pimple\Container;
 use WeChat\WeChat;
@@ -27,6 +28,7 @@ use WeChat\WeChat;
  * @property Service\Activity\NotificationsGitHubClient     $activity_notifications
  * @property Service\Activity\StarringGitHubClient          $activity_starring
  * @property Service\Activity\WatchingGitHubClient          $activity_watching
+ * @property Service\Authorizations\GitHubClient            $authorizations
  * @property Service\Data\GitHubClient                      $data
  * @property Service\Deployment\GitHubClient                $deployment
  * @property Service\Gist\GitHubClient                      $gist
@@ -62,12 +64,14 @@ use WeChat\WeChat;
  * @property Docker                                         $docker
  * @property WeChat                                         $wechat
  * @property Service\WeChat\Template\WeChatClient           $wechat_template_message
+ * @property Request                                        $request
  */
 class KhsCI extends Container
 {
     // 服务提供器数组.
     protected $providers = [
         Providers\ActivityProvider::class,
+        Providers\AuthorizationsProvider::class,
         Providers\BuildProvider::class,
         Providers\ChecksProvider::class,
         Providers\CurlProvider::class,
@@ -146,6 +150,7 @@ class KhsCI extends Container
         set_time_limit(0);
 
         $this['curl_timeout'] = 100;
+        $this['request'] = (Request::createFromGlobals());
 
         // 注册服务提供器
         $this->registerProviders();

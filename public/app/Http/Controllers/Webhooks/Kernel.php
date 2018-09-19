@@ -18,7 +18,7 @@ class Kernel
     {
         $khsci = new KhsCI([], static::$git_type);
 
-        $output = $khsci->webhooks->Server();
+        $output = $khsci->webhooks->server();
 
         return [$output];
     }

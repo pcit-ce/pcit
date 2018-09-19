@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace KhsCI\Service\Webhooks;
 
 use Exception;
+use KhsCI\KhsCI as PCIT;
 use KhsCI\Support\Cache;
 use KhsCI\Support\Env;
 use KhsCI\Support\Request;
 
 /**
- * Class GitHub.
- *
  * @see https://developer.github.com/webhooks/#events
  */
 class GitHubClient
@@ -27,37 +26,45 @@ class GitHubClient
     public $cache_key = 'webhooks';
 
     /**
-     * @return bool|int
+     * @var PCIT
+     */
+    public $app;
+
+    public function __construct(PCIT $app)
+    {
+        $this->app = $app;
+    }
+
+    /**
+     * @return int
      *
      * @throws Exception
      */
-    public function Server()
+    public function server()
     {
         $type = Request::getHeader('X-Github-Event') ?? 'undefined';
-        $content = file_get_contents('php://input');
+        // $content = file_get_contents('php://input');
 
-        if ($this->secret($content)) {
-            try {
-                return $this->pushCache($type, $content);
-            } catch (\Throwable $e) {
-                throw new Exception($e->getMessage(), $e->getCode());
-            }
+        $content = $this->app->request->getContent();
+
+        $this->secret($content);
+
+        try {
+            return $this->pushCache($type, $content);
+        } catch (\Throwable $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
         }
-
-        throw new Exception('', 402);
     }
 
     /**
      * @param string $content
      *
-     * @return bool
-     *
      * @throws Exception
      */
-    private function secret(string $content)
+    private function secret(string $content): void
     {
         if (Env::get('CI_WEBHOOKS_DEBUG', false)) {
-            return true;
+            return;
         }
 
         $secret = Env::get('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
@@ -69,7 +76,7 @@ class GitHubClient
         $serverHash = hash_hmac($algo, $content, $secret);
 
         if ($github_hash === $serverHash) {
-            return true;
+            return;
         }
 
         throw new Exception('', 402);

@@ -14,6 +14,10 @@
 
 * [API Docs](https://api.ci.khs1994.com)
 
+* [Plugins](https://github.com/khs1994-php/pcit/tree/master/plugins)
+
+* [PHP Docs](https://khs1994-php.github.io/pcit)
+
 * [Donate](https://zan.khs1994.com)
 
 * [PCIT EE](https://github.com/khs1994-php/pcit/tree/master/docs#about-pcit-ce-and-ee)

@@ -14,7 +14,7 @@ class WebhooksProvider implements ServiceProviderInterface
         $pimple['webhooks'] = function ($app) {
             $class = 'KhsCI\Service\Webhooks\\'.$app->class_name;
 
-            return new $class();
+            return new $class($app);
         };
     }
 }

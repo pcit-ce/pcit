@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
-class Response
+class Response extends \Symfony\Component\HttpFoundation\Response
 {
     const HTTP_CODE = [
         200,

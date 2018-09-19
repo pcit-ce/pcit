@@ -103,10 +103,12 @@ env:
     - DB=mysql
     # - DB=postgresql
     - CI_REDIS_HOST=localhost
+    - CI_REDIS_NAME=15
     - CI_MYSQL_HOST=127.0.0.1
     - CI_MYSQL_USERNAME=root
     - CI_MYSQL_PASSWORD=mytest
     - CI_MYSQL_DBNAME=pcit_test
+    - CI_WEBHOOKS_TOKEN=pcit
 
 #
 # rabbitmq vhost / username guest password guest

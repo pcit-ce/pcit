@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KhsCI\Support;
 
-class Request
+class Request extends \Symfony\Component\HttpFoundation\Request
 {
     public static function getAllHeaders()
     {

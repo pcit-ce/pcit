@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace PCIT\Tests\Service\Users;
 
 use KhsCI\Support\Env;
-use KhsCI\Tests\KhsCITestCase;
+use PCIT\Tests\PCITTestCase;
 
-class TestGitHubClient extends KhsCITestCase
+class GitHubClientTest extends PCITTestCase
 {
     /**
-     * @group DON'TTEST
+     * @group dont-test
      *
      * @throws \Exception
      */
     public function testAuthorizations(): void
     {
-        $khsci = self::getTest();
+        $pcit = self::getTest();
 
         $username = Env::get('CI_GITHUB_TEST_USERNAME');
 
         $password = Env::get('CI_GITHUB_TEST_PASSWORD');
 
-        $khsci->user_basic_info->authorizations($username, $password);
+        $result = $pcit->user_basic_info->getUserInfo();
     }
 }

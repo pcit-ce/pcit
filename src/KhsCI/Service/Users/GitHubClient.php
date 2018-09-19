@@ -102,23 +102,6 @@ class GitHubClient
         return $output;
     }
 
-    /**
-     * @param string $username
-     * @param string $password
-     *
-     * @return mixed
-     *
-     * @throws Exception
-     */
-    public function authorizations(string $username, string $password)
-    {
-        $url = $this->api_url.'/authorizations';
-
-        $this->curl->setHtpasswd($username, $password);
-
-        return $this->curl->get($url);
-    }
-
     public function listBlockedUsers(): void
     {
     }
