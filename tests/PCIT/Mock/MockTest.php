@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Mock;
 
-use App\Console\BuildCommand;
+use KhsCI\Service\Build\Events\LogClient;
 use PCIT\Tests\PCITTestCase;
 
 class MockTest extends PCITTestCase
@@ -16,10 +16,10 @@ class MockTest extends PCITTestCase
      */
     public function testStub(): void
     {
-        $stub = $this->createMock(BuildCommand::class);
+        $stub = $this->createMock(LogClient::class);
 
-        $stub->method('test')->willReturn(1);
+        $stub->method('handle')->willReturn([1, 100]);
 
-        $this->assertEquals(1, $stub->test());
+        $this->assertEquals([1, 100], $stub->handle());
     }
 }

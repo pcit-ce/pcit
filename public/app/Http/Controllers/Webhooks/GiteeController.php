@@ -6,5 +6,5 @@ namespace App\Http\Controllers\Webhooks;
 
 class GiteeController extends Kernel
 {
-    protected $git_type = 'gitee';
+    protected static $git_type = 'gitee';
 }

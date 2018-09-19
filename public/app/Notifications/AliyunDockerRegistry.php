@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Notifications;
 
+use App\Notifications\GitHubChecksConclusion\Passed;
+
 class AliyunDockerRegistry extends Passed
 {
     public $image_details;
@@ -18,7 +20,7 @@ class AliyunDockerRegistry extends Passed
     /**
      * @return string
      */
-    public function handle()
+    public function markdown()
     {
         return self::$header.<<<EOF
 

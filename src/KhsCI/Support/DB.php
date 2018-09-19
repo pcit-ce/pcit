@@ -36,6 +36,7 @@ class DB
             try {
                 $pdo = new PDO($dsn, $mysql_username, $mysql_password);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
                 self::$pdo = $pdo;
             } catch (PDOException $e) {
                 if (1049 === $e->getCode()) {

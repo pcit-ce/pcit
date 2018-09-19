@@ -11,6 +11,8 @@ class DBTest extends PCITTestCase
 {
     public function test(): void
     {
+        DB::close();
+
         $result = DB::statement('select database()');
 
         $this->assertEquals(0, $result);
