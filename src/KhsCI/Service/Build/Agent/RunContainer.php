@@ -71,6 +71,8 @@ class RunContainer
         // upload cache
         $this->runCacheContainer($job_id, false);
 
+        Cleanup::systemDelete((string) $job_id, true);
+
         throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
     }
 
@@ -104,9 +106,6 @@ class RunContainer
 
         // run service
         $this->runService($job_id);
-
-        // cache
-        $this->runCacheContainer($job_id);
 
         while (1) {
             $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
@@ -183,7 +182,8 @@ class RunContainer
             $this->runPipeline($job_id, $container_config);
         } catch (\Throwable $e) {
             LogSupport::debug(__FILE__, __LINE__, 'fetch cache error',
-                [], LogSupport::EMERGENCY);
+                ['message' => $e->getMessage(), 'code' => $e->getCode()],
+                LogSupport::EMERGENCY);
         }
     }
 
@@ -251,8 +251,6 @@ class RunContainer
         LogSupport::debug(__FILE__, __LINE__, 'Run job after finished', ['status' => $status], LogSupport::EMERGENCY);
 
         Job::updateFinishedAt($job_id);
-
-        Cleanup::systemDelete((string) $job_id, true);
     }
 
     /**

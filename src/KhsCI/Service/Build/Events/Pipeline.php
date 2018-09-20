@@ -72,12 +72,13 @@ class Pipeline
 
             Log::debug(__FILE__, __LINE__, json_encode($env), [], Log::INFO);
 
-            $cmd = ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'];
+            $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'] : null;
+            $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
 
             $container_config = $docker_container
                 ->setEnv($env)
                 ->setBinds(["$job_id:$workdir", 'tmp:/tmp'])
-                ->setEntrypoint(['/bin/sh', '-c'])
+                ->setEntrypoint($entrypoint)
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => "$job_id",
                     'com.khs1994.ci.pipeline.name' => $setup,

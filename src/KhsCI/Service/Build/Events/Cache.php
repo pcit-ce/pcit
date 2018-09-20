@@ -74,7 +74,7 @@ class Cache
             'S3_BUCKET='.Env::get('', 'pcit'),
             'S3_REGION='.Env::get('', 'us-east-1'),
             'S3_CACHE_PREFIX='.$prefix,
-            'S3_CACHE='.json_encode($this->cache),
+            'S3_CACHE='.json_encode($this->cache->directories),
             'S3_CACHE_DOWNLOAD=true',
         ];
 
@@ -85,8 +85,6 @@ class Cache
             );
 
         array_pop($env);
-
-        $env = array_merge($env, ['S3_CACHE_DOWNLOAD=false']);
 
         \KhsCI\Support\Cache::store()
             ->hSet('cache_upload',
@@ -109,6 +107,9 @@ class Cache
             ->setImage('khs1994/s3')
             ->setEnv($env)
             ->setWorkingDir($this->workdir)
+            ->setLabels([
+                'com.khs1994.ci' => (string) $this->build_key_id,
+            ])
             ->setCreateJson(null)
             ->getCreateJson();
     }

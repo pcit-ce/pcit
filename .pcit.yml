@@ -103,7 +103,7 @@ pipeline:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
     shell: bash
     when:
-      statue: success
+      status: success
     # please set env in settings
     environment:
       # - CODECOV_TOKEN=XXX
