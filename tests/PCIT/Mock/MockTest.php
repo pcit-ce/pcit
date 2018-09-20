@@ -12,7 +12,7 @@ class MockTest extends PCITTestCase
     /**
      * 请注意，final、private 和 static 方法无法对其进行上桩(stub)或模仿(mock).
      *
-     * @throws \ReflectionException
+     * @group dont-test
      */
     public function testStub(): void
     {
