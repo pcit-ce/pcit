@@ -6,12 +6,13 @@ namespace KhsCI\Service\Build;
 
 use App\Job;
 use Exception;
+use KhsCI\Service\Build\Events\Cache;
 use KhsCI\Service\Build\Events\Git;
 use KhsCI\Service\Build\Events\Matrix;
+use KhsCI\Service\Build\Events\Notifications;
 use KhsCI\Service\Build\Events\Pipeline;
 use KhsCI\Service\Build\Events\Services;
 use KhsCI\Service\Build\Events\Subject;
-use KhsCI\Service\Build\Events\SystemEnv;
 use KhsCI\Support\CI;
 use KhsCI\Support\Log;
 
@@ -74,7 +75,7 @@ class Client
         $pipeline = $yaml_obj->pipeline ?? null;
         $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->matrix ?? null;
-        $config = $yaml_obj->config ?? null;
+        $notifications = $yaml_obj->notifications ?? null;
 
         $this->pipeline = $pipeline;
 
@@ -83,11 +84,16 @@ class Client
 
         $path = $workspace->path ?? $this->build->repo_full_name;
 
-        if ('.' === $path) {
-            $path = null;
-        }
+        $path = '.' === $path ? null : $path;
 
         $this->workdir = $workdir = $base_path.'/'.$path;
+
+        (new Subject())
+            // cache
+            ->register(new Cache($this->build->build_key_id, $workdir, $cache))
+            // notification
+            ->register(new Notifications($this->build->build_key_id, $notifications))
+            ->handle();
 
         // ci system env
         $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
@@ -121,7 +127,6 @@ class Client
         foreach ($matrix as $k => $matrix_config) {
             $this->job_id = Job::create($this->build->build_key_id);
 
-            // set git config
             (new Subject())
                 // git
                 ->register(new Git($git, $this->build, $this))

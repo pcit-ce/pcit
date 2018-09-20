@@ -1,5 +1,5 @@
 #
-# @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
+# @see https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
 #
 
 language: php
@@ -50,7 +50,6 @@ pipeline:
       - CI_MYSQL_PASSWORD=mytest
       - CI_MYSQL_DBNAME=test
       - CI_WEBHOOKS_TOKEN=pcit
-
     commands:
       - pwd
       - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
@@ -83,13 +82,10 @@ pipeline:
 
   # This is a build docker image demo，when tag push
   publish_php:
-    #
-    # ci_xxx KhsCI Image
-    #
-    image: ci_docker_build
+    image: khs1994/docker
     # registry: docker.khs1994.com
     repo: khs1994/php
-    tags: 7.2.7-swarm-${CI_TAG}
+    tags: 7.2.10-swarm-${CI_TAG}
     # target: php
     build_args:
       - a:1
@@ -109,37 +105,52 @@ pipeline:
     when:
       statue: success
     # please set env in settings
-    # environment:
-    #   - CODECOV_TOKEN=XXX
+    environment:
+      # - CODECOV_TOKEN=XXX
+      - PCIT_OS_NAME=linux
     commands:
-      - bash <(curl -s https://codecov.io/bash)
+      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
 
-  #  upload_file:
-  #    image: khs1994/tencent_cloud_cos:v4
-  #    when:
-  #      status: success
-  #      event: tag
-  #    file:
-  #      README.md: khsci/tencent_cloud_cos_file_name_${KHSCI_TAG}
-  #      Dockerfile: khsci/tencent_cloud_cos_file_name2_${KHSCI_TAG}
-  #      # please set env by khsci env_var feature,don't set secret in .khsci.yml
-  #      # environment:
-  #      # - COS_V4_REGION=x
-  #      # - COS_V4_APP_ID=x
-  #      # - COS_V4_SECRET_ID=x
-  #      # - COS_V4_SECRET_KEY=x
-  #      # - COS_V4_BUCKET=x
+  pages:
+    image: khs1994/pages
+    shell: bash
+    when:
+      status: success
+    environment:
+      keep_history: true
+      target_branch: gh-pages
+      git_url: gitee.com/khs1994-php/khsci
+      local_dir: build
+      email: khs1994@khs1994.com
+      name: pcit
+      # git_token: git_token
 
-  #  github_releases:
-  #    image: khs1994/github_releases
-  #    when:
-  #      status: success
-  #      event: tag
-  #      # environment:
-  #      # - GITHUB_TOKEN=x
-  #    file:
-  #    - "CHANGELOG.md"
-  #    - "ROADMAP.md"
+  upload_file:
+    image: khs1994/tencent_cloud_cos:v4
+    when:
+      status: success
+      event: tag
+    file:
+      README.md: khsci/tencent_cloud_cos_file_name_${KHSCI_TAG}
+      Dockerfile: khsci/tencent_cloud_cos_file_name2_${KHSCI_TAG}
+      # please set env by pcit env_var feature,don't set secret in .pcit.yml
+      # environment:
+      # - COS_V4_REGION=x
+      # - COS_V4_APP_ID=x
+      # - COS_V4_SECRET_ID=x
+      # - COS_V4_SECRET_KEY=x
+      # - COS_V4_BUCKET=x
+
+  github_releases:
+    image: khs1994/github_releases
+    when:
+      status: success
+      event: tag
+      # environment:
+      # - GITHUB_TOKEN=x
+    file:
+      - "CHANGELOG.md"
+      - "ROADMAP.md"
 
   after_failure:
     image: bash

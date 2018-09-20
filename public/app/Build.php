@@ -216,6 +216,20 @@ EOF;
     }
 
     /**
+     * @param $build_key_id
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function getBranch($build_key_id)
+    {
+        $sql = 'SELECT branch FROM builds WHERE id=? LIMIT 1';
+
+        return DB::select($sql, [$build_key_id], true);
+    }
+
+    /**
      * 某分支的构建列表.
      *
      * @param string   $git_type

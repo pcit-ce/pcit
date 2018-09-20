@@ -1,20 +1,12 @@
-FROM khs1994/php-fpm:7.2.7-alpine3.7
+FROM khs1994/php:7.2.10-fpm-alpine
 
-ENV COS_V5_APP_ID=null \
-    COS_V5_REGION=null \
-    COS_V5_KEY=null \
-    COS_V5_SECRET=null \
-    COS_V5_BUCKET=null \
-    COS_V5_LABEL=null \
-    COS_V5_FILE=null
+COPY composer.json /srv/pcit/plugin/cosv5/
 
-WORKDIR /khsci
+RUN composer --working-dir=/srv/pcit/plugin/cosv5 install \
+    && rm -rf /tmp/cache
 
-COPY composer.json index.php .env.example /khsci/
+COPY index.php .env.example /srv/pcit/plugin/cosv5/
 
-RUN composer install \
-    && rm -rf \tmp\cache
+ENTRYPOINT ["php"]
 
-ENTRYPOINT ["php","index.php"]
-
-CMD upload
+CMD ["/srv/pcit/plugin/cosv5/index.php"]
