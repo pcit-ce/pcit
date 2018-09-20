@@ -100,8 +100,8 @@ pipeline:
 
   # This is success after demo
   after_success:
-    image: bash
-    shell: /usr/local/bin/bash
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    shell: bash
     when:
       statue: success
     # please set env in settings

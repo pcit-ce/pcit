@@ -105,6 +105,9 @@ class RunContainer
         // run service
         $this->runService($job_id);
 
+        // cache
+        $this->runCacheContainer($job_id);
+
         while (1) {
             $container_config = Cache::store()->rPop((string) $job_id.'_pipeline');
 
@@ -141,10 +144,6 @@ class RunContainer
 
                 continue;
             }
-
-            // cache
-
-            $this->runCacheContainer($job_id);
 
             try {
                 $this->runPipeline($job_id, $container_config);

@@ -28,7 +28,7 @@ __pycache__
 coverage_report
 coverage.xml
 
-build
-cache
+/build
+/cache
 
 vim.exe.stackdump
