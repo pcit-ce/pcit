@@ -101,7 +101,7 @@ pipeline:
   # This is success after demo
   after_success:
     image: bash
-    shell: bash
+    shell: /usr/local/bin/bash
     when:
       statue: success
     # please set env in settings
@@ -117,13 +117,13 @@ pipeline:
     when:
       status: success
     environment:
-      keep_history: true
-      target_branch: gh-pages
-      git_url: gitee.com/khs1994-php/khsci
-      local_dir: build
-      email: khs1994@khs1994.com
-      name: pcit
-      # git_token: git_token
+      - keep_history=true
+      - target_branch=gh-pages
+      - git_url=gitee.com/khs1994-php/khsci
+      - local_dir=build
+      - email=khs1994@khs1994.com
+      - name=pcit
+      # - git_token: git_token
 
   upload_file:
     image: khs1994/tencent_cloud_cos:v4
