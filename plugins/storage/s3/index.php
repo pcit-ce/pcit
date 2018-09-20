@@ -23,7 +23,7 @@ if ($s3_cache = getenv('S3_CACHE')) {
     $prefix = getenv('S3_CACHE_PREFIX');
 
     if (getenv('S3_CACHE_DOWNLOAD')) {
-        echo 'Setting up build cache';
+        echo "Setting up build cache\n";
 
         file_put_contents($prefix, $flysystem->get($prefix.'.tar.gz'));
         exec("set -ex ; tar -zxvf {$prefix}.tar.gz ; rm -rf -zxvf {$prefix}");
@@ -33,7 +33,7 @@ if ($s3_cache = getenv('S3_CACHE')) {
 
     $file_list = null;
 
-    echo 'store build cache';
+    echo "store build cache\n";
 
     foreach ((array) json_decode($s3_cache) as $item) {
         $file_list .= ' '.$item;
@@ -45,7 +45,7 @@ if ($s3_cache = getenv('S3_CACHE')) {
 
     $result = $flysystem->put($prefix.'.tar.gz', file_get_contents($prefix.'.tar.gz'));
 
-    echo 'result is '.$result ? 'success' : 'failure';
+    echo $result ? 'success' : 'failure';
 
     exit;
 }

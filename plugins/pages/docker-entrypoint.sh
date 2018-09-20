@@ -4,13 +4,13 @@ set -ex
 
 echo "Preparing deploy"
 
+if ! [ -d ${local_dir} ];then exit; fi
+
 rm -rf ${local_dir}/.git
 
 if [ ${keep_history:-true} == 'true' ];then
   git clone --bare -b ${target_branch:-gh-pages} https://${git_url} ${local_dir}/.git || echo
 fi
-
-if ! [ -d ${local_dir} ];then exit; fi
 
 echo "Deploying application"
 

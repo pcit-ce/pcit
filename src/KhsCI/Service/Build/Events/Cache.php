@@ -13,6 +13,8 @@ class Cache
 {
     public $build_key_id;
 
+    public $job_id;
+
     public $cache;
 
     public $workdir;
@@ -20,12 +22,15 @@ class Cache
     /**
      * Cache constructor.
      *
+     * @param int    $job_id
      * @param int    $build_key_id
      * @param string $workdir
      * @param mixed  $cache
      */
-    public function __construct(int $build_key_id, string $workdir, $cache = null)
+    public function __construct(int $job_id, int $build_key_id, string $workdir, $cache = null)
     {
+        $this->job_id = $job_id;
+
         $this->build_key_id = $build_key_id;
 
         $this->cache = $cache;
@@ -80,7 +85,7 @@ class Cache
 
         \KhsCI\Support\Cache::store()
             ->hSet('cache_download',
-                (string) $this->build_key_id,
+                (string) $this->job_id,
                 $this->getContainerConfig($docker_container, $env)
             );
 
@@ -88,7 +93,7 @@ class Cache
 
         \KhsCI\Support\Cache::store()
             ->hSet('cache_upload',
-                (string) $this->build_key_id,
+                (string) $this->job_id,
                 $this->getContainerConfig($docker_container, $env)
             );
     }
@@ -108,8 +113,9 @@ class Cache
             ->setEnv($env)
             ->setWorkingDir($this->workdir)
             ->setLabels([
-                'com.khs1994.ci' => (string) $this->build_key_id,
+                'com.khs1994.ci' => (string) $this->job_id,
             ])
+            ->setBinds(["$this->job_id:$this->workdir"])
             ->setCreateJson(null)
             ->getCreateJson();
     }

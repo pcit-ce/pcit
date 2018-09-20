@@ -170,9 +170,7 @@ class RunContainer
     {
         $cache_hash_key = $download ? 'cache_download' : 'cache_upload';
 
-        $build_key_id = Job::getBuildKeyId($job_id);
-
-        $container_config = Cache::store()->hGet($cache_hash_key, (string) $build_key_id);
+        $container_config = Cache::store()->hGet($cache_hash_key, (string) $job_id);
 
         if (!$container_config) {
             return;

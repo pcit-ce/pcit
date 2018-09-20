@@ -89,8 +89,6 @@ class Client
         $this->workdir = $workdir = $base_path.'/'.$path;
 
         (new Subject())
-            // cache
-            ->register(new Cache($this->build->build_key_id, $workdir, $cache))
             // notification
             ->register(new Notifications($this->build->build_key_id, $notifications))
             ->handle();
@@ -114,6 +112,8 @@ class Client
                 ->register(new Services($services, (int) $this->job_id, null))
                 // pipeline
                 ->register(new Pipeline($pipeline, $this->build, $this, null))
+                // cache
+                ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $workdir, $cache))
                 ->handle();
 
             Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);
@@ -134,6 +134,8 @@ class Client
                 ->register(new Services($services, (int) $this->job_id, $matrix_config))
                 // pipeline
                 ->register(new Pipeline($pipeline, $this->build, $this, $matrix_config))
+                // cache
+                ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $workdir, $cache))
                 ->handle();
 
             Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);

@@ -111,6 +111,18 @@ pipeline:
     commands:
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
 
+  php-cs-fixer:
+    image: khs1994/php:7.2.10-fpm-alpine
+    commands:
+      - php-cs-fixer fix
+
+  sami:
+    image: khs1994/php:7.2.10-fpm-alpine
+    when:
+      status: success
+    commands:
+      - sami update .sami.php
+
   pages:
     image: khs1994/pages
     shell: bash
