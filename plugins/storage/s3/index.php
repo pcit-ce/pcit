@@ -41,9 +41,11 @@ if ($s3_cache = getenv('S3_CACHE')) {
 
     $file_list = trim($file_list, ' ');
 
-    exec("set -ex ; tar -zcvf {$prefix}.tar.gz $file_list ; rm -rf {$prefix}.tar.gz");
+    exec("set -ex ; tar -zcvf {$prefix}.tar.gz $file_list");
 
     $result = $flysystem->put($prefix.'.tar.gz', file_get_contents($prefix.'.tar.gz'));
+
+    exec("rm -rf {$prefix}.tar.gz");
 
     echo $result ? 'success' : 'failure';
 

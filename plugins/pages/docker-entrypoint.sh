@@ -34,7 +34,10 @@ set +e
 git remote get-url origin && git remote rm origin
 set -e
 
+set +x
+echo "git remote add origin https://${name}:git_token@${git_url}.git"
 git remote add origin https://${name}:${git_token}@${git_url}.git
+set -x
 
 if [ ${new:-false} == 'true' ];then git push origin master:${target_branch} ; exit 0; fi
 
