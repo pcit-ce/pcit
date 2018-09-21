@@ -68,23 +68,19 @@ class Parse
 
         $content = '\n';
 
-        $content .= 'echo;echo\n\n';
+        $content .= 'echo;echo\n\necho "==>" Pipeline '.$setup.' Run On "=>" '.$image;
 
-        $content .= 'echo Start Build in '.$setup.' "=>" '.$image;
-
-        $content .= '\n\necho;echo\n\n';
+        $content .= '\n\necho;echo\n\nset -x\n\n';
 
         for ($i = 0; $i < \count($commands); ++$i) {
             $command = addslashes($commands[$i]);
 
-            $content .= 'echo "$ '.str_replace('$', '\\\\$', $command).'"\n\n';
+            $content .= $command;
 
-            $content .= 'echo;echo\n\n';
-
-            $content .= str_replace('$$', '$', $command).'\n\n';
-
-            $content .= 'echo;echo\n\n';
+            $content .= '\n\n';
         }
+
+        // var_dump(stripcslashes($content));
 
         $ci_script = base64_encode(stripcslashes($content));
 

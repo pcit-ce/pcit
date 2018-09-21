@@ -21,19 +21,25 @@ $flysystem = new League\Flysystem\Filesystem(new AwsS3Adapter(new \Aws\S3\S3Clie
 
 if ($s3_cache = getenv('S3_CACHE')) {
     $prefix = getenv('S3_CACHE_PREFIX');
+    $cache_tar_gz_name = $prefix.'.tar.gz';
 
     if (getenv('S3_CACHE_DOWNLOAD')) {
-        echo "Setting up build cache\n";
+        echo "\n\n==> Setting up build cache\n";
 
-        file_put_contents($prefix, $flysystem->get($prefix.'.tar.gz'));
-        exec("set -ex ; tar -zxvf {$prefix}.tar.gz ; rm -rf -zxvf {$prefix}");
+        try {
+            file_put_contents($cache_tar_gz_name, $flysystem->read($cache_tar_gz_name));
+
+            exec("set -ex ; tar -zxvf $cache_tar_gz_name ; rm -rf $cache_tar_gz_name");
+        } catch (\League\Flysystem\FileNotFoundException $e) {
+            echo $e->getMessage().'. Code is '.$e->getCode()."\n";
+        }
 
         exit;
     }
 
     $file_list = null;
 
-    echo "store build cache\n";
+    echo "\n\n==> Store build cache\n";
 
     foreach ((array) json_decode($s3_cache) as $item) {
         $file_list .= ' '.$item;
@@ -41,11 +47,11 @@ if ($s3_cache = getenv('S3_CACHE')) {
 
     $file_list = trim($file_list, ' ');
 
-    exec("set -ex ; tar -zcvf {$prefix}.tar.gz $file_list");
+    exec("set -ex ; tar -zcvf $cache_tar_gz_name $file_list");
 
-    $result = $flysystem->put($prefix.'.tar.gz', file_get_contents($prefix.'.tar.gz'));
+    $result = $flysystem->put($cache_tar_gz_name, file_get_contents($cache_tar_gz_name));
 
-    exec("rm -rf {$prefix}.tar.gz");
+    exec("rm -rf $cache_tar_gz_name");
 
     echo $result ? 'success' : 'failure';
 

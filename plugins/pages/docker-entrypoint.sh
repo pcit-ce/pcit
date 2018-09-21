@@ -1,8 +1,10 @@
 #!/bin/bash
 
-set -ex
+echo;echo
 
-echo "Preparing deploy"
+echo "==> Preparing deploy git pages"
+
+set -ex
 
 if ! [ -d ${local_dir} ];then exit; fi
 
@@ -12,7 +14,7 @@ if [ ${keep_history:-true} == 'true' ];then
   git clone --bare -b ${target_branch:-gh-pages} https://${git_url} ${local_dir}/.git || echo
 fi
 
-echo "Deploying application"
+set +x; echo "Deploying application"; set -x
 
 cd ${local_dir}
 
@@ -30,9 +32,7 @@ git config user.email ${email}
 
 git commit -m "Deploy pages by PCIT"
 
-set +e
-git remote get-url origin && git remote rm origin
-set -e
+set +e; git remote get-url origin && git remote rm origin; set -e
 
 set +x
 echo "git remote add origin https://${name}:git_token@${git_url}.git"
