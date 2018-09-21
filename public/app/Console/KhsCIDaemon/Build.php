@@ -7,10 +7,7 @@ namespace App\Console\KhsCIDaemon;
 use App\Build as BuildEloquent;
 use App\Console\Events\Build as BuildEvent;
 use App\Console\Events\CheckAdmin;
-use App\Console\Events\LogHandle;
 use App\Console\Events\Subject;
-use App\Console\Events\UpdateBuildStatus;
-use App\Job;
 use Exception;
 use KhsCI\KhsCI;
 use KhsCI\Support\CI;
@@ -50,36 +47,8 @@ class Build
             // exec build
             (new KhsCI())->build->handle($buildData);
 
-            $job_ids = Job::getByBuildKeyID($buildData->build_key_id, true);
-
-            foreach ($job_ids as $job_id) {
-                $job_id = $job_id['id'];
-                Log::debug(__FILE__, __LINE__,
-                    'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
-
-                $subject
-                    // update build status in progress
-                    ->register(
-                        new UpdateBuildStatus((int) $job_id, $buildData->config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS)
-                    )
-                    ->handle();
-
-                try {
-                    (new KhsCI())->build_agent->handle((int) $job_id);
-                } catch (\Throwable $e) {
-                    Log::debug(__FILE__, __LINE__,
-                        'Handle job success', [
-                            'job_id' => $job_id,
-                            'message' => $e->getMessage(),
-                        ], Log::EMERGENCY);
-
-                    $subject
-                        ->register(new LogHandle((int) $job_id))
-                        ->register(
-                            new UpdateBuildStatus((int) $job_id, $buildData->config, $e->getMessage())
-                        )->handle();
-                }
-            }
+            // agent run job
+            (new Agent())->handle($buildData->build_key_id, $buildData->config);
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [
                 'message' => $e->getMessage(), 'code' => $e->getCode(), ], Log::EMERGENCY);
