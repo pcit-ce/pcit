@@ -8,6 +8,11 @@ use Exception;
 use KhsCI\KhsCI as PCIT;
 use KhsCI\Service\Build\BuildData;
 use KhsCI\Service\Build\Client;
+use KhsCI\Service\Build\Conditional\Branch;
+use KhsCI\Service\Build\Conditional\Event;
+use KhsCI\Service\Build\Conditional\Platform;
+use KhsCI\Service\Build\Conditional\Status;
+use KhsCI\Service\Build\Conditional\Tag;
 use KhsCI\Service\Build\Parse;
 use KhsCI\Support\Cache;
 use KhsCI\Support\Log;
@@ -46,18 +51,44 @@ class Pipeline
 
             $image = $array->image;
             $commands = $array->commands ?? null;
-            $event = $array->when->event ?? null;
             $env = $array->environment ?? [];
             $status = $array->when->status ?? null;
             $shell = $array->shell ?? 'sh';
 
-            if (!self::parseEvent($event, $this->build->event_type)) {
+            $when_platform = $array->when->platform ?? null;
+
+            // tag pull_request
+            $when_event = $array->when->event ?? null;
+
+            $when_branch = $array->when->branch ?? null;
+            $when_tag = $array->when->tag ?? null;
+
+            $this->client->build->tag;
+            $this->client->build->pull_request_number;
+
+            if (!(new Platform($when_platform, 'linux/amd64'))->regHandle()) {
+                Log::connect()->emergency('skip by platform check');
                 continue;
             }
 
-            $failure = self::parseStatus($status, 'failure');
-            $success = self::parseStatus($status, 'success');
-            $changed = self::parseStatus($status, 'changed');
+            if (!(new Event($when_event, $this->build->event_type))->handle()) {
+                Log::connect()->emergency('skip by event check');
+                continue;
+            }
+
+            if (!(new Branch($when_branch, $this->build->branch))->regHandle()) {
+                Log::connect()->emergency('skip by branch check');
+                continue;
+            }
+
+            if (!(new Tag($when_tag, $this->build->tag))->regHandle()) {
+                Log::connect()->emergency('skip by tag check');
+                continue;
+            }
+
+            $failure = (new Status())->handle($status, 'failure');
+            $success = (new Status())->handle($status, 'success');
+            $changed = (new Status())->handle($status, 'changed');
 
             $no_status = $status ? false : true;
 
@@ -105,70 +136,5 @@ class Pipeline
 
             Cache::store()->lPush((string) $job_id.'_pipeline', $container_config);
         }
-    }
-
-    /**
-     * @param        $event
-     * @param string $event_type
-     *
-     * @return bool
-     *
-     * @throws Exception
-     */
-    private static function parseEvent($event, string $event_type)
-    {
-        if ($event) {
-            if (\is_string($event)) {
-                if ($event_type !== $event) {
-                    Log::debug(
-                        __FILE__,
-                        __LINE__,
-                        "Pipeline $event Is Not Current ".$event_type.'. Skip', [], Log::EMERGENCY
-                    );
-
-                    return false;
-                }
-            } elseif (\is_array($event) and (!\in_array($event_type, $event, true))) {
-                Log::debug(
-                    __FILE__,
-                    __LINE__,
-                    "Pipeline Event $event not in ".implode(' | ', $event).'. skip', [], Log::EMERGENCY);
-
-                return false;
-            }
-
-            return true;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $status
-     * @param $target
-     *
-     * @return bool
-     */
-    private static function parseStatus($status, $target)
-    {
-        if (!$status) {
-            return false;
-        }
-
-        if (\is_string($status)) {
-            if (\in_array($status, ['failure', 'success', 'changed'], true)) {
-                return $status === $target;
-            }
-        }
-
-        if (\is_array($status)) {
-            foreach ($status as $k) {
-                if ($k === $target) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }

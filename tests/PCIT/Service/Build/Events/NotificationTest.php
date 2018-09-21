@@ -36,7 +36,7 @@ class NotificationTest extends PCITTestCase
      */
     public function test_email_array(): void
     {
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 notifications:
   email:
     - khs1994@khs1994.com
@@ -54,7 +54,7 @@ EOF;
      */
     public function test_email_list(): void
     {
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 notifications:
   email:
     recipients:

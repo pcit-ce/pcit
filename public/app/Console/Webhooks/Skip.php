@@ -6,6 +6,7 @@ namespace App\Console\Webhooks;
 
 use App\Build;
 use Exception;
+use KhsCI\Service\Build\Conditional\Branch;
 use KhsCI\Support\Log;
 
 class Skip
@@ -46,8 +47,6 @@ class Skip
     public function handle(): void
     {
         $build_key_id = $this->build_key_id;
-        $config = $this->config;
-        $branch = $this->branch;
 
         // check commit message
         if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $this->commit_message)) {
@@ -58,55 +57,23 @@ class Skip
             return;
         }
 
-        if (null === $config) {
+        if (null === $this->config) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because config is empty', [], Log::INFO);
 
             return;
         }
 
-        $yaml_obj = (object) json_decode($config, true);
+        $yaml_obj = json_decode($this->config);
 
         $branches = $yaml_obj->branches ?? null;
 
-        if (null === $branches) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty', [], Log::INFO);
+        $result = (new Branch($branches, $this->branch))->regHandle();
 
+        if ($result) {
             return;
         }
 
-        $branches_exclude = $branches['exclude'] ?? [];
-
-        $branches_include = $branches['include'] ?? [];
-
-        if ([] === $branches_exclude and [] === $branches_include) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because branches is empty', [], Log::INFO);
-
-            return;
-        }
-
-        // 匹配排除分支
-        if ($branches_exclude) {
-            if (self::check($branches_exclude, $branch)) {
-                $message = ".pcit.yml exclude branch $branch, build skip";
-
-                Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
-
-                self::writeSkipToDB($build_key_id);
-
-                return;
-            }
-        }
-
-        // 匹配包含分支
-        if ($branches_include) {
-            if (self::check($branches_include, $branch)) {
-                $message = ".pcit.yml include branch $branch, building";
-
-                Log::debug(__FILE__, __LINE__, $message, [], Log::INFO);
-
-                return;
-            }
-        }
+        self::writeSkipToDB($build_key_id);
     }
 
     /**
@@ -118,46 +85,6 @@ class Skip
     {
         Build::updateBuildStatus($build_key_id, 'skip');
 
-        throw new Exception('skip');
-    }
-
-    /**
-     * @param string|array $pattern
-     * @param string       $subject
-     *
-     * @return bool
-     *
-     * @throws Exception
-     */
-    private static function check($pattern, string $subject)
-    {
-        if (\is_string($pattern)) {
-            return self::checkString($pattern, $subject);
-        }
-
-        if (\is_array($pattern)) {
-            foreach ($pattern as $k) {
-                if (self::checkString($k, $subject)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $pattern
-     * @param string $subject
-     *
-     * @return bool
-     */
-    private static function checkString(string $pattern, string $subject)
-    {
-        if (preg_match('#'.$pattern.'#', $subject)) {
-            return true;
-        }
-
-        return false;
+        throw new Exception('build skip by commit message or branch ruler');
     }
 }

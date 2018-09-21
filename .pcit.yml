@@ -79,6 +79,35 @@ pipeline:
       # ^[0-9.]+      1.2.0-rc
       # ^v([0-9.]+)$  v1.2.3
 
+  test_platform:
+    image: bash
+    when:
+      platform: Windows/amd64
+    commands:
+      - echo "Only run on Windows amd64"
+
+  test_when_branch_include:
+    image: bash
+    when:
+      branch:
+        include: dev
+    commands:
+      - echo "Only run on dev branch"
+
+  test_when_branch:
+    image: bash
+    when:
+      branch: master
+    commands:
+      - echo "Only run on master branch"
+
+  test_when_branch_exclude:
+    image: bash
+    when:
+      branch:
+        exclude: master
+    commands:
+      - echo "Don't run on master branch"
 
   # This is a build docker image demo，when tag push
   publish_php:
@@ -222,7 +251,7 @@ matrix:
     - 10.4
 
 branches:
-  include: [ master ]
+  include: [ master,dev ]
   exclude: test*
   # include: [ master, release/* ]
   # exclude: [ release/1.0.0, release/1.1.* ]

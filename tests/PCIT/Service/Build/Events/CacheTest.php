@@ -43,7 +43,7 @@ class CacheTest extends PCITTestCase
     {
         DB::close();
 
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 cache: 
   directories:
   - dir
