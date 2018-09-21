@@ -122,6 +122,7 @@ pipeline:
     # dockerfile: path/to/Dockerfile
     when:
       event: tag
+      branch: alpha
     # please set env in settings
     # environment:
     # - DOCKER_USERNAME=username
@@ -171,6 +172,7 @@ pipeline:
     when:
       status: success
       event: tag
+      branch: alpha
     file:
       README.md: khsci/tencent_cloud_cos_file_name_${KHSCI_TAG}
       Dockerfile: khsci/tencent_cloud_cos_file_name2_${KHSCI_TAG}
@@ -187,6 +189,7 @@ pipeline:
     when:
       status: success
       event: tag
+      branch: alpha
       # environment:
       # - GITHUB_TOKEN=x
     file:
