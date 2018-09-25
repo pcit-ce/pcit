@@ -63,7 +63,7 @@ use WeChat\WeChat;
  * @property Curl                                           $curl
  * @property Docker                                         $docker
  * @property WeChat                                         $wechat
- * @property Service\WeChat\Template\WeChatClient           $wechat_template_message
+ * @property Service\Kernel\WeChat\Template\WeChatClient    $wechat_template_message
  * @property Request                                        $request
  */
 class KhsCI extends Container

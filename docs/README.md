@@ -20,8 +20,6 @@
 
 ## PCIT EE
 
-> GitHub App PCIT （即 **PCIT CE** ） 暂不提供项目测试、构建
-
 **PCIT EE 需要自行部署，部署方法请看下一节**
 
 ### 项目测试、构建
@@ -43,7 +41,7 @@ $ git clone https://github.com/khs1994-docker/php-demo
 ```bash
 $ cd php-demo
 
-# edit file then push it to github
+# 编辑文件，然后推送到 GitHub
 
 $ git add .
 

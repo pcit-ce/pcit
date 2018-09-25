@@ -12,7 +12,7 @@ This will return a list of branches a repository has on GitHub.
 | :----- | :------------------------------------------------- |
 | `GET`  | `/repo/{git_type}/{username}/{repo.name}/branches` |
 
-**Example:** `GET` `/repo/github/khs1994-php/khsci/branches`
+**Example:** `GET` `/repo/github/khs1994-php/pcit/branches`
 
 ## Find
 
@@ -24,4 +24,4 @@ This will return information about an individual branch.
 | :----- | :------------------------------------------------------------- |
 | `GET`  | `/repo/{git_type}/{username}/{repo.name}/branch/{branch.name}` |
 
-**Example:** `GET` `/repo/github/khs1994-php/khsci/branch/master`
+**Example:** `GET` `/repo/github/khs1994-php/pcit/branch/master`

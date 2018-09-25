@@ -1,7 +1,7 @@
 # Beta features
 
 ## List
-     
+
 This will return a list of beta features available to a user.
 
 > 返回 Beta 功能列表
@@ -21,7 +21,7 @@ This will update a user's beta_feature.
 ```bash
 $ curl -X PATCH \
     -H "Content-Type: application/json" \
-    -H "KhsCI-API-Version: 3" \
+    -H "PCIT-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{"beta_feature.enabled":true}' \
     https://ci.khs1994.com/api/user/khs1994/{beta_feature.id}

@@ -2,7 +2,7 @@
 
 ## List
 
-This returns a list of the settings for that repository. 
+This returns a list of the settings for that repository.
 
 > 返回某个仓库的设置列表
 
@@ -10,7 +10,7 @@ This returns a list of the settings for that repository.
 | :----- | :------------------------------------------------- |
 | `GET`  | `/repo/{username}/{repo.name}/settings` |
 
-**Example:** `GET` `/repo/khs1994-php/khsci/settings`
+**Example:** `GET` `/repo/khs1994-php/pcit/settings`
 
 ## Get
 
@@ -31,10 +31,10 @@ This updates a single setting.
 ```bash
 $ curl -X PATCH \
     -H "Content-Type: application/json" \
-    -H "KhsCI-API-Version: 3" \
+    -H "PCIT-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "setting.value": true }' \
-    https://ci.khs1994.com/api/repo/khs1994-php/khsci/setting/{setting.name}
+    https://ci.khs1994.com/api/repo/khs1994-php/pcit/setting/{setting.name}
 ```
 
 | Method   | URL                                                              |

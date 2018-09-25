@@ -1,0 +1,93 @@
+header {
+    /*position: relative;*/
+    /*border-style: solid;*/
+}
+
+.ico {
+    margin-left: 20%;
+}
+
+.docs {
+    margin-left: 6%;
+}
+
+.plugins {
+    margin-left: 2%;
+}
+
+.donate {
+    margin-left: 2%;
+}
+
+.username {
+    margin-left: 25%;
+}
+
+.login {
+/*border: solid;*/
+float: left;
+position: relative;
+margin-top: 15%;
+margin-left: 20%;
+}
+
+.login_tips {
+position: absolute;
+/*float: left;*/
+width: 500px;
+line-height: 25px;
+
+}
+
+.login_button {
+position: absolute;
+margin-top: 100px;
+margin-left: 500px;
+float: left;
+}
+
+footer {
+position: relative;
+margin-top: 540px;
+margin-left: 8%;
+}
+
+footer li {
+line-height: 30px;
+color: #636b6f;
+list-style-type: none;
+}
+
+footer a {
+text-decoration: none;
+color: #636b6f;
+}
+
+footer a:hover {
+text-decoration: underline;
+color: #636b6f;
+}
+
+.about {
+/*border: solid;*/
+float: left;
+margin-left: 10%;
+}
+
+.help {
+/*border: solid;*/
+float: left;
+margin-left: 5%;
+}
+
+.legal {
+/*border: solid;*/
+float: left;
+margin-left: 5%;
+}
+
+.status {
+/*border: solid;*/
+float: left;
+margin-left: 10%;
+}

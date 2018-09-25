@@ -20,7 +20,7 @@ This returns a list of builds for an individual repository. The result is pagina
 | :----- | :----------------------------------------------- |
 | `GET`  | `/repo/{git_type}/{username}/{repo.name}/builds` |
 
-**Example:** `GET` `/repo/github/khs1994-php/khsci/builds`
+**Example:** `GET` `/repo/github/khs1994-php/pcit/builds`
 
 ## Find By Repo Current
 
@@ -30,7 +30,7 @@ This returns a list of builds for an individual repository. The result is pagina
 | :----- | :-----------------------------------------------        |
 | `GET`  | `/repo/{git_type}/{username}/{repo.name}/build/current` |
 
-**Example:** `GET` `/repo/github/khs1994-php/khsci/build/current`
+**Example:** `GET` `/repo/github/khs1994-php/pcit/build/current`
 
 ## Find
 

@@ -210,6 +210,20 @@ EOF;
     }
 
     /**
+     * @param int $job_key_id
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getBuildStatus(int $job_key_id)
+    {
+        $sql = 'SELECT state FROM jobs WHERE id=?';
+
+        return DB::select($sql, [$job_key_id]);
+    }
+
+    /**
      * @param int $build_key_id
      *
      * @return int

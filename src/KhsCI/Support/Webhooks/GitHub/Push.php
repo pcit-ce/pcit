@@ -95,7 +95,7 @@ class Push
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
 
-        $branch = self::ref2branch($obj->base_ref);
+        $branch = self::ref2branch($obj->base_ref ?? 'refs/heads/master');
 
         $head_commit = $obj->head_commit;
         $commit_id = $head_commit->id;

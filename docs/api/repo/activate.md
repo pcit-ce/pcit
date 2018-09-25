@@ -2,7 +2,7 @@
 
 ## Activate
 
-This will activate a repository, allowing its tests to be run on KhsCI.
+This will activate a repository, allowing its tests to be run on PCIT.
 
 | Method  | URL                                                |
 | :-----  | :------------------------------------------------- |
@@ -10,7 +10,7 @@ This will activate a repository, allowing its tests to be run on KhsCI.
 
 ## Deactivate
 
-This will deactivate a repository, preventing any tests from running on KhsCI.
+This will deactivate a repository, preventing any tests from running on PCIT.
 
 | Method  | URL                                                  |
 | :-----  | :-------------------------------------------------   |

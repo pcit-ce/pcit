@@ -46,7 +46,7 @@ This returns the cron set for the specified branch for the specified repository.
 | :----- | :------------------------------------------------------------------ |
 | `GET`  | `/repo/{username}/{repo.name}/branch/{branch.name}/cron` |
 
-**Example:** `GET` `/repo/khs1994-php/khsci/branch/master/cron`
+**Example:** `GET` `/repo/khs1994-php/pcit/branch/master/cron`
 
 ## CreateByBranch
 
@@ -57,10 +57,10 @@ This creates a cron on the specified branch for the specified repository. Conten
 ```bash
 $ curl -X POST \
     -H "Content-Type: application/json" \
-    -H "KhsCI-API-Version: 3" \
+    -H "PCIT-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "cron.interval": "monthly" }' \
-    https://ci.khs1994.com/api/repo/khs1994-php/khsci/branch/master/cron
+    https://ci.khs1994.com/api/repo/khs1994-php/pcit/branch/master/cron
 ```
 
 | Method    | URL                                                                 |

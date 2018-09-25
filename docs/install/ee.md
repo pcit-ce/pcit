@@ -1,24 +1,24 @@
-# KhsCI EE
+# PCIT EE
 
 ## 运行环境准备
 
 安装好 Docker 并克隆部署环境（LNMP）
 
 ```bash
-$ git clone https://github.com/khs1994-docker/lnmp
+$ git clone --depth=1 https://github.com/khs1994-docker/lnmp
 
 $ cd lnmp
 
-$ ./lnmp-docker.sh khsci-up
+$ ./lnmp-docker pcit-up
 ```
 
 ## 准备网站 TLS 证书
 
-将 **公钥** **私钥** 文件内容合在一起放入 `khsci/ssl/ci.crt` 文件中。
+将 **公钥** **私钥** 文件内容合在一起放入 `pcit/ssl/ci.crt` 文件中。
 
 ## 配置 NGINX
 
-编辑 `khsci/conf/khsci.conf`
+编辑 `pcit/conf/pcit.conf`
 
 ## 新建 GitHub OAuth App
 
@@ -29,6 +29,8 @@ $ ./lnmp-docker.sh khsci-up
 * `Authorization callback URL` OAuth 回调地址 https://ci.example.com:port/oauth/github
 
 ## 新建 GitHub App
+
+在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App，用于 **OAuth2** 账号体系
 
 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps/new) 新建 GitHub App
 
@@ -42,13 +44,13 @@ $ ./lnmp-docker.sh khsci-up
 
 在 GitHub App 设置(General)->Private keys->右边按钮(Generate a private key)，下载到本地
 
-假设该私钥文件名为 `khsci.2018-04-28.private-key.pem`
+假设该私钥文件名为 `pcit.2018-04-28.private-key.pem`
 
-放入到 `lnmp/app/khsci/public/private_key` 目录中
+放入到 `lnmp/app/pcit/public/storage/private_key` 目录中
 
 ## 填写关键信息
 
-编辑 `lnmp/app/khsci/public/.env.production` 文件，设置好相关变量
+编辑 `lnmp/app/pcit/public/.env.production` 文件，设置好相关变量
 
 特别注意以下变量
 
@@ -56,16 +58,16 @@ $ ./lnmp-docker.sh khsci-up
 CI_GITHUB_APP_PRIVATE_FILE=
 ```
 
-此变量值为上一步生成的私钥文件名，例如 `khsci.2018-04-28.private-key.pem`
+此变量值为上一步生成的私钥文件名，例如 `pcit.2018-04-28.private-key.pem`
 
 其他变量含义请查看 [ENV](env.md)
 
 ## 启动
 
 ```bash
-$ lnmp-docker.sh khsci-up
+$ lnmp-docker pcit-up
 ```
 
 ## 准备项目
 
-项目根目录包含 `.khsci.yml`，推送到 GitHub，在 commit 信息处点击小图标查看详情。
+项目根目录包含 `.pcit.yml`，推送到 GitHub，在 commit 信息处点击小图标查看详情。

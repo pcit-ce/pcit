@@ -1,8 +1,8 @@
 # ENV
 
-`public/.env.*` 文件包含了自定义 KhsCI 所需的环境变量，下面详细介绍这些变量的作用
+`public/.env.*` 文件包含了自定义 PCIT 所需的环境变量，下面详细介绍这些变量的作用
 
-变量值仅有两种类型 `String` 和 `Bool`，默认值请查看这里 https://github.com/khs1994-php/khsci/blob/master/public/.env.example
+变量值仅有两种类型 `String` 和 `Bool`，默认值请查看这里 https://github.com/khs1994-php/pcit/blob/master/public/.env.example
 
 * `CI_HOST` String 部署 CI 的域名
 

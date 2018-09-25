@@ -6,33 +6,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <title>PCIT Login</title>
+  <link rel="stylesheet" href="/css/login.css" type="text/css"/>
 </head>
 <body>
 <header>
-
+  <span class="ico">PCIT</span>
+  <span class="docs">Documentation</span>
+  <span class="plugins">Plugins</span>
+  <span class="donate">Donate</span>
+  <span class="username">username</span>
 </header>
-<div style="text-align: center;margin-top: 200px">
-  <button id="hello" v-if="display" type="button" onclick="hello()"
-          title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">PCIT Hello
-  </button>
-  <div>
-    <span class="tips"> Login to PCIT </span>
-    <p>PCIT 没有自己的账号体系，你可以使用 GitHub,Gitee,Gogs,Coding 的账号进行登录</p>
-    <p>点击登录按钮意味着您同意我们的服务条款和隐私政策</p>
+<div class="login">
+  <div class="login_tips">
+    <p style="font-size: 30px">Login to PCIT</p>
+    <p style="font-size: 18px">PCIT 没有自己的账号体系，你可以使用<br> GitHub, Gitee, <s>Gogs</s>, <s>Coding</s>, <s>AI 人脸</s>进行登录</p>
+    <p style="font-size: 14px;color: #636b6f">点击登录按钮意味着您同意我们的 服务条款 和 隐私政策 </p>
   </div>
-  <button type="button" onclick="github()" title="Login With GitHub">GitHub</button>
-  <button type="button" onclick="coding()" title="Login With Coding Coming soon">Coding</button>
-  <button type="button" onclick="gitee()" title="Login With Gitee Coming soon">Gitee</button>
+  <div class="login_button">
+    <button id="hello" v-if="display" type="button" onclick="hello()"
+            title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">PCIT Hello
+    </button>
+    <button type="button" onclick="github()" title="Login With GitHub">GitHub</button>
+    <button type="button" onclick="coding()" title="Login With Coding Coming soon">Coding</button>
+    <button type="button" onclick="gitee()" title="Login With Gitee Coming soon">Gitee</button>
+  </div>
 </div>
 
-<footer style="margin-top: 25%">
-  <ul>
-    <li>@PCIT, Datong, Shanxi<br><br></li>
-    <li><a href="mailto:ci@khs1994.com">email</a><br><br></li>
-    <li><a href="https://github.com/khs1994-php/pcit/tree/master/docs" target="_blank">Docs</a></li>
+<footer>
+  <ul class="about">
+    <li>@PCIT, Datong, Shanxi</li>
+    <li><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></li>
+    <li><a href="//weibo.com/kanghuaishuai" target="_blank">Weibo</a></li>
+    <li><a href="" target="_blank">WeChat</a></li>
+    <li><a href="mailto:ci@khs1994.com">Email</a></li>
   </ul>
-  <ul>
+
+  <ul class="help">
+    <li><a href="https://github.com/khs1994-php/pcit/tree/master/docs" target="_blank">Documentation</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/issues" target="_blank">Community</a></li>
+    <li><a href="/blog" target="_blank">Blog</a></li>
     <li><a href="https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md" target="_blank">CHANGELOG</a></li>
+    <li><a href="https://zan.khs1994.com" target="_blank">Donate</a></li>
+  </ul>
+
+  <ul class="legal">
+    <li><a href="" target="_blank">Terms of Service</a></li>
+    <li><a href="" target="_blank">Privacy Policy</a></li>
+    <li><a href="" target="_blank">PCIT CE</a></li>
+    <li><a href="" target="_blank">PCIT EE</a></li>
+    <li><a href="" target="_blank">Why PCIT</a></li>
+  </ul>
+
+  <ul class="status">
+    <li><a href="" target="_blank">PCIT Status</a></li>
   </ul>
 </footer>
 
@@ -58,7 +84,9 @@
     data: {
       display: false
     }
-  })
+  });
+
+
 </script>
 </body>
 </html>

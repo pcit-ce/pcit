@@ -1,4 +1,4 @@
-# KhsCI Plugins
+# PCIT Plugins
 
 ## 如何开发一个插件
 
@@ -22,8 +22,8 @@
 
 | Plugin                                                               | Author |
 | :------------------------------------------------------------------- | :----- |
-| [Tencent Cloud COS v4](https://github.com/tencentyun/cos-php-sdk-v4) | @KhsCI |
-| [Tencent Cloud COS v5](https://github.com/tencentyun/cos-php-sdk-v5) | @KhsCI |
-| [Email](https://github.com/PHPMailer/PHPMailer)                      | @KhsCI |
-| [GitHub Pages](https://github.com/khs1994-php/khsci)                 | @KhsCI |
-| [GitHub Release](https://github.com/khs1994-php/khsci)               | @aktau |
+| [Tencent Cloud COS v4](https://github.com/tencentyun/cos-php-sdk-v4) | @PCIT  |
+| [Tencent Cloud COS v5](https://github.com/tencentyun/cos-php-sdk-v5) | @PCIT  |
+| [Email](https://github.com/PHPMailer/PHPMailer)                      | @PCIT  |
+| [GitHub Pages](https://github.com/khs1994-php/pcit)                  | @PCIT  |
+| [GitHub Release](https://github.com/khs1994-php/pcit)                | @aktau |
