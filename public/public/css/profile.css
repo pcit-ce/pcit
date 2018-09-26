@@ -77,3 +77,19 @@ footer a:hover {
     float: left;
     margin-left: 10%;
 }
+
+#userinfo {
+    margin-left: 20%;
+}
+
+#user{
+    margin-left: 20%;
+}
+
+#orgs {
+    margin-left: 20%;
+}
+
+#repos {
+    margin-left: 20%;
+}

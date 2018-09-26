@@ -142,13 +142,15 @@ $ ./lnmp-docker pcit-up
 
 更多信息请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
 
+### 视频教程
+
+文字版看不明白？请查看 [视频版]() 安装教程。
+
 ## 开发团队支持
 
 ![](https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg)
 
-扫码关注 **PCIT** 微信公众平台，寻求 **PCIT** 团队支持。
-
-[微博](https://weibo.com/kanghuaishuai) [QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)
+关注 PCIT **微信公众平台** **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 寻求 **PCIT** 团队支持。
 
 ## PCIT 子项目
 

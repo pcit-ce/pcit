@@ -145,7 +145,7 @@
         settings_url = data;
         content = `<p></p>
         <p></p>
-        <a href="${settings_url}/${installation_id}" target="_blank">在 GitHub 管理项目</a>
+        <a href="${settings_url}/${installation_id}" target="_blank">找不到仓库？请在 GitHub 管理你的仓库</a>
         `;
 
         $("#repos").append(content);
@@ -163,8 +163,8 @@
       success: function (data) {
 
         installation_url = data;
-        content = `<p>GitHub App 集成</p>
-            <p><a href="${installation_url}" target="_blank">激活项目</a> 找不到项目！请点击激活项目</p>
+        content = `<p>此账号或组织未安装 GitHub App 或未选择项目，点击
+<a href="${installation_url}" target="_blank">激活项目</a> 在 GitHub 进行安装</p>
         `;
         $("#repos").append(content);
       },
@@ -227,11 +227,10 @@
         list(data);
 
         if (git_type !== 'github') {
-
-          return 1;
+          return;
         }
 
-        if (installation_id) {
+        if (parseInt(installation_id)) {
           showGitHubAppSettings(org_name, installation_id);
         } else {
           showGitHubAppInstall(uid);
