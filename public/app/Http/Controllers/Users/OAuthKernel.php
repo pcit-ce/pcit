@@ -69,6 +69,8 @@ class OAuthKernel
         $url = static::$oauth->getLoginUrl($state);
 
         Response::redirect($url);
+
+        exit;
     }
 
     /**
@@ -124,5 +126,7 @@ class OAuthKernel
         Session::put($git_type.'.expire', time() + 24 * 60 * 60);
 
         Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
+
+        exit;
     }
 }

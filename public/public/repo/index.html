@@ -5,9 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-  <title>KhsCI</title>
+  <link rel="stylesheet" type="text/css" href="/css/repos.css">
+  <title>PCIT</title>
 </head>
 <body>
+
+<header></header>
+
+<footer></footer>
+
 <script>
   let url_array = location.href.split('/');
   let username = url_array[4];
@@ -16,7 +22,7 @@
   $(document).ready(function () {
     $.ajax({
         type: 'GET',
-        url: '/api/' + `${git_type}/${username}/repos`,
+        url: '/api/repos/' + `${git_type}/${username}`,
         success: function (data) {
           $.each(data)
         }
@@ -24,5 +30,6 @@
     )
   })
 </script>
+<script src="/js/repos.js"></script>
 </body>
 </html>

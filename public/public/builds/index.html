@@ -4,32 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-  <title>KhsCI - Builds</title>
+  <link rel="stylesheet" type="text/css" href="/css/builds.css">
+  <title>PCIT - Builds</title>
 </head>
 <body>
-<header>
 
-</header>
-<div id="repo">
-</div>
-<div>
+<header></header>
+
+<div id="repo"></div>
+
+<div class="main">
   <button id="current">Current</button>
   <button id="branches">Branches</button>
   <button id="builds">Build History</button>
   <button id="pull_requests">Pull Requests</button>
 
-  <select title="" id="sellect">
+  <select title="" id="select">
     <option value="settings">Settings</option>
     <option value="requests">Requests</option>
     <option value="caches">Caches</option>
     <option value="trigger_build">Trigger Build</option>
   </select>
-
 </div>
+
 <br>
-<div id="display">
 
-</div>
+<div id="display"></div>
+
+<footer></footer>
+
 <script>
   let url = location.href;
 
@@ -37,11 +40,7 @@
 
   let baseUrl = "https://" + location.host;
 
-  let git_type = array[3];
-
-  let username = array[4];
-
-  let repo = array[5];
+  let [, , , git_type, username, repo] = array;
 
   let base_full_url = baseUrl + '/' + git_type + '/' + username + '/' + repo;
 
@@ -51,13 +50,25 @@
 
   let build_id;
 
+  let title;
+
   if (6 === array.length) {
     type_from_url = 'current';
   }
 
   let query = git_type + '/' + username + '/' + repo;
 
-  let baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
+  let baseTitle = format_gittype(git_type) + ' - ' + username + '/' + repo + ' - PCIT';
+
+  function format_gittype(gittype) {
+    switch (gittype) {
+      case 'github':
+        return 'GitHub';
+
+      default:
+        return gittype.substring(0, 1).toUpperCase() + gittype.substring(1);
+    }
+  }
 
   function current() {
     $.ajax({
@@ -66,8 +77,7 @@
       success: function (data) {
         display('current', data);
       }
-
-    })
+    });
   }
 
   function branches() {
@@ -77,11 +87,10 @@
       success: function (data) {
         display('branches', data)
       }
-    })
+    });
   }
 
   function builds() {
-
     let url = location.href;
 
     let array = url.split('/');
@@ -101,6 +110,7 @@
         },
         error: function (data) {
           display('builds', 'error');
+          console.log(data);
         }
       });
 
@@ -115,6 +125,7 @@
       },
       error: function (data) {
         display('builds', 'error');
+        console.log(data);
       }
     });
   }
@@ -139,7 +150,7 @@
         break;
 
       case 'gitee':
-        commitUrl = `https://gitee.com/${username}/${repo}/commit/${commit_id}`
+        commitUrl = `https://gitee.com/${username}/${repo}/commit/${commit_id}`;
 
         break;
     }
@@ -166,16 +177,12 @@
   }
 
   function showLog(data) {
-    let build_id = data.id;
-    let build_status = data.build_status;
-    let commit_id = data.commit_id;
-    let commit_message = data.commit_message;
-    let branch = data.branch;
-    let committer_name = data.committer_name;
-    let compare = data.compare;
-    let stopped_at = data.finished_at;
     let nbsp = '&nbsp;&nbsp;';
-    let build_log = data.build_log;
+    console.log(data);
+    let {
+      id: build_id, build_status, commit_id, commit_message, branch, committer_name,
+      compare, stopped_at, build_log
+    } = data;
 
     if (null === build_log) {
       build_log = 'This Build is ' + build_status;
@@ -183,15 +190,14 @@
     if (null === stopped_at) {
       stopped_at = 'This build is ' + build_status;
     } else {
+      let d;
       d = new Date(parseInt(stopped_at) * 1000);
       stopped_at = d.toLocaleString();
     }
 
     let commit_url = getCommitUrl(commit_id);
 
-    $("#display").append(
-      `
- <h2># ${build_id}${nbsp}${branch}${nbsp}${build_status}${nbsp}
+    $("#display").append(`<h2># ${build_id}${nbsp}${branch}${nbsp}${build_status}${nbsp}
 <a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id.slice(0, 7)}</a>${nbsp}
 ${commit_message}${nbsp}${committer_name}${nbsp}
 <a title="View diff on GitHub" href="${compare}" target='_blank'>Compare </a>${nbsp}${stopped_at}${nbsp}</h2>
@@ -227,15 +233,11 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
           let i = data.length + 1;
           $.each(data, function (id, status) {
             i--;
-            let event_type = status.event_type;
-            let build_id = status.id;
-            let branch = status.branch;
-            let committer_username = status.committer_name;
-            let commit_message = status.commit_message;
-            let commit_id = status.commit_id;
-            let build_status = status.build_status;
-            let started_at = status.started_at;
-            let stopped_at = status.finished_at;
+
+            let {
+              event_type, id: build_id, branch, committer_username,
+              commit_message, commit_id, build_status, started_at, finished_at: stopped_at
+            } = status;
 
             let nbsp = "&nbsp;&nbsp;&nbsp;";
             let nbsp2 = nbsp + nbsp + nbsp;
@@ -244,8 +246,9 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
             commit_id = commit_id.substr(0, 7);
 
             if (null == started_at) {
-              started_at = nbsp2 + nbsp2 + 'Build Is Pending'
+              started_at = nbsp2 + nbsp2 + 'Pending'
             } else {
+              let d;
               d = new Date(parseInt(started_at) * 1000);
               started_at = d.toLocaleString();
             }
@@ -253,17 +256,17 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
             if (null == stopped_at) {
               stopped_at = ' '
             } else {
+              let d;
               d = new Date(parseInt(stopped_at) * 1000);
               stopped_at = d.toLocaleString();
             }
 
-            $("#display").append(`
-<tr>
+            $("#display").append(`<tr>
 <td>${i}${nbsp}</td>
 <td style='color:blue;'>${nbsp}${event_type}${nbsp}</td>
-<td>${nbsp}${branch}${nbsp}</td>
-<td>${committer_username}${nbsp}</td>
-<td style='color: brown'>${nbsp}${commit_message}${nbsp}</td>
+<td title="${branch}">${nbsp}${branch.slice(0, 10)}${nbsp}</td>
+<td title="${committer_username}">${committer_username.slice(0, 10)}${nbsp}</td>
+<td style='color: brown' title="${commit_message}">${nbsp}${commit_message.slice(0, 28)}${nbsp}</td>
 <td>${nbsp}<a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
 <td><a href="${location.href}/${build_id}" target='_blank'># ${build_id}&nbsp;${build_status}</a>${nbsp}</td>
 <td>${nbsp}${started_at}${nbsp}</td>
@@ -294,15 +297,13 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
               let stopped_at = status[3];
 
               if (null == stopped_at) {
-                stopped_at = '&nbsp;&nbsp;&nbsp;Build Is Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                stopped_at = '&nbsp;&nbsp;&nbsp;Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
               } else {
-
+                let d;
                 d = new Date(stopped_at * 1000);
-
                 stopped_at = d.toLocaleString();
               }
-              $("#display").append(`
-<tr>
+              $("#display").append(`<tr>
 <td><a href="${builds}/${id}" target='_blank'># ${id} </a></td>
 <td>${nbsp}${status[0]}${nbsp}</td>
 <td>${nbsp}${status[2]}${nbsp}</td>
@@ -310,7 +311,6 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
 <td><a href="${status[4]}" target='_black'>${status[1]}</a></td>
 </tr>
 `);
-
             });
 
             $("#display").append("<hr>");
@@ -327,17 +327,14 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
           let i = data.length + 1;
           $.each(data, function (id, status) {
             i--;
+
             let event_type = 'PR # ';
-            let pull_request_id = status.pull_request_number;
-            let build_id = status.id;
-            let branch = status.branch;
-            let committer_username = status.committer_username;
-            let commit_message = status.commit_message;
-            let commit_id = status.commit_id;
-            let build_status = status.build_status;
-            let started_at = status.started_at;
-            let stopped_at = status.finished_at;
             let nbsp = "&nbsp;&nbsp;&nbsp;";
+
+            let {
+              pull_request_number: pull_request_id, id: build_id, branch, committer_username,
+              commit_message, commit_id, build_status, started_at, finished_at: stopped_at,
+            } = status;
 
             let commit_url = getCommitUrl(commit_id);
 
@@ -346,8 +343,9 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
             commit_id = commit_id.substr(0, 7);
 
             if (null == started_at) {
-              started_at = 'Build Is Pending'
+              started_at = 'Pending'
             } else {
+              let d;
               d = new Date(started_at * 1000);
               started_at = d.toLocaleString();
             }
@@ -355,6 +353,7 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
             if (null == stopped_at) {
               stopped_at = ' ';
             } else {
+              let d;
               d = new Date(stopped_at * 1000);
               stopped_at = d.toLocaleString();
             }
@@ -381,7 +380,8 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
     }
   }
 
-  function display_title(id, data) {
+  function display_title(id) {
+
     switch (id) {
       case "pull_requests":
         title = 'Pull Requests - ' + baseTitle;
@@ -453,12 +453,9 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
       type: "post",
       url: location.href,
       success: function (data) {
-
         display(id, data);
-
       }
-    })
-
+    });
   });
 
   $(document).ready(function () {
@@ -467,7 +464,7 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
 
     let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;';
 
-    $('#repo').append('<h2>' + git_type + nbsp + username + '/' + repo + nbsp +
+    $('#repo').append('<h2>' + format_gittype(git_type) + nbsp + username + '/' + repo + nbsp +
       "<a href='" + base_full_url + "/getstatus' target='_blank'>" +
       '<img src="' + base_full_url + '/status" />' + '</a></h2>'
     );
@@ -494,5 +491,6 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
     }
   });
 </script>
+<script src='/js/profile.js'></script>
 </body>
 </html>

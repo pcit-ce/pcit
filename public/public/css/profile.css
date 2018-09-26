@@ -32,32 +32,9 @@ header a:hover {
     margin-left: 25%;
 }
 
-.login {
-    /*border: solid;*/
-    float: left;
-    position: relative;
-    margin-top: 13%;
-    margin-left: 20%;
-}
-
-.login_tips {
-    position: absolute;
-    /*float: left;*/
-    width: 500px;
-    line-height: 25px;
-
-}
-
-.login_button {
-    position: absolute;
-    margin-top: 100px;
-    margin-left: 500px;
-    float: left;
-}
-
 footer {
     position: relative;
-    margin-top: 520px;
+    margin-top: 190px;
     margin-left: 8%;
 }
 

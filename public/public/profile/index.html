@@ -6,36 +6,38 @@
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/js-cookie/2.2.0/js.cookie.min.js"></script>
   <script src="https://lib.baomitu.com/clipboard.js/2.0.1/clipboard.min.js"></script>
-  <title>KhsCI - Profile</title>
+  <link rel="stylesheet" type="text/css" href="/css/profile.css">
+  <title>PCIT - Profile</title>
 </head>
 <body>
-<header>
 
-</header>
+<header></header>
+
 <div id="userinfo">
   <p id="username"></p>
   <button id="sync" onclick="sync()">同步账户信息</button>
 </div>
+
 <br>
 
-<div class="tip">
-  <p id="feature">
-    <a href="/features" target="_blank"><button>Beta</button></a>
-  </p>
-</div>
 <hr>
+
 <br>
-<div id="user">
-</div>
+
+<div id="user"></div>
+
 <hr>
+
 <div id="orgs">
   <form class="orgs">
   </form>
 </div>
-<hr>
-<div id="repos">
 
-</div>
+<hr>
+
+<div id="repos"></div>
+
+<footer></footer>
 
 <script>
 
@@ -47,13 +49,24 @@
 
   let username = url_array[5];
 
+  function format_gittype(gittype) {
+    switch (gittype) {
+      case 'github':
+        return 'GitHub';
+
+      default:
+        return gittype.substring(0, 1).toUpperCase() + gittype.substring(1);
+    }
+  }
+
   function showUserBasicInfo(data) {
     $("#username").text("Welcome " + data.username).addClass(data.type);
 
-    $("title").text(git_type + ' - ' + data.username + " - Profile - KhsCI");
+    $("title").text(format_gittype(git_type) + ' - ' + data.username + " - Profile - PCIT");
+
     $("#user").empty().append(
       "<span onclick='click_user()'>" + data.username + "</span><br><br><strong >API authentication</strong><br><br>" +
-      "<p>使用 KhsCI API 请访问 " +
+      "<p>使用 PCIT API 请访问 " +
       "<a href='https://api.ci.khs1994.com' target='_blank'>https://api.ci.khs1994.com</a></p>" +
       "<input id='token' value='" + Cookies.get(git_type + '_api_token') + "'>" +
       "<button class='copy_token' data-clipboard-target='#token' onclick='copy_token()'>Copy</button><br><br>"
@@ -61,7 +74,7 @@
   }
 
   function copy_token() {
-    var clipboard = new ClipboardJS('.copy_token');
+    let clipboard = new ClipboardJS('.copy_token');
 
     clipboard.on('success', function (e) {
       console.info('Action:', e.action);
@@ -77,9 +90,8 @@
     $.each(data, function (num, repo) {
 
       let button = $("<button></button>");
-      let status = repo.build_status;
-      let repo_name = repo.repo_full_name;
 
+      let {build_status: status, repo_full_name: repo_name} = repo;
 
       button.attr("onclick", 'open_or_close(this)');
 
@@ -131,11 +143,9 @@
       url: "/api/ci/github_app_settings/" + org_name,
       success: function (data) {
         settings_url = data;
-        content = `
-        <p></p>
+        content = `<p></p>
         <p></p>
         <a href="${settings_url}/${installation_id}" target="_blank">在 GitHub 管理项目</a>
-
         `;
 
         $("#repos").append(content);
@@ -153,15 +163,13 @@
       success: function (data) {
 
         installation_url = data;
-        content = `
-            <p>GitHub App 集成</p>
-
+        content = `<p>GitHub App 集成</p>
             <p><a href="${installation_url}" target="_blank">激活项目</a> 找不到项目！请点击激活项目</p>
         `;
         $("#repos").append(content);
       },
       error: function (data) {
-        alert(data);
+        console.log(data);
       }
     });
   }
@@ -205,8 +213,7 @@
   }
 
   function show_org(data, org_name) {
-    let installation_id = data[0].installation_id;
-    let uid = data[0].uid;
+    let {installation_id, uid} = data[0];
 
     $.ajax({
       type: "GET",
@@ -310,8 +317,9 @@
       },
       success: function (data) {
         location.reload();
+        console.log(data);
       }
-    })
+    });
   }
 
   function open_or_close(id) {
@@ -327,8 +335,9 @@
         success: function (data) {
           id.innerHTML = 'Close';
           id.style.color = 'Green';
+          console.log(data);
         }
-      })
+      });
     } else {
 
       $.ajax({
@@ -337,11 +346,13 @@
         success: function (data) {
           id.innerHTML = 'Open';
           id.style.color = 'Red';
+          console.log(data);
         }
       });
 
     }
   }
 </script>
+<script src="/js/profile.js"></script>
 </body>
 </html>

@@ -39,30 +39,22 @@ class Agent
 
         foreach ($job_ids as $job_id) {
             $job_id = $job_id['id'];
-            Log::debug(__FILE__, __LINE__,
-                'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
+            Log::debug(__FILE__, __LINE__, 'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
 
             $subject
                 // update build status in progress
-                ->register(
-                    new UpdateBuildStatus((int) $job_id, $config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS)
-                )
+                ->register(new UpdateBuildStatus((int)$job_id, $config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS))
                 ->handle();
 
             try {
-                (new KhsCI())->build_agent->handle((int) $job_id);
+                (new KhsCI())->build_agent->handle((int)$job_id);
             } catch (\Throwable $e) {
-                Log::debug(__FILE__, __LINE__,
-                    'Handle job success', [
-                        'job_id' => $job_id,
-                        'message' => $e->getMessage(),
-                    ], Log::EMERGENCY);
+                Log::debug(__FILE__, __LINE__, 'Handle job success', ['job_id' => $job_id, 'message' => $e->getMessage(),], Log::EMERGENCY);
 
                 $subject
-                    ->register(new LogHandle((int) $job_id))
-                    ->register(
-                        new UpdateBuildStatus((int) $job_id, $config, $e->getMessage())
-                    )->handle();
+                    ->register(new LogHandle((int)$job_id))
+                    ->register(new UpdateBuildStatus((int)$job_id, $config, $e->getMessage()))
+                    ->handle();
             }
         }
     }
