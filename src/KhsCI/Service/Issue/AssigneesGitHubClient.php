@@ -20,7 +20,7 @@ class AssigneesGitHubClient
     private $api_url;
 
     private $header = [
-        'Accept' => 'application/vnd.github.symmetra-preview+json',
+        'Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.symmetra-preview+json',
     ];
 
     /**

@@ -17,7 +17,7 @@ class Suites
     private $api_url;
 
     private $header = [
-        'Accept' => 'application/vnd.github.antiope-preview+json',
+        'Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.antiope-preview+json',
     ];
 
     /**

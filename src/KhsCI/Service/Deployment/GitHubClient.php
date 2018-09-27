@@ -193,6 +193,6 @@ class GitHubClient
             'auto_inactive' => $auto_inactive,
         ];
 
-        return $this->curl->post($url, json_encode(array_filter($data)), ['Accept' => 'application/vnd.github.ant-man-preview+json']);
+        return $this->curl->post($url, json_encode(array_filter($data)), ['Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.ant-man-preview+json']);
     }
 }

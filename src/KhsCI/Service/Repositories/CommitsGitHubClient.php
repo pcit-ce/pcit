@@ -75,7 +75,7 @@ class CommitsGitHubClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/commits/'.$ref;
 
-        return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.VERSION.sha']);
+        return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.v3.sha']);
     }
 
     /**

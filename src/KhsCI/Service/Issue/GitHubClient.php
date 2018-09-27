@@ -22,7 +22,7 @@ class GitHubClient
     private $api_url;
 
     private $header = [
-        'Accept' => 'application/vnd.github.symmetra-preview+json',
+        'Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.symmetra-preview+json',
     ];
 
     /**
@@ -186,9 +186,9 @@ class GitHubClient
                 'locked' => true,
                 'active_lock_reason' => $lock_reason,
             ];
-            $this->curl->put($url, json_encode($data), ['Accept' => 'application/vnd.github.sailor-v-preview+json']);
+            $this->curl->put($url, json_encode($data), ['Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.sailor-v-preview+json']);
         } else {
-            $this->curl->put($url, null, ['Accept' => 'application/vnd.github.sailor-v-preview+json']);
+            $this->curl->put($url, null, ['Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.sailor-v-preview+json']);
         }
 
         $http_return_code = $this->curl->getCode();
@@ -235,6 +235,6 @@ class GitHubClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/timeline';
 
-        return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.mockingbird-preview']);
+        return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.mockingbird-preview']);
     }
 }
