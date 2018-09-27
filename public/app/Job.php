@@ -77,6 +77,20 @@ EOF;
     }
 
     /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function allByBuildKeyID(int $build_key_id)
+    {
+        $sql = 'SELECT * FROM jobs WHERE build_id=?';
+
+        return DB::select($sql, [$build_key_id]);
+    }
+
+    /**
      * @param int $job_id
      *
      * @return int

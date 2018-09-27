@@ -85,7 +85,50 @@ class Build extends DBModel
     {
         $sql = 'UPDATE builds SET build_status=? WHERE id=?';
 
+        if (null === $status) {
+            $status = self::getBuildStatus($build_key_id);
+        }
+
         return DB::update($sql, [$status, $build_key_id]);
+    }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getBuildStatus(int $build_key_id)
+    {
+        $sql = 'SELECT state FROM jobs WHERE build_id=? group by state';
+
+        $result = DB::select($sql, [$build_key_id]);
+
+        if (1 === \count($result)) {
+            return $result[0]['state'];
+        }
+
+        foreach ($result as $k) {
+            $state[] = $k['state'];
+        }
+
+        $conclusion = [
+            'cancelled',
+            'errored',
+            'failure',
+            'in_progress',
+            // 'success',
+            'pending',
+        ];
+
+        foreach ($conclusion as $k) {
+            if (\in_array('$k', $result)) {
+                return $k;
+            }
+        }
+
+        return 'errored';
     }
 
     /**
@@ -118,7 +161,7 @@ class Build extends DBModel
      *
      * @throws Exception
      */
-    public static function getBuildStatus(int $rid, string $branch)
+    public static function getLastBuildStatus(int $rid, string $branch)
     {
         $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip") ORDER BY id DESC LIMIT 1';
 

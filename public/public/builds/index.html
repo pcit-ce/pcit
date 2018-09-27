@@ -182,7 +182,7 @@
     console.log(data);
     let {
       id: build_id, build_status, commit_id, commit_message, branch, committer_name,
-      compare, stopped_at, build_log
+      compare, stopped_at, build_log, jobs
     } = data;
 
     if (null === build_log) {
@@ -201,10 +201,18 @@
     $("#display").append(`<h2># ${build_id}${nbsp}${branch}${nbsp}${build_status}${nbsp}
 <a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id.slice(0, 7)}</a>${nbsp}
 ${commit_message}${nbsp}${committer_name}${nbsp}
-<a title="View diff on GitHub" href="${compare}" target='_blank'>Compare </a>${nbsp}${stopped_at}${nbsp}</h2>
-<pre>${build_log}</pre>
-`
+<a title="View diff on GitHub" href="${compare}" target='_blank'>Compare </a>${nbsp}${stopped_at}${nbsp}</h2>`
     );
+
+    if (jobs.length === 1) {
+      $("#display").append(`<pre>${jobs[0]['build_log']}</pre>`);
+
+      return;
+    }
+
+    $.each(jobs, function (id, data) {
+      $("#display").append(`<pre>${data.build_log}</pre>`);
+    });
   }
 
   function display(id, data) {
@@ -268,8 +276,8 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
 <td title="${branch}">${nbsp}${branch.slice(0, 10)}${nbsp}</td>
 <td title="${committer_username}">${committer_username.slice(0, 10)}${nbsp}</td>
 <td style='color: brown' title="${commit_message}">${nbsp}${commit_message.slice(0, 28)}${nbsp}</td>
-<td>${nbsp}<a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
-<td><a href="${location.href}/${build_id}" target='_blank'># ${build_id}&nbsp;${build_status}</a>${nbsp}</td>
+<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
+<td><a class="details" href="${location.href}/${build_id}" target='_blank'># ${build_id}&nbsp;${build_status}</a>${nbsp}</td>
 <td>${nbsp}${started_at}${nbsp}</td>
 <td>${nbsp}${stopped_at}${nbsp}</td>
 </tr>
@@ -367,8 +375,8 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
 <td>${nbsp}${branch}${nbsp}</td>
 <td>${committer_username}${nbsp}</td>
 <td style='color:brown'> ${nbsp}${commit_message}${nbsp}</td>
-<td>${nbsp}<a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
-<td><a href="${base_full_url}/builds/${build_id}" target='_blank'> #${build_id}${nbsp}${build_status}</a>${nbsp}</td>
+<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
+<td><a class="details" href="${base_full_url}/builds/${build_id}" target='_blank'> #${build_id}${nbsp}${build_status}</a>${nbsp}</td>
 <td>${nbsp}${started_at}${nbsp}</td>
 <td>${nbsp}${stopped_at}${nbsp}</td>
 </tr>

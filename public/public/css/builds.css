@@ -108,3 +108,17 @@ footer a:hover {
     margin-left: 20%;
     width: 70%;
 }
+
+.details {
+    text-decoration: none;
+    color: blue;
+}
+
+.details:hover{
+    text-decoration: underline;
+    color: blue;
+}
+
+body {
+    overflow-y: scroll;
+}

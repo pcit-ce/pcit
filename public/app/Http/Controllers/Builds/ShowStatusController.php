@@ -30,7 +30,7 @@ class ShowStatusController
 
         $rid = Repo::getRid(...$arg);
 
-        $status = Build::getBuildStatus((int) $rid, $branch);
+        $status = Build::getLastBuildStatus((int) $rid, $branch);
 
         if (null === $status) {
             header('Content-Type: image/svg+xml;charset=utf-8');

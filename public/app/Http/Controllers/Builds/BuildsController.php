@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Builds;
 
 use App\Build;
 use App\Http\Controllers\Users\JWTController;
+use App\Job;
 use App\Repo;
 use Exception;
 use KhsCI\Support\CI;
@@ -103,10 +104,12 @@ class BuildsController
     public function find($build_id)
     {
         // APITokenController::check((int) $build_id);
-
         $output = Build::find((int) $build_id);
 
         if ($output) {
+            $output['build_status'] = Build::getBuildStatus((int) $build_id);
+            $output['jobs'] = Job::allByBuildKeyID((int) $build_id);
+
             return $output;
         }
 
