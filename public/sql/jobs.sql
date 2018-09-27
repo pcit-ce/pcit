@@ -1,4 +1,4 @@
-# use khsci;
+# use pcit;
 
 # DROP TABLE IF EXISTS `jobs`;
 

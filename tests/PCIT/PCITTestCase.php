@@ -70,7 +70,7 @@ class PCITTestCase extends TestCase
         // repo
         $sql = <<<'EOF'
 INSERT INTO repo VALUES(
-null,'github',1,'khs1994-php','khsci','khs1994-php/khsci',1,1,?,null,'master'
+null,'github',1,'khs1994-php','khsci','khs1994-php/pcit',1,1,?,null,'master'
 ),(
 null,'github',2,'khs1994-php','other','khs1994-php/other',1,1,?,null,'master'
 )

@@ -1,4 +1,4 @@
-# USE khsci;
+# USE pcit;
 
 # DROP TABLE IF EXISTS `issues`;
 

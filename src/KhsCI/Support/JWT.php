@@ -34,7 +34,7 @@ class JWT
     }
 
     /**
-     * KhsCI 加密 token.
+     * PCIT 加密 token.
      *
      * @param string $privateKey
      * @param string $git_type

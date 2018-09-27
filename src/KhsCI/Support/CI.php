@@ -106,6 +106,6 @@ class CI
         ini_set('display_errors', 'on');
         ini_set('error_reporting', (string) \constant('E_ALL'));
         ini_set('log_errors', 'on');
-        ini_set('error_log', sys_get_temp_dir().'/khsci.log');
+        ini_set('error_log', sys_get_temp_dir().'/pcit.log');
     }
 }

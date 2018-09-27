@@ -1,4 +1,4 @@
-# USE khsci;
+# USE pcit;
 
 # DROP TABLE IF EXISTS `repo`;
 
@@ -17,3 +17,6 @@ CREATE TABLE IF NOT EXISTS `repo` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `unique_repo` (`git_type`, `repo_full_name`)
 );
+
+ALTER TABLE repo
+  ADD COLUMN `auto_merge` INT UNSIGNED;
