@@ -100,8 +100,18 @@ footer a:hover {
     margin-left: 20%;
 }
 
-#user{
+#user {
     margin-left: 20%;
+}
+
+#user a {
+    text-decoration: none;
+    font-size: 20px;
+    color: blue;
+}
+
+#user a:hover {
+    text-decoration: underline;
 }
 
 #orgs {
@@ -110,4 +120,21 @@ footer a:hover {
 
 #repos {
     margin-left: 20%;
+}
+
+#repos > a {
+    text-decoration: none;
+    line-height: 50px;
+    color: #aaaaaa;
+    font-size: 30px;
+}
+
+#repos a:hover {
+    text-decoration: underline;
+    line-height: 20px;
+    color: blue;
+}
+
+body {
+    overflow-y: scroll;
 }

@@ -145,8 +145,9 @@
       success: function (data) {
         settings_url = data;
         content = `<p></p>
-        <p></p>
-        <a href="${settings_url}/${installation_id}" target="_blank">找不到仓库？请在 GitHub 管理你的仓库</a>
+        <p>找不到仓库？请在
+        <a href="${settings_url}/${installation_id}" target="_blank"> GitHub </a>管理你的仓库
+        </p>
         `;
 
         $("#repos").append(content);

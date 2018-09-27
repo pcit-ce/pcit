@@ -23,12 +23,21 @@
     <p style="font-size: 14px;color: #636b6f">点击登录按钮意味着您同意我们的 服务条款 和 隐私政策 </p>
   </div>
   <div class="login_button">
-    <button id="hello" v-if="display" type="button" onclick="hello()"
-            title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">PCIT Hello
+    <button class="hello-login-button" type="button" onclick="hello()"
+            title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">Login with Face
     </button>
-    <button type="button" onclick="github()" title="Login With GitHub">GitHub</button>
-    <button type="button" onclick="coding()" title="Login With Coding Coming soon">Coding</button>
-    <button type="button" onclick="gitee()" title="Login With Gitee Coming soon">Gitee</button>
+
+    <button class="github-login-button" type="button" onclick="github()" title="Login With GitHub">Login with GitHub
+    </button>
+
+    <button class="gitee-login-button" type="button" onclick="gitee()" title="Login With Gitee">Login with Gitee
+    </button>
+
+    <button class="coding-login-button" type="button" onclick="coding()" title="Login With Coding">Login with Coding
+    </button>
+
+    <button class="gogs-login-button" type="button" onclick="gogs()" title="Login With Gogs">Login with Gogs
+    </button>
   </div>
 </div>
 
@@ -37,8 +46,9 @@
     <li>@PCIT, Datong, Shanxi</li>
     <li><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></li>
     <li><a href="//weibo.com/kanghuaishuai" target="_blank">Weibo</a></li>
-    <li><a href="" target="_blank">WeChat</a></li>
-    <li><a href="//shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63" target="_blank">QQ Group</a></li>
+    <li><a href="/wechat" target="_blank">WeChat</a></li>
+    <li><a href="//shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63"
+           target="_blank">QQ Group</a></li>
     <li><a href="mailto:ci@khs1994.com">Email</a></li>
   </ul>
 
@@ -54,9 +64,9 @@
   <ul class="legal">
     <li><a href="" target="_blank">Terms of Service</a></li>
     <li><a href="" target="_blank">Privacy Policy</a></li>
-    <li><a href="" target="_blank">PCIT CE</a></li>
-    <li><a href="" target="_blank">PCIT EE</a></li>
-    <li><a href="" target="_blank">Why PCIT</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ce.md" target="_blank">PCIT CE</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md" target="_blank">PCIT EE</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/why.md" target="_blank">Why PCIT</a></li>
     <li><a href="//api.ci.khs1994.com" target="_blank">Plugins</a></li>
   </ul>
 
@@ -80,6 +90,10 @@
 
   function gitee() {
     document.location = 'https://' + location.host + '/oauth/gitee/login';
+  }
+
+  function gogs() {
+    document.location = 'https://' + location.host + '/oauth/gogs/login';
   }
 
   new Vue({

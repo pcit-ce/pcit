@@ -1,4 +1,6 @@
-# PCIT (PHP CI TOOLKIT) 使用 PHP 编写的持续集成工具
+# PCIT (PCIT is not only a PHP CI TOOLKIT)
+
+> 使用 PHP 编写的持续集成工具，支持 PHP、Java、Node 等 **全部** 开发语言。
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-php/pcit.svg?style=social&label=Stars)](https://github.com/khs1994-php/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/pcit/all.svg)](https://github.com/khs1994-php/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/khs1994-php/pcit) [![codecov](https://codecov.io/gh/khs1994-php/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/pcit) [![qqgroup-894134241](https://img.shields.io/badge/QQ%E7%BE%A4-894134241-blue.svg)](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)
 
@@ -83,7 +85,7 @@ pipeline:
 
 > 若想查看构建的聚合页面(详情，管理)，请登录 https://ci.khs1994.com/login
 
-## PCIT CE && PCIT EE
+## PCIT CE vs PCIT EE
 
 执行 CI 构建需要耗费 **计算资源**，本项目公有云因 **缺少资金** 暂不能提供构建功能。
 

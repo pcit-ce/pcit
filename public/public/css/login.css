@@ -61,9 +61,63 @@ header a:hover {
 
 .login_button {
     position: absolute;
-    margin-top: 100px;
+    margin-top: -40px;
     margin-left: 500px;
     float: left;
+}
+
+.hello-login-button {
+    width: 352px;
+    height: 50.4px;
+    background-color: darkblue;
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    text-indent: 2em;
+}
+
+.github-login-button {
+    width: 352px;
+    height: 50.4px;
+    margin-top: 5px;
+    background-color: rgb(36, 41, 46);
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    text-indent: 2em;
+}
+
+.gitee-login-button {
+    width: 352px;
+    height: 50.4px;
+    margin-top: 5px;
+    background-color: rgb(254, 115, 0);
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    text-indent: 2em;
+}
+
+.coding-login-button {
+    width: 352px;
+    height: 50.4px;
+    margin-top: 5px;
+    background-color: rgb(96, 108, 128);
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    text-indent: 2em;
+}
+
+.gogs-login-button {
+    width: 352px;
+    height: 50.4px;
+    margin-top: 5px;
+    background-color: red;
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    text-indent: 2em;
 }
 
 footer {

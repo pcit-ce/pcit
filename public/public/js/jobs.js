@@ -9,7 +9,7 @@ $('footer').append(`<ul class="about">
     <li>@PCIT, Datong, Shanxi</li>
     <li><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></li>
     <li><a href="//weibo.com/kanghuaishuai" target="_blank">Weibo</a></li>
-    <li><a href="" target="_blank">WeChat</a></li>
+    <li><a href="/wechat" target="_blank">WeChat</a></li>
     <li><a href="//shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63" target="_blank">QQ Group</a></li>
     <li><a href="mailto:ci@khs1994.com">Email</a></li>
   </ul>
@@ -26,9 +26,9 @@ $('footer').append(`<ul class="about">
   <ul class="legal">
     <li><a href="" target="_blank">Terms of Service</a></li>
     <li><a href="" target="_blank">Privacy Policy</a></li>
-    <li><a href="" target="_blank">PCIT CE</a></li>
-    <li><a href="" target="_blank">PCIT EE</a></li>
-    <li><a href="" target="_blank">Why PCIT</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ce.md" target="_blank">PCIT CE</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md" target="_blank">PCIT EE</a></li>
+    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/why.md" target="_blank">Why PCIT</a></li>
     <li><a href="//api.ci.khs1994.com" target="_blank">Plugins</a></li>
   </ul>
 
