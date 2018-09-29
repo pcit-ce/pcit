@@ -41,7 +41,7 @@
 * `CI_MYSQL_PORT` String
 * `CI_MYSQL_USERNAME` String
 * `CI_MYSQL_PASSWORD` String
-* `CI_MYSQL_DBNAME` String
+* `CI_MYSQL_DATABASE` String
 
 * `CI_WEBHOOKS_TOKEN` String Webhooks Secert (仅支持 GitHub)
 * `CI_WEBHOOKS_DEBUG` Bool Webhooks 是否开启 Debug，若开启系统将不验证 Secret

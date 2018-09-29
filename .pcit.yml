@@ -43,12 +43,12 @@ pipeline:
     environment:
       - CI_REDIS_HOST=redis
       - CI_REDIS_PORT=6379
-      - CI_REDIS_DBNAME=15
+      - CI_REDIS_DATABASE=15
       - CI_MYSQL_HOST=mysql
       - CI_MYSQL_PORT=3306
       - CI_MYSQL_USERNAME=root
       - CI_MYSQL_PASSWORD=mytest
-      - CI_MYSQL_DBNAME=test
+      - CI_MYSQL_DATABASE=test
       - CI_WEBHOOKS_TOKEN=pcit
     commands:
       - pwd

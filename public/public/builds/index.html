@@ -211,7 +211,7 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
     }
 
     $.each(jobs, function (id, data) {
-      $("#display").append(`<pre>${data.build_log}</pre>`);
+      $("#display").append(`<pre style="background: black; color: white">${data.build_log}</pre>`);
     });
   }
 
