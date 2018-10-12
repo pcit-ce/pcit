@@ -56,7 +56,10 @@
     "psr-4": {
       "KhsCI\\": "src/KhsCI/",
       "App\\": "public/app/"
-    }
+    },
+    "files": [
+      "src/KhsCI/Support/helpers.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

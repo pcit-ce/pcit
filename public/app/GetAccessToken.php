@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App;
 
 use Exception;
-use KhsCI\KhsCI;
 use KhsCI\Support\DB;
 use KhsCI\Support\Env;
 
@@ -76,11 +75,9 @@ class GetAccessToken
             throw new Exception('installation_id is error', 500);
         }
 
-        $khsci = new KhsCI();
-
-        $access_token = $khsci->github_apps_installations->getAccessToken(
+        $access_token = pcit()->github_apps_installations->getAccessToken(
             (int) $installation_id,
-            __DIR__.'/../storage/private_key/'.Env::get('CI_GITHUB_APP_PRIVATE_FILE')
+            __DIR__.'/../storage/private_key/'.env('CI_GITHUB_APP_PRIVATE_FILE')
         );
 
         return $access_token;
