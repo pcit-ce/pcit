@@ -46,7 +46,7 @@
 
 * **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 事件并将其分解为多个任务 (job)，之后在 Docker 单机或集群（Swarm、Kubernetes）中执行构建、测试、容器化部署的自动化过程。
 
-* **CLI** 提供各种实用的功能，例如 命令行操作 GitHub，命令行调用 Tencent AI 开放能力
+* **CLI** 提供各种实用的功能，例如命令行查看构建状态，命令行操作 GitHub，命令行调用 Tencent AI 开放能力
 
 * **开放平台** 包含用于功能扩展的 **插件** 和 **RESTFul API**，与开发者一道构建 PCIT 生态系统
 
@@ -81,7 +81,15 @@ pipeline:
 
 > 查看构建的聚合页面，请登录 https://ci.khs1994.com/login
 
+## PCIT CE vs PCIT EE
+
+在未来 PCIT 可能会提供 **公有云服务** 让开发者无需私有部署即可方便快捷的使用 PCIT。我们将这个有待实现的版本称为 PCIT CE。
+
+所以 **CE** 和 **EE** 的区别为是否需要开发者自行部署。
+
 ## 部署 PCIT EE
+
+> 依托于 khs1994-docker/lnmp LNMP 容器化解决方案，私有部署 PCIT 也很方便。
 
 * ~~PHP~~
 
@@ -128,11 +136,11 @@ $ ./lnmp-docker pcit-up
 
 文字版看不明白？请查看 [视频版]() 安装教程。
 
-## 开发团队支持
+## 联系我们
 
-![](https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg)
+![](https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg)
 
-关注 PCIT **微信公众平台** **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 寻求 **PCIT** 开发团队支持。
+关注 PCIT 项目作者 **微信公众平台** **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 获得支持或最新动态。
 
 ## PCIT 子项目
 
@@ -148,10 +156,6 @@ $ ./lnmp-docker pcit-up
 
 * [GitHub CLI]()
 
-* [Gitee CLI]()
-
-* [Gogs CLI]()
-
 ## 项目拆分
 
 未来本项目可能会将以下模块进行拆分
@@ -163,16 +167,17 @@ $ ./lnmp-docker pcit-up
 ## 致谢
 
 * [PHP](https://www.php.net)
-
 * [Docker](https://www.docker.com)
-
 * [Kubernetes](https://kubernetes.io/)
-
 * [Travis CI](https://travis-ci.com)
-
 * [Drone CI](https://drone.io)
 
-### GitHub 上的其他 CI/CD 项目
+## 国内友商
+
+* [PHP 实现 piplin.com](http://piplin.com/)
+* [JAVA 实现 flow.ci](https://flow.ci)
+
+## GitHub 上的其他 CI/CD 项目
 
 * https://github.com/topics/continuous-integration?l=php&o=desc&s=stars
 

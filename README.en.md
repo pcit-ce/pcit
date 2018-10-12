@@ -127,9 +127,9 @@ $ ./lnmp-docker pcit-up
 
 ## Support
 
-![](https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg)
+![](https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg)
 
-扫码关注 **PCIT** 微信公众平台，寻求 **PCIT** 团队支持。
+扫码关注 PCIT 项目作者微信公众平台，获得支持或最新动态。
 
 ## Projects for PCIT
 
