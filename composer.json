@@ -58,7 +58,7 @@
       "App\\": "public/app/"
     },
     "files": [
-      "src/KhsCI/Support/helpers.php"
+      "src/KhsCI/Kernel/helpers.php"
     ]
   },
   "autoload-dev": {

@@ -99,3 +99,30 @@ footer a:hover {
 body {
     overflow-y: scroll;
 }
+
+.repo {
+    margin-top: 5%;
+    margin-left: 20%;
+    font-size: 25px;
+    line-height: 35px;
+}
+
+.repo_full_name {
+    width: 350px;
+}
+
+.last_build_id {
+    width: 100px;
+}
+
+.last_build_branch {
+    width: 100px;
+}
+
+.last_build_commit {
+    width: 100px;
+}
+
+.time {
+    width: 100px;
+}

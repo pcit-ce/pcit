@@ -51,7 +51,6 @@ header a:hover {
 }
 
 footer {
-    position: relative;
     margin-top: 115px;
     margin-left: 8%;
 }
@@ -97,7 +96,14 @@ footer a:hover {
 }
 
 #userinfo {
+    float: left;
     margin-left: 20%;
+    width: 250px;
+}
+
+#details {
+    margin-left: 600px;
+    padding-left: 100px;
 }
 
 #user {
@@ -115,11 +121,14 @@ footer a:hover {
 }
 
 #orgs {
+    float: left;
     margin-left: 20%;
+    width: 250px;
 }
 
 #repos {
-    margin-left: 20%;
+    margin-left: 50px;
+    height: 180px;
 }
 
 #repos > a {

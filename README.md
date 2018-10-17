@@ -20,6 +20,14 @@
 
 本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎对 CI/CD 有 **独特见解** 的 PHP 开发者参与贡献 PCIT。
 
+## 微信订阅号
+
+<p align="center">
+<img width="200" src="https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg">
+</p>
+
+<p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
+
 ## 愿景
 
 在 **2020** 年将 PCIT 打造成为国内具有一定影响力的智能化 CI/CD 系统。
@@ -138,9 +146,7 @@ $ ./lnmp-docker pcit-up
 
 ## 联系我们
 
-![](https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg)
-
-关注 PCIT 项目作者 **微信公众平台** **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 获得支持或最新动态。
+关注 PCIT 项目作者 **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 获得支持或最新动态。
 
 ## PCIT 子项目
 

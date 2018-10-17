@@ -209,6 +209,16 @@ class DB
     }
 
     /**
+     * @param \Closure $callback
+     */
+    public static function transaction($callback): void
+    {
+        self::beginTransaction();
+        \call_user_func($callback);
+        self::commit();
+    }
+
+    /**
      * @throws Exception
      */
     public static function commit(): void
@@ -243,5 +253,10 @@ class DB
     public static function getDebugInfo()
     {
         return self::$debug;
+    }
+
+    public static function getPdo()
+    {
+        return self::connection();
     }
 }

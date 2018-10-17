@@ -14,7 +14,7 @@ cache:
 sudo: required
 
 services:
-  # - docker
+  - docker
   # - rabbitmq
   # - memcached
   - redis-server
@@ -79,6 +79,33 @@ jobs:
         keep-history: true
         on:
           branch: master
+    - stage: docs
+      script:
+        - cd docs
+        - docker run -it --rm -v $PWD:/srv/gitbook-src khs1994/gitbook
+      deploy:
+        provider: pages
+        repo: khs1994-php/pcit-docs
+        skip-cleanup: true
+        local-dir: docs/_book
+        github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+        keep-history: true
+        on:
+          branch: master
+    - stage: api-docs
+      script:
+        - cd docs/api
+        - docker run -it --rm -v $PWD:/srv/gitbook-src khs1994/gitbook
+      deploy:
+        provider: pages
+        repo: khs1994-php/pcit-api-docs
+        skip-cleanup: true
+        local-dir: docs/api/_book
+        github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+        keep-history: true
+        on:
+          branch: master
+
     # - stage: deploy
     #   script: " if ! [ -z \"${TRAVIS_TAG}\" ];then
     #   echo \"${TRAVIS_TAG}\" ;
@@ -99,9 +126,6 @@ stages:
 env:
   global:
     - MONGODB=disable
-    # - DB=sqlite
-    - DB=mysql
-    # - DB=postgresql
     - CI_REDIS_HOST=localhost
     - CI_REDIS_NAME=15
     - CI_MYSQL_HOST=127.0.0.1
@@ -109,6 +133,10 @@ env:
     - CI_MYSQL_PASSWORD=mytest
     - CI_MYSQL_DATABASE=pcit_test
     - CI_WEBHOOKS_TOKEN=pcit
+  matrix:
+    # - DB=sqlite
+    - DB=mysql
+    # - DB=postgresql
 
 #
 # rabbitmq vhost / username guest password guest

@@ -13,24 +13,11 @@
 
 <header></header>
 
+<div class="username_header"></div>
+<div class="repo"></div>
+
 <footer></footer>
 
-<script>
-  let url_array = location.href.split('/');
-  let username = url_array[4];
-  let git_type = url_array[3];
-
-  $(document).ready(function () {
-    $.ajax({
-        type: 'GET',
-        url: '/api/repos/' + `${git_type}/${username}`,
-        success: function (data) {
-          $.each(data)
-        }
-      }
-    )
-  })
-</script>
 <script src="/js/repos.js"></script>
 </body>
 </html>
