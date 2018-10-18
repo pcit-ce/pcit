@@ -49,8 +49,7 @@
         },
         'audio': true
       }, successFunc, errorFunc);    //success是获取成功的回调函数
-    }
-    else {
+    } else {
       alert('Native device media streaming (getUserMedia) not supported in this browser.');
     }
   }
@@ -60,8 +59,7 @@
     if (video.mozSrcObject !== undefined) {
       //Firefox中，video.mozSrcObject最初为null，而不是未定义的，我们可以靠这个来检测Firefox的支持
       video.mozSrcObject = stream;
-    }
-    else {
+    } else {
       video.src = window.URL && window.URL.createObjectURL(stream) || stream;
     }
 

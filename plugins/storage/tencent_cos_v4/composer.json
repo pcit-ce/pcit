@@ -1,5 +1,6 @@
 {
   "require": {
-    "qcloud/cos-sdk-v4": "^4.3"
-  }
+    "khs1994/flysystem-tencentcloud-cos-v4": "dev-master"
+  },
+  "minimum-stability": "dev"
 }

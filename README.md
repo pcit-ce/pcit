@@ -167,7 +167,7 @@ $ ./lnmp-docker pcit-up
 未来本项目可能会将以下模块进行拆分
 
 * [前端 UI](https://github.com/khs1994-php/pcit-ui)
-* [YAML 转为 Docker 配置](https://github.com/khs1994-php/pcit-yaml)
+* [YML 转化为 PCIT 配置](https://github.com/khs1994-php/pcit-yml)
 * [缓存后端驱动](https://github.com/khs1994-php/pcit-cache)
 
 ## 致谢

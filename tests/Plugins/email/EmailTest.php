@@ -19,6 +19,6 @@ class EmailTest extends TestCase
      */
     public function testSend(): void
     {
-        require __DIR__.'/../../../plugins/email/index.php';
+        require __DIR__.'/../../../plugins/notification/email/index.php';
     }
 }

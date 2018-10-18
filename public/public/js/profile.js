@@ -1,5 +1,5 @@
 $('header').append(`
-<span class="ico"><img title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
+<span class="ico"><img alt='ico' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
 <span class="docs"><a href="//docs.ci.khs1994.com" target="_blank">Documentation</a></span>
 <span class="plugins"><a href="//docs.ci.khs1994.com/plugins/" target="_blank">Plugins</a></span>
 <span class="donate"><a href="//zan.khs1994.com" target="_blank">Donate</a></span>
@@ -60,7 +60,7 @@ function formatGitType(gittype) {
 }
 
 function showUserBasicInfo(data) {
-  $("#username").text("Welcome " + data.username).addClass(data.type);
+  $("#username").text(data.username).addClass(data.type);
 
   $("title").text(`${formatGitType(git_type)} - ${data.username} - Profile - PCIT`);
 
@@ -87,7 +87,15 @@ function copyToken() {
 }
 
 function list(data) {
-  $("#repos").empty();
+  let count = data.length;
+  let repos_element = $("#repos");
+
+  repos_element.empty().css('height', 200);
+
+  if (count > 4) {
+    repos_element.css('height', count * 50);
+  }
+
   $.each(data, function (num, repo) {
 
     let button = $("<button></button>");
@@ -130,9 +138,10 @@ function list(data) {
 }
 
 function showOrg(data) {
+  let count = data.length;
   $.each(data, function (num, org) {
     let org_name = org.username;
-    $(".orgs").append(`<p onclick="click_org(this.innerHTML)">${org_name}</p>`)
+    $(".orgs").append(`<p onclick="click_org(this.innerHTML)">${org_name}</p>`).css('height', count * 50);
   });
 }
 
@@ -184,8 +193,7 @@ function click_user() {
       'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
     },
     success: function (data) {
-      let installation_id = data[0].installation_id;
-      let uid = data[0].uid;
+      let {installation_id, uid} = data;
 
       $.ajax({
         type: "GET",

@@ -17,3 +17,9 @@
 * **Docker** 构建 Docker 镜像
 * **包管理类** NPM、PYPI、RUBYGEM
 * **Kubernetes** Helm
+
+## 标准化
+
+### 存储类
+
+* 必须使用 [Flysystem](https://github.com/thephpleague/flysystem) 兼容驱动。

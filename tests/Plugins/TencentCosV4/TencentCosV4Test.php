@@ -21,7 +21,7 @@ class TencentCosV4Test extends TestCase
     {
         $ret = null;
 
-        require __DIR__.'/../../../plugins/tencent_cos_v4/index.php';
+        require __DIR__.'/../../../plugins/storage/tencent_cos_v4/index.php';
 
         $this->assertEquals(0, $ret['code']);
     }

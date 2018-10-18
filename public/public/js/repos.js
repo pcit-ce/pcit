@@ -43,40 +43,40 @@ let username = url_array[4];
 let git_type = url_array[3];
 
 $(document).ready(function () {
-    $.ajax({
-            type: 'GET',
-            url: '/api/repos/' + `${git_type}/${username}`,
-            success: function (data) {
-                $('.username_header').append(`${git_type} || ${username}`);
+  $.ajax({
+      type: 'GET',
+      url: '/api/repos/' + `${git_type}/${username}`,
+      success: function (data) {
+        $('.username_header').append(`${git_type} || ${username}`);
 
-                repo(data);
-            }
-        }
-    )
+        repo(data);
+      }
+    }
+  )
 });
 
 function repo(data) {
-    $.each(data, function ($k, $v) {
-        let {repo_full_name} = $v;
+  $.each(data, function ($k, $v) {
+    let {repo_full_name} = $v;
 
-        $.ajax({
-            type: 'GET',
-            url: '/api/repo/' + `${git_type}/${repo_full_name}/build/current`,
-            success: function (data) {
+    $.ajax({
+      type: 'GET',
+      url: '/api/repo/' + `${git_type}/${repo_full_name}/build/current`,
+      success: function (data) {
 
-                console.log(data);
+        console.log(data);
 
-                let {
-                    id: last_build_id,
-                    branch: last_build_branch,
-                    commit_id: last_build_commit,
-                    created_at: time
-                } = data;
+        let {
+          id: last_build_id,
+          branch: last_build_branch,
+          commit_id: last_build_commit,
+          created_at: time
+        } = data;
 
-                last_build_commit = last_build_commit.slice(0, 7);
-                let repo_name = repo_full_name.split('/');
+        last_build_commit = last_build_commit.slice(0, 7);
+        let repo_name = repo_full_name.split('/');
 
-                $('.repo').append(`
+        $('.repo').append(`
 <tr>
 <td class="repo_full_name">${repo_name[1]}</td>
 <td class="last_build_id">${last_build_id}</td>
@@ -85,7 +85,7 @@ function repo(data) {
 <td class="time">${time}</td>
 </tr>      
         `);
-            }
-        });
+      }
     });
+  });
 }

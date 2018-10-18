@@ -51,7 +51,7 @@ header a:hover {
 }
 
 footer {
-    margin-top: 115px;
+    margin-top: 220px;
     margin-left: 8%;
 }
 
@@ -101,6 +101,10 @@ footer a:hover {
     width: 250px;
 }
 
+#userinfo .my_account {
+    color: rgb(157,157,157);
+}
+
 #details {
     margin-left: 600px;
     padding-left: 100px;
@@ -126,7 +130,12 @@ footer a:hover {
     width: 250px;
 }
 
+#orgs .organization {
+    color: rgb(157,157,157);
+}
+
 #repos {
+    /*position: relative;*/
     margin-left: 50px;
     height: 180px;
 }
