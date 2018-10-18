@@ -89,11 +89,15 @@ function copyToken() {
 function list(data) {
   let count = data.length;
   let repos_element = $("#repos");
+  let orgs_element = $('#orgs');
 
   repos_element.empty().css('height', 200);
+  orgs_element.css('height',220);
 
-  if (count > 4) {
-    repos_element.css('height', count * 50);
+  if (count > 3) {
+    let css_height = count * 50;
+    repos_element.css('height', css_height);
+    orgs_element.css('height', css_height);
   }
 
   $.each(data, function (num, repo) {

@@ -33,12 +33,7 @@ class GitHubClient
      */
     public function list(string $repo_full_name, string $sha, string $ref, string $task, string $environment)
     {
-        $queryParameters = http_build_query([
-            'sha' => $sha,
-            'ref' => $ref,
-            'task' => $task,
-            'environment' => $environment,
-        ]);
+        $queryParameters = http_build_query(compact('sha', 'ref', 'task', 'environment'));
 
         $url = implode('/', [
                 $this->api_url, 'repos', $repo_full_name, 'deployments',
@@ -95,17 +90,7 @@ class GitHubClient
                            bool $transient_environment = null,
                            bool $production_environment = null): void
     {
-        $array = [
-            'ref' => $ref,
-            'task' => $task,
-            'auto_merge' => $auto_merge,
-            'required_contexts' => $required_contexts,
-            'payload' => $payload,
-            'environment' => $environment,
-            'description' => $description,
-            'transient_environment' => $transient_environment,
-            'production_environment' => $production_environment,
-        ];
+        $array = compact('ref', 'task', 'auto_merge', 'required_contexts', 'payload', 'environment', 'description', 'transient_environment', 'production_environment');
 
         $array = array_filter($array);
 
@@ -165,9 +150,10 @@ class GitHubClient
      *
      * @param string      $repo_full_name  repo full name
      * @param string      $id
-     * @param string      $state           error, failure, inactive, pending, or success
+     * @param string      $state           error, failure,inactive,in_progress,queued,pending, or success
      * @param string|null $log_url
      * @param string|null $description
+     * @param string      $environment
      * @param string|null $environment_url
      * @param bool        $auto_inactive
      *
@@ -180,19 +166,16 @@ class GitHubClient
                                  string $state,
                                  string $log_url = null,
                                  string $description = null,
+                                 string $environment = 'production',
                                  string $environment_url = null,
                                  bool $auto_inactive = true)
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/deployments/'.$id.'/statuses';
 
-        $data = [
-            'state' => $state,
-            'log_url' => $log_url,
-            'description' => $description,
-            'environment_url' => $environment_url,
-            'auto_inactive' => $auto_inactive,
-        ];
+        $data = array_filter(
+            compact('state', 'log_url', 'description', 'environment', 'environment_url', 'auto_inactive'));
 
-        return $this->curl->post($url, json_encode(array_filter($data)), ['Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.ant-man-preview+json']);
+        return $this->curl->post($url, json_encode(array_filter($data)),
+            ['Accept' => 'application/vnd.github.flash-preview.machine-man-preview.speedy-preview.ant-man-preview+json']);
     }
 }
