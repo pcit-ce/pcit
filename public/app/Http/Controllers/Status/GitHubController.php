@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Status;
 
 use App\GetAccessToken;
 use Exception;
-use KhsCI\KhsCI;
+use PCIT\PCIT;
 
 class GitHubController
 {
@@ -19,9 +19,9 @@ class GitHubController
      */
     public function __construct()
     {
-        $khsci = new KhsCI();
+        $pcit = new PCIT();
 
-        self::$status = $khsci->repo_status;
+        self::$status = $pcit->repo_status;
     }
 
     /**
@@ -63,9 +63,9 @@ class GitHubController
 
         list($username, $repo) = explode('/', $repo_full_name);
 
-        $khsci = new KhsCI(['github_access_token' => $accessToken]);
+        $pcit = new PCIT(['github_access_token' => $accessToken]);
 
-        return $khsci->repo_status->create(
+        return $pcit->repo_status->create(
             $username,
             $repo,
             $commit_sha,

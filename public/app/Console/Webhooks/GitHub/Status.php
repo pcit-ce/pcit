@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Webhooks\GitHub;
 
-use KhsCI\Support\DB;
+use PCIT\Support\DB;
 
 class Status
 {

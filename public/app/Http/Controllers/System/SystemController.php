@@ -6,7 +6,7 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Users\JWTController;
 use Exception;
-use KhsCI\Support\Env;
+use PCIT\Support\Env;
 
 class SystemController
 {

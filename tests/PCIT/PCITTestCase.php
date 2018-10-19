@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PCIT\Tests;
 
-use App\Console\KhsCIDaemon\Migrate;
+use App\Console\PCITDaemon\Migrate;
 use App\User;
 use Dotenv\Dotenv;
 use Exception;
-use KhsCI\KhsCI;
-use KhsCI\Support\DB;
+use PCIT\PCIT;
+use PCIT\Support\DB;
 use PHPUnit\Framework\TestCase;
 
 class PCITTestCase extends TestCase
@@ -20,22 +20,20 @@ class PCITTestCase extends TestCase
      * @param array  $config
      * @param string $git_type
      *
-     * @return KhsCI
+     * @return PCIT
      *
      * @throws Exception
      */
     public static function getTest(array $config = [], string $git_type = null)
     {
-        if (!(self::$test instanceof KhsCI)) {
-            self::$test = new KhsCI($config, $git_type ?? 'github');
+        if (!(self::$test instanceof PCIT)) {
+            self::$test = new PCIT($config, $git_type ?? 'github');
         }
 
         return self::$test;
     }
 
     /**
-     * KhsCITestCase constructor.
-     *
      * @param null|string $name
      * @param array       $data
      * @param string      $dataName
@@ -70,7 +68,7 @@ class PCITTestCase extends TestCase
         // repo
         $sql = <<<'EOF'
 INSERT INTO repo VALUES(
-null,'github',1,'khs1994-php','khsci','khs1994-php/pcit',1,1,?,null,'master'
+null,'github',1,'khs1994-php','pcit','khs1994-php/pcit',1,1,?,null,'master'
 ),(
 null,'github',2,'khs1994-php','other','khs1994-php/other',1,1,?,null,'master'
 )
@@ -104,7 +102,7 @@ null,'github_app',1,'push','master',null,null,null,null,4,'commit message4','adm
 ) ,(
 null,'github_app',1,'push','master',null,null,null,null,5,'commit message5','admin',
 'khs1994@khs1994.com','admin',?,null,null,null,'passed','[]',null,null,null,null,null,null
-) 
+)
 EOF;
 
         DB::insert($sql, [time(), time(), time(), time(), time()]);

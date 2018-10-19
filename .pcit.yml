@@ -161,7 +161,7 @@ pipeline:
     environment:
       - keep_history=true
       - target_branch=gh-pages
-      - git_url=gitee.com/khs1994-php/khsci
+      - git_url=gitee.com/khs1994-php/pcit
       - local_dir=build
       - email=khs1994@khs1994.com
       - name=khs1994
@@ -174,8 +174,8 @@ pipeline:
       event: tag
       branch: alpha
     file:
-      README.md: khsci/tencent_cloud_cos_file_name_${KHSCI_TAG}
-      Dockerfile: khsci/tencent_cloud_cos_file_name2_${KHSCI_TAG}
+      README.md: pcit/tencent_cloud_cos_file_name_${PCIT_TAG}
+      Dockerfile: pcit/tencent_cloud_cos_file_name2_${PCIT_TAG}
       # please set env by pcit env_var feature,don't set secret in .pcit.yml
       # environment:
       # - COS_V4_REGION=x

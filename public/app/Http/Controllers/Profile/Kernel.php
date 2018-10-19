@@ -6,9 +6,9 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Users\JWTController;
 use App\User;
-use KhsCI\Support\Env;
-use KhsCI\Support\Response;
-use KhsCI\Support\Session;
+use PCIT\Support\Env;
+use PCIT\Support\Response;
+use PCIT\Support\Session;
 
 class Kernel
 {

@@ -6,8 +6,8 @@ namespace App\Console\Webhooks;
 
 use App\Build;
 use Exception;
-use KhsCI\Service\Build\Conditional\Branch;
-use KhsCI\Support\Log;
+use PCIT\Service\Build\Conditional\Branch;
+use PCIT\Support\Log;
 
 class Skip
 {

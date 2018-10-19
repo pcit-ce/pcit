@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks;
 
 use Exception;
-use KhsCI\Support\Cache;
+use PCIT\Support\Cache;
 
 class AliyunDockerRegistryController
 {

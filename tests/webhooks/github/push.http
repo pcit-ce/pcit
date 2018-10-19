@@ -52,12 +52,12 @@ X-Hub-Signature: sha1=e76e60d903c010e45ca28c7c42ae50d3d1b513dc
 
       ],
       "removed": [
-        "src/KhsCI/Service/Queue/UpdateRepoCollaborators.php"
+        PCIT
       ],
       "modified": [
         "public/app/Console/Queue.php",
-        "src/KhsCI/KhsCI.php",
-        "src/KhsCI/Providers/QueueProvider.php"
+        PCIT.php,
+        PCIT
       ]
     }
   ],
@@ -82,12 +82,12 @@ X-Hub-Signature: sha1=e76e60d903c010e45ca28c7c42ae50d3d1b513dc
 
     ],
     "removed": [
-      "src/KhsCI/Service/Queue/UpdateRepoCollaborators.php"
+      PCIT
     ],
     "modified": [
       "public/app/Console/Queue.php",
-      "src/KhsCI/KhsCI.php",
-      "src/KhsCI/Providers/QueueProvider.php"
+      PCIT.php,
+      PCIT
     ]
   },
   "repository": {

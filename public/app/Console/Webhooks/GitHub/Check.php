@@ -33,7 +33,7 @@ class Check
             'action' => $action,
             'account' => $account,
             'check_suite_id' => $check_suite_id
-        ] = \KhsCI\Support\Webhooks\GitHub\Check::suite($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Check::suite($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
@@ -63,7 +63,7 @@ class Check
             'check_run_id' => $check_run_id,
             'branch' => $branch,
             'account' => $account,
-        ] = \KhsCI\Support\Webhooks\GitHub\Check::run($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Check::run($json_content);
 
         if (\in_array($action, ['created', 'updated'], true)) {
             return;

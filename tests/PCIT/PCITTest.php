@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace PCIT\Tests;
 
 use Exception;
-use KhsCI\Support\Cache;
-use KhsCI\Support\DB;
+use PCIT\Support\Cache;
+use PCIT\Support\DB;
 
 class PCITTest extends PCITTestCase
 {
     /**
-     * @return \KhsCI\KhsCI
+     * @return \PCIT\PCIT
      *
      * @throws Exception
      */

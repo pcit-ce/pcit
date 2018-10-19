@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Service\Build;
 
-use KhsCI\Service\Build\Parse;
+use PCIT\Service\Build\Parse;
 use PCIT\Tests\PCITTestCase;
 
 class ParseTest extends PCITTestCase

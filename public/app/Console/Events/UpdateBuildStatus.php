@@ -8,7 +8,7 @@ use App\Notifications\GitHubChecksConclusion\Cancelled;
 use App\Notifications\GitHubChecksConclusion\Failed;
 use App\Notifications\GitHubChecksConclusion\InProgress;
 use App\Notifications\GitHubChecksConclusion\Passed;
-use KhsCI\Support\CI;
+use PCIT\Support\CI;
 
 class UpdateBuildStatus
 {

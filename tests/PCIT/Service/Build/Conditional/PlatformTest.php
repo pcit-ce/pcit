@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Service\Build\Conditional;
 
-use KhsCI\Service\Build\Conditional\Platform;
+use PCIT\Service\Build\Conditional\Platform;
 use PCIT\Tests\PCITTestCase;
 
 class PlatformTest extends PCITTestCase

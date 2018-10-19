@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Support;
 
-use KhsCI\Support\Cache;
+use PCIT\Support\Cache;
 use PCIT\Tests\PCITTestCase;
 
 class CacheTest extends PCITTestCase

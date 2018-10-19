@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use KhsCI\Service\OAuth\CodingClient;
+use PCIT\Service\OAuth\CodingClient;
 
 class OAuthCodingController extends OAuthKernel
 {

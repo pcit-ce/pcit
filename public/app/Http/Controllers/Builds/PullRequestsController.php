@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use Exception;
-use KhsCI\Support\CI;
-use KhsCI\Support\DB;
-use KhsCI\Support\Git;
+use PCIT\Support\CI;
+use PCIT\Support\DB;
+use PCIT\Support\Git;
 
 class PullRequestsController
 {

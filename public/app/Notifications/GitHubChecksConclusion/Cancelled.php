@@ -7,7 +7,7 @@ namespace App\Notifications\GitHubChecksConclusion;
 use App\Job;
 use App\Notifications\GitHubAppChecks;
 use Exception;
-use KhsCI\Support\CI;
+use PCIT\Support\CI;
 
 class Cancelled extends Passed
 {

@@ -7,10 +7,10 @@ namespace App\Notifications;
 use App\Build;
 use App\Repo;
 use Exception;
-use KhsCI\KhsCI;
-use KhsCI\Support\Date;
-use KhsCI\Support\Git;
-use KhsCI\Support\Log;
+use PCIT\PCIT;
+use PCIT\Support\Date;
+use PCIT\Support\Git;
+use PCIT\Support\Log;
 
 class WeChatTemplate
 {
@@ -22,7 +22,7 @@ class WeChatTemplate
      */
     public static function send(int $build_key_id, string $info): void
     {
-        $khsci = new Khsci();
+        $pcit = new PCIT();
 
         $output = Build::find($build_key_id);
 
@@ -40,7 +40,7 @@ class WeChatTemplate
 
         $repo_full_name = Repo::getRepoFullName((int) $rid, $git_type);
 
-        $output = $khsci->wechat_template_message->sendTemplateMessage(
+        $output = $pcit->wechat_template_message->sendTemplateMessage(
             $build_status,
             Date::Int2ISO((int) $time),
             $event_type,

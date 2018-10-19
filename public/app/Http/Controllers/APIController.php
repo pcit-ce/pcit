@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use KhsCI\Support\Env;
+use PCIT\Support\Env;
 
 class APIController
 {

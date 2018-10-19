@@ -6,10 +6,10 @@ namespace App\Console\Events;
 
 use App\GetAccessToken;
 use App\Repo;
-use KhsCI\KhsCI;
-use KhsCI\Service\Build\BuildData;
-use KhsCI\Support\CI;
-use KhsCI\Support\Log;
+use PCIT\PCIT;
+use PCIT\Service\Build\BuildData;
+use PCIT\Support\CI;
+use PCIT\Support\Log;
 
 class AutoMerge
 {
@@ -36,11 +36,11 @@ class AutoMerge
 
         $build_status = $build->build_status;
 
-        $khsci = new KhsCI([
+        $pcit = new PCIT([
             $build->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($build->rid),
         ]);
 
-        $auto_merge_label = $khsci
+        $auto_merge_label = $pcit
             ->issue_labels
             ->listLabelsOnIssue($build->repo_full_name, $build->pull_request_number);
 
@@ -52,7 +52,7 @@ class AutoMerge
             $repo_array = explode('/', Repo::getRepoFullName($build->rid, $build->git_type));
 
             try {
-                if ($khsci->pull_request->isMerged($repo_array[0], $repo_array[1], $build->pull_request_number)) {
+                if ($pcit->pull_request->isMerged($repo_array[0], $repo_array[1], $build->pull_request_number)) {
                     Log::debug(
                         __FILE__,
                         __LINE__,
@@ -64,7 +64,7 @@ class AutoMerge
 
                 $commit_message = null;
 
-                $khsci->pull_request
+                $pcit->pull_request
                     ->merge(
                         $repo_array[0],
                         $repo_array[1],

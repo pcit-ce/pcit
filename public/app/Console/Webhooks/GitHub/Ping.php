@@ -20,7 +20,7 @@ class Ping
         [
             'rid' => $rid,
             'created_at' => $created_at
-        ] = \KhsCI\Support\Webhooks\GitHub\Ping::handle($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Ping::handle($json_content);
 
         return Build::insertPing('github', $rid, $created_at);
     }

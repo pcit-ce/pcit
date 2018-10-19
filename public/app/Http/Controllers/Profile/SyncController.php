@@ -9,14 +9,14 @@ use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use App\User;
 use Exception;
-use KhsCI\KhsCI;
+use PCIT\PCIT;
 
 class SyncController
 {
     /**
-     * @var KhsCI
+     * @var PCIT
      */
-    private $khsci;
+    private $pcit;
 
     private $git_type;
 
@@ -33,7 +33,7 @@ class SyncController
 
         $this->access_token = GetAccessToken::getAccessTokenByUid((int) $this->uid, $this->git_type);
 
-        $this->khsci = new KhsCI(
+        $this->pcit = new PCIT(
             [$this->git_type.'_access_token' => $this->access_token], $this->git_type
         );
 
@@ -67,7 +67,7 @@ class SyncController
             'name' => $name,
             'email' => $email,
             'pic' => $pic
-            ) = $this->khsci->user_basic_info->getUserInfo();
+            ) = $this->pcit->user_basic_info->getUserInfo();
 
         User::updateUserInfo($this->uid, null, $name, $email, $pic, false, $this->git_type);
     }
@@ -84,7 +84,7 @@ class SyncController
         do {
             ++$page;
 
-            $json = $this->khsci->user_basic_info->getRepos($page, false);
+            $json = $this->pcit->user_basic_info->getRepos($page, false);
 
             $num_pre_page = \count(json_decode($json));
 
@@ -99,7 +99,7 @@ class SyncController
      */
     private function getOrgs(): void
     {
-        $orgs = $this->khsci->user_basic_info->listOrgs();
+        $orgs = $this->pcit->user_basic_info->listOrgs();
 
         if (!$orgs) {
             return;
@@ -123,7 +123,7 @@ class SyncController
 
         foreach ($orgs as $k) {
             $org_name = $k['username'];
-            $output = $this->khsci->orgs->exists($org_name);
+            $output = $this->pcit->orgs->exists($org_name);
 
             if (!$output) {
                 User::delete($this->git_type, $org_name);
@@ -149,7 +149,7 @@ class SyncController
         do {
             ++$page;
 
-            $json = $this->khsci->orgs->listRepo($org_name, 1);
+            $json = $this->pcit->orgs->listRepo($org_name, 1);
 
             $num_pre_page = \count(json_decode($json));
 

@@ -2,8 +2,8 @@
 
 <?php
 
-use App\Console\KhsCIDaemon\MigrateCommand;
-use App\Console\KhsCIDaemon\UpCommand;
+use App\Console\PCITDaemon\MigrateCommand;
+use App\Console\PCITDaemon\UpCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../public/bootstrap/app.php';

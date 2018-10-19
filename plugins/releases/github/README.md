@@ -3,7 +3,7 @@
 ```yaml
 pipeline:
   deploy:
-    image: khsci/github_releases
+    image: pcit/github_releases
     when:
       status: success
       event: tag

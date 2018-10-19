@@ -1,15 +1,15 @@
 <?php
 
 declare(strict_types=1);
-use KhsCI\KhsCI;
+use PCIT\PCIT;
 
 try {
     // create checks
-    $khsci = new KhsCI();
+    $pcit = new PCIT();
 
-    $khsci->check_run->create();
+    $pcit->check_run->create();
 
     // update checks
-    $khsci->check_run->update();
+    $pcit->check_run->update();
 } catch (Exception $e) {
 }

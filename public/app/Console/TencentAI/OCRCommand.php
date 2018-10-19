@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\TencentAI;
 
-use KhsCI\Support\JSON;
+use PCIT\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

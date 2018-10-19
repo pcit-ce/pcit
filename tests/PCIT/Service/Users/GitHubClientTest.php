@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Service\Users;
 
-use KhsCI\Support\Env;
+use PCIT\Support\Env;
 use PCIT\Tests\PCITTestCase;
 
 class GitHubClientTest extends PCITTestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace KhsCI\Tests\Plugins;
+namespace PCIT\Tests\Plugins;
 
 use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;

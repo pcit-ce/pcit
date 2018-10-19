@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Service\Webhooks;
 
-use KhsCI\KhsCI as PCIT;
-use KhsCI\Support\Request;
+use PCIT\PCIT as PCIT;
+use PCIT\Support\Request;
 use PCIT\Tests\PCITTestCase;
 
 class GitHubClientTest extends PCITTestCase

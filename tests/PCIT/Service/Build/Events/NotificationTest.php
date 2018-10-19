@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Service\Build\Events;
 
-use KhsCI\Service\Build\Events\Notifications;
-use KhsCI\Support\Cache;
+use PCIT\Service\Build\Events\Notifications;
+use PCIT\Support\Cache;
 use PCIT\Tests\PCITTestCase;
 use Symfony\Component\Yaml\Yaml;
 

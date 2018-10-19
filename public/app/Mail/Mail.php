@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Mail;
 
 use Exception;
-use KhsCI\KhsCI;
-use KhsCI\Support\Log;
+use PCIT\PCIT;
+use PCIT\Support\Log;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class Mail
@@ -33,7 +33,7 @@ class Mail
                                 array $cc = [],
                                 array $bcc = []): void
     {
-        self::$mail = (new KhsCI())->mail;
+        self::$mail = (new PCIT())->mail;
 
         try {
             $address && self::parseAddress($address);

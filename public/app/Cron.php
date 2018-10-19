@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
-use KhsCI\Support\DBModel;
+use PCIT\Support\DBModel;
 
 class Cron extends DBModel
 {

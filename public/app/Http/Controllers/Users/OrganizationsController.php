@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Users;
 
 use App\User;
 use Exception;
-use KhsCI\KhsCI;
+use PCIT\PCIT;
 
 class OrganizationsController
 {
@@ -36,7 +36,7 @@ class OrganizationsController
      */
     public function find(string $git_type, string $org_name)
     {
-        $khsci = new KhsCI();
+        $pcit = new PCIT();
 
         return User::getUserInfo($org_name, 0, $git_type);
     }

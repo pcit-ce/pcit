@@ -64,7 +64,7 @@ if (6 === array.length) {
 
 let query = git_type + '/' + username + '/' + repo;
 
-let baseTitle = git_type + ' - ' + username + '/' + repo + ' - KhsCI';
+let baseTitle = git_type + ' - ' + username + '/' + repo + ' - PCIT';
 
 function current() {
   $.ajax({

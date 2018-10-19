@@ -6,9 +6,9 @@ namespace App\Console\Webhooks\GitHub;
 
 use App\GetAccessToken;
 use App\Issue;
-use KhsCI\KhsCI;
-use KhsCI\Support\Cache;
-use KhsCI\Support\Log;
+use PCIT\PCIT;
+use PCIT\Support\Cache;
+use PCIT\Support\Log;
 
 class Issues
 {
@@ -46,7 +46,7 @@ class Issues
             'assignees' => $assignees,
             'labels' => $labels,
             'account' => $account,
-        ] = \KhsCI\Support\Webhooks\GitHub\Issues::handle($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Issues::handle($json_content);
 
         $assignees && Issue::updateAssignees($assignees, 'github', $issue_id);
 
@@ -98,7 +98,7 @@ class Issues
             'body' => $body,
             'created_at' => $created_at,
             'account' => $account,
-        ] = \KhsCI\Support\Webhooks\GitHub\Issues::comment($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Issues::comment($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
@@ -143,7 +143,7 @@ class Issues
     {
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
-        (new KhsCI(['github_access_token' => $access_token]))
+        (new PCIT(['github_access_token' => $access_token]))
             ->issue_comments->create($repo_full_name, $issue_number, $body);
     }
 }

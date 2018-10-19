@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\TencentAI;
 
-use KhsCI\KhsCI;
+use PCIT\PCIT;
 
 class TencentAICommand
 {
@@ -15,6 +15,6 @@ class TencentAICommand
      */
     public static function get()
     {
-        return (new KhsCI())->tencent_ai;
+        return (new PCIT())->tencent_ai;
     }
 }

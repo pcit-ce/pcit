@@ -6,11 +6,11 @@ namespace App\Console\Events;
 
 use App\Repo;
 use App\User;
-use KhsCI\CIException;
-use KhsCI\Service\Build\BuildData;
-use KhsCI\Support\CI;
-use KhsCI\Support\Env;
-use KhsCI\Support\Log;
+use PCIT\CIException;
+use PCIT\Service\Build\BuildData;
+use PCIT\Support\CI;
+use PCIT\Support\Env;
+use PCIT\Support\Log;
 
 class CheckAdmin
 {
@@ -35,7 +35,7 @@ class CheckAdmin
         $ci_root = Env::get('CI_ROOT');
 
         while ($ci_root) {
-            Log::debug(__FILE__, __LINE__, 'KhsCI already set ci root', [], Log::INFO);
+            Log::debug(__FILE__, __LINE__, 'PCIT already set ci root', [], Log::INFO);
 
             $admin = Repo::getAdmin((int) $build->rid, false, $build->git_type);
 

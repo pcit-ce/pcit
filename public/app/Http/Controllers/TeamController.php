@@ -10,7 +10,7 @@ class TeamController
     {
         return [
             'code' => 200,
-            'team' => 'https://github.com/khs1994-php/khsci/graphs/contributors',
+            'team' => 'https://github.com/khs1994-php/pcit/graphs/contributors',
         ];
     }
 }

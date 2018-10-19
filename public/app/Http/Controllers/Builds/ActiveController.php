@@ -19,7 +19,7 @@ class ActiveController
     }
 
     /**
-     * This will activate a repository, allowing its tests to be run on KhsCI.
+     * This will activate a repository, allowing its tests to be run on PCIT.
      *
      * POST
      *

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-use KhsCI\Support\Env;
-use KhsCI\Support\Response;
-use KhsCI\Support\Session;
+use PCIT\Support\Env;
+use PCIT\Support\Response;
+use PCIT\Support\Session;
 
 class LogOut
 {

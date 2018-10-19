@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\WeChat;
 
 use Exception;
-use KhsCI\KhsCI;
+use PCIT\PCIT;
 
 class MessageServer
 {
@@ -16,9 +16,9 @@ class MessageServer
      */
     public function __invoke()
     {
-        $khsci = new KhsCI();
+        $pcit = new PCIT();
 
-        return $khsci->wechat->server->pushHandler(function ($message) {
+        return $pcit->wechat->server->pushHandler(function ($message) {
             return null;
         })->register();
     }

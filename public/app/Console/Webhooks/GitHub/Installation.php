@@ -26,7 +26,7 @@ class Installation
             'repo' => $repositories,
             'sender' => $sender,
             'account' => $account
-        ] = \KhsCI\Support\Webhooks\GitHub\Installation::handle($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Installation::handle($json_content);
 
         // 仓库管理员信息
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
@@ -95,7 +95,7 @@ class Installation
             'repo' => $repo,
             'sender' => $sender,
             'account' => $account
-        ] = \KhsCI\Support\Webhooks\GitHub\Installation::repositories($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Installation::repositories($json_content);
 
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
         User::updateUserInfo($account);

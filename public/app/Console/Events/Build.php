@@ -7,12 +7,12 @@ namespace App\Console\Events;
 use App\Repo;
 use App\Setting;
 use Exception;
-use KhsCI\CIException;
-use KhsCI\Service\Build\BuildData;
-use KhsCI\Support\CI;
-use KhsCI\Support\DB;
-use KhsCI\Support\JSON;
-use KhsCI\Support\Log;
+use PCIT\CIException;
+use PCIT\Service\Build\BuildData;
+use PCIT\Support\CI;
+use PCIT\Support\DB;
+use PCIT\Support\JSON;
+use PCIT\Support\Log;
 
 class Build extends BuildData
 {

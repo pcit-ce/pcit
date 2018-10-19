@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Builds;
 use App\Build;
 use App\Repo;
 use Exception;
-use KhsCI\Support\Env;
+use PCIT\Support\Env;
 
 class ShowStatusController
 {

@@ -6,9 +6,9 @@ namespace App\Console\Webhooks;
 
 use App\Repo;
 use Exception;
-use KhsCI\Support\Git;
-use KhsCI\Support\HTTP;
-use KhsCI\Support\Log;
+use PCIT\Support\Git;
+use PCIT\Support\HTTP;
+use PCIT\Support\Log;
 use Symfony\Component\Yaml\Yaml;
 
 class GetConfig

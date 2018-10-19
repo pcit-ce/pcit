@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Support;
 
-use KhsCI\Support\Request;
+use PCIT\Support\Request;
 use PCIT\Tests\PCITTestCase;
 
 class RequestTest extends PCITTestCase

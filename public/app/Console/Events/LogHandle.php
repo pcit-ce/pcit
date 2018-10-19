@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Events;
 
 use App\Job;
-use KhsCI\Support\Cache;
-use KhsCI\Support\Log;
+use PCIT\Support\Cache;
+use PCIT\Support\Log;
 
 class LogHandle
 {
@@ -35,7 +35,7 @@ class LogHandle
         Log::debug(__FILE__, __LINE__,
             'Handle job log', ['job_id' => $this->job_id], Log::EMERGENCY);
 
-        $folder_name = sys_get_temp_dir().'/.khsci';
+        $folder_name = sys_get_temp_dir().'/.pcit';
 
         !is_dir($folder_name) && mkdir($folder_name);
 

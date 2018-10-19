@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\DB\Tests;
 
-use App\Console\KhsCIDaemon\Migrate;
+use App\Console\PCITDaemon\Migrate;
 use Exception;
-use KhsCI\Support\DB;
+use PCIT\Support\DB;
 use PCIT\Tests\PCITTestCase;
 use PHPUnit\DbUnit\TestCaseTrait;
 

@@ -6,9 +6,9 @@ ob_start();
 
 define('PCIT_START', microtime(true));
 
-use KhsCI\Support\Env;
-use KhsCI\Support\Response;
-use KhsCI\Support\Route;
+use PCIT\Support\Env;
+use PCIT\Support\Response;
+use PCIT\Support\Route;
 
 require __DIR__.'/../bootstrap/app.php';
 

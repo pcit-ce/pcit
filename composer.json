@@ -54,11 +54,11 @@
   },
   "autoload": {
     "psr-4": {
-      "KhsCI\\": "src/KhsCI/",
+      "PCIT\\": "src/PCIT/",
       "App\\": "public/app/"
     },
     "files": [
-      "src/KhsCI/Kernel/helpers.php"
+      "src/PCIT/Kernel/helpers.php"
     ]
   },
   "autoload-dev": {

@@ -38,6 +38,6 @@ indent_size = 4
 
 indent_style = tab
 
-[{package.json,.travis.yml,.khsci.yml,.drone.yml}]
+[{package.json,.travis.yml,.pcit.yml,.drone.yml}]
 
 indent_size = 2

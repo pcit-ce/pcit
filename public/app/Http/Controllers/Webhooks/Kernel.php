@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks;
 
 use Exception;
-use KhsCI\KhsCI;
+use PCIT\PCIT;
 
 class Kernel
 {
@@ -16,9 +16,9 @@ class Kernel
      */
     public function __invoke()
     {
-        $khsci = new KhsCI([], static::$git_type);
+        $pcit = new PCIT([], static::$git_type);
 
-        $output = $khsci->webhooks->server();
+        $output = $pcit->webhooks->server();
 
         return [$output];
     }

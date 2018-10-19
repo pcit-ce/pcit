@@ -8,9 +8,9 @@ use App\Build;
 use App\Repo;
 use Curl\Curl;
 use Exception;
-use KhsCI\Support\Git;
-use KhsCI\Support\JWT;
-use KhsCI\Support\Request;
+use PCIT\Support\Git;
+use PCIT\Support\JWT;
+use PCIT\Support\Request;
 
 class JWTController
 {

@@ -6,8 +6,8 @@ namespace App\Console\Webhooks\GitHub;
 
 use App\Repo;
 use App\User;
-use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Account;
-use KhsCI\Support\Webhooks\GitHub\UserBasicInfo\Sender;
+use PCIT\Support\Webhooks\GitHub\UserBasicInfo\Account;
+use PCIT\Support\Webhooks\GitHub\UserBasicInfo\Sender;
 
 /**
  * 每收到 webhooks 更新数据.

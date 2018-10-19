@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Webhooks\GitHub;
 
-use KhsCI\Support\DB;
+use PCIT\Support\DB;
 
 class Delete
 {
@@ -21,7 +21,7 @@ class Delete
             'repo_full_name' => $repo_full_name,
             'ref_type' => $ref_type,
             'account' => $account,
-        ] = \KhsCI\Support\Webhooks\GitHub\Delete::handle($json_content);
+        ] = \PCIT\Support\Webhooks\GitHub\Delete::handle($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))

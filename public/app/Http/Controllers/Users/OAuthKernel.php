@@ -6,12 +6,12 @@ namespace App\Http\Controllers\Users;
 
 use Error;
 use Exception;
-use KhsCI\KhsCI;
-use KhsCI\Service\OAuth\CodingClient;
-use KhsCI\Service\OAuth\GiteeClient;
-use KhsCI\Service\OAuth\GitHubClient;
-use KhsCI\Support\Response;
-use KhsCI\Support\Session;
+use PCIT\PCIT;
+use PCIT\Service\OAuth\CodingClient;
+use PCIT\Service\OAuth\GiteeClient;
+use PCIT\Service\OAuth\GitHubClient;
+use PCIT\Support\Response;
+use PCIT\Support\Session;
 
 class OAuthKernel
 {
@@ -39,9 +39,9 @@ class OAuthKernel
      */
     public function __construct()
     {
-        $khsci = new KhsCI([], static::$git_type);
+        $pcit = new PCIT([], static::$git_type);
 
-        static::$oauth = $khsci->oauth;
+        static::$oauth = $pcit->oauth;
     }
 
     /**
@@ -107,9 +107,9 @@ class OAuthKernel
 
             false !== $access_token && Session::put($git_type.'.access_token', $access_token);
 
-            $khsci = new KhsCI([$git_type.'_access_token' => $access_token], $git_type);
+            $pcit = new PCIT([$git_type.'_access_token' => $access_token], $git_type);
 
-            $userInfoArray = $khsci->user_basic_info->getUserInfo();
+            $userInfoArray = $pcit->user_basic_info->getUserInfo();
         } catch (Error $e) {
             throw new Exception($e->getMessage(), 500);
         }

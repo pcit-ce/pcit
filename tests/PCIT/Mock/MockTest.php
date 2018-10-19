@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Mock;
 
-use KhsCI\Service\Build\Events\Log;
+use PCIT\Service\Build\Events\Log;
 use PCIT\Tests\PCITTestCase;
 
 class MockTest extends PCITTestCase

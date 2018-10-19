@@ -7,10 +7,10 @@ namespace App\Console\Webhooks;
 use App\Build;
 use App\Notifications\GitHubAppChecks;
 use App\Repo;
-use KhsCI\KhsCI;
-use KhsCI\Support\CI;
-use KhsCI\Support\JSON;
-use KhsCI\Support\Log;
+use PCIT\PCIT;
+use PCIT\Support\CI;
+use PCIT\Support\JSON;
+use PCIT\Support\Log;
 
 class AliYunRegistry
 {
@@ -53,7 +53,7 @@ class AliYunRegistry
                 CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS,
                 'Aliyun Docker Registry Push',
                 'Build Docker image Success',
-                (new KhsCi())->check_md->aliyunDockerRegistry(
+                (new PCIT())->check_md->aliyunDockerRegistry(
                     'PHP',
                     PHP_OS,
                     JSON::beautiful($json_content)

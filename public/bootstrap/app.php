@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Dotenv\Dotenv;
-use KhsCI\Support\CI;
-use KhsCI\Support\Env;
+use PCIT\Support\CI;
+use PCIT\Support\Env;
 
 require __DIR__.'/../../vendor/autoload.php';
 

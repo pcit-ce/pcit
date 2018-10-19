@@ -10,12 +10,12 @@ use App\Job;
 use App\Notifications\GitHubChecksConclusion\Queued;
 use App\Repo;
 use Exception;
-use KhsCI\KhsCI;
-use KhsCI\Service\Checks\RunData;
-use KhsCI\Support\CI;
-use KhsCI\Support\Env;
-use KhsCI\Support\JSON;
-use KhsCI\Support\Log;
+use PCIT\PCIT;
+use PCIT\Service\Checks\RunData;
+use PCIT\Support\CI;
+use PCIT\Support\Env;
+use PCIT\Support\JSON;
+use PCIT\Support\Log;
 
 class GitHubAppChecks
 {
@@ -63,7 +63,7 @@ class GitHubAppChecks
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
-        $khsci = new KhsCI(['github_access_token' => $access_token], 'github');
+        $pcit = new PCIT(['github_access_token' => $access_token], 'github');
 
         $output_array = Build::find((int) $build_key_id);
 
@@ -119,9 +119,9 @@ class GitHubAppChecks
         $run_data->check_run_id = $check_run_id;
 
         if ($check_run_id and !$force_create) {
-            $result = $khsci->check_run->update($run_data);
+            $result = $pcit->check_run->update($run_data);
         } else {
-            $result = $khsci->check_run->create($run_data);
+            $result = $pcit->check_run->create($run_data);
         }
 
         $check_run_id = json_decode($result)->id ?? null;
@@ -155,7 +155,7 @@ class GitHubAppChecks
             time(), time(),
             CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, null,
             null,
-            (new KhsCI())
+            (new PCIT())
                 ->check_md
                 ->success(
                     'PHP',

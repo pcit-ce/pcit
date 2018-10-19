@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App;
 
 use Exception;
-use KhsCI\Support\DB;
-use KhsCI\Support\Env;
+use PCIT\Support\DB;
+use PCIT\Support\Env;
 
 class GetAccessToken
 {

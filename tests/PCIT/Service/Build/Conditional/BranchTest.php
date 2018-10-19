@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Service\Build\Conditional;
 
-use KhsCI\Service\Build\Conditional\Branch;
+use PCIT\Service\Build\Conditional\Branch;
 use PCIT\Tests\PCITTestCase;
 
 class BranchTest extends PCITTestCase

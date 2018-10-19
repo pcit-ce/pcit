@@ -7,12 +7,12 @@ namespace App\Http\Controllers\Webhooks;
 use App\Repo;
 use Error;
 use Exception;
-use KhsCI\KhsCI;
-use KhsCI\Support\Cache;
-use KhsCI\Support\CI;
-use KhsCI\Support\Env;
-use KhsCI\Support\Request;
-use KhsCI\Support\Session;
+use PCIT\PCIT;
+use PCIT\Support\Cache;
+use PCIT\Support\CI;
+use PCIT\Support\Env;
+use PCIT\Support\Request;
+use PCIT\Support\Session;
 
 class Controller
 {
@@ -73,9 +73,9 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI([self::$gitType.'_access_token' => $access_token], static::$gitType);
+        $pcit = new PCIT([self::$gitType.'_access_token' => $access_token], static::$gitType);
 
-        $json = $khsci->repo_webhooks->getWebhooks($raw, ...$arg);
+        $json = $pcit->repo_webhooks->getWebhooks($raw, ...$arg);
 
         return json_decode($json, true);
     }
@@ -113,9 +113,9 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI([self::$gitType.'_access_token' => $access_token], static::$gitType);
+        $pcit = new PCIT([self::$gitType.'_access_token' => $access_token], static::$gitType);
 
-        $getWebhooksStatus = $khsci->repo_webhooks->getStatus($webhooksUrl, ...$arg);
+        $getWebhooksStatus = $pcit->repo_webhooks->getStatus($webhooksUrl, ...$arg);
 
         if (1 === $getWebhooksStatus) {
             Repo::updateWebhookStatus(1, $gitType, "$arg[1]/$arg[2]");
@@ -124,7 +124,7 @@ class Controller
         }
 
         try {
-            $json = $khsci->repo_webhooks->setWebhooks($data, ...$arg);
+            $json = $pcit->repo_webhooks->setWebhooks($data, ...$arg);
         } catch (Exception $e) {
             if (422 === $e->getCode()) {
                 Repo::updateWebhookStatus(1, $gitType, "$arg[1]/$arg[2]");
@@ -158,9 +158,9 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $khsci = new KhsCI([self::$gitType.'_access_token' => $access_token], static::$gitType);
+        $pcit = new PCIT([self::$gitType.'_access_token' => $access_token], static::$gitType);
 
-        return $khsci->repo_webhooks->unsetWebhooks(...$arg);
+        return $pcit->repo_webhooks->unsetWebhooks(...$arg);
     }
 
     /**
@@ -232,7 +232,7 @@ class Controller
     {
         $url = Env::get('CI_HOST').'/webhooks/coding';
 
-        $token = Env::get('WEBHOOKS_TOKEN', md5('khsci'));
+        $token = Env::get('WEBHOOKS_TOKEN', md5('pcit'));
 
         return <<<EOF
 {
@@ -255,7 +255,7 @@ EOF;
     {
         $url = Env::get('CI_HOST').'/webhooks/gitee';
 
-        $token = Env::get('WEBHOOKS_TOKEN', md5('khsci'));
+        $token = Env::get('WEBHOOKS_TOKEN', md5('pcit'));
 
         return <<<EOF
 {
@@ -275,7 +275,7 @@ EOF;
     {
         $url = Env::get('CI_HOST').'/webhooks/github';
 
-        $token = Env::get('WEBHOOKS_TOKEN', md5('khsci'));
+        $token = Env::get('WEBHOOKS_TOKEN', md5('pcit'));
 
         return <<<EOF
 {

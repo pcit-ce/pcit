@@ -22,7 +22,7 @@ class SiteMapController
             'docs' => $host.'/docs',
             'wechat' => $host.'/wechat',
             'status' => $host.'/status',
-            'feedback' => 'https://github.com/khs1994-php/khsci/issues',
+            'feedback' => 'https://github.com/khs1994-php/pcit/issues',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
                 'test' => $host.'/test5',

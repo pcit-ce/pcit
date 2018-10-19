@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Support;
 
-use KhsCI\Support\DB;
+use PCIT\Support\DB;
 use PCIT\Tests\PCITTestCase;
 
 class DBTest extends PCITTestCase

@@ -9,7 +9,7 @@ use App\Http\Controllers\Users\JWTController;
 use App\Job;
 use App\Repo;
 use Exception;
-use KhsCI\Support\CI;
+use PCIT\Support\CI;
 
 class BuildsController
 {

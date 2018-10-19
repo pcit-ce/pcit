@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App;
 
 use Exception;
-use KhsCI\Support\CI;
-use KhsCI\Support\DB;
-use KhsCI\Support\DBModel;
+use PCIT\Support\CI;
+use PCIT\Support\DB;
+use PCIT\Support\DBModel;
 
 class Setting extends DBModel
 {

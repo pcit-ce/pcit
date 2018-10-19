@@ -8,7 +8,7 @@ use App\Build;
 use App\Job;
 use App\Notifications\GitHubAppChecks;
 use Exception;
-use KhsCI\Support\CI;
+use PCIT\Support\CI;
 
 class Passed
 {

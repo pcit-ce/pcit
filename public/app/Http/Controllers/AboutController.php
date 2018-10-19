@@ -10,7 +10,7 @@ class AboutController
     {
         return [
             'code' => 200,
-            'about' => 'The goal of KhsCI is to build CI/CD System by PHP Powered by Docker and Kubernetes',
+            'about' => 'The goal of PCIT is to build CI/CD System by PHP Powered by Docker and Kubernetes',
         ];
     }
 }

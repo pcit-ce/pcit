@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Tests\Service\Build\Conditional;
 
-use KhsCI\Service\Build\Conditional\Tag;
+use PCIT\Service\Build\Conditional\Tag;
 use PCIT\Tests\PCITTestCase;
 
 class TagTest extends PCITTestCase

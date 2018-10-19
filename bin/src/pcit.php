@@ -8,27 +8,27 @@ require __DIR__.'/../../public/bootstrap/app.php';
 
 $cli = new Application('PCIT CLI', 'v18.06');
 
-$fh = opendir(__DIR__.'/../../public/app/Console/KhsCI/Repo');
+$fh = opendir(__DIR__.'/../../public/app/Console/PCIT/Repo');
 
 while ($file = readdir($fh)) {
     if ('.' === $file or '..' === $file) {
         continue;
     }
 
-    $class = '\App\Console\KhsCI\Repo\\'.rtrim($file, '.php');
+    $class = '\App\Console\PCIT\Repo\\'.rtrim($file, '.php');
 
     $cli->add(new $class());
 }
 
-$fh = opendir(__DIR__.'/../../public/app/Console/KhsCI');
+$fh = opendir(__DIR__.'/../../public/app/Console/PCIT');
 
 if ($fh) {
     while (false !== ($file = readdir($fh))) {
-        if ('.' === $file or '..' === $file or 'KhsCICommand.php' === $file or 'Repo' === $file) {
+        if ('.' === $file or '..' === $file or 'PCITCommand.php' === $file or 'Repo' === $file) {
             continue;
         }
 
-        $class = '\App\Console\KhsCI\\'.rtrim($file, '.php');
+        $class = '\App\Console\PCIT\\'.rtrim($file, '.php');
 
         $cli->add(new $class());
     }
