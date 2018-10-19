@@ -100,7 +100,7 @@ footer a:hover {
     margin-left: 20%;
 }
 
-.main {
+.column {
     margin-left: 20%;
 }
 
@@ -121,4 +121,17 @@ footer a:hover {
 
 body {
     overflow-y: scroll;
+}
+
+.column #current{
+    margin-left: 1px;
+}
+
+.column span{
+    font-size: 20px;
+    margin-left: 20px;
+}
+
+#more_options {
+    margin-left: 470px;
 }

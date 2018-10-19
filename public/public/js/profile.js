@@ -1,12 +1,11 @@
 $('header').append(`
-<span class="ico"><img alt='ico' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
+<span class="ico"><img alt='pcit' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
 <span class="docs"><a href="//docs.ci.khs1994.com" target="_blank">Documentation</a></span>
 <span class="plugins"><a href="//docs.ci.khs1994.com/plugins/" target="_blank">Plugins</a></span>
 <span class="donate"><a href="//zan.khs1994.com" target="_blank">Donate</a></span>
 <span class="username">username</span>
 `
 );
-
 $('footer').append(`
     <ul class="about">
     <li>@PCIT, Datong, Shanxi</li>
@@ -42,11 +41,8 @@ $('footer').append(`
 );
 
 let ci_host = "https://" + location.host + "/";
-
 let url_array = location.href.split('/');
-
 let git_type = url_array[4];
-
 let username = url_array[5];
 
 function formatGitType(gittype) {
@@ -60,12 +56,16 @@ function formatGitType(gittype) {
 }
 
 function showUserBasicInfo(data) {
-  $("#username").text(data.username).addClass(data.type);
+  let {username, type} = data;
 
-  $("title").text(`${formatGitType(git_type)} - ${data.username} - Profile - PCIT`);
+  $("#username").text(username).addClass(type);
+
+  let title = `${formatGitType(git_type)} - ${data.username} - Profile - PCIT`;
+
+  $("title").text(title);
 
   $("#user").empty().append(
-    "<span onclick='click_user()'>" + data.username + "</span>" +
+    "<span>" + username + "</span>" +
     "<br><br><strong >API authentication</strong><br><br>" +
     "<p>使用 PCIT API 请访问 " +
     "<a href='https://api.ci.khs1994.com' target='_blank'>https://api.ci.khs1994.com</a></p>" +
@@ -92,7 +92,7 @@ function list(data) {
   let orgs_element = $('#orgs');
 
   repos_element.empty().css('height', 200);
-  orgs_element.css('height',220);
+  orgs_element.css('height', 220);
 
   if (count > 3) {
     let css_height = count * 50;
@@ -101,14 +101,13 @@ function list(data) {
   }
 
   $.each(data, function (num, repo) {
-
-    let button = $("<button></button>");
-
     let {build_status: status, repo_full_name: repo_name} = repo;
+    let button = $('<button></button>');
 
-    button.attr("onclick", 'open_or_close(this)');
+    button.addClass('open_or_close');
+    button.attr('repo', repo_name);
 
-    if (status === (1).toString()) {
+    if (status === 1 + "") {
       button.text('Close');
       button.css('color', 'green');
     } else {
@@ -124,14 +123,15 @@ function list(data) {
     }
 
     // <p id="username/repo">username/repo</p>
-    let p = $("<a></a>").text(repo_name);
+    let p = $('<a></a>');
 
+    p.text(repo_name);
     p.attr("id", repo_name);
     p.attr('href', ci_host + git_type + '/' + repo_name);
     p.attr('target', '_blank');
     p.css('display', 'inline');
 
-    let settings = $("<a></a>");
+    let settings = $('<a></a>');
 
     settings.text('Setting');
     settings.attr('href', ci_host + git_type + "/" + repo_name + "/settings");
@@ -143,27 +143,42 @@ function list(data) {
 
 function showOrg(data) {
   let count = data.length;
+
   $.each(data, function (num, org) {
-    let org_name = org.username;
-    $(".orgs").append(`<p onclick="click_org(this.innerHTML)">${org_name}</p>`).css('height', count * 50);
+    let {username: org_name} = org;
+    let orgs_element = $(".orgs");
+
+    orgs_element.append(`<p class = "org_name">${org_name}</p>`).css('height', count * 50);
   });
 }
 
 function showGitHubAppSettings(org_name, installation_id) {
   let settings_url;
   let content;
+  let repos_element = $("#repos");
+
   $.ajax({
     type: "GET",
     url: "/api/ci/github_app_settings/" + org_name,
     success: function (data) {
       settings_url = data;
-      content = `<p></p>
-        <p>找不到仓库？请在
-        <a href="${settings_url}/${installation_id}" target="_blank"> GitHub </a>管理你的仓库
-        </p>
-        `;
 
-      $("#repos").append(content);
+      content = $('<p></p>');
+
+      content.append('找不到仓库？请在 ');
+
+      content.append(() => {
+        let a_element = $('<a></a>');
+        a_element.attr('href', `${settings_url}/${installation_id}`);
+        a_element.attr('target', '_blank');
+        a_element.text('GitHub');
+
+        return a_element;
+      });
+
+      content.append(' 添加仓库');
+
+      repos_element.append('<p></p>').append(content);
     }
   });
 }
@@ -176,12 +191,22 @@ function showGitHubAppInstall(uid) {
     type: "GET",
     url: "/api/ci/github_app_installation/" + uid,
     success: function (data) {
+      let repos_element = $("#repos");
 
       installation_url = data;
-      content = `<p>此账号或组织未安装 GitHub App 或未选择项目，点击
-<a href="${installation_url}" target="_blank">激活项目</a> 在 GitHub 进行安装</p>
-        `;
-      $("#repos").append(content);
+      content = $('<p></p>');
+      content.append(() => '此账号或组织未安装 GitHub App 或未选择项目，点击 ');
+      content.append(() => {
+        let a_element = $('<a></a>');
+        a_element.attr('href', installation_url);
+        a_element.attr('target', '_blank');
+        a_element.text('激活项目');
+
+        return a_element;
+      });
+
+      content.append(' 在 GitHub 进行安装');
+      repos_element.append(content);
     },
     error: function (data) {
       console.log(data);
@@ -197,7 +222,7 @@ function click_user() {
       'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
     },
     success: function (data) {
-      let {installation_id, uid} = data;
+      let {installation_id, uid} = data[0];
 
       $.ajax({
         type: "GET",
@@ -212,7 +237,7 @@ function click_user() {
 
           if (git_type !== 'github') {
 
-            return 1;
+            return;
           }
 
           if (installation_id) {
@@ -227,6 +252,10 @@ function click_user() {
 }
 
 function show_org(data, org_name) {
+  if (data[0] === undefined) {
+    return;
+  }
+
   let {installation_id, uid} = data[0];
 
   $.ajax({
@@ -263,7 +292,7 @@ function click_org(org_name) {
     success: function (data) {
       show_org(data, org_name);
     }
-  })
+  });
 }
 
 $(document).ready(function () {
@@ -339,33 +368,50 @@ function sync() {
   });
 }
 
-function open_or_close(id) {
-  let repo = id.getAttribute('id');
-  let status = id.innerHTML;
-  if ('Open' === status) {
+function open_or_close(target) {
+  let status = target.innerHTML;
+  let repo = target.id;
 
+  if ('Open' === status) {
     $.ajax({
       type: "POST",
-      url: ci_host + "webhooks/" + git_type + "/" + repo + "/199412/activate",
+      url: ci_host + "webhooks/" + git_type + "/" + repo + "/activate",
       dataType: "json",
       contentType: 'application/json;charset=utf-8',
       success: function (data) {
-        id.innerHTML = 'Close';
-        id.style.color = 'Green';
+        target.innerHTML = 'Close';
+        target.style.color = 'Green';
         console.log(data);
       }
     });
   } else {
-
     $.ajax({
       type: "delete",
-      url: ci_host + "/webhooks/" + git_type + "/" + repo + "/199412/deactivate",
+      url: ci_host + "webhooks/" + git_type + "/" + repo + "/deactivate",
       success: function (data) {
-        id.innerHTML = 'Open';
-        id.style.color = 'Red';
+        target.innerHTML = 'Open';
+        target.style.color = 'Red';
         console.log(data);
       }
     });
-
   }
 }
+
+$("#orgs").click(function (event) {
+  let org_name = event.target.innerHTML;
+  click_org(org_name);
+});
+
+$("#userinfo").click(function (event) {
+  let username = event.target.innerHTML;
+  click_user(username);
+});
+
+// append 添加元素绑定事件
+// https://www.cnblogs.com/liubaojing/p/8383960.html
+
+$("#repos").on('click', '.open_or_close', function (event) {
+  console.log(event);
+
+  open_or_close(event.target);
+});
