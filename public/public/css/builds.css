@@ -18,7 +18,7 @@ header a:hover {
 }
 
 .ico {
-    margin-left: 20%;
+    margin-left: 15%;
     font-size: 40px;
 }
 
@@ -45,7 +45,7 @@ header a:hover {
 
 .username {
     position: absolute;
-    margin-left: 600px;
+    margin-left: 825px;
     margin-top: 20px;
     font-size: 20px;
 }
@@ -53,7 +53,9 @@ header a:hover {
 footer {
     position: relative;
     margin-top: 260px;
-    margin-left: 8%;
+    margin-left: 12%;
+    margin-right: auto;
+    width: 70%;
 }
 
 footer li {
@@ -75,7 +77,7 @@ footer a:hover {
 .about {
     /*border: solid;*/
     float: left;
-    margin-left: 10%;
+    /*margin-left: 10%;*/
 }
 
 .help {
@@ -93,7 +95,7 @@ footer a:hover {
 .status {
     /*border: solid;*/
     float: left;
-    margin-left: 10%;
+    margin-left: 20%;
 }
 
 #repo {
@@ -101,11 +103,11 @@ footer a:hover {
 }
 
 .column {
-    margin-left: 20%;
+    margin-left: 15%;
 }
 
 #display {
-    margin-left: 20%;
+    margin: 0 auto;
     width: 70%;
 }
 
@@ -114,7 +116,7 @@ footer a:hover {
     color: blue;
 }
 
-.details:hover{
+.details:hover {
     text-decoration: underline;
     color: blue;
 }
@@ -123,11 +125,11 @@ body {
     overflow-y: scroll;
 }
 
-.column #current{
+.column #current {
     margin-left: 1px;
 }
 
-.column span{
+.column span {
     font-size: 20px;
     margin-left: 20px;
 }

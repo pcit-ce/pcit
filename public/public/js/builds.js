@@ -40,23 +40,23 @@ $('footer').append(`<ul class="about">
 
 let url = location.href;
 
-let array = url.split('/');
+let url_array = url.split('/');
 
 let baseUrl = "https://" + location.host;
 
-let [, , , git_type, username, repo] = array;
+let [, , , git_type, username, repo] = url_array;
 
 let base_full_url = baseUrl + '/' + git_type + '/' + username + '/' + repo;
 
 let base_include = git_type + '/' + username + '/' + repo;
 
-let type_from_url = array[6];
+let type_from_url = url_array[6];
 
 let build_id;
 
 let title;
 
-if (6 === array.length) {
+if (6 === url_array.length) {
   type_from_url = 'current';
 }
 
@@ -95,14 +95,10 @@ function branches() {
 }
 
 function builds() {
-  let url = location.href;
-
-  let array = url.split('/');
-
   let build_id;
 
-  if (8 === array.length) {
-    build_id = array[7];
+  if (8 === url_array.length) {
+    build_id = url_array[7];
   }
 
   if (build_id) {
@@ -144,7 +140,7 @@ function pull_requests() {
   })
 }
 
-function getCommitUrl(commit_id) {
+function getCommitUrl(commit_id, gittype = 'github') {
   let commitUrl;
 
   switch (git_type) {
@@ -162,7 +158,7 @@ function getCommitUrl(commit_id) {
   return commitUrl;
 }
 
-function getPRUrl(pull_request_id) {
+function getPRUrl(pull_request_id, gittype = 'github') {
   let prUrl;
 
   switch (git_type) {
@@ -186,12 +182,9 @@ function showLog(data) {
   let display_element = $("#display");
   let {
     id: build_id, build_status, commit_id, commit_message, branch, committer_name,
-    compare, stopped_at, build_log, jobs
+    compare, stopped_at, jobs
   } = data;
 
-  if (null === build_log) {
-    build_log = 'This Build is ' + build_status;
-  }
   if (null === stopped_at) {
     stopped_at = 'This build is ' + build_status;
   } else {
@@ -209,13 +202,29 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
   );
 
   if (jobs.length === 1) {
-    $("#display").append(`<pre>${jobs[0]['build_log']}</pre>`);
+    let build_log = jobs[0]['build_log'];
+
+    if (null === build_log) {
+      build_log = 'This Build is ' + build_status;
+    }
+
+    display_element.append(`<pre>${build_log}</pre>`);
 
     return;
   }
 
   $.each(jobs, function (id, data) {
-    $("#display").append(`<pre style="background: black; color: white">${data.build_log}</pre>`);
+    let {build_log} = data;
+
+    if (null === build_log) {
+      build_log = 'This Build is ' + build_status;
+    }
+
+    let pre_element = $('<pre></pre>');
+    pre_element.append(build_log);
+    pre_element.css('background', 'black').css('color', 'white');
+
+    display_element.append(pre_element);
   });
 }
 
@@ -227,7 +236,7 @@ function display(id, data) {
   switch (id) {
     case 'current':
       if (0 === data.length) {
-        $("#display").append("Not Build Yet !");
+        display_element.append("Not Build Yet !");
       } else {
         showLog(data);
       }
@@ -235,12 +244,9 @@ function display(id, data) {
       break;
 
     case 'builds':
-      let url = location.href;
-
-      let array = url.split('/');
-      if (8 === array.length) {
+      if (8 === url_array.length) {
         if (0 === data.length || 'error' === data) {
-          $("#display").append('Oops, we couldn\'t find that build!');
+          display_element.append('Oops, we couldn\'t find that build!');
         } else {
           showLog(data);
         }
@@ -277,7 +283,7 @@ function display(id, data) {
             stopped_at = d.toLocaleString();
           }
 
-          $("#display").append(`<tr>
+          display_element.append(`<tr>
 <td>${i}${nbsp}</td>
 <td style='color:blue;'>${nbsp}${event_type}${nbsp}</td>
 <td title="${branch}">${nbsp}${branch.slice(0, 10)}${nbsp}</td>
@@ -292,13 +298,13 @@ function display(id, data) {
           )
         });
       } else {
-        $("#display").append('Not Build Yet !');
+        display_element.append('Not Build Yet !');
       }
 
       break;
     case 'branches':
       if (0 === data.length) {
-        $("#display").append('Not Build Yet !')
+        display_element.append('Not Build Yet !');
       } else {
 
         $.each(data, function (num, branch) {
@@ -319,7 +325,7 @@ function display(id, data) {
               d = new Date(stopped_at * 1000);
               stopped_at = d.toLocaleString();
             }
-            $("#display").append(`<tr>
+            display_element.append(`<tr>
 <td><a href="${builds}/${id}" target='_blank'># ${id} </a></td>
 <td>${nbsp}${status[0]}${nbsp}</td>
 <td>${nbsp}${status[2]}${nbsp}</td>
@@ -338,7 +344,7 @@ function display(id, data) {
 
     case "pull_requests":
       if (0 === data.length) {
-        $("#display").append('No pull request builds for this repository');
+        display_element.append('No pull request builds for this repository');
       } else {
         let i = data.length + 1;
         $.each(data, function (id, status) {
@@ -374,7 +380,7 @@ function display(id, data) {
             stopped_at = d.toLocaleString();
           }
 
-          $("#display").append(
+          display_element.append(
             `
 <tr>
 <td>${i}${nbsp}</td>
@@ -470,21 +476,34 @@ $("#branches").on({
 });
 
 $("#pull_requests").on({
-  'click':function(){
-   pull_requests();
+  'click': function () {
+    pull_requests();
   }
 });
 
-$(document).ready(function () {
+jQuery(document).ready(function () {
 
   display_title(type_from_url);
 
   let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;';
 
-  $('#repo').append('<h2>' + format_gittype(git_type) + nbsp + username + '/' + repo + nbsp +
-    "<a href='" + base_full_url + "/getstatus' target='_blank'>" +
-    '<img alt="status" src="' + base_full_url + '/status" />' + '</a></h2>'
-  );
+  let content = jQuery('<h2></h2>');
+
+  content.append(() => {
+    return format_gittype(git_type) + nbsp + username + '/' + repo + nbsp;
+  }).append(() => {
+    let a_element = $('<a></a>');
+    let img_element = $('<img alt="status" src=""/>');
+
+    img_element.attr('src', base_full_url + '/status');
+    a_element.append(img_element);
+    a_element.attr('href', base_full_url + '/getstatus');
+    a_element.attr('target', '_black');
+
+    return a_element;
+  });
+
+  $('#repo').append(content);
 
   switch (type_from_url) {
     case 'current':
