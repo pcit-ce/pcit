@@ -60,7 +60,9 @@ if (6 === url_array.length) {
   type_from_url = 'current';
 }
 
-let query = git_type + '/' + username + '/' + repo;
+let repo_fullname = username + '/' + repo;
+
+let query = git_type + '/' + repo_fullname;
 
 let baseTitle = format_gittype(git_type) + ' - ' + username + '/' + repo + ' - PCIT';
 
@@ -140,6 +142,73 @@ function pull_requests() {
   })
 }
 
+function jobs() {
+  console.log('jobs');
+  $.ajax({
+    type: "get",
+    url: '/api/repo/' + base_include + '/jobs/1',
+    success: function (data) {
+      display(id, data);
+    }
+  });
+}
+
+function settings() {
+  console.log(location.href);
+  $.ajax({
+    type: "get",
+    url: '/api/repo/' + repo_fullname + '/settings',
+    headers: {
+      'Authorization': 'token ' + Cookies.get(git_type + 'api_token')
+    },
+    success: function (data) {
+      display(id, data);
+    }
+  });
+}
+
+function requests() {
+  console.log(location.href);
+  $.ajax({
+    type: "get",
+    url: '/api/repo/' + repo_fullname + '/requests',
+    herders: {
+      'Authorization': 'token ' + Cookies.get(git_type + '_api+token')
+    },
+    success: function (data) {
+      display(id, data);
+    }
+  });
+}
+
+function caches() {
+  console.log(location.href);
+  $.ajax({
+    type: "get",
+    url: '/api/repo/' + repo_fullname + '/caches',
+    headers: {
+      'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+    },
+    success: function (data) {
+      display(id, data);
+    }
+  });
+}
+
+function triggerBuild() {
+  console.log(location.href);
+  $.ajax({
+    type: "post",
+    url: '/api/repo/' + repo_fullname + '/trigger',
+    headers: {
+      'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
+    },
+    success: function (data) {
+      display(id, data);
+    }
+  });
+}
+
 function getCommitUrl(commit_id, gittype = 'github') {
   let commitUrl;
 
@@ -194,12 +263,65 @@ function showLog(data) {
   }
 
   let commit_url = getCommitUrl(commit_id);
+  let div_element = $('<div class="build_data"></div>');
 
-  display_element.append(`<h2># ${build_id}${nbsp}${branch}${nbsp}${build_status}${nbsp}
-<a title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id.slice(0, 7)}</a>${nbsp}
-${commit_message}${nbsp}${committer_name}${nbsp}
-<a title="View diff on GitHub" href="${compare}" target='_blank'>Compare </a>${nbsp}${stopped_at}${nbsp}</h2>`
-  );
+  div_element.append(() => {
+    let build_id_element = $('<div class="build_id"></div>');
+    build_id_element.append(build_id);
+
+    return build_id_element;
+  });
+
+  div_element.append(() => {
+    let branch_element = $('<div class="branch"></div>');
+    branch_element.append(branch);
+
+    let build_status_element = $('<div class="build_status"></div>');
+    build_status_element.append(build_status);
+
+    return build_status_element;
+  });
+
+  div_element.append(() => {
+    let commit_url_element = $('<a></a>');
+    commit_url_element.append(commit_id.slice(0, 7));
+    commit_url_element.attr('title', 'View commit on GitHub');
+    commit_url_element.attr('href', commit_url);
+    commit_url_element.attr('target', '_blank');
+
+    return commit_url_element;
+  });
+
+  div_element.append(() => {
+    let commit_message_element = $('<div class="commit_message"></div>');
+    commit_message_element.append(commit_message);
+
+    return commit_message_element;
+  });
+
+  div_element.append(() => {
+    let committer_name_element = $('<div class="committer_name"></div>');
+    committer_name_element.append(committer_name);
+
+    return committer_name_element;
+  });
+
+  div_element.append(() => {
+    let compare_element = $('<a class="compare"></a>');
+    compare_element.append('Compare').attr('title', 'View diff on GitHub').attr('href', compare);
+    compare_element.attr('target', '_blank');
+
+    return compare_element;
+  });
+
+  div_element.append(() => {
+    let stopped_at_element = $('<div class="stopped_at"></div>');
+    stopped_at_element.append(stopped_at);
+
+    return stopped_at_element;
+  });
+
+  display_element.append(div_element);
 
   if (jobs.length === 1) {
     let build_log = jobs[0]['build_log'];
@@ -228,6 +350,178 @@ ${commit_message}${nbsp}${committer_name}${nbsp}
   });
 }
 
+function display_builds(data, display_element) {
+  if (8 === url_array.length) {
+    if (0 === data.length || 'error' === data) {
+      display_element.append('Oops, we couldn\'t find that build!');
+    } else {
+      showLog(data);
+    }
+
+  } else if (0 !== data.length) {
+    let i = data.length + 1;
+    $.each(data, function (id, status) {
+      i--;
+
+      let {
+        event_type, id: build_id, branch, committer_username,
+        commit_message, commit_id, build_status, started_at, finished_at: stopped_at
+      } = status;
+
+      let nbsp = "&nbsp;&nbsp;&nbsp;";
+      let nbsp2 = nbsp + nbsp + nbsp;
+
+      let commit_url = getCommitUrl(commit_id);
+      commit_id = commit_id.substr(0, 7);
+
+      if (null == started_at) {
+        started_at = nbsp2 + nbsp2 + 'Pending'
+      } else {
+        let d;
+        d = new Date(parseInt(started_at) * 1000);
+        started_at = d.toLocaleString();
+      }
+
+      if (null == stopped_at) {
+        stopped_at = ' '
+      } else {
+        let d;
+        d = new Date(parseInt(stopped_at) * 1000);
+        stopped_at = d.toLocaleString();
+      }
+
+      display_element.append(`<tr>
+<td>${i}${nbsp}</td>
+<td style='color:blue;'>${nbsp}${event_type}${nbsp}</td>
+<td title="${branch}">${nbsp}${branch.slice(0, 10)}${nbsp}</td>
+<td title="${committer_username}">${committer_username.slice(0, 10)}${nbsp}</td>
+<td style='color: brown' title="${commit_message}">${nbsp}${commit_message.slice(0, 28)}${nbsp}</td>
+<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
+<td><a class="details" href="${location.href}/${build_id}" target='_blank'># ${build_id}&nbsp;${build_status}</a>${nbsp}</td>
+<td>${nbsp}${started_at}${nbsp}</td>
+<td>${nbsp}${stopped_at}${nbsp}</td>
+</tr>
+`
+      )
+    });
+  } else {
+    display_element.append('Not Build Yet !');
+  }
+}
+
+function display_branches(data, display_element) {
+  if (0 === data.length) {
+    display_element.append('Not Build Yet !');
+  } else {
+
+    $.each(data, function (num, branch) {
+
+      display_element.append(branch);
+
+      $.each(status, function (id, status) {
+        id = id.replace('k', '');
+
+        let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+        let stopped_at = status[3];
+
+        if (null == stopped_at) {
+          stopped_at = '&nbsp;&nbsp;&nbsp;Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        } else {
+          let d;
+          d = new Date(stopped_at * 1000);
+          stopped_at = d.toLocaleString();
+        }
+        display_element.append(`<tr>
+<td><a href="${builds}/${id}" target='_blank'># ${id} </a></td>
+<td>${nbsp}${status[0]}${nbsp}</td>
+<td>${nbsp}${status[2]}${nbsp}</td>
+<td>${nbsp}${stopped_at}${nbsp}</td>
+<td><a href="${status[4]}" target='_black'>${status[1]}</a></td>
+</tr>
+`);
+      });
+
+      display_element.append("<hr>");
+
+    })
+  }
+}
+
+function display_pullRequests(data, display_element) {
+  if (0 === data.length) {
+    display_element.append('No pull request builds for this repository');
+  } else {
+    let i = data.length + 1;
+    $.each(data, function (id, status) {
+      i--;
+
+      let event_type = 'PR # ';
+      let nbsp = "&nbsp;&nbsp;&nbsp;";
+
+      let {
+        pull_request_number: pull_request_id, id: build_id, branch, committer_username,
+        commit_message, commit_id, build_status, started_at, finished_at: stopped_at,
+      } = status;
+
+      let commit_url = getCommitUrl(commit_id);
+
+      let pull_request_url = getPRUrl(pull_request_id);
+
+      commit_id = commit_id.substr(0, 7);
+
+      if (null == started_at) {
+        started_at = 'Pending'
+      } else {
+        let d;
+        d = new Date(started_at * 1000);
+        started_at = d.toLocaleString();
+      }
+
+      if (null == stopped_at) {
+        stopped_at = ' ';
+      } else {
+        let d;
+        d = new Date(stopped_at * 1000);
+        stopped_at = d.toLocaleString();
+      }
+
+      display_element.append(
+        `
+<tr>
+<td>${i}${nbsp}</td>
+<td><a title="View Pull Request on GitHub" href="${pull_request_url}" target="_blank">${event_type}${pull_request_id}</a>${nbsp}</td>
+<td>${nbsp}${branch}${nbsp}</td>
+<td>${committer_username}${nbsp}</td>
+<td style='color:brown'> ${nbsp}${commit_message}${nbsp}</td>
+<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
+<td><a class="details" href="${base_full_url}/builds/${build_id}" target='_blank'> #${build_id}${nbsp}${build_status}</a>${nbsp}</td>
+<td>${nbsp}${started_at}${nbsp}</td>
+<td>${nbsp}${stopped_at}${nbsp}</td>
+</tr>
+`
+      )
+    });
+  }
+}
+
+function display_settings(data, display_element) {
+  display_element.append('settings');
+}
+
+function display_requests(data, display_element) {
+  display_element.append('requests');
+}
+
+function display_caches(data, display_element) {
+  display_element.append('caches');
+}
+
+function display_triggerBuild(data, display_element) {
+  display_element.append('triggerBuild');
+}
+
+
 function display(id, data) {
   let display_element = $("#display");
 
@@ -244,160 +538,33 @@ function display(id, data) {
       break;
 
     case 'builds':
-      if (8 === url_array.length) {
-        if (0 === data.length || 'error' === data) {
-          display_element.append('Oops, we couldn\'t find that build!');
-        } else {
-          showLog(data);
-        }
-
-      } else if (0 !== data.length) {
-        let i = data.length + 1;
-        $.each(data, function (id, status) {
-          i--;
-
-          let {
-            event_type, id: build_id, branch, committer_username,
-            commit_message, commit_id, build_status, started_at, finished_at: stopped_at
-          } = status;
-
-          let nbsp = "&nbsp;&nbsp;&nbsp;";
-          let nbsp2 = nbsp + nbsp + nbsp;
-
-          let commit_url = getCommitUrl(commit_id);
-          commit_id = commit_id.substr(0, 7);
-
-          if (null == started_at) {
-            started_at = nbsp2 + nbsp2 + 'Pending'
-          } else {
-            let d;
-            d = new Date(parseInt(started_at) * 1000);
-            started_at = d.toLocaleString();
-          }
-
-          if (null == stopped_at) {
-            stopped_at = ' '
-          } else {
-            let d;
-            d = new Date(parseInt(stopped_at) * 1000);
-            stopped_at = d.toLocaleString();
-          }
-
-          display_element.append(`<tr>
-<td>${i}${nbsp}</td>
-<td style='color:blue;'>${nbsp}${event_type}${nbsp}</td>
-<td title="${branch}">${nbsp}${branch.slice(0, 10)}${nbsp}</td>
-<td title="${committer_username}">${committer_username.slice(0, 10)}${nbsp}</td>
-<td style='color: brown' title="${commit_message}">${nbsp}${commit_message.slice(0, 28)}${nbsp}</td>
-<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
-<td><a class="details" href="${location.href}/${build_id}" target='_blank'># ${build_id}&nbsp;${build_status}</a>${nbsp}</td>
-<td>${nbsp}${started_at}${nbsp}</td>
-<td>${nbsp}${stopped_at}${nbsp}</td>
-</tr>
-`
-          )
-        });
-      } else {
-        display_element.append('Not Build Yet !');
-      }
+      display_builds(data, display_element);
 
       break;
     case 'branches':
-      if (0 === data.length) {
-        display_element.append('Not Build Yet !');
-      } else {
-
-        $.each(data, function (num, branch) {
-
-          display_element.append(branch);
-
-          $.each(status, function (id, status) {
-            id = id.replace('k', '');
-
-            let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-
-            let stopped_at = status[3];
-
-            if (null == stopped_at) {
-              stopped_at = '&nbsp;&nbsp;&nbsp;Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-            } else {
-              let d;
-              d = new Date(stopped_at * 1000);
-              stopped_at = d.toLocaleString();
-            }
-            display_element.append(`<tr>
-<td><a href="${builds}/${id}" target='_blank'># ${id} </a></td>
-<td>${nbsp}${status[0]}${nbsp}</td>
-<td>${nbsp}${status[2]}${nbsp}</td>
-<td>${nbsp}${stopped_at}${nbsp}</td>
-<td><a href="${status[4]}" target='_black'>${status[1]}</a></td>
-</tr>
-`);
-          });
-
-          display_element.append("<hr>");
-
-        })
-      }
+      display_branches(data, display_element);
 
       break;
 
     case "pull_requests":
-      if (0 === data.length) {
-        display_element.append('No pull request builds for this repository');
-      } else {
-        let i = data.length + 1;
-        $.each(data, function (id, status) {
-          i--;
+      display_pullRequests(data, display_element);
 
-          let event_type = 'PR # ';
-          let nbsp = "&nbsp;&nbsp;&nbsp;";
+      break;
 
-          let {
-            pull_request_number: pull_request_id, id: build_id, branch, committer_username,
-            commit_message, commit_id, build_status, started_at, finished_at: stopped_at,
-          } = status;
+    case 'settings':
+      display_settings(data, display_element);
+      break;
 
-          let commit_url = getCommitUrl(commit_id);
+    case 'requests':
+      display_requests(data, display_element);
+      break;
 
-          let pull_request_url = getPRUrl(pull_request_id);
+    case 'caches':
+      display_caches(data, display_element);
+      break;
 
-          commit_id = commit_id.substr(0, 7);
-
-          if (null == started_at) {
-            started_at = 'Pending'
-          } else {
-            let d;
-            d = new Date(started_at * 1000);
-            started_at = d.toLocaleString();
-          }
-
-          if (null == stopped_at) {
-            stopped_at = ' ';
-          } else {
-            let d;
-            d = new Date(stopped_at * 1000);
-            stopped_at = d.toLocaleString();
-          }
-
-          display_element.append(
-            `
-<tr>
-<td>${i}${nbsp}</td>
-<td><a title="View Pull Request on GitHub" href="${pull_request_url}" target="_blank">${event_type}${pull_request_id}</a>${nbsp}</td>
-<td>${nbsp}${branch}${nbsp}</td>
-<td>${committer_username}${nbsp}</td>
-<td style='color:brown'> ${nbsp}${commit_message}${nbsp}</td>
-<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
-<td><a class="details" href="${base_full_url}/builds/${build_id}" target='_blank'> #${build_id}${nbsp}${build_status}</a>${nbsp}</td>
-<td>${nbsp}${started_at}${nbsp}</td>
-<td>${nbsp}${stopped_at}${nbsp}</td>
-</tr>
-`
-          )
-        });
-      }
-
+    case 'trigger_build':
+      display_triggerBuild(data, display_element);
       break;
   }
 }
@@ -424,6 +591,12 @@ function display_title(id) {
 $(".column").click(function (event) {
   let id = event.target.id;
 
+  if (id === 'more_options') {
+    return;
+  }
+
+  console.log(id);
+
   if ('current' === id) {
     history.pushState({}, baseTitle, baseUrl + '/' + query);
 
@@ -439,45 +612,86 @@ $(".column").click(function (event) {
   $("title").text(title);
 });
 
-$("option").click(function () {
-  let id = $(this).attr('value');
-  history.pushState({}, baseTitle, baseUrl + '/' + query + '/' + id);
-
-  history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
-
-  $('title').text(baseTitle);
-
-  $.ajax({
-    type: "post",
-    url: location.href,
-    success: function (data) {
-      display(id, data);
-    }
-  });
-});
-
 // https://www.cnblogs.com/yangzhi/p/3576520.html
 $("#current").on({
   'click': function () {
     current();
+  },
+  'mouseover': function (event) {
+    event.target.style.color = 'green';
+    event.target.style.borderBottomStyle = 'solid';
+  },
+  'mouseout': function (event) {
+    event.target.style.color = 'black';
+    event.target.style.borderBottomStyle = 'none';
   }
 });
 
 $("#builds").on({
   'click': function () {
     builds();
+  },
+  'mouseover': function (event) {
+    event.target.style.color = 'green';
+    event.target.style.borderBottomStyle = 'solid';
+  },
+  'mouseout': function (event) {
+    event.target.style.color = 'black';
+    event.target.style.borderBottomStyle = 'none';
   }
 });
 
 $("#branches").on({
   'click': function () {
     branches();
+  },
+  'mouseover': function (event) {
+    event.target.style.color = 'green';
+    event.target.style.borderBottomStyle = 'solid';
+  },
+  'mouseout': function (event) {
+    event.target.style.color = 'black';
+    event.target.style.borderBottomStyle = 'none';
   }
 });
 
 $("#pull_requests").on({
-  'click': function () {
+  'click': function (event) {
     pull_requests();
+    event.target.style.color = 'green';
+    event.target.style.borderBottomStyle = 'solid';
+  },
+  'mouseover': function (event) {
+    event.target.style.color = 'green';
+    event.target.style.borderBottomStyle = 'solid';
+  },
+  'mouseout': function (event) {
+    event.target.style.color = 'black';
+    event.target.style.borderBottomStyle = 'none';
+  }
+});
+
+$("#settings").on({
+  'click': function (event) {
+    settings();
+  }
+});
+
+$("#caches").on({
+  'click': function (event) {
+    caches();
+  }
+});
+
+$("#requests").on({
+  'click': function (event) {
+    requests();
+  }
+});
+
+$("#trigger_build").on({
+  'click': function (event) {
+    triggerBuild();
   }
 });
 
@@ -505,6 +719,8 @@ jQuery(document).ready(function () {
 
   $('#repo').append(content);
 
+  console.log(type_from_url);
+
   switch (type_from_url) {
     case 'current':
       current();
@@ -523,6 +739,22 @@ jQuery(document).ready(function () {
     case 'pull_requests':
       pull_requests();
 
+      break;
+
+    case 'jobs':
+      jobs();
+      break;
+
+    case 'settings':
+      settings();
+      break;
+
+    case 'request':
+      requests();
+      break;
+
+    case 'caches':
+      caches();
       break;
   }
 });

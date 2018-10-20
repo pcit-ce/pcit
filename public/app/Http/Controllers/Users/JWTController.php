@@ -24,6 +24,11 @@ class JWTController
     private static function getToken()
     {
         $token = Request::getHeader('Authorization');
+
+        if (!$token) {
+            throw new Exception('Requires authentication', 401);
+        }
+
         $token = explode(' ', $token)[1] ?? null;
 
         if ($token) {

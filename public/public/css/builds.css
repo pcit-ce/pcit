@@ -99,11 +99,19 @@ footer a:hover {
 }
 
 #repo {
-    margin-left: 20%;
+    margin-top: 40px;
+    margin-left: 15%;
 }
 
 .column {
+    margin-top: 40px;
     margin-left: 15%;
+    width: 70%;
+}
+
+#more_options {
+    float: right;
+    margin: auto;
 }
 
 #display {

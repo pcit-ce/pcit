@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://lib.baomitu.com/js-cookie/2.2.0/js.cookie.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/css/builds.css">
   <link rel="shortcut icon" href="/ico/pcit.png" type="image/x-icon"/>
   <title>PCIT - Builds</title>
@@ -21,10 +22,10 @@
   <span id="pull_requests">Pull Requests</span>
 
   <select id="more_options">
-    <option value="settings">Settings</option>
-    <option value="requests">Requests</option>
-    <option value="caches">Caches</option>
-    <option value="trigger_build">Trigger Build</option>
+    <option id="settings" value="settings">Settings</option>
+    <option id="requests" value="requests">Requests</option>
+    <option id="caches" value="caches">Caches</option>
+    <option id="trigger_build" value="trigger_build">Trigger Build</option>
   </select>
 
 </div>
