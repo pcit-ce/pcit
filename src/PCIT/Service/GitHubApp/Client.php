@@ -121,7 +121,8 @@ class Client
 
         return $this->curl->get($url, null, [
                 'Authorization' => 'Bearer '.$jwt,
-                'Accept' => 'application/vnd.github.machine-man-preview.speedy-preview+json',
+                'Accept' => 'application/vnd.github.machine-man-preview+json;
+                application/vnd.github.speedy-preview+json',
             ]
         );
     }

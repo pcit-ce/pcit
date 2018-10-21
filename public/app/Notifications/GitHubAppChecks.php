@@ -67,7 +67,6 @@ class GitHubAppChecks
 
         $output_array = Build::find((int) $build_key_id);
 
-        $branch = $output_array['branch'];
         $commit_id = $output_array['commit_id'];
         $event_type = $output_array['event_type'];
 
@@ -100,7 +99,6 @@ class GitHubAppChecks
         $run_data = new RunData(
             $repo_full_name,
             $name,
-            $branch,
             $commit_id,
             $details_url,
             (string) $job_key_id,

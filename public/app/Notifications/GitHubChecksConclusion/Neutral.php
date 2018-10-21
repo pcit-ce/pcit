@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\GitHubChecksConclusion;
 
-class Neutral extends Passed
+class Neutral extends Kernel
 {
     /**
      * @return string

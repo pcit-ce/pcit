@@ -9,7 +9,7 @@ use App\Notifications\GitHubAppChecks;
 use Exception;
 use PCIT\Support\CI;
 
-class InProgress extends Passed
+class InProgress extends Kernel
 {
     /**
      * @throws Exception

@@ -10,8 +10,6 @@ class RunData
 
     public $name;
 
-    public $branch;
-
     public $commit_id;
 
     public $details_url;
@@ -42,7 +40,6 @@ class RunData
 
     public function __construct(string $repo_full_name,
                                 string $name,
-                                string $branch,
                                 string $commit_id,
                                 string $details_url,
                                 string $external_id,
@@ -59,7 +56,6 @@ class RunData
     {
         $this->repo_full_name = $repo_full_name;
         $this->name = $name;
-        $this->branch = $branch;
         $this->commit_id = $commit_id;
         $this->details_url = $details_url;
         $this->external_id = $external_id;

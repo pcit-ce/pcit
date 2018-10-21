@@ -176,6 +176,9 @@ class GitHubClient
             compact('state', 'log_url', 'description', 'environment', 'environment_url', 'auto_inactive'));
 
         return $this->curl->post($url, json_encode(array_filter($data)),
-            ['Accept' => 'application/vnd.github.flash-preview.machine-man-preview.speedy-preview.ant-man-preview+json']);
+            ['Accept' => 'application/vnd.github.flash-preview+json;
+            application/vnd.github.machine-man-preview+json;
+            application/vnd.github.speedy-preview+json;
+            application/vnd.github.ant-man-preview+json']);
     }
 }

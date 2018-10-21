@@ -19,7 +19,9 @@ class GitHubClient
     private $is_update;
 
     private $header = [
-        'Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.symmetra-preview+json',
+        'Accept' => 'application/vnd.github.machine-man-preview+json;
+        application/vnd.github.speedy-preview+json;
+        application/vnd.github.symmetra-preview+json',
     ];
 
     /**

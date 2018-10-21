@@ -17,7 +17,9 @@ use PCIT\Support\Log;
 class Run
 {
     protected $header = [
-        'Accept' => 'application/vnd.github.machine-man-preview.speedy-preview.antiope-preview+json',
+        'Accept' => 'application/vnd.github.antiope-preview+json;
+             application/vnd.github.machine-man-preview+json;
+             application/vnd.github.speedy-preview+json',
     ];
 
     /**
@@ -47,7 +49,6 @@ class Run
 
         $data = array_filter([
             'name' => $run_data->name,
-            'head_branch' => $run_data->branch,
             'head_sha' => $run_data->commit_id,
             'details_url' => $run_data->details_url,
             'external_id' => $run_data->external_id,
@@ -91,7 +92,6 @@ class Run
 
         $data = array_filter([
             'name' => $run_data->name,
-            'head_branch' => $run_data->branch,
             'head_sha' => $run_data->commit_id,
             'details_url' => $run_data->details_url,
             'external_id' => $run_data->external_id,

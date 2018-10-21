@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\GitHubChecksConclusion;
 
-class TimedOut extends Passed
+class TimedOut extends Kernel
 {
     /**
      * @return string

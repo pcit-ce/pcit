@@ -9,7 +9,7 @@ use App\Notifications\GitHubAppChecks;
 use Exception;
 use PCIT\Support\CI;
 
-class Cancelled extends Passed
+class Cancelled extends Kernel
 {
     /**
      * @throws Exception

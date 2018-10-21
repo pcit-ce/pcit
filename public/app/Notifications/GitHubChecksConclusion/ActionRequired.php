@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Notifications\GitHubChecksConclusion;
 
-class ActionRequired extends Passed
+class ActionRequired extends Kernel
 {
     /**
      * @return string
