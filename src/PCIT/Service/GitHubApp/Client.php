@@ -121,8 +121,7 @@ class Client
 
         return $this->curl->get($url, null, [
                 'Authorization' => 'Bearer '.$jwt,
-                'Accept' => 'application/vnd.github.machine-man-preview+json;
-                application/vnd.github.speedy-preview+json',
+                'Accept' => 'application/vnd.github.machine-man-preview+json',
             ]
         );
     }
@@ -153,7 +152,7 @@ class Client
 
         $access_token_json = $this->curl->post($url, null, [
             'Authorization' => 'Bearer '.$this->getJWT($private_key_path),
-            'Accept' => 'application/vnd.github.machine-man-preview.speedy-preview+json',
+            'Accept' => 'application/vnd.github.machine-man-preview+json',
         ]);
 
         $access_token_obj = json_decode($access_token_json);

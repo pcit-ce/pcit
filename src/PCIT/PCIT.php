@@ -127,7 +127,8 @@ class PCIT extends Container
             $this['curl_config'] = [null, false,
                 [
                     'Authorization' => 'token '.$this['config']['github']['access_token'],
-                    'Accept' => 'application/vnd.github.machine-man-preview+json',
+                    'Accept' => 'application/vnd.github.machine-man-preview+json;
+                    application/vnd.github.speedy-preview+json',
                 ],
             ];
         } elseif ($this['config']['gitee']['access_token'] ?? false) {

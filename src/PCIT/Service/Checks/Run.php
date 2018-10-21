@@ -92,7 +92,6 @@ class Run
 
         $data = array_filter([
             'name' => $run_data->name,
-            'head_sha' => $run_data->commit_id,
             'details_url' => $run_data->details_url,
             'external_id' => $run_data->external_id,
             'status' => $run_data->status,
