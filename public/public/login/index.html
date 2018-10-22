@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,12 +21,12 @@
 <div class="login">
   <div class="login_tips">
     <p style="font-size: 30px">Login to PCIT</p>
-    <p style="font-size: 18px">PCIT 没有自己的账号体系，你可以使用<br> GitHub, Gitee, <s>Gogs</s>, <s>Coding</s>, <s>AI 人脸</s>进行登录</p>
+    <p style="font-size: 18px">无需注册账号，请直接使用<br> GitHub, Gitee, <s>Gogs</s>, <s>Coding</s>, <s>AI 人脸</s>进行登录</p>
     <p style="font-size: 14px;color: #636b6f">点击登录按钮意味着您同意我们的 服务条款 和 隐私政策 </p>
   </div>
 
   <div class="login_button">
-    <button class="hello-login-button" type="button" onclick="hello()"
+    <button @click="clickMethod" class="hello-login-button" type="button"
             title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">Login with Face
     </button>
 
@@ -36,10 +36,12 @@
     <button class="gitee-login-button" type="button" onclick="gitee()" title="Login With Gitee">Login with Gitee
     </button>
 
-    <button class="coding-login-button" type="button" onclick="coding()" title="Login With Coding">Login with Coding
+    <button @click="clickMethod" class="coding-login-button" type="button" title="Login With Coding">Login
+      with Coding
     </button>
 
-    <button class="gogs-login-button" type="button" onclick="gogs()" title="Login With Gogs">Login with Gogs
+    <button @click="clickMethod" class="gogs-login-button" type="button" title="Login With Gogs">Login with
+      Gogs
     </button>
   </div>
 </div>

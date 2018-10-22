@@ -19,8 +19,28 @@ function gogs() {
 }
 
 new Vue({
-  el: "#hello",
-  data: {
-    display: false
+  el: ".hello-login-button",
+  methods: {
+    clickMethod: () => {
+      alert('即将支持，敬请期待！请使用其他方式登录');
+    }
+  }
+});
+
+new Vue({
+  el: ".coding-login-button",
+  methods: {
+    clickMethod: () => {
+      alert('即将支持，敬请期待！请使用其他方式登录');
+    }
+  }
+});
+
+new Vue({
+  el: ".gogs-login-button",
+  methods: {
+    clickMethod: () => {
+      alert('即将支持，敬请期待！请使用其他方式登录');
+    }
   }
 });

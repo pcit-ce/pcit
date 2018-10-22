@@ -246,7 +246,6 @@ function getPRUrl(pull_request_id, gittype = 'github') {
 }
 
 function showLog(data) {
-  let nbsp = '&nbsp;&nbsp;';
   console.log(data);
   let display_element = $("#display");
   let {
@@ -360,6 +359,8 @@ function display_builds(data, display_element) {
 
   } else if (0 !== data.length) {
     let i = data.length + 1;
+    let ul_el = $('<ul class="builds_list"></ul>');
+    ul_el.innerHeight(i * 100);
     $.each(data, function (id, status) {
       i--;
 
@@ -368,14 +369,11 @@ function display_builds(data, display_element) {
         commit_message, commit_id, build_status, started_at, finished_at: stopped_at
       } = status;
 
-      let nbsp = "&nbsp;&nbsp;&nbsp;";
-      let nbsp2 = nbsp + nbsp + nbsp;
-
       let commit_url = getCommitUrl(commit_id);
       commit_id = commit_id.substr(0, 7);
 
       if (null == started_at) {
-        started_at = nbsp2 + nbsp2 + 'Pending'
+        started_at = 'Pending'
       } else {
         let d;
         d = new Date(parseInt(started_at) * 1000);
@@ -383,27 +381,82 @@ function display_builds(data, display_element) {
       }
 
       if (null == stopped_at) {
-        stopped_at = ' '
+        stopped_at = 'Pending'
       } else {
         let d;
         d = new Date(parseInt(stopped_at) * 1000);
         stopped_at = d.toLocaleString();
       }
 
-      display_element.append(`<tr>
-<td>${i}${nbsp}</td>
-<td style='color:blue;'>${nbsp}${event_type}${nbsp}</td>
-<td title="${branch}">${nbsp}${branch.slice(0, 10)}${nbsp}</td>
-<td title="${committer_username}">${committer_username.slice(0, 10)}${nbsp}</td>
-<td style='color: brown' title="${commit_message}">${nbsp}${commit_message.slice(0, 28)}${nbsp}</td>
-<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
-<td><a class="details" href="${location.href}/${build_id}" target='_blank'># ${build_id}&nbsp;${build_status}</a>${nbsp}</td>
-<td>${nbsp}${started_at}${nbsp}</td>
-<td>${nbsp}${stopped_at}${nbsp}</td>
-</tr>
-`
-      )
+      let li_el = $('<li></li>');
+
+      li_el.append(() => {
+        let div_element = $('<div class="build_id"></div>');
+        div_element.append(i);
+
+        if (build_status === 'success') {
+          div_element.css('background', '#39aa56');
+        } else if (build_status === 'in_progress') {
+          div_element.css('background', 'yellow');
+        }else{
+          div_element.css('background','#db4545');
+        }
+
+        return div_element;
+      });
+
+      li_el.append(() => {
+        let div_element = $('<div class="event_type"></div>');
+        div_element.append(event_type);
+
+        return div_element;
+      }).append(() => {
+        let div_element = $('<div class="branch"></div>');
+        div_element.append(branch.slice(0, 10)).attr('title', branch);
+
+        return div_element;
+      }).append(() => {
+        let div_element = $('<div class="commit_message"></div>');
+        div_element.append(commit_message.slice(0, 28)).attr('title', commit_message);
+
+        return div_element;
+      }).append(() => {
+        let a_element = $('<a class="commit_id"></a>');
+        a_element.append(commit_id);
+        a_element.attr('href', commit_url).attr('title', 'View commit on GitHub');
+        a_element.attr('target', '_block').addClass('commit_url');
+
+        return a_element;
+      }).append(() => {
+        let a_element = $('<a class="build_status"></a>');
+        a_element.append(`# ${build_id} ${build_status}`);
+        a_element.attr('href', `${location.href}/${build_id}`);
+        a_element.attr('target', '_block');
+
+        return a_element;
+      }).append(() => {
+        let div_element = $('<div class="build_time"></div>');
+        div_element.append(started_at);
+
+        return div_element;
+      }).append(() => {
+        let div_element = $('<div></div>');
+        div_element.append(stopped_at).addClass('build_time_ago');
+        div_element.attr('title', 'Finished ');
+
+        return div_element;
+      }).append(() => {
+        return (() => {
+          let button_el = $('<button class="cancel_or_restart"></button>');
+          button_el.append('button');
+
+          return button_el;
+        })();
+      });
+
+      ul_el.append(li_el);
     });
+    display_element.append(ul_el);
   } else {
     display_element.append('Not Build Yet !');
   }
@@ -413,7 +466,7 @@ function display_branches(data, display_element) {
   if (0 === data.length) {
     display_element.append('Not Build Yet !');
   } else {
-
+    console.log(data);
     $.each(data, function (num, branch) {
 
       display_element.append(branch);
@@ -421,17 +474,16 @@ function display_branches(data, display_element) {
       $.each(status, function (id, status) {
         id = id.replace('k', '');
 
-        let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-
         let stopped_at = status[3];
 
         if (null == stopped_at) {
-          stopped_at = '&nbsp;&nbsp;&nbsp;Pending &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+          stopped_at = 'Pending';
         } else {
           let d;
           d = new Date(stopped_at * 1000);
           stopped_at = d.toLocaleString();
         }
+
         display_element.append(`<tr>
 <td><a href="${builds}/${id}" target='_blank'># ${id} </a></td>
 <td>${nbsp}${status[0]}${nbsp}</td>
@@ -452,12 +504,14 @@ function display_pullRequests(data, display_element) {
   if (0 === data.length) {
     display_element.append('No pull request builds for this repository');
   } else {
+
+    let ul_el = $('<ul class="pull_requests_list"></ul>');
+
     let i = data.length + 1;
     $.each(data, function (id, status) {
       i--;
 
       let event_type = 'PR # ';
-      let nbsp = "&nbsp;&nbsp;&nbsp;";
 
       let {
         pull_request_number: pull_request_id, id: build_id, branch, committer_username,
@@ -486,22 +540,67 @@ function display_pullRequests(data, display_element) {
         stopped_at = d.toLocaleString();
       }
 
-      display_element.append(
-        `
-<tr>
-<td>${i}${nbsp}</td>
-<td><a title="View Pull Request on GitHub" href="${pull_request_url}" target="_blank">${event_type}${pull_request_id}</a>${nbsp}</td>
-<td>${nbsp}${branch}${nbsp}</td>
-<td>${committer_username}${nbsp}</td>
-<td style='color:brown'> ${nbsp}${commit_message}${nbsp}</td>
-<td>${nbsp}<a class="details" title="View commit on GitHub" href="${commit_url}" target='_blank'>${commit_id}</a>${nbsp}</td>
-<td><a class="details" href="${base_full_url}/builds/${build_id}" target='_blank'> #${build_id}${nbsp}${build_status}</a>${nbsp}</td>
-<td>${nbsp}${started_at}${nbsp}</td>
-<td>${nbsp}${stopped_at}${nbsp}</td>
-</tr>
-`
-      )
+      let li_el = $('<li></li>');
+
+      li_el.append(() => {
+        let div_el = $('<div class="id"></div>');
+        div_el.append();
+
+        return div_el;
+      }).append(() => {
+        let a_el = $('<a class="pull_request_url"></a>');
+        a_el.append(`#PR ${pull_request_id}`);
+        a_el.attr('title', 'View pull request on GitHub');
+        a_el.attr('href', pull_request_url);
+        a_el.attr('target', '_block');
+
+        return a_el;
+      }).append(() => {
+        let div_el = $('<div class="branch"></div>');
+        div_el.append(branch);
+
+        return div_el;
+      }).append(() => {
+        let div_el = $('<div class="committer"></div>');
+        div_el.append(committer_username);
+
+        return div_el;
+      }).append(() => {
+        let div_el = $('<div class="commit_message"></div>');
+        div_el.append(commit_message);
+
+        return div_el;
+      }).append(() => {
+        let a_el = $('<a class="commit_id"></a>');
+        a_el.append(commit_id);
+        a_el.attr('href', commit_url);
+        a_el.attr('target', '_block');
+        a_el.attr('title', 'View commit on GitHub');
+        return a_el;
+      }).append(() => {
+        let a_el = $('<a class="build_status"></a>');
+        a_el.append(build_status);
+        a_el.attr('href', `${base_full_url}/builds/${build_id}`);
+        a_el.attr('target', '_block');
+
+        return a_el;
+      }).append(() => {
+        let div_el = $('<div class="build_time"></div>');
+        div_el.append();
+
+        return div_el;
+      }).append(() => {
+        let div_el = $('<div class="build_time_age"></div>');
+
+        div_el.append(stopped_at);
+
+        return div_el;
+      });
+
+      ul_el.append(li_el);
+
     });
+    display_element.append(ul_el)
   }
 }
 
@@ -699,12 +798,10 @@ jQuery(document).ready(function () {
 
   display_title(type_from_url);
 
-  let nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;';
-
   let content = jQuery('<h2></h2>');
 
   content.append(() => {
-    return format_gittype(git_type) + nbsp + username + '/' + repo + nbsp;
+    return format_gittype(git_type) + username + '/' + repo;
   }).append(() => {
     let a_element = $('<a></a>');
     let img_element = $('<img alt="status" src=""/>');

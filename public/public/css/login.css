@@ -1,7 +1,12 @@
-header {
-    /*position: relative;*/
-    /*border-style: solid;*/
+body {
+    margin: 0;
+    padding: 0;
 }
+
+header {
+    background: #f1f1f1;
+}
+
 
 header a {
     text-decoration: none;
@@ -162,6 +167,3 @@ footer a:hover {
     margin-left: 20%;
 }
 
-body {
-    overflow-y: scroll;
-}

@@ -1,33 +1,53 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
   <title>三列布局</title>
   <style>
     header {
+      margin: 0 auto;
       height: 60px;
-      background: red;
+      background: green;
     }
 
     .main {
-      width: 70%;
+      position: relative;
+      margin: 0 auto;
       height: 600px;
+      width: 70%;
     }
 
     .left {
-
+      position: absolute;
+      /*float: left;*/
+      background: rebeccapurple;
+      width: 200px;
+      height: 600px;
+      left: 0;
+      top: 0;
     }
 
     .middle {
-
+      /*float: left;*/
+      background: yellow;
+      height: 600px;
+      margin: 0 300px 0 200px;
     }
 
     .right {
-
+      position: absolute;
+      /*float: right;*/
+      background: green;
+      width: 300px;
+      height: 600px;
+      right: 0;
+      top: 0;
     }
 
     footer {
+      margin: 0 auto;
       height: 60px;
-      background: red;
+      background: green;
     }
   </style>
 </head>
@@ -35,7 +55,7 @@
 <header>header</header>
 <div class="main">
   <div class="left">left</div>
-  <div class="middle">middle</div>
+  <div class="middle">中间自适应</div>
   <div class="right">right</div>
 </div>
 <footer>footer</footer>

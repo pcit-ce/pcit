@@ -1,6 +1,10 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
 header {
-    /*position: relative;*/
-    /*border-style: solid;*/
+    background: #f1f1f1;
 }
 
 header a {
@@ -52,16 +56,24 @@ header a:hover {
 
 footer {
     position: relative;
-    margin-top: 260px;
-    margin-left: 12%;
-    margin-right: auto;
+    margin: 260px auto 10px;
     width: 70%;
+    height: 200px;
+    /*border: 1px solid red;*/
+}
+
+footer ul {
+    display: block;
+    margin: 0;
+    /*border: 1px solid;*/
 }
 
 footer li {
     line-height: 30px;
     color: #636b6f;
     list-style-type: none;
+    display: block;
+    margin: 0;
 }
 
 footer a {
@@ -75,27 +87,36 @@ footer a:hover {
 }
 
 .about {
-    /*border: solid;*/
-    float: left;
-    /*margin-left: 10%;*/
+    position: absolute;
+    /*float: left;*/
+    margin-left: -4%;
+    width: 200px;
+    left: 0;
+    top: 0;
 }
 
 .help {
-    /*border: solid;*/
-    float: left;
-    margin-left: 5%;
+    position: absolute;
+    /*float: left;*/
+    margin-left: 200px;
+    width: 100px;
 }
 
 .legal {
     /*border: solid;*/
-    float: left;
-    margin-left: 5%;
+    /*float: left;*/
+    position: absolute;
+    margin-left: 400px;
+    width: 200px;
 }
 
 .status {
     /*border: solid;*/
-    float: left;
-    margin-left: 20%;
+    /*float: left;*/
+    /*margin-left: 20%;*/
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 #repo {
@@ -104,19 +125,24 @@ footer a:hover {
 }
 
 .column {
+    position: relative;
     margin-top: 40px;
     margin-left: 15%;
     width: 70%;
 }
 
 #more_options {
-    float: right;
-    margin: auto;
+    position: absolute;
+    /*float: right;*/
+    top: 0;
+    right: 0;
 }
 
 #display {
+    position: relative;
     margin: 0 auto;
     width: 70%;
+    /*border: 1px solid rebeccapurple;*/
 }
 
 .details {
@@ -144,4 +170,113 @@ body {
 
 #more_options {
     margin-left: 470px;
+}
+
+.builds_list {
+    margin-top: 2px;
+    margin-left: -40px;
+    position: relative;
+    height: 100px;
+    width: 100%;
+    display: block;
+    list-style-type: none;
+    /*border: 1px solid red;*/
+}
+
+.builds_list li {
+    border: 1px solid;
+    border-left-style: none;
+    /*line-height: 100px;*/
+    display: block;
+    margin-bottom: 10px;
+    /*position: absolute;*/
+    height: 100px;
+}
+
+.builds_list a {
+    display: block;
+}
+
+.builds_list .build_id {
+    font-size: 16px;
+    width: 10px;
+    height: 100px;
+    float: left;
+}
+
+.builds_list .event_type {
+    font-size: 16px;
+    width: 100px;
+    /*height: 100px;*/
+    background: red;
+    float: left;
+}
+
+.builds_list .branch {
+    font-size: 16px;
+    width: 100px;
+    /*height: 100px;*/
+    background: orange;
+    float: left;
+}
+
+.builds_list .commit_message {
+    font-size: 16px;
+    width: 200px;
+    /*height: 100px;*/
+    background: yellow;
+    float: left;
+}
+
+.builds_list .commit_url {
+    font-size: 16px;
+    width: 150px;
+    /*height: 100px;*/
+    background: green;
+    float: left;
+    /*position: absolute;*/
+    /*left: 500px;*/
+    /*top: 60px;*/
+}
+
+.builds_list .build_status {
+    font-size: 16px;
+    width: 150px;
+    /*height: 100px;*/
+    background: aqua;
+    float: left;
+    /*position: absolute;*/
+    /*left: 500px;*/
+}
+
+.builds_list .build_time {
+    font-size: 16px;
+    width: 100px;
+    /*height: 100px;*/
+    background: blue;
+    float: left;
+}
+
+.builds_list .build_time_ago {
+    font-size: 16px;
+    background: blueviolet;
+    /*width: 140px;*/
+    /*height: 100px;*/
+    float: left;
+    /*position: absolute;*/
+}
+
+.builds_list .cancel_or_restart {
+    /*height: 100px;*/
+    float: right;
+    top: 0;
+    right: 0;
+}
+
+tr {
+    margin-top: 10px;
+}
+
+.pull_request_list li {
+    display: block;
 }

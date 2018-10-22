@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>position</title>
+  <style>
+    body {
+      /*margin: 0;*/
+      /*padding: 0;*/
+      height: 10000px;
+    }
+
+    .div1 {
+      width: 100px;
+      height: 100px;
+      background: red;
+      position: absolute;
+      left: 100px;
+      bottom: 100px;
+      border: 1px solid;
+    }
+
+    .div2 {
+      width: 100px;
+      height: 100px;
+      background: green;
+      position: relative;
+    }
+
+    .c {
+      width: 10px;
+      height: 10px;
+      background: black;
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+    }
+
+    .div3 {
+      width: 100px;
+      height: 100px;
+      background: yellow;
+      display: inline;
+    }
+  </style>
+</head>
+<body>
+
+<!--固定定位:始终以电脑屏幕的左上角为参考点-->
+
+<!--绝对定位:以就近的父元素(如果父元素没定位,就以爷爷作为参考点),做偏移-->
+
+<!-- left > right top > bottom -->
+
+<!--绝对定位时bottom属性的参照点是浏览器的第一屏(就是没有移动滚动条的时候)的可视区域的下边缘。-->
+
+<!--相对定位:相对于自己原来的位置(以自己原来的位置为参考点),做偏移.-->
+
+<div class="div1"></div>
+<div class="div2">
+  <div class="c">
+  </div>
+</div>
+
+<div class="div3">1</div>
+
+</body>
+</html>
