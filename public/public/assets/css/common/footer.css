@@ -1,0 +1,64 @@
+footer {
+    position: relative;
+    margin: 260px auto 10px;
+    width: 70%;
+    height: 200px;
+    /*border: 1px solid red;*/
+}
+
+footer ul {
+    display: block;
+    margin: 0;
+    /*border: 1px solid;*/
+}
+
+footer li {
+    line-height: 30px;
+    color: #636b6f;
+    list-style-type: none;
+    display: block;
+    margin: 0;
+}
+
+footer a {
+    text-decoration: none;
+    color: #636b6f;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    color: #636b6f;
+}
+
+.about {
+    position: absolute;
+    /*float: left;*/
+    margin-left: -4%;
+    width: 200px;
+    left: 0;
+    top: 0;
+}
+
+.help {
+    position: absolute;
+    /*float: left;*/
+    margin-left: 200px;
+    width: 100px;
+}
+
+.legal {
+    /*border: solid;*/
+    /*float: left;*/
+    position: absolute;
+    margin-left: 400px;
+    width: 200px;
+}
+
+.status {
+    /*border: solid;*/
+    /*float: left;*/
+    /*margin-left: 20%;*/
+    position: absolute;
+    right: 0;
+    top: 0;
+}

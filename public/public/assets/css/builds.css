@@ -1,0 +1,204 @@
+@import "builds/pull_requests_list.css";
+@import "builds/builds_lists.css";
+@import "common/header.css";
+@import "common/footer.css";
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+
+}
+
+#repo {
+    margin-top: 40px;
+    margin-left: 15%;
+}
+
+.column {
+    position: relative;
+    margin-top: 40px;
+    margin-left: 15%;
+    width: 70%;
+}
+
+#more_options {
+    position: absolute;
+    /*float: right;*/
+    top: 0;
+    right: 0;
+}
+
+#display {
+    position: relative;
+    margin: 0 auto;
+    width: 70%;
+    /*border: 1px solid rebeccapurple;*/
+}
+
+.details {
+    text-decoration: none;
+    color: blue;
+}
+
+.details:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+.column {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f4f4f4;
+}
+
+.column #current {
+    margin-left: 1px;
+}
+
+.column span {
+    font-size: 14px;
+    margin-left: 20px;
+    padding-bottom: 10px;
+}
+
+#more_options {
+    margin-left: 470px;
+}
+
+.build_data {
+    margin-top: 10px;
+    position: relative;
+    border-top: 2px solid #f4f4f4;
+    border-bottom: 2px solid #f4f4f4;
+    border-right: 2px solid #f4f4f4;
+    height: 200px;
+    margin-left: 10px;
+}
+
+.build_data a {
+    text-decoration: none;
+    color: #666666;
+}
+
+.build_data a:hover {
+    text-decoration: underline;
+}
+
+.build_data .build_id {
+    background: red;
+    width: 10px;
+    height: 201px;
+    margin-left: -10px;
+    border-top: 1px solid red;
+    margin-top: -1px;
+    border-bottom: 1px solid red;
+}
+
+.build_data .branch {
+    /*background: yellow;*/
+    position: absolute;
+    width: 100px;
+    height: 30px;
+    left: 10px;
+    top: 10px;
+    padding-left: 50px;
+    font-size: 16px;
+}
+
+.build_data .commit_message {
+    /*background: bisque;*/
+    position: absolute;
+    height: 30px;
+    width: 300px;
+    left: 100px;
+    top: 10px;
+    padding-left: 10px;
+    font-size: 16px;
+}
+
+.build_data .commit_url {
+    /*background: green;*/
+    width: 200px;
+    height: 30px;
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    padding-left: 50px;
+    font-size: 15px;
+}
+
+.build_data .compare {
+    /*background: chocolate;*/
+    position: absolute;
+    left: 10px;
+    top: 80px;
+    width: 200px;
+    height: 30px;
+    padding-left: 50px;
+    font-size: 15px;
+}
+
+.build_data .branch_url {
+    /*background: red;*/
+    position: absolute;
+    width: 300px;
+    height: 30px;
+    left: 10px;
+    top: 110px;
+    padding-left: 50px;
+    font-size: 15px;
+}
+
+.build_data .committer {
+    /*background: lightgoldenrodyellow;*/
+    position: absolute;
+    height: 30px;
+    width: 200px;
+    left: 10px;
+    bottom: 10px;
+    padding-left: 50px;
+    font-size: 15px;
+}
+
+.build_data .build_status {
+    /*background: yellowgreen;*/
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    left: 600px;
+    top: 10px;
+    font-size: 16px;
+}
+
+.build_data .build_time {
+    /*background: firebrick;*/
+    position: absolute;
+    left: 600px;
+    top: 60px;
+    width: 200px;
+    height: 30px;
+    color: #666666;
+    font-size: 15px;
+}
+
+.build_data .build_time_ago {
+    /*background: cornsilk;*/
+    position: absolute;
+    left: 600px;
+    top: 110px;
+    width: 200px;
+    height: 30px;
+    color: #666666;
+    font-size: 15px;
+}
+
+.build_data .cancel_or_restart {
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    width: 150px;
+}
+
+tr {
+    margin-top: 10px;
+}

@@ -1,0 +1,129 @@
+/*使用绝对定位布局*/
+
+.pull_requests_list {
+    /*border: 1px solid;*/
+    /*list-style-type: none;*/
+    margin-left: -30px;
+}
+
+.pull_requests_list a {
+    display: block;
+    text-decoration: none;
+    color: #666666;
+}
+
+.pull_requests_list a:hover {
+    text-decoration: underline;
+}
+
+.pull_requests_list li {
+    display: block;
+    position: relative;
+    list-style-type: none;
+    border: 2px solid #f4f4f4;
+    border-left: none;
+    margin-bottom: 10px;
+    height: 100px;
+    text-align: center;
+}
+
+.pull_requests_list .id {
+    background: red;
+}
+
+.pull_requests_list .build_id {
+    /*background: red;*/
+    height: 100px;
+    width: 10px;
+    /*float: left;*/
+    margin-left: -10px;
+}
+
+.pull_requests_list .pull_request_url {
+    /*background: yellow;*/
+    height: 100px;
+    width: 100px;
+    /*float: left;*/
+    position: absolute;
+    left: 10px;
+    top: 0;
+}
+
+.pull_requests_list .branch {
+    /*background: orangered;*/
+    height: 50px;
+    width: 100px;
+    /*float: left;*/
+    position: absolute;
+    left: 110px;
+    top: 0;
+}
+
+.pull_requests_list .committer {
+    /*background: aqua;*/
+    height: 50px;
+    width: 100px;
+    /*float: left;*/
+    position: absolute;
+    left: 110px;
+    top: 50px;
+}
+
+.pull_requests_list .commit_message {
+    /*background: green;*/
+    height: 100px;
+    width: 300px;
+    /*float: left;*/
+    position: absolute;
+    left: 210px;
+    top: 0;
+}
+
+.pull_requests_list .commit_id {
+    /*background: bisque;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 510px;
+    top: 50px;
+}
+
+.pull_requests_list .build_status {
+    /*background: red;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 510px;
+    top: 0;
+}
+
+.pull_requests_list .build_time {
+    /*background: yellowgreen;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 710px;
+    top: 0;
+
+}
+
+.pull_requests_list .build_time_ago {
+    /*background: darksalmon;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 710px;
+    top: 50px;
+}
+
+.pull_requests_list .cancel_or_restart {
+    display: block;
+    /*float: right;*/
+    position: absolute;
+    right: 0;
+    top: 0;
+}

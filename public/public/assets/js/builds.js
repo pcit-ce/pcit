@@ -76,7 +76,15 @@ function format_gittype(gittype) {
   }
 }
 
+function column_span_click(id) {
+  let span_el = $('#' + id);
+  span_el.css('color', 'green');
+  span_el.css('border-bottom-style', 'solid');
+}
+
 function current() {
+  column_span_click('current');
+
   $.ajax({
     type: "GET",
     url: '/api/repo/' + base_include + '/build/current',
@@ -87,16 +95,20 @@ function current() {
 }
 
 function branches() {
+  column_span_click('branches');
+
   $.ajax({
     type: "GET",
     url: '/api/repo/' + base_include + '/branches',
     success: function (data) {
-      display('branches', data)
+      display('branches', data);
     }
   });
 }
 
 function builds() {
+  column_span_click('builds');
+
   let build_id;
 
   if (8 === url_array.length) {
@@ -133,11 +145,13 @@ function builds() {
 }
 
 function pull_requests() {
+  column_span_click('pull_requests');
+
   $.ajax({
     type: 'GET',
     url: '/api/repo/' + base_include + '/builds?type=pr',
     success: function (data) {
-      display('pull_requests', data)
+      display('pull_requests', data);
     }
   })
 }
@@ -266,7 +280,7 @@ function showLog(data) {
 
   div_element.append(() => {
     let build_id_element = $('<div class="build_id"></div>');
-    build_id_element.append(build_id);
+    build_id_element.append('');
 
     return build_id_element;
   });
@@ -275,14 +289,22 @@ function showLog(data) {
     let branch_element = $('<div class="branch"></div>');
     branch_element.append(branch);
 
+    return branch_element;
+  }).append(() => {
+    let div_el = $('<a class="branch_url">Branch </a>');
+    div_el.append(branch);
+    div_el.attr('href', '');
+    div_el.attr('target', '_block');
+    div_el.attr('title', 'View branch on GitHub');
+    return div_el;
+  }).append(() => {
+
     let build_status_element = $('<div class="build_status"></div>');
     build_status_element.append(build_status);
 
     return build_status_element;
-  });
-
-  div_element.append(() => {
-    let commit_url_element = $('<a></a>');
+  }).append(() => {
+    let commit_url_element = $('<a class="commit_url">Commit </a>');
     commit_url_element.append(commit_id.slice(0, 7));
     commit_url_element.attr('title', 'View commit on GitHub');
     commit_url_element.attr('href', commit_url);
@@ -299,14 +321,14 @@ function showLog(data) {
   });
 
   div_element.append(() => {
-    let committer_name_element = $('<div class="committer_name"></div>');
+    let committer_name_element = $('<div class="committer"></div>');
     committer_name_element.append(committer_name);
 
     return committer_name_element;
   });
 
   div_element.append(() => {
-    let compare_element = $('<a class="compare"></a>');
+    let compare_element = $('<a class="compare">Compare </a>');
     compare_element.append('Compare').attr('title', 'View diff on GitHub').attr('href', compare);
     compare_element.attr('target', '_blank');
 
@@ -314,10 +336,19 @@ function showLog(data) {
   });
 
   div_element.append(() => {
-    let stopped_at_element = $('<div class="stopped_at"></div>');
-    stopped_at_element.append(stopped_at);
+    let stopped_at_element = $('<div class="build_time"></div>');
+    stopped_at_element.append('Ran for 7 min 17 sec');
 
     return stopped_at_element;
+  }).append(() => {
+    let div_el = $('<div class="build_time_ago"></div>');
+    div_el.append('about 9 hours ago');
+
+    return div_el;
+  }).append(() => {
+    let button_el = $('<button class="cancel_or_restart"></button>');
+    button_el.append('button');
+    return button_el;
   });
 
   display_element.append(div_element);
@@ -392,7 +423,7 @@ function display_builds(data, display_element) {
 
       li_el.append(() => {
         let div_element = $('<div class="build_id"></div>');
-        div_element.append(i);
+        div_element.append('');
 
         if (build_status === 'success') {
           div_element.css('background', '#39aa56');
@@ -415,6 +446,11 @@ function display_builds(data, display_element) {
         div_element.append(branch.slice(0, 10)).attr('title', branch);
 
         return div_element;
+      }).append(() => {
+        let div_el = $('<div class="committer"></div>');
+        div_el.append(committer_username);
+
+        return div_el;
       }).append(() => {
         let div_element = $('<div class="commit_message"></div>');
         div_element.append(commit_message.slice(0, 28)).attr('title', commit_message);
@@ -513,8 +549,6 @@ function display_pullRequests(data, display_element) {
     $.each(data, function (id, status) {
       i--;
 
-      let event_type = 'PR # ';
-
       let {
         pull_request_number: pull_request_id, id: build_id, branch, committer_username,
         commit_message, commit_id, build_status, started_at, finished_at: stopped_at,
@@ -551,7 +585,7 @@ function display_pullRequests(data, display_element) {
         return div_el;
       }).append(() => {
         let div_el = $('<div class="build_id"></div>');
-        div_el.append(build_id);
+        div_el.append('');
 
         if (build_status === 'success') {
           div_el.css('background', '#39aa56');
@@ -731,62 +765,73 @@ $(".column").click(function (event) {
   $("title").text(title);
 });
 
+function mouseoutMethod(event) {
+  event.target.style.color = 'black';
+  event.target.style.borderBottomStyle = 'none';
+}
+
+function mouseoverMethod(event) {
+  event.target.style.color = 'green';
+  event.target.style.borderBottomStyle = 'solid';
+}
+
+function column_el_click(id) {
+  switch (id) {
+    case 'current':
+      current();
+      break;
+
+    case 'branches':
+      branches();
+
+      break;
+
+    case 'builds':
+      builds();
+
+      break;
+
+    case 'pull_requests':
+      pull_requests();
+
+      break;
+  }
+}
+
+let column_el = $('.column span');
+
 // https://www.cnblogs.com/yangzhi/p/3576520.html
-$("#current").on({
-  'click': function () {
-    current();
-  },
-  'mouseover': function (event) {
-    event.target.style.color = 'green';
-    event.target.style.borderBottomStyle = 'solid';
-  },
-  'mouseout': function (event) {
-    event.target.style.color = 'black';
-    event.target.style.borderBottomStyle = 'none';
-  }
-});
-
-$("#builds").on({
-  'click': function () {
-    builds();
-  },
-  'mouseover': function (event) {
-    event.target.style.color = 'green';
-    event.target.style.borderBottomStyle = 'solid';
-  },
-  'mouseout': function (event) {
-    event.target.style.color = 'black';
-    event.target.style.borderBottomStyle = 'none';
-  }
-});
-
-$("#branches").on({
-  'click': function () {
-    branches();
-  },
-  'mouseover': function (event) {
-    event.target.style.color = 'green';
-    event.target.style.borderBottomStyle = 'solid';
-  },
-  'mouseout': function (event) {
-    event.target.style.color = 'black';
-    event.target.style.borderBottomStyle = 'none';
-  }
-});
-
-$("#pull_requests").on({
+$(column_el).on({
   'click': function (event) {
-    pull_requests();
-    event.target.style.color = 'green';
-    event.target.style.borderBottomStyle = 'solid';
+
+    let target = event.target;
+    let target_id = target.id;
+
+    column_el_click(target_id);
+
+    // 移除其他元素的颜色
+    column_el.css('color', '#000000').css('border-bottom-style', 'none');
+    // 启用其他元素的鼠标移出事件
+    column_el.on({
+      'mouseout': (event) => {
+        mouseoutMethod(event);
+      }
+    });
+
+    // 关闭该元素的鼠标移出事件
+    $('#' + target_id).off('mouseout');
+
+    // 最后对被点击元素
+    target.style.color = 'green';
+    target.style.borderBottomStyle = 'solid';
+
   },
   'mouseover': function (event) {
     event.target.style.color = 'green';
     event.target.style.borderBottomStyle = 'solid';
   },
   'mouseout': function (event) {
-    event.target.style.color = 'black';
-    event.target.style.borderBottomStyle = 'none';
+    mouseoutMethod(event);
   }
 });
 
