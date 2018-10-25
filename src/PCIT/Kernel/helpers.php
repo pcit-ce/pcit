@@ -18,3 +18,19 @@ if (!function_exists('env')) {
         return Env::get($key, $default);
     }
 }
+
+if (!function_exists('base_path')) {
+    function base_path()
+    {
+        return __DIR__.'/../../../';
+    }
+}
+
+if (!function_exists('view')) {
+    function view($path): void
+    {
+        include base_path().'public/public/'.$path;
+
+        exit;
+    }
+}

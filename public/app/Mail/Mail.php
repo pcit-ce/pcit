@@ -16,6 +16,18 @@ class Mail
      */
     private static $mail;
 
+    public $from;
+
+    public $subject;
+
+    public $view;
+
+    public $attach;
+
+    public static function to(): void
+    {
+    }
+
     /**
      * @param array  $address address and name
      * @param string $subject

@@ -7,9 +7,9 @@ namespace App;
 use Exception;
 use PCIT\Support\CI;
 use PCIT\Support\DB;
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Build extends DBModel
+class Build extends Model
 {
     /**
      * @param int $build_key_id

@@ -6,9 +6,9 @@ namespace App;
 
 use Exception;
 use PCIT\Support\DB;
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Job extends DBModel
+class Job extends Model
 {
     /**
      * @param int $jobs_id
@@ -47,7 +47,7 @@ class Job extends DBModel
     public static function create(int $build_id)
     {
         $sql = <<<'EOF'
-INSERT INTO jobs(id,allow_failure,state,created_at,build_id) 
+INSERT INTO jobs(id,allow_failure,state,created_at,build_id)
 
 values(null,?,?,?,?)
 EOF;

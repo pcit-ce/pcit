@@ -6,9 +6,9 @@ namespace App;
 
 use Exception;
 use PCIT\Support\DB;
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Repo extends DBModel
+class Repo extends Model
 {
     protected static $table = 'repo';
 
@@ -161,7 +161,7 @@ EOF;
         DB::update($sql, ['[]', $git_type, $rid]);
 
         $sql = <<<EOF
-UPDATE repo SET $type=JSON_MERGE_PRESERVE($type,?) 
+UPDATE repo SET $type=JSON_MERGE_PRESERVE($type,?)
 
 WHERE git_type=? AND rid=? AND NOT JSON_CONTAINS($type,JSON_QUOTE(?))
 EOF;
@@ -310,7 +310,7 @@ EOF;
             $sql = <<<'EOF'
 UPDATE repo SET
 
-git_type=?,rid=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=? 
+git_type=?,rid=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=?
 
 WHERE id=?;
 EOF;
@@ -357,7 +357,7 @@ EOF;
     public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
         $sql = <<<'EOF'
-            DELETE repo FROM user LEFT JOIN repo ON repo.repo_full_name LIKE CONCAT(user.username,"/%") 
+            DELETE repo FROM user LEFT JOIN repo ON repo.repo_full_name LIKE CONCAT(user.username,"/%")
             where user.installation_id = ?
 EOF;
 

@@ -1,18 +1,12 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Created by PhpStorm.
- * User: SYSTEM
- * Date: 2018/8/9
- * Time: 10:54.
- */
 
 namespace App\Mail;
 
 class SendMail
 {
-    public static function handle(): void
+    public static function build(): void
     {
         if (!Env::get('CI_EMAIL_PASSWORD', false)) {
             Log::debug(__FILE__, __LINE__, 'mail settings not found, send Mail skip', [], Log::INFO);

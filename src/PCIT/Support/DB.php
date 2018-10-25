@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Support;
 
+use Closure;
 use Exception;
 use PDO;
 use PDOException;
@@ -209,9 +210,11 @@ class DB
     }
 
     /**
-     * @param \Closure $callback
+     * @param Closure $callback
+     *
+     * @throws Exception
      */
-    public static function transaction($callback): void
+    public static function transaction(Closure $callback): void
     {
         self::beginTransaction();
         \call_user_func($callback);
@@ -255,6 +258,11 @@ class DB
         return self::$debug;
     }
 
+    /**
+     * @return PDO
+     *
+     * @throws Exception
+     */
     public static function getPdo()
     {
         return self::connection();

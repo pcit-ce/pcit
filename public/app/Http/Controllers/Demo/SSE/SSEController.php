@@ -17,10 +17,17 @@ class SSEController
         while (1) {
             $time = date('Y-m-d H:i:s', time());
             // id event retry data \n\n
-            echo "id: 1\nretry: 100\ndata: $time\n\n";
+            // retry：最大间隔时间，整数，单位毫秒
+            // event: 自定义信息类型
+            echo "id: 1\nretry: 1000\ndata: $time\n\n";
             ob_flush();
             flush();
             sleep(1);
         }
+    }
+
+    public function client()
+    {
+        return view('sse/index.html');
     }
 }

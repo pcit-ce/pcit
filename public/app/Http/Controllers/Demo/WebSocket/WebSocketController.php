@@ -10,4 +10,9 @@ class WebSocketController
     {
         echo 1;
     }
+
+    public function client()
+    {
+        return view('websocket/index.html');
+    }
 }

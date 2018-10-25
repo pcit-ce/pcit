@@ -232,5 +232,7 @@ Route::get('api/ci/github_app_installation/{uid}', 'System\SystemController@getG
 Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@getGitHubAppSettingsUrl');
 
 /* Demo */
-Route::get('websocket_server', 'Demo\WebSocket\WebSocketController');
-Route::get('sse_server', 'Demo\SSE\SSEController');
+Route::get('websocket/server', 'Demo\WebSocket\WebSocketController');
+Route::get('sse/server', 'Demo\SSE\SSEController');
+Route::get('websocket/client', 'Demo\WebSocket\WebSocketController@client');
+Route::get('sse/client', 'Demo\SSE\SSEController@client');

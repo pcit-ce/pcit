@@ -6,9 +6,9 @@ namespace App;
 
 use Exception;
 use PCIT\Support\DB;
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Issue extends DBModel
+class Issue extends Model
 {
     /**
      * @param string $git_type

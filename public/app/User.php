@@ -6,10 +6,10 @@ namespace App;
 
 use Exception;
 use PCIT\Support\DB;
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 use PCIT\Support\Webhooks\GitHub\UserBasicInfo\Account;
 
-class User extends DBModel
+class User extends Model
 {
     protected static $table = 'user';
 
@@ -125,7 +125,7 @@ EOF;
         DB::update($sql, ['[]', $git_type, $org_id]);
 
         $sql = <<<'EOF'
-UPDATE user SET org_admin=JSON_MERGE_PRESERVE(org_admin,?) 
+UPDATE user SET org_admin=JSON_MERGE_PRESERVE(org_admin,?)
 
 WHERE git_type=? AND uid=? AND NOT JSON_CONTAINS(org_admin,JSON_QUOTE(?))
 EOF;

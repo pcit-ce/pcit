@@ -7,11 +7,38 @@ namespace PCIT\Support;
 
 use Exception;
 
-class DBModel
+class Model
 {
+    const CREATED_AT = 'created_at';
+
+    const UPDATED_AT = 'updated_at';
+
     protected static $table = null;
 
     protected static $set_array = [];
+
+    protected static $primaryKey = 'id';
+
+    protected static $incrementing = true;
+
+    /**
+     * 如果主键不是一个整数，则应该在模型上设置 string.
+     */
+    protected static $keyType = '';
+
+    /**
+     * 默认数据表中存在 created_at 和 updated_at 这两个字段.
+     */
+    protected static $timestamps = true;
+
+    protected static $connection = '';
+
+    /**
+     * 结果分块.
+     */
+    public static function chunk(int $count, \Closure $closer): void
+    {
+    }
 
     /**
      * 取得所有数据.
@@ -54,6 +81,13 @@ class DBModel
     }
 
     /**
+     * 取回符合查询限制的第一个模型 ...
+     */
+    public static function first(): void
+    {
+    }
+
+    /**
      * 通过主键查找数据，找不到则抛出异常.
      *
      * @param int|array $table_primary_key_id
@@ -71,6 +105,10 @@ class DBModel
         }
 
         throw new Exception(__FILE__.' : '.__LINE__.' Not Found', 404);
+    }
+
+    public static function firstOrFail(): void
+    {
     }
 
     /**
@@ -122,4 +160,15 @@ class DBModel
 
         return DB::select("SELECT id FROM $table ORDER BY id DESC LIMIT 1", null, true);
     }
+
+    /**
+     * @param int|array $primaryKeyValue 通过主键删除数据
+     */
+    public static function destroy($primaryKeyValue): void
+    {
+    }
+
+//    public static function delete(): void
+//    {
+//    }
 }

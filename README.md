@@ -120,6 +120,7 @@ $ git clone https://github.com/khs1994-docker/lnmp.git ~/lnmp
 # $ git clone https://gitee.com/khs1994-docker/lnmp.git ~/lnmp
 
 $ composer create-project khs1994/pcit ~/lnmp/app/pcit
+# $ cd ~/lnmp ; lnmp-composer create-project khs1994/pcit app/pcit
 
 $ cd lnmp
 ```

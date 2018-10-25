@@ -1,6 +1,8 @@
 body {
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
+
 }
 
 header {
@@ -155,10 +157,6 @@ footer a:hover {
     color: blue;
 }
 
-body {
-    overflow-y: scroll;
-}
-
 .column #current {
     margin-left: 1px;
 }
@@ -172,8 +170,15 @@ body {
     margin-left: 470px;
 }
 
+.build_data {
+    position: relative;
+}
+
+.build_data .build_id {
+    background: red;
+}
+
 .builds_list {
-    margin-top: 2px;
     margin-left: -40px;
     position: relative;
     height: 100px;
@@ -195,6 +200,11 @@ body {
 
 .builds_list a {
     display: block;
+    text-decoration: none;
+}
+
+.builds_list a:hover {
+    text-decoration: underline;
 }
 
 .builds_list .build_id {
@@ -207,69 +217,87 @@ body {
 .builds_list .event_type {
     font-size: 16px;
     width: 100px;
-    /*height: 100px;*/
+    height: 100px;
     background: red;
     float: left;
+    text-align: center;
 }
 
 .builds_list .branch {
     font-size: 16px;
     width: 100px;
-    /*height: 100px;*/
+    height: 100px;
     background: orange;
     float: left;
+    text-align: center;
 }
 
 .builds_list .commit_message {
     font-size: 16px;
-    width: 200px;
-    /*height: 100px;*/
+    width: 340px;
+    height: 90px;
     background: yellow;
     float: left;
+    margin-right: -200px;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
 .builds_list .commit_url {
     font-size: 16px;
-    width: 150px;
-    /*height: 100px;*/
+    width: 160px;
+    height: 50px;
     background: green;
     float: left;
-    /*position: absolute;*/
-    /*left: 500px;*/
-    /*top: 60px;*/
+    position: relative;
+    left: 160px;
+    top: 60px;
+    margin-top: -10px;
+    text-align: center;
 }
 
 .builds_list .build_status {
     font-size: 16px;
-    width: 150px;
-    /*height: 100px;*/
+    width: 160px;
+    height: 50px;
     background: aqua;
     float: left;
-    /*position: absolute;*/
-    /*left: 500px;*/
+    position: relative;
+    left: 0;
+    top: 0;
+    text-align: center;
 }
 
 .builds_list .build_time {
     font-size: 16px;
-    width: 100px;
-    /*height: 100px;*/
+    width: 200px;
+    height: 50px;
     background: blue;
     float: left;
+    position: relative;
+    left: 70px;
+    top: 0;
+    /*padding-left: 100px;*/
 }
 
 .builds_list .build_time_ago {
     font-size: 16px;
     background: blueviolet;
-    /*width: 140px;*/
-    /*height: 100px;*/
+    width: 200px;
+    height: 50px;
     float: left;
-    /*position: absolute;*/
+    position: relative;
+    left: 390px;
+    top: 0;
+    /*padding-left: 100px;*/
 }
 
 .builds_list .cancel_or_restart {
     /*height: 100px;*/
+    display: block;
     float: right;
-    top: 0;
+    position: relative;
+    top: -10px;
     right: 0;
 }
 
@@ -277,6 +305,130 @@ tr {
     margin-top: 10px;
 }
 
-.pull_request_list li {
+/*使用绝对定位布局*/
+
+.pull_requests_list {
+    /*border: 1px solid;*/
+    /*list-style-type: none;*/
+    margin-left: -40px;
+}
+
+.pull_requests_list a {
     display: block;
+    text-decoration: none;
+    color: #666666;
+}
+
+.pull_requests_list a:hover {
+    text-decoration: underline;
+}
+
+.pull_requests_list li {
+    display: block;
+    position: relative;
+    list-style-type: none;
+    border: 1px solid;
+    margin-bottom: 10px;
+    height: 100px;
+    text-align: center;
+}
+
+.pull_requests_list .id {
+    background: red;
+}
+
+.pull_requests_list .build_id {
+    /*background: red;*/
+    height: 100px;
+    width: 10px;
+    /*float: left;*/
+}
+
+.pull_requests_list .pull_request_url {
+    /*background: yellow;*/
+    height: 100px;
+    width: 100px;
+    /*float: left;*/
+    position: absolute;
+    left: 10px;
+    top: 0;
+}
+
+.pull_requests_list .branch {
+    /*background: orangered;*/
+    height: 50px;
+    width: 100px;
+    /*float: left;*/
+    position: absolute;
+    left: 110px;
+    top: 0;
+}
+
+.pull_requests_list .committer {
+    /*background: aqua;*/
+    height: 50px;
+    width: 100px;
+    /*float: left;*/
+    position: absolute;
+    left: 110px;
+    top: 50px;
+}
+
+.pull_requests_list .commit_message {
+    /*background: green;*/
+    height: 100px;
+    width: 300px;
+    /*float: left;*/
+    position: absolute;
+    left: 210px;
+    top: 0;
+}
+
+.pull_requests_list .commit_id {
+    /*background: bisque;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 510px;
+    top: 50px;
+}
+
+.pull_requests_list .build_status {
+    /*background: red;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 510px;
+    top: 0;
+}
+
+.pull_requests_list .build_time {
+    /*background: yellowgreen;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 710px;
+    top: 0;
+
+}
+
+.pull_requests_list .build_time_ago {
+    /*background: darksalmon;*/
+    height: 50px;
+    width: 200px;
+    /*float: left;*/
+    position: absolute;
+    left: 710px;
+    top: 50px;
+}
+
+.pull_requests_list .cancel_or_restart {
+    display: block;
+    /*float: right;*/
+    position: absolute;
+    right: 0;
+    top: 0;
 }

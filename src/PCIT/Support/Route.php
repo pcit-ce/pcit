@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace PCIT\Support;
 
 use Closure;
-use Error;
 use Exception;
 
 /**
- * @method static get(string $url, Closure | string $action)
- * @method static post(string $url, Closure | string $action)
- * @method static delete(string $url, Closure | string $action)
- * @method static patch(string $url, Closure | string $action)
+ * @method static get(string $url, Closure|string $action)
+ * @method static post(string $url, Closure|string $action)
+ * @method static put(string $url, Closure|string $action)
+ * @method static patch(string $url, Closure|string $action)
+ * @method static delete(string $url, Closure|string $action)
+ * @method static options(string $url, Closure|string $action)
  */
 class Route
 {
@@ -52,15 +53,13 @@ class Route
                     $response = $obj->$method(...$arg);
                 }
                 self::$output = $response;
-            } catch (Error | Exception $e) {
+            } catch (\Throwable $e) {
                 // 捕获类方法不存在错误
                 $code = $e->getCode();
 
-                if (0 === $code) {
-                    $code = 404;
-                }
+                0 === $code && $code = 500;
 
-                throw new Error($e->getMessage(), $code);
+                throw new Exception($e->getMessage(), $code, $e);
             }
 
             // 处理完毕，退出
@@ -77,7 +76,7 @@ class Route
      *
      * @throws Exception
      */
-    private static function exec($targetUrl, $action): void
+    private static function handle($targetUrl, $action): void
     {
         // ?a=1&b=2
         $queryString = $_SERVER['QUERY_STRING'];
@@ -149,6 +148,6 @@ class Route
             return;
         }
 
-        self::exec(...$arg);
+        self::handle(...$arg);
     }
 }

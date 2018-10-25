@@ -58,10 +58,9 @@ class Kernel
         );
 
         User::updateUserInfo((int) $uid, null, (string) $username, (string) $email, (string) $pic, false, $git_type);
+
         User::updateAccessToken((int) $uid, $access_token, $git_type);
 
-        require __DIR__.'/../../../../public/profile/index.html';
-
-        exit;
+        return view('profile/index.html');
     }
 }

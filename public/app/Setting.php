@@ -7,9 +7,9 @@ namespace App;
 use Exception;
 use PCIT\Support\CI;
 use PCIT\Support\DB;
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Setting extends DBModel
+class Setting extends Model
 {
     protected static $table = 'settings';
 
@@ -28,7 +28,7 @@ class Setting extends DBModel
     public static function list(int $rid, string $git_type = 'github')
     {
         $sql = <<<'EOF'
-SELECT 
+SELECT
 build_pushes,
 build_pull_requests,
 maximum_number_of_builds,

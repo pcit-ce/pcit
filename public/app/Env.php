@@ -6,9 +6,9 @@ namespace App;
 
 use Exception;
 use PCIT\Support\DB;
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Env extends DBModel
+class Env extends Model
 {
     protected static $table = 'env_vars';
 

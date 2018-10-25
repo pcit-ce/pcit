@@ -398,8 +398,8 @@ function display_builds(data, display_element) {
           div_element.css('background', '#39aa56');
         } else if (build_status === 'in_progress') {
           div_element.css('background', 'yellow');
-        }else{
-          div_element.css('background','#db4545');
+        } else {
+          div_element.css('background', '#db4545');
         }
 
         return div_element;
@@ -507,6 +507,8 @@ function display_pullRequests(data, display_element) {
 
     let ul_el = $('<ul class="pull_requests_list"></ul>');
 
+    ul_el.height((data.length + 1) * 100);
+
     let i = data.length + 1;
     $.each(data, function (id, status) {
       i--;
@@ -533,7 +535,7 @@ function display_pullRequests(data, display_element) {
       }
 
       if (null == stopped_at) {
-        stopped_at = ' ';
+        stopped_at = 'Pending';
       } else {
         let d;
         d = new Date(stopped_at * 1000);
@@ -545,6 +547,19 @@ function display_pullRequests(data, display_element) {
       li_el.append(() => {
         let div_el = $('<div class="id"></div>');
         div_el.append();
+
+        return div_el;
+      }).append(() => {
+        let div_el = $('<div class="build_id"></div>');
+        div_el.append(build_id);
+
+        if (build_status === 'success') {
+          div_el.css('background', '#39aa56');
+        } else if (build_status === 'in_progress') {
+          div_el.css('background', 'yellow');
+        } else {
+          div_el.css('background', '#db4545');
+        }
 
         return div_el;
       }).append(() => {
@@ -586,15 +601,20 @@ function display_pullRequests(data, display_element) {
         return a_el;
       }).append(() => {
         let div_el = $('<div class="build_time"></div>');
-        div_el.append();
+        div_el.append(started_at);
 
         return div_el;
       }).append(() => {
-        let div_el = $('<div class="build_time_age"></div>');
+        let div_el = $('<div class="build_time_ago"></div>');
 
         div_el.append(stopped_at);
 
         return div_el;
+      }).append(() => {
+        let button_el = $('<button class="cancel_or_restart"></button>');
+        button_el.append('button');
+
+        return button_el;
       });
 
       ul_el.append(li_el);

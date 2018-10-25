@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Cron extends DBModel
+class Cron extends Model
 {
     protected static $table = 'cron';
 

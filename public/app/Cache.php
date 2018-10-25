@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App;
 
-use PCIT\Support\DBModel;
+use PCIT\Support\Model;
 
-class Cache extends DBModel
+class Cache extends Model
 {
 }

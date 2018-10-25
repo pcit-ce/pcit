@@ -35,7 +35,7 @@ if ('/index.php' === $_SERVER['REQUEST_URI']) {
 
 try {
     require_once __DIR__.'/../route/web.php';
-} catch (Exception | Error $e) {
+} catch (Throwable $e) {
     if ('Finish' === $e->getMessage()) {
         $output = Route::$output;
 
@@ -62,6 +62,7 @@ try {
         'documentation_url' => 'https://github.com/khs1994-php/pcit/tree/master/docs/api',
         'file' => $debug ? $e->getFile() : null,
         'line' => $debug ? $e->getLine() : null,
+        'details' => $debug ? (array) $e->getPrevious() : null,
     ]), PCIT_START);
 
     exit;
@@ -75,4 +76,5 @@ Response::json(array_filter([
     'api_url' => getenv('CI_HOST').'/api',
     'obj' => $debug ? Route::$obj ?? null : null,
     'method' => $debug ? Route::$method ?? null : null,
+    'details' => $debug ? '路由控制器填写错误' : null,
 ]), PCIT_START);
