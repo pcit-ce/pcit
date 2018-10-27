@@ -46,21 +46,13 @@ $ ./lnmp-docker pcit-up
 
 假设该私钥文件名为 `pcit.2018-04-28.private-key.pem`
 
-放入到 `lnmp/app/pcit/public/storage/private_key` 目录中
+我们需要将其改名为 `private.key`
+
+放入到 `~/lnmp/pcit/github_app` 目录中
 
 ## 填写关键信息
 
-编辑 `lnmp/app/pcit/public/.env.production` 文件，设置好相关变量
-
-特别注意以下变量
-
-```bash
-CI_GITHUB_APP_PRIVATE_FILE=
-```
-
-此变量值为上一步生成的私钥文件名，例如 `pcit.2018-04-28.private-key.pem`
-
-其他变量含义请查看 [ENV](env.md)
+编辑 `~/lnmp/pcit/.pcit.env` 文件，设置好相关变量，变量含义请查看 [ENV](env.md)
 
 ## 启动
 

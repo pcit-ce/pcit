@@ -30,7 +30,6 @@
 
 * `CI_GITHUB_APP_NAME` String GitHub App 应用名称
 * `CI_GITHUB_APP_ID` String GitHub App ID
-* `CI_GITHUB_APP_PRIVATE_FILE` String GitHub App 私钥文件名，需要在设置页面生成，之后放到 `public/private_key/` 目录中
 
 * `CI_TZ` String 时区设置
 

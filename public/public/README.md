@@ -44,4 +44,8 @@ $ npm install
 
 ```bash
 $ npm run webpack-pro
+
+# or 
+
+$ npm run build
 ```

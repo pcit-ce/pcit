@@ -1,4 +1,14 @@
 .git
 .idea
+
 vendor
 composer.lock
+
+public/public/node_modules
+public/public/package-lock.json
+
+public/.env.*
+public/.env
+!public/.env.example
+
+public/storage/private_key

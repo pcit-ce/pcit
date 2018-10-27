@@ -6,7 +6,6 @@ namespace App;
 
 use Exception;
 use PCIT\Support\DB;
-use PCIT\Support\Env;
 
 class GetAccessToken
 {
@@ -77,7 +76,7 @@ class GetAccessToken
 
         $access_token = pcit()->github_apps_installations->getAccessToken(
             (int) $installation_id,
-            __DIR__.'/../storage/private_key/'.env('CI_GITHUB_APP_PRIVATE_FILE')
+            __DIR__.'/../storage/private_key/private.key'
         );
 
         return $access_token;

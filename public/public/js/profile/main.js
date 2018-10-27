@@ -1,9 +1,11 @@
 const header = require('../common/header');
+const footer = require('../common/footer');
 const git = require('../common/git');
 const app = require('../common/app');
 const title = require('../common/title');
 
 header.show();
+footer.show();
 
 let ci_host = "https://" + location.host + "/";
 let url_array = location.href.split('/');

@@ -18,6 +18,18 @@ function gogs() {
   document.location = 'https://' + location.host + '/oauth/gogs/login';
 }
 
+$('.github-login-button').on({
+  'click': () => {
+    github();
+  }
+});
+
+$('.gitee-login-button').on({
+  'click': () => {
+    gitee();
+  }
+});
+
 new Vue({
   el: ".hello-login-button",
   methods: {

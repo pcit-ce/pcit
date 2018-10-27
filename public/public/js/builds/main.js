@@ -1,80 +1,23 @@
-$('header').append(`<span class="ico"><img alt='pcit' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
-<span class="docs"><a href="//docs.ci.khs1994.com" target="_blank">Documentation</a></span>
-<span class="plugins"><a href="//docs.ci.khs1994.com/plugins/" target="_blank">Plugins</a></span>
-<span class="donate"><a href="//zan.khs1994.com" target="_blank">Donate</a></span>
-<span class="username">username</span>`
-);
+const header = require('../common/header');
+const footer = require('../common/footer');
+const git = require('../common/git');
+const title = require('./title');
+const {
+  url,
+  url_array,
+  baseUrl,
+  git_type,
+  username,
+  repo,
+  repo_full_name,
+  git_repo_full_name,
+  repo_full_name_url,
+  type_from_url,
+  baseTitle,
+} = require('./data');
 
-$('footer').append(`<ul class="about">
-    <li>@PCIT, Datong, Shanxi</li>
-    <li><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></li>
-    <li><a href="//weibo.com/kanghuaishuai" target="_blank">Weibo</a></li>
-    <li><a href="/wechat" target="_blank">WeChat</a></li>
-    <li><a href="//shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63" target="_blank">QQ Group</a></li>
-    <li><a href="mailto:ci@khs1994.com">Email</a></li>
-  </ul>
-
-  <ul class="help">
-    <li><a href="https://github.com/khs1994-php/pcit/tree/master/docs" target="_blank">Documentation</a></li>
-    <li><a href="//api.ci.khs1994.com" target="_blank">API</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/issues" target="_blank">Community</a></li>
-    <li><a href="/blog" target="_blank">Blog</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md" target="_blank">CHANGELOG</a></li>
-    <li><a href="https://zan.khs1994.com" target="_blank">Donate</a></li>
-  </ul>
-
-  <ul class="legal">
-    <li><a href="" target="_blank">Terms of Service</a></li>
-    <li><a href="" target="_blank">Privacy Policy</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ce.md" target="_blank">PCIT CE</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md" target="_blank">PCIT EE</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/why.md" target="_blank">Why PCIT</a></li>
-    <li><a href="//api.ci.khs1994.com" target="_blank">Plugins</a></li>
-  </ul>
-
-  <ul class="status">
-    <li><a href="" target="_blank">PCIT Status</a></li>
-  </ul>
-`
-);
-
-let url = location.href;
-
-let url_array = url.split('/');
-
-let baseUrl = "https://" + location.host;
-
-let [, , , git_type, username, repo] = url_array;
-
-let base_full_url = baseUrl + '/' + git_type + '/' + username + '/' + repo;
-
-let base_include = git_type + '/' + username + '/' + repo;
-
-let type_from_url = url_array[6];
-
-let build_id;
-
-let title;
-
-if (6 === url_array.length) {
-  type_from_url = 'current';
-}
-
-let repo_fullname = username + '/' + repo;
-
-let query = git_type + '/' + repo_fullname;
-
-let baseTitle = format_gittype(git_type) + ' - ' + username + '/' + repo + ' - PCIT';
-
-function format_gittype(gittype) {
-  switch (gittype) {
-    case 'github':
-      return 'GitHub';
-
-    default:
-      return gittype.substring(0, 1).toUpperCase() + gittype.substring(1);
-  }
-}
+header.show();
+footer.show();
 
 function column_span_click(id) {
   let span_el = $('#' + id);
@@ -87,7 +30,7 @@ function current() {
 
   $.ajax({
     type: "GET",
-    url: '/api/repo/' + base_include + '/build/current',
+    url: '/api/repo/' + git_repo_full_name + '/build/current',
     success: function (data) {
       display('current', data);
     }
@@ -99,7 +42,7 @@ function branches() {
 
   $.ajax({
     type: "GET",
-    url: '/api/repo/' + base_include + '/branches',
+    url: '/api/repo/' + git_repo_full_name + '/branches',
     success: function (data) {
       display('branches', data);
     }
@@ -133,7 +76,7 @@ function main() {
 
   $.ajax({
     type: 'GET',
-    url: '/api/repo/' + base_include + '/builds',
+    url: '/api/repo/' + git_repo_full_name + '/builds',
     success: function (data) {
       display('builds', data);
     },
@@ -149,7 +92,7 @@ function pull_requests() {
 
   $.ajax({
     type: 'GET',
-    url: '/api/repo/' + base_include + '/builds?type=pr',
+    url: '/api/repo/' + git_repo_full_name + '/builds?type=pr',
     success: function (data) {
       display('pull_requests', data);
     }
@@ -160,9 +103,9 @@ function jobs() {
   console.log('jobs');
   $.ajax({
     type: "get",
-    url: '/api/repo/' + base_include + '/jobs/1',
+    url: '/api/repo/' + git_repo_full_name + '/jobs/1',
     success: function (data) {
-      display(id, data);
+      display('jobs', data);
     }
   });
 }
@@ -171,12 +114,12 @@ function settings() {
   console.log(location.href);
   $.ajax({
     type: "get",
-    url: '/api/repo/' + repo_fullname + '/settings',
+    url: '/api/repo/' + repo_full_name + '/settings',
     headers: {
       'Authorization': 'token ' + Cookies.get(git_type + 'api_token')
     },
     success: function (data) {
-      display(id, data);
+      display('settings', data);
     }
   });
 }
@@ -185,12 +128,12 @@ function requests() {
   console.log(location.href);
   $.ajax({
     type: "get",
-    url: '/api/repo/' + repo_fullname + '/requests',
+    url: '/api/repo/' + repo_full_name + '/requests',
     herders: {
       'Authorization': 'token ' + Cookies.get(git_type + '_api+token')
     },
     success: function (data) {
-      display(id, data);
+      display('requests', data);
     }
   });
 }
@@ -199,12 +142,12 @@ function caches() {
   console.log(location.href);
   $.ajax({
     type: "get",
-    url: '/api/repo/' + repo_fullname + '/caches',
+    url: '/api/repo/' + repo_full_name + '/caches',
     headers: {
       'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
     },
     success: function (data) {
-      display(id, data);
+      display('caches', data);
     }
   });
 }
@@ -213,50 +156,14 @@ function triggerBuild() {
   console.log(location.href);
   $.ajax({
     type: "post",
-    url: '/api/repo/' + repo_fullname + '/trigger',
+    url: '/api/repo/' + repo_full_name + '/trigger',
     headers: {
       'Authorization': 'token ' + Cookies.get(git_type + '_api_token')
     },
     success: function (data) {
-      display(id, data);
+      display('triggerBuild', data);
     }
   });
-}
-
-function getCommitUrl(commit_id, gittype = 'github') {
-  let commitUrl;
-
-  switch (git_type) {
-
-    case 'github':
-      commitUrl = 'https://github.com/' + username + '/' + repo + '/commit/' + commit_id;
-      break;
-
-    case 'gitee':
-      commitUrl = `https://gitee.com/${username}/${repo}/commit/${commit_id}`;
-
-      break;
-  }
-
-  return commitUrl;
-}
-
-function getPRUrl(pull_request_id, gittype = 'github') {
-  let prUrl;
-
-  switch (git_type) {
-    case 'github':
-      prUrl = `https://github.com/${username}/${repo}/pull/${pull_request_id}`;
-
-      break;
-
-    case 'gitee':
-      prUrl = `https://gitee.com/${username}/${repo}/pulls/${pull_request_id}`;
-
-      break;
-  }
-
-  return prUrl;
 }
 
 function showLog(data) {
@@ -275,7 +182,7 @@ function showLog(data) {
     stopped_at = d.toLocaleString();
   }
 
-  let commit_url = getCommitUrl(commit_id);
+  let commit_url = git.getCommitUrl(username, repo, commit_id);
   let div_element = $('<div class="build_data"></div>');
 
   div_element.append(() => {
@@ -400,7 +307,7 @@ function display_builds(data, display_element) {
         commit_message, commit_id, build_status, started_at, finished_at: stopped_at
       } = status;
 
-      let commit_url = getCommitUrl(commit_id);
+      let commit_url = git.getCommitUrl(username, repo, commit_id);
       commit_id = commit_id.substr(0, 7);
 
       if (null == started_at) {
@@ -554,9 +461,9 @@ function display_pullRequests(data, display_element) {
         commit_message, commit_id, build_status, started_at, finished_at: stopped_at,
       } = status;
 
-      let commit_url = getCommitUrl(commit_id);
+      let commit_url = git.getCommitUrl(username, repo, commit_id);
 
-      let pull_request_url = getPRUrl(pull_request_id);
+      let pull_request_url = git.getPullRequestUrl(username, repo, pull_request_id);
 
       commit_id = commit_id.substr(0, 7);
 
@@ -629,7 +536,7 @@ function display_pullRequests(data, display_element) {
       }).append(() => {
         let a_el = $('<a class="build_status"></a>');
         a_el.append(build_status);
-        a_el.attr('href', `${base_full_url}/builds/${build_id}`);
+        a_el.attr('href', `${repo_full_name_url}/builds/${build_id}`);
         a_el.attr('target', '_block');
 
         return a_el;
@@ -722,22 +629,6 @@ function display(id, data) {
   }
 }
 
-function display_title(id) {
-
-  switch (id) {
-    case "pull_requests":
-      title = 'Pull Requests - ' + baseTitle;
-      break;
-    case "builds":
-      title = 'Builds - ' + baseTitle;
-      break;
-    default:
-      title = baseTitle;
-  }
-
-  $("title").text(title);
-}
-
 // http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
 // 事件冒泡 点击了 子元素 会向上传递 即也点击了父元素
 
@@ -751,29 +642,17 @@ $(".column").click(function (event) {
   console.log(id);
 
   if ('current' === id) {
-    history.pushState({}, baseTitle, baseUrl + '/' + query);
+    history.pushState({}, baseTitle, baseUrl + '/' + git_repo_full_name);
 
-    history.replaceState(null, baseTitle, baseUrl + '/' + query);
+    history.replaceState(null, baseTitle, baseUrl + '/' + git_repo_full_name);
   } else {
-    history.pushState({}, baseTitle, baseUrl + '/' + query + '/' + id);
+    history.pushState({}, baseTitle, baseUrl + '/' + git_repo_full_name + '/' + id);
 
-    history.replaceState(null, baseTitle, baseUrl + '/' + query + '/' + id);
+    history.replaceState(null, baseTitle, baseUrl + '/' + git_repo_full_name + '/' + id);
   }
 
-  display_title(id);
-
-  $("title").text(title);
+  title.show(baseTitle, id);
 });
-
-function mouseoutMethod(event) {
-  event.target.style.color = 'black';
-  event.target.style.borderBottomStyle = 'none';
-}
-
-function mouseoverMethod(event) {
-  event.target.style.color = 'green';
-  event.target.style.borderBottomStyle = 'solid';
-}
 
 function column_el_click(id) {
   switch (id) {
@@ -796,6 +675,16 @@ function column_el_click(id) {
 
       break;
   }
+}
+
+function mouseoutMethod(event) {
+  event.target.style.color = 'black';
+  event.target.style.borderBottomStyle = 'none';
+}
+
+function mouseoverMethod(event) {
+  event.target.style.color = 'green';
+  event.target.style.borderBottomStyle = 'solid';
 }
 
 let column_el = $('.column span');
@@ -827,8 +716,7 @@ $(column_el).on({
 
   },
   'mouseover': function (event) {
-    event.target.style.color = 'green';
-    event.target.style.borderBottomStyle = 'solid';
+    mouseoverMethod(event);
   },
   'mouseout': function (event) {
     mouseoutMethod(event);
@@ -861,19 +749,19 @@ $("#trigger_build").on({
 
 jQuery(document).ready(function () {
 
-  display_title(type_from_url);
+  title.show(baseTitle, type_from_url);
 
   let content = jQuery('<h2></h2>');
 
   content.append(() => {
-    return format_gittype(git_type) + username + '/' + repo;
+    return git.format(git_type) + repo_full_name;
   }).append(() => {
     let a_element = $('<a></a>');
     let img_element = $('<img alt="status" src=""/>');
 
-    img_element.attr('src', base_full_url + '/status');
+    img_element.attr('src', repo_full_name_url + '/status');
     a_element.append(img_element);
-    a_element.attr('href', base_full_url + '/getstatus');
+    a_element.attr('href', repo_full_name_url + '/getstatus');
     a_element.attr('target', '_black');
 
     return a_element;
