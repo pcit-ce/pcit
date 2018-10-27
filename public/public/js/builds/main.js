@@ -106,7 +106,7 @@ function branches() {
   });
 }
 
-function builds() {
+function main() {
   column_span_click('builds');
 
   let build_id;
@@ -521,7 +521,7 @@ function display_branches(data, display_element) {
         }
 
         display_element.append(`<tr>
-<td><a href="${builds}/${id}" target='_blank'># ${id} </a></td>
+<td><a href="${main}/${id}" target='_blank'># ${id} </a></td>
 <td>${nbsp}${status[0]}${nbsp}</td>
 <td>${nbsp}${status[2]}${nbsp}</td>
 <td>${nbsp}${stopped_at}${nbsp}</td>
@@ -787,7 +787,7 @@ function column_el_click(id) {
       break;
 
     case 'builds':
-      builds();
+      main();
 
       break;
 
@@ -894,7 +894,7 @@ jQuery(document).ready(function () {
       break;
 
     case 'builds':
-      builds();
+      main();
 
       break;
 

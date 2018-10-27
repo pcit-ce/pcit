@@ -32,3 +32,8 @@ coverage.xml
 /cache
 
 vim.exe.stackdump
+
+# node
+
+node_modules
+package-lock.json

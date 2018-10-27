@@ -1,68 +1,23 @@
-$('header').append(`
-<span class="ico"><img alt='pcit' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
-<span class="docs"><a href="//docs.ci.khs1994.com" target="_blank">Documentation</a></span>
-<span class="plugins"><a href="//docs.ci.khs1994.com/plugins/" target="_blank">Plugins</a></span>
-<span class="donate"><a href="//zan.khs1994.com" target="_blank">Donate</a></span>
-<span class="username">username</span>
-`
-);
-$('footer').append(`
-    <ul class="about">
-    <li>@PCIT, Datong, Shanxi</li>
-    <li><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></li>
-    <li><a href="//weibo.com/kanghuaishuai" target="_blank">Weibo</a></li>
-    <li><a href="/wechat" target="_blank">WeChat</a></li>
-    <li><a href="//shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63" target="_blank">QQ Group</a></li>
-    <li><a href="mailto:ci@khs1994.com">Email</a></li>
-  </ul>
+const header = require('../common/header');
+const git = require('../common/git');
+const app = require('../common/app');
+const title = require('../common/title');
 
-  <ul class="help">
-    <li><a href="https://github.com/khs1994-php/pcit/tree/master/docs" target="_blank">Documentation</a></li>
-    <li><a href="//api.ci.khs1994.com" target="_blank">API</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/issues" target="_blank">Community</a></li>
-    <li><a href="/blog" target="_blank">Blog</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md" target="_blank">CHANGELOG</a></li>
-    <li><a href="https://zan.khs1994.com" target="_blank">Donate</a></li>
-  </ul>
-
-  <ul class="legal">
-    <li><a href="" target="_blank">Terms of Service</a></li>
-    <li><a href="" target="_blank">Privacy Policy</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ce.md" target="_blank">PCIT CE</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md" target="_blank">PCIT EE</a></li>
-    <li><a href="https://github.com/khs1994-php/pcit/blob/master/docs/why.md" target="_blank">Why PCIT</a></li>
-    <li><a href="//api.ci.khs1994.com" target="_blank">Plugins</a></li>
-  </ul>
-
-  <ul class="status">
-    <li><a href="" target="_blank">PCIT Status</a></li>
-  </ul>
-`
-);
+header.show();
 
 let ci_host = "https://" + location.host + "/";
 let url_array = location.href.split('/');
 let git_type = url_array[4];
 let username = url_array[5];
 
-function formatGitType(gittype) {
-  switch (gittype) {
-    case 'github':
-      return 'GitHub';
-
-    default:
-      return gittype.substring(0, 1).toUpperCase() + gittype.substring(1);
-  }
-}
-
 function showUserBasicInfo(data) {
   let {username, type} = data;
 
   $("#username").text(username).addClass(type);
 
-  let title = `${formatGitType(git_type)} - ${data.username} - Profile - PCIT`;
+  let titleContent = `${git.format(git_type)} - ${data.username} - Profile - ${app.app_name}`;
 
-  $("title").text(title);
+  title.titleChange(titleContent);
 
   $("#user").empty().append(
     "<span>" + username + "</span>" +
@@ -70,9 +25,17 @@ function showUserBasicInfo(data) {
     "<p>使用 PCIT API 请访问 " +
     "<a href='https://api.ci.khs1994.com' target='_blank'>https://api.ci.khs1994.com</a></p>" +
     "<input id='token' value='" + Cookies.get(git_type + '_api_token') + "'>" +
-    "<button class='copy_token' data-clipboard-target='#token' onclick='copyToken()'>Copy</button><br><br>"
+    "<button class='copy_token' data-clipboard-target='#token'>Copy</button><br><br>"
   );
 }
+
+(() => {
+  $('.copy_token').on({
+    'click': () => {
+      copyToken();
+    }
+  })
+})();
 
 function copyToken() {
   let clipboard = new ClipboardJS('.copy_token');
@@ -165,18 +128,14 @@ function showGitHubAppSettings(org_name, installation_id) {
 
       content = $('<p></p>');
 
-      content.append('找不到仓库？请在 ');
-
-      content.append(() => {
+      content.append('找不到仓库？请在 ').append(() => {
         let a_element = $('<a></a>');
         a_element.attr('href', `${settings_url}/${installation_id}`);
         a_element.attr('target', '_blank');
         a_element.text('GitHub');
 
         return a_element;
-      });
-
-      content.append(' 添加仓库');
+      }).append(' 添加仓库');
 
       repos_element.append('<p></p>').append(content);
     }

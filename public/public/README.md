@@ -28,6 +28,20 @@
 
 ## 前端构建工具
 
+* Node & NPM
+
+```bash
+# global
+$ npm i -g cross-env 
+
+# local
+$ npm install
+```
+
 ### Gulp
 
 ### webpack
+
+```bash
+$ npm run webpack-pro
+```
