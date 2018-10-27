@@ -24,8 +24,18 @@ class RunData
 
     public $conclusion = null;
 
+    /**
+     * @var string|null
+     *
+     * PCIT - Branch
+     */
     public $title = null;
 
+    /**
+     * @var string|null
+     *
+     * Build Event is Push Completed #126-339
+     */
     public $summary = null;
 
     public $text = null;

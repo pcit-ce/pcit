@@ -2,14 +2,12 @@
 
 ## 运行环境准备
 
-安装好 Docker 并克隆部署环境（LNMP）
+安装好 Docker 并克隆 LNMP 部署环境
 
 ```bash
-$ git clone --depth=1 https://github.com/khs1994-docker/lnmp
+$ git clone --depth=1 https://github.com/khs1994-docker/lnmp ~/lnmp
 
-$ cd lnmp
-
-$ ./lnmp-docker pcit-up
+$ cd ~/lnmp
 ```
 
 ## 准备网站 TLS 证书
@@ -22,15 +20,13 @@ $ ./lnmp-docker pcit-up
 
 ## 新建 GitHub OAuth App
 
-在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/applications/new) 新建 OAuth App
+在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App，用于 **OAuth2** 账号体系
 
 部分重要信息填写如下：
 
 * `Authorization callback URL` OAuth 回调地址 https://ci.example.com:port/oauth/github
 
 ## 新建 GitHub App
-
-在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App，用于 **OAuth2** 账号体系
 
 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps/new) 新建 GitHub App
 
@@ -44,15 +40,13 @@ $ ./lnmp-docker pcit-up
 
 在 GitHub App 设置(General)->Private keys->右边按钮(Generate a private key)，下载到本地
 
-假设该私钥文件名为 `pcit.2018-04-28.private-key.pem`
+例如该私钥文件名为 `pcit.2018-04-28.private-key.pem`
 
-我们需要将其改名为 `private.key`
-
-放入到 `~/lnmp/pcit/github_app` 目录中
+我们需要将其改名为 `private.key`，之后放入到 `~/lnmp/pcit/key` 目录中
 
 ## 填写关键信息
 
-编辑 `~/lnmp/pcit/.pcit.env` 文件，设置好相关变量，变量含义请查看 [ENV](env.md)
+编辑 `~/lnmp/pcit/.env.development` 文件，设置好相关变量，变量含义请查看 [ENV](env.md)
 
 ## 启动
 

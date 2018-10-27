@@ -10,7 +10,7 @@ use App\Notifications\GitHubAppChecks;
 use Exception;
 use PCIT\Support\CI;
 
-class Kernel
+abstract class Kernel
 {
     protected static $header = <<<'EOF'
 # About PCIT (PHP CI TOOLKIT)

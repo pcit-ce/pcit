@@ -80,6 +80,7 @@ class Issues
             'updated_at' => $updated_at,
             'closed_at' => $closed_at,
             'account' => (new Account($repository_owner, $org)),
+            'action' => $action,
         ];
     }
 

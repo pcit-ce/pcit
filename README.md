@@ -30,7 +30,11 @@
 
 ## 愿景
 
-在 **2020** 年将 PCIT 打造成为国内具有一定影响力的智能化 CI/CD 系统。
+将 PCIT 打造成为国内具有一定影响力的 **智能化** CI/CD 系统。
+
+## 博客
+
+将来我会在 https://blog.ci.khs1994.com 中对 PCIT 所涉及的概念进行系统讲解，敬请期待。
 
 ## 什么是持续集成 Continuous Integration (CI)?
 
@@ -119,27 +123,26 @@ $ git clone https://github.com/khs1994-docker/lnmp.git ~/lnmp
 # 中国镜像
 # $ git clone https://gitee.com/khs1994-docker/lnmp.git ~/lnmp
 
-$ composer create-project khs1994/pcit ~/lnmp/app/pcit
-# $ cd ~/lnmp ; lnmp-composer create-project khs1994/pcit app/pcit
-
-$ cd lnmp
+$ cd ~/lnmp
 ```
 
 **1.** 在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App，用于 **OAuth2** 账号体系
 
 **2.** 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 GitHub App
 
-**3.** 编辑 `~/lnmp/app/public/.env.development` 文件中的变量，之后启动 PCIT
+**3.** 准备证书文件，包括网站证书以及 GitHub App 的私钥证书
+
+**4.** 编辑 `~/lnmp/pcit/.env.development` 文件中的变量，之后启动 PCIT
 
 ```bash
 $ ./lnmp-docker pcit-up
 ```
 
-**4.** 点击刚才注册好的 GitHub App，选择仓库进行安装。
+**5.** 点击刚才注册好的 GitHub App 地址为 https://github.com/apps/YOUR_APP_NAME ，进行安装。
 
-**5.** Git 仓库根目录包含 `.pcit.yml` 文件，推送到 GitHub，在 Commit 详情处查看构建。
+**6.** Git 仓库根目录包含 `.pcit.yml` 文件，推送到 GitHub，在 Commit 详情处查看构建。
 
-更多信息请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
+详细的步骤请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
 
 ### 视频教程
 

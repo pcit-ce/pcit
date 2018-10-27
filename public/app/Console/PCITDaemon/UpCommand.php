@@ -33,6 +33,7 @@ class UpCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
+        // 数据库迁移
         try {
             sleep(5);
 
@@ -47,6 +48,10 @@ class UpCommand extends Command
         Log::debug(__FILE__, __LINE__, 'Start Memory is '.memory_get_usage(), [], Log::INFO);
 
         set_time_limit(0);
+
+        // 进行系统检查
+
+        $this->check();
 
         if (PHP_OS === 'Linux') {
             // http://www.laruence.com/2009/06/11/930.html
@@ -75,7 +80,7 @@ class UpCommand extends Command
     /**
      * @throws Exception
      */
-    public function process_execute(): void
+    private function process_execute(): void
     {
         //创建子进程
         $pid = pcntl_fork();
@@ -96,6 +101,19 @@ class UpCommand extends Command
             if (pcntl_wifexited($status)) {
                 return;
             }
+        }
+    }
+
+    private function check(): void
+    {
+        // GitHub App private key
+        $private_key_root = base_path().'/public/storage/private_key';
+        $private_key = $private_key_root.'/private.key';
+        $public_key = $private_key_root.'/public.key';
+
+        if ((!file_exists($private_key)) or (!file_exists($public_key))) {
+            echo "\n\n\nGitHub App private key not found\n\n\n";
+            exit;
         }
     }
 }

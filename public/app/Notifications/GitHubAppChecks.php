@@ -82,10 +82,10 @@ class GitHubAppChecks
             $status_use_in_title = 'in Progress';
         }
 
-        $name = $name ??
-            'Build Event is '.ucfirst($event_type).' '.ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
+        $name = $name ?? 'PCIT - '.ucfirst($event_type).' #'.$build_key_id.'-'.$job_key_id;
 
-        $title = $title ?? Env::get('CI_NAME').' Build is '.ucfirst($status_use_in_title);
+        $title = $title ??
+            ucfirst($event_type).' - '.ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
 
         $summary = $summary ??
             'This Repository Build Powered By [PCIT](https://github.com/khs1994-php/pcit)';
