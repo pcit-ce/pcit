@@ -151,7 +151,7 @@ class PCIT extends Container
         set_time_limit(0);
 
         $this['curl_timeout'] = 100;
-        $this['request'] = (Request::createFromGlobals());
+        $this['request'] = Request::createFromGlobals();
 
         // 注册服务提供器
         $this->registerProviders();

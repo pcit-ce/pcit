@@ -4,11 +4,11 @@
 
 use Symfony\Component\Console\Application;
 
-require __DIR__.'/../../public/bootstrap/app.php';
+require __DIR__.'/../../framework/bootstrap/app.php';
 
 $cli = new Application('PCIT CLI', 'v18.06');
 
-$fh = opendir(__DIR__.'/../../public/app/Console/PCIT/Repo');
+$fh = opendir(base_path().'app/Console/PCIT/Repo');
 
 while ($file = readdir($fh)) {
     if ('.' === $file or '..' === $file) {
@@ -20,7 +20,7 @@ while ($file = readdir($fh)) {
     $cli->add(new $class());
 }
 
-$fh = opendir(__DIR__.'/../../public/app/Console/PCIT');
+$fh = opendir(base_path().'app/Console/PCIT');
 
 if ($fh) {
     while (false !== ($file = readdir($fh))) {

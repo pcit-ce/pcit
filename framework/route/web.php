@@ -236,3 +236,11 @@ Route::get('websocket/server', 'Demo\WebSocket\WebSocketController');
 Route::get('sse/server', 'Demo\SSE\SSEController');
 Route::get('websocket/client', 'Demo\WebSocket\WebSocketController@client');
 Route::get('sse/client', 'Demo\SSE\SSEController@client');
+
+/* Test */
+
+if (\PCIT\Support\CI::environment('testing')) {
+    Route::get('test', function () {
+        return 1;
+    });
+}

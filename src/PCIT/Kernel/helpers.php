@@ -29,7 +29,7 @@ if (!function_exists('base_path')) {
 if (!function_exists('view')) {
     function view($path): void
     {
-        include base_path().'public/public/'.$path;
+        include base_path().'public/'.$path;
 
         exit;
     }

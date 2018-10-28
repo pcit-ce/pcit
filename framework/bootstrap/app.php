@@ -20,8 +20,16 @@ if ($app_env = Env::get('APP_ENV')) {
     $env_file = '.env.'.$app_env;
 }
 
-if (file_exists(__DIR__.'/../../public/'.$env_file)) {
-    (new Dotenv(__DIR__.'/../../public', $env_file))->load();
+if (file_exists(base_path().$env_file)) {
+    (new Dotenv(base_path(), $env_file))->load();
 }
 
 date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
+
+$app = new \PCIT\Foundation\Application();
+
+$app[\App\Http\Kernel::class] = function ($app) {
+    return new \App\Http\Kernel();
+};
+
+return $app;

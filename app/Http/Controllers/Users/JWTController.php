@@ -51,7 +51,7 @@ class JWTController
 
         list('git_type' => $git_type, 'uid' => $uid, 'exp' => $exp) = (array) JWT::decode(
             $token,
-            __DIR__.'/../../../../storage/private_key/public.key'
+            base_path().'framework/storage/private_key/public.key'
         );
 
         if ($exp < time()) {
@@ -180,7 +180,7 @@ class JWTController
         // 验证通过 返回 jwt
         a:
         return JWT::encode(
-            __DIR__.'/../../../../storage/private_key/private.key',
+            base_path().'framework/storage/private_key/private.key',
             (string) $git_type,
             (string) $username,
             (int) $uid,

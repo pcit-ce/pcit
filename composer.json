@@ -55,7 +55,7 @@
   "autoload": {
     "psr-4": {
       "PCIT\\": "src/PCIT/",
-      "App\\": "public/app/"
+      "App\\": "app/"
     },
     "files": [
       "src/PCIT/Kernel/helpers.php"

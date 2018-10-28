@@ -19,8 +19,8 @@ __pycache__
 
 # env
 
-.env*
-
+.env
+.env.*
 !.env.example
 
 # coerage report

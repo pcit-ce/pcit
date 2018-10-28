@@ -107,7 +107,7 @@ class UpCommand extends Command
     private function check(): void
     {
         // GitHub App private key
-        $private_key_root = base_path().'/public/storage/private_key';
+        $private_key_root = base_path().'/framework/storage/private_key';
         $private_key = $private_key_root.'/private.key';
         $public_key = $private_key_root.'/public.key';
 

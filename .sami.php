@@ -21,7 +21,7 @@ $iterator = Finder::create()
     ->name('*.php')
     // ->exclude('docs')
     ->in(__DIR__.'/src')
-    ->in(__DIR__.'/public');
+    ->in(__DIR__.'/app');
 
 // $versions = GitVersionCollection::create($dir)
 //     ->addFromTags('18.*.*')// add tag

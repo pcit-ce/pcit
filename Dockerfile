@@ -13,8 +13,8 @@ FROM node:${NODE_VERSION} as frontend
 
 COPY . /app/pcit
 
-RUN cd /app/pcit/public/public \
-      && mkdir -p /app/pcit/public/storage/private_key \
+RUN cd /app/pcit/public \
+      && mkdir -p /app/pcit/framework/storage/private_key \
       && npm install -g cross-env \
       && npm install \
       && npm run build \

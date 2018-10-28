@@ -4,11 +4,11 @@
 vendor
 composer.lock
 
-public/public/node_modules
-public/public/package-lock.json
+public/node_modules
+public/package-lock.json
 
-public/.env.*
-public/.env
-!public/.env.example
+.env.*
+.env
+.env.example
 
-public/storage/private_key
+framework/storage/private_key

@@ -76,7 +76,7 @@ class GetAccessToken
 
         $access_token = pcit()->github_apps_installations->getAccessToken(
             (int) $installation_id,
-            __DIR__.'/../storage/private_key/private.key'
+            base_path().'framework/storage/private_key/private.key'
         );
 
         return $access_token;

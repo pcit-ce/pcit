@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Webhooks;
 use Exception;
 use PCIT\PCIT;
 
-class Kernel
+abstract class Kernel
 {
     protected static $git_type;
 

@@ -12,7 +12,7 @@ use PCIT\PCIT;
 use PCIT\Support\DB;
 use PHPUnit\Framework\TestCase;
 
-class PCITTestCase extends TestCase
+abstract class PCITTestCase extends TestCase
 {
     private static $test;
 
@@ -42,8 +42,8 @@ class PCITTestCase extends TestCase
      */
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
-        if (file_exists(__DIR__.'/../../public/.env.testing')) {
-            (new Dotenv(__DIR__.'/../../public', '.env.testing'))->load();
+        if (file_exists(base_path().'.env.testing')) {
+            (new Dotenv(base_path(), '.env.testing'))->load();
         }
 
         ob_start();

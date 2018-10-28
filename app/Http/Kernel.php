@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http;
 
-class Kernel
+class Kernel extends \PCIT\Foundation\Http\Kernel
 {
 }

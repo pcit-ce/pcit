@@ -1,3 +1,4 @@
-.env*
-!.env.example
-phpinfo.php
+test
+
+# TODO
+# /assets

@@ -17,7 +17,7 @@ class DockerProvider implements ServiceProviderInterface
             if (Env::get('CI_DOCKER_TLS_VERIFY', false)) {
                 return Docker::docker(Docker::createOptionArray(Env::get('CI_DOCKER_HOST'),
                     true,
-                    __DIR__.'/../../../public/storage/private_key',
+                    base_path().'framework/storage/private_key',
                     null,
                     null,
                     null,
