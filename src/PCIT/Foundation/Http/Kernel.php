@@ -11,17 +11,9 @@ use Throwable;
 
 class Kernel
 {
-    public function handle(...$args): void
+    private function sendRequestThroughRouter()
     {
         $debug = true === Env::get('CI_DEBUG', false);
-
-        ini_set('session.cookie_path', '/');
-        ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
-        ini_set('session.gc_maxlifetime', '690000'); // s
-        ini_set('session.cookie_lifetime', '690000'); // s
-        ini_set('session.cookie_secure', 'On');
-
-        // session_set_cookie_params(1800 , '/', '.'getenv('CI_SESSION_DOMAIN', true));
 
         if ('/index.php' === $_SERVER['REQUEST_URI']) {
             Response::redirect('dashboard');
@@ -29,14 +21,14 @@ class Kernel
         }
 
         try {
-            require_once base_path().'framework/route/web.php';
+            require_once base_path().'framework/routes/web.php';
         } catch (Throwable $e) {
             if ('Finish' === $e->getMessage()) {
                 $output = Route::$output;
 
                 switch (\gettype($output)) {
                     case 'array':
-                        Response::json($output, PCIT_START);
+                        return Response::json($output, PCIT_START);
 
                         break;
                     case 'integer':
@@ -51,7 +43,7 @@ class Kernel
                 exit;
             }
 
-            Response::json(array_filter([
+            return Response::json(array_filter([
                 'code' => $e->getCode() ?? 500,
                 'message' => $e->getMessage() ?? 'ERROR',
                 'documentation_url' => 'https://github.com/khs1994-php/pcit/tree/master/docs/api',
@@ -59,12 +51,10 @@ class Kernel
                 'line' => $debug ? $e->getLine() : null,
                 'details' => $debug ? (array) $e->getPrevious() : null,
             ]), PCIT_START);
-
-            exit;
         }
 
         // 路由控制器填写错误
-        Response::json(array_filter([
+        return Response::json(array_filter([
             'code' => 404,
             'message' => 'Not Found',
             'api_url' => getenv('CI_HOST').'/api',
@@ -72,5 +62,20 @@ class Kernel
             'method' => $debug ? Route::$method ?? null : null,
             'details' => $debug ? '路由控制器填写错误' : null,
         ]), PCIT_START);
+    }
+
+    public function handle($requests)
+    {
+        ini_set('session.cookie_path', '/');
+        ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
+        ini_set('session.gc_maxlifetime', '690000'); // s
+        ini_set('session.cookie_lifetime', '690000'); // s
+        ini_set('session.cookie_secure', 'On');
+
+        // session_set_cookie_params(1800 , '/', '.'getenv('CI_SESSION_DOMAIN', true));
+
+        $response = $this->sendRequestThroughRouter();
+
+        return $response;
     }
 }

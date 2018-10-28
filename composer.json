@@ -25,6 +25,7 @@
     "ext-json": "*",
     "ext-redis": "*",
     "doctrine/cache": "^1.6",
+    "filp/whoops": "^2.3",
     "firebase/php-jwt": "^5.0",
     "khs1994/curl": "~18.06.0",
     "khs1994/docker": "~18.06.02",

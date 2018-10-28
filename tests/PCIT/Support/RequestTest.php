@@ -16,4 +16,17 @@ class RequestTest extends PCITTestCase
 
         $this->assertArrayHasKey('next', Request::parseLink($link));
     }
+
+    /**
+     * @group dont-test
+     */
+    public function test(): void
+    {
+        $this->getTest()
+            ->request = \Symfony\Component\HttpFoundation\Request::create('/test');
+
+        $response = '';
+
+        $this->assertEquals(1, $response);
+    }
 }

@@ -8,7 +8,7 @@ use PCIT\Support\Env;
 
 require __DIR__.'/../../vendor/autoload.php';
 
-if ('cli' !== \PHP_SAPI) {
+if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
 
@@ -26,7 +26,7 @@ if (file_exists(base_path().$env_file)) {
 
 date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
 
-$app = new \PCIT\Foundation\Application();
+$app = new \PCIT\Foundation\Application([]);
 
 $app[\App\Http\Kernel::class] = function ($app) {
     return new \App\Http\Kernel();

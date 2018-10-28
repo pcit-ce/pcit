@@ -20,8 +20,10 @@ class Response extends \Symfony\Component\HttpFoundation\Response
     /**
      * @param array $array
      * @param float $startedAt
+     *
+     * @return false|string
      */
-    public static function json(array $array, float $startedAt): void
+    public static function json(array $array, float $startedAt)
     {
         header('content-type: application/json;charset=utf-8');
         $time = microtime(true) - $startedAt;
@@ -34,7 +36,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response
             unset($array['code']);
         }
 
-        echo json_encode($array);
+        return new self(json_encode($array), $code);
     }
 
     /**
