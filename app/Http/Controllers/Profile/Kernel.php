@@ -10,7 +10,7 @@ use PCIT\Support\Env;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 
-class Kernel
+abstract class Kernel
 {
     /**
      * @var string

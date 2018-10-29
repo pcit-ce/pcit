@@ -28,7 +28,10 @@ class Kernel
 
                 switch (\gettype($output)) {
                     case 'array':
-                        return Response::json($output, PCIT_START);
+                        return Response::json(
+                            array_merge(
+                                $output, ['code' => $e->getCode()]
+                            ), PCIT_START);
 
                         break;
                     case 'integer':

@@ -13,11 +13,12 @@ module.exports = {
     'profile': __dirname + '/js/profile/main.js',
     'login': __dirname + '/js/login/main.js',
     'builds': path.resolve('./js/builds/main.js'),
+    'demo': path.resolve('./js/demo/main.js'),
   },
   output: {
     path: __dirname + '/assets/js',
     filename: "[name].js",
-    pathinfo: true
+    // pathinfo: true
   },
   devtool: 'none',
   devServer: {

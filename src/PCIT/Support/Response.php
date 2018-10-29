@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Support;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class Response extends \Symfony\Component\HttpFoundation\Response
 {
     const HTTP_CODE = [
@@ -25,7 +27,6 @@ class Response extends \Symfony\Component\HttpFoundation\Response
      */
     public static function json(array $array, float $startedAt)
     {
-        header('content-type: application/json;charset=utf-8');
         $time = microtime(true) - $startedAt;
         header("X-Runtime-rack: $time");
         $code = $array['code'] ?? 200;
@@ -36,7 +37,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response
             unset($array['code']);
         }
 
-        return new self(json_encode($array), $code);
+        return new JsonResponse($array, $code);
     }
 
     /**

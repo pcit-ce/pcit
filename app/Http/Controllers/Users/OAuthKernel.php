@@ -13,7 +13,7 @@ use PCIT\Service\OAuth\GitHubClient;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 
-class OAuthKernel
+abstract class OAuthKernel
 {
     /**
      * @var GitHubClient|GitHubClient|CodingClient|GiteeClient
