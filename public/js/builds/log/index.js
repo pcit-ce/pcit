@@ -42,7 +42,7 @@ module.exports = {
     }).append(() => {
 
       let build_status_element = $('<div class="build_status"></div>');
-      build_status_element.append(build_status);
+      build_status_element.append('#' + build_id + ' ' + build_status);
 
       return build_status_element;
     }).append(() => {

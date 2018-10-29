@@ -309,27 +309,35 @@ EOF;
     /**
      * 某仓库的构建列表.
      *
-     * @param string   $git_type
      * @param int      $rid
      * @param int|null $before
      * @param int|null $limit
      * @param bool     $pr
+     * @param string   $git_type
+     * @param bool     $all
      *
      * @return array
      *
      * @throws Exception
      */
-    public static function allByRid(int $rid, ?int $before, ?int $limit, bool $pr, $git_type = 'github')
+    public static function allByRid(int $rid,
+                                    ?int $before,
+                                    ?int $limit,
+                                    bool $pr,
+                                    $all = false,
+                                    $git_type = 'github')
     {
         $before = $before ?? self::getLastKeyId();
 
         $limit = $limit ?? 25;
 
+        $exclude = $all ? 'null' : 'skip';
+
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag,commit_message,compare,
 committer_name,committer_username,build_status,event_type,pull_request_number
 FROM builds WHERE
-id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('skip')
+id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('$exclude')
 ORDER BY id DESC LIMIT $limit
 EOF;
         if ($pr) {

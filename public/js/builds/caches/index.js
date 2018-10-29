@@ -3,7 +3,7 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('caches');
+  display_element.append('caches' + JSON.stringify(data));
 }
 
 module.exports = {

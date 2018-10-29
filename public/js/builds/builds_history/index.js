@@ -1,4 +1,4 @@
-const common = require('../common');
+const {column_span_click, column_click_handle} = require('../common');
 const git = require('../../common/git');
 const log = require('../log');
 
@@ -7,10 +7,30 @@ function display(data, username, repo, url_array) {
 
   display_element.empty();
 
+  url_array = url_array();
+
+  console.log(url_array);
+
   if (8 === url_array.length) {
     if (0 === data.length || 'error' === data) {
       display_element.append('Oops, we couldn\'t find that build!');
     } else {
+      let column_el = $('#pull_requests');
+      column_el.after('<span id="column_ico"> > <span>');
+
+      column_el = $('#column_ico');
+
+      column_el.after(() => {
+        let span_el = $('<span id="build_id"></span>');
+        span_el.append('Build #' + data.id);
+
+        return span_el;
+
+      });
+
+      // build_id span 元素被选中
+      $('#build_id').trigger('click');
+
       log.show(data);
     }
 
@@ -91,7 +111,7 @@ function display(data, username, repo, url_array) {
         return a_element;
       }).append(() => {
         let a_element = $('<a class="build_status"></a>');
-        a_element.append(`# ${build_id} ${build_status}`);
+        a_element.append(`#${build_id} ${build_status}`);
         a_element.attr('href', `${location.href}/${build_id}`);
         a_element.attr('target', '_block');
 
@@ -126,23 +146,26 @@ function display(data, username, repo, url_array) {
 
 module.exports = {
   handle: (git_repo_full_name, username, repo, url_array) => {
-    common.column_span_click('builds');
 
     let build_id;
 
-    if (8 === url_array.length) {
-      build_id = url_array[7];
+    if (8 === url_array().length) {
+      build_id = url_array()[7];
+    } else {
+      column_span_click('builds');
     }
+
+    console.log(url_array());
 
     if (build_id) {
       $.ajax({
         type: 'GET',
         url: '/api/build/' + build_id,
         success: function (data) {
-          display('builds', data);
+          display(data, username, repo, url_array);
         },
         error: function (data) {
-          display('builds', 'error');
+          display('error');
           console.log(data);
         }
       });

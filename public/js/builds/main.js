@@ -2,19 +2,7 @@ const header = require('../common/header');
 const footer = require('../common/footer');
 const git = require('../common/git');
 const title = require('./title');
-const {
-  url,
-  url_array,
-  baseUrl,
-  git_type,
-  username,
-  repo,
-  repo_full_name,
-  git_repo_full_name,
-  repo_full_name_url,
-  type_from_url,
-  baseTitle,
-} = require('./data');
+const url = require('./url');
 
 const current = require('./current');
 const branches = require('./branches');
@@ -30,32 +18,51 @@ const jobs = require('./jobs');
 header.show();
 footer.show();
 
+const repo_full_name = url.getRepoFullName;
+const git_repo_full_name = url.getGitRepoFullName;
+const username = url.getUsername;
+const repo = url.getRepo;
+const type = url.getType;
+const repo_full_name_url = url.getRepoFullNameUrl;
+const git_type = url.getGitType;
+const baseTitle = url.baseTitle;
+
+const common = require('./common');
 // http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
 // 事件冒泡 点击了 子元素 会向上传递 即也点击了父元素
 
 $(".column").click(function (event) {
   let id = event.target.id;
 
+  console.log('事件冒泡 ' + id);
+
   if (id === 'more_options') {
     return;
   }
 
-  console.log(id);
-
-  if ('current' === id) {
-    history.pushState({}, baseTitle, baseUrl + '/' + git_repo_full_name);
-
-    history.replaceState(null, baseTitle, baseUrl + '/' + git_repo_full_name);
-  } else {
-    history.pushState({}, baseTitle, baseUrl + '/' + git_repo_full_name + '/' + id);
-
-    history.replaceState(null, baseTitle, baseUrl + '/' + git_repo_full_name + '/' + id);
+  if (id === 'build_id') {
+    // build_id 元素被点击
+    common.column_click_handle(event.target.id);
   }
 
   title.show(baseTitle, id);
 });
 
+function changeUrl(id) {
+  if ('current' === id) {
+    history.pushState({}, baseTitle, repo_full_name_url);
+
+    history.replaceState(null, baseTitle, repo_full_name_url);
+  } else {
+    history.pushState({}, baseTitle, repo_full_name_url + '/' + id);
+
+    history.replaceState(null, baseTitle, repo_full_name_url + '/' + id);
+  }
+}
+
 function column_el_click(id) {
+  changeUrl(id);
+
   switch (id) {
     case 'current':
       current.handle(git_repo_full_name, username, repo);
@@ -67,7 +74,7 @@ function column_el_click(id) {
       break;
 
     case 'builds':
-      builds_history.handle(git_repo_full_name, username, repo, url_array);
+      builds_history.handle(git_repo_full_name, username, repo, url.getUrlWithArray);
 
       break;
 
@@ -88,33 +95,19 @@ function mouseoverMethod(event) {
   event.target.style.borderBottomStyle = 'solid';
 }
 
-let column_el = $('.column span');
-
 // https://www.cnblogs.com/yangzhi/p/3576520.html
-$(column_el).on({
+$('.column span').on({
   'click': function (event) {
 
+    let column_el = $('.column span');
     let target = event.target;
     let target_id = target.id;
 
+    console.log(target_id);
+
     column_el_click(target_id);
-
-    // 移除其他元素的颜色
-    column_el.css('color', '#000000').css('border-bottom-style', 'none');
-    // 启用其他元素的鼠标移出事件
-    column_el.on({
-      'mouseout': (event) => {
-        mouseoutMethod(event);
-      }
-    });
-
-    // 关闭该元素的鼠标移出事件
-    $('#' + target_id).off('mouseout');
-
-    // 最后对被点击元素
-    target.style.color = 'green';
-    target.style.borderBottomStyle = 'solid';
-
+    common.column_remove();
+    common.column_click_handle(target.id);
   },
   'mouseover': function (event) {
     mouseoverMethod(event);
@@ -126,8 +119,31 @@ $(column_el).on({
 
 $("#more_options").on({
   'click': function (event) {
+    console.log(url.getUrlWithArray());
+
     let id = event.target.id;
+
+    if (id === 'more_options') {
+      return;
+    }
+
+    // if (url.getUrlWithArray().length === 8) {
+    //   return;
+    // }
+
     let token = Cookies.get(git_type + '_api_token');
+
+    changeUrl(id);
+
+    common.column_remove();
+
+    $('#pull_requests').after(() => {
+      let span_el = $(`<span id="column_more_options"></span>`);
+
+      return span_el.append((id.slice(0, 1)).toUpperCase() + id.slice(1));
+    });
+
+    common.column_click_handle('column_more_options');
 
     switch (id) {
       case "settings":
@@ -150,10 +166,9 @@ $("#more_options").on({
 });
 
 jQuery(document).ready(function () {
-
-  title.show(baseTitle, type_from_url);
-
   let content = jQuery('<h2></h2>');
+
+  title.show(baseTitle, type);
 
   content.append(() => {
     return git.format(git_type) + repo_full_name;
@@ -171,11 +186,11 @@ jQuery(document).ready(function () {
 
   $('#repo').append(content);
 
-  console.log(type_from_url);
+  console.log(type);
 
   let token = Cookies.get(git_type + '_api_token');
 
-  switch (type_from_url) {
+  switch (type) {
 
     case 'current':
       current.handle(git_repo_full_name, username, repo);
@@ -187,7 +202,7 @@ jQuery(document).ready(function () {
       break;
 
     case 'builds':
-      builds_history.handle(git_repo_full_name, username, repo, url_array);
+      builds_history.handle(git_repo_full_name, username, repo, url.getUrlWithArray);
 
       break;
 
@@ -204,7 +219,7 @@ jQuery(document).ready(function () {
       settings.handle(repo_full_name, token);
       break;
 
-    case 'request':
+    case 'requests':
       requests.handle(repo_full_name, token);
       break;
 

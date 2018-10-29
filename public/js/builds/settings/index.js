@@ -3,7 +3,7 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('settings' + data.stringify());
+  display_element.append('settings' + JSON.stringify(data));
 }
 
 module.exports = {

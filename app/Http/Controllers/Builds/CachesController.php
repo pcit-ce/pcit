@@ -21,7 +21,7 @@ class CachesController
     {
         list($username, $repo_name) = $args;
 
-        JWTController::checkByRepo(...$args);
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
     }
 
     /**

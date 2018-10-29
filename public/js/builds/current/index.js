@@ -1,4 +1,4 @@
-const common = require('../common');
+const {column_span_click} = require('../common');
 const log = require('../log');
 
 function display(data, username, repo) {
@@ -15,7 +15,7 @@ function display(data, username, repo) {
 
 module.exports = {
   handle: (git_repo_full_name, username, repo) => {
-    common.column_span_click('current');
+    column_span_click('current');
 
     $.ajax({
       type: "GET",

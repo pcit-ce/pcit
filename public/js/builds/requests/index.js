@@ -2,7 +2,7 @@ function display(data) {
   let display_element = $("#display");
 
   display_element.empty();
-  display_element.append('requests' + data.stringify());
+  display_element.append('requests' + JSON.stringify(data));
 }
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     $.ajax({
       type: "get",
       url: '/api/repo/' + repo_full_name + '/requests',
-      herders: {
+      headers: {
         'Authorization': 'token ' + token
       },
       success: function (data) {
@@ -20,4 +20,3 @@ module.exports = {
     });
   },
 };
-

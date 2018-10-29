@@ -3,7 +3,7 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('triggerBuild' + data.stringify());
+  display_element.append('triggerBuild' + JSON.stringify(data));
 }
 
 module.exports = {

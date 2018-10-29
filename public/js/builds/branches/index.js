@@ -1,4 +1,4 @@
-const common = require('../common');
+const {column_span_click} = require('../common');
 
 function display(data) {
   let display_element = $("#display");
@@ -44,7 +44,7 @@ function display(data) {
 
 module.exports = {
   handle: (git_repo_full_name) => {
-    common.column_span_click('branches');
+    column_span_click('branches');
     $.ajax({
       type: "GET",
       url: '/api/repo/' + git_repo_full_name + '/branches',

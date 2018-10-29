@@ -53,7 +53,7 @@ abstract class Kernel
             $git_type.'_api_token',
             $api_token,
             time() + 24 * 60 * 60,
-            '',
+            '/',
             Env::get('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
         );
 

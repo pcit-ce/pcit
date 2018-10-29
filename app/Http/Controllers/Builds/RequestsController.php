@@ -28,11 +28,11 @@ class RequestsController
 
         list($username, $repo_name) = $args;
 
-        JWTController::checkByRepo(...$args);
+        list($uid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $output = Build::listByRid((int) $rid);
+        $output = Build::allByRid((int) $rid, null, null, true, true, $git_type);
 
         if ($output) {
             return $output;

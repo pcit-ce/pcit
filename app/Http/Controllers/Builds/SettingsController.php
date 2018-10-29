@@ -25,7 +25,7 @@ class SettingsController
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        return Setting::list($git_type, $rid);
+        return Setting::list($rid, $git_type);
     }
 
     /**
@@ -45,7 +45,7 @@ class SettingsController
 
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        return Setting::get($git_type, $rid, $setting_name);
+        return Setting::get($rid, $setting_name, $git_type);
     }
 
     /**
