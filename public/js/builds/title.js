@@ -1,3 +1,5 @@
+'use strict';
+
 const git = require('../common/git');
 const app = require('../common/app');
 
@@ -6,17 +8,17 @@ module.exports = {
     let title;
 
     switch (id) {
-      case "pull_requests":
+      case 'pull_requests':
         title = 'Pull Requests - ' + baseTitle;
         break;
-      case "builds":
+      case 'builds':
         title = 'Builds - ' + baseTitle;
         break;
       default:
         title = baseTitle;
     }
 
-    $("title").text(title);
+    $('title').text(title);
   },
 
   base: (gitType, username, repo) => {

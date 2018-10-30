@@ -1,8 +1,10 @@
+'use strict';
+
 const {column_span_click} = require('../common');
 const git = require('../../common/git');
 
 function display(data, username, repo, repo_full_name_url) {
-  let display_element = $("#display");
+  let display_element = $('#display');
 
   display_element.empty();
 
@@ -14,9 +16,7 @@ function display(data, username, repo, repo_full_name_url) {
 
     ul_el.height((data.length + 1) * 100);
 
-    let i = data.length + 1;
     $.each(data, function (id, status) {
-      i--;
 
       let {
         pull_request_number: pull_request_id, id: build_id, branch, committer_username,
@@ -30,7 +30,7 @@ function display(data, username, repo, repo_full_name_url) {
       commit_id = commit_id.substr(0, 7);
 
       if (null == started_at) {
-        started_at = 'Pending'
+        started_at = 'Pending';
       } else {
         let d;
         d = new Date(started_at * 1000);
@@ -99,7 +99,7 @@ function display(data, username, repo, repo_full_name_url) {
         let a_el = $('<a class="build_status"></a>');
         a_el.append(build_status);
         a_el.attr('href', `${repo_full_name_url}/builds/${build_id}`);
-        a_el.attr('target', '_block');
+        a_el.attr('target', '_self');
 
         return a_el;
       }).append(() => {
@@ -123,7 +123,7 @@ function display(data, username, repo, repo_full_name_url) {
       ul_el.append(li_el);
 
     });
-    display_element.append(ul_el)
+    display_element.append(ul_el);
   }
 }
 
@@ -138,6 +138,6 @@ module.exports = {
       success: function (data) {
         display(data, username, repo, repo_full_name_url);
       }
-    })
+    });
   },
 };

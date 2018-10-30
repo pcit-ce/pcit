@@ -1,11 +1,22 @@
+'use strict';
+
 function mouseoutMethod(event) {
   event.target.style.color = 'black';
   event.target.style.borderBottomStyle = 'none';
 }
 
+// eslint-disable-next-line no-unused-vars
 function mouseoverMethod(event) {
   event.target.style.color = 'green';
   event.target.style.borderBottomStyle = 'solid';
+}
+
+function more_options_click_handler(id) {
+  $('#pull_requests').after(() => {
+    let span_el = $('<span id="column_more_options"></span>');
+
+    return span_el.append((id.slice(0, 1)).toUpperCase() + id.slice(1));
+  });
 }
 
 module.exports = {
@@ -16,6 +27,14 @@ module.exports = {
   },
   column_click_handle: (id) => {
     let column_el = $('.column span');
+
+    if (-1 !== $.inArray(id, ['', 'settings', 'requests', 'caches', 'trigger_build'])) {
+      more_options_click_handler(id);
+      column_el.css('color', '#000000').css('border-bottom-style', 'none');
+      $('.column #column_more_options').css('color', 'green').css('border-bottom-style', 'solid');
+
+      return;
+    }
 
     // 移除其他元素的颜色
     column_el.css('color', '#000000').css('border-bottom-style', 'none');

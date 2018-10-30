@@ -1,9 +1,11 @@
-const {column_span_click, column_click_handle} = require('../common');
+'use strict';
+
+const {column_span_click} = require('../common');
 const git = require('../../common/git');
 const log = require('../log');
 
 function display(data, username, repo, url_array) {
-  let display_element = $("#display");
+  let display_element = $('#display');
 
   display_element.empty();
 
@@ -12,6 +14,7 @@ function display(data, username, repo, url_array) {
   console.log(url_array);
 
   if (8 === url_array.length) {
+
     if (0 === data.length || 'error' === data) {
       display_element.append('Oops, we couldn\'t find that build!');
     } else {
@@ -50,7 +53,7 @@ function display(data, username, repo, url_array) {
       commit_id = commit_id.substr(0, 7);
 
       if (null == started_at) {
-        started_at = 'Pending'
+        started_at = 'Pending';
       } else {
         let d;
         d = new Date(parseInt(started_at) * 1000);
@@ -58,7 +61,7 @@ function display(data, username, repo, url_array) {
       }
 
       if (null == stopped_at) {
-        stopped_at = 'Pending'
+        stopped_at = 'Pending';
       } else {
         let d;
         d = new Date(parseInt(stopped_at) * 1000);
@@ -113,7 +116,7 @@ function display(data, username, repo, url_array) {
         let a_element = $('<a class="build_status"></a>');
         a_element.append(`#${build_id} ${build_status}`);
         a_element.attr('href', `${location.href}/${build_id}`);
-        a_element.attr('target', '_block');
+        a_element.attr('target', '_self');
 
         return a_element;
       }).append(() => {

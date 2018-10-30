@@ -1,9 +1,11 @@
+'use strict';
+
 const git = require('../../common/git');
 
 module.exports = {
   show: (data, username, repo) => {
     console.log(data);
-    let display_element = $("#display");
+    let display_element = $('#display');
     let {
       id: build_id, build_status, commit_id, commit_message, branch, committer_name,
       compare, stopped_at, jobs

@@ -1,5 +1,7 @@
+'use strict';
+
 function display(data) {
-  let display_element = $("#display");
+  let display_element = $('#display');
 
   display_element.empty();
 
@@ -11,7 +13,7 @@ module.exports = {
 
     console.log(location.href);
     $.ajax({
-      type: "get",
+      type: 'get',
       url: '/api/repo/' + repo_full_name + '/settings',
       headers: {
         'Authorization': 'token ' + token

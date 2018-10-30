@@ -83,6 +83,8 @@ jobs:
       script:
         - cd docs
         - docker run -it --rm -v $PWD:/srv/gitbook-src khs1994/gitbook
+        - sudo touch _book/CNAME
+        - sudo echo "docs.ci.khs1994.com" | sudo tee _book/CNAME
       deploy:
         provider: pages
         repo: khs1994-php/pcit-docs
@@ -96,6 +98,8 @@ jobs:
       script:
         - cd docs/api
         - docker run -it --rm -v $PWD:/srv/gitbook-src khs1994/gitbook
+        - sudo touch _book/CNAME
+        - echo "api.ci.khs1994.com" | sudo tee _book/CNAME
       deploy:
         provider: pages
         repo: khs1994-php/pcit-api-docs

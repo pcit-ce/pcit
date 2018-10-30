@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports.show = () => {
   $('footer').append(`
     <ul class="about">

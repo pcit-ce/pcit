@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports.show = () => {
   $('header').append(`
 <span class="ico"><img alt='pcit' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>

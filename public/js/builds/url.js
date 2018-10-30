@@ -1,3 +1,5 @@
+'use strict';
+
 let title = require('./title');
 
 function getUrl() {

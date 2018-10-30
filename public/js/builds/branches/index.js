@@ -1,7 +1,9 @@
+'use strict';
+
 const {column_span_click} = require('../common');
 
 function display(data) {
-  let display_element = $("#display");
+  let display_element = $('#display');
 
   display_element.empty();
 
@@ -27,18 +29,18 @@ function display(data) {
         }
 
         display_element.append(`<tr>
-<td><a href="${main}/${id}" target='_blank'># ${id} </a></td>
-<td>${nbsp}${status[0]}${nbsp}</td>
-<td>${nbsp}${status[2]}${nbsp}</td>
-<td>${nbsp}${stopped_at}${nbsp}</td>
+<td><a href="" target='_blank'># ${id} </a></td>
+<td>${status[0]}</td>
+<td>${status[2]}</td>
+<td>${stopped_at}</td>
 <td><a href="${status[4]}" target='_black'>${status[1]}</a></td>
 </tr>
 `);
       });
 
-      display_element.append("<hr>");
+      display_element.append('<hr>');
 
-    })
+    });
   }
 }
 
@@ -46,7 +48,7 @@ module.exports = {
   handle: (git_repo_full_name) => {
     column_span_click('branches');
     $.ajax({
-      type: "GET",
+      type: 'GET',
       url: '/api/repo/' + git_repo_full_name + '/branches',
       success: function (data) {
         display(data);

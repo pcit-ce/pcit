@@ -1,3 +1,5 @@
+'use strict';
+
 $('header').append(`<span class="ico"><img alt='pcit' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
 <span class="docs"><a href="//docs.ci.khs1994.com" target="_blank">Documentation</a></span>
 <span class="plugins"><a href="//docs.ci.khs1994.com/plugins/" target="_blank">Plugins</a></span>
@@ -44,15 +46,15 @@ let git_type = url_array[3];
 
 $(document).ready(function () {
   $.ajax({
-      type: 'GET',
-      url: '/api/repos/' + `${git_type}/${username}`,
-      success: function (data) {
-        $('.username_header').append(`${git_type} || ${username}`);
+    type: 'GET',
+    url: '/api/repos/' + `${git_type}/${username}`,
+    success: function (data) {
+      $('.username_header').append(`${git_type} || ${username}`);
 
-        repo(data);
-      }
+      repo(data);
     }
-  )
+  }
+  );
 });
 
 function repo(data) {

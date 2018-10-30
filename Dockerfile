@@ -11,12 +11,14 @@ ARG NODE_VERSION=alpine
 
 FROM node:${NODE_VERSION} as frontend
 
+ARG NODE_REGISTRY=https://registry.npmjs.org
+
 COPY . /app/pcit
 
 RUN cd /app/pcit/public \
       && mkdir -p /app/pcit/framework/storage/private_key \
       && npm install -g cross-env \
-      && npm install \
+      && npm install --registry=${NODE_REGISTRY} \
       && npm run build \
       && rm -rf node_modules
 
