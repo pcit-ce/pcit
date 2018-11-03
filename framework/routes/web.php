@@ -9,13 +9,11 @@ Route::get('test1/{id}', function ($id) {
     return $id;
 });
 
-Route::get('test3', 'Test\TestController');
+Route::get('test3', 'Test\TestController@test3');
 
 Route::get('test4', 'Test\TestController@notExistsMethod');
 
 Route::get('test5', 'Test\TestController@test5');
-
-Route::post('test5', 'Test\TestController@test5');
 
 /*Test end*/
 

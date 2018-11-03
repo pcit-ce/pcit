@@ -7,7 +7,7 @@ namespace App\Console\Events;
 use App\Repo;
 use App\Setting;
 use Exception;
-use PCIT\CIException;
+use PCIT\Exception\PCITException;
 use PCIT\Service\Build\BuildData;
 use PCIT\Support\CI;
 use PCIT\Support\DB;
@@ -19,7 +19,7 @@ class Build extends BuildData
     /**
      * @return Build
      *
-     * @throws CIException
+     * @throws PCITException
      * @throws Exception
      */
     public function handle()
@@ -49,7 +49,7 @@ EOF;
         // 数据库没有结果，跳过构建，也就没有 build_key_id
 
         if (!$output) {
-            throw new CIException('Build not Found, skip', 01404);
+            throw new PCITException('Build not Found, skip', 01404);
         }
 
         $output = array_values($output);
@@ -66,7 +66,7 @@ EOF;
             $this->config) = $output;
 
         if (!$this->config) {
-            throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+            throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
         }
 
         $this->build_key_id = (int) $build_key_id;

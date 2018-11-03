@@ -18,14 +18,14 @@ class CI
 
     const BUILD_EVENT_ISSUE = 'issue';
 
-    const GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS = 'success';
+    const GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS = 'success'; // web-passed ico-passing
 
-    const GITHUB_CHECK_SUITE_CONCLUSION_FAILURE = 'failure';
+    const GITHUB_CHECK_SUITE_CONCLUSION_FAILURE = 'failure'; // web-failed ico-failing
 
     // 中性的.
     const GITHUB_CHECK_SUITE_CONCLUSION_NEUTRAL = 'neutral';
 
-    const GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED = 'cancelled';
+    const GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED = 'cancelled'; // web-canceled web-errored ico-error
 
     const GITHUB_CHECK_SUITE_CONCLUSION_TIMED_OUT = 'timed_out';
 
@@ -33,9 +33,9 @@ class CI
     const GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED = 'action_required';
 
     // status
-    const GITHUB_CHECK_SUITE_STATUS_QUEUED = 'queued';
+    const GITHUB_CHECK_SUITE_STATUS_QUEUED = 'queued'; // pending web-created web-started
 
-    const GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS = 'in_progress';
+    const GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS = 'in_progress'; // pending
 
     const GITHUB_CHECK_SUITE_STATUS_COMPLETED = 'completed';
 

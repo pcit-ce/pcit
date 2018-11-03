@@ -8,7 +8,7 @@ use App\Build;
 use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
-use PCIT\CIException;
+use PCIT\Exception\PCITException;
 use PCIT\PCIT as PCIT;
 use PCIT\Service\Build\Cleanup;
 use PCIT\Service\Build\Events\Log;
@@ -31,7 +31,7 @@ class RunContainer
     /**
      * @param int $job_id
      *
-     * @throws CIException
+     * @throws PCITException
      * @throws \Exception
      */
     public function handle(int $job_id): void
@@ -52,7 +52,7 @@ class RunContainer
                 $this->after($job_id, 'failure');
                 Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
 
-                throw new CIException($e->getMessage(), $e->getCode());
+                throw new PCITException($e->getMessage(), $e->getCode());
             } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                 // 某一 job success
                 $this->after($job_id, 'success');
@@ -73,7 +73,7 @@ class RunContainer
 
         Cleanup::systemDelete((string) $job_id, true);
 
-        throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+        throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
     }
 
     /**
@@ -148,16 +148,16 @@ class RunContainer
                 $this->runPipeline($job_id, $container_config);
             } catch (\Throwable $e) {
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
-                    throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+                    throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }
 
                 LogSupport::getMonolog()->emergency($e->getMessage());
 
-                throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+                throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
             }
         }
 
-        throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+        throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
     }
 
     /**

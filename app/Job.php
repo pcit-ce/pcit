@@ -293,4 +293,42 @@ EOF;
 
         return (int) DB::select($sql, [$job_key_id], true);
     }
+
+    /**
+     * @param int $build_key_id
+     *
+     * @return string
+     *
+     * @throws Exception
+     */
+    public static function getBuildStatusByBuildKeyId(int $build_key_id)
+    {
+        $status = DB::select(
+            'SELECT state FROM jobs WHERE build_id=? GROUP BY state', [$build_key_id]);
+
+        if (1 === \count($status)) {
+            return $status[0]['state'];
+        }
+
+        // 有一个 error failure 均返回对应值
+        foreach ($status as $state) {
+            if ('cancelled' === $state['state']) {
+                return 'cancelled';
+            }
+
+            if ('error' === $state['state']) {
+                return 'error';
+            }
+
+            if ('failure' === $state['state']) {
+                return 'failure';
+            }
+
+            if ('skip' === $state['state']) {
+                return 'skip';
+            }
+        }
+
+        return 'pending';
+    }
 }

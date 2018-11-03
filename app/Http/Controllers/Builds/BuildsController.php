@@ -62,7 +62,7 @@ class BuildsController
 
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $array = Build::allByRid((int) $rid, $before, $limit, (bool) $pr, $git_type);
+        $array = Build::allByRid((int) $rid, $before, $limit, (bool) $pr, false, $git_type);
 
         $return_array = [];
 

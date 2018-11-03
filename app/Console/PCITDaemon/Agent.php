@@ -57,5 +57,10 @@ class Agent
                     ->handle();
             }
         }
+
+        // update build status
+        $status = Job::getBuildStatusByBuildKeyId($build_key_id);
+
+        \App\Build::updateBuildStatus($build_key_id, $status);
     }
 }

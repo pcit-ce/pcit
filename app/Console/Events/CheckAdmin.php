@@ -6,7 +6,7 @@ namespace App\Console\Events;
 
 use App\Repo;
 use App\User;
-use PCIT\CIException;
+use PCIT\Exception\PCITException;
 use PCIT\Service\Build\BuildData;
 use PCIT\Support\CI;
 use PCIT\Support\Env;
@@ -25,7 +25,7 @@ class CheckAdmin
     }
 
     /**
-     * @throws CIException
+     * @throws PCITException
      * @throws \Exception
      */
     public function handle(): void
@@ -64,7 +64,7 @@ class CheckAdmin
 
             a:
 
-            throw new CIException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, $build->build_key_id);
+            throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, $build->build_key_id);
         }
     }
 }
