@@ -1,7 +1,4 @@
-body {
-    margin: 0;
-    padding: 0;
-}
+@import "common/body.css";
 
 header {
     background: #f1f1f1;

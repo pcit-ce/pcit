@@ -106,6 +106,9 @@
     position: absolute;
     left: 532px;
     top: 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
 }
 
 .pull_requests_list .build_time {

@@ -39,6 +39,10 @@ function getRepoFullNameUrl() {
   return getHost() + '/' + getGitRepoFullName();
 }
 
+function getJobId() {
+  return getUrlWithArray()()[7];
+}
+
 function getType() {
   let type_from_url = getUrlWithArray()()[6];
 
@@ -61,4 +65,5 @@ module.exports = {
   getRepoFullNameUrl: getRepoFullNameUrl(),
   getType: getType(),
   baseTitle: title.base(getGitType(), getUsername(), getRepo()),
+  getJobId: getJobId(),
 };

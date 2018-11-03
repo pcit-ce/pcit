@@ -10,6 +10,8 @@ use PCIT\Support\Model;
 
 class Job extends Model
 {
+    public static $table = 'jobs';
+
     /**
      * @param int $jobs_id
      *
@@ -330,5 +332,16 @@ EOF;
         }
 
         return 'pending';
+    }
+
+    /**
+     * @param int    $job_id
+     * @param string $env
+     *
+     * @throws Exception
+     */
+    public static function updateEnv(int $job_id, string $env): void
+    {
+        DB::update('update jobs set env_vars=? WHERE id=?', [$env, $job_id]);
     }
 }

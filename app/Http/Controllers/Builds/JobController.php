@@ -17,21 +17,25 @@ class JobController
     /**
      * @param $build_key_id
      *
+     * @return array
+     *
      * @throws \Exception
      */
-    public function list($build_key_id): void
+    public function list($build_key_id)
     {
-        Job::getByBuildKeyID((int) $build_key_id);
+        return Job::getByBuildKeyID((int) $build_key_id);
     }
 
     /**
      * @param $job_id
      *
+     * @return array|int
+     *
      * @throws \Exception
      */
-    public function find($job_id): void
+    public function find($job_id)
     {
-        Job::find((int) $job_id);
+        return Job::find((int) $job_id);
     }
 
     /**

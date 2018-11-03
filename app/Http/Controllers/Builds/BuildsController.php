@@ -107,7 +107,6 @@ class BuildsController
         $output = Build::find((int) $build_id);
 
         if ($output) {
-            $output['build_status'] = Build::getBuildStatus((int) $build_id);
             $output['jobs'] = Job::allByBuildKeyID((int) $build_id);
 
             return $output;

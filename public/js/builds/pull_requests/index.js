@@ -49,6 +49,7 @@ function display(data, username, repo, repo_full_name_url) {
       let status_color;
 
       status_color = common_status.getColor(build_status);
+      build_status = common_status.change(build_status);
 
       let li_el = $('<li></li>');
 

@@ -14,8 +14,7 @@ const settings = require('./settings');
 const requests = require('./requests');
 const caches = require('./caches');
 const trigger_build = require('./triggerBuild');
-
-// const jobs = require('./jobs');
+const jobs = require('./jobs');
 
 const repo_full_name = url.getRepoFullName;
 const git_repo_full_name = url.getGitRepoFullName;
@@ -25,7 +24,7 @@ let type = url.getType;
 const repo_full_name_url = url.getRepoFullNameUrl;
 const git_type = url.getGitType;
 const baseTitle = url.baseTitle;
-
+const url_array = url.getUrlWithArray();
 const common = require('./common');
 
 header.show();
@@ -117,6 +116,10 @@ function column_el_click(id, change_url = true) {
 
     case 'trigger_build':
       trigger_build.handle(repo_full_name, getToken());
+      break;
+
+    case 'jobs':
+      jobs.handle(username, repo, url.getJobId);
       break;
   }
 }
@@ -218,9 +221,14 @@ jQuery(document).ready(function () {
 
   common.column_remove(); // 移除 column
   column_el_click(type, false); // 渲染 display 页面
+
   if (url.getUrlWithArray().length === 8) {
-    type = 'build_id';
+    if (url.getUrlWithArray().slice(-2) === 'builds') {
+      type = 'build_id';
+    }
+    type = 'jobs';
   }
+
   common.column_click_handle(type); // 渲染被点击的 column
   changeUrl(type, true);
 });

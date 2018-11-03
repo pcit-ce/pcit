@@ -2,6 +2,7 @@
 
 const {column_span_click} = require('../common');
 const log = require('../log');
+const build = require('../builds');
 
 function display(data, username, repo) {
   let display_element = $('#display');
@@ -11,7 +12,8 @@ function display(data, username, repo) {
   if (0 === data.length) {
     display_element.append('Not Build Yet !');
   } else {
-    log.show(data, username, repo);
+
+    build.show(data, username, repo);
   }
 }
 

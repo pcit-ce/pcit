@@ -1,0 +1,59 @@
+.jobs_list {
+    position: relative;
+    margin-top: 50px;
+    height: 1px;
+}
+
+.job_list {
+    display: block;
+    border: #f4f4f4 1px solid;
+    margin-bottom: 10px;
+    height: 34px;
+    text-align: center;
+    text-decoration: none;
+    color: #666666;
+}
+
+.job_list:hover {
+
+}
+
+.job_list .job_id {
+    /*background: red;*/
+    width: 100px;
+    height: 24px;
+    position: absolute;
+    padding-top: 10px;
+}
+
+.job_list .job_os {
+    /*background: orange;*/
+    width: 100px;
+    position: absolute;
+    left: 120px;
+    height: 24px;
+    padding-top: 10px;
+}
+
+.job_list .job_env_vars {
+    /*background: yellow;*/
+    position: absolute;
+    left: 240px;
+    padding-top: 10px;
+    height: 24px;
+}
+
+.job_list .job_run_time {
+    /*background: gold;*/
+    width: 100px;
+    position: absolute;
+    right: 200px;
+    height: 24px;
+    padding-top: 10px;
+}
+
+.job_list .job_cancel_or_restart {
+    /*background: rebeccapurple;*/
+    position: absolute;
+    right: 10px;
+}

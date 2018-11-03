@@ -17,6 +17,10 @@ class Matrix
      */
     public static function parseMatrix(?array $matrix)
     {
+        if ($matrix['include'] ?? false) {
+            return $matrix['include'];
+        }
+
         if (!$matrix) {
             return [];
         }

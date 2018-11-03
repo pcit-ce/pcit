@@ -2,7 +2,7 @@
 
 const {column_span_click} = require('../common');
 const git = require('../../common/git');
-const log = require('../log');
+const builds = require('../builds');
 const common_status = require('../../common/status');
 
 function display(data, username, repo, url_array) {
@@ -35,7 +35,7 @@ function display(data, username, repo, url_array) {
       // build_id span 元素被选中
       $('#build_id').trigger('click');
 
-      log.show(data);
+      builds.show(data,username,repo);
     }
 
   } else if (0 !== data.length) {
@@ -74,6 +74,7 @@ function display(data, username, repo, url_array) {
       let status_color;
 
       status_color = common_status.getColor(build_status);
+      build_status = common_status.change(build_status);
 
       li_el.append(() => {
         let div_element = $('<div class="build_id"></div>');

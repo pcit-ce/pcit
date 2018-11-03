@@ -3,6 +3,8 @@
 @import "common/header.css";
 @import "common/footer.css";
 @import "builds/common.css";
+@import "common/body.css";
+@import "builds/jobs_list.css";
 
 body {
     margin: 0;

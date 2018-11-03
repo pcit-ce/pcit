@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Service\Build\Events;
 
+use App\Job;
 use Exception;
 use PCIT\PCIT;
 use PCIT\Service\Build\Parse;
@@ -34,6 +35,8 @@ class Services
         if (null === $this->service) {
             return;
         }
+
+        Job::updateEnv($this->job_id, json_encode($this->matrix_config));
 
         foreach ($this->service as $service_name => $array) {
             $image = $array->image;
