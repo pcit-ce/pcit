@@ -3,7 +3,7 @@
 module.exports.show = () => {
   $('footer').append(`
     <ul class="about">
-    <li>@PCIT, Datong, Shanxi</li>
+    <li><a title="Author of PCIT From Datong,Shanxi" href="https://www.bilibili.com/video/av34549860?from=search&seid=4430979976495551124">@PCIT, Datong, Shanxi</a></li>
     <li><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></li>
     <li><a href="//weibo.com/kanghuaishuai" target="_blank">Weibo</a></li>
     <li><a href="/wechat" target="_blank">WeChat</a></li>

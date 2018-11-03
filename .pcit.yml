@@ -253,6 +253,15 @@ matrix:
   POSTGRESQL_VERSION:
     - 10.5
 
+# matrix:
+#   include:
+#     - PHP_VERSION: 7.2.11
+#       MYSQL_VERSION: 5.7.23
+#       REDIS_VERSION: 5.0.0
+#     - PHP_VERSION: 7.1.23
+#       MYSQL_VERSION: 5.7.23
+#       REDIS_VERSION: 5.0.0
+
 branches:
   include: [ master,dev ]
   exclude: test*

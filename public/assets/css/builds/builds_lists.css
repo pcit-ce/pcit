@@ -46,35 +46,36 @@
 
 .builds_list .branch {
     font-size: 16px;
-    width: 100px;
+    width: 50px;
     height: 50px;
     /*background: orange;*/
     float: left;
     text-align: center;
+    padding-left: 35px;
 }
 
 .builds_list .committer {
     font-size: 16px;
-    width: 100px;
+    width: 50px;
     height: 50px;
     /*background: red;*/
     float: left;
     text-align: center;
     position: relative;
-    left: -100px;
+    left: -51px;
     top: 50px;
 }
 
 .builds_list .commit_message {
     font-size: 16px;
-    width: 340px;
+    width: 310px;
     height: 90px;
     /*background: yellow;*/
     float: left;
-    margin-right: -200px;
+    margin-right: -100px;
     padding-top: 10px;
-    padding-left: 10px;
     color: #666666;
+    text-align: left;
 }
 
 .builds_list .commit_url {
@@ -83,7 +84,7 @@
     /*background: green;*/
     float: left;
     position: relative;
-    left: 160px;
+    left: 110px;
     top: 60px;
     margin-top: -10px;
     text-align: center;
@@ -98,7 +99,7 @@
     /*background: aqua;*/
     float: left;
     position: relative;
-    left: 0;
+    left: -50px;
     top: 0;
     text-align: center;
 
@@ -111,7 +112,7 @@
     /*background: blue;*/
     float: left;
     position: relative;
-    left: 70px;
+    left: 10px;
     top: 0;
     /*padding-left: 100px;*/
     color: #666666;
@@ -124,7 +125,7 @@
     height: 50px;
     float: left;
     position: relative;
-    left: 390px;
+    left: 330px;
     top: 0;
     /*padding-left: 100px;*/
     color: #666666;

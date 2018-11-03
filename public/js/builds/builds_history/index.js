@@ -3,6 +3,7 @@
 const {column_span_click} = require('../common');
 const git = require('../../common/git');
 const log = require('../log');
+const common_status = require('../../common/status');
 
 function display(data, username, repo, url_array) {
   let display_element = $('#display');
@@ -70,17 +71,14 @@ function display(data, username, repo, url_array) {
 
       let li_el = $('<li></li>');
 
+      let status_color;
+
+      status_color = common_status.getColor(build_status);
+
       li_el.append(() => {
         let div_element = $('<div class="build_id"></div>');
         div_element.append('');
-
-        if (build_status === 'success') {
-          div_element.css('background', '#39aa56');
-        } else if (build_status === 'in_progress') {
-          div_element.css('background', 'yellow');
-        } else {
-          div_element.css('background', '#db4545');
-        }
+        div_element.css('background', status_color);
 
         return div_element;
       });
@@ -92,12 +90,14 @@ function display(data, username, repo, url_array) {
         return div_element;
       }).append(() => {
         let div_element = $('<div class="branch"></div>');
-        div_element.append(branch.slice(0, 10)).attr('title', branch);
+        div_element.append(branch.slice(0, 10)).attr('title', branch)
+          .css('color', status_color);
 
         return div_element;
       }).append(() => {
         let div_el = $('<div class="committer"></div>');
-        div_el.append(committer_username);
+        div_el.append(committer_username)
+          .attr('title', committer_username);
 
         return div_el;
       }).append(() => {
@@ -107,16 +107,17 @@ function display(data, username, repo, url_array) {
         return div_element;
       }).append(() => {
         let a_element = $('<a class="commit_id"></a>');
-        a_element.append(commit_id);
-        a_element.attr('href', commit_url).attr('title', 'View commit on GitHub');
-        a_element.attr('target', '_block').addClass('commit_url');
+        a_element.append(commit_id)
+          .attr('href', commit_url).attr('title', 'View commit on GitHub')
+          .attr('target', '_block').addClass('commit_url');
 
         return a_element;
       }).append(() => {
         let a_element = $('<a class="build_status"></a>');
-        a_element.append(`#${build_id} ${build_status}`);
-        a_element.attr('href', `${location.href}/${build_id}`);
-        a_element.attr('target', '_self');
+        a_element.append(`#${build_id} ${build_status}`)
+          .attr('href', `${location.href}/${build_id}`)
+          .attr('target', '_self')
+          .css('color', status_color);
 
         return a_element;
       }).append(() => {
@@ -126,14 +127,17 @@ function display(data, username, repo, url_array) {
         return div_element;
       }).append(() => {
         let div_element = $('<div></div>');
-        div_element.append(stopped_at).addClass('build_time_ago');
-        div_element.attr('title', 'Finished ');
+        let data = new Date();
+
+        div_element.append(stopped_at).addClass('build_time_ago')
+          .attr('title', 'Finished ' + data.toLocaleString());
 
         return div_element;
       }).append(() => {
         return (() => {
           let button_el = $('<button class="cancel_or_restart"></button>');
-          button_el.append('button');
+          button_el.append('button')
+            .attr('title', 'Restart build');
 
           return button_el;
         })();

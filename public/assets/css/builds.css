@@ -2,6 +2,7 @@
 @import "builds/builds_lists.css";
 @import "common/header.css";
 @import "common/footer.css";
+@import "builds/common.css";
 
 body {
     margin: 0;

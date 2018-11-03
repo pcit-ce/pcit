@@ -152,6 +152,8 @@ $ ./lnmp-docker pcit-up
 
 关注 PCIT 项目作者 **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 获得支持或最新动态。
 
+## 生态系统
+
 ## PCIT 子项目
 
 * [Docker PHP SDK](https://github.com/khs1994-docker/libdocker)
@@ -173,6 +175,9 @@ $ ./lnmp-docker pcit-up
 * [前端 UI](https://github.com/khs1994-php/pcit-ui)
 * [YML 转化为 PCIT 配置](https://github.com/khs1994-php/pcit-yml)
 * [缓存后端驱动](https://github.com/khs1994-php/pcit-cache)
+* [日志处理组件](https://github.com/khs1994-php/pcit-logs)
+* [API 组件](https://github.com/khs1994-php/pcit-api)
+* [部署组件 Deployer](https://github.com/khs1994-php/pcit-deployer)
 
 ## 致谢
 

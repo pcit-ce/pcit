@@ -6,6 +6,7 @@ clone:
     # submodule_override:
     #   test/resource: http://192.168.199.100/khs1994/image.git
 
+# /drone/src/github.com/username/repo
 workspace:
   base: /pcit
   path: .
@@ -34,12 +35,15 @@ pipeline:
       - mv $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       - sleep 30
       - vendor/bin/phpunit --coverage-clover=coverage.xml
+    # volumes:
+    # - /tmp:/tmp
+    # privileged: true
     when:
       branch: master
       event: [push,pull_request,tag,deployment]
-      # volumes:
-      # - /tmp:/tmp
-      # privileged: true
+      # matrix:
+      #   PHP_VERSION: 7.2.11
+      #  REDIS_VERSION: 5.0.0
 
   codecov:
     image: plugins/codecov
@@ -90,3 +94,12 @@ matrix:
     - 5.7.23
   REDIS_VERSION:
     - 5.0.0
+
+# matrix:
+#   include:
+#     - PHP_VERSION: 7.2.11
+#       MYSQL_VERSION: 5.7.23
+#       REDIS_VERSION: 5.0.0
+#     - PHP_VERSION: 7.1.23
+#       MYSQL_VERSION: 5.7.23
+#       REDIS_VERSION: 5.0.0

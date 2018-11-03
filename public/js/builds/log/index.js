@@ -1,6 +1,7 @@
 'use strict';
 
 const git = require('../../common/git');
+const status = require('../../common/status');
 
 module.exports = {
   show: (data, username, repo) => {
@@ -10,6 +11,10 @@ module.exports = {
       id: build_id, build_status, commit_id, commit_message, branch, committer_name,
       compare, stopped_at, jobs
     } = data;
+
+    let status_color;
+
+    status_color = status.getColor(build_status);
 
     if (null === stopped_at) {
       stopped_at = 'This build is ' + build_status;
@@ -24,14 +29,15 @@ module.exports = {
 
     div_element.append(() => {
       let build_id_element = $('<div class="build_id"></div>');
-      build_id_element.append('');
-
+      build_id_element.append('')
+        .css('background', status_color);
       return build_id_element;
     });
 
     div_element.append(() => {
       let branch_element = $('<div class="branch"></div>');
-      branch_element.append(branch);
+      branch_element.append(branch)
+        .css('color', status_color);
 
       return branch_element;
     }).append(() => {
@@ -44,7 +50,8 @@ module.exports = {
     }).append(() => {
 
       let build_status_element = $('<div class="build_status"></div>');
-      build_status_element.append('#' + build_id + ' ' + build_status);
+      build_status_element.append('#' + build_id + ' ' + build_status)
+        .css('color', status_color);
 
       return build_status_element;
     }).append(() => {
@@ -59,7 +66,8 @@ module.exports = {
 
     div_element.append(() => {
       let commit_message_element = $('<div class="commit_message"></div>');
-      commit_message_element.append(commit_message);
+      commit_message_element.append(commit_message)
+        .css('color', status_color);
 
       return commit_message_element;
     });

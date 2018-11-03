@@ -27,9 +27,9 @@
     text-align: center;
 }
 
-.pull_requests_list .id {
-    background: red;
-}
+/*.pull_requests_list .id {*/
+   /**/
+/*}*/
 
 .pull_requests_list .build_id {
     /*background: red;*/
@@ -40,6 +40,7 @@
 }
 
 .pull_requests_list .pull_request_url {
+    font-size: 16px;
     /*background: yellow;*/
     height: 100px;
     width: 100px;
@@ -47,6 +48,7 @@
     position: absolute;
     left: 10px;
     top: 0;
+    text-align: center;
 }
 
 .pull_requests_list .branch {
@@ -77,6 +79,11 @@
     position: absolute;
     left: 210px;
     top: 0;
+    font-size: 16px;
+    color: #666666;
+    text-align: left;
+    padding-left: 25px;
+    padding-top: 10px;
 }
 
 .pull_requests_list .commit_id {
@@ -85,8 +92,10 @@
     width: 200px;
     /*float: left;*/
     position: absolute;
-    left: 510px;
+    left: 532px;
     top: 50px;
+    text-align: center;
+    font-size: 13px;
 }
 
 .pull_requests_list .build_status {
@@ -95,7 +104,7 @@
     width: 200px;
     /*float: left;*/
     position: absolute;
-    left: 510px;
+    left: 532px;
     top: 0;
 }
 
@@ -105,9 +114,9 @@
     width: 200px;
     /*float: left;*/
     position: absolute;
-    left: 710px;
+    left: 700px;
     top: 0;
-
+    color: #666666;
 }
 
 .pull_requests_list .build_time_ago {
@@ -116,8 +125,9 @@
     width: 200px;
     /*float: left;*/
     position: absolute;
-    left: 710px;
+    left: 700px;
     top: 50px;
+    color: #666666;
 }
 
 .pull_requests_list .cancel_or_restart {
@@ -125,5 +135,5 @@
     /*float: right;*/
     position: absolute;
     right: 0;
-    top: 0;
+    top: 40px;
 }

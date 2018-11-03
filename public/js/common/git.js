@@ -11,6 +11,17 @@ module.exports = {
     }
   },
 
+  getUrl: (username, repo, gitType = 'github') => {
+    let url;
+    switch (gitType) {
+      case 'github':
+        url = 'https://github.com';
+        break;
+    }
+
+    return url;
+  },
+
   getCommitUrl: (username, repo, commit_id, gitType = 'github') => {
     let commitUrl;
 

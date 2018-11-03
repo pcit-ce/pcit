@@ -173,20 +173,41 @@ $('#more_options').on({
 });
 
 jQuery(document).ready(function () {
-  let content = jQuery('<h2></h2>');
+  let content = jQuery('<h1 class="repo_title"></h1>');
 
   title.show(baseTitle, type);
 
   content.append(() => {
-    return git.format(git_type) + repo_full_name;
+    let span_el = $("<a class='h1_git_type'></a>");
+    span_el.append(git.format(git_type))
+      .attr('href', [git.getUrl(repo, username), username, repo].join('/'))
+      .attr('target', '_block');
+
+    return span_el;
   }).append(() => {
-    let a_element = $('<a></a>');
+    let span_el = $('<a class="h1_username">');
+    span_el.append(username)
+      .attr('href', [url.getHost, git_type, username].join('/'));
+
+    return span_el;
+  }).append(() => {
+    let span_el = $('<span></span>');
+    span_el.append(' / ');
+    return span_el;
+  }).append(() => {
+    let span_el = $('<a class="h1_repo"></a>');
+    span_el.append(repo)
+      .attr('href', [url.getHost, git_type, username, repo].join('/'));
+
+    return span_el;
+  }).append(() => {
+    let a_element = $('<a class="h1_status"></a>');
     let img_element = $('<img alt="status" src=""/>');
 
     img_element.attr('src', repo_full_name_url + '/status');
-    a_element.append(img_element);
-    a_element.attr('href', repo_full_name_url + '/getstatus');
-    a_element.attr('target', '_black');
+    a_element.append(img_element)
+      .attr('href', repo_full_name_url + '/getstatus')
+      .attr('target', '_black');
 
     return a_element;
   });
