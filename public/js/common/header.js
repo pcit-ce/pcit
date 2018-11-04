@@ -7,6 +7,5 @@ module.exports.show = () => {
 <span class="plugins"><a href="//docs.ci.khs1994.com/plugins/" target="_blank">Plugins</a></span>
 <span class="donate"><a href="//zan.khs1994.com" target="_blank">Donate</a></span>
 <span class="username">username</span>
-`
-  );
+`);
 };

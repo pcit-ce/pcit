@@ -13,11 +13,11 @@ module.exports = {
       type: 'get',
       url: '/api/repo/' + url.getRepoFullName() + '/requests',
       headers: {
-        'Authorization': 'token ' + token.getToken(url.getGitType())
+        Authorization: 'token ' + token.getToken(url.getGitType())
       },
-      success: function (data) {
+      success: function(data) {
         display(data);
       }
     });
-  },
+  }
 };

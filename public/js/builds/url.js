@@ -90,6 +90,12 @@ module.exports = {
   },
 
   getBaseTitle: () => {
-    return git.format(getGitType()) + ' - ' + getRepoFullName() + ' - ' + app.app_name;
+    return (
+      git.format(getGitType()) +
+      ' - ' +
+      getRepoFullName() +
+      ' - ' +
+      app.app_name
+    );
   }
 };

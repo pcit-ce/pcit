@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  titleChange: (title) => {
+  titleChange: title => {
     $('title').text(title);
   }
 };

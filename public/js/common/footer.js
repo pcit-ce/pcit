@@ -32,6 +32,5 @@ module.exports.show = () => {
   <ul class="status">
     <li><a href="" target="_blank">PCIT Status</a></li>
   </ul>
-`
-  );
+`);
 };

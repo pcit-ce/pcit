@@ -23,6 +23,8 @@ module.exports = {
   },
 
   base: (gitType, username, repo) => {
-    return git.format(gitType) + ' - ' + username + '/' + repo + ' - ' + app.app_name;
+    return (
+      git.format(gitType) + ' - ' + username + '/' + repo + ' - ' + app.app_name
+    );
   }
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-const {column_span_click} = require('../common');
+const { column_span_click } = require('../common');
 
 function display(data) {
   let display_element = $('#display');
@@ -11,11 +11,10 @@ function display(data) {
     display_element.append('Not Build Yet !');
   } else {
     console.log(data);
-    $.each(data, function (num, branch) {
-
+    $.each(data, function(num, branch) {
       display_element.append(branch);
 
-      $.each(status, function (id, status) {
+      $.each(status, function(id, status) {
         id = id.replace('k', '');
 
         let stopped_at = status[3];
@@ -39,20 +38,19 @@ function display(data) {
       });
 
       display_element.append('<hr>');
-
     });
   }
 }
 
 module.exports = {
-  handle: (url) => {
+  handle: url => {
     column_span_click('branches');
     $.ajax({
       type: 'GET',
       url: '/api/repo/' + url.getGitRepoFullName() + '/branches',
-      success: function (data) {
+      success: function(data) {
         display(data);
       }
     });
-  },
+  }
 };

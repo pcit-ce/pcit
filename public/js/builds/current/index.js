@@ -1,6 +1,6 @@
 'use strict';
 
-const {column_span_click} = require('../common');
+const { column_span_click } = require('../common');
 const build = require('../builds');
 
 function display(data, url) {
@@ -11,19 +11,18 @@ function display(data, url) {
   if (0 === data.length) {
     display_element.append('Not Build Yet !');
   } else {
-
     build.show(data, url);
   }
 }
 
 module.exports = {
-  handle: (url) => {
+  handle: url => {
     column_span_click('current');
 
     $.ajax({
       type: 'GET',
       url: '/api/repo/' + url.getGitRepoFullName() + '/build/current',
-      success: function (data) {
+      success: function(data) {
         display(data, url);
       }
     });

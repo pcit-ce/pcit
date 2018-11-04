@@ -8,9 +8,6 @@ module.exports = {
   show: (data, url) => {
     console.log(data);
 
-    let username = url.getUsername();
-    let repo = url.getRepo();
-
     // 没有 build 数据
     if (!data) {
       log.show(null);
@@ -18,7 +15,7 @@ module.exports = {
       return;
     }
 
-    let {jobs, build_id, build_status} = data;
+    let { jobs, build_id, build_status } = data;
 
     data.status = build_status;
 
@@ -34,7 +31,7 @@ module.exports = {
     // 只有一个 job 直接展示日志
     if (jobs.length === 1) {
       data.id = build_id;
-      let {build_log} = jobs[0];
+      let { build_log } = jobs[0];
       log.show(build_log);
 
       return;

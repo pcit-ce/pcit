@@ -25,7 +25,7 @@ footer.show();
 
 // 事件捕获 从父元素到子元素传递
 // 事件冒泡 点击了 子元素 会向上传递 即也点击了父元素
-$('.column').click(function (event) {
+$('.column').click(function(event) {
   let id = event.target.id;
 
   console.log('事件冒泡 ' + id);
@@ -48,28 +48,34 @@ $('.column').click(function (event) {
 function changeUrl(id, replace = false) {
   if ('current' === id) {
     if (replace) {
-      history.replaceState({'key_id': id}, null, url.getRepoFullNameUrl());
+      history.replaceState({ key_id: id }, null, url.getRepoFullNameUrl());
       return;
     }
 
-    history.pushState({'key_id': id}, null, url.getRepoFullNameUrl());
-
+    history.pushState({ key_id: id }, null, url.getRepoFullNameUrl());
   } else {
     if (replace) {
       if (8 === url.getUrlWithArray().length) {
-        history.replaceState({'key_id': id}, null, null);
+        history.replaceState({ key_id: id }, null, null);
         return;
       }
-      history.replaceState({'key_id': id}, null, url.getRepoFullNameUrl() + '/' + id);
+      history.replaceState(
+        { key_id: id },
+        null,
+        url.getRepoFullNameUrl() + '/' + id
+      );
       return;
     }
 
-    history.pushState({'key_id': id}, null, url.getRepoFullNameUrl() + '/' + id);
+    history.pushState(
+      { key_id: id },
+      null,
+      url.getRepoFullNameUrl() + '/' + id
+    );
   }
 }
 
 function column_el_click(id, change_url = true) {
-
   change_url && changeUrl(id);
 
   switch (id) {
@@ -93,19 +99,19 @@ function column_el_click(id, change_url = true) {
       break;
 
     case 'settings':
-      settings.handle(url,token);
+      settings.handle(url, token);
       break;
 
     case 'caches':
-      caches.handle(url,token);
+      caches.handle(url, token);
       break;
 
     case 'requests':
-      requests.handle(url,token);
+      requests.handle(url, token);
       break;
 
     case 'trigger_build':
-      trigger_build.handle(url,token);
+      trigger_build.handle(url, token);
       break;
 
     case 'jobs':
@@ -126,8 +132,7 @@ function mouseoverMethod(event) {
 
 // https://www.cnblogs.com/yangzhi/p/3576520.html
 $('.column span').on({
-  'click': function (event) {
-
+  click: function(event) {
     let target = event.target;
     let id = target.id;
 
@@ -137,16 +142,16 @@ $('.column span').on({
     common.column_remove();
     common.column_click_handle(id);
   },
-  'mouseover': function (event) {
+  mouseover: function(event) {
     mouseoverMethod(event);
   },
-  'mouseout': function (event) {
+  mouseout: function(event) {
     mouseoutMethod(event);
   }
 });
 
 $('#more_options').on({
-  'click': function (event) {
+  click: function(event) {
     console.log(url.getUrlWithArray());
 
     let id = event.target.id;
@@ -159,61 +164,82 @@ $('#more_options').on({
     //   return;
     // }
 
-    column_el_click(id);  // 渲染 display 页面
+    column_el_click(id); // 渲染 display 页面
     common.column_remove(); // 移除其他元素
     common.column_click_handle(id); // 增加元素
   }
 });
 
 // 处理页面加载，用户首次进入
-jQuery(document).ready(function () {
+jQuery(document).ready(function() {
   let content = jQuery('<h1 class="repo_title"></h1>');
 
   let type = url.getType();
 
   title.show(url.getBaseTitle(), type);
 
-  content.append(() => {
-    let span_el = $("<a class='h1_git_type'></a>");
-    span_el.append(git.format(url.getGitType()))
-      .attr('href', [
-        git.getUrl(url.getUsername(), url.getRepo(), url.getGitType()),
-        url.getUsername(),
-        url.getRepo()
-      ].join('/'))
-      .attr('target', '_block');
+  content
+    .append(() => {
+      let span_el = $("<a class='h1_git_type'></a>");
+      span_el
+        .append(git.format(url.getGitType()))
+        .attr(
+          'href',
+          [
+            git.getUrl(url.getUsername(), url.getRepo(), url.getGitType()),
+            url.getUsername(),
+            url.getRepo()
+          ].join('/')
+        )
+        .attr('target', '_block');
 
-    return span_el;
-  }).append(() => {
-    let span_el = $('<a class="h1_username">');
-    span_el.append(url.getUsername())
-      .attr('href', [url.getHost(), url.getGitType(), url.getUsername()].join('/'));
+      return span_el;
+    })
+    .append(() => {
+      let span_el = $('<a class="h1_username">');
+      span_el
+        .append(url.getUsername())
+        .attr(
+          'href',
+          [url.getHost(), url.getGitType(), url.getUsername()].join('/')
+        );
 
-    return span_el;
-  }).append(() => {
-    let span_el = $('<span></span>');
-    span_el.append(' / ');
+      return span_el;
+    })
+    .append(() => {
+      let span_el = $('<span></span>');
+      span_el.append(' / ');
 
-    return span_el;
-  }).append(() => {
-    let span_el = $('<a class="h1_repo"></a>');
-    span_el.append(url.getRepo())
-      .attr('href',
-        [url.getHost(), url.getGitType(), url.getUsername(), url.getRepo()].join('/')
-      );
+      return span_el;
+    })
+    .append(() => {
+      let span_el = $('<a class="h1_repo"></a>');
+      span_el
+        .append(url.getRepo())
+        .attr(
+          'href',
+          [
+            url.getHost(),
+            url.getGitType(),
+            url.getUsername(),
+            url.getRepo()
+          ].join('/')
+        );
 
-    return span_el;
-  }).append(() => {
-    let a_element = $('<a class="h1_status"></a>');
-    let img_element = $('<img alt="status" src=""/>');
+      return span_el;
+    })
+    .append(() => {
+      let a_element = $('<a class="h1_status"></a>');
+      let img_element = $('<img alt="status" src=""/>');
 
-    img_element.attr('src', url.getRepoFullNameUrl() + '/status');
-    a_element.append(img_element)
-      .attr('href', url.getRepoFullNameUrl() + '/getstatus')
-      .attr('target', '_black');
+      img_element.attr('src', url.getRepoFullNameUrl() + '/status');
+      a_element
+        .append(img_element)
+        .attr('href', url.getRepoFullNameUrl() + '/getstatus')
+        .attr('target', '_black');
 
-    return a_element;
-  });
+      return a_element;
+    });
 
   $('#repo').append(content);
 
@@ -231,7 +257,7 @@ jQuery(document).ready(function () {
 });
 
 // 处理回退事件
-window.onpopstate = (event) => {
+window.onpopstate = event => {
   let id = event.state.key_id;
   console.log(id);
 
@@ -241,15 +267,18 @@ window.onpopstate = (event) => {
 };
 
 // 处理 cancel restart button 点击事件
-$(document).on('click',
+$(document).on(
+  'click',
   '.job_list button,.build_data button,.builds_list button,.pull_requests_list button',
-  async function () {
-    await common_status.buttonClick($(this));
+  function() {
+    (async that => {
+      await common_status.buttonClick(that);
 
-    let type = url.getType();
-    column_el_click(type, false); // 渲染 display 页面
-    common.column_remove(); // 移除 column
-    common.column_click_handle(type); // 渲染被点击的 column
+      let type = url.getType();
+      column_el_click(type, false); // 渲染 display 页面
+      common.column_remove(); // 移除 column
+      common.column_click_handle(type); // 渲染被点击的 column
+    })($(this));
 
     return false;
   }

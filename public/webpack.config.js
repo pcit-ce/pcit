@@ -12,14 +12,14 @@ module.exports = {
   },
   cache: true,
   entry: {
-    'builds': path.resolve('./js/builds/main.js'),
-    'login': __dirname + '/js/login/main.js',
-    'profile': __dirname + '/js/profile/main.js',
-    'demo': path.resolve('./js/demo/main.js'),
+    builds: path.resolve('./js/builds/main.js'),
+    login: __dirname + '/js/login/main.js',
+    profile: __dirname + '/js/profile/main.js',
+    demo: path.resolve('./js/demo/main.js')
   },
   output: {
     path: __dirname + '/assets/js',
-    filename: '[name].js',
+    filename: '[name].js'
     // pathinfo: true
   },
   devtool: 'none',
@@ -27,7 +27,7 @@ module.exports = {
     contentBase: './',
     historyApiFallback: true,
     inline: true,
-    hot: true,
+    hot: true
   },
   plugins: [],
   module: {
@@ -38,7 +38,7 @@ module.exports = {
         include: path.join(__dirname, './src'),
         exclude: /node_modules/
       }
-    ],
+    ]
   },
   optimization: {
     minimize: true, //是否进行代码压缩

@@ -26,13 +26,13 @@ function gogs() {
 }
 
 $('.github-login-button').on({
-  'click': () => {
+  click: () => {
     github();
   }
 });
 
 $('.gitee-login-button').on({
-  'click': () => {
+  click: () => {
     gitee();
   }
 });

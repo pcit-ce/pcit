@@ -4,8 +4,7 @@ const details = require('../log/details');
 const log = require('../log');
 
 function display(job_data, build_data, url) {
-
-  let {build_log} = job_data;
+  let { build_log } = job_data;
 
   job_data.log = build_log;
   job_data.commit_id = build_data.commit_id;
@@ -21,20 +20,19 @@ function display(job_data, build_data, url) {
 }
 
 module.exports = {
-  handle: (url) => {
-
+  handle: url => {
     let job_id = url.getUrlWithArray()[7];
 
     $.ajax({
       type: 'get',
       url: '/api/job/' + job_id,
-      success: function (data) {
-        let {build_id} = data;
+      success: function(data) {
+        let { build_id } = data;
 
         $.ajax({
           url: '/api/build/' + build_id,
 
-          success: (build_data) => {
+          success: build_data => {
             display(data, build_data, url);
           }
         });

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  format: (gittype) => {
+  format: gittype => {
     switch (gittype) {
       case 'github':
         return 'GitHub';
@@ -26,9 +26,14 @@ module.exports = {
     let commitUrl;
 
     switch (gitType) {
-
       case 'github':
-        commitUrl = 'https://github.com/' + username + '/' + repo + '/commit/' + commit_id;
+        commitUrl =
+          'https://github.com/' +
+          username +
+          '/' +
+          repo +
+          '/commit/' +
+          commit_id;
         break;
 
       case 'gitee':

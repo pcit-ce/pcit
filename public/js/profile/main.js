@@ -18,37 +18,47 @@ let username = url_array[5];
 let token = Cookies.get(git_type + '_api_token');
 
 function showUserBasicInfo(data) {
-  let {username, type} = data;
+  let { username, type } = data;
 
-  $('#username').text(username).addClass(type);
+  $('#username')
+    .text(username)
+    .addClass(type);
 
-  let titleContent = `${git.format(git_type)} - ${data.username} - Profile - ${app.app_name}`;
+  let titleContent = `${git.format(git_type)} - ${data.username} - Profile - ${
+    app.app_name
+  }`;
 
   title.titleChange(titleContent);
 
-  $('#user').empty().append(
-    '<span>' + username + '</span>' +
-    '<br><br><strong >API authentication</strong><br><br>' +
-    '<p>使用 PCIT API 请访问 ' +
-    '<a href=\'https://api.ci.khs1994.com\' target=\'_blank\'>https://api.ci.khs1994.com</a></p>' +
-    '<input id=\'token\' value=\'' + token + '\'>' +
-    '<button class=\'copy_token\' data-clipboard-target=\'#token\'>Copy</button><br><br>'
-  );
+  $('#user')
+    .empty()
+    .append(
+      '<span>' +
+        username +
+        '</span>' +
+        '<br><br><strong >API authentication</strong><br><br>' +
+        '<p>使用 PCIT API 请访问 ' +
+        "<a href='https://api.ci.khs1994.com' target='_blank'>https://api.ci.khs1994.com</a></p>" +
+        "<input id='token' value='" +
+        token +
+        "'>" +
+        "<button class='copy_token' data-clipboard-target='#token'>Copy</button><br><br>"
+    );
 }
 
 (() => {
   $('.copy_token').on({
-    'click': () => {
+    click: () => {
       copyToken();
     }
   });
 })();
 
 function copyToken() {
-// eslint-disable-next-line no-undef
+  // eslint-disable-next-line no-undef
   let clipboard = new ClipboardJS('.copy_token');
 
-  clipboard.on('success', function (e) {
+  clipboard.on('success', function(e) {
     console.info('Action:', e.action);
     console.info('Text:', e.text);
     console.info('Trigger:', e.trigger);
@@ -71,8 +81,8 @@ function list(data) {
     orgs_element.css('height', css_height);
   }
 
-  $.each(data, function (num, repo) {
-    let {build_status: status, repo_full_name: repo_name} = repo;
+  $.each(data, function(num, repo) {
+    let { build_status: status, repo_full_name: repo_name } = repo;
     let button = $('<button></button>');
 
     button.addClass('open_or_close');
@@ -107,19 +117,26 @@ function list(data) {
     settings.text('Setting');
     settings.attr('href', ci_host + git_type + '/' + repo_name + '/settings');
     settings.attr('target', '_blank');
-    $('#repos').append(button).append('&nbsp;&nbsp;').append(settings).append('&nbsp;&nbsp;')
-      .append(p).append('<br>');
+    $('#repos')
+      .append(button)
+      .append('&nbsp;&nbsp;')
+      .append(settings)
+      .append('&nbsp;&nbsp;')
+      .append(p)
+      .append('<br>');
   });
 }
 
 function showOrg(data) {
   let count = data.length;
 
-  $.each(data, function (num, org) {
-    let {username: org_name} = org;
+  $.each(data, function(num, org) {
+    let { username: org_name } = org;
     let orgs_element = $('.orgs');
 
-    orgs_element.append(`<p class = "org_name">${org_name}</p>`).css('height', count * 50);
+    orgs_element
+      .append(`<p class = "org_name">${org_name}</p>`)
+      .css('height', count * 50);
   });
 }
 
@@ -131,19 +148,22 @@ function showGitHubAppSettings(org_name, installation_id) {
   $.ajax({
     type: 'GET',
     url: '/api/ci/github_app_settings/' + org_name,
-    success: function (data) {
+    success: function(data) {
       settings_url = data;
 
       content = $('<p></p>');
 
-      content.append('找不到仓库？请在 ').append(() => {
-        let a_element = $('<a></a>');
-        a_element.attr('href', `${settings_url}/${installation_id}`);
-        a_element.attr('target', '_blank');
-        a_element.text('GitHub');
+      content
+        .append('找不到仓库？请在 ')
+        .append(() => {
+          let a_element = $('<a></a>');
+          a_element.attr('href', `${settings_url}/${installation_id}`);
+          a_element.attr('target', '_blank');
+          a_element.text('GitHub');
 
-        return a_element;
-      }).append(' 添加仓库');
+          return a_element;
+        })
+        .append(' 添加仓库');
 
       repos_element.append('<p></p>').append(content);
     }
@@ -157,7 +177,7 @@ function showGitHubAppInstall(uid) {
   $.ajax({
     type: 'GET',
     url: '/api/ci/github_app_installation/' + uid,
-    success: function (data) {
+    success: function(data) {
       let repos_element = $('#repos');
 
       installation_url = data;
@@ -175,7 +195,7 @@ function showGitHubAppInstall(uid) {
       content.append(' 在 GitHub 进行安装');
       repos_element.append(content);
     },
-    error: function (data) {
+    error: function(data) {
       console.log(data);
     }
   });
@@ -186,24 +206,31 @@ function click_user() {
     type: 'GET',
     url: '/api/user',
     headers: {
-      'Authorization': 'token ' + token
+      Authorization: 'token ' + token
     },
-    success: function (data) {
-      let {installation_id, uid} = data[0];
+    success: function(data) {
+      let { installation_id, uid } = data[0];
 
       $.ajax({
         type: 'GET',
         url: '/api/repos',
         headers: {
-          'Authorization': 'token ' + token
+          Authorization: 'token ' + token
         },
-        success: function (data) {
-          history.pushState({}, username, ci_host + 'profile/' + git_type + '/' + username);
-          history.replaceState(null, username, ci_host + 'profile/' + git_type + '/' + username);
+        success: function(data) {
+          history.pushState(
+            {},
+            username,
+            ci_host + 'profile/' + git_type + '/' + username
+          );
+          history.replaceState(
+            null,
+            username,
+            ci_host + 'profile/' + git_type + '/' + username
+          );
           list(data);
 
           if (git_type !== 'github') {
-
             return;
           }
 
@@ -223,17 +250,25 @@ function show_org(data, org_name) {
     return;
   }
 
-  let {installation_id, uid} = data[0];
+  let { installation_id, uid } = data[0];
 
   $.ajax({
     type: 'GET',
     url: '/api/repos/' + git_type + '/' + org_name,
     headers: {
-      'Authorization': 'token ' + token
+      Authorization: 'token ' + token
     },
-    success: function (data) {
-      history.pushState({}, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
-      history.replaceState(null, org_name, ci_host + 'profile/' + git_type + '/' + org_name);
+    success: function(data) {
+      history.pushState(
+        {},
+        org_name,
+        ci_host + 'profile/' + git_type + '/' + org_name
+      );
+      history.replaceState(
+        null,
+        org_name,
+        ci_host + 'profile/' + git_type + '/' + org_name
+      );
       list(data);
 
       if (git_type !== 'github') {
@@ -254,25 +289,23 @@ function click_org(org_name) {
     type: 'GET',
     url: '/api/org/' + git_type + '/' + org_name,
     headers: {
-      'Authorization': 'token ' + token
+      Authorization: 'token ' + token
     },
-    success: function (data) {
+    success: function(data) {
       show_org(data, org_name);
     }
   });
 }
 
-$(document).ready(function () {
-
+$(document).ready(function() {
   $.ajax({
     type: 'GET',
     url: '/api/user',
     headers: {
-      'Authorization': 'token ' + token
+      Authorization: 'token ' + token
     },
 
-    success: function (data) {
-
+    success: function(data) {
       showUserBasicInfo(data[0]);
 
       if (data[0].username === username) {
@@ -280,10 +313,10 @@ $(document).ready(function () {
           type: 'GET',
           url: '/api/orgs',
           headers: {
-            'Authorization': 'token ' + token
+            Authorization: 'token ' + token
           },
 
-          success: function (data) {
+          success: function(data) {
             showOrg(data);
           }
         });
@@ -295,10 +328,10 @@ $(document).ready(function () {
     type: 'GET',
     url: '/api/repos',
     headers: {
-      'Authorization': 'token ' + token
+      Authorization: 'token ' + token
     },
 
-    success: function (data) {
+    success: function(data) {
       list(data);
     }
   });
@@ -308,17 +341,15 @@ $(document).ready(function () {
       type: 'GET',
       url: '/api/ci/oauth_client_id',
       headers: {
-        'Authorization': 'token ' + token
+        Authorization: 'token ' + token
       },
-      success: function (data) {
+      success: function(data) {
         $('.tip').after(`
 <p><a href="${data}" target="_blank"> <button>授权</button></a></p>
-`
-        );
+`);
       }
     });
   }
-
 });
 
 function sync() {
@@ -326,9 +357,9 @@ function sync() {
     type: 'POST',
     url: '/api/user/sync',
     headers: {
-      'Authorization': 'token ' + token
+      Authorization: 'token ' + token
     },
-    success: function (data) {
+    success: function(data) {
       location.reload();
       console.log(data);
     }
@@ -347,7 +378,7 @@ function open_or_close(target) {
       url: ci_host + 'webhooks/' + git_type + '/' + repo + '/activate',
       dataType: 'json',
       contentType: 'application/json;charset=utf-8',
-      success: function (data) {
+      success: function(data) {
         target.innerHTML = 'Close';
         target.style.color = 'Green';
         console.log(data);
@@ -357,7 +388,7 @@ function open_or_close(target) {
     $.ajax({
       type: 'delete',
       url: ci_host + 'webhooks/' + git_type + '/' + repo + '/deactivate',
-      success: function (data) {
+      success: function(data) {
         target.innerHTML = 'Open';
         target.style.color = 'Red';
         console.log(data);
@@ -366,12 +397,12 @@ function open_or_close(target) {
   }
 }
 
-$('#orgs').click(function (event) {
+$('#orgs').click(function(event) {
   let org_name = event.target.innerHTML;
   click_org(org_name);
 });
 
-$('#userinfo').click(function (event) {
+$('#userinfo').click(function(event) {
   let username = event.target.innerHTML;
   click_user(username);
 });
@@ -379,7 +410,7 @@ $('#userinfo').click(function (event) {
 // append 添加元素绑定事件
 // https://www.cnblogs.com/liubaojing/p/8383960.html
 
-$('#repos').on('click', '.open_or_close', function (event) {
+$('#repos').on('click', '.open_or_close', function(event) {
   console.log(event);
 
   open_or_close(event.target);

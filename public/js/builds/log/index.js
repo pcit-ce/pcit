@@ -1,5 +1,7 @@
+'use strict';
+
 module.exports = {
-  show: (log) => {
+  show: log => {
     if (!log) {
       log = 'Build log is empty';
     }

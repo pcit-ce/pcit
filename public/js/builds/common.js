@@ -15,23 +15,28 @@ function more_options_click_handler(id) {
   $('#pull_requests').after(() => {
     let span_el = $('<span id="column_more_options"></span>');
 
-    return span_el.append((id.slice(0, 1)).toUpperCase() + id.slice(1));
+    return span_el.append(id.slice(0, 1).toUpperCase() + id.slice(1));
   });
 }
 
 module.exports = {
-  column_span_click: (id) => {
+  column_span_click: id => {
     let span_el = $('#' + id);
     span_el.css('color', 'green');
     span_el.css('border-bottom-style', 'solid');
   },
-  column_click_handle: (id) => {
+  column_click_handle: id => {
     let column_el = $('.column span');
 
-    if (-1 !== $.inArray(id, ['', 'settings', 'requests', 'caches', 'trigger_build'])) {
+    if (
+      -1 !==
+      $.inArray(id, ['', 'settings', 'requests', 'caches', 'trigger_build'])
+    ) {
       more_options_click_handler(id);
       column_el.css('color', '#000000').css('border-bottom-style', 'none');
-      $('.column #column_more_options').css('color', 'green').css('border-bottom-style', 'solid');
+      $('.column #column_more_options')
+        .css('color', 'green')
+        .css('border-bottom-style', 'solid');
 
       return;
     }
@@ -40,7 +45,7 @@ module.exports = {
     column_el.css('color', '#000000').css('border-bottom-style', 'none');
     // 启用其他元素的鼠标移出事件
     column_el.on({
-      'mouseout': (event) => {
+      mouseout: event => {
         mouseoutMethod(event);
       }
     });

@@ -1,44 +1,35 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "node": true,
-    "shared-node-browser": true,
-    "es6": true,
-    "jquery": true,
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+    jquery: true,
+    commonjs: true
   },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "ecmaVersion": 2015,
-    "impliedStrict": true,
-    "sourceType": "script",
+  extends: 'eslint:recommended',
+  parserOptions: {
+    ecmaVersion: 2015,
+    impliedStrict: true,
+    sourceType: 'script'
   },
-  "rules": {
-    "indent": [
-      "error",
+  rules: {
+    indent: [
+      'error',
       2,
       {
-        "SwitchCase": 1,
-        "FunctionDeclaration": {
-          "parameters": 2,
-          "body": 1
+        SwitchCase: 1,
+        FunctionDeclaration: {
+          parameters: 2,
+          body: 1
         },
-        "ObjectExpression": 1
+        ObjectExpression: 1
       }
     ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
-    "no-console": "off",
-    "strict": 2
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
+    'no-console': 'off',
+    strict: 2
   },
-  "plugins": []
+  plugins: []
 };
