@@ -8,13 +8,12 @@ function display(data) {
 }
 
 module.exports = {
-  handle: (repo_full_name, token) => {
-    console.log(location.href);
+  handle: (url, token) => {
     $.ajax({
       type: 'get',
-      url: '/api/repo/' + repo_full_name + '/requests',
+      url: '/api/repo/' + url.getRepoFullName() + '/requests',
       headers: {
-        'Authorization': 'token ' + token
+        'Authorization': 'token ' + token.getToken(url.getGitType())
       },
       success: function (data) {
         display(data);

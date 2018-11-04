@@ -10,13 +10,6 @@ use Exception;
 
 class RepositoriesController
 {
-    public function index(): void
-    {
-        require __DIR__.'/../../../../public/repo/index.html';
-
-        exit;
-    }
-
     /**
      * This returns a list of repositories the current user has access to.
      *

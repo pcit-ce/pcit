@@ -2,7 +2,7 @@ const common_status = require('../../common/status');
 const git = require('../../common/git');
 
 module.exports = {
-  show: (data, username, repo, job = false) => {
+  show: (data, url, job = false) => {
     console.log(data);
     let display_element = $('#display');
 
@@ -26,7 +26,7 @@ module.exports = {
       stopped_at = d.toLocaleString();
     }
 
-    let commit_url = git.getCommitUrl(username, repo, commit_id);
+    let commit_url = git.getCommitUrl(url.getUsername(), url.getRepo(), commit_id);
     let div_element = $('<div class="build_data"></div>');
 
     div_element.append(() => {
@@ -115,11 +115,5 @@ module.exports = {
     });
 
     display_element.append(div_element);
-
-    $('.build_data button').on({
-      'click': function () {
-        common_status.buttonClick($(this));
-      }
-    });
   }
 };

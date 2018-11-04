@@ -3,7 +3,7 @@
 const {column_span_click} = require('../common');
 const build = require('../builds');
 
-function display(data, username, repo) {
+function display(data, url) {
   let display_element = $('#display');
 
   display_element.empty();
@@ -12,19 +12,19 @@ function display(data, username, repo) {
     display_element.append('Not Build Yet !');
   } else {
 
-    build.show(data, username, repo);
+    build.show(data, url);
   }
 }
 
 module.exports = {
-  handle: (git_repo_full_name, username, repo) => {
+  handle: (url) => {
     column_span_click('current');
 
     $.ajax({
       type: 'GET',
-      url: '/api/repo/' + git_repo_full_name + '/build/current',
+      url: '/api/repo/' + url.getGitRepoFullName() + '/build/current',
       success: function (data) {
-        display(data, username, repo);
+        display(data, url);
       }
     });
   }

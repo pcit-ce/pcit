@@ -12,12 +12,9 @@ module.exports = {
   },
   cache: true,
   entry: {
-    'admin': __dirname + '/js/admin/main.js',
     'builds': path.resolve('./js/builds/main.js'),
-    'dashboard': __dirname + '/js/dashboard/main.js',
     'login': __dirname + '/js/login/main.js',
     'profile': __dirname + '/js/profile/main.js',
-    'repos': __dirname + '/js/repos/main.js',
     'demo': path.resolve('./js/demo/main.js'),
   },
   output: {

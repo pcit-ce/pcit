@@ -5,12 +5,12 @@ const git = require('../../common/git');
 const builds = require('../builds');
 const common_status = require('../../common/status');
 
-function display(data, username, repo, url_array) {
+function display(data, url) {
   let display_element = $('#display');
 
   display_element.empty();
 
-  url_array = url_array();
+  let url_array = url.getUrlWithArray();
 
   console.log(url_array);
 
@@ -36,7 +36,7 @@ function display(data, username, repo, url_array) {
       // build_id span 元素被选中
       $('#build_id').trigger('click');
 
-      builds.show(data, username, repo);
+      builds.show(data,url);
     }
 
   } else if (0 !== data.length) {
@@ -51,7 +51,7 @@ function display(data, username, repo, url_array) {
         commit_message, commit_id, build_status, started_at, finished_at: stopped_at
       } = status;
 
-      let commit_url = git.getCommitUrl(username, repo, commit_id);
+      let commit_url = git.getCommitUrl(url.getUsername(), url.getRepo(), commit_id);
       commit_id = commit_id.substr(0, 7);
 
       if (null == started_at) {
@@ -152,12 +152,12 @@ function display(data, username, repo, url_array) {
     });
     display_element.append(ul_el);
 
-    // 按钮点击事件
-    $('.builds_list button').on({
-      'click': function () {
-        common_status.buttonClick($(this));
-      }
-    })
+    // 按钮点击事件 already move to main.js
+    // $('.builds_list button').on({
+    //   'click': function () {
+    //     common_status.buttonClick($(this));
+    //   }
+    // })
 
   } else {
     display_element.append('Not Build Yet !');
@@ -165,24 +165,23 @@ function display(data, username, repo, url_array) {
 }
 
 module.exports = {
-  handle: (git_repo_full_name, username, repo, url_array) => {
+  handle: (url) => {
 
     let build_id;
+    let url_array = url.getUrlWithArray();
 
-    if (8 === url_array().length) {
-      build_id = url_array()[7];
+    if (8 === url_array.length) {
+      build_id = url_array[7];
     } else {
       column_span_click('builds');
     }
-
-    console.log(url_array());
 
     if (build_id) {
       $.ajax({
         type: 'GET',
         url: '/api/build/' + build_id,
         success: function (data) {
-          display(data, username, repo, url_array);
+          display(data, url);
         },
         error: function (data) {
           display('error');
@@ -195,9 +194,9 @@ module.exports = {
 
     $.ajax({
       type: 'GET',
-      url: '/api/repo/' + git_repo_full_name + '/builds',
+      url: '/api/repo/' + url.getGitRepoFullName() + '/builds',
       success: function (data) {
-        display(data, username, repo, url_array);
+        display(data, url);
       },
       error: function (data) {
         display('error');

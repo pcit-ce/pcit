@@ -1,6 +1,7 @@
 'use strict';
 
-let title = require('./title');
+const git = require('../common/git');
+const app = require('../common/app');
 
 function getUrl() {
   return location.href;
@@ -12,19 +13,19 @@ function getHost() {
 }
 
 function getUrlWithArray() {
-  return () => getUrl().split('/');
+  return getUrl().split('/');
 }
 
 function getGitType() {
-  return getUrlWithArray()()[3];
+  return getUrlWithArray()[3];
 }
 
 function getUsername() {
-  return getUrlWithArray()()[4];
+  return getUrlWithArray()[4];
 }
 
 function getRepo() {
-  return getUrlWithArray()()[5];
+  return getUrlWithArray()[5];
 }
 
 function getRepoFullName() {
@@ -40,13 +41,13 @@ function getRepoFullNameUrl() {
 }
 
 function getJobId() {
-  return getUrlWithArray()()[7];
+  return getUrlWithArray()[7];
 }
 
 function getType() {
-  let type_from_url = getUrlWithArray()()[6];
+  let type_from_url = getUrlWithArray()[6];
 
-  if (6 === getUrlWithArray()().length) {
+  if (6 === getUrlWithArray().length) {
     type_from_url = 'current';
   }
 
@@ -54,16 +55,41 @@ function getType() {
 }
 
 module.exports = {
-  getUrl: getUrl(),
-  getUrlWithArray: getUrlWithArray(),
-  getHost: getHost(),
-  getGitType: getGitType(),
-  getUsername: getUsername(),
-  getRepo: getRepo(),
-  getRepoFullName: getRepoFullName(),
-  getGitRepoFullName: getGitRepoFullName(),
-  getRepoFullNameUrl: getRepoFullNameUrl(),
-  getType: getType(),
-  baseTitle: title.base(getGitType(), getUsername(), getRepo()),
-  getJobId: getJobId(),
+  getUrl: () => {
+    return getUrl();
+  },
+  getUrlWithArray: () => {
+    return getUrlWithArray();
+  },
+  getHost: () => {
+    return getHost();
+  },
+  getGitType: () => {
+    return getGitType();
+  },
+  getUsername: () => {
+    return getUsername();
+  },
+  getRepo: () => {
+    return getRepo();
+  },
+  getRepoFullName: () => {
+    return getRepoFullName();
+  },
+  getGitRepoFullName: () => {
+    return getGitRepoFullName();
+  },
+  getRepoFullNameUrl: () => {
+    return getRepoFullNameUrl();
+  },
+  getType: () => {
+    return getType();
+  },
+  getJobId: () => {
+    return getJobId();
+  },
+
+  getBaseTitle: () => {
+    return git.format(getGitType()) + ' - ' + getRepoFullName() + ' - ' + app.app_name;
+  }
 };

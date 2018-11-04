@@ -60,18 +60,21 @@ module.exports = {
     let type = that.attr('type'); // build or job
     let id = that.attr('event_id');
 
-    $.ajax({
-      method: 'post',
-      headers: {
-        'Authorization': 'token ' + token.getToken(url.getGitType),
-      },
-      url: '/api/' + [type, id, event].join('/'),
-      success: () => {
-        let {text: button_text, title: button_title} = buttonChange(event);
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        method: 'post',
+        headers: {
+          'Authorization': 'token ' + token.getToken(url.getGitType()),
+        },
+        url: '/api/' + [type, id, event].join('/'),
+        success: () => {
+          let {text: button_text, title: button_title} = buttonChange(event);
 
-        that.text(button_text);
-        that.attr('title', button_title + 'type');
-      }
+          that.text(button_text);
+          that.attr('title', button_title + 'type');
+          resolve();
+        }
+      })
     });
   }
 };

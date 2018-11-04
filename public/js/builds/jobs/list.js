@@ -3,13 +3,14 @@ const common_status = require('../../common/status');
 // list builds all jobs
 
 module.exports = {
-  show: (data, username, repo) => {
+  show: (data, url) => {
     let jobs_list_el = $('<div class="jobs_list"></div>');
 
     let {jobs} = data;
 
-    let git_type = location.pathname.split('/', 2)[1];
-    let job_url = ['/', location.host, git_type, username, repo, 'jobs'].join('/');
+    let git_type = url.getGitType();
+
+    let job_url = '/' + [git_type, url.getUsername(), url.getRepo(), 'jobs'].join('/');
 
     $.each(jobs, (index, job) => {
 
@@ -70,7 +71,7 @@ module.exports = {
 
     // 鼠标移入 job list 背景变色
     $('.job_list').on({
-      'mousemove': function (e) {
+      'mousemove': function () {
         let that = $(this);
         let background_color = that.attr('status_background_color');
         let border_color = that.attr('status_color');
@@ -82,18 +83,6 @@ module.exports = {
         let that = $(this);
 
         that.css('background', 'none').css('border-left', 'none');
-      }
-    });
-
-    $('.job_list button').on({
-      'mousemove': () => {
-        console.log(1);
-      },
-      'click': function () {
-        console.log(1);
-        common_status.buttonClick($(this));
-
-        return false;
       }
     });
   }

@@ -17,6 +17,16 @@ Route::get('test5', 'Test\TestController@test5');
 
 /*Test end*/
 
+/* Dashboard */
+Route::get('{git_type}/dashboard', function () {
+    return 'Coming Soon';
+});
+
+/* Admin */
+Route::get('admin', function () {
+    return 'Coming Soon';
+});
+
 Route::get('api', 'APIController');
 
 Route::get('sitemap', 'SiteMapController');
@@ -116,7 +126,7 @@ Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
 
 /**Repos**/
 
-Route::get('{git_type}/{username}', 'Users\RepositoriesController@index');
+Route::get('{git_type}/{username}', 'Builds\IndexController');
 
 Route::get('api/repos', 'Users\RepositoriesController');
 

@@ -1,10 +1,10 @@
 module.exports = {
   show: (log) => {
     if (!log) {
-      log = 'Build is pending';
+      log = 'Build log is empty';
     }
 
-    let pre_el = $('<pre><pre>');
+    let pre_el = $('<pre class="build_log"><pre>');
 
     pre_el.append(log);
 

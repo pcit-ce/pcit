@@ -4,7 +4,7 @@ const {column_span_click} = require('../common');
 const git = require('../../common/git');
 const common_status = require('../../common/status');
 
-function display(data, username, repo, repo_full_name_url) {
+function display(data,url) {
   let display_element = $('#display');
 
   display_element.empty();
@@ -23,6 +23,10 @@ function display(data, username, repo, repo_full_name_url) {
         pull_request_number: pull_request_id, id: build_id, branch, committer_username,
         commit_message, commit_id, build_status, started_at, finished_at: stopped_at,
       } = status;
+
+      let username = url.getUsername();
+      let repo = url.getRepo();
+      let repo_full_name_url = url.getRepoFullNameUrl();
 
       let commit_url = git.getCommitUrl(username, repo, commit_id);
 
@@ -133,24 +137,18 @@ function display(data, username, repo, repo_full_name_url) {
 
     });
     display_element.append(ul_el);
-
-    $('.pull_requests_list button').on({
-      'click': function () {
-        common_status.buttonClick($(this));
-      }
-    })
   }
 }
 
 module.exports = {
-  handle: (git_repo_full_name, username, repo, repo_full_name_url) => {
+  handle: (url) => {
     column_span_click('pull_requests');
 
     $.ajax({
       type: 'GET',
-      url: '/api/repo/' + git_repo_full_name + '/builds?type=pr',
+      url: '/api/repo/' + url.getGitRepoFullName() + '/builds?type=pr',
       success: function (data) {
-        display(data, username, repo, repo_full_name_url);
+        display(data,url);
       }
     });
   },

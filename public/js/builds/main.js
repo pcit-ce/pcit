@@ -16,16 +16,8 @@ const caches = require('./caches');
 const trigger_build = require('./triggerBuild');
 const jobs = require('./jobs');
 
-const repo_full_name = url.getRepoFullName;
-const git_repo_full_name = url.getGitRepoFullName;
-const username = url.getUsername;
-const repo = url.getRepo;
-let type = url.getType;
-const repo_full_name_url = url.getRepoFullNameUrl;
-const git_type = url.getGitType;
-const baseTitle = url.baseTitle;
-// const url_array = url.getUrlWithArray();
 const common = require('./common');
+const common_status = require('../common/status');
 const token = require('../common/token');
 
 header.show();
@@ -47,7 +39,7 @@ $('.column').click(function (event) {
     common.column_click_handle(event.target.id);
   }
 
-  title.show(baseTitle, id);
+  title.show(url.getBaseTitle(), id);
 });
 
 // http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
@@ -56,11 +48,11 @@ $('.column').click(function (event) {
 function changeUrl(id, replace = false) {
   if ('current' === id) {
     if (replace) {
-      history.replaceState({'key_id': id}, baseTitle, repo_full_name_url);
+      history.replaceState({'key_id': id}, null, url.getRepoFullNameUrl());
       return;
     }
 
-    history.pushState({'key_id': id}, baseTitle, repo_full_name_url);
+    history.pushState({'key_id': id}, null, url.getRepoFullNameUrl());
 
   } else {
     if (replace) {
@@ -68,11 +60,11 @@ function changeUrl(id, replace = false) {
         history.replaceState({'key_id': id}, null, null);
         return;
       }
-      history.replaceState({'key_id': id}, baseTitle, repo_full_name_url + '/' + id);
+      history.replaceState({'key_id': id}, null, url.getRepoFullNameUrl() + '/' + id);
       return;
     }
 
-    history.pushState({'key_id': id}, baseTitle, repo_full_name_url + '/' + id);
+    history.pushState({'key_id': id}, null, url.getRepoFullNameUrl() + '/' + id);
   }
 }
 
@@ -82,42 +74,42 @@ function column_el_click(id, change_url = true) {
 
   switch (id) {
     case 'current':
-      current.handle(git_repo_full_name, username, repo);
+      current.handle(url);
       break;
 
     case 'branches':
-      branches.handle(git_repo_full_name);
+      branches.handle(url);
 
       break;
 
     case 'builds':
-      builds_history.handle(git_repo_full_name, username, repo, url.getUrlWithArray);
+      builds_history.handle(url);
 
       break;
 
     case 'pull_requests':
-      pull_requests.handle(git_repo_full_name, username, repo, repo_full_name_url);
+      pull_requests.handle(url);
 
       break;
 
     case 'settings':
-      settings.handle(repo_full_name, token.getToken(git_type));
+      settings.handle(url,token);
       break;
 
     case 'caches':
-      caches.handle(repo_full_name, token.getToken(git_type));
+      caches.handle(url,token);
       break;
 
     case 'requests':
-      requests.handle(repo_full_name, token.getToken(git_type));
+      requests.handle(url,token);
       break;
 
     case 'trigger_build':
-      trigger_build.handle(repo_full_name, token.getToken(git_type));
+      trigger_build.handle(url,token);
       break;
 
     case 'jobs':
-      jobs.handle(username, repo, url.getJobId);
+      jobs.handle(url);
       break;
   }
 }
@@ -177,38 +169,47 @@ $('#more_options').on({
 jQuery(document).ready(function () {
   let content = jQuery('<h1 class="repo_title"></h1>');
 
-  title.show(baseTitle, type);
+  let type = url.getType();
+
+  title.show(url.getBaseTitle(), type);
 
   content.append(() => {
     let span_el = $("<a class='h1_git_type'></a>");
-    span_el.append(git.format(git_type))
-      .attr('href', [git.getUrl(repo, username), username, repo].join('/'))
+    span_el.append(git.format(url.getGitType()))
+      .attr('href', [
+        git.getUrl(url.getUsername(), url.getRepo(), url.getGitType()),
+        url.getUsername(),
+        url.getRepo()
+      ].join('/'))
       .attr('target', '_block');
 
     return span_el;
   }).append(() => {
     let span_el = $('<a class="h1_username">');
-    span_el.append(username)
-      .attr('href', [url.getHost, git_type, username].join('/'));
+    span_el.append(url.getUsername())
+      .attr('href', [url.getHost(), url.getGitType(), url.getUsername()].join('/'));
 
     return span_el;
   }).append(() => {
     let span_el = $('<span></span>');
     span_el.append(' / ');
+
     return span_el;
   }).append(() => {
     let span_el = $('<a class="h1_repo"></a>');
-    span_el.append(repo)
-      .attr('href', [url.getHost, git_type, username, repo].join('/'));
+    span_el.append(url.getRepo())
+      .attr('href',
+        [url.getHost(), url.getGitType(), url.getUsername(), url.getRepo()].join('/')
+      );
 
     return span_el;
   }).append(() => {
     let a_element = $('<a class="h1_status"></a>');
     let img_element = $('<img alt="status" src=""/>');
 
-    img_element.attr('src', repo_full_name_url + '/status');
+    img_element.attr('src', url.getRepoFullNameUrl() + '/status');
     a_element.append(img_element)
-      .attr('href', repo_full_name_url + '/getstatus')
+      .attr('href', url.getRepoFullNameUrl() + '/getstatus')
       .attr('target', '_black');
 
     return a_element;
@@ -222,10 +223,7 @@ jQuery(document).ready(function () {
   column_el_click(type, false); // 渲染 display 页面
 
   if (url.getUrlWithArray().length === 8) {
-    if (url.getUrlWithArray().slice(-2) === 'builds') {
-      type = 'build_id';
-    }
-    type = 'jobs';
+    type = url.getUrlWithArray().slice(-2) === 'builds' ? 'build_id' : 'jobs';
   }
 
   common.column_click_handle(type); // 渲染被点击的 column
@@ -241,3 +239,18 @@ window.onpopstate = (event) => {
   common.column_remove(); // 移除 column
   common.column_click_handle(id); // 渲染被点击的 column
 };
+
+// 处理 cancel restart button 点击事件
+$(document).on('click',
+  '.job_list button,.build_data button,.builds_list button,.pull_requests_list button',
+  async function () {
+    await common_status.buttonClick($(this));
+
+    let type = url.getType();
+    column_el_click(type, false); // 渲染 display 页面
+    common.column_remove(); // 移除 column
+    common.column_click_handle(type); // 渲染被点击的 column
+
+    return false;
+  }
+);

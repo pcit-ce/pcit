@@ -45,11 +45,11 @@ function display(data) {
 }
 
 module.exports = {
-  handle: (git_repo_full_name) => {
+  handle: (url) => {
     column_span_click('branches');
     $.ajax({
       type: 'GET',
-      url: '/api/repo/' + git_repo_full_name + '/branches',
+      url: '/api/repo/' + url.getGitRepoFullName() + '/branches',
       success: function (data) {
         display(data);
       }

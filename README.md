@@ -71,6 +71,8 @@
 * Git 仓库根目录包含 [`.pcit.yml`](https://github.com/khs1994-php/pcit/tree/master/yml_examples) 来配置 CI 规则
 
 ```yaml
+language: php
+
 pipeline:
 
   install:
@@ -153,6 +155,10 @@ $ ./lnmp-docker pcit-up
 关注 PCIT 项目作者 **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 获得支持或最新动态。
 
 ## 生态系统
+
+## Why PCIT
+
+* https://github.com/khs1994-php/pcit/blob/master/docs/why.md
 
 ## PCIT 子项目
 

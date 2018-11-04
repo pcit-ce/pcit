@@ -5,20 +5,29 @@ const list = require('../jobs/list');
 const log = require('../log');
 
 module.exports = {
-  show: (data, username, repo) => {
+  show: (data, url) => {
     console.log(data);
+
+    let username = url.getUsername();
+    let repo = url.getRepo();
 
     // 没有 build 数据
     if (!data) {
+      log.show(null);
+
       return;
     }
 
     let {jobs, build_id, build_status} = data;
+
     data.status = build_status;
 
-    details.show(data, username, repo);
+    details.show(data, url);
 
-    if (!jobs) {
+    // jobs 为空
+    if (jobs.length === 0) {
+      log.show(null);
+
       return;
     }
 
@@ -32,6 +41,6 @@ module.exports = {
     }
 
     // 有多个 job ,展示 jobs 列表
-    list.show(data, username, repo);
+    list.show(data, url);
   }
 };
