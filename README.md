@@ -186,6 +186,7 @@ $ ./lnmp-docker pcit-up
 * [Kubernetes](https://kubernetes.io/)
 * [Travis CI](https://travis-ci.com)
 * [Drone CI](https://drone.io)
+* [Minio](https://github.com/minio/minio)
 
 ## 国内友商
 

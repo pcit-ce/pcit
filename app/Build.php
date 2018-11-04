@@ -217,13 +217,13 @@ class Build extends Model
     public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
         $sql = <<<'EOF'
-SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) AND event_type NOT IN (?)
+SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?) AND event_type NOT IN (?)
 ORDER BY id DESC LIMIT 1
 EOF;
 
         return DB::select($sql, [
             $git_type, $rid,
-            'pending',
+            // 'pending',
             'skip',
             'inactive',
             CI::BUILD_EVENT_PR,

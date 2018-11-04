@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Build;
 use App\Job;
 
 class JobController
 {
-    public function __invoke(...$arg): void
-    {
-        require __DIR__.'/../../../../public/jobs/index.html';
-        exit;
-    }
-
     /**
      * @param $build_key_id
      *
@@ -40,9 +35,14 @@ class JobController
 
     /**
      * @param $job_id
+     *
+     * @throws \Exception
      */
     public function cancel($job_id): void
     {
+        Job::updateBuildStatus((int) $job_id, 'cancelled');
+
+        $this->updateBuildStatus((int) $job_id);
     }
 
     /**
@@ -52,6 +52,24 @@ class JobController
      */
     public function restart($job_id): void
     {
-        Job::updateBuildStatus($job_id, 'pending');
+        Job::updateBuildStatus((int) $job_id, 'pending');
+
+        $this->updateBuildStatus((int) $job_id);
+    }
+
+    /**
+     * 更新 job 的状态，同时更新 build 的状态
+     *
+     * @param int $job_id
+     *
+     * @throws \Exception
+     */
+    private function updateBuildStatus(int $job_id): void
+    {
+        $build_key_id = Job::getBuildKeyId($job_id);
+
+        $status = Job::getBuildStatusByBuildKeyId($build_key_id);
+
+        Build::updateBuildStatus($build_key_id, $status);
     }
 }

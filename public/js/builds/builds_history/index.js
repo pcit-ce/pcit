@@ -15,10 +15,11 @@ function display(data, username, repo, url_array) {
   console.log(url_array);
 
   if (8 === url_array.length) {
-
+    // 展示某个 build 详情
     if (0 === data.length || 'error' === data) {
       display_element.append('Oops, we couldn\'t find that build!');
     } else {
+      // 展示某个 build
       let column_el = $('#pull_requests');
       column_el.after('<span id="column_ico"> > <span>');
 
@@ -35,7 +36,7 @@ function display(data, username, repo, url_array) {
       // build_id span 元素被选中
       $('#build_id').trigger('click');
 
-      builds.show(data,username,repo);
+      builds.show(data, username, repo);
     }
 
   } else if (0 !== data.length) {
@@ -73,6 +74,7 @@ function display(data, username, repo, url_array) {
 
       let status_color;
 
+      let {text: button_text, title: button_title} = common_status.getButton(build_status);
       status_color = common_status.getColor(build_status);
       build_status = common_status.change(build_status);
 
@@ -137,8 +139,10 @@ function display(data, username, repo, url_array) {
       }).append(() => {
         return (() => {
           let button_el = $('<button class="cancel_or_restart"></button>');
-          button_el.append('button')
-            .attr('title', 'Restart build');
+          button_el.append(button_text)
+            .attr('title', button_title + ' build')
+            .attr('event_id', build_id)
+            .attr('type', 'build');
 
           return button_el;
         })();
@@ -147,6 +151,14 @@ function display(data, username, repo, url_array) {
       ul_el.append(li_el);
     });
     display_element.append(ul_el);
+
+    // 按钮点击事件
+    $('.builds_list button').on({
+      'click': function () {
+        common_status.buttonClick($(this));
+      }
+    })
+
   } else {
     display_element.append('Not Build Yet !');
   }

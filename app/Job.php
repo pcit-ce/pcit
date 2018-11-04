@@ -297,6 +297,8 @@ EOF;
     }
 
     /**
+     * 从 build 的所有 job 得出 build 的状态
+     *
      * @param int $build_key_id
      *
      * @return string

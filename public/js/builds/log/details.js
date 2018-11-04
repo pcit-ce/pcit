@@ -2,7 +2,7 @@ const common_status = require('../../common/status');
 const git = require('../../common/git');
 
 module.exports = {
-  show: (data, username, repo, job = 'true') => {
+  show: (data, username, repo, job = false) => {
     console.log(data);
     let display_element = $('#display');
 
@@ -13,8 +13,10 @@ module.exports = {
 
     let status_color;
 
+    let {title: button_title, text: button_text} = common_status.getButton(status);
     status_color = common_status.getColor(status);
     let build_status = common_status.change(status);
+
     console.log(build_status);
     if (null === stopped_at) {
       stopped_at = 'This build is ' + build_status;
@@ -99,7 +101,11 @@ module.exports = {
       return div_el;
     }).append(() => {
       let button_el = $('<button class="cancel_or_restart"></button>');
-      button_el.append('button');
+      button_el.append(button_text)
+        .attr('title', button_title + (job ? ' job' : ' build'))
+        .attr('event_id', id)
+        .attr('type', job ? 'job' : 'build');
+
       return button_el;
     }).append(() => {
       let env_el = $('<div class="env"></div>');
@@ -109,5 +115,11 @@ module.exports = {
     });
 
     display_element.append(div_element);
+
+    $('.build_data button').on({
+      'click': function () {
+        common_status.buttonClick($(this));
+      }
+    });
   }
 };

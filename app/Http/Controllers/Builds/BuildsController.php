@@ -10,6 +10,7 @@ use App\Job;
 use App\Repo;
 use Exception;
 use PCIT\Support\CI;
+use PCIT\Support\DB;
 
 class BuildsController
 {
@@ -126,9 +127,13 @@ class BuildsController
      */
     public function cancel($build_id): void
     {
-        JWTController::check((int) $build_id);
+        $build_id = (int) $build_id;
 
-        Build::updateBuildStatus((int) $build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+        JWTController::check($build_id);
+
+        Build::updateBuildStatus($build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+
+        $this->updateJobStatus($build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
     }
 
     /**
@@ -142,10 +147,33 @@ class BuildsController
      */
     public function restart($build_id): void
     {
-        JWTController::check((int) $build_id);
+        $build_id = (int) $build_id;
+        JWTController::check($build_id);
 
-        Build::updateBuildStatus((int) $build_id, 'pending');
-        Build::updateStartAt((int) $build_id, 0);
-        Build::updateStopAt((int) $build_id, 0);
+        Build::updateBuildStatus($build_id, 'pending');
+        // Build::updateStartAt((int) $build_id, 0);
+        // Build::updateStopAt((int) $build_id, 0);
+        $this->updateJobStatus($build_id, 'pending');
+    }
+
+    /**
+     * 更新 build 的状态同时更新 job 的状态
+     *
+     * @param int    $build_id
+     * @param string $status
+     *
+     * @throws Exception
+     */
+    private function updateJobStatus(int $build_id, string $status): void
+    {
+        DB::beginTransaction();
+        $jobs = Job::getByBuildKeyID($build_id);
+
+        foreach ($jobs as $job) {
+            $job_id = $job['id'];
+
+            Job::updateBuildStatus((int) $job_id, $status);
+        }
+        DB::commit();
     }
 }

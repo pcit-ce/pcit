@@ -48,6 +48,7 @@ function display(data, username, repo, repo_full_name_url) {
 
       let status_color;
 
+      let {title: button_title, text: button_text} = common_status.getButton(build_status);
       status_color = common_status.getColor(build_status);
       build_status = common_status.change(build_status);
 
@@ -120,8 +121,10 @@ function display(data, username, repo, repo_full_name_url) {
         return div_el;
       }).append(() => {
         let button_el = $('<button class="cancel_or_restart"></button>');
-        button_el.append('button')
-          .attr('title', 'Restart build');
+        button_el.append(button_text)
+          .attr('title', button_title + ' build')
+          .attr('event_id', build_id)
+          .attr('type', 'build');
 
         return button_el;
       });
@@ -130,9 +133,14 @@ function display(data, username, repo, repo_full_name_url) {
 
     });
     display_element.append(ul_el);
+
+    $('.pull_requests_list button').on({
+      'click': function () {
+        common_status.buttonClick($(this));
+      }
+    })
   }
 }
-
 
 module.exports = {
   handle: (git_repo_full_name, username, repo, repo_full_name_url) => {

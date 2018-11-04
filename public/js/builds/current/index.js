@@ -1,7 +1,6 @@
 'use strict';
 
 const {column_span_click} = require('../common');
-const log = require('../log');
 const build = require('../builds');
 
 function display(data, username, repo) {

@@ -19,6 +19,7 @@ module.exports = {
 
       let status_color = common_status.getColor(state);
       let status_background_color = common_status.getColor(state, true);
+      let {text: button_text, title: button_title} = common_status.getButton(state);
 
       let a_el = $('<a class="job_list"></a>');
 
@@ -47,20 +48,17 @@ module.exports = {
       }).append(() => {
         let button_el = $('<button class="job_cancel_or_restart"/>');
 
-        button_el.append('button')
-          .attr('title', 'Restart job');
+        button_el.append(button_text)
+          .attr('title', button_title + ' job')
+          .attr('event_id', id)
+          .attr('type', 'job');
 
         return button_el;
       }).attr('href', job_url + '/' + id)
-        .attr('id', id)
         .css('cursor', 'hand')
+        .attr('status_background_color', status_background_color)
+        .attr('status_color', status_color)
       ;
-
-      $('#' + id).on('mousemove', null, null, (e) => {
-        console.log('mousemove');
-        e.target.id.style.backgroundColor = status_background_color;
-        e.target.id.style.borderLeft = '10px solid ' + status_color;
-      });
 
       jobs_list_el.append(a_el);
     });
@@ -69,5 +67,34 @@ module.exports = {
     display_el.append(jobs_list_el);
 
     // display_el.css('height', (jobs.length * 10) + 'px');
+
+    // 鼠标移入 job list 背景变色
+    $('.job_list').on({
+      'mousemove': function (e) {
+        let that = $(this);
+        let background_color = that.attr('status_background_color');
+        let border_color = that.attr('status_color');
+
+        $(this).css('background', background_color)
+          .css('border-left', '5px solid ' + border_color);
+      },
+      'mouseout': function () {
+        let that = $(this);
+
+        that.css('background', 'none').css('border-left', 'none');
+      }
+    });
+
+    $('.job_list button').on({
+      'mousemove': () => {
+        console.log(1);
+      },
+      'click': function () {
+        console.log(1);
+        common_status.buttonClick($(this));
+
+        return false;
+      }
+    });
   }
 };

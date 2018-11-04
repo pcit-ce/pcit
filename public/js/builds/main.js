@@ -24,14 +24,15 @@ let type = url.getType;
 const repo_full_name_url = url.getRepoFullNameUrl;
 const git_type = url.getGitType;
 const baseTitle = url.baseTitle;
-const url_array = url.getUrlWithArray();
+// const url_array = url.getUrlWithArray();
 const common = require('./common');
+const token = require('../common/token');
 
 header.show();
 footer.show();
 
+// 事件捕获 从父元素到子元素传递
 // 事件冒泡 点击了 子元素 会向上传递 即也点击了父元素
-
 $('.column').click(function (event) {
   let id = event.target.id;
 
@@ -51,13 +52,14 @@ $('.column').click(function (event) {
 
 // http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
 // https://developer.mozilla.org/zh-CN/docs/Web/API/History_API
-
+// 标题参数目前无效
 function changeUrl(id, replace = false) {
   if ('current' === id) {
     if (replace) {
       history.replaceState({'key_id': id}, baseTitle, repo_full_name_url);
       return;
     }
+
     history.pushState({'key_id': id}, baseTitle, repo_full_name_url);
 
   } else {
@@ -69,13 +71,9 @@ function changeUrl(id, replace = false) {
       history.replaceState({'key_id': id}, baseTitle, repo_full_name_url + '/' + id);
       return;
     }
+
     history.pushState({'key_id': id}, baseTitle, repo_full_name_url + '/' + id);
   }
-}
-
-function getToken() {
-// eslint-disable-next-line no-undef
-  return Cookies.get(git_type + '_api_token');
 }
 
 function column_el_click(id, change_url = true) {
@@ -103,19 +101,19 @@ function column_el_click(id, change_url = true) {
       break;
 
     case 'settings':
-      settings.handle(repo_full_name, getToken());
+      settings.handle(repo_full_name, token.getToken(git_type));
       break;
 
     case 'caches':
-      caches.handle(repo_full_name, getToken());
+      caches.handle(repo_full_name, token.getToken(git_type));
       break;
 
     case 'requests':
-      requests.handle(repo_full_name, getToken());
+      requests.handle(repo_full_name, token.getToken(git_type));
       break;
 
     case 'trigger_build':
-      trigger_build.handle(repo_full_name, getToken());
+      trigger_build.handle(repo_full_name, token.getToken(git_type));
       break;
 
     case 'jobs':
@@ -175,6 +173,7 @@ $('#more_options').on({
   }
 });
 
+// 处理页面加载，用户首次进入
 jQuery(document).ready(function () {
   let content = jQuery('<h1 class="repo_title"></h1>');
 
@@ -233,6 +232,7 @@ jQuery(document).ready(function () {
   changeUrl(type, true);
 });
 
+// 处理回退事件
 window.onpopstate = (event) => {
   let id = event.state.key_id;
   console.log(id);

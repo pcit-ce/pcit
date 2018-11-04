@@ -56,12 +56,14 @@ body {
 
 .column #current {
     margin-left: 1px;
+    cursor: pointer;
 }
 
 .column span {
     font-size: 14px;
     margin-left: 20px;
     padding-bottom: 10px;
+    cursor: pointer;
 }
 
 #more_options {
