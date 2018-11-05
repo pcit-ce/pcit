@@ -283,3 +283,33 @@ $(document).on(
     return false;
   }
 );
+
+$(document).on(
+  'click',
+  '.setting [name="build_pushes"],' +
+    '.setting [name="build_pull_requests"],' +
+    '.setting [name="auto_cancel_branch_builds"],' +
+    '.setting [name="auto_cancel_pull_request_builds"]',
+  function() {
+    let that = $(this);
+
+    that.attr('value') === '1'
+      ? that.prop('checked', false).prop('value', '0')
+      : that.prop('checked', true).prop('value', '1');
+
+    // 发起请求
+
+    console.log(that);
+
+    $.ajax({
+      type: 'patch',
+      headers: {
+        Authorization: 'token ' + token.getToken(url.getGitType())
+      },
+      data: `{"${that.attr('name')}":${that.prop('value')}}`,
+      url:
+        '/api/repo/' +
+        [url.getRepoFullName(), 'setting', that.attr('name')].join('/')
+    });
+  }
+);

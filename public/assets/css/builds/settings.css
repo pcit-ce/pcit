@@ -1,0 +1,26 @@
+.setting label {
+    display: block;
+    line-height: 30px;
+}
+
+.setting .general {
+    margin-top: 10px;
+}
+
+.setting .auto_cancellation {
+    margin-top: 20px;
+}
+
+.setting .env {
+    margin-top: 20px;
+}
+
+.setting .cron {
+    margin-top: 20px;
+}
+
+.setting .setting_title {
+    font-size: 18px;
+    color: rgb(62, 170, 175);
+    margin-bottom: 10px;
+}

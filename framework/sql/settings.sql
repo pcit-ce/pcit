@@ -6,7 +6,6 @@ CREATE TABLE settings (
   `id`                              BIGINT AUTO_INCREMENT,
   `git_type`                        VARCHAR(20),
   `rid`                             BIGINT,
-  `builds_only_with_khsci_yml`      INT    DEFAULT 0,
   `build_pushes`                    INT    DEFAULT 1,
   `build_pull_requests`             INT    DEFAULT 1,
   `maximum_number_of_builds`        INT    DEFAULT 1,

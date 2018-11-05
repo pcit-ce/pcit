@@ -91,7 +91,10 @@ function display(data, url) {
 
       li_el.append(() => {
         let div_element = $('<div class="build_id"></div>');
-        div_element.append('').css('background', status_color);
+        div_element.append('').css({
+          background: status_color,
+          border: '1px solid' + status_color
+        });
 
         return div_element;
       });
@@ -121,7 +124,7 @@ function display(data, url) {
         .append(() => {
           let div_element = $('<div class="commit_message"></div>');
           div_element
-            .append(commit_message.slice(0, 28))
+            .append(commit_message.slice(0, 40))
             .attr('title', commit_message);
 
           return div_element;

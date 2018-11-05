@@ -78,7 +78,10 @@ function display(data, url) {
         })
         .append(() => {
           let div_el = $('<div class="build_id"></div>');
-          div_el.append('').css('background', status_color);
+          div_el.append('').css({
+            background: status_color,
+            border: '1px solid' + status_color
+          });
 
           return div_el;
         })
@@ -108,7 +111,7 @@ function display(data, url) {
         .append(() => {
           let div_el = $('<div class="commit_message"></div>');
           div_el
-            .append(commit_message.slice(0, 28))
+            .append(commit_message.slice(0, 40))
             .attr('title', commit_message);
 
           return div_el;

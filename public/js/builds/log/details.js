@@ -46,7 +46,10 @@ module.exports = {
 
     div_element.append(() => {
       let build_id_element = $('<div class="build_id"></div>');
-      build_id_element.append('').css('background', status_color);
+      build_id_element.append('').css({
+        background: status_color,
+        border: '1px solid ' + status_color
+      });
       return build_id_element;
     });
 
