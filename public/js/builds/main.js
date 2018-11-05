@@ -297,10 +297,9 @@ $(document).on(
       ? that.prop('checked', false).prop('value', '0')
       : that.prop('checked', true).prop('value', '1');
 
+    // console.log(that);
+
     // 发起请求
-
-    console.log(that);
-
     $.ajax({
       type: 'patch',
       headers: {
@@ -310,6 +309,132 @@ $(document).on(
       url:
         '/api/repo/' +
         [url.getRepoFullName(), 'setting', that.attr('name')].join('/')
+    });
+  }
+);
+
+$(document).on('click', '.env_list_item .delete', function() {
+  let env_id = $(this)
+    .parent()
+    .attr('env_id');
+  $(this)
+    .parent()
+    .remove();
+
+  // 发起请求
+  $.ajax({
+    type: 'delete',
+    url: '/api/repo/' + [url.getRepoFullName(), 'env_var', env_id].join('/'),
+    headers: {
+      Authorization: 'token ' + token.getToken(url.getGitType())
+    }
+  });
+
+  return false;
+});
+
+$(document).on('click', '.new_env input[name="is_public"]', function() {
+  let that = $(this);
+
+  console.log(that.attr('value') === '0');
+
+  that.attr('value') === '0'
+    ? that.prop('checked', 'checked').prop('value', '1')
+    : that.prop('checked', false).prop('value', '0');
+
+  console.log(that.prop('checked'));
+});
+
+$(document).on('click', '.new_env button', function() {
+  let is_public = $(this)
+    .prev()
+    .children()
+    .attr('value');
+  let value = $(this)
+    .prev()
+    .prev()
+    .val();
+  let name = $(this)
+    .prev()
+    .prev()
+    .prev()
+    .val();
+
+  console.log(is_public);
+  console.log(value);
+  console.log(name);
+
+  // 发起请求
+  function getData() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'post',
+        data: `{"env_var.name":"${name}","env_var.value":"${value}","env_var.public":"${is_public}"}`,
+        url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
+        headers: {
+          Authorization: 'token ' + token.getToken(url.getGitType())
+        },
+        success: res => {
+          resolve(res);
+        }
+      });
+    });
+  }
+
+  (async () => {
+    let id = await getData();
+    console.log(id);
+    // 增加列表
+    let env_el = $('.env_list_item:last-of-type');
+
+    let env_item_el = $('<div class="env_list_item"></div>').attr({
+      env_id: id,
+      public: is_public
+    });
+
+    env_item_el
+      .append(() => {
+        return $('<div class="env_name"></div>').append(name);
+      })
+      .append(() => {
+        return $('<div class="env_value"></div>').append(value);
+      })
+      .append(() => {
+        return $('<button class="delete"></button>').append('Delete');
+      });
+
+    env_el.after(env_item_el);
+  })().then();
+
+  return false;
+});
+
+$(document).on(
+  'input porpertychange',
+  '.general input[name="maximum_number_of_builds"]',
+  function() {
+    let value = $(this).val();
+
+    if (value.length === 0) {
+      return;
+    }
+
+    if (value <= 0) {
+      alert('value must lt 0');
+      return;
+    }
+
+    $.ajax({
+      type: 'patch',
+      url:
+        '/api/repo/' +
+        [url.getRepoFullName(), 'setting', 'maximum_number_of_builds'].join(
+          '/'
+        ),
+      data: `{"maximum_number_of_builds":${value}}`,
+      headers: {
+        Authorization: 'token ' + token.getToken(url.getGitType())
+      }
     });
   }
 );

@@ -1,5 +1,19 @@
 'use strict';
 
+function get_env(url, token) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
+      headers: {
+        Authorization: 'token ' + token.getToken(url.getGitType())
+      },
+      success: data => {
+        resolve(data);
+      }
+    });
+  });
+}
+
 function display(data, url, token) {
   let display_element = $('#display');
 
@@ -14,7 +28,7 @@ function display(data, url, token) {
 
   general_el
     .append(() => {
-      let div_el = $('<label class="setting_title"></label>');
+      let div_el = $('<div class="setting_title"></div>');
 
       return div_el.append('General');
     })
@@ -43,38 +57,78 @@ function display(data, url, token) {
 
   auto_cancellation
     .append(() => {
-      return $('<label class="setting_title"></label>').append(
-        'Auto Cancellation'
-      );
+      return $('<div class="setting_title"></div>').append('Auto Cancellation');
     })
     .append(() => {
       let input_el = $(
         '<label><input type="radio" name="auto_cancel_branch_builds"/></label>'
       );
 
-      return input_el.append('Auto cancel push');
+      return input_el.append('Auto cancel push builds');
     })
     .append(() => {
       let input_el = $(
         '<label><input type="radio" name="auto_cancel_pull_request_builds"/></label>'
       );
 
-      return input_el.append('Auto cancel pull request');
+      return input_el.append('Auto cancel pull request builds');
     });
 
-  env_el
-    .append(() => {
-      return $('<label class="setting_title"></label>').append(
-        'Environment Variables'
-      );
-    })
-    .append(() => {});
+  env_el.append(() => {
+    return $('<div class="setting_title"></div>').append(
+      'Environment Variables'
+    );
+  });
+
+  get_env(url, token).then(result => {
+    $.each(result, (index, data) => {
+      let { id, name, public: is_public, value } = data;
+
+      let env_item_el = $('<div class="env_list_item"></div>').attr({
+        env_id: id,
+        public: is_public
+      });
+
+      env_item_el
+        .append(() => {
+          return $('<div class="env_name"></div>').append(name);
+        })
+        .append(() => {
+          return $('<div class="env_value"></div>').append(value);
+        })
+        .append(() => {
+          return $('<button class="delete"></button>').append('Delete');
+        });
+
+      env_el.append(env_item_el);
+    });
+
+    env_el.append(() => {
+      return $('<form class="new_env"></form>')
+        .append(() => {
+          return $('<input class="name" type="text" value="Name"/>');
+        })
+        .append(() => {
+          return $('<input class="value" type="text" value="Value"/>');
+        })
+        .append(() => {
+          return $(
+            '<label class="is_public"><input type="radio" name="is_public" value="0"/></label>'
+          ).append('Public Value');
+        })
+        .append(() => {
+          return $('<button></button>').append('Add');
+        });
+    });
+  });
 
   cron_el
     .append(() => {
-      return $('<label class="setting_title"></label>').append('Cron Jobs');
+      return $('<div class="setting_title"></div>').append('Cron Jobs');
     })
-    .append(() => {});
+    .append(() => {
+      return $('<label>Coming Soon</label>');
+    });
 
   setting_el.append(general_el, auto_cancellation, env_el, cron_el);
 
@@ -92,7 +146,10 @@ function display(data, url, token) {
     $.each(data, (key, value) => {
       $(`.setting [name=${key}]`)
         .prop('checked', value === '1')
-        .attr('value', value === '1' ? '1' : '0');
+        .attr(
+          'value',
+          key === 'maximum_number_of_builds' ? value : value === '1' ? '1' : '0'
+        );
     });
   }
 }
