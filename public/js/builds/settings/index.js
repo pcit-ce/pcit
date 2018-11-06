@@ -49,7 +49,7 @@ function display(data, url, token) {
 
     .append(() => {
       let input_el = $(
-        '<label><input type="text" name="maximum_number_of_builds"/></label>'
+        '<label><input type="text" name="maximum_number_of_builds" value="1"/></label>'
       );
 
       return input_el.prepend('Maximum number of builds');
@@ -113,7 +113,7 @@ function display(data, url, token) {
         })
         .append(() => {
           return $(
-            '<label class="is_public"><input type="radio" name="is_public" value="0"/></label>'
+            '<label class="is_public"><input type="radio" name="is_public" value="0" /></label>'
           ).append('Public Value');
         })
         .append(() => {

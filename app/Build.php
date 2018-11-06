@@ -335,16 +335,22 @@ EOF;
 
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag,commit_message,compare,
-committer_name,committer_username,build_status,event_type,pull_request_number
+committer_name,committer_username,build_status,event_type,pull_request_number,created_at
 FROM builds WHERE
-id<=$before AND git_type=? AND rid=? AND event_type IN(?,?) AND build_status NOT IN('$exclude')
+id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?) AND build_status NOT IN('$exclude')
 ORDER BY id DESC LIMIT $limit
 EOF;
-        if ($pr) {
-            return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, null]);
+        if ($all) {
+            return DB::select($sql, [
+                $git_type, $rid, CI::BUILD_EVENT_PR, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG,
+            ]);
         }
 
-        return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_TAG, CI::BUILD_EVENT_PUSH]);
+        if ($pr) {
+            return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, null, null]);
+        }
+
+        return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_TAG, CI::BUILD_EVENT_PUSH, null]);
     }
 
     /**

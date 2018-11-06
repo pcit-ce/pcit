@@ -25,7 +25,7 @@ class JWTController
     {
         $token = Request::getHeader('Authorization');
 
-        if (!$token) {
+        if (!$token || 'token undefined' === $token) {
             throw new Exception('Requires authentication', 401);
         }
 

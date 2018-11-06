@@ -80,6 +80,17 @@ EOF;
 
         $sql = "UPDATE settings SET $setting_name=? WHERE git_type=? AND rid=?";
 
-        return DB::update($sql, [$setting_value, $git_type, $rid]);
+        $result = DB::update($sql, [$setting_value, $git_type, $rid]);
+
+        // 当用户更新设置时才新建列
+        if (0 === $result) {
+            $sql = <<<EOF
+INSERT INTO settings(git_type, rid,$setting_name) values(?,?,?)
+EOF;
+
+            $result = DB::insert($sql, [$git_type, $rid, $setting_value]);
+        }
+
+        return $result;
     }
 }

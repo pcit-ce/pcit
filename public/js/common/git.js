@@ -17,6 +17,9 @@ module.exports = {
       case 'github':
         url = 'https://github.com';
         break;
+      case 'gitee':
+        url = 'https://gitee.com';
+        break;
     }
 
     return url;

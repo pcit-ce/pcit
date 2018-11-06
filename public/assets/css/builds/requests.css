@@ -2,7 +2,8 @@
     border: 1px solid #f1f1f1;
     margin-bottom: 10px;
     position: relative;
-    height: 100px;
+    height: 30px;
+    font-size: 19px;
 }
 
 .requests .requests_list * {
@@ -10,30 +11,54 @@
 }
 
 .requests .status {
-   left: 1px;
+    left: 1px;
+    width: 10px;
+    height: 30px;
+    /*border-left: 8px solid red;*/
 }
 
+.requests a {
+    text-decoration: none;
+}
+
+.requests a:hover {
+    text-decoration: underline;
+}
+
+
 .requests .event_type {
-    left: 100px;
+    left: 30px;
 }
 
 .requests .branch {
-    left: 200px;
+    left: 100px;
 }
 
 .requests .commit_id {
+    display: block;
+    left: 200px;
+}
+
+.requests .created_at{
     left: 300px;
+    color: #666;
 }
 
 .requests .commit_message {
-    left: 400px;
+    left: 410px;
+    color: #666;
 }
 
 .requests .build_id {
-    left: 600px;
+    display: block;
+    left: 740px;
+    color: #666;
 }
 
 .requests .reason {
     position: absolute;
-    right: 0;
+    right: 2px;
+    color: #666;
+    /*background: rebeccapurple;*/
+    /*text-align:left;*/
 }

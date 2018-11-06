@@ -5,7 +5,7 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('triggerBuild' + JSON.stringify(data));
+  display_element.append('手动触发构建功能即将上线');
 }
 
 module.exports = {
@@ -19,6 +19,9 @@ module.exports = {
       },
       success: function(data) {
         display(data);
+      },
+      error: () => {
+        display('');
       }
     });
   }
