@@ -344,6 +344,16 @@ EOF;
      */
     public static function updateEnv(int $job_id, string $env): void
     {
-        DB::update('update jobs set env_vars=? WHERE id=?', [$env, $job_id]);
+        DB::update('UPDATE jobs set env_vars=? WHERE id=?', [$env, $job_id]);
+    }
+
+    /**
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getPendingJob()
+    {
+        return DB::select('SELECT * FROM jobs WHERE state=? ORDER BY id LIMIT 1', ['pending']);
     }
 }

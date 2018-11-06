@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Console\PCITDaemon;
+namespace App\Console\PCITDaemon\Commands;
 
+use App\Console\PCITDaemon\Migrate;
 use Exception;
 use PCIT\Support\Env;
 use PCIT\Support\Log;
@@ -11,12 +12,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpCommand extends Command
+abstract class Kernel extends Command
 {
-    public function __construct(?string $name = null)
-    {
-        parent::__construct($name);
-    }
+    /**
+     * @var \App\Console\PCITDaemon\Kernel
+     */
+    protected $handler;
 
     protected function configure(): void
     {
@@ -65,8 +66,7 @@ class UpCommand extends Command
         }
 
         while (1) {
-            $up = new Up();
-            $up->up();
+            $this->handler->handle();
             unset($up);
 
             if (Env::get('CI_DEBUG_MEMORY', false)) {
@@ -80,14 +80,13 @@ class UpCommand extends Command
     /**
      * @throws Exception
      */
-    private function process_execute(): void
+    protected function process_execute(): void
     {
         //创建子进程
         $pid = pcntl_fork();
         //子进程
         if (0 === $pid) {
-            $up = new Up();
-            $up->up();
+            $this->handler->handle();
 
             if (Env::get('CI_DEBUG_MEMORY', false)) {
                 Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
