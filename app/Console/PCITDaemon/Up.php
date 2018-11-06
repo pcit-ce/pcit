@@ -31,10 +31,11 @@ class Up
     public function up(): void
     {
         try {
-            // 从 Webhooks 缓存中拿出数据，进行处理
+            // 从 Webhooks 缓存中拿出数据，存入数据库
             $this->webhooks();
 
             // Docker 构建队列
+            // 从数据库中取出数据，生成 jobs
             try {
                 (new Build())->build();
             } catch (\Throwable $e) {
@@ -70,7 +71,7 @@ class Up
     }
 
     /**
-     * 从缓存中拿出 webhooks 数据，并进行处理.
+     * 从缓存中拿出 webhooks 数据，存入数据库中.
      *
      * @throws Exception
      */

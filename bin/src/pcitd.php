@@ -2,6 +2,7 @@
 
 <?php
 
+use App\Console\PCITDaemon\AgentCommand;
 use App\Console\PCITDaemon\MigrateCommand;
 use App\Console\PCITDaemon\UpCommand;
 use Symfony\Component\Console\Application;
@@ -18,6 +19,8 @@ try {
     $cli->add(new MigrateCommand());
 
     $cli->add(new UpCommand());
+
+    $cli->add(new AgentCommand());
 
     $cli->run();
 } catch (Exception $e) {

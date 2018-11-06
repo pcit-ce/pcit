@@ -4,7 +4,9 @@
 
 ### 2018/11/06
 
-* [*] 增加支持 `[skip pcit]` `[pcit skip]` 指令跳过构建（不区分大小写）
+* [ ] Docker for Windows bug : 容器中无法 ping 通局域网地址，重启解决。
+* [x] Docker for Windows bug : post 数据过长，无响应。通过启动另一个 socket 转 IP 容器解决。
+* [x] 增加支持 `[skip pcit]` `[pcit skip]` 指令跳过构建（不区分大小写）
 
 ### 2018/11/04
 

@@ -48,7 +48,7 @@ class Build
             (new PCIT())->build->handle($buildData);
 
             // agent run job
-            (new Agent())->handle($buildData->build_key_id, $buildData->config);
+            // (new Agent())->handle($buildData->build_key_id, $buildData->config);
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [
                 'message' => $e->getMessage(), 'code' => $e->getCode(), ], Log::EMERGENCY);

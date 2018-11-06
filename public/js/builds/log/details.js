@@ -55,10 +55,9 @@ module.exports = {
 
     div_element
       .append(() => {
-        let branch_element = $('<div class="branch"></div>');
-        branch_element.append(branch).css('color', status_color);
-
-        return branch_element;
+        return $('<div class="branch"></div>')
+          .append(branch)
+          .css('color', status_color);
       })
       .append(() => {
         let div_el = $('<a class="branch_url">Branch </a>');
@@ -69,12 +68,9 @@ module.exports = {
         return div_el;
       })
       .append(() => {
-        let build_status_element = $('<div class="build_status"></div>');
-        build_status_element
+        return $('<div class="build_status"></div>')
           .append('#' + id + ' ' + build_status)
           .css('color', status_color);
-
-        return build_status_element;
       })
       .append(() => {
         let commit_url_element = $('<a class="commit_url">Commit </a>');
@@ -87,28 +83,23 @@ module.exports = {
       });
 
     div_element.append(() => {
-      let commit_message_element = $('<div class="commit_message"></div>');
-      commit_message_element.append(commit_message).css('color', status_color);
-
-      return commit_message_element;
+      return $('<div class="commit_message"></div>')
+        .append(commit_message)
+        .css('color', status_color);
     });
 
     div_element.append(() => {
-      let committer_name_element = $('<div class="committer"></div>');
-      committer_name_element.append(committer_name);
-
-      return committer_name_element;
+      return $('<div class="committer"></div>').append(committer_name);
     });
 
     div_element.append(() => {
-      let compare_element = $('<a class="compare">Compare </a>');
-      compare_element
+      return $('<a class="compare">Compare </a>')
         .append('Compare')
-        .attr('title', 'View diff on GitHub')
-        .attr('href', compare);
-      compare_element.attr('target', '_blank');
-
-      return compare_element;
+        .attr({
+          title: 'View diff on GitHub',
+          href: compare,
+          target: '_blank'
+        });
     });
 
     div_element
@@ -135,10 +126,7 @@ module.exports = {
         return button_el;
       })
       .append(() => {
-        let env_el = $('<div class="env"></div>');
-        env_el.append(env_vars);
-        console.log(env_vars);
-        return env_el;
+        return $('<div class="env"></div>').append(env_vars);
       });
 
     display_element.append(div_element);
