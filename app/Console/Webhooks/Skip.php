@@ -41,7 +41,6 @@ class Skip
     /**
      * 检查 commit 信息跳过构建. branch 匹配构建.
      *
-     *
      * @throws Exception
      */
     public function handle(): void
@@ -49,7 +48,9 @@ class Skip
         $build_key_id = $this->build_key_id;
 
         // check commit message
-        if (preg_match('#(\[skip ci\])|(\[ci skip\])#i', $this->commit_message)) {
+        if (preg_match(
+            '#(\[skip ci\])|(\[ci skip\])|(\[pcit skip\])|(\[skip pcit\])#i',
+            $this->commit_message)) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message', [], Log::INFO);
 
             self::writeSkipToDB($build_key_id);

@@ -171,6 +171,14 @@ $('#more_options').on({
 });
 
 // 处理页面加载，用户首次进入
+$(() => {});
+
+// =
+
+$(document).ready(() => {});
+
+// =
+
 jQuery(document).ready(function() {
   let content = jQuery('<h1 class="repo_title"></h1>');
 

@@ -2,6 +2,10 @@
 
 ## v18.06
 
+### 2018/11/06
+
+* [*] 增加支持 `[skip pcit]` `[pcit skip]` 指令跳过构建（不区分大小写）
+
 ### 2018/11/04
 
 * [ ] `.pcit.yml` 根据 `language` 指令自动增加默认的 image command environment 指令。
