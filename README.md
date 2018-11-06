@@ -1,6 +1,6 @@
 # PCIT (PCIT is not PHP CI TOOLKIT)
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/pcit.svg?style=social&label=Stars)](https://github.com/khs1994-php/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/pcit/all.svg)](https://github.com/khs1994-php/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/khs1994-php/pcit) [![codecov](https://codecov.io/gh/khs1994-php/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/pcit) [![qqgroup-894134241](https://img.shields.io/badge/QQ%E7%BE%A4-894134241-blue.svg)](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/pcit.svg?style=social&label=Stars)](https://github.com/khs1994-php/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/pcit/all.svg)](https://github.com/khs1994-php/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/khs1994-php/pcit) [![codecov](https://codecov.io/gh/khs1994-php/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/pcit)
 
 **国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的开源云原生 CI/CD 系统**
 
@@ -16,7 +16,9 @@
 
 ## 项目状态
 
-**积极开发中** 部分描述或功能只是 [**路线图**](ROADMAP.md) 中的一部分，有待实现，请点击 `Star` 或关注微博、微信、QQ群（见下方）保持对 PCIT 的关注。
+**积极开发中** 部分描述或功能只是 [**路线图**](ROADMAP.md) 中的一部分，有待实现，请点击 `Star` 或关注微信订阅号保持对 PCIT 的关注。
+
+**预览** 点击 https://ci.khs1994.com/github/khs1994-docker/lnmp 查看 PCIT 功能界面。
 
 本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎开发者参与贡献 PCIT。
 
@@ -149,10 +151,6 @@ $ ./lnmp-docker pcit-up
 ### 视频教程
 
 文字版看不明白？请查看 [视频版]() 安装教程。
-
-## 联系我们
-
-关注 PCIT 项目作者 **[微博](https://weibo.com/kanghuaishuai)** **[QQ 群 894134241](https://shang.qq.com/wpa/qunwpa?idkey=776defd7c271e9de70b9dfae855a34f11aada1fec9f27d22303dfffcb6d75e63)** 获得支持或最新动态。
 
 ## 生态系统
 

@@ -127,7 +127,7 @@ function display(data, url, token) {
       return $('<div class="setting_title"></div>').append('Cron Jobs');
     })
     .append(() => {
-      return $('<label>Coming Soon</label>');
+      return $('<label>计划构建功能即将上线</label>');
     });
 
   setting_el.append(general_el, auto_cancellation, env_el, cron_el);

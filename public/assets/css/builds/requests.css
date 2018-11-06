@@ -1,0 +1,39 @@
+.requests .requests_list {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 10px;
+    position: relative;
+    height: 100px;
+}
+
+.requests .requests_list * {
+    position: absolute;
+}
+
+.requests .status {
+   left: 1px;
+}
+
+.requests .event_type {
+    left: 100px;
+}
+
+.requests .branch {
+    left: 200px;
+}
+
+.requests .commit_id {
+    left: 300px;
+}
+
+.requests .commit_message {
+    left: 400px;
+}
+
+.requests .build_id {
+    left: 600px;
+}
+
+.requests .reason {
+    position: absolute;
+    right: 0;
+}

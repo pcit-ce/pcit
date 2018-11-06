@@ -17,8 +17,8 @@ COPY . /app/pcit
 
 RUN cd /app/pcit/public \
       && mkdir -p /app/pcit/framework/storage/private_key \
-      && npm install -g cross-env \
-      && npm install --registry=${NODE_REGISTRY} \
+      && npm install -g cross-env --registry=${NODE_REGISTRY} \
+      && npm install --registry=${NODE_REGISTRY} --production \
       && npm run build \
       && rm -rf node_modules
 

@@ -12,3 +12,8 @@ public/package-lock.json
 .env.example
 
 framework/storage/private_key
+
+.php_cs.cache
+
+/build
+/cache

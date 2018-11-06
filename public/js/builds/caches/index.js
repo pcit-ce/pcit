@@ -5,7 +5,9 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('caches' + JSON.stringify(data));
+  display_element
+    .append('缓存列表功能即将上线')
+    .append('caches' + JSON.stringify(data));
 }
 
 module.exports = {

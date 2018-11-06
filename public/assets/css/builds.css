@@ -6,7 +6,7 @@
 @import "common/body.css";
 @import "builds/jobs_list.css";
 @import "builds/settings.css";
-
+@import "builds/requests.css";
 body {
     margin: 0;
     padding: 0;

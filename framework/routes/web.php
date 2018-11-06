@@ -27,21 +27,23 @@ Route::get('admin', function () {
     return 'Coming Soon';
 });
 
-Route::get('api', 'APIController');
-
-Route::get('sitemap', 'SiteMapController');
-
-Route::get('status', 'StatusController');
-
-Route::get('about', 'AboutController');
-
-Route::get('team', 'TeamController');
-
-Route::get('docs', 'DocsController');
-
-Route::get('wechat', 'WeChatController');
-
-Route::get('blog', 'BlogController');
+Route::get('api', 'IndexController@api');
+Route::get('sitemap', 'IndexController@sitemap');
+Route::get('status', 'IndexController@status');
+Route::get('about', 'IndexController@about');
+Route::get('team', 'IndexController@team');
+Route::get('docs', 'IndexController@docs');
+Route::get('wechat', 'IndexController@wechat');
+Route::get('blog', 'IndexController@blog');
+Route::get('issues', 'IndexController@issues');
+Route::get('changelog', 'IndexController@changelog');
+Route::get('ce', 'IndexController@ce');
+Route::get('ee', 'IndexController@ee');
+Route::get('why', 'IndexController@why');
+Route::get('donate', 'IndexController@donate');
+Route::get('plugins', 'IndexController@plugins');
+Route::get('terms-of-service', 'IndexController@terms_of_service');
+Route::get('privacy-policy', 'IndexController@privacy_policy');
 
 /* OAuth login*/
 

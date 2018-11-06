@@ -24,6 +24,9 @@ module.exports = {
       url: '/api/repo/' + url.getGitRepoFullName() + '/build/current',
       success: function(data) {
         display(data, url);
+      },
+      error: function() {
+        display('', url);
       }
     });
   }
