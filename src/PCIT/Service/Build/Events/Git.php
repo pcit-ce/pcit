@@ -128,7 +128,7 @@ class Git
             ->setImage($git_image)
             ->setCreateJson(null)
             ->getCreateJson();
-
-        Cache::store()->lpush($client->job_id, $config);
+        Cache::store()->lpush((string) $client->job_id, 'end');
+        Cache::store()->lpush((string) $client->job_id, $config);
     }
 }

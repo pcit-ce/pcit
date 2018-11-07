@@ -19,7 +19,7 @@ clone:
 workspace:
   base: /app
   # path: .
-  path: src
+  path: pcit
 
 cache:
   directories:

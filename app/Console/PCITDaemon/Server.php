@@ -27,7 +27,7 @@ use PCIT\Support\Log;
 use TencentAI\TencentAI;
 
 /**
- * Run Server and agent on one node.
+ * Run Server node without docker.
  */
 class Server extends Kernel
 {
@@ -87,9 +87,6 @@ class Server extends Kernel
         try {
             // exec build
             (new PCIT())->build->handle($buildData);
-
-            // agent run job
-            // (new Agent())->handle();
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [
                 'message' => $e->getMessage(), 'code' => $e->getCode(), ], Log::EMERGENCY);

@@ -46,6 +46,13 @@ class Pipeline
 
         $workdir = $this->client->workdir;
 
+        // push
+        $cache = Cache::store();
+        $cache->lPush((string) $job_id.'_pipeline', 'end');
+        $cache->lPush((string) $job_id.'_success', 'end');
+        $cache->lPush((string) $job_id.'_failure', 'end');
+        $cache->lPush((string) $job_id.'_changed', 'end');
+
         foreach ($this->pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
 
@@ -134,7 +141,28 @@ class Pipeline
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            Cache::store()->lPush((string) $job_id.'_pipeline', $container_config);
+            $is_status = false;
+
+            if ($failure) {
+                $is_status = true;
+                $cache->lPush((string) $job_id.'_failure', $container_config);
+            }
+
+            if ($success) {
+                $is_status = true;
+                $cache->lPush((string) $job_id.'_success', $container_config);
+            }
+
+            if ($changed) {
+                $is_status = true;
+                $cache->lPush((string) $job_id.'_changed', $container_config);
+            }
+
+            if (true === $is_status) {
+                return;
+            }
+
+            $cache->lPush((string) $job_id.'_pipeline', $container_config);
         }
     }
 }

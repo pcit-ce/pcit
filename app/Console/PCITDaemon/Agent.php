@@ -10,6 +10,7 @@ use App\Console\Events\Subject;
 use App\Console\Events\UpdateBuildStatus;
 use App\Job;
 use PCIT\PCIT;
+use PCIT\Support\Cache;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
 
@@ -30,11 +31,17 @@ class Agent extends Kernel
         Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
 
         // 取出一个 job,包括 job config, build key id
-        $job_data = Job::getPendingJob()[0];
+        $job_data = Job::getPendingJob()[0] ?? null;
+
+        if (!$job_data) {
+            return;
+        }
 
         ['id' => $job_id, 'build_id' => $build_key_id] = $job_data;
 
-        $config = Build::getConfig((int) $build_key_id);
+        echo $job_id;
+
+        $config = Build::getConfig((int) $build_key_id) ?? '';
 
         $subject = new Subject();
 
@@ -56,9 +63,46 @@ class Agent extends Kernel
                 ->handle();
         }
 
+        // 恢复缓存队列
+        $services_key = $job_id.'_services';
+        $pipeline_key = $job_id.'_pipeline';
+        $this->cacheHandler($services_key);
+        $this->cacheHandler($pipeline_key);
+
         // 运行一个 job 之后更新 build 状态
         $status = Job::getBuildStatusByBuildKeyId((int) $build_key_id);
 
         Build::updateBuildStatus((int) $build_key_id, $status);
+    }
+
+    /**
+     * @param $key
+     *
+     * @throws \Exception
+     */
+    public function cacheHandler($key): void
+    {
+        $cache = Cache::store();
+
+        if ($cache->lLen($key) <= 1) {
+            return;
+        }
+
+        $result = $cache->lpop($key);
+
+        if ('end' === $result) {
+            $cache->rpush($key, 'end');
+        } else {
+            $length = $cache->lLen($key);
+
+            for ($i = 0; $i > $length; ++$i) {
+                $result = $cache->rpoplpush($key, $key);
+
+                if ('end' === $result) {
+                    $cache->lpop($key);
+                    $cache->rpush($key, 'end');
+                }
+            }
+        }
     }
 }
