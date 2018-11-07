@@ -10,6 +10,7 @@ use PCIT\Service\Build\BuildData;
 use PCIT\Service\Build\Client;
 use PCIT\Service\Build\Conditional\Branch;
 use PCIT\Service\Build\Conditional\Event;
+use PCIT\Service\Build\Conditional\Matrix;
 use PCIT\Service\Build\Conditional\Platform;
 use PCIT\Service\Build\Conditional\Status;
 use PCIT\Service\Build\Conditional\Tag;
@@ -70,6 +71,8 @@ class Pipeline
             $when_branch = $array->when->branch ?? null;
             $when_tag = $array->when->tag ?? null;
 
+            $when_matrix = $array->when->matrix ?? null;
+
             $this->client->build->tag;
             $this->client->build->pull_request_number;
 
@@ -90,6 +93,11 @@ class Pipeline
 
             if (!(new Tag($when_tag, $this->build->tag))->regHandle()) {
                 Log::connect()->emergency('skip by tag check');
+                continue;
+            }
+
+            if (!(new Matrix($when_matrix, $this->matrix_config))->handle()) {
+                Log::connect()->emergency('skip by matrix check');
                 continue;
             }
 

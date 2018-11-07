@@ -6,7 +6,7 @@ namespace PCIT\Service\Build\Conditional;
 
 use PCIT\Support\Log;
 
-class Kernel
+abstract class Kernel
 {
     public $conditional;
 

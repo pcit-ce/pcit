@@ -16,7 +16,11 @@ function getColor(status, backgroud) {
 
   if (status === 'success') {
     status_color = backgroud ? '#deecdb' : '#39aa56';
-  } else if (status === 'in_progress' || status === 'pending') {
+  } else if (
+    status === 'in_progress' ||
+    status === 'pending' ||
+    status === 'queued'
+  ) {
     status_color = backgroud ? '#faf6db' : '#edde3f';
   } else if (status === 'cancelled') {
     status_color = backgroud ? '#f1f1f1' : '#9d9d9d';
@@ -38,6 +42,8 @@ module.exports = {
         return 'started';
       case 'pending':
         return 'created';
+      case 'queued':
+        return 'created';
       case 'failure':
         return 'failed';
       case 'success':
@@ -52,7 +58,11 @@ module.exports = {
   },
 
   getButton: status => {
-    if (status === 'pending' || status === 'in_progress') {
+    if (
+      status === 'pending' ||
+      status === 'in_progress' ||
+      status === 'queued'
+    ) {
       return { text: 'cancel', title: 'Cancel' };
     }
 
