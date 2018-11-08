@@ -323,10 +323,6 @@ class RunContainer
                 break;
             }
 
-            if (!$container_config) {
-                break;
-            }
-
             $container_id = $this->docker_container
                 ->setCreateJson($container_config)
                 ->create(false)

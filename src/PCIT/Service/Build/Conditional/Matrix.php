@@ -8,6 +8,10 @@ class Matrix extends Kernel
 {
     public function handle()
     {
+        if (!$this->conditional) {
+            return true;
+        }
+
         if ($this->current === $this->conditional) {
             return true;
         }
