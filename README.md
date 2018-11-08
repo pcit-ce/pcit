@@ -152,6 +152,16 @@ $ ./lnmp-docker pcit-up
 
 文字版看不明白？请查看 [视频版]() 安装教程。
 
+## 示例项目
+
+目前 PCIT 官方维护以下语言的示例项目。 
+
+| 语言        | 地址 |
+| --          | --   |
+| **PHP**     | https://github.com/khs1994-php/tencent-ai |
+| **Node.js** | https://github.com/khs1994-php/tencent-ai-node | 
+| **Go**      | https://github.com/khs1994-php/tencent-ai-go |
+
 ## 生态系统
 
 ## Why PCIT

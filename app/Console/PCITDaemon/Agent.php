@@ -64,10 +64,7 @@ class Agent extends Kernel
         }
 
         // 恢复缓存队列
-        $services_key = $job_id.'_services';
-        $pipeline_key = $job_id.'_pipeline';
-        $this->cacheHandler($services_key);
-        $this->cacheHandler($pipeline_key);
+        $this->cacheHandler((string) $job_id);
 
         // 运行一个 job 之后更新 build 状态
         $status = Job::getBuildStatusByBuildKeyId((int) $build_key_id);
@@ -76,31 +73,41 @@ class Agent extends Kernel
     }
 
     /**
-     * @param $key
+     * @param string $job_id
      *
      * @throws \Exception
      */
-    public function cacheHandler($key): void
+    public function cacheHandler(string $job_id): void
     {
         $cache = Cache::store();
 
-        if ($cache->lLen($key) <= 1) {
-            return;
-        }
+        $services_key = $job_id.'_services';
+        $pipeline_key = $job_id.'_pipeline';
+        $success_key = $job_id.'_success';
+        $failure_key = $job_id.'_failure';
+        $changed_key = $job_id.'_changed';
 
-        $result = $cache->lpop($key);
+        $key_array = [$services_key, $pipeline_key, $success_key, $failure_key, $changed_key];
 
-        if ('end' === $result) {
-            $cache->rpush($key, 'end');
-        } else {
-            $length = $cache->lLen($key);
+        foreach ($key_array as $key) {
+            if ($cache->lLen($key) <= 1) {
+                return;
+            }
 
-            for ($i = 0; $i > $length; ++$i) {
-                $result = $cache->rpoplpush($key, $key);
+            $result = $cache->lpop($key);
 
-                if ('end' === $result) {
-                    $cache->lpop($key);
-                    $cache->rpush($key, 'end');
+            if ('end' === $result) {
+                $cache->rpush($key, 'end');
+            } else {
+                $length = $cache->lLen($key);
+
+                for ($i = 1; $i > $length; ++$i) {
+                    $result = $cache->rpoplpush($key, $key);
+
+                    if ('end' === $result) {
+                        $cache->lpop($key);
+                        $cache->rpush($key, 'end');
+                    }
                 }
             }
         }

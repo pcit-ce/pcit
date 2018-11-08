@@ -3,12 +3,12 @@ module.exports = {
     browser: true,
     node: true,
     es6: true,
-    jquery: true,
-    commonjs: true
+    jquery: true
   },
   extends: 'eslint:recommended',
   parserOptions: {
-    ecmaVersion: 2015,
+    // ecmaVersion: 2015,
+    ecmaVersion: 7,
     impliedStrict: true,
     sourceType: 'script'
   },

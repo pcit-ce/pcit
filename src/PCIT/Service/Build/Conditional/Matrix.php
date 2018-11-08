@@ -1,7 +1,8 @@
 <?php
 
-namespace PCIT\Service\Build\Conditional;
+declare(strict_types=1);
 
+namespace PCIT\Service\Build\Conditional;
 
 class Matrix extends Kernel
 {
