@@ -82,7 +82,7 @@ class Server extends Kernel
         }
 
         Build::updateBuildStatus(
-            $buildData->build_key_id, 'pending');
+            $buildData->build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_QUEUED);
 
         try {
             // exec build
