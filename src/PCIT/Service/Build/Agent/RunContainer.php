@@ -241,6 +241,21 @@ class RunContainer
     }
 
     /**
+     * @param int $job_id
+     *
+     * @throws \Exception
+     */
+    private function changed(int $job_id): void
+    {
+        // TODO 获取上一次 build 的状况
+        $changed = Build::buildStatusIsChanged(Job::getRid($job_id), 'master');
+
+        $changed_key = $job_id.'_'.\PCIT\Support\Job::JOB_STATUS_CHANGED;
+
+        Job::updateFinishedAt($job_id);
+    }
+
+    /**
      * 运行 成功或失败之后的任务
      *
      * @param int $job_id
@@ -253,28 +268,23 @@ class RunContainer
         LogSupport::debug(__FILE__, __LINE__,
             'Run job after', ['job_id' => $job_id, 'status' => $status], LogSupport::EMERGENCY);
 
-        // TODO
-        // 获取上一次 build 的状况
-        $changed = Build::buildStatusIsChanged(Job::getRid($job_id), 'master');
+        // TODO 获取上一次 build 的状况
+        if ('changed' === $status && !Build::buildStatusIsChanged(Job::getRid($job_id), 'master')) {
+            return;
+        }
 
         $status_key = $job_id.'_'.$status;
 
-        $changed_key = $job_id.'_'.\PCIT\Support\Job::JOB_STATUS_CHANGED;
+        if (1 === Cache::store()->lLen($status_key)) {
+            $this->after($job_id, 'changed');
+
+            return;
+        }
 
         while (1) {
             $container_config = Cache::store()->rPoplpush($status_key, $status_key);
 
             if ('end' === $container_config) {
-                break;
-            }
-
-            if (!$container_config) {
-                $container_config = Cache::store()->rPoplpush($changed_key, $changed_key);
-
-                if (!$container_config && $changed) {
-                    break;
-                }
-
                 break;
             }
 
@@ -285,9 +295,13 @@ class RunContainer
             }
         }
 
-        LogSupport::debug(__FILE__, __LINE__, 'Run job after finished', ['status' => $status], LogSupport::EMERGENCY);
+        if ('changed' === $status) {
+            return;
+        }
 
-        Job::updateFinishedAt($job_id);
+        $this->after($job_id, 'changed');
+
+        LogSupport::debug(__FILE__, __LINE__, 'Run job after finished', ['status' => $status], LogSupport::EMERGENCY);
     }
 
     /**
