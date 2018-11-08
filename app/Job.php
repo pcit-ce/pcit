@@ -333,7 +333,7 @@ EOF;
             }
         }
 
-        return 'pending';
+        return 'queued';
     }
 
     /**
@@ -352,8 +352,8 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getPendingJob()
+    public static function getQueuedJob()
     {
-        return DB::select('SELECT * FROM jobs WHERE state=? ORDER BY id LIMIT 1', ['pending']);
+        return DB::select('SELECT * FROM jobs WHERE state=? ORDER BY id LIMIT 1', ['queued']);
     }
 }

@@ -52,7 +52,7 @@ class JobController
      */
     public function restart($job_id): void
     {
-        Job::updateBuildStatus((int) $job_id, 'pending');
+        Job::updateBuildStatus((int) $job_id, 'queued');
 
         $this->updateBuildStatus((int) $job_id);
     }
