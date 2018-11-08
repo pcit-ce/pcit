@@ -83,7 +83,7 @@ EOF;
 
         $this->config = JSON::beautiful($this->config);
 
-        Log::connect()->emergency('====== '.$this->build_key_id.' Build Start Success ======');
+        Log::connect()->emergency('====== Get Build '.$this->build_key_id.' Data Start ======');
 
         $this->getRepoConfig();
 

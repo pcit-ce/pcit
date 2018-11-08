@@ -54,7 +54,7 @@ class CheckAdmin
                 $uid = User::getUid($k, $build->git_type);
 
                 if (\in_array($uid, $admin_array, true)) {
-                    Log::debug(__FILE__, __LINE__, 'This repo is ci root\'s repo, building...', [], Log::INFO);
+                    Log::debug(__FILE__, __LINE__, 'This repo is ci root\'s repo, continue...', [], Log::INFO);
 
                     return;
                 }

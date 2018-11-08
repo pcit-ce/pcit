@@ -105,6 +105,9 @@ class Client
 
             $this->job_id = Job::create($this->build->build_key_id);
 
+            Log::getMonolog()->emergency(
+                '=== Handle job Start', ['job_id' => $this->job_id]);
+
             (new Subject())
                 // git
                 ->register(new Git($git, $this->build, $this))
@@ -116,7 +119,7 @@ class Client
                 ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $workdir, $cache))
                 ->handle();
 
-            Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);
+            Log::getMonolog()->emergency('=== Generate job success ===', ['job_id' => $this->job_id]);
 
             return;
         }
@@ -126,6 +129,9 @@ class Client
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
             $this->job_id = Job::create($this->build->build_key_id);
+
+            Log::getMonolog()->emergency(
+                '=== Handle job Start ===', ['job_id' => $this->job_id]);
 
             (new Subject())
                 // git
@@ -138,7 +144,7 @@ class Client
                 ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $workdir, $cache))
                 ->handle();
 
-            Log::getMonolog()->emergency('Generate job success', ['job_id' => $this->job_id]);
+            Log::getMonolog()->emergency('=== Generate job success ===', ['job_id' => $this->job_id]);
         }
     }
 }
