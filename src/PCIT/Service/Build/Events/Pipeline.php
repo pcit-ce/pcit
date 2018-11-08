@@ -10,6 +10,7 @@ use PCIT\Service\Build\BuildData;
 use PCIT\Service\Build\Client;
 use PCIT\Service\Build\Conditional\Branch;
 use PCIT\Service\Build\Conditional\Event;
+use PCIT\Service\Build\Conditional\Matrix;
 use PCIT\Service\Build\Conditional\Platform;
 use PCIT\Service\Build\Conditional\Status;
 use PCIT\Service\Build\Conditional\Tag;
@@ -46,6 +47,13 @@ class Pipeline
 
         $workdir = $this->client->workdir;
 
+        // push
+        $cache = Cache::store();
+        $cache->lPush((string) $job_id.'_pipeline', 'end');
+        $cache->lPush((string) $job_id.'_success', 'end');
+        $cache->lPush((string) $job_id.'_failure', 'end');
+        $cache->lPush((string) $job_id.'_changed', 'end');
+
         foreach ($this->pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
 
@@ -62,6 +70,8 @@ class Pipeline
 
             $when_branch = $array->when->branch ?? null;
             $when_tag = $array->when->tag ?? null;
+
+            $when_matrix = $array->when->matrix ?? null;
 
             $this->client->build->tag;
             $this->client->build->pull_request_number;
@@ -83,6 +93,11 @@ class Pipeline
 
             if (!(new Tag($when_tag, $this->build->tag))->regHandle()) {
                 Log::connect()->emergency('skip by tag check');
+                continue;
+            }
+
+            if (!(new Matrix($when_matrix, $this->matrix_config))->handle()) {
+                Log::connect()->emergency('skip by matrix check');
                 continue;
             }
 
@@ -134,7 +149,28 @@ class Pipeline
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            Cache::store()->lPush((string) $job_id.'_pipeline', $container_config);
+            $is_status = false;
+
+            if ($failure) {
+                $is_status = true;
+                $cache->lPush((string) $job_id.'_failure', $container_config);
+            }
+
+            if ($success) {
+                $is_status = true;
+                $cache->lPush((string) $job_id.'_success', $container_config);
+            }
+
+            if ($changed) {
+                $is_status = true;
+                $cache->lPush((string) $job_id.'_changed', $container_config);
+            }
+
+            if (true === $is_status) {
+                continue;
+            }
+
+            $cache->lPush((string) $job_id.'_pipeline', $container_config);
         }
     }
 }

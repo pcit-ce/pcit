@@ -9,6 +9,7 @@ use App\Job;
 use App\Notifications\GitHubAppChecks;
 use Exception;
 use PCIT\Support\CI;
+use PCIT\Support\JSON;
 
 abstract class Kernel
 {
@@ -66,6 +67,8 @@ EOF;
     {
         $this->job_key_id = $job_key_id;
 
+        $this->config = JSON::beautiful($config);
+
         $this->config = $config ??
             'This repo not include .pcit.yml file or build log is empty, please see https://docs.ci.khs1994.com/usage/';
 
@@ -90,7 +93,7 @@ EOF;
 
         $job_key_id = $this->job_key_id;
 
-        Build::updateBuildStatus($this->job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+        // Build::updateBuildStatus($this->job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
 
         GitHubAppChecks::send(
             $job_key_id,

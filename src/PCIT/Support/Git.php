@@ -63,10 +63,10 @@ class Git
 
                 break;
             case 'coding':
-                $url = 'https://coding.net/u/'.$username.'/p/'.$repo.'/git';
+                $url = 'https://git.dev.tencent.com/u/'.$username.'/p/'.$repo.'/git';
 
                 if ($ssh) {
-                    $url = 'git@git.coding.net:'.$repo_full_name;
+                    $url = 'git@git.dev.tencent.com:'.$repo_full_name;
                 }
 
                 break;
@@ -219,8 +219,8 @@ class Git
                 break;
             case 'coding':
                 // 支持 Coding 企业版
-                $url = Env::get('CI_CODING_HOST', null) ?? 'coding.net/api';
-
+                $url = Env::get('CI_CODING_HOST', null) ?? 'dev.tencent.com';
+                $url .= '/api';
                 break;
 
             case 'gitee':

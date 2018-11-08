@@ -54,11 +54,11 @@
 
 ## PCIT 架构
 
-**PCIT** 由 **PHP 后端**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** + **开放平台**（`插件`、`API`）四部分组成
+**PCIT** 由 **PHP 分布式后端（1+N）**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** + **开放平台**（`插件`、`API`）四部分组成
 
 * **Webhooks Server** 接收 Git 事件
 
-* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 事件并将其分解为多个任务 (job)，之后在 Docker 单机或集群（Swarm、Kubernetes）中执行构建、测试、容器化部署的自动化过程。
+* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 事件生成一个 build 并将其分解为多个 job (Server 节点)，之后在 Docker 单机或集群（Swarm、Kubernetes）中执行构建、测试、容器化部署的自动化过程（Agent 节点）。
 
 * **CLI** 提供各种实用的功能，例如命令行查看构建状态，命令行操作 GitHub，命令行调用 Tencent AI 开放能力
 
@@ -151,6 +151,16 @@ $ ./lnmp-docker pcit-up
 ### 视频教程
 
 文字版看不明白？请查看 [视频版]() 安装教程。
+
+## 示例项目
+
+目前 PCIT 官方维护以下语言的示例项目。 
+
+| 语言        | 地址 |
+| --          | --   |
+| **PHP**     | https://github.com/khs1994-php/tencent-ai |
+| **Node.js** | https://github.com/khs1994-php/tencent-ai-node | 
+| **Go**      | https://github.com/khs1994-php/tencent-ai-go |
 
 ## 生态系统
 

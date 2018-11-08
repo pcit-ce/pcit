@@ -18,3 +18,6 @@ CREATE TABLE IF NOT EXISTS `jobs` (
   `env_vars`      VARCHAR(255)
 )
   AUTO_INCREMENT = 10;
+
+
+ALTER TABLE jobs ADD COLUMN `container_config` TEXT;

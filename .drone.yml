@@ -43,7 +43,7 @@ pipeline:
       event: [push,pull_request,tag,deployment]
       # matrix:
       #   PHP_VERSION: 7.2.11
-      #  REDIS_VERSION: 5.0.0
+      #   REDIS_VERSION: 5.0.0
 
   codecov:
     image: plugins/codecov

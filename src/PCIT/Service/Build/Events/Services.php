@@ -38,6 +38,8 @@ class Services
 
         Job::updateEnv($this->job_id, json_encode($this->matrix_config));
 
+        Cache::store()->lPush((string) $this->job_id.'_services', 'end');
+
         foreach ($this->service as $service_name => $array) {
             $image = $array->image;
             $env = $array->environment ?? null;

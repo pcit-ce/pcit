@@ -19,7 +19,7 @@ clone:
 workspace:
   base: /app
   # path: .
-  path: src
+  path: pcit
 
 cache:
   directories:
@@ -86,6 +86,13 @@ pipeline:
     commands:
       - echo "Only run on Windows amd64"
 
+  test_when_branch:
+    image: bash
+    when:
+      branch: master
+    commands:
+      - echo "Only run on master branch"
+
   test_when_branch_include:
     image: bash
     when:
@@ -93,13 +100,6 @@ pipeline:
         include: dev
     commands:
       - echo "Only run on dev branch"
-
-  test_when_branch:
-    image: bash
-    when:
-      branch: master
-    commands:
-      - echo "Only run on master branch"
 
   test_when_branch_exclude:
     image: bash
@@ -214,6 +214,17 @@ pipeline:
     commands:
       - echo "build changed"
 
+  test_matrix:
+    image: bash
+    commands:
+      - echo "test when matrix"
+    when:
+      matrix:
+        - PHP_VERSION: 7.2.11
+          NGINX_VERSION: 1.15.6
+          REDIS_VERSION: 5.0.0
+          MYSQL_VERSION: 5.7.23
+
 services:
   mysql:
     image: mysql:${MYSQL_VERSION}
@@ -242,16 +253,16 @@ matrix:
     - 7.2.11
     - 7.1.23
   NGINX_VERSION:
-    - 1.15.5
+    - 1.15.6
   REDIS_VERSION:
     - 5.0.0
   MYSQL_VERSION:
     - 5.7.23
     # - 8.0.12
-  MONGODB_VERSION:
-    - 4.1.4
-  POSTGRESQL_VERSION:
-    - 10.5
+  # MONGODB_VERSION:
+    # - 4.1.4
+  # POSTGRESQL_VERSION:
+    # - 10.5
 
 # matrix:
 #   include:

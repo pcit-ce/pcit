@@ -9,7 +9,7 @@ class Branch extends Kernel
     public function regHandle()
     {
         if (!\is_object($this->conditional)) {
-            return parent::reghandle();
+            return parent::regHandle();
         }
 
         $include = $this->conditional->include ?? [];
@@ -17,16 +17,18 @@ class Branch extends Kernel
 
         if ($exclude) {
             $this->conditional = $exclude;
-            $result = $this->RegHandle();
+            $result = $this->regHandle();
 
             if (true === ($result ?? false)) {
                 return false;
+            } else {
+                return true;
             }
         }
 
         if ($include) {
             $this->conditional = $include;
-            $result = $this->RegHandle();
+            $result = $this->regHandle();
 
             if (true === ($result ?? false)) {
                 return true;
