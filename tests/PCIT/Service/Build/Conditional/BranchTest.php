@@ -30,8 +30,18 @@ class BranchTest extends PCITTestCase
         $result = (new Branch($obj, 'master'))->regHandle();
         $this->assertTrue($result);
 
+        $obj = json_decode('{"include":"master"}');
+        $result = (new Branch($obj, 'dev'))->regHandle();
+        $this->assertFalse($result);
+
+        $obj = json_decode('{"exclude":"master"}');
+        $result = (new Branch($obj, 'dev'))->regHandle();
+
+        $this->assertTrue($result);
+
         $obj = json_decode('{"exclude":"master"}');
         $result = (new Branch($obj, 'master'))->regHandle();
+
         $this->assertFalse($result);
 
         $obj = json_decode('{"exclude":"master","include":"master"}');

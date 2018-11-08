@@ -55,6 +55,8 @@ class Pipeline
         $cache->lPush((string) $job_id.'_changed', 'end');
 
         foreach ($this->pipeline as $setup => $array) {
+            var_dump($setup);
+
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
 
             $image = $array->image;
@@ -167,7 +169,7 @@ class Pipeline
             }
 
             if (true === $is_status) {
-                return;
+                continue;
             }
 
             $cache->lPush((string) $job_id.'_pipeline', $container_config);

@@ -104,7 +104,7 @@ class GitHubAppChecks
             (string) $job_key_id,
             $status,
             $started_at,
-            $completed_at,
+            $completed_at ?? time(),
             $conclusion,
             $title,
             $summary,
