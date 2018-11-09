@@ -12,7 +12,11 @@ function display(data, url) {
 
   if (data.length === 0) {
     display_element.append('Not Event receive !');
+    display_element.append(60);
+    return;
   }
+
+  display_element.innerHeight(60 + data.length * 30);
 
   $.each(data, (key, value) => {
     let requests_el_item = $('<div class="requests_list"></div>');
@@ -42,7 +46,9 @@ function display(data, url) {
         );
       })
       .append(() => {
-        return $('<div class="event_type"></div>').append(event_type);
+        return $('<div class="event_type"></div>').append(
+          event_type === 'pull_request' ? 'pr' : event_type
+        );
       })
       .append(() => {
         return $('<div class="branch"></div>')

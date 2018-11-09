@@ -6,6 +6,8 @@ const common_status = require('../../common/status');
 
 module.exports = {
   show: (data, url) => {
+    let display_el = $('#display');
+
     let jobs_list_el = $('<div class="jobs_list"></div>');
 
     let { jobs } = data;
@@ -14,6 +16,8 @@ module.exports = {
 
     let job_url =
       '/' + [git_type, url.getUsername(), url.getRepo(), 'jobs'].join('/');
+
+    display_el.innerHeight((jobs.length + 1) * 100);
 
     $.each(jobs, (index, job) => {
       let { id, state, env_vars = '' } = job;
@@ -75,7 +79,6 @@ module.exports = {
       jobs_list_el.append(a_el);
     });
 
-    let display_el = $('#display');
     display_el.append(jobs_list_el);
 
     // display_el.css('height', (jobs.length * 10) + 'px');

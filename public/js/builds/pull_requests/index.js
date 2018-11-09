@@ -11,10 +11,11 @@ function display(data, url) {
 
   if (0 === data.length) {
     display_element.append('No pull request builds for this repository');
+    display_element.innerHeight(60);
   } else {
     let ul_el = $('<ul class="pull_requests_list"></ul>');
 
-    ul_el.height((data.length + 1) * 100);
+    display_element.height((data.length + 1) * 100);
 
     $.each(data, function(id, status) {
       let {

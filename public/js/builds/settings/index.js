@@ -81,6 +81,8 @@ function display(data, url, token) {
   });
 
   get_env(url, token).then(result => {
+    display_element.innerHeight(300 + result.length * 30);
+
     $.each(result, (index, data) => {
       let { id, name, public: is_public, value } = data;
 

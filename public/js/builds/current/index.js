@@ -10,6 +10,7 @@ function display(data, url) {
 
   if (0 === data.length) {
     display_element.append('Not Build Yet !');
+    display_element.innerHeight(60);
   } else {
     build.show(data, url);
   }
