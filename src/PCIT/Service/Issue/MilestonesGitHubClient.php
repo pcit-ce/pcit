@@ -54,14 +54,9 @@ class MilestonesGitHubClient
      */
     public function create(string $repo_full_name, string $title, ?string $description, ?string $due_on, string $state = 'open'): void
     {
-        $data = [
-            'title' => $title,
-            'state' => $state,
-            'description' => $description,
-            'due_on' => $due_on,
-        ];
-
-        $this->curl->post($this->api_url.'/repos/'.$repo_full_name.'/milestones', json_encode(array_filter($data)));
+        $this->curl->post($this->api_url.'/repos/'.$repo_full_name.'/milestones',
+            json_encode(array_filter(compact(
+                'title', 'state', 'description', 'due_on'))));
     }
 
     /**
@@ -78,14 +73,11 @@ class MilestonesGitHubClient
      */
     public function update(string $repo_full_name, int $milestone_number, string $title, ?string $description, ?string $due_on, string $state = 'open'): void
     {
-        $data = [
-            'title' => $title,
-            'state' => $state,
-            'description' => $description,
-            'due_on' => $due_on,
-        ];
-
-        $this->curl->patch($this->api_url.'/repos/'.$repo_full_name.'/milestones/'.$milestone_number, json_encode(array_filter($data)));
+        $this->curl->patch(
+            $this->api_url.'/repos/'.$repo_full_name.'/milestones/'.$milestone_number,
+            json_encode(array_filter(compact(
+                'title', 'state', 'description', 'due_on'
+            ))));
     }
 
     /**

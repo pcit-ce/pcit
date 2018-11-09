@@ -255,11 +255,7 @@ EOF;
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/comments/'.$comment_id;
 
-        $data = [
-            'body' => $body,
-        ];
-
-        $this->curl->patch($url, json_encode($data));
+        $this->curl->patch($url, json_encode(compact('body')));
 
         $http_return_code = $this->curl->getCode();
 

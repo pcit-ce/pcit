@@ -94,11 +94,7 @@ class AssigneesGitHubClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
 
-        $data = [
-            'assignees' => $assignees,
-        ];
-
-        $this->curl->post($url, json_encode($data), $this->header);
+        $this->curl->post($url, json_encode(compact('data')), $this->header);
 
         $http_return_code = $this->curl->getCode();
 
@@ -122,11 +118,7 @@ class AssigneesGitHubClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/assignees';
 
-        $data = [
-            'assignees' => $assignees,
-        ];
-
-        $this->curl->delete($url, json_encode($data), $this->header);
+        $this->curl->delete($url, json_encode(compact('assignees')), $this->header);
 
         $http_return_code = $this->curl->getCode();
 

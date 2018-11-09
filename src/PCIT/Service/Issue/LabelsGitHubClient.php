@@ -55,7 +55,7 @@ class LabelsGitHubClient
      * post 201
      *
      * @param string $repo_full_name
-     * @param string $label_name
+     * @param string $name           label name
      * @param string $color
      * @param string $description
      *
@@ -63,17 +63,11 @@ class LabelsGitHubClient
      *
      * @throws Exception
      */
-    public function create(string $repo_full_name, string $label_name, string $color, string $description)
+    public function create(string $repo_full_name, string $name, string $color, string $description)
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/labels';
 
-        $data = [
-            'name' => $label_name,
-            'color' => $color,
-            'description' => $description,
-        ];
-
-        return $this->curl->post($url, $data);
+        return $this->curl->post($url, compact('name', 'color', 'description'));
     }
 
     /**
@@ -83,7 +77,7 @@ class LabelsGitHubClient
      *
      * @param string $repo_full_name
      * @param string $label_current_name
-     * @param string $label_name
+     * @param string $label_name         label name
      * @param string $color
      * @param string $description
      *
@@ -93,19 +87,13 @@ class LabelsGitHubClient
      */
     public function update(string $repo_full_name,
                            string $label_current_name,
-                           string $label_name,
+                           string $name,
                            string $color,
                            string $description)
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/labels/'.$label_current_name;
 
-        $data = [
-            'name' => $label_name,
-            'color' => $color,
-            'description' => $description,
-        ];
-
-        return $this->curl->post($url, json_encode($data));
+        return $this->curl->post($url, json_encode(compact('name', 'color', 'description')));
     }
 
     /**

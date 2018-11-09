@@ -103,15 +103,9 @@ class GitHubClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues';
 
-        $data = [
-            'title' => $title,
-            'body' => $body,
-            'milestone' => $milestone,
-            'labels' => $labels,
-            'assignees' => $assignees,
-        ];
-
-        $this->curl->post($url, json_encode(array_filter($data)), $this->header);
+        $this->curl->post($url, json_encode(array_filter(compact(
+            'title', 'body', 'milestone', 'labels', 'assignees'
+        ))), $this->header);
 
         $http_return_code = $this->curl->getCode();
 
@@ -147,16 +141,9 @@ class GitHubClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number;
 
-        $data = [
-            'title' => $title,
-            'body' => $body,
-            'state' => $state,
-            'milestone' => $milestone,
-            'labels' => $labels,
-            'assignees' => $assignees,
-        ];
-
-        $this->curl->patch($url, json_encode(array_filter($data)), $this->header);
+        $this->curl->patch($url, json_encode(array_filter(compact(
+            'title', 'body', 'state', 'milestone', 'labels', 'assignees'
+        ))), $this->header);
 
         $http_return_code = $this->curl->getCode();
 

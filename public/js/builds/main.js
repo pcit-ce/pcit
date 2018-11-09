@@ -330,12 +330,24 @@ $(document).on('click', '.env_list_item .delete', function() {
     .remove();
 
   // 发起请求
-  $.ajax({
-    type: 'delete',
-    url: '/api/repo/' + [url.getRepoFullName(), 'env_var', env_id].join('/'),
-    headers: {
-      Authorization: 'token ' + token.getToken(url.getGitType())
-    }
+  (() => {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'delete',
+        url:
+          '/api/repo/' + [url.getRepoFullName(), 'env_var', env_id].join('/'),
+        headers: {
+          Authorization: 'token ' + token.getToken(url.getGitType())
+        },
+        success() {
+          resolve();
+        }
+      });
+    });
+  })().then(() => {
+    let display_el = $('#display');
+
+    display_el.innerHeight(display_el.innerHeight() - 50);
   });
 
   return false;
@@ -412,6 +424,10 @@ $(document).on('click', '.new_env button', function() {
       });
 
     env_el.after(env_item_el);
+
+    let display_el = $('#display');
+
+    display_el.innerHeight(display_el.innerHeight() + 50);
   })().then();
 
   return false;
