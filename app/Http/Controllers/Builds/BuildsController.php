@@ -173,6 +173,8 @@ class BuildsController
             $job_id = $job['id'];
 
             Job::updateBuildStatus((int) $job_id, $status);
+
+            'cancelled' === $status && (new JobController())->handleCancel((int) $job_id);
         }
         DB::commit();
     }

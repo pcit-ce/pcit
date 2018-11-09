@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Builds;
 
 use App\Build;
 use App\Job;
+use App\Notifications\GitHubChecksConclusion\Cancelled;
+use PCIT\Support\DB;
 
 class JobController
 {
@@ -40,9 +42,27 @@ class JobController
      */
     public function cancel($job_id): void
     {
-        Job::updateBuildStatus((int) $job_id, 'cancelled');
+        $job_id = (int) $job_id;
+
+        $this->handleCancel($job_id);
 
         $this->updateBuildStatus((int) $job_id);
+    }
+
+    /**
+     * @param int $job_id
+     *
+     * @throws \Exception
+     */
+    public function handleCancel(int $job_id): void
+    {
+        DB::beginTransaction();
+        Job::updateBuildStatus($job_id, 'cancelled');
+        Job::updateFinishedAt($job_id, time());
+        $config = Build::getConfig(Job::getBuildKeyId($job_id));
+        DB::commit();
+
+        (new Cancelled($job_id, $config, null))->handle();
     }
 
     /**

@@ -38,7 +38,7 @@ class Cancelled extends Kernel
     /**
      * @return string
      */
-    public function cancelled()
+    public function markdown()
     {
         return self::$header.<<<EOF
 

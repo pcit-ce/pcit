@@ -31,14 +31,16 @@ class InitCommand extends Command
         $current_file = getcwd().'/.pcit.yml';
 
         if (file_exists($current_file)) {
-            throw new Exception('.pcit.yml exists, skip', 500);
+            echo '.pcit.yml exists, generate .pcit.yml.example'."\n\n";
+
+            $current_file = getcwd().'/.pcit.yml.example';
         }
 
         $content = <<<'EOF'
-#
-# @see https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
-#
-        
+# https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
+# https://ci.khs1994.com
+# https://github.com/apps/pcit-ce
+
 clone:
   git:
     # image: plugins/git
@@ -50,9 +52,10 @@ clone:
       # hello-world: https://github.com/octocat/hello-world.git
 
 workspace:
+  # /app/pcit
   base: /app
   # path: .
-  path: src
+  path: pcit
 
 cache:
   directories:
@@ -60,13 +63,11 @@ cache:
   - .php_cs.cache
 
 pipeline:
-  #
-  # This is phpunit demo
-  #
 
-  php:
-    image: khs1994/php-fpm:${PHP_VERSION}
-    pull: true
+  # This is phpunit demo
+  script:
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    # pull: true
     environment:
       - a=1
     commands:
@@ -91,6 +92,12 @@ pipeline:
       # branch:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
+      # matrix:
+      #   - PHP_VERSION: 7.2.11
+      #     REDIS_VERSION: 1.15.6
+      #     MYSQL_VERSION: 5.7.22
+      #     MONGODB_VERSION: 4.1.4
+      #     POSTGRESQL_VERSION: 11.0
 
 services:
   mysql:
@@ -102,13 +109,13 @@ services:
     command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # postgresql:
-  #   image: postgres:${POSTGRESQL_VERSION}
+  #   image: postgres:${POSTGRESQL_VERSION}-alpine
   #   environment:
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_DB=test
 
   redis:
-    image: redis:${REDIS_VERSION}
+    image: redis:${REDIS_VERSION}-alpine
     command: ["--bind", "0.0.0.0"]
 
   # mongodb:
@@ -117,38 +124,26 @@ services:
 
 matrix:
   PHP_VERSION:
-    - 7.2.5-alpine3.7
-    - 7.1.18-alpine
-    # - 7.1.17-alpine3.4
-    # - 7.0.30-alpine3.4
-    # - 5.6.36-alpine3.4
+    - 7.2.11
+    - 7.1.23
   REDIS_VERSION:
-    - 4.0.9-alpine
+    - 5.0.0
   MYSQL_VERSION:
     # - 8.0.11
     - 5.7.22
   MONGODB_VERSION:
-    - 3.7.3
+    - 4.1.4
   POSTGRESQL_VERSION:
-    - 10.3-alpine
+    - 11.0
 
 # branches:
 #   include: [ master, dev, feature/* ]
 #   exclude: [ release/1.0.0, release/1.1.* ]
 
-config:
-  aliyun:
-    docker_registry:
-      # registry: git_repo_full_name
-      # khs1994/wsl: khs1994-php/pcit
-
-  tencent_cloud:
-    docker_registry:
-      # khs1994/wsl: khs1994-php/pcit    
 EOF;
 
         file_put_contents($current_file, $content);
 
-        return $output->write('.pcit.yml Generate Success');
+        return $output->write($current_file.' Generate Success');
     }
 }

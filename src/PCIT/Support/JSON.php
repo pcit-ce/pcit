@@ -15,8 +15,12 @@ class JSON
      *
      * @see    http://www.veryhuo.com/a/view/50222.html
      */
-    public static function beautiful(string $json)
+    public static function beautiful(?string $json)
     {
+        if (null === $json) {
+            return null;
+        }
+
         $result = '';
         $pos = 0;
         $strLen = \strlen($json);

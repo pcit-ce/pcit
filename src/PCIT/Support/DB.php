@@ -205,8 +205,11 @@ class DB
      */
     public static function beginTransaction(): void
     {
-        self::connection()->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
-        self::connection()->beginTransaction();
+        try {
+            self::connection()->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
+            self::connection()->beginTransaction();
+        } catch (\Throwable $e) {
+        }
     }
 
     /**
@@ -226,8 +229,11 @@ class DB
      */
     public static function commit(): void
     {
-        self::connection()->commit();
-        self::connection()->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+        try {
+            self::connection()->commit();
+            self::connection()->setAttribute(PDO::ATTR_AUTOCOMMIT, 1);
+        } catch (\Throwable $e) {
+        }
     }
 
     /**
