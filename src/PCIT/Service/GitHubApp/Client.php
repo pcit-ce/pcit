@@ -134,8 +134,11 @@ class Client
      *
      * @throws Exception
      */
-    public function getAccessToken(int $installation_id, string $private_key_path)
+    public function getAccessToken(int $installation_id, string $private_key_path = null)
     {
+        $private_key_path = $private_key_path ??
+            base_path().'framework/storage/private_key/private.key';
+
         Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token ...');
 
         $redis = Cache::store();
@@ -162,7 +165,9 @@ class Client
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
 
-            throw new Exception('Get GitHub App AccessToken Error', $http_return_code);
+            Cache::store()->delete('github_app_jwt');
+
+            throw new Exception('Get GitHub App AccessToken Error '.$access_token_json, $http_return_code);
         }
 
         $access_token = $access_token_obj->token;

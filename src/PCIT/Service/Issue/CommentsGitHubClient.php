@@ -8,7 +8,7 @@ use Curl\Curl;
 use Exception;
 use PCIT\Support\JSON;
 use PCIT\Support\Log;
-use TencentAI\Error\TencentAIError;
+use TencentAI\Exception\TencentAIException;
 
 class CommentsGitHubClient
 {
@@ -68,36 +68,31 @@ class CommentsGitHubClient
             try {
                 $lang = $translate->detect($source);
                 $lang = $lang['data']['lang'] ?? 'en';
-            } catch (TencentAIError $e) {
+            } catch (TencentAIException $e) {
                 $lang = 'en';
             }
 
-            try {
-                $translate = $translate->aILabText($source);
-                $translate = JSON::beautiful(
-                    json_encode($translate, JSON_UNESCAPED_UNICODE));
-            } catch (TencentAIError $e) {
-                $translate = JSON::beautiful(
-                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-            }
+            $translate = $translate->aILabText($source);
+            $translate = JSON::beautiful(
+                json_encode($translate, JSON_UNESCAPED_UNICODE));
 
             $translate_output = json_decode($translate, true)['data']['trans_text'] ?? null;
 
-            $lang_show_in_md = 'Chinese';
+            // $lang_show_in_md = 'Chinese';
 
             if ('en' === $lang) {
                 $source = $translate_output;
-                $lang_show_in_md = 'English';
+                // $lang_show_in_md = 'English';
             }
 
-            try {
-                $chat = $nlp->chat($source, (string) $issue_number);
-                $chat = JSON::beautiful(
-                    json_encode($chat, JSON_UNESCAPED_UNICODE));
-            } catch (TencentAIError $e) {
-                $chat = JSON::beautiful(
-                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
-            }
+//            try {
+//                $chat = $nlp->chat($source, (string) $issue_number);
+//                $chat = JSON::beautiful(
+//                    json_encode($chat, JSON_UNESCAPED_UNICODE));
+//            } catch (TencentAIException $e) {
+//                $chat = JSON::beautiful(
+//                    json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
+//            }
 
             //            try {
             //                $sem = $nlp->wordcom($source);
@@ -130,11 +125,11 @@ class CommentsGitHubClient
             //            }
 
             try {
-                $polar = $nlp->textPolar($source);
+                $polar = $nlp->textPolar($source ?? '积极');
 
                 $polar = JSON::beautiful(
                     json_encode($polar, JSON_UNESCAPED_UNICODE));
-            } catch (TencentAIError $e) {
+            } catch (TencentAIException $e) {
                 $polar = JSON::beautiful(
                     json_encode([$e->getMessage(), $e->getCode()], JSON_UNESCAPED_UNICODE));
             }
@@ -158,13 +153,21 @@ class CommentsGitHubClient
             //            }
 
             $data = <<<EOF
+<details>
+<summary><strong>Source</strong></summary>            
 <blockquote>
 
 $source_show_in_md
 
 </blockquote>
+</details>
+<br>
+<details>
+<summary><strong>Translate</strong></summary>
 
 $translate_output
+
+</details>
 
 ### Tencent AI Analytic Result :$emoji:
 
@@ -181,6 +184,9 @@ EOF;
 
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
+        }
+
+        if ($enable_tencent_ai) {
         }
 
         return $output;

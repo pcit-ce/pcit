@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Events;
 
-use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
 use App\Notifications\GitHubChecksConclusion\Failed;
 use App\Notifications\GitHubChecksConclusion\InProgress;
@@ -43,8 +42,6 @@ class UpdateBuildStatus
         $job_key_id = $this->job_key_id;
         $config = $this->config;
         $build_log = $this->build_log;
-
-        Job::updateFinishedAt($job_key_id, time());
 
         switch ($this->build_status) {
             case 'inactive':

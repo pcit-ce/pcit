@@ -22,7 +22,7 @@ if (!function_exists('env')) {
 if (!function_exists('base_path')) {
     function base_path()
     {
-        return __DIR__.'/../../../';
+        return realpath(__DIR__.'/../../../').'/';
     }
 }
 
