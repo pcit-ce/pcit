@@ -54,23 +54,23 @@ INSERT INTO jobs(id,allow_failure,state,created_at,build_id)
 values(null,?,?,?,?)
 EOF;
 
-        return DB::insert($sql, [0, 'pending', time(), $build_id]);
+        return DB::insert($sql, [0, 'queued', time(), $build_id]);
     }
 
     /**
      * @param int  $build_key_id
-     * @param bool $pending
+     * @param bool $queued
      *
      * @return array
      *
      * @throws Exception
      */
-    public static function getByBuildKeyID(int $build_key_id, bool $pending = false)
+    public static function getByBuildKeyID(int $build_key_id, bool $queued = false)
     {
-        if ($pending) {
+        if ($queued) {
             $sql = 'SELECT id FROM jobs WHERE build_id=? AND state=?';
 
-            return DB::select($sql, [$build_key_id, 'pending']);
+            return DB::select($sql, [$build_key_id, 'queued']);
         }
 
         $sql = 'SELECT id FROM jobs WHERE build_id=?';
@@ -311,7 +311,11 @@ EOF;
             'SELECT state FROM jobs WHERE build_id=? GROUP BY state', [$build_key_id]);
 
         if (1 === \count($status)) {
-            return $status[0]['state'];
+            $state = $status[0]['state'];
+
+            $state = 'pending' === $state ? 'queued' : $state;
+
+            return $state;
         }
 
         // 有一个 error failure 均返回对应值
@@ -352,8 +356,8 @@ EOF;
      *
      * @throws Exception
      */
-    public static function getPendingJob()
+    public static function getQueuedJob()
     {
-        return DB::select('SELECT * FROM jobs WHERE state=? ORDER BY id LIMIT 1', ['pending']);
+        return DB::select('SELECT * FROM jobs WHERE state=? ORDER BY id LIMIT 1', ['queued']);
     }
 }

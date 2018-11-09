@@ -153,7 +153,7 @@ class BuildsController
         Build::updateBuildStatus($build_id, 'queued');
         // Build::updateStartAt((int) $build_id, 0);
         // Build::updateStopAt((int) $build_id, 0);
-        $this->updateJobStatus($build_id, 'pending');
+        $this->updateJobStatus($build_id, 'queued');
     }
 
     /**

@@ -31,7 +31,7 @@ class Agent extends Kernel
         Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
 
         // 取出一个 job,包括 job config, build key id
-        $job_data = Job::getPendingJob()[0] ?? null;
+        $job_data = Job::getQueuedJob()[0] ?? null;
 
         if (!$job_data) {
             return;
