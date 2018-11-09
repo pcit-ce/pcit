@@ -116,14 +116,12 @@ module.exports = {
         return div_el;
       })
       .append(() => {
-        let button_el = $('<button class="cancel_or_restart"></button>');
-        button_el
+        return $('<button class="cancel_or_restart"></button>')
           .append(button_text)
           .attr('title', button_title + (job ? ' job' : ' build'))
           .attr('event_id', id)
-          .attr('type', job ? 'job' : 'build');
-
-        return button_el;
+          .attr('type', job ? 'job' : 'build')
+          .addClass('btn btn-default');
       })
       .append(() => {
         return $('<div class="env"></div>').append(env_vars);

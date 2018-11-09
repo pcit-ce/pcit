@@ -11,12 +11,14 @@ header a {
 }
 
 header a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: #fff;
 }
 
 #pcit_ico {
+    margin-top: -10px;
     width: 70px;
-    height: 58px;
+    height: 56px;
 }
 
 .ico {

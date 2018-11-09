@@ -152,14 +152,12 @@ function display(data, url) {
           return div_el;
         })
         .append(() => {
-          let button_el = $('<button class="cancel_or_restart"></button>');
-          button_el
+          return $('<button class="cancel_or_restart"></button>')
             .append(button_text)
             .attr('title', button_title + ' build')
             .attr('event_id', build_id)
-            .attr('type', 'build');
-
-          return button_el;
+            .attr('type', 'build')
+            .addClass('btn btn-default');
         });
 
       ul_el.append(li_el);

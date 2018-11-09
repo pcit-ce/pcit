@@ -61,15 +61,12 @@ module.exports = {
           return div_el;
         })
         .append(() => {
-          let button_el = $('<button class="job_cancel_or_restart"/>');
-
-          button_el
+          return $('<button class="job_cancel_or_restart"/>')
             .append(button_text)
             .attr('title', button_title + ' job')
             .attr('event_id', id)
-            .attr('type', 'job');
-
-          return button_el;
+            .attr('type', 'job')
+            .addClass('btn btn-default btn-sm active');
         })
         .attr('href', job_url + '/' + id)
         .css('cursor', 'hand')

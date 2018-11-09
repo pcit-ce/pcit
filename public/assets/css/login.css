@@ -20,8 +20,9 @@ header a:hover {
 }
 
 #pcit_ico {
+    margin-top: -10px;
     width: 70px;
-    height: 58px;
+    height: 56px;
 }
 
 .ico {

@@ -405,22 +405,30 @@ $(document).on('click', '.new_env button', function() {
     let id = await getData();
     console.log(id);
     // 增加列表
-    let env_el = $('.env_list_item:last-of-type');
+    let env_el = $('.env_list_item:nth-last-of-type(2)');
 
-    let env_item_el = $('<div class="env_list_item"></div>').attr({
-      env_id: id,
-      public: is_public
-    });
+    let env_item_el = $('<form class="env_list_item form-inline"></form>').attr(
+      {
+        env_id: id,
+        public: is_public
+      }
+    );
 
     env_item_el
       .append(() => {
-        return $('<div class="env_name"></div>').append(name);
+        return $(
+          '<input class="env_name form-control" type="text" readonly/>'
+        ).attr('placeholder', name);
       })
       .append(() => {
-        return $('<div class="env_value"></div>').append(value);
+        return $(
+          '<input class="env_value form-control" type="text" readonly/>'
+        ).attr('placeholder', value);
       })
       .append(() => {
-        return $('<button class="delete"></button>').append('Delete');
+        return $(
+          '<button class="delete btn btn-default btn-xs"></button>'
+        ).append('Delete');
       });
 
     env_el.after(env_item_el);

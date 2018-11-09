@@ -1,6 +1,7 @@
 .jobs_list {
     position: relative;
     margin-top: 50px;
+    overflow: auto;
 }
 
 .job_list {
@@ -55,4 +56,5 @@
     /*background: rebeccapurple;*/
     position: absolute;
     right: 10px;
+    text-align: center;
 }

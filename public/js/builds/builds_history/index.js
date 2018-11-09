@@ -175,14 +175,14 @@ function display(data, url) {
         })
         .append(() => {
           return (() => {
-            let button_el = $('<button class="cancel_or_restart"></button>');
-            button_el.append(button_text).attr({
-              title: button_title + ' build',
-              event_id: build_id,
-              type: 'build'
-            });
-
-            return button_el;
+            return $('<button class="cancel_or_restart"></button>')
+              .append(button_text)
+              .attr({
+                title: button_title + ' build',
+                event_id: build_id,
+                type: 'build'
+              })
+              .addClass('btn btn-default');
           })();
         });
 

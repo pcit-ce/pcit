@@ -49,7 +49,9 @@ function display(data, url, token) {
 
     .append(() => {
       let input_el = $(
-        '<label><input type="text" name="maximum_number_of_builds" value="1"/></label>'
+        '<form class="form-inline"><label>' +
+          '<input class="form-control" type="text" name="maximum_number_of_builds" value="1"/>' +
+          '</label></form>'
       );
 
       return input_el.prepend('Maximum number of builds');
@@ -75,43 +77,56 @@ function display(data, url, token) {
     });
 
   env_el.append(() => {
-    return $('<div class="setting_title"></div>').append(
+    return $('<form class="setting_title"></form>').append(
       'Environment Variables'
     );
   });
 
   get_env(url, token).then(result => {
-    display_element.innerHeight(300 + result.length * 30);
-    env_el.append($('<div class="env_list_item"></div>').hide());
+    display_element.innerHeight(400 + result.length * 50);
+    env_el.append($('<form class="env_list_item form-inline"></form>').hide());
     $.each(result, (index, data) => {
       let { id, name, public: is_public, value } = data;
 
-      let env_item_el = $('<div class="env_list_item"></div>').attr({
+      let env_item_el = $(
+        '<form class="env_list_item form-inline"></form>'
+      ).attr({
         env_id: id,
         public: is_public
       });
 
       env_item_el
         .append(() => {
-          return $('<div class="env_name"></div>').append(name);
+          return $(
+            '<input type="text" class="env_name form-control" readonly/>'
+          ).attr('placeholder', name);
         })
         .append(() => {
-          return $('<div class="env_value"></div>').append(value);
+          return $('<input class="env_value form-control" readonly/>').attr(
+            'placeholder',
+            is_public === '1' ? value : '************'
+          );
         })
         .append(() => {
-          return $('<button class="delete"></button>').append('Delete');
+          return $(
+            '<button class="delete btn btn-default btn-xs"></button>'
+          ).append('Delete');
         });
 
       env_el.append(env_item_el);
     });
 
     env_el.append(() => {
-      return $('<form class="new_env"></form>')
+      return $('<form class="new_env form-inline"></form>')
         .append(() => {
-          return $('<input class="name" type="text" value="Name"/>');
+          return $(
+            '<input class="name form-control" type="text" placeholder="name" />'
+          );
         })
         .append(() => {
-          return $('<input class="value" type="text" value="Value"/>');
+          return $(
+            '<input class="value form-control" type="text" placeholder="value" />'
+          );
         })
         .append(() => {
           return $(
@@ -119,7 +134,7 @@ function display(data, url, token) {
           ).append('Public Value');
         })
         .append(() => {
-          return $('<button></button>').append('Add');
+          return $('<button class="btn btn-default"></button>').append('Add');
         });
     });
   });

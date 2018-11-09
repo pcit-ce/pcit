@@ -17,3 +17,12 @@ framework/storage/private_key
 
 /build
 /cache
+
+/.github
+/docs
+/examples
+/miniprogram
+/plugins
+/tests
+/yaml_examples
+/coverage.xml
