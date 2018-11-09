@@ -1,37 +1,27 @@
 # 贡献导引
 
-请严格按照以下步骤操作，如有任何问题，请提出 [issue](https://github.com/khs1994-php/pcit/issues/new)
+欢迎通过 Pull Request 提交你的代码。
 
-* 在 [GitHub](https://github.com/khs1994-php/pcit/fork) 上点击 `fork` 按钮将本仓库 fork 到自己的仓库，如 `yourname/pcit`，然后 `clone` 到本地。
+你可以选择以下模块参与 PCIT 项目开发。
 
-  ```bash
-  $ git clone -b dev git@github.com:yourname/pcit.git
+## 服务端
 
-  $ cd pcit
+### Git API
 
-  # 将项目与上游关联
+### PCITD Command
 
-  $ git remote add upstream git@github.com:khs1994-php/pcit.git
-  ```
+### PCIT Command
 
-* 增加内容或者修复错误后提交，并推送到自己的仓库。
+### Tencent AI CLI
 
-  ```bash
-  $ git add .
+### GitHub CLI
 
-  $ git commit -a "Fix issue #1: change helo to hello"
+### More...
 
-  $ git push origin/dev
-  ```
+## 前端
 
-* 在 [GitHub](https://github.com/khs1994-php/pcit) 上提交 `Pull request`，注意请提交到 `dev` 分支。
+### 前端 UI
 
-* 请定期更新自己仓库。
+### 微信小程序
 
-  ```bash
-  $ git fetch upstream
-
-  $ git rebase upstream/dev
-
-  $ git push -f origin dev
-  ```
+### More...

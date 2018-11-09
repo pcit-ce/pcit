@@ -20,7 +20,7 @@
 
 **预览** 点击 https://ci.khs1994.com/github/khs1994-docker/lnmp 查看 PCIT 功能界面。
 
-本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎开发者参与贡献 PCIT。
+本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎开发者 [参与 PCIT 开发](https://github.com/khs1994-php/pcit/blob/master/CONTRIBUTING.md)。
 
 ## 微信订阅号
 
