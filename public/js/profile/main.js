@@ -82,11 +82,13 @@ function list(data) {
   }
 
   $.each(data, function(num, repo) {
+    let repo_item_el = $('<div class="repo_item"></div>');
+
     let { build_status: status, repo_full_name: repo_name } = repo;
+
     let button = $('<button></button>');
 
-    button.addClass('open_or_close');
-    button.attr('repo', repo_name);
+    button.addClass('open_or_close btn btn-light').attr('repo', repo_name);
 
     if (status === 1 + '') {
       button.text('Close');
@@ -99,12 +101,8 @@ function list(data) {
     button.attr('id', repo_name);
     button.css('text-align', 'right');
 
-    if ('github' === git_type) {
-      button.hide();
-    }
-
     // <p id="username/repo">username/repo</p>
-    let p = $('<a></a>');
+    let p = $('<a class="repo_full_name"></a>');
 
     p.text(repo_name);
     p.attr('id', repo_name);
@@ -112,17 +110,18 @@ function list(data) {
     p.attr('target', '_blank');
     p.css('display', 'inline');
 
-    let settings = $('<a class="material-icons">settings</a>')
-      .attr('href', ci_host + git_type + '/' + repo_name + '/settings')
+    let settings = $('<a class="settings material-icons">settings</a>')
+      .attr('href', ci_host + [git_type, repo_name + 'settings'].join('/'))
       .attr('target', '_blank');
 
-    $('#repos')
-      .append(button)
-      .append('&nbsp;&nbsp;')
+    repo_item_el
+      .append(() => {
+        return 'github' === git_type ? button.hide() : button;
+      })
       .append(settings)
-      .append('&nbsp;&nbsp;')
-      .append(p)
-      .append('<br>');
+      .append(p);
+
+    repos_element.append(repo_item_el);
   });
 }
 
@@ -150,7 +149,7 @@ function showGitHubAppSettings(org_name, installation_id) {
     success: function(data) {
       settings_url = data;
 
-      content = $('<p></p>');
+      content = $('<p class="repo_tips"></p>');
 
       content
         .append('找不到仓库？请在 ')
@@ -180,7 +179,7 @@ function showGitHubAppInstall(uid) {
       let repos_element = $('#repos');
 
       installation_url = data;
-      content = $('<p></p>');
+      content = $('<p class="repo_tips"></p>');
       content.append(() => '此账号或组织未安装 GitHub App 或未选择项目，点击 ');
       content.append(() => {
         let a_element = $('<a></a>');
@@ -351,11 +350,35 @@ $(document).ready(function() {
   }
 });
 
-function sync() {
+$('#sync').on('click', function() {
   $(this)
-    .prop('disabled')
     .empty()
-    .append('账户信息同步中');
+    .append('账户信息同步中')
+    .attr('disabled', 'disabled');
+
+  $(this).after(() => {
+    return $('<div></div>')
+      .addClass('progress')
+      .append(() => {
+        return $('<div></div>')
+          .addClass('progress-bar progress-bar-striped progress-bar-animated')
+          .attr({
+            role: 'progressbar',
+            'aria-valuenow': 10,
+            'aria-valuemin': 0,
+            'aria-valuemax': 100
+          })
+          .css('width', '20%');
+      });
+  });
+
+  function progress(progress, timeout) {
+    setTimeout(() => {
+      $('.progress-bar')
+        .attr('aria-valuenow', progress)
+        .css('width', progress + '%');
+    }, timeout);
+  }
 
   $.ajax({
     type: 'POST',
@@ -368,9 +391,12 @@ function sync() {
       console.log(data);
     }
   });
-}
 
-$('#sync').on('click', sync);
+  progress(20, 2000);
+  progress(40, 10000);
+  progress(80, 15000);
+  progress(97, 30000);
+});
 
 function open_or_close(target) {
   let status = target.innerHTML;

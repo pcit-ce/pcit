@@ -7,7 +7,7 @@ namespace PCIT\Service\Repositories;
 use Curl\Curl;
 use Exception;
 
-class GitHubClient
+class WebhooksGitHubClient
 {
     private $api_url;
 
@@ -60,12 +60,10 @@ class GitHubClient
      *
      * @throws Exception
      */
-    public function getWebhooksStatus(string $url, string $username, string $repo)
+    public function getStatus(string $url, string $username, string $repo)
     {
         if ('https://api.github.com' === $this->api_url) {
-            /*
-             * GitHub 不能添加重复 webhooks ,这里跳过判断
-             */
+            // GitHub 不能添加重复 webhooks ,这里跳过判断
             return 0;
         }
 

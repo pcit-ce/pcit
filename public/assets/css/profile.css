@@ -58,7 +58,7 @@ footer a:hover {
 }
 
 #userinfo .my_account {
-    color: rgb(157,157,157);
+    color: rgb(157, 157, 157);
 }
 
 #details {
@@ -78,7 +78,8 @@ footer a:hover {
 }
 
 #user a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    font-size: 20px;
 }
 
 #orgs {
@@ -88,28 +89,51 @@ footer a:hover {
 }
 
 #orgs .organization {
-    color: rgb(157,157,157);
+    color: rgb(157, 157, 157);
 }
 
 #repos {
     /*position: relative;*/
-    margin-left: 50px;
+    /*margin-left: 30px;*/
     height: 180px;
+    margin-top: -10px;
 }
 
-#repos > a {
+#repos .repo_item > a {
     text-decoration: none;
     line-height: 50px;
-    color: #aaaaaa;
     font-size: 30px;
+    color: #aaaaaa;
 }
 
-#repos a:hover {
+#repos .repo_item a:hover {
     text-decoration: none;
-    line-height: 50px;
     color: blue;
 }
 
-body {
-    overflow-y: scroll;
+#repos .repo_item {
+    position: relative;
+}
+
+#repos .repo_full_name {
+
+}
+
+#repos .settings {
+    position: absolute;
+    right: 270px;
+}
+
+#repos .repo_tips {
+    margin-top: 20px;
+}
+
+#repos .open_or_close {
+    position: absolute;
+    right: 340px;
+}
+
+.progress {
+    margin-top: 15px;
+    width: 140px;
 }

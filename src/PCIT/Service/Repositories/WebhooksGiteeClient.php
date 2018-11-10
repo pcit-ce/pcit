@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Service\Repositories;
 
-class WebhooksGiteeClient
+class WebhooksGiteeClient extends WebhooksGitHubClient
 {
 }

@@ -12,6 +12,6 @@ module.exports = {
 
     let display_el = $('#display');
 
-    display_el.append(pre_el);
+    display_el.append(pre_el).innerHeight(pre_el.innerHeight() + 70);
   }
 };

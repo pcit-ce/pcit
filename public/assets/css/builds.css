@@ -227,4 +227,7 @@ tr {
     line-height: 30px;
     background: #222;
     color: #f1f1f1;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
 }
