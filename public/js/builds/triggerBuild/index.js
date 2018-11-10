@@ -5,7 +5,8 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('手动触发构建功能即将上线').innerHeight(55);
+  display_element.append('手动触发构建功能即将上线');
+  //.innerHeight(55);
 }
 
 module.exports = {

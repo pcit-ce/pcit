@@ -83,7 +83,7 @@ function display(data, url, token) {
   });
 
   get_env(url, token).then(result => {
-    display_element.innerHeight(400 + result.length * 50);
+    // display_element.innerHeight(400 + result.length * 50);
     env_el.append($('<form class="env_list_item form-inline"></form>').hide());
     $.each(result, (index, data) => {
       let { id, name, public: is_public, value } = data;

@@ -349,7 +349,7 @@ $(document).on('click', '.env_list_item .delete', function() {
   })().then(() => {
     let display_el = $('#display');
 
-    display_el.innerHeight(display_el.innerHeight() - 50);
+    // display_el.innerHeight(display_el.innerHeight() - 50);
   });
 
   return false;
@@ -437,7 +437,7 @@ $(document).on('click', '.new_env button', function() {
 
     let display_el = $('#display');
 
-    display_el.innerHeight(display_el.innerHeight() + 50);
+    // display_el.innerHeight(display_el.innerHeight() + 50);
   })().then();
 
   return false;

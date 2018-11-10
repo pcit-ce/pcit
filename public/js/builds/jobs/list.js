@@ -17,7 +17,7 @@ module.exports = {
     let job_url =
       '/' + [git_type, url.getUsername(), url.getRepo(), 'jobs'].join('/');
 
-    display_el.innerHeight((jobs.length + 1) * 100);
+    // display_el.innerHeight((jobs.length + 1) * 100);
 
     $.each(jobs, (index, job) => {
       let { id, state, env_vars = '' } = job;

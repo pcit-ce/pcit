@@ -9,11 +9,11 @@ function display(data) {
 
   if (0 === data.length) {
     display_element.append('Not Build Yet !');
-    display_element.innerHeight(55);
+    // display_element.innerHeight(55);
   } else {
     console.log(data);
 
-    display_element.innerHeight(data.length * 20);
+    // display_element.innerHeight(data.length * 20);
 
     $.each(data, function(num, branch) {
       display_element.append(branch);

@@ -35,9 +35,16 @@ body {
 #display {
     position: relative;
     margin: 0 auto;
-    width: 70%;
-    height: 80px;
+    width: 72%;
+    /*height: 80px;*/
     /*border: 1px solid rebeccapurple;*/
+}
+
+/*解决父容器塌陷*/
+#display:after{
+    content: "";
+    display: block;
+    clear: both;
 }
 
 .details {

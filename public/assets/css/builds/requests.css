@@ -2,13 +2,13 @@
     border: 1px solid #f1f1f1;
     margin-bottom: 10px;
     position: relative;
-    height: 30px;
+    /*height: 30px;*/
     font-size: 19px;
 }
 
-.requests .requests_list * {
-    position: absolute;
-}
+/*.requests .requests_list * {*/
+/*position: absolute;*/
+/*}*/
 
 .requests .status {
     left: 1px;
@@ -25,40 +25,39 @@
     text-decoration: underline;
 }
 
+/*.requests .event_type {*/
+    /*left: 30px;*/
+/*}*/
 
-.requests .event_type {
-    left: 30px;
-}
+/*.requests .branch {*/
+    /*left: 100px;*/
+/*}*/
 
-.requests .branch {
-    left: 100px;
-}
+/*.requests .commit_id {*/
+    /*display: block;*/
+    /*left: 200px;*/
+/*}*/
 
-.requests .commit_id {
-    display: block;
-    left: 200px;
-}
+/*.requests .created_at{*/
+    /*left: 300px;*/
+    /*color: #666;*/
+/*}*/
 
-.requests .created_at{
-    left: 300px;
-    color: #666;
-}
+/*.requests .commit_message {*/
+    /*left: 410px;*/
+    /*color: #666;*/
+/*}*/
 
-.requests .commit_message {
-    left: 410px;
-    color: #666;
-}
+/*.requests .build_id {*/
+    /*display: block;*/
+    /*left: 740px;*/
+    /*color: #666;*/
+/*}*/
 
-.requests .build_id {
-    display: block;
-    left: 740px;
-    color: #666;
-}
-
-.requests .reason {
-    position: absolute;
-    right: 2px;
-    color: #666;
-    /*background: rebeccapurple;*/
-    /*text-align:left;*/
-}
+/*.requests .reason {*/
+    /*position: absolute;*/
+    /*right: 2px;*/
+    /*color: #666;*/
+    /*!*background: rebeccapurple;*!*/
+    /*!*text-align:left;*!*/
+/*}*/
