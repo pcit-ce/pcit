@@ -279,6 +279,8 @@ $(document).on(
   'click',
   '.job_list button,.build_data button,.builds_list button,.pull_requests_list button',
   function() {
+    $(this).prop('disabled');
+
     (async that => {
       await common_status.buttonClick(that);
 
@@ -427,7 +429,7 @@ $(document).on('click', '.new_env button', function() {
       })
       .append(() => {
         return $(
-          '<button class="delete btn btn-default btn-xs"></button>'
+          '<button class="delete btn btn-light btn-xs"></button>'
         ).append('Delete');
       });
 

@@ -8,14 +8,14 @@
     display: block;
     border: #f4f4f4 1px solid;
     margin-bottom: 10px;
-    height: 34px;
+    height: 46px;
     text-align: center;
     text-decoration: none;
     color: #666666;
 }
 
 .job_list:hover {
-
+    color: #666666;
 }
 
 .job_list .job_id {
@@ -56,5 +56,4 @@
     /*background: rebeccapurple;*/
     position: absolute;
     right: 10px;
-    text-align: center;
 }

@@ -62,9 +62,10 @@ function display(data, url) {
 
       let status_color;
 
-      let { title: button_title, text: button_text } = common_status.getButton(
-        build_status
-      );
+      let {
+        title: button_title,
+        handle: button_handle
+      } = common_status.getButton(build_status);
       status_color = common_status.getColor(build_status);
       build_status = common_status.change(build_status);
 
@@ -153,11 +154,16 @@ function display(data, url) {
         })
         .append(() => {
           return $('<button class="cancel_or_restart"></button>')
-            .append(button_text)
+            .append(() => {
+              return $('<i class="material-icons"></i>').append(() => {
+                return button_handle === 'cancel' ? 'cancel' : 'refresh';
+              });
+            })
+            .attr('handle', button_handle)
             .attr('title', button_title + ' build')
             .attr('event_id', build_id)
-            .attr('type', 'build')
-            .addClass('btn btn-default');
+            .attr('job_or_build', 'build')
+            .addClass('btn btn-light');
         });
 
       ul_el.append(li_el);

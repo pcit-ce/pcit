@@ -109,7 +109,7 @@ function display(data, url, token) {
         })
         .append(() => {
           return $(
-            '<button class="delete btn btn-default btn-xs"></button>'
+            '<button class="delete btn btn-light btn-xs"></button>'
           ).append('Delete');
         });
 
@@ -134,7 +134,7 @@ function display(data, url, token) {
           ).append('Public Value');
         })
         .append(() => {
-          return $('<button class="btn btn-default"></button>').append('Add');
+          return $('<button class="btn btn-light"></button>').append('Add');
         });
     });
   });

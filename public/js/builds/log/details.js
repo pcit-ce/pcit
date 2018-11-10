@@ -22,9 +22,10 @@ module.exports = {
 
     let status_color;
 
-    let { title: button_title, text: button_text } = common_status.getButton(
-      status
-    );
+    let {
+      handle: button_handle,
+      title: button_title
+    } = common_status.getButton(status);
     status_color = common_status.getColor(status);
     let build_status = common_status.change(status);
 
@@ -117,11 +118,18 @@ module.exports = {
       })
       .append(() => {
         return $('<button class="cancel_or_restart"></button>')
-          .append(button_text)
+          .append(() => {
+            return $('<i></i>')
+              .addClass('material-icons')
+              .append(() => {
+                return button_handle === 'cancel' ? 'cancel' : 'refresh';
+              });
+          })
+          .attr('handle', button_handle)
           .attr('title', button_title + (job ? ' job' : ' build'))
           .attr('event_id', id)
-          .attr('type', job ? 'job' : 'build')
-          .addClass('btn btn-default');
+          .attr('job_or_build', job ? 'job' : 'build')
+          .addClass('btn btn-light');
       })
       .append(() => {
         return $('<div class="env"></div>').append(env_vars);

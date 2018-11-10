@@ -3,12 +3,12 @@
 const token = require('./token');
 const url = require('../builds/url');
 
-function buttonChange(button_text) {
-  if (button_text === 'cancel') {
-    return { text: 'restart', title: 'Restart' };
+function buttonChange(handle) {
+  if (handle === 'cancel') {
+    return { handle: 'restart', title: 'Restart' };
   }
 
-  return { text: 'cancel', title: 'Cancel' };
+  return { handle: 'cancel', title: 'Cancel' };
 }
 
 function getColor(status, backgroud) {
@@ -63,17 +63,17 @@ module.exports = {
       status === 'in_progress' ||
       status === 'queued'
     ) {
-      return { text: 'cancel', title: 'Cancel' };
+      return { handle: 'cancel', title: 'Cancel' };
     }
 
-    return { text: 'restart', title: 'Restart' };
+    return { handle: 'restart', title: 'Restart' };
   },
-  buttonChange: button_text => {
-    return buttonChange(button_text);
+  buttonChange: handle => {
+    return buttonChange(handle);
   },
   buttonClick: that => {
-    let event = that.text();
-    let type = that.attr('type'); // build or job
+    let handle = that.attr('handle');
+    let type = that.attr('job_or_build'); // build or job
     let id = that.attr('event_id');
 
     return new Promise((resolve, reject) => {
@@ -82,12 +82,13 @@ module.exports = {
         headers: {
           Authorization: 'token ' + token.getToken(url.getGitType())
         },
-        url: '/api/' + [type, id, event].join('/'),
+        url: '/api/' + [type, id, handle].join('/'),
         success: () => {
-          let { text: button_text, title: button_title } = buttonChange(event);
+          let { handle: button_handle, title: button_title } = buttonChange(
+            handle
+          );
 
-          that.text(button_text);
-          that.attr({ title: button_title + 'type' });
+          that.attr({ handle: button_handle, title: button_title + 'type' });
 
           resolve();
         },

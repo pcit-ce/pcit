@@ -16,7 +16,8 @@ header a {
 }
 
 header a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: #fff;
 }
 
 #pcit_ico {
@@ -79,6 +80,7 @@ header a:hover {
     color: white;
     text-align: left;
     text-indent: 2em;
+    cursor: pointer;
 }
 
 .github-login-button {
@@ -90,6 +92,7 @@ header a:hover {
     color: white;
     text-align: left;
     text-indent: 2em;
+    cursor: pointer;
 }
 
 .gitee-login-button {
@@ -101,6 +104,7 @@ header a:hover {
     color: white;
     text-align: left;
     text-indent: 2em;
+    cursor: pointer;
 }
 
 .coding-login-button {
@@ -112,6 +116,7 @@ header a:hover {
     color: white;
     text-align: left;
     text-indent: 2em;
+    cursor: pointer;
 }
 
 .gogs-login-button {
@@ -123,6 +128,7 @@ header a:hover {
     color: white;
     text-align: left;
     text-indent: 2em;
+    cursor: pointer;
 }
 
 footer {

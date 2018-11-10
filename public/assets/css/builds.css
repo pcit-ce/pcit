@@ -212,9 +212,9 @@ body {
 
 .build_data .cancel_or_restart {
     position: absolute;
-    right: 5px;
+    right: 10px;
     top: 10px;
-    width: 150px;
+    padding-top: 10px;
 }
 
 tr {

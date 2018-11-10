@@ -26,9 +26,11 @@ module.exports = {
 
       let status_color = common_status.getColor(state);
       let status_background_color = common_status.getColor(state, true);
-      let { text: button_text, title: button_title } = common_status.getButton(
-        state
-      );
+      let {
+        class: button_class,
+        handle: button_handle,
+        title: button_title
+      } = common_status.getButton(state);
 
       let a_el = $('<a class="job_list"></a>');
 
@@ -61,12 +63,17 @@ module.exports = {
           return div_el;
         })
         .append(() => {
-          return $('<button class="job_cancel_or_restart"/>')
-            .append(button_text)
+          return $('<button class="job_cancel_or_restart" type="button"/>')
+            .append(() => {
+              return $('<i class="material-icons"></i>').append(() => {
+                return button_handle === 'cancel' ? 'cancel' : 'refresh';
+              });
+            })
+            .addClass('btn btn-light')
+            .attr('handle', button_handle)
             .attr('title', button_title + ' job')
             .attr('event_id', id)
-            .attr('type', 'job')
-            .addClass('btn btn-default btn-sm active');
+            .attr('job_or_build', 'job');
         })
         .attr('href', job_url + '/' + id)
         .css('cursor', 'hand')

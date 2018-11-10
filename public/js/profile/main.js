@@ -112,11 +112,10 @@ function list(data) {
     p.attr('target', '_blank');
     p.css('display', 'inline');
 
-    let settings = $('<a></a>');
+    let settings = $('<a class="material-icons">settings</a>')
+      .attr('href', ci_host + git_type + '/' + repo_name + '/settings')
+      .attr('target', '_blank');
 
-    settings.text('Setting');
-    settings.attr('href', ci_host + git_type + '/' + repo_name + '/settings');
-    settings.attr('target', '_blank');
     $('#repos')
       .append(button)
       .append('&nbsp;&nbsp;')
@@ -305,7 +304,7 @@ $(document).ready(function() {
       Authorization: 'token ' + token
     },
 
-    success: function(data) {
+    success(data) {
       showUserBasicInfo(data[0]);
 
       if (data[0].username === username) {
@@ -353,6 +352,11 @@ $(document).ready(function() {
 });
 
 function sync() {
+  $(this)
+    .prop('disabled')
+    .empty()
+    .append('账户信息同步中');
+
   $.ajax({
     type: 'POST',
     url: '/api/user/sync',

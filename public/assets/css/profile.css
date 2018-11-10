@@ -51,6 +51,7 @@ footer a:hover {
 }
 
 #userinfo {
+    margin-top: 20px;
     float: left;
     margin-left: 15%;
     width: 250px;
@@ -61,6 +62,7 @@ footer a:hover {
 }
 
 #details {
+    margin-top: 20px;
     margin-left: 600px;
     padding-left: 100px;
 }
@@ -103,8 +105,8 @@ footer a:hover {
 }
 
 #repos a:hover {
-    text-decoration: underline;
-    line-height: 20px;
+    text-decoration: none;
+    line-height: 50px;
     color: blue;
 }
 
