@@ -5,7 +5,7 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('缓存列表功能即将上线').innerHeight(60);
+  display_element.append('缓存列表功能即将上线').innerHeight(55);
 }
 
 module.exports = {

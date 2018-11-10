@@ -12,7 +12,7 @@ function display(data, url) {
 
   if (data.length === 0) {
     display_element.append('Not Event receive !');
-    display_element.append(60);
+    display_element.innerHeight(55);
     return;
   }
 

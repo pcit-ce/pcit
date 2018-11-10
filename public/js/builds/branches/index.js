@@ -9,7 +9,7 @@ function display(data) {
 
   if (0 === data.length) {
     display_element.append('Not Build Yet !');
-    display_element.innerHeight(60);
+    display_element.innerHeight(55);
   } else {
     console.log(data);
 

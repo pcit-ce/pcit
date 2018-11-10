@@ -101,8 +101,8 @@ footer a:hover {
 
 #repos .repo_item > a {
     text-decoration: none;
-    line-height: 50px;
-    font-size: 30px;
+    line-height: 60px;
+    font-size: 25px;
     color: #aaaaaa;
 }
 
@@ -113,6 +113,7 @@ footer a:hover {
 
 #repos .repo_item {
     position: relative;
+    margin-left: 400px;
 }
 
 #repos .repo_full_name {

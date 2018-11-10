@@ -18,7 +18,7 @@ function display(data, url) {
     // 展示某个 build 详情
     if (0 === data.length || 'error' === data) {
       display_element.append("Oops, we couldn't find that build!");
-      display_element.innerHeight(60);
+      display_element.innerHeight(55);
     } else {
       // 展示某个 build
       let column_el = $('#pull_requests');

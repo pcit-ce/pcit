@@ -111,7 +111,7 @@ function list(data) {
     p.css('display', 'inline');
 
     let settings = $('<a class="settings material-icons">settings</a>')
-      .attr('href', ci_host + [git_type, repo_name + 'settings'].join('/'))
+      .attr('href', ci_host + [git_type, repo_name, 'settings'].join('/'))
       .attr('target', '_blank');
 
     repo_item_el
