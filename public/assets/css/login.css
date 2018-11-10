@@ -1,4 +1,4 @@
-body{
+body {
     margin: 0;
     padding: 0;
     font-family: 'Source Sans Pro', serif;
@@ -56,24 +56,26 @@ header a:hover {
 }
 
 .login {
-    width: 70%;
-    margin: 130px auto;
+    /*width: 80%;*/
+    margin: 110px auto 0;
+    /*height: 300px;*/
 }
 
 .login_tips {
-    float: left;
-    width: 60%;
-    line-height: 25px;
-    margin-top: 40px;
+    /*float: left;*/
+    /*width: 60%;*/
+    /*line-height: 25px;*/
+    padding-top: 50px;
 }
 
 .login_button {
-    width: 40%;
-    float: right;
+    /*width: 40%;*/
+    /*float: right;*/
+    padding-top: 10px;
 }
 
 .hello-login-button {
-    width: 352px;
+    width: 370px;
     height: 50.4px;
     background-color: darkblue;
     font-size: 20px;
@@ -84,7 +86,7 @@ header a:hover {
 }
 
 .github-login-button {
-    width: 352px;
+    width: 370px;
     height: 50.4px;
     margin-top: 5px;
     background-color: rgb(36, 41, 46);
@@ -96,7 +98,7 @@ header a:hover {
 }
 
 .gitee-login-button {
-    width: 352px;
+    width: 370px;
     height: 50.4px;
     margin-top: 5px;
     background-color: rgb(254, 115, 0);
@@ -108,7 +110,7 @@ header a:hover {
 }
 
 .coding-login-button {
-    width: 352px;
+    width: 370px;
     height: 50.4px;
     margin-top: 5px;
     background-color: rgb(96, 108, 128);
@@ -120,7 +122,7 @@ header a:hover {
 }
 
 .gogs-login-button {
-    width: 352px;
+    width: 370px;
     height: 50.4px;
     margin-top: 5px;
     background-color: red;
@@ -132,17 +134,15 @@ header a:hover {
 }
 
 footer {
+    /*position: absolute;*/
     position: relative;
-    margin-top: 490px;
-    margin-left: 12%;
-    margin-right: auto;
-    width: 70%;
-}
-
-footer li {
+    /*margin-top: 80px;*/
+    /*margin-left: 100px;*/
+    /*margin-right: auto;*/
+    /*width: 70%;*/
+    /*left: 50px;*/
     line-height: 30px;
-    color: #636b6f;
-    list-style-type: none;
+    padding-top: 85px;
 }
 
 footer a {
@@ -150,32 +150,11 @@ footer a {
     color: #636b6f;
 }
 
+footer .about,.help,.legal,.status {
+    margin-bottom: 20px;
+}
+
 footer a:hover {
     text-decoration: underline;
     color: #636b6f;
 }
-
-.about {
-    /*border: solid;*/
-    float: left;
-    /*margin-left: 10%;*/
-}
-
-.help {
-    /*border: solid;*/
-    float: left;
-    margin-left: 5%;
-}
-
-.legal {
-    /*border: solid;*/
-    float: left;
-    margin-left: 5%;
-}
-
-.status {
-    /*border: solid;*/
-    float: left;
-    margin-left: 20%;
-}
-

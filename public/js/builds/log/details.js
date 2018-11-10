@@ -17,14 +17,14 @@ module.exports = {
       committer_name,
       compare,
       stopped_at,
-      env_vars
+      env_vars,
     } = data;
 
     let status_color;
 
     let {
       handle: button_handle,
-      title: button_title
+      title: button_title,
     } = common_status.getButton(status);
     status_color = common_status.getColor(status);
     let build_status = common_status.change(status);
@@ -41,7 +41,7 @@ module.exports = {
     let commit_url = git.getCommitUrl(
       url.getUsername(),
       url.getRepo(),
-      commit_id
+      commit_id,
     );
     let div_element = $('<div class="build_data"></div>');
 
@@ -49,7 +49,7 @@ module.exports = {
       let build_id_element = $('<div class="build_id"></div>');
       build_id_element.append('').css({
         background: status_color,
-        border: '1px solid ' + status_color
+        border: '1px solid ' + status_color,
       });
       return build_id_element;
     });
@@ -99,7 +99,7 @@ module.exports = {
         .attr({
           title: 'View diff on GitHub',
           href: compare,
-          target: '_blank'
+          target: '_blank',
         });
     });
 
@@ -136,5 +136,5 @@ module.exports = {
       });
 
     display_element.append(div_element);
-  }
+  },
 };

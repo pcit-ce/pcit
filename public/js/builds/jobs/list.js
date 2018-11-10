@@ -29,7 +29,7 @@ module.exports = {
       let {
         class: button_class,
         handle: button_handle,
-        title: button_title
+        title: button_title,
       } = common_status.getButton(state);
 
       let a_el = $('<a class="job_list"></a>');
@@ -102,7 +102,7 @@ module.exports = {
         let that = $(this);
 
         that.css('background', 'none').css('border-left', 'none');
-      }
+      },
     });
-  }
+  },
 };

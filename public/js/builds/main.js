@@ -62,7 +62,7 @@ function changeUrl(id, replace = false) {
       history.replaceState(
         { key_id: id },
         null,
-        url.getRepoFullNameUrl() + '/' + id
+        url.getRepoFullNameUrl() + '/' + id,
       );
       return;
     }
@@ -70,7 +70,7 @@ function changeUrl(id, replace = false) {
     history.pushState(
       { key_id: id },
       null,
-      url.getRepoFullNameUrl() + '/' + id
+      url.getRepoFullNameUrl() + '/' + id,
     );
   }
 }
@@ -147,7 +147,7 @@ $('.column span').on({
   },
   mouseout: function(event) {
     mouseoutMethod(event);
-  }
+  },
 });
 
 $('#more_options').on({
@@ -167,7 +167,7 @@ $('#more_options').on({
     column_el_click(id); // 渲染 display 页面
     common.column_remove(); // 移除其他元素
     common.column_click_handle(id); // 增加元素
-  }
+  },
 });
 
 // 处理页面加载，用户首次进入
@@ -196,8 +196,8 @@ jQuery(document).ready(function() {
           [
             git.getUrl(url.getUsername(), url.getRepo(), url.getGitType()),
             url.getUsername(),
-            url.getRepo()
-          ].join('/')
+            url.getRepo(),
+          ].join('/'),
         )
         .attr('target', '_block');
 
@@ -209,7 +209,7 @@ jQuery(document).ready(function() {
         .append(url.getUsername())
         .attr(
           'href',
-          [url.getHost(), url.getGitType(), url.getUsername()].join('/')
+          [url.getHost(), url.getGitType(), url.getUsername()].join('/'),
         );
 
       return span_el;
@@ -230,8 +230,8 @@ jQuery(document).ready(function() {
             url.getHost(),
             url.getGitType(),
             url.getUsername(),
-            url.getRepo()
-          ].join('/')
+            url.getRepo(),
+          ].join('/'),
         );
 
       return span_el;
@@ -291,7 +291,7 @@ $(document).on(
     })($(this));
 
     return false;
-  }
+  },
 );
 
 $(document).on(
@@ -313,14 +313,14 @@ $(document).on(
     $.ajax({
       type: 'patch',
       headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType())
+        Authorization: 'token ' + token.getToken(url.getGitType()),
       },
       data: `{"${that.attr('name')}":${that.prop('value')}}`,
       url:
         '/api/repo/' +
-        [url.getRepoFullName(), 'setting', that.attr('name')].join('/')
+        [url.getRepoFullName(), 'setting', that.attr('name')].join('/'),
     });
-  }
+  },
 );
 
 $(document).on('click', '.env_list_item .delete', function() {
@@ -333,17 +333,17 @@ $(document).on('click', '.env_list_item .delete', function() {
 
   // 发起请求
   (() => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       $.ajax({
         type: 'delete',
         url:
           '/api/repo/' + [url.getRepoFullName(), 'env_var', env_id].join('/'),
         headers: {
-          Authorization: 'token ' + token.getToken(url.getGitType())
+          Authorization: 'token ' + token.getToken(url.getGitType()),
         },
         success() {
           resolve();
-        }
+        },
       });
     });
   })().then(() => {
@@ -388,17 +388,17 @@ $(document).on('click', '.new_env button', function() {
 
   // 发起请求
   function getData() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       $.ajax({
         type: 'post',
         data: `{"env_var.name":"${name}","env_var.value":"${value}","env_var.public":"${is_public}"}`,
         url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
         headers: {
-          Authorization: 'token ' + token.getToken(url.getGitType())
+          Authorization: 'token ' + token.getToken(url.getGitType()),
         },
         success: res => {
           resolve(res);
-        }
+        },
       });
     });
   }
@@ -412,24 +412,24 @@ $(document).on('click', '.new_env button', function() {
     let env_item_el = $('<form class="env_list_item form-inline"></form>').attr(
       {
         env_id: id,
-        public: is_public
-      }
+        public: is_public,
+      },
     );
 
     env_item_el
       .append(() => {
         return $(
-          '<input class="env_name form-control" type="text" readonly/>'
+          '<input class="env_name form-control" type="text" readonly/>',
         ).attr('placeholder', name);
       })
       .append(() => {
         return $(
-          '<input class="env_value form-control" type="text" readonly/>'
+          '<input class="env_value form-control" type="text" readonly/>',
         ).attr('placeholder', value);
       })
       .append(() => {
         return $(
-          '<button class="delete btn btn-light btn-xs"></button>'
+          '<button class="delete btn btn-light btn-xs"></button>',
         ).append('Delete');
       });
 
@@ -463,12 +463,12 @@ $(document).on(
       url:
         '/api/repo/' +
         [url.getRepoFullName(), 'setting', 'maximum_number_of_builds'].join(
-          '/'
+          '/',
         ),
       data: `{"maximum_number_of_builds":${value}}`,
       headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType())
-      }
+        Authorization: 'token ' + token.getToken(url.getGitType()),
+      },
     });
-  }
+  },
 );

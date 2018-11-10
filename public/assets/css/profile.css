@@ -1,6 +1,10 @@
 @import "common/body.css";
 @import "common/header.css";
 
+body{
+    overflow-y: scroll;
+}
+
 footer {
     position: relative;
     margin-top: 220px;

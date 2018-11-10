@@ -24,7 +24,7 @@ function showUserBasicInfo(data) {
     .text(username)
     .addClass(type);
 
-  let titleContent = `${git.format(git_type)} - ${data.username} - Profile - ${
+  let titleContent = `${git.format(git_type)} - ${username} - Profile - ${
     app.app_name
   }`;
 
@@ -32,27 +32,41 @@ function showUserBasicInfo(data) {
 
   $('#user')
     .empty()
-    .append(
-      '<span>' +
-        username +
-        '</span>' +
-        '<br><br><strong >API authentication</strong><br><br>' +
-        '<p>使用 PCIT API 请访问 ' +
-        "<a href='https://api.ci.khs1994.com' target='_blank'>https://api.ci.khs1994.com</a></p>" +
-        "<input id='token' value='" +
-        token +
-        "'>" +
-        "<button class='copy_token' data-clipboard-target='#token'>Copy</button><br><br>"
+    .append(() => $('<span></span>').append(username))
+    .append(() => $('<strong></strong>').append('API authentication'))
+    .append(() =>
+      $('<p></p>')
+        .append('使用 PCIT API 请访问')
+        .append(() => {
+          return $('<a></a>')
+            .append('https://api.ci.khs1994.com')
+            .attr({
+              href: 'https://api.ci.khs1994.com',
+              target: '_blank',
+            });
+        })
+        .append(() =>
+          $('<input/>').attr({
+            id: 'token',
+            value: token,
+          }),
+        )
+        .append(() =>
+          $('<button></button>')
+            .addClass('copy_token')
+            .attr({
+              'data-clipboard-target': '#token',
+            })
+            .append('Copy'),
+        ),
     );
 }
 
-(() => {
-  $('.copy_token').on({
-    click: () => {
-      copyToken();
-    }
-  });
-})();
+$('.copy_token').on({
+  click: () => {
+    copyToken();
+  },
+});
 
 function copyToken() {
   // eslint-disable-next-line no-undef
@@ -67,6 +81,7 @@ function copyToken() {
   });
 }
 
+// show repos
 function list(data) {
   let count = data.length;
   let repos_element = $('#repos');
@@ -83,12 +98,10 @@ function list(data) {
 
   $.each(data, function(num, repo) {
     let repo_item_el = $('<div class="repo_item"></div>');
-
     let { build_status: status, repo_full_name: repo_name } = repo;
-
     let button = $('<button></button>');
 
-    button.addClass('open_or_close btn btn-light').attr('repo', repo_name);
+    button.addClass('open_or_close btn btn-light').attr('repo_name', repo_name);
 
     if (status === 1 + '') {
       button.text('Close');
@@ -98,17 +111,15 @@ function list(data) {
       button.css('color', 'red');
     }
 
-    button.attr('id', repo_name);
-    button.css('text-align', 'right');
-
     // <p id="username/repo">username/repo</p>
-    let p = $('<a class="repo_full_name"></a>');
-
-    p.text(repo_name);
-    p.attr('id', repo_name);
-    p.attr('href', ci_host + git_type + '/' + repo_name);
-    p.attr('target', '_blank');
-    p.css('display', 'inline');
+    let p = $('<a class="repo_full_name"></a>')
+      .text(repo_name)
+      .attr({
+        repo_name: repo_name,
+        href: ci_host + git_type + '/' + repo_name,
+        target: '_blank',
+      })
+      .css('display', 'inline');
 
     let settings = $('<a class="settings material-icons">settings</a>')
       .attr('href', ci_host + [git_type, repo_name, 'settings'].join('/'))
@@ -125,122 +136,131 @@ function list(data) {
   });
 }
 
+// show org list
 function showOrg(data) {
   let count = data.length;
 
-  $.each(data, function(num, org) {
+  $.each(data, (num, org) => {
     let { username: org_name } = org;
-    let orgs_element = $('.orgs');
 
-    orgs_element
-      .append(`<p class = "org_name">${org_name}</p>`)
+    $('.orgs')
+      .append(() => {
+        return $('<p class="org_name"></p>')
+          .append(org_name)
+          .attr({
+            org_name: org_name,
+          });
+      })
       .css('height', count * 50);
   });
 }
 
 function showGitHubAppSettings(org_name, installation_id) {
-  let settings_url;
-  let content;
-  let repos_element = $('#repos');
+  (async () => {
+    let settings_url = await new Promise(resolve => {
+      $.ajax({
+        type: 'GET',
+        url: '/api/ci/github_app_settings/' + org_name,
+        success(data) {
+          resolve(data);
+        },
+      });
+    });
 
-  $.ajax({
-    type: 'GET',
-    url: '/api/ci/github_app_settings/' + org_name,
-    success: function(data) {
-      settings_url = data;
-
-      content = $('<p class="repo_tips"></p>');
-
-      content
+    $('#repos').append(() => {
+      return $('<p class="repo_tips"></p>')
         .append('找不到仓库？请在 ')
         .append(() => {
-          let a_element = $('<a></a>');
-          a_element.attr('href', `${settings_url}/${installation_id}`);
-          a_element.attr('target', '_blank');
-          a_element.text('GitHub');
-
-          return a_element;
+          return $('<a></a>')
+            .attr({
+              href: `${settings_url}/${installation_id}`,
+              target: '_blank',
+            })
+            .text('GitHub');
         })
         .append(' 添加仓库');
-
-      repos_element.append('<p></p>').append(content);
-    }
-  });
+    });
+  })();
 }
 
 function showGitHubAppInstall(uid) {
-  let installation_url;
-  let content;
-
-  $.ajax({
-    type: 'GET',
-    url: '/api/ci/github_app_installation/' + uid,
-    success: function(data) {
-      let repos_element = $('#repos');
-
-      installation_url = data;
-      content = $('<p class="repo_tips"></p>');
-      content.append(() => '此账号或组织未安装 GitHub App 或未选择项目，点击 ');
-      content.append(() => {
-        let a_element = $('<a></a>');
-        a_element.attr('href', installation_url);
-        a_element.attr('target', '_blank');
-        a_element.text('激活项目');
-
-        return a_element;
+  (async () => {
+    let installation_url = await new Promise(resolve => {
+      $.ajax({
+        type: 'GET',
+        url: '/api/ci/github_app_installation/' + uid,
+        success: function(data) {
+          resolve(data);
+        },
       });
+    });
 
-      content.append(' 在 GitHub 进行安装');
-      repos_element.append(content);
-    },
-    error: function(data) {
-      console.log(data);
-    }
+    $('#repos').append(
+      $('<p class="repo_tips"></p>')
+        .append(() => '此账号或组织未安装 GitHub App 或未选择项目，点击 ')
+        .append(() => {
+          return $('<a></a>')
+            .attr({
+              href: installation_url,
+              target: '_blank',
+            })
+            .text('激活项目');
+        })
+        .append(' 在 GitHub 进行安装'),
+    );
+  })();
+}
+
+function get_userdata() {
+  return new Promise(resolve => {
+    $.ajax({
+      type: 'GET',
+      url: '/api/user',
+      headers: {
+        Authorization: 'token ' + token,
+      },
+      success: function(data) {
+        resolve(data);
+      },
+    });
   });
 }
 
 function click_user() {
-  $.ajax({
-    type: 'GET',
-    url: '/api/user',
-    headers: {
-      Authorization: 'token ' + token
-    },
-    success: function(data) {
-      let { installation_id, uid } = data[0];
+  (async () => {
+    let data = await get_userdata();
 
+    let { installation_id, uid } = data[0];
+
+    let repo_data = await new Promise(resolve => {
       $.ajax({
         type: 'GET',
         url: '/api/repos',
         headers: {
-          Authorization: 'token ' + token
+          Authorization: 'token ' + token,
         },
         success: function(data) {
-          history.pushState(
-            {},
-            username,
-            ci_host + 'profile/' + git_type + '/' + username
-          );
-          history.replaceState(
-            null,
-            username,
-            ci_host + 'profile/' + git_type + '/' + username
-          );
-          list(data);
-
-          if (git_type !== 'github') {
-            return;
-          }
-
-          if (installation_id) {
-            showGitHubAppSettings(null, installation_id);
-          } else {
-            showGitHubAppInstall(uid);
-          }
-        }
+          resolve(data);
+        },
       });
+    });
+
+    history.pushState(
+      {},
+      username,
+      ci_host + 'profile/' + git_type + '/' + username,
+    );
+
+    list(repo_data);
+
+    if (git_type !== 'github') {
+      return;
     }
-  });
+
+    installation_id
+      ? showGitHubAppSettings(null, installation_id)
+      : showGitHubAppInstall(uid);
+  })();
 }
 
 function show_org(data, org_name) {
@@ -250,36 +270,36 @@ function show_org(data, org_name) {
 
   let { installation_id, uid } = data[0];
 
-  $.ajax({
-    type: 'GET',
-    url: '/api/repos/' + git_type + '/' + org_name,
-    headers: {
-      Authorization: 'token ' + token
-    },
-    success: function(data) {
-      history.pushState(
-        {},
-        org_name,
-        ci_host + 'profile/' + git_type + '/' + org_name
-      );
-      history.replaceState(
-        null,
-        org_name,
-        ci_host + 'profile/' + git_type + '/' + org_name
-      );
-      list(data);
+  (async () => {
+    let org_data = await new Promise(resolve => {
+      $.ajax({
+        type: 'GET',
+        url: '/api/repos/' + git_type + '/' + org_name,
+        headers: {
+          Authorization: 'token ' + token,
+        },
+        success: function(data) {
+          resolve(data);
+        },
+      });
+    });
 
-      if (git_type !== 'github') {
-        return;
-      }
+    history.pushState(
+      {},
+      org_name,
+      ci_host + 'profile/' + git_type + '/' + org_name,
+    );
 
-      if (parseInt(installation_id)) {
-        showGitHubAppSettings(org_name, installation_id);
-      } else {
-        showGitHubAppInstall(uid);
-      }
+    list(org_data);
+
+    if (git_type !== 'github') {
+      return;
     }
-  });
+
+    parseInt(installation_id)
+      ? showGitHubAppSettings(org_name, installation_id)
+      : showGitHubAppInstall(uid);
+  })();
 }
 
 function click_org(org_name) {
@@ -287,67 +307,86 @@ function click_org(org_name) {
     type: 'GET',
     url: '/api/org/' + git_type + '/' + org_name,
     headers: {
-      Authorization: 'token ' + token
+      Authorization: 'token ' + token,
     },
     success: function(data) {
       show_org(data, org_name);
-    }
+    },
+  });
+}
+
+function get_user_repos() {
+  return new Promise(resolve => {
+    $.ajax({
+      type: 'GET',
+      url: '/api/repos',
+      headers: {
+        Authorization: 'token ' + token,
+      },
+      success: function(data) {
+        resolve(data);
+      },
+    });
   });
 }
 
 $(document).ready(function() {
-  $.ajax({
-    type: 'GET',
-    url: '/api/user',
-    headers: {
-      Authorization: 'token ' + token
-    },
+  (async () => {
+    let data = await get_userdata();
 
-    success(data) {
-      showUserBasicInfo(data[0]);
+    showUserBasicInfo(data[0]);
 
-      if (data[0].username === username) {
-        $.ajax({
-          type: 'GET',
-          url: '/api/orgs',
-          headers: {
-            Authorization: 'token ' + token
-          },
+    let { installation_id, username: api_username, uid } = data[0];
 
-          success: function(data) {
-            showOrg(data);
-          }
-        });
-      }
+    if (api_username === username) {
+      $.ajax({
+        type: 'GET',
+        url: '/api/orgs',
+        headers: {
+          Authorization: 'token ' + token,
+        },
+
+        success: function(data) {
+          showOrg(data);
+        },
+      });
     }
-  });
 
-  $.ajax({
-    type: 'GET',
-    url: '/api/repos',
-    headers: {
-      Authorization: 'token ' + token
-    },
+    let user_repo_data = await get_user_repos();
 
-    success: function(data) {
-      list(data);
+    list(user_repo_data);
+
+    if ('github' === git_type) {
+      parseInt(installation_id)
+        ? showGitHubAppSettings(username, installation_id)
+        : showGitHubAppInstall(uid);
+      return;
     }
-  });
 
-  if ('github' === git_type) {
-    $.ajax({
-      type: 'GET',
-      url: '/api/ci/oauth_client_id',
-      headers: {
-        Authorization: 'token ' + token
-      },
-      success: function(data) {
-        $('.tip').after(`
-<p><a href="${data}" target="_blank"> <button>授权</button></a></p>
-`);
-      }
+    let oauth_client_url = await new Promise(resolve => {
+      $.ajax({
+        type: 'GET',
+        url: '/api/ci/oauth_client_id',
+        headers: {
+          Authorization: 'token ' + token,
+        },
+        success: function(data) {
+          resolve(data);
+        },
+      });
     });
-  }
+
+    $('.tip').after(() => {
+      $('<p></p>').append(() => {
+        return $('<a></a>')
+          .append('<button>授权</button>')
+          .attr({
+            href: oauth_client_url,
+            target: '_blank',
+          });
+      });
+    });
+  })();
 });
 
 $('#sync').on('click', function() {
@@ -366,7 +405,7 @@ $('#sync').on('click', function() {
             role: 'progressbar',
             'aria-valuenow': 10,
             'aria-valuemin': 0,
-            'aria-valuemax': 100
+            'aria-valuemax': 100,
           })
           .css('width', '20%');
       });
@@ -384,12 +423,12 @@ $('#sync').on('click', function() {
     type: 'POST',
     url: '/api/user/sync',
     headers: {
-      Authorization: 'token ' + token
+      Authorization: 'token ' + token,
     },
     success: function(data) {
       location.reload();
       console.log(data);
-    }
+    },
   });
 
   progress(20, 2000);
@@ -412,7 +451,7 @@ function open_or_close(target) {
         target.innerHTML = 'Close';
         target.style.color = 'Green';
         console.log(data);
-      }
+      },
     });
   } else {
     $.ajax({
@@ -422,14 +461,13 @@ function open_or_close(target) {
         target.innerHTML = 'Open';
         target.style.color = 'Red';
         console.log(data);
-      }
+      },
     });
   }
 }
 
-$('#orgs').click(function(event) {
-  let org_name = event.target.innerHTML;
-  click_org(org_name);
+$(document).on('click', '.org_name', function() {
+  click_org($(this).attr('org_name'));
 });
 
 $('#userinfo').click(function(event) {
@@ -439,7 +477,6 @@ $('#userinfo').click(function(event) {
 
 // append 添加元素绑定事件
 // https://www.cnblogs.com/liubaojing/p/8383960.html
-
 $('#repos').on('click', '.open_or_close', function(event) {
   console.log(event);
 

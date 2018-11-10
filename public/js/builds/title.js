@@ -26,5 +26,5 @@ module.exports = {
     return (
       git.format(gitType) + ' - ' + username + '/' + repo + ' - ' + app.app_name
     );
-  }
+  },
 };

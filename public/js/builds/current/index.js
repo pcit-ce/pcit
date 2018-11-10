@@ -28,7 +28,7 @@ module.exports = {
       },
       error: function() {
         display('', url);
-      }
+      },
     });
-  }
+  },
 };

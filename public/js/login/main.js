@@ -28,13 +28,13 @@ function gogs() {
 $('.github-login-button').on({
   click: () => {
     github();
-  }
+  },
 });
 
 $('.gitee-login-button').on({
   click: () => {
     gitee();
-  }
+  },
 });
 
 new Vue({
@@ -42,8 +42,8 @@ new Vue({
   methods: {
     clickMethod: () => {
       alert('即将支持，敬请期待！请使用其他方式登录');
-    }
-  }
+    },
+  },
 });
 
 new Vue({
@@ -51,8 +51,8 @@ new Vue({
   methods: {
     clickMethod: () => {
       alert('即将支持，敬请期待！请使用其他方式登录');
-    }
-  }
+    },
+  },
 });
 
 new Vue({
@@ -60,6 +60,6 @@ new Vue({
   methods: {
     clickMethod: () => {
       alert('即将支持，敬请期待！请使用其他方式登录');
-    }
-  }
+    },
+  },
 });

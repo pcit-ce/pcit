@@ -34,9 +34,9 @@ module.exports = {
 
           success: build_data => {
             display(data, build_data, url);
-          }
+          },
         });
-      }
+      },
     });
-  }
+  },
 };

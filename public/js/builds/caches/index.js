@@ -15,11 +15,11 @@ module.exports = {
       type: 'get',
       url: '/api/repo/' + url.getRepoFullName() + '/caches',
       headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType())
+        Authorization: 'token ' + token.getToken(url.getGitType()),
       },
       success: function(data) {
         display(data);
-      }
+      },
     });
-  }
+  },
 };

@@ -80,12 +80,12 @@ module.exports = {
       $.ajax({
         method: 'post',
         headers: {
-          Authorization: 'token ' + token.getToken(url.getGitType())
+          Authorization: 'token ' + token.getToken(url.getGitType()),
         },
         url: '/api/' + [type, id, handle].join('/'),
         success: () => {
           let { handle: button_handle, title: button_title } = buttonChange(
-            handle
+            handle,
           );
 
           that.attr({ handle: button_handle, title: button_title + 'type' });
@@ -94,8 +94,8 @@ module.exports = {
         },
         error: e => {
           reject(e);
-        }
+        },
       });
     });
-  }
+  },
 };

@@ -97,5 +97,5 @@ module.exports = {
       ' - ' +
       app.app_name
     );
-  }
+  },
 };

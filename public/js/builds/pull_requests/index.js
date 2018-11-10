@@ -27,7 +27,7 @@ function display(data, url) {
         commit_id,
         build_status,
         started_at,
-        finished_at: stopped_at
+        finished_at: stopped_at,
       } = status;
 
       let username = url.getUsername();
@@ -39,7 +39,7 @@ function display(data, url) {
       let pull_request_url = git.getPullRequestUrl(
         username,
         repo,
-        pull_request_id
+        pull_request_id,
       );
 
       commit_id = commit_id.substr(0, 7);
@@ -64,7 +64,7 @@ function display(data, url) {
 
       let {
         title: button_title,
-        handle: button_handle
+        handle: button_handle,
       } = common_status.getButton(build_status);
       status_color = common_status.getColor(build_status);
       build_status = common_status.change(build_status);
@@ -82,7 +82,7 @@ function display(data, url) {
           let div_el = $('<div class="build_id"></div>');
           div_el.append('').css({
             background: status_color,
-            border: '1px solid' + status_color
+            border: '1px solid' + status_color,
           });
 
           return div_el;
@@ -181,7 +181,7 @@ module.exports = {
       url: '/api/repo/' + url.getGitRepoFullName() + '/builds?type=pr',
       success: function(data) {
         display(data, url);
-      }
+      },
     });
-  }
+  },
 };

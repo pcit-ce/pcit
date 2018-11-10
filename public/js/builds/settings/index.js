@@ -1,15 +1,15 @@
 'use strict';
 
 function get_env(url, token) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     $.ajax({
       url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
       headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType())
+        Authorization: 'token ' + token.getToken(url.getGitType()),
       },
       success: data => {
         resolve(data);
-      }
+      },
     });
   });
 }
@@ -34,14 +34,14 @@ function display(data, url, token) {
     })
     .append(() => {
       let input_el = $(
-        '<label><input type="radio" name="build_pushes"/></label>'
+        '<label><input type="radio" name="build_pushes"/></label>',
       );
 
       return input_el.append('Build Push Event');
     })
     .append(() => {
       let input_el = $(
-        '<label><input type="radio" name="build_pull_requests"/></label>'
+        '<label><input type="radio" name="build_pull_requests"/></label>',
       );
 
       return input_el.append('Build Pull request Event');
@@ -51,7 +51,7 @@ function display(data, url, token) {
       let input_el = $(
         '<form class="form-inline"><label>' +
           '<input class="form-control" type="text" name="maximum_number_of_builds" value="1"/>' +
-          '</label></form>'
+          '</label></form>',
       );
 
       return input_el.prepend('Maximum number of builds');
@@ -63,14 +63,14 @@ function display(data, url, token) {
     })
     .append(() => {
       let input_el = $(
-        '<label><input type="radio" name="auto_cancel_branch_builds"/></label>'
+        '<label><input type="radio" name="auto_cancel_branch_builds"/></label>',
       );
 
       return input_el.append('Auto cancel push builds');
     })
     .append(() => {
       let input_el = $(
-        '<label><input type="radio" name="auto_cancel_pull_request_builds"/></label>'
+        '<label><input type="radio" name="auto_cancel_pull_request_builds"/></label>',
       );
 
       return input_el.append('Auto cancel pull request builds');
@@ -78,7 +78,7 @@ function display(data, url, token) {
 
   env_el.append(() => {
     return $('<form class="setting_title"></form>').append(
-      'Environment Variables'
+      'Environment Variables',
     );
   });
 
@@ -89,27 +89,27 @@ function display(data, url, token) {
       let { id, name, public: is_public, value } = data;
 
       let env_item_el = $(
-        '<form class="env_list_item form-inline"></form>'
+        '<form class="env_list_item form-inline"></form>',
       ).attr({
         env_id: id,
-        public: is_public
+        public: is_public,
       });
 
       env_item_el
         .append(() => {
           return $(
-            '<input type="text" class="env_name form-control" readonly/>'
+            '<input type="text" class="env_name form-control" readonly/>',
           ).attr('placeholder', name);
         })
         .append(() => {
           return $('<input class="env_value form-control" readonly/>').attr(
             'placeholder',
-            is_public === '1' ? value : '************'
+            is_public === '1' ? value : '************',
           );
         })
         .append(() => {
           return $(
-            '<button class="delete btn btn-light btn-xs"></button>'
+            '<button class="delete btn btn-light btn-xs"></button>',
           ).append('Delete');
         });
 
@@ -120,17 +120,17 @@ function display(data, url, token) {
       return $('<form class="new_env form-inline"></form>')
         .append(() => {
           return $(
-            '<input class="name form-control" type="text" placeholder="name" />'
+            '<input class="name form-control" type="text" placeholder="name" />',
           );
         })
         .append(() => {
           return $(
-            '<input class="value form-control" type="text" placeholder="value" />'
+            '<input class="value form-control" type="text" placeholder="value" />',
           );
         })
         .append(() => {
           return $(
-            '<label class="is_public"><input type="radio" name="is_public" value="0" /></label>'
+            '<label class="is_public"><input type="radio" name="is_public" value="0" /></label>',
           ).append('Public Value');
         })
         .append(() => {
@@ -154,7 +154,7 @@ function display(data, url, token) {
   if (setting_is_default) {
     $(
       '.setting [name="build_pushes"],' +
-        '.setting [name="build_pull_requests"]'
+        '.setting [name="build_pull_requests"]',
     )
       .prop('checked', true)
       .attr('value', '1');
@@ -165,7 +165,11 @@ function display(data, url, token) {
         .prop('checked', value === '1')
         .attr(
           'value',
-          key === 'maximum_number_of_builds' ? value : value === '1' ? '1' : '0'
+          key === 'maximum_number_of_builds'
+            ? value
+            : value === '1'
+              ? '1'
+              : '0',
         );
     });
   }
@@ -178,11 +182,11 @@ module.exports = {
       type: 'get',
       url: '/api/repo/' + url.getRepoFullName() + '/settings',
       headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType())
+        Authorization: 'token ' + token.getToken(url.getGitType()),
       },
       success: function(data) {
         display(data, url, token);
-      }
+      },
     });
-  }
+  },
 };

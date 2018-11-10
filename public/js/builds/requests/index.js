@@ -30,7 +30,7 @@ function display(data, url) {
       build_status,
       event_type,
       pull_request_number,
-      created_at
+      created_at,
     } = value;
 
     let color =
@@ -42,12 +42,12 @@ function display(data, url) {
       .append(() => {
         return $('<div class="status"></div>').css(
           'border-left',
-          '8px solid ' + color
+          '8px solid ' + color,
         );
       })
       .append(() => {
         return $('<div class="event_type"></div>').append(
-          event_type === 'pull_request' ? 'pr' : event_type
+          event_type === 'pull_request' ? 'pr' : event_type,
         );
       })
       .append(() => {
@@ -62,8 +62,8 @@ function display(data, url) {
             url.getUsername(),
             url.getRepo(),
             commit_id,
-            url.getGitType()
-          )
+            url.getGitType(),
+          ),
         ].join('/');
 
         return $('<a class="commit_id"></a>')
@@ -71,7 +71,7 @@ function display(data, url) {
           .attr({
             title: 'View commit on GitHub',
             href: commit_url,
-            target: '_blank'
+            target: '_blank',
           })
           .css('color', color);
       })
@@ -100,7 +100,7 @@ function display(data, url) {
           .append('# ' + id)
           .attr({
             title: 'Go to the build this request triggered',
-            href: build_id_url
+            href: build_id_url,
           });
       })
       .append(() => {
@@ -125,14 +125,14 @@ module.exports = {
       type: 'get',
       url: '/api/repo/' + url.getRepoFullName() + '/requests',
       headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType())
+        Authorization: 'token ' + token.getToken(url.getGitType()),
       },
       success: function(data) {
         display(data, url);
       },
       error: () => {
         display('', url);
-      }
+      },
     });
-  }
+  },
 };

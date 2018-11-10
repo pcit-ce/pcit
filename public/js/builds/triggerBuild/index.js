@@ -15,14 +15,14 @@ module.exports = {
       type: 'post',
       url: '/api/repo/' + url.getRepoFullName() + '/trigger',
       headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType())
+        Authorization: 'token ' + token.getToken(url.getGitType()),
       },
       success: function(data) {
         display(data);
       },
       error: () => {
         display('');
-      }
+      },
     });
-  }
+  },
 };

@@ -47,7 +47,7 @@ module.exports = {
     column_el.on({
       mouseout: event => {
         mouseoutMethod(event);
-      }
+      },
     });
 
     // 关闭该元素的鼠标移出事件
@@ -63,5 +63,5 @@ module.exports = {
     $('#build_id').remove();
     $('#column_ico').remove();
     $('#column_more_options').remove();
-  }
+  },
 };

@@ -55,13 +55,13 @@ function display(data, url) {
         commit_id,
         build_status,
         started_at,
-        finished_at: stopped_at
+        finished_at: stopped_at,
       } = status;
 
       let commit_url = git.getCommitUrl(
         url.getUsername(),
         url.getRepo(),
-        commit_id
+        commit_id,
       );
       commit_id = commit_id.substr(0, 7);
 
@@ -88,7 +88,7 @@ function display(data, url) {
       let {
         class: button_class,
         handle: button_handle,
-        title: button_title
+        title: button_title,
       } = common_status.getButton(build_status);
       status_color = common_status.getColor(build_status);
       build_status = common_status.change(build_status);
@@ -97,7 +97,7 @@ function display(data, url) {
         let div_element = $('<div class="build_id"></div>');
         div_element.append('').css({
           background: status_color,
-          border: '1px solid' + status_color
+          border: '1px solid' + status_color,
         });
 
         return div_element;
@@ -140,7 +140,7 @@ function display(data, url) {
             .attr({
               href: commit_url,
               title: 'View commit on GitHub',
-              target: '_block'
+              target: '_block',
             })
             .addClass('commit_url');
 
@@ -152,7 +152,7 @@ function display(data, url) {
             .append(`#${build_id} ${build_status}`)
             .attr({
               href: `${location.href}/${build_id}`,
-              target: '_self'
+              target: '_self',
             })
             .css('color', status_color);
 
@@ -187,7 +187,7 @@ function display(data, url) {
                 title: button_title + ' build',
                 event_id: build_id,
                 job_or_build: 'build',
-                handle: button_handle
+                handle: button_handle,
               })
               .addClass('btn btn-light');
           })();
@@ -229,7 +229,7 @@ module.exports = {
         error: function(data) {
           display('error');
           console.log(data);
-        }
+        },
       });
 
       return;
@@ -244,7 +244,7 @@ module.exports = {
       error: function(data) {
         display('error');
         console.log(data);
-      }
+      },
     });
-  }
+  },
 };

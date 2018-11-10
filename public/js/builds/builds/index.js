@@ -39,5 +39,5 @@ module.exports = {
 
     // 有多个 job ,展示 jobs 列表
     list.show(data, url);
-  }
+  },
 };

@@ -54,7 +54,7 @@ module.exports = {
       url: '/api/repo/' + url.getGitRepoFullName() + '/branches',
       success: function(data) {
         display(data);
-      }
+      },
     });
-  }
+  },
 };

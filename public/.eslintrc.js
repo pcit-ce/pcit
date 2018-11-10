@@ -3,14 +3,15 @@ module.exports = {
     browser: true,
     node: true,
     es6: true,
-    jquery: true
+    jquery: true,
   },
-  extends: 'eslint:recommended',
+  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  parser: 'babel-eslint',
   parserOptions: {
     // ecmaVersion: 2015,
-    ecmaVersion: 7,
+    ecmaVersion: 9,
     impliedStrict: true,
-    sourceType: 'script'
+    sourceType: 'script',
   },
   rules: {
     indent: [
@@ -20,16 +21,17 @@ module.exports = {
         SwitchCase: 1,
         FunctionDeclaration: {
           parameters: 2,
-          body: 1
+          body: 1,
         },
-        ObjectExpression: 1
-      }
+        ObjectExpression: 1,
+      },
     ],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'no-console': 'off',
-    strict: 2
+    strict: 2,
+    'prettier/prettier': ['error', { trailingComma: 'all' }],
   },
-  plugins: []
+  plugins: [],
 };
