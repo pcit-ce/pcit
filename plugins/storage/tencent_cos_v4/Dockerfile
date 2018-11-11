@@ -1,4 +1,4 @@
-FROM khs1994/php:7.2.11-fpm-alpine
+FROM khs1994/php:7.2.12-fpm-alpine
 
 COPY composer.json /srv/pcit/plugin/cosv4/
 

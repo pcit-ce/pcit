@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.2.11}-fpm-alpine
+        - PHP_VERSION=${PHP_VERSION:-7.2.12}-fpm-alpine
         - NODE_VERSION=${NODE_VERSION:-alpine}
         - NODE_REGISTRY=https://registry.npm.taobao.org
     image: khs1994/pcit:alpine

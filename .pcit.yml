@@ -114,7 +114,7 @@ pipeline:
     image: khs1994/docker
     # registry: docker.khs1994.com
     repo: khs1994/php
-    tags: 7.2.11-swarm-${CI_TAG}
+    tags: 7.2.12-swarm-${CI_TAG}
     # target: php
     build_args:
       - a:1
@@ -142,12 +142,12 @@ pipeline:
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
 
   php-cs-fixer:
-    image: khs1994/php:7.2.11-fpm-alpine
+    image: khs1994/php:7.2.12-fpm-alpine
     commands:
       - php-cs-fixer fix
 
   sami:
-    image: khs1994/php:7.2.11-fpm-alpine
+    image: khs1994/php:7.2.12-fpm-alpine
     when:
       status: success
     commands:
@@ -220,7 +220,7 @@ pipeline:
       - echo "test when matrix"
     when:
       matrix:
-        - PHP_VERSION: 7.2.11
+        - PHP_VERSION: 7.2.12
           NGINX_VERSION: 1.15.6
           REDIS_VERSION: 5.0.0
           MYSQL_VERSION: 5.7.23
@@ -250,7 +250,7 @@ services:
 
 matrix:
   PHP_VERSION:
-    - 7.2.11
+    - 7.2.12
     - 7.1.23
   NGINX_VERSION:
     - 1.15.6
@@ -266,7 +266,7 @@ matrix:
 
 # matrix:
 #   include:
-#     - PHP_VERSION: 7.2.11
+#     - PHP_VERSION: 7.2.12
 #       MYSQL_VERSION: 5.7.23
 #       REDIS_VERSION: 5.0.0
 #     - PHP_VERSION: 7.1.23

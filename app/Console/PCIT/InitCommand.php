@@ -93,7 +93,7 @@ pipeline:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
       # matrix:
-      #   - PHP_VERSION: 7.2.11
+      #   - PHP_VERSION: 7.2.12
       #     REDIS_VERSION: 1.15.6
       #     MYSQL_VERSION: 5.7.22
       #     MONGODB_VERSION: 4.1.4
@@ -124,7 +124,7 @@ services:
 
 matrix:
   PHP_VERSION:
-    - 7.2.11
+    - 7.2.12
     - 7.1.23
   REDIS_VERSION:
     - 5.0.0

@@ -2,7 +2,7 @@
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
 #
 
-ARG PHP_VERSION=7.2.11-fpm-alpine
+ARG PHP_VERSION=7.2.12-fpm-alpine
 ARG NODE_VERSION=alpine
 
 #

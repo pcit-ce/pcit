@@ -15,7 +15,7 @@ class MatrixTest extends PCITTestCase
         $yaml = <<<EOF
 matrix:
   PHP_VERSION: 
-    - 7.2.11
+    - 7.2.12
     - 7.1.23
   REDIS_VERSION:
     - 5.0.0  
@@ -25,7 +25,7 @@ EOF;
         $yaml2 = <<<EOF
 matrix:
   include:
-    - PHP_VERSION: 7.2.11
+    - PHP_VERSION: 7.2.12
       REDIS_VERSION: 5.0.0
     - PHP_VERSION: 7.1.23
       REDIS_VERSION: 5.0.0 
