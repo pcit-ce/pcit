@@ -25,13 +25,17 @@
   <span id="builds">Build History</span>
   <span id="pull_requests">Pull Requests</span>
 
-  <select id="more_options">
-    <option id="settings" value="settings">Settings</option>
-    <option id="requests" value="requests">Requests</option>
-    <option id="caches" value="caches">Caches</option>
-    <option id="trigger_build" value="trigger_build">Trigger Build</option>
-  </select>
-
+  <div class="btn-group more_options" role="group">
+    <button id="more_options" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Options
+    </button>
+    <div class="dropdown-menu" aria-labelledby="more_options">
+      <a class="dropdown-item auth" id="settings" value="settings">Settings</a>
+      <a class="dropdown-item" id="requests" value="requests">Requests</a>
+      <a class="dropdown-item auth" id="caches" value="caches">Caches</a>
+      <a class="dropdown-item auth" id="trigger_build" value="trigger_build">Trigger Build</a>
+    </div>
+  </div>
 </div>
 
 <br>

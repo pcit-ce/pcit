@@ -23,24 +23,9 @@ const token = require('../common/token');
 header.show();
 footer.show();
 
-// 事件捕获 从父元素到子元素传递
-// 事件冒泡 点击了 子元素 会向上传递 即也点击了父元素
-$('.column').click(function(event) {
-  let id = event.target.id;
-
-  console.log('事件冒泡 ' + id);
-
-  if (id === 'more_options') {
-    return;
-  }
-
-  if (id === 'build_id') {
-    // build_id 元素被点击
-    common.column_click_handle(event.target.id);
-  }
-
-  title.show(url.getBaseTitle(), id);
-});
+if (!token.getToken(url.getGitType())) {
+  $('.more_options .auth').hide();
+}
 
 // http://www.zhangxinxu.com/wordpress/2013/06/html5-history-api-pushstate-replacestate-ajax/
 // https://developer.mozilla.org/zh-CN/docs/Web/API/History_API
@@ -150,7 +135,7 @@ $('.column span').on({
   },
 });
 
-$('#more_options').on({
+$('.more_options').on({
   click: function(event) {
     console.log(url.getUrlWithArray());
 
@@ -188,9 +173,12 @@ jQuery(document).ready(function() {
 
   content
     .append(() => {
-      let span_el = $('<a class="h1_git_type"></a>');
-      span_el
-        .append(git.format(url.getGitType()))
+      return $('<a class="h1_git_type"></a>')
+        .append(() => {
+          return $('<div></div>')
+            .append(git.format(url.getGitType()))
+            .css('float', 'left');
+        })
         .attr(
           'href',
           [
@@ -199,9 +187,21 @@ jQuery(document).ready(function() {
             url.getRepo(),
           ].join('/'),
         )
-        .attr('target', '_block');
-
-      return span_el;
+        .css({
+          display: 'block',
+        })
+        .attr('target', '_block')
+        .append(
+          $('<span></span>')
+            .addClass('badge badge-dark badge-pill')
+            .append('Beta')
+            .css({
+              'font-size': '11px',
+              display: 'block',
+              float: 'left',
+              'margin-right': '10px',
+            }),
+        );
     })
     .append(() => {
       let span_el = $('<a class="h1_username">');
@@ -470,3 +470,24 @@ $(document).on(
     });
   },
 );
+
+// 事件捕获 从父元素到子元素传递
+// 事件冒泡 点击了 子元素 会向上传递 即也点击了父元素
+$('.column').click(function(event) {
+  let id = event.target.id;
+
+  console.log('事件冒泡 ' + id);
+
+  if (id === 'more_options') {
+    return;
+  }
+
+  if (id === 'build_id') {
+    // build_id 元素被点击
+    common.column_click_handle(id);
+  }
+
+  title.show(url.getBaseTitle(), id);
+
+  console.log(event.target.getAttribute('job_id'));
+});

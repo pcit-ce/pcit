@@ -35,7 +35,7 @@ abstract class Kernel extends Command
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
         // 数据库迁移 server only
-        if ('server' === $this->getName()) {
+        if (\in_array($this->getName(), ['server', 'up'], true)) {
             try {
                 sleep(5);
 

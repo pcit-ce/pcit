@@ -33,6 +33,8 @@ function display(data, url) {
       created_at,
     } = value;
 
+    commit_message = tag ? tag : commit_message;
+
     let color =
       build_status === 'skip'
         ? status.getColor('error')

@@ -4,7 +4,7 @@ const details = require('../log/details');
 const log = require('../log');
 
 function display(job_data, build_data, url) {
-  let { build_log } = job_data;
+  let { build_log, id: job_id, build_id } = job_data;
 
   job_data.log = build_log;
   job_data.commit_id = build_data.commit_id;
@@ -17,6 +17,8 @@ function display(job_data, build_data, url) {
 
   // display log
   log.show(job_data.log);
+
+  let column_el = $('#pull_requests');
 }
 
 module.exports = {

@@ -25,13 +25,6 @@ body {
     width: 70%;
 }
 
-#more_options {
-    position: absolute;
-    /*float: right;*/
-    top: 0;
-    right: 0;
-}
-
 #display {
     position: relative;
     margin: 0 auto;
@@ -74,8 +67,16 @@ body {
     cursor: pointer;
 }
 
+.more_options {
+    float: right;
+    right: 0;
+    bottom: 10px;
+}
+
 #more_options {
-    margin-left: 470px;
+    color: black;
+    border: 1px solid;
+    width: 100px;
 }
 
 .build_data {

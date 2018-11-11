@@ -56,7 +56,10 @@ function display(data, url) {
         build_status,
         started_at,
         finished_at: stopped_at,
+        tag,
       } = status;
+
+      commit_message = tag ? tag : commit_message;
 
       let commit_url = git.getCommitUrl(
         url.getUsername(),
@@ -86,7 +89,6 @@ function display(data, url) {
       let status_color;
 
       let {
-        class: button_class,
         handle: button_handle,
         title: button_title,
       } = common_status.getButton(build_status);

@@ -26,7 +26,11 @@ class Agent extends Kernel
     {
         Log::debug(__FILE__, __LINE__, 'Docker connect ...');
 
-        (new PCIT())->docker->system->ping(1);
+        try {
+            (new PCIT())->docker->system->ping(1);
+        } catch (\Throwable $e) {
+            return;
+        }
 
         Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
 
