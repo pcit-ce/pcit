@@ -188,7 +188,7 @@ jQuery(document).ready(function() {
 
   content
     .append(() => {
-      let span_el = $("<a class='h1_git_type'></a>");
+      let span_el = $('<a class="h1_git_type"></a>');
       span_el
         .append(git.format(url.getGitType()))
         .attr(
@@ -279,7 +279,7 @@ $(document).on(
   'click',
   '.job_list button,.build_data button,.builds_list button,.pull_requests_list button',
   function() {
-    $(this).prop('disabled');
+    $(this).attr('disabled', 'disabled');
 
     (async that => {
       await common_status.buttonClick(that);
@@ -347,8 +347,7 @@ $(document).on('click', '.env_list_item .delete', function() {
       });
     });
   })().then(() => {
-    let display_el = $('#display');
-
+    // let display_el = $('#display');
     // display_el.innerHeight(display_el.innerHeight() - 50);
   });
 
@@ -435,8 +434,7 @@ $(document).on('click', '.new_env button', function() {
 
     env_el.after(env_item_el);
 
-    let display_el = $('#display');
-
+    // let display_el = $('#display');
     // display_el.innerHeight(display_el.innerHeight() + 50);
   })().then();
 

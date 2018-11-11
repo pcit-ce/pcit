@@ -189,7 +189,7 @@ function display(data, url) {
                 job_or_build: 'build',
                 handle: button_handle,
               })
-              .addClass('btn btn-light');
+              .addClass('btn btn-link');
           })();
         });
 

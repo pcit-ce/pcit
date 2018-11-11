@@ -236,3 +236,7 @@ tr {
     margin-bottom: 20px;
     padding-bottom: 15px;
 }
+
+.material-icons {
+    color: #666666;
+}

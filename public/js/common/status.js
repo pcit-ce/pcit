@@ -2,6 +2,7 @@
 
 const token = require('./token');
 const url = require('../builds/url');
+const ucfirst = require('../common/util').ucfirst;
 
 function buttonChange(handle) {
   if (handle === 'cancel') {
@@ -76,6 +77,8 @@ module.exports = {
     let type = that.attr('job_or_build'); // build or job
     let id = that.attr('event_id');
 
+    that.attr('title', ucfirst(handle) + ' ' + type + ' ...');
+
     return new Promise((resolve, reject) => {
       $.ajax({
         method: 'post',
@@ -88,7 +91,10 @@ module.exports = {
             handle,
           );
 
-          that.attr({ handle: button_handle, title: button_title + 'type' });
+          that.attr({
+            handle: button_handle,
+            title: button_title + type,
+          });
 
           resolve();
         },

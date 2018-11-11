@@ -55,7 +55,7 @@ class Agent extends Kernel
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, 'Handle job success', ['job_id' => $job_id, 'message' => $e->getMessage()], Log::EMERGENCY);
 
-            Job::updateFinishedAt($job_id, time());
+            Job::updateFinishedAt((int) $job_id, time());
 
             $subject
                 ->register(new LogHandle((int) $job_id))

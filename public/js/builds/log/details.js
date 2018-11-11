@@ -129,7 +129,7 @@ module.exports = {
           .attr('title', button_title + (job ? ' job' : ' build'))
           .attr('event_id', id)
           .attr('job_or_build', job ? 'job' : 'build')
-          .addClass('btn btn-light');
+          .addClass('btn btn-link');
       })
       .append(() => {
         return $('<div class="env"></div>').append(env_vars);

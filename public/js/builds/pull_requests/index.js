@@ -163,7 +163,7 @@ function display(data, url) {
             .attr('title', button_title + ' build')
             .attr('event_id', build_id)
             .attr('job_or_build', 'build')
-            .addClass('btn btn-light');
+            .addClass('btn btn-link');
         });
 
       ul_el.append(li_el);

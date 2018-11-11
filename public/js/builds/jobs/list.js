@@ -69,7 +69,7 @@ module.exports = {
                 return button_handle === 'cancel' ? 'cancel' : 'refresh';
               });
             })
-            .addClass('btn btn-light')
+            .addClass('btn btn-link')
             .attr('handle', button_handle)
             .attr('title', button_title + ' job')
             .attr('event_id', id)
