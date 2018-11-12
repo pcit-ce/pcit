@@ -5,7 +5,11 @@ function display(data) {
 
   display_element.empty();
 
-  display_element.append('缓存列表功能即将上线');
+  let cache_el = $('<div class="cache container"></div>').append(
+    '缓存列表功能即将上线',
+  );
+
+  display_element.append(cache_el);
   // .innerHeight(55);
 }
 

@@ -45,7 +45,7 @@ class Cancelled extends Kernel
 # Build Configuration
 
 |Build Option      | Setting    |
-| --               |   --       |  
+| --               |   --       |
 | Language         | $this->language  |
 | Operating System | $this->os        |
 
@@ -54,14 +54,6 @@ class Cancelled extends Kernel
 
 ```json
 $this->config
-```
-
-</details>
-
-# Build Log
-
-```bash
-$this->build_log
 ```
 
 EOF;

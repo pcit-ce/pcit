@@ -20,7 +20,7 @@ function display(data, url, token) {
   display_element.empty();
 
   let setting_is_default = data.length === 0;
-  let setting_el = $('<div class="setting"></div>');
+  let setting_el = $('<div class="setting container"></div>');
   let general_el = $('<form class="general"></form>');
   let auto_cancellation = $('<form class="auto_cancellation"></form>');
   let env_el = $('<form class="env"></form>');

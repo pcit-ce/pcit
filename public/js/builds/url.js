@@ -47,8 +47,12 @@ function getJobId() {
 function getType() {
   let type_from_url = getUrlWithArray()[6];
 
+  if (5 === getUrlWithArray().length) {
+    return 'repo';
+  }
+
   if (6 === getUrlWithArray().length) {
-    type_from_url = 'current';
+    return 'current';
   }
 
   return type_from_url;

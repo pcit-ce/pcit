@@ -57,7 +57,8 @@ module.exports = {
     div_element
       .append(() => {
         return $('<div class="branch"></div>')
-          .append(branch)
+          .append(branch.slice(0, 7))
+          .attr('title', branch)
           .css('color', status_color);
       })
       .append(() => {
@@ -86,11 +87,14 @@ module.exports = {
     div_element.append(() => {
       return $('<div class="commit_message"></div>')
         .append(commit_message)
+        .attr('title', commit_message)
         .css('color', status_color);
     });
 
     div_element.append(() => {
-      return $('<div class="committer"></div>').append(committer_name);
+      return $('<div class="committer"></div>')
+        .append(committer_name)
+        .attr('title', committer_name);
     });
 
     div_element.append(() => {

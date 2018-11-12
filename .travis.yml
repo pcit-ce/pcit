@@ -100,6 +100,7 @@ jobs:
         - docker run -it --rm -v $PWD:/srv/gitbook-src khs1994/gitbook
         - sudo touch _book/CNAME
         - echo "api.ci.khs1994.com" | sudo tee _book/CNAME
+      # https://docs.travis-ci.com/user/deployment/pages/
       deploy:
         provider: pages
         repo: khs1994-php/pcit-api-docs
@@ -107,6 +108,7 @@ jobs:
         local-dir: docs/api/_book
         github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
         keep-history: true
+        target-branch: gh-pages
         on:
           branch: master
     - stage: deploy

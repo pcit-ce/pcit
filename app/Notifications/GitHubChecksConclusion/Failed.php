@@ -67,7 +67,7 @@ class Failed extends Kernel
 # Build Configuration
 
 |Build Option      | Setting    |
-| --               |   --       |  
+| --               |   --       |
 | Language         | $this->language  |
 | Operating System | $this->os        |
 
@@ -79,12 +79,6 @@ $this->config
 ```
 
 </details>
-
-# Build Log
-
-```bash
-$this->build_log
-```
 
 EOF;
     }

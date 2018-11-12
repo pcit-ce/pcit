@@ -32,7 +32,9 @@
 
 ## 愿景
 
-将 PCIT 打造成为国内具有一定影响力的 **智能化** CI/CD 系统。
+你尽管 `push`，其他的 PCIT 搞定。
+
+push by you, test and deploy by us.
 
 ## 博客
 
@@ -154,13 +156,15 @@ $ ./lnmp-docker pcit-up
 
 ## 示例项目
 
-目前 PCIT 官方维护以下语言的示例项目。 
+目前 PCIT 官方维护以下语言的示例项目。
 
-| 语言        | 地址 |
-| --          | --   |
-| **PHP**     | https://github.com/khs1994-php/tencent-ai |
-| **Node.js** | https://github.com/khs1994-php/tencent-ai-node | 
-| **Go**      | https://github.com/khs1994-php/tencent-ai-go |
+| 语言        | 地址 | 构建页面|
+| --          | --   | -- |
+| **PHP**     | https://github.com/khs1994-php/tencent-ai | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/tencent-ai) |
+| **Node.js** | https://github.com/khs1994-php/tencent-ai-node | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/tencent-ai-node) |
+| **Go**      | https://github.com/khs1994-php/tencent-ai-go | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/tencent-ai-go) |
+| **Hexo (Node.js)** | https://github.com/khs1994/khs1994.github.io | [![Build Status](https://ci.khs1994.com/github/khs1994/khs1994.github.io/status?branch=hexo)](https://ci.khs1994.com/github/khs1994/khs1994.github.io) |
+| **Bash Shell**| https://github.com/khs1994-docker/lnmp | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 
 ## 生态系统
 

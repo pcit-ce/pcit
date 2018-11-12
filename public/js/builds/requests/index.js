@@ -8,7 +8,7 @@ function display(data, url) {
 
   display_element.empty();
 
-  let requests_el = $('<div class="requests"></div>');
+  let requests_el = $('<div class="requests container"></div>');
 
   if (data.length === 0) {
     display_element.append('Not Event receive !');
@@ -90,7 +90,7 @@ function display(data, url) {
       })
       .append(() => {
         return $('<div class="commit_message col-md-3"></div>')
-          .append(commit_message.substring(0, 35))
+          .append(commit_message.substring(0, 24))
           .attr('title', commit_message);
       })
       .append(() => {
