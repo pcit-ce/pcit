@@ -57,7 +57,7 @@ module.exports = {
     div_element
       .append(() => {
         return $('<div class="branch"></div>')
-          .append(branch.slice(0, 7))
+          .append($('<strong></strong>').append(branch.slice(0, 7)))
           .attr('title', branch)
           .css('color', status_color);
       })
@@ -71,7 +71,7 @@ module.exports = {
       })
       .append(() => {
         return $('<div class="build_status"></div>')
-          .append('#' + id + ' ' + build_status)
+          .append($('<strong></strong>').append('#' + id + ' ' + build_status))
           .css('color', status_color);
       })
       .append(() => {

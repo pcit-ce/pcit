@@ -26,7 +26,7 @@ module.exports = {
     span_el.css('border-bottom-style', 'solid');
   },
   column_click_handle: id => {
-    let column_el = $('.column span');
+    let column_el = $('.column .col-md-1');
 
     if (
       -1 !==

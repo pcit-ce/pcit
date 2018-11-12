@@ -33,6 +33,10 @@ if (!token.getToken(url.getGitType())) {
 // https://developer.mozilla.org/zh-CN/docs/Web/API/History_API
 // 标题参数目前无效
 function changeUrl(id, replace = false) {
+  if ('trigger_build' === id) {
+    return;
+  }
+
   if ('current' === id) {
     if (replace) {
       history.replaceState({ key_id: id }, null, url.getRepoFullNameUrl());
@@ -126,7 +130,7 @@ function mouseoverMethod(event) {
 }
 
 // https://www.cnblogs.com/yangzhi/p/3576520.html
-$('.column span').on({
+$('.column .col-md-1').on({
   click: function(event) {
     let target = event.target;
     let id = target.id;
@@ -185,9 +189,11 @@ jQuery(document).ready(function() {
     .append(() => {
       return $('<a class="h1_git_type"></a>')
         .append(() => {
+          let git_format = git.format(url.getGitType());
           return $('<div></div>')
-            .append(git.format(url.getGitType()))
-            .css('float', 'left');
+            .append(git_format)
+            .css('float', 'left')
+            .attr('title', 'View Repository on ' + git_format);
         })
         .attr(
           'href',

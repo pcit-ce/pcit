@@ -3,6 +3,7 @@
 const { column_span_click } = require('../common');
 const git = require('../../common/git');
 const common_status = require('../../common/status');
+const error_info = require('../error/error').error_info;
 
 function display(data, url) {
   let display_element = $('#display');
@@ -10,7 +11,9 @@ function display(data, url) {
   display_element.empty();
 
   if (0 === data.length) {
-    display_element.append('No pull request builds for this repository');
+    display_element.append(
+      error_info('No pull request builds for this repository'),
+    );
     // display_element.innerHeight(55);
   } else {
     let ul_el = $('<ul class="pull_requests_list"></ul>');
@@ -72,93 +75,71 @@ function display(data, url) {
       let li_el = $('<li></li>');
 
       li_el
-        .append(() => {
-          let div_el = $('<div class="id"></div>');
-          div_el.append();
-
-          return div_el;
-        })
-        .append(() => {
-          let div_el = $('<div class="build_id"></div>');
-          div_el.append('').css({
-            background: status_color,
-            border: '1px solid' + status_color,
-          });
-
-          return div_el;
-        })
-        .append(() => {
-          let a_el = $('<a class="pull_request_url"></a>');
-          a_el
+        .append($('<div class="id"></div>').append())
+        .append(
+          $('<div class="build_id"></div>')
+            .append('')
+            .css({
+              background: status_color,
+              border: '1px solid' + status_color,
+            }),
+        )
+        .append(
+          $('<a class="pull_request_url"></a>')
             .append(`#PR ${pull_request_id}`)
             .attr('title', 'View pull request on GitHub')
             .attr('href', pull_request_url)
             .attr('target', '_block')
-            .css('color', status_color);
-
-          return a_el;
-        })
-        .append(() => {
-          let div_el = $('<div class="branch"></div>');
-          div_el.append(branch).attr('title', branch);
-
-          return div_el;
-        })
-        .append(() => {
-          let div_el = $('<div class="committer"></div>');
-          div_el.append(committer_username).attr('title', committer_username);
-
-          return div_el;
-        })
-        .append(() => {
-          let div_el = $('<div class="commit_message"></div>');
-          div_el
+            .css('color', status_color),
+        )
+        .append(
+          $('<div class="branch"></div>')
+            .append($('<strong></strong>').append(branch))
+            .attr('title', branch)
+            .css('color', status_color),
+        )
+        .append(
+          $('<div class="committer"></div>')
+            .append(committer_username)
+            .attr('title', committer_username),
+        )
+        .append(
+          $('<div class="commit_message"></div>')
             .append(commit_message.slice(0, 40))
-            .attr('title', commit_message);
-
-          return div_el;
-        })
-        .append(() => {
-          let a_el = $('<a class="commit_id"></a>');
-          a_el.append(commit_id);
-          a_el.attr('href', commit_url);
-          a_el.attr('target', '_block');
-          a_el.attr('title', 'View commit on GitHub');
-          return a_el;
-        })
-        .append(() => {
-          let a_el = $('<a class="build_status"></a>');
-          a_el
-            .append('#' + build_id + ' ' + build_status)
+            .attr('title', commit_message),
+        )
+        .append(
+          $('<a class="commit_id"></a>')
+            .append(commit_id)
+            .attr('href', commit_url)
+            .attr('target', '_block')
+            .attr('title', 'View commit on GitHub'),
+        )
+        .append(
+          $('<a class="build_status"></a>')
+            .append(
+              $('<strong></strong>').append(
+                '#' + build_id + ' ' + build_status,
+              ),
+            )
             .attr('href', `${repo_full_name_url}/builds/${build_id}`)
             .attr('target', '_self')
-            .css('color', status_color);
-
-          return a_el;
-        })
+            .css('color', status_color),
+        )
+        .append($('<div class="build_time"></div>').append(started_at))
         .append(() => {
-          let div_el = $('<div class="build_time"></div>');
-          div_el.append(started_at);
-
-          return div_el;
-        })
-        .append(() => {
-          let div_el = $('<div class="build_time_ago"></div>');
           let date = new Date();
-
-          div_el
+          return $('<div class="build_time_ago"></div>')
             .append(stopped_at)
             .attr('title', 'Finished ' + date.toLocaleString());
-
-          return div_el;
         })
         .append(() => {
           return $('<button class="cancel_or_restart"></button>')
-            .append(() => {
-              return $('<i class="material-icons"></i>').append(() => {
-                return button_handle === 'cancel' ? 'cancel' : 'refresh';
-              });
-            })
+            .append(
+              $('<i class="material-icons"></i>').append(
+                button_handle === 'cancel' ? 'cancel' : 'refresh',
+              ),
+            )
             .attr('handle', button_handle)
             .attr('title', button_title + ' build')
             .attr('event_id', build_id)

@@ -1,20 +1,13 @@
 .requests .requests_list {
     border: 1px solid #f1f1f1;
     margin-bottom: 10px;
-    position: relative;
-    /*height: 30px;*/
+    /* position: relative; */
+    /* height: 30px; */
     font-size: 19px;
 }
 
-/*.requests .requests_list * {*/
-/*position: absolute;*/
-/*}*/
-
-.requests .status {
-    left: 1px;
-    width: 10px;
-    height: 30px;
-    /*border-left: 8px solid red;*/
+.requests {
+  margin-top: 12px;
 }
 
 .requests a {
@@ -24,10 +17,6 @@
 .requests a:hover {
     text-decoration: underline;
 }
-
-/*.requests .event_type {*/
-    /*left: 30px;*/
-/*}*/
 
 /*.requests .branch {*/
     /*left: 100px;*/

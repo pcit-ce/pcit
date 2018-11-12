@@ -15,17 +15,20 @@
 </head>
 <body>
 
-<header></header>
+<header class="container"></header>
+<nav class="my navbar navbar-dark bg-dark navbar-expand-lg"></nav>
 
-<div id="repo"></div>
+<div id="repo" class="container"></div>
 
-<div class="column">
-  <span id="current">Current</span>
-  <span id="branches">Branches</span>
-  <span id="builds">Build History</span>
-  <span id="pull_requests">Pull Requests</span>
+<div class="container">
 
-  <div class="btn-group more_options" role="group">
+<div class="column row">
+  <div id="current" class="col-md-1">Current</div>
+  <div id="branches" class="col-md-1">Branches</div>
+  <div id="builds" class="col-md-1">Builds</div>
+  <div id="pull_requests" class="col-md-1">PRs</div>
+
+  <div class="btn-group more_options ml-md-auto" role="group">
     <button id="more_options" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Options
     </button>
@@ -37,12 +40,11 @@
     </div>
   </div>
 </div>
-
-<br>
+</div>
 
 <div id="display" class="container"></div>
 
-<footer></footer>
+<footer class="container"></footer>
 
 <script src='/assets/js/builds.js'></script>
 </body>

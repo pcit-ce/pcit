@@ -1,23 +1,13 @@
 footer {
-    position: relative;
-    margin: 290px auto 10px;
-    width: 70%;
-    height: 200px;
-    /*border: 1px solid red;*/
-}
-
-footer ul {
-    display: block;
-    margin: 0;
-    /*border: 1px solid;*/
-}
-
-footer li {
+    /* position: absolute; */
+    /* position: relative; */
+    /*margin-top: 80px;*/
+    /* margin-left: 100px; */
+    /*margin-right: auto;*/
+    /* width: 80%; */
+    /*left: 50px;*/
     line-height: 30px;
-    color: #636b6f;
-    list-style-type: none;
-    display: block;
-    margin: 0;
+    padding-top: 85px;
 }
 
 footer a {
@@ -25,40 +15,11 @@ footer a {
     color: #636b6f;
 }
 
+footer .about,.help,.legal,.status {
+    margin-bottom: 20px;
+}
+
 footer a:hover {
     text-decoration: underline;
     color: #636b6f;
-}
-
-.about {
-    position: absolute;
-    /*float: left;*/
-    margin-left: -4%;
-    width: 200px;
-    left: 0;
-    top: 0;
-}
-
-.help {
-    position: absolute;
-    /*float: left;*/
-    margin-left: 200px;
-    width: 100px;
-}
-
-.legal {
-    /*border: solid;*/
-    /*float: left;*/
-    position: absolute;
-    margin-left: 400px;
-    width: 200px;
-}
-
-.status {
-    /*border: solid;*/
-    /*float: left;*/
-    /*margin-left: 20%;*/
-    position: absolute;
-    right: 0;
-    top: 0;
 }

@@ -2,6 +2,7 @@
 
 const { column_span_click } = require('../common');
 const build = require('../builds');
+const error_info = require('../error/error').error_info;
 
 function display(data, url) {
   let display_element = $('#display');
@@ -9,7 +10,7 @@ function display(data, url) {
   display_element.empty();
 
   if (0 === data.length) {
-    display_element.append('Not Build Yet !');
+    display_element.append(error_info('Not Build Yet !'));
     // display_element.innerHeight(55);
   } else {
     build.show(data, url);

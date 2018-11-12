@@ -40,7 +40,7 @@
 }
 
 .pull_requests_list .pull_request_url {
-    font-size: 16px;
+    font-size: 20px;
     /*background: yellow;*/
     height: 100px;
     width: 100px;
@@ -49,6 +49,7 @@
     left: 10px;
     top: 0;
     text-align: center;
+    padding-top: 25px;
 }
 
 .pull_requests_list .branch {
@@ -59,6 +60,7 @@
     position: absolute;
     left: 110px;
     top: 0;
+    font-size: 20px;
 }
 
 .pull_requests_list .committer {
@@ -79,7 +81,7 @@
     position: absolute;
     left: 210px;
     top: 0;
-    font-size: 16px;
+    font-size: 18px;
     color: #666666;
     text-align: left;
     padding-left: 25px;
@@ -106,7 +108,7 @@
     position: absolute;
     left: 532px;
     top: 0;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
     line-height: 24px;
 }

@@ -2,16 +2,17 @@
 
 const status = require('../../common/status');
 const git = require('../../common/git');
+const error_info = require('../error/error').error_info;
 
 function display(data, url) {
   let display_element = $('#display');
 
   display_element.empty();
 
-  let requests_el = $('<div class="requests container"></div>');
+  let requests_el = $('<div class="requests"></div>');
 
   if (data.length === 0) {
-    display_element.append('Not Event receive !');
+    display_element.append(error_info('Not Event receive !'));
     // display_element.innerHeight(55);
     return;
   }
@@ -42,15 +43,9 @@ function display(data, url) {
 
     requests_el_item
       .append(() => {
-        return $('<div class="status col-md-1"></div>').css(
-          'border-left',
-          '8px solid ' + color,
-        );
-      })
-      .append(() => {
-        return $('<div class="event_type col-md-1"></div>').append(
-          event_type === 'pull_request' ? 'pr' : event_type,
-        );
+        return $('<div class="event_type col-md-1"></div>')
+          .append(event_type === 'pull_request' ? 'pr' : event_type)
+          .css('border-left', '8px solid' + color);
       })
       .append(() => {
         return $('<div class="branch col-md-1"></div>')
@@ -68,7 +63,7 @@ function display(data, url) {
           ),
         ].join('/');
 
-        return $('<a class="commit_id col-md-1"></a>')
+        return $('<a class="commit_id col-md-1 text-truncate"></a>')
           .append(commit_id.substring(0, 8))
           .attr({
             title: 'View commit on GitHub',
@@ -89,8 +84,8 @@ function display(data, url) {
           .attr('title', new Date(created_at * 1000).toLocaleString());
       })
       .append(() => {
-        return $('<div class="commit_message col-md-3"></div>')
-          .append(commit_message.substring(0, 24))
+        return $('<div class="commit_message col-md-3 text-truncate"></div>')
+          .append(commit_message)
           .attr('title', commit_message);
       })
       .append(() => {
@@ -111,7 +106,7 @@ function display(data, url) {
             ? 'Build skipped via commit message'
             : 'Build created successfully';
 
-        return $('<div class="reason col-md-3"></div>')
+        return $('<div class="reason col-md-3 text-truncate"></div>')
           .append(message.substring(0, 26))
           .attr({ title: message });
       });

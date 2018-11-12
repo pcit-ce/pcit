@@ -1,15 +1,13 @@
 'use strict';
 
+const error_info = require('../error/error').error_info;
+
 function display(data) {
   let display_element = $('#display');
 
   display_element.empty();
 
-  let cache_el = $('<div class="cache container"></div>').append(
-    '缓存列表功能即将上线',
-  );
-
-  display_element.append(cache_el);
+  display_element.append(error_info('缓存列表功能即将上线'));
   // .innerHeight(55);
 }
 

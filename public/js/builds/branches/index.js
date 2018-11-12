@@ -1,6 +1,7 @@
 'use strict';
 
 const { column_span_click } = require('../common');
+const error_info = require('../error/error').error_info;
 
 function display(data) {
   let display_element = $('#display');
@@ -8,7 +9,7 @@ function display(data) {
   display_element.empty();
 
   if (0 === data.length) {
-    display_element.append('Not Build Yet !');
+    display_element.append(error_info('Not Build Yet !', '', '', 'primary'));
     // display_element.innerHeight(55);
   } else {
     console.log(data);

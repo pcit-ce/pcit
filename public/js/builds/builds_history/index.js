@@ -4,6 +4,7 @@ const { column_span_click } = require('../common');
 const git = require('../../common/git');
 const builds = require('../builds');
 const common_status = require('../../common/status');
+const build_not_find = require('../error/error').error_info;
 
 function display(data, url) {
   let display_element = $('#display');
@@ -17,17 +18,18 @@ function display(data, url) {
   if (8 === url_array.length) {
     // 展示某个 build 详情
     if (0 === data.length || 'error' === data) {
-      display_element.append("Oops, we couldn't find that build!");
+      display_element.append(
+        build_not_find(
+          "Oops, we couldn't find that build!",
+          '',
+          'The build not exist.',
+        ),
+      );
       // display_element.innerHeight(55);
     } else {
       // 展示某个 build
-      let column_el = $('#pull_requests');
-      column_el.after('<span id="column_ico"> > <span>');
-
-      column_el = $('#column_ico');
-
-      column_el.after(() => {
-        let span_el = $('<span id="build_id"></span>');
+      $('#pull_requests').after(() => {
+        let span_el = $('<div id="build_id" class="col-md-2"></div>');
         span_el.append('Build #' + data.id);
 
         return span_el;
@@ -115,7 +117,7 @@ function display(data, url) {
         .append(() => {
           let div_element = $('<div class="branch"></div>');
           div_element
-            .append(branch.slice(0, 10))
+            .append($('<strong></strong>').append(branch.slice(0, 10)))
             .attr('title', branch)
             .css('color', status_color);
 
@@ -151,7 +153,9 @@ function display(data, url) {
         .append(() => {
           let a_element = $('<a class="build_status"></a>');
           a_element
-            .append(`#${build_id} ${build_status}`)
+            .append(
+              $('<strong></strong>').append(`#${build_id} ${build_status}`),
+            )
             .attr({
               href: `${location.href}/${build_id}`,
               target: '_self',
@@ -206,7 +210,7 @@ function display(data, url) {
     //   }
     // })
   } else {
-    display_element.append('Not Build Yet !');
+    display_element.append(build_not_find('Not Build Yet !', '', ''));
   }
 }
 
@@ -214,6 +218,7 @@ module.exports = {
   handle: url => {
     let build_id;
     let url_array = url.getUrlWithArray();
+    let display_element = $('#display');
 
     if (8 === url_array.length) {
       build_id = url_array[7];
@@ -229,8 +234,12 @@ module.exports = {
           display(data, url);
         },
         error: function(data) {
-          display('error');
-          console.log(data);
+          build_not_find(
+            "Oops, we couldn't find that build!",
+            '',
+            'The build may not exist or may belong to another repository.',
+          );
+          // console.log(data);
         },
       });
 
@@ -244,8 +253,9 @@ module.exports = {
         display(data, url);
       },
       error: function(data) {
-        display('error');
-        console.log(data);
+        display_element.empty();
+        display_element.append(build_not_find('Not Build Yet !', '', ''));
+        // console.log(data);
       },
     });
   },

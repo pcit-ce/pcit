@@ -1,57 +1,13 @@
 @import "common/body.css";
 @import "common/header.css";
+@import "common/footer.css";
+
+footer{
+  margin-top: 100px;
+}
 
 body{
     overflow-y: scroll;
-}
-
-footer {
-    position: relative;
-    margin-top: 220px;
-    margin-left: 12%;
-    margin-right: auto;
-    /*margin-left: 0%;*/
-    width: 70%;
-}
-
-footer li {
-    line-height: 30px;
-    color: #636b6f;
-    list-style-type: none;
-}
-
-footer a {
-    text-decoration: none;
-    color: #636b6f;
-}
-
-footer a:hover {
-    text-decoration: underline;
-    color: #636b6f;
-}
-
-.about {
-    /*border: solid;*/
-    float: left;
-    /*margin-left: 10%;*/
-}
-
-.help {
-    /*border: solid;*/
-    float: left;
-    margin-left: 5%;
-}
-
-.legal {
-    /*border: solid;*/
-    float: left;
-    margin-left: 5%;
-}
-
-.status {
-    /*border: solid;*/
-    float: left;
-    margin-left: 29%;
 }
 
 #userinfo {
@@ -107,12 +63,12 @@ footer a:hover {
     text-decoration: none;
     line-height: 60px;
     font-size: 25px;
-    color: #aaaaaa;
+    color: rgb(3,102,214);
 }
 
 #repos .repo_item a:hover {
-    text-decoration: none;
-    color: blue;
+    text-decoration: underline;
+    color: rgb(3,102,214);
 }
 
 #repos .repo_item {

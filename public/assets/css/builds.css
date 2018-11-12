@@ -8,29 +8,26 @@
 @import "builds/settings.css";
 @import "builds/requests.css";
 
-body {
-    margin: 0;
-    padding: 0;
-}
-
 #repo {
     margin-top: 40px;
-    margin-left: 15%;
+    /* margin-left: 15%; */
+    color: rgb(3,102,214);
+}
+
+#repo a {
+    color: rgb(3,102,214);
 }
 
 .column {
-    position: relative;
     margin-top: 40px;
-    margin-left: 15%;
-    width: 70%;
+}
+
+.column .always {
+  text-align: center;
 }
 
 #display {
-    position: relative;
-    margin: 0 auto;
-    width: 72%;
-    /*height: 80px;*/
-    /*border: 1px solid rebeccapurple;*/
+  margin-top: 20px;
 }
 
 /*解决父容器塌陷*/
@@ -51,26 +48,7 @@ body {
 }
 
 .column {
-    padding-bottom: 10px;
     border-bottom: 2px solid #f4f4f4;
-}
-
-.column #current {
-    margin-left: 1px;
-    cursor: pointer;
-}
-
-.column span {
-    font-size: 14px;
-    margin-left: 20px;
-    padding-bottom: 10px;
-    cursor: pointer;
-}
-
-.more_options {
-    float: right;
-    right: 0;
-    bottom: 10px;
 }
 
 #more_options {
@@ -117,7 +95,7 @@ body {
     left: -20px;
     top: 10px;
     padding-left: 50px;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .build_data .commit_message {
@@ -127,8 +105,8 @@ body {
     width: 300px;
     left: 75px;
     top: 10px;
-    padding-left: 10px;
-    font-size: 16px;
+    padding-left: 20px;
+    font-size: 18px;
 }
 
 .build_data .commit_url {
@@ -182,7 +160,7 @@ body {
     position: absolute;
     left: 600px;
     top: 10px;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .build_data .build_time {

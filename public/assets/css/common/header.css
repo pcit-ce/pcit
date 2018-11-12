@@ -1,55 +1,8 @@
-header {
-    /*background: #f1f1f1;*/
-    background: #24292e;
-    height: 60px;
-}
-
-header a {
-    text-decoration: none;
-    /*color: #636b6f;*/
-    color: #fff;
-}
-
-header a:hover {
-    text-decoration: none;
-    color: #fff;
-}
-
-#pcit_ico {
-    margin-top: -10px;
-    width: 70px;
-    height: 56px;
-}
-
-.ico {
-    margin-left: 15%;
-    font-size: 40px;
-}
-
-.docs {
-    position: absolute;
-    margin-left: 30px;
-    font-size: 20px;
-    margin-top: 20px;
-}
-
-.plugins {
-    position: absolute;
-    margin-left: 200px;
-    font-size: 20px;
-    margin-top: 20px;
-}
-
-.donate {
-    position: absolute;
-    margin-left: 300px;
-    font-size: 20px;
-    margin-top: 20px;
-}
-
-.username {
-    position: absolute;
-    margin-left: 825px;
-    margin-top: 20px;
-    font-size: 20px;
+.my {
+  position: absolute;
+  margin-top: -100px;
+  padding: 0;
+  height: 100px;
+  width: 100%;
+  z-index: -1;
 }
