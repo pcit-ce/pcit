@@ -54,16 +54,18 @@ class Issues
 
         if (\in_array($action, ['opened', 'edited', 'closed' or 'reopened'], true)) {
             Issue::insert(
-                'github', $rid, $issue_id, $issue_number, $action, $title, $body,
+                $rid, $issue_id, $issue_number, $action, $title, $body,
                 $sender_username, $sender_uid, $sender_pic,
                 $state, (int) $locked,
-                $created_at, $closed_at, $updated_at
+                $created_at, $closed_at, $updated_at, 'github'
             );
         }
 
         if ('opened' !== $action) {
             return;
         }
+
+        self::checkTitle($repo_full_name, $issue_number, $rid, $title);
 
         self::createComment($rid, $repo_full_name, $issue_number, $body);
 
@@ -74,6 +76,45 @@ class Issues
         Log::debug(__FILE__, __LINE__, $issue_number.' opened', [], Log::INFO);
 
         return;
+    }
+
+    /**
+     * 检查标题是否为中文.
+     *
+     * 若为中文则翻译为英文
+     *
+     * @param $title
+     * @param $rid
+     * @param $repo_full_name
+     * @param $issue_number
+     *
+     * @throws \Exception
+     */
+    public static function checkTitle($repo_full_name, $issue_number, $rid, $title): void
+    {
+        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
+
+        $app = new PCIT(['github_access_token' => $access_token]);
+
+        try {
+            $result = $app->tencent_ai->translate->detect($title);
+
+            $lang = $result['data']['lang'] ?? 'en';
+
+            if ('zh' === $lang) {
+                $result = $app->tencent_ai->translate->aILabText($title);
+
+                $title = $result['data']['trans_text'] ?? null;
+            }
+        } catch (\Throwable $e) {
+            return;
+        }
+
+        if ('zh' !== $lang or null === $title) {
+            return;
+        }
+
+        $app->issue->edit($repo_full_name, $issue_number, $title);
     }
 
     /**

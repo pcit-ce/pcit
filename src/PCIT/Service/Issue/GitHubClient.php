@@ -98,8 +98,8 @@ class GitHubClient
                            string $title,
                            string $body,
                            int $milestone,
-                           array $labels,
-                           array $assignees): void
+                           array $labels = null,
+                           array $assignees = null): void
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues';
 
@@ -128,16 +128,18 @@ class GitHubClient
      * @param array  $labels
      * @param array  $assignees
      *
+     * @see https://developer.github.com/v3/issues/#edit-an-issue
+     *
      * @throws Exception
      */
     public function edit(string $repo_full_name,
                          int $issue_number,
-                         string $title,
-                         string $body,
-                         string $state,
-                         int $milestone,
-                         array $labels,
-                         array $assignees): void
+                         string $title = null,
+                         string $body = null,
+                         string $state = null,
+                         int $milestone = null,
+                         array $labels = null,
+                         array $assignees = null): void
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number;
 

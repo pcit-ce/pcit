@@ -146,10 +146,10 @@ class Issue extends Model
         $sql = <<<'EOF'
 INSERT INTO issues(
 
-id,git_type,rid,issue_id,issue_number,action,title,body,sender_username,sender_uid,sender_pic,
+id,git_type,rid,issue_id,issue_number,action,title,body,sender_uid,
 state,locked,created_at,closed_at,updated_at
 
-) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(null,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
         $last_insert_id = DB::insert($sql, [
