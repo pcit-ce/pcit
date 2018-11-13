@@ -21,6 +21,7 @@ class Delete
             'repo_full_name' => $repo_full_name,
             'ref_type' => $ref_type,
             'account' => $account,
+            'ref' => $ref,
         ] = \PCIT\Support\Webhooks\GitHub\Delete::handle($json_content);
 
         (new Subject())
@@ -30,7 +31,7 @@ class Delete
         if ('branch' === $ref_type) {
             $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
 
-            DB::delete($sql, ['github', $ref_type, (int) $rid]);
+            DB::delete($sql, ['github', $ref, (int) $rid]);
         }
     }
 }

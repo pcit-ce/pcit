@@ -17,13 +17,13 @@ module.exports.show = () => {
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="">Docs<span class="sr-only">(current)</span></a>
+        <a class="nav-link" target="_blank" href="//docs.ci.khs1994.com">Docs<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">API</a>
+        <a class="nav-link" target="_blank" href="//api.ci.khs1994.com">API</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Donate</a>
+        <a class="nav-link" target="_blank" href="//ci.khs1994.com/donate">Donate</a>
       </li>
     </ul>
     </div>

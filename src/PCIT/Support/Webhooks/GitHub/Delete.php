@@ -23,6 +23,7 @@ class Delete
         $obj = json_decode($json_content);
 
         $ref_type = $obj->ref_type;
+        $ref = $obj->ref;
 
         $repository = $obj->repository;
         $rid = $repository->id;
@@ -38,6 +39,6 @@ class Delete
         $account = (new Account($repository_owner, $org));
 
         return compact('installation_id', 'rid', 'repo_full_name',
-            'account', 'ref_type');
+            'account', 'ref_type', 'ref');
     }
 }

@@ -47,6 +47,7 @@ class Push
         $head_commit = $obj->head_commit;
 
         if (null === $head_commit) {
+            // 删除分支,也会产生一条 push 事件，此时 head commit 为 null
             throw new \Exception('skip', 200);
         }
 
@@ -60,20 +61,16 @@ class Push
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        return [
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'branch' => $branch,
-            'commit_id' => $commit_id,
-            'commit_message' => $commit_message,
-            'compare' => $compare,
-            'event_time' => $commit_timestamp,
-            'author' => (new Author($author)),
-            'committer' => (new Committer($committer)),
-            'installation_id' => $installation_id,
-            'account' => (new Account($repository_owner, $org)),
-            'sender' => (new Sender($obj->sender)),
-        ];
+        $event_time = $commit_timestamp;
+        $author = (new Author($author));
+        $committer = (new Committer($committer));
+        $account = (new Account($repository_owner, $org));
+        $sender = (new Sender($obj->sender));
+
+        return compact('rid', 'repo_full_name', 'branch', 'commit_id', 'commit_message',
+            'compare', 'event_time', 'author', 'committer',
+            'installation_id', 'account', 'sender'
+        );
     }
 
     /**

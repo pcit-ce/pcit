@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.3/css/bootstrap.min.css"  crossorigin="anonymous">
-  <script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js"  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.bootcss.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <title>PCIT Login</title>
   <link rel="stylesheet" href="/assets/css/login.css" type="text/css"/>
@@ -15,79 +15,98 @@
 </head>
 <body>
 
-<header>
-  <span class="ico"><img class="rounded" alt='PCIT' title="PCIT IS A PHP CI TOOLKIT" id="pcit_ico" src="/ico/pcit.png"/></span>
-  <span class="docs"><a href="//docs.ci.khs1994.com" target="_blank">Documentation</a></span>
-  <span class="plugins"><a href="//ci.khs1994.com/plugins/" target="_blank">Plugins</a></span>
-  <span class="donate"><a href="//ci.khs1994.com/donate" target="_blank">Donate</a></span>
+<header class="container">
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <a class="navbar-brand" href="">PCIT</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//docs.ci.khs1994.com">Docs<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//api.ci.khs1994.com">API</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//ci.khs1994.com/donate">Donate</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </header>
+
+<nav class="my_nav navbar navbar-dark bg-dark navbar-expand-lg"></nav>
 
 <div class="login container">
   <div class="row">
-  <div class="login_tips col-md-6">
-    <p style="font-size: 30px">Login to PCIT</p>
-    <p style="font-size: 18px">无需注册账号，请直接使用<br> GitHub, Gitee, <s>Gogs</s>, <s>Coding</s>, <s>AI 人脸</s>进行登录</p>
-    <p style="font-size: 14px;color: #636b6f">点击登录按钮意味着您同意我们的 服务条款 和 隐私政策 </p>
-  </div>
+    <div class="login_tips col-md-6">
+      <p style="font-size: 30px">Login to PCIT</p>
+      <p style="font-size: 18px">无需注册账号，请直接使用<br> GitHub, Gitee, <s>Gogs</s>, <s>Coding</s>, <s>AI 人脸</s>进行登录</p>
+      <p style="font-size: 14px;color: #636b6f">点击登录按钮意味着您同意我们的 服务条款 和 隐私政策 </p>
+    </div>
 
-  <div class="login_button col-md-6">
-    <button @click="clickMethod" class="hello-login-button" type="button"
-            title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">Login with Face
-    </button>
+    <div class="login_button col-md-6">
+      <button @click="clickMethod" class="hello-login-button" type="button"
+              title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">Login with Face
+      </button>
 
-    <button class="github-login-button" type="button" title="Login With GitHub">Login with GitHub
-    </button>
+      <button class="github-login-button" type="button" title="Login With GitHub">Login with GitHub
+      </button>
 
-    <button class="gitee-login-button" type="button" title="Login With Gitee">Login with Gitee
-    </button>
+      <button class="gitee-login-button" type="button" title="Login With Gitee">Login with Gitee
+      </button>
 
-    <button @click="clickMethod" class="coding-login-button" type="button" title="Login With Coding">Login
-      with Coding
-    </button>
+      <button @click="clickMethod" class="coding-login-button" type="button" title="Login With Coding">Login
+        with Coding
+      </button>
 
-    <button @click="clickMethod" class="gogs-login-button" type="button" title="Login With Gogs">Login with
-      Gogs
-    </button>
-  </div>
+      <button @click="clickMethod" class="gogs-login-button" type="button" title="Login With Gogs">Login with
+        Gogs
+      </button>
+    </div>
   </div>
 </div>
 
 <footer class="container">
   <div class="row">
     <div class="about col-md-3 col-sm-3">
-    <div><a target="_blank" title="Author of PCIT From Datong,Shanxi"
-           href="https://www.bilibili.com/video/av34549860?from=search&seid=4430979976495551124"><strong>@PCIT, Datong,
-      Shanxi</strong></a></div>
-    <div><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></div>
-    <div><a href="https://ci.khs1994.com/wechat" target="_blank">WeChat</a></div>
-    <div><a href="https://ci.khs1994.com/team" target="_blank">Team</a></div>
-    <div><a href="mailto:ci@khs1994.com">Email</a></div>
-  </div>
+      <div><a target="_blank" title="Author of PCIT From Datong,Shanxi"
+              href="https://www.bilibili.com/video/av34549860?from=search&seid=4430979976495551124"><strong>@PCIT,
+        Datong,
+        Shanxi</strong></a></div>
+      <div><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></div>
+      <div><a href="https://ci.khs1994.com/wechat" target="_blank">WeChat</a></div>
+      <div><a href="https://ci.khs1994.com/team" target="_blank">Team</a></div>
+      <div><a href="mailto:ci@khs1994.com">Email</a></div>
+    </div>
 
-  <div class="help col-md-3 col-sm-3">
-    <div><strong>HELP</strong></div>
-    <div><a href="https://docs.ci.khs1994.com" target="_blank">Documentation</a></div>
-    <div><a href="https://api.ci.khs1994.com" target="_blank">API</a></div>
-    <div><a href="https://ci.khs1994.com/issues" target="_blank">Community</a></div>
-    <div><a href="https://ci.khs1994.com/blog" target="_blank">Blog</a></div>
-    <div><a href="https://ci.khs1994.com/changelog" target="_blank">CHANGELOG</a></div>
-    <div><a href="https://ci.khs1994.com/donate" target="_blank">Donate</a></div>
-  </div>
+    <div class="help col-md-3 col-sm-3">
+      <div><strong>HELP</strong></div>
+      <div><a href="https://docs.ci.khs1994.com" target="_blank">Documentation</a></div>
+      <div><a href="https://api.ci.khs1994.com" target="_blank">API</a></div>
+      <div><a href="https://ci.khs1994.com/issues" target="_blank">Community</a></div>
+      <div><a href="https://ci.khs1994.com/blog" target="_blank">Blog</a></div>
+      <div><a href="https://ci.khs1994.com/changelog" target="_blank">CHANGELOG</a></div>
+      <div><a href="https://ci.khs1994.com/donate" target="_blank">Donate</a></div>
+    </div>
 
-  <div class="legal col-md-3 col-sm-3">
-    <div><strong>LEGAL</strong></div>
-    <div><a href="https://ci.khs1994.com/terms-of-service" target="_blank">Terms of Service</a></div>
-    <div><a href="https://ci.khs1994.com/privacy-policy" target="_blank">Privacy Policy</a></div>
-    <div><a href="https://ci.khs1994.com/ce" target="_blank">PCIT CE</a></div>
-    <div><a href="https://ci.khs1994.com/ee" target="_blank">PCIT EE</a></div>
-    <div><a href="https://ci.khs1994.com/why" target="_blank">Why PCIT</a></div>
-    <div><a href="https://ci.khs1994.com/plugins" target="_blank">Plugins</a></div>
-  </div>
+    <div class="legal col-md-3 col-sm-3">
+      <div><strong>LEGAL</strong></div>
+      <div><a href="https://ci.khs1994.com/terms-of-service" target="_blank">Terms of Service</a></div>
+      <div><a href="https://ci.khs1994.com/privacy-policy" target="_blank">Privacy Policy</a></div>
+      <div><a href="https://ci.khs1994.com/ce" target="_blank">PCIT CE</a></div>
+      <div><a href="https://ci.khs1994.com/ee" target="_blank">PCIT EE</a></div>
+      <div><a href="https://ci.khs1994.com/why" target="_blank">Why PCIT</a></div>
+      <div><a href="https://ci.khs1994.com/plugins" target="_blank">Plugins</a></div>
+    </div>
 
-  <div class="status col-md-3 col-sm-3">
-    <div><strong>PCIT Status</strong></div>
-    <div><a href="https://ci.khs1994.com/status" target="_blank">PCIT Status</a></div>
-  </div>
+    <div class="status col-md-3 col-sm-3">
+      <div><strong>PCIT Status</strong></div>
+      <div><a href="https://ci.khs1994.com/status" target="_blank">PCIT Status</a></div>
+    </div>
 
   </div>
 </footer>
