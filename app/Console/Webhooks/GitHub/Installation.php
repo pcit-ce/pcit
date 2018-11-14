@@ -28,18 +28,17 @@ class Installation
             'account' => $account
         ] = \PCIT\Support\Webhooks\GitHub\Installation::handle($json_content);
 
-        // 仓库管理员信息
-        User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-
-        if ('created' === $action) {
-            self::create($repositories, $sender->uid);
+        if ('deleted' === $action) {
+            self::delete($installation_id, $account->username);
 
             return;
         }
 
-        self::delete($installation_id);
+        // 仓库管理员信息
+        User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->username);
+        self::create($repositories, $sender->uid);
     }
 
     /**
@@ -65,15 +64,15 @@ class Installation
     /**
      * 用户卸载了 GitHub App.
      *
-     * @param int $installation_id
-     *
-     * @return int
+     * @param int    $installation_id
+     * @param string $username
      *
      * @throws \Exception
      */
-    public static function delete(int $installation_id)
+    public static function delete(int $installation_id, string $username): void
     {
-        return Repo::deleteByInstallationId($installation_id);
+        Repo::deleteByInstallationId($installation_id);
+        User::updateInstallationId(0, $username);
     }
 
     /**

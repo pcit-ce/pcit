@@ -347,6 +347,8 @@ EOF;
     /**
      * 用户卸载了 GitHub App.
      *
+     * 将 repo 表中 user_full_name 与 user 表 installation_id 匹配的记录删除
+     *
      * @param string $git_type
      * @param        $installation_id
      *
@@ -357,11 +359,11 @@ EOF;
     public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
         $sql = <<<'EOF'
-            DELETE repo FROM user LEFT JOIN repo ON repo.repo_full_name LIKE CONCAT(user.username,"/%")
+            DELETE repo FROM repo LEFT JOIN user ON repo.repo_full_name LIKE CONCAT(user.username,"/%")
             where user.installation_id = ?
 EOF;
 
-        return DB::delete($sql, [$git_type, $installation_id]);
+        return DB::delete($sql, [$installation_id]);
     }
 
     /**

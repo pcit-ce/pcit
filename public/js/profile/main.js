@@ -254,7 +254,7 @@ function click_user() {
       return;
     }
 
-    installation_id
+    parseInt(installation_id)
       ? showGitHubAppSettings(null, installation_id)
       : showGitHubAppInstall(uid);
   })();

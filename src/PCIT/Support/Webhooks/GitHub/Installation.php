@@ -31,7 +31,7 @@ class Installation
 
         $account = $installation->account;
 
-        $repo = $obj->repositories;
+        $repo = $obj->repositories ?? null;
 
         $org = 'Organization' === $account->type;
 
