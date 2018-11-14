@@ -83,21 +83,12 @@ function copyToken() {
 
 // show repos
 function list(data) {
-  let count = data.length;
   let repos_element = $('#repos');
-  let orgs_element = $('#orgs');
 
-  repos_element.empty().css('height', 200);
-  orgs_element.css('height', 220);
-
-  if (count > 3) {
-    let css_height = count * 50;
-    repos_element.css('height', css_height);
-    orgs_element.css('height', css_height);
-  }
+  repos_element.empty();
 
   $.each(data, function(num, repo) {
-    let repo_item_el = $('<div class="repo_item"></div>');
+    let repo_item_el = $('<div class="repo_item row"></div>');
     let { build_status: status, repo_full_name: repo_name } = repo;
     let button = $('<button></button>');
 
@@ -112,7 +103,7 @@ function list(data) {
     }
 
     // <p id="username/repo">username/repo</p>
-    let p = $('<a class="repo_full_name"></a>')
+    let p = $('<a class="repo_full_name col-6"></a>')
       .text(repo_name)
       .attr({
         repo_name: repo_name,
@@ -121,7 +112,7 @@ function list(data) {
       })
       .css('display', 'inline');
 
-    let settings = $('<a class="settings material-icons">settings</a>')
+    let settings = $('<a class="settings material-icons col-6">settings</a>')
       .attr('href', ci_host + [git_type, repo_name, 'settings'].join('/'))
       .attr('target', '_blank');
 
@@ -129,8 +120,8 @@ function list(data) {
       .append(() => {
         return 'github' === git_type ? button.hide() : button;
       })
-      .append(settings)
-      .append(p);
+      .append(p)
+      .append(settings);
 
     repos_element.append(repo_item_el);
   });
@@ -230,7 +221,7 @@ function click_user() {
   (async () => {
     let data = await get_userdata();
 
-    let { installation_id, uid } = data[0];
+    let { installation_id, uid, username, name, pic } = data[0];
 
     let repo_data = await new Promise(resolve => {
       $.ajax({
@@ -251,6 +242,10 @@ function click_user() {
       ci_host + 'profile/' + git_type + '/' + username,
     );
 
+    $('.header_img').attr('src', pic);
+    $('.details_usernickname').text(name ? name : username);
+    $('.details_username').text('@' + username);
+
     list(repo_data);
 
     if (git_type !== 'github') {
@@ -267,6 +262,12 @@ function show_org(data, org_name) {
   if (data[0] === undefined) {
     return;
   }
+
+  let { pic, username, name } = data[0];
+
+  $('.header_img').attr('src', pic);
+  $('.details_usernickname').text(name ? name : username);
+  $('.details_username').text('@' + username);
 
   let { installation_id, uid } = data[0];
 

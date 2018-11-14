@@ -276,6 +276,10 @@ class RunContainer
         $status_key = $job_id.'_'.$status;
 
         if (1 === Cache::store()->lLen($status_key)) {
+            if ('changed' === $status) {
+                return;
+            }
+
             $this->after($job_id, 'changed');
 
             return;

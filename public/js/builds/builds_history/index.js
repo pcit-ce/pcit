@@ -29,7 +29,9 @@ function display(data, url) {
     } else {
       // 展示某个 build
       $('#pull_requests').after(() => {
-        let span_el = $('<div id="build_id" class="col-md-2 text-center"></div>');
+        let span_el = $(
+          '<div id="build_id" class="col-md-2 text-center"></div>',
+        );
         span_el.append('Build #' + data.id);
 
         return span_el;

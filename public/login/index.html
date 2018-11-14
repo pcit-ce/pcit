@@ -15,8 +15,9 @@
 </head>
 <body>
 
-<header class="container">
+<header>
   <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container">
     <a class="navbar-brand" href="">PCIT</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,20 +26,25 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="//docs.ci.khs1994.com">Docs<span class="sr-only">(current)</span></a>
+          <a class="nav-link" target="_blank" href="//ci.khs1994.com/changelog">CHANGELOG</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//docs.ci.khs1994.com">Documentation</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" target="_blank" href="//api.ci.khs1994.com">API</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="https://github.com/khs1994-php/pcit">GitHub</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" target="_blank" href="//ci.khs1994.com/donate">Donate</a>
         </li>
       </ul>
     </div>
+    </div>
   </nav>
 </header>
-
-<nav class="my_nav navbar navbar-dark bg-dark navbar-expand-lg"></nav>
 
 <div class="login container">
   <div class="row">
@@ -49,21 +55,21 @@
     </div>
 
     <div class="login_button col-md-6">
-      <button @click="clickMethod" class="hello-login-button" type="button"
+      <button @click="clickMethod" class="btn hello-login-button" type="button"
               title="PCIT Hello 能使你在两秒内登录 PCIT，而无需密码，只需看一下">Login with Face
       </button>
 
-      <button class="github-login-button" type="button" title="Login With GitHub">Login with GitHub
+      <button class="btn github-login-button" type="button" title="Login With GitHub">Login with GitHub
       </button>
 
-      <button class="gitee-login-button" type="button" title="Login With Gitee">Login with Gitee
+      <button class="btn gitee-login-button" type="button" title="Login With Gitee">Login with Gitee
       </button>
 
-      <button @click="clickMethod" class="coding-login-button" type="button" title="Login With Coding">Login
+      <button @click="clickMethod" class="btn coding-login-button" type="button" title="Login With Coding">Login
         with Coding
       </button>
 
-      <button @click="clickMethod" class="gogs-login-button" type="button" title="Login With Gogs">Login with
+      <button @click="clickMethod" class="btn gogs-login-button" type="button" title="Login With Gogs">Login with
         Gogs
       </button>
     </div>

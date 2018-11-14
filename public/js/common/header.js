@@ -10,22 +10,30 @@ module.exports.show = () => {
   // `);
   $('header').append(`
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <div class="container">
     <a class="navbar-brand" href="">PCIT</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
 </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" target="_blank" href="//docs.ci.khs1994.com">Docs<span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" target="_blank" href="//api.ci.khs1994.com">API</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" target="_blank" href="//ci.khs1994.com/donate">Donate</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//ci.khs1994.com/changelog">CHANGELOG</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//docs.ci.khs1994.com">Documentation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//api.ci.khs1994.com">API</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="https://github.com/khs1994-php/pcit">GitHub</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="//ci.khs1994.com/donate">Donate</a>
+        </li>
     </ul>
+    </div>
     </div>
   </nav>`);
 };

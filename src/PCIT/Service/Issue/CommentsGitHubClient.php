@@ -54,6 +54,10 @@ class CommentsGitHubClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
 
+        if (!$source) {
+            return null;
+        }
+
         $source_show_in_md = $source;
 
         $data = $source;

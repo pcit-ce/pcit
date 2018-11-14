@@ -4,30 +4,6 @@ body {
     font-family: 'Source Sans Pro', serif;
 }
 
-/*header {*/
-    /*background: #24292e;*/
-    /*height: 60px;*/
-/*}*/
-
-/*header a {*/
-    /*text-decoration: none;*/
-    /*!*color: #636b6f;*!*/
-    /*color: #ffffff;*/
-/*}*/
-
-/*header a:hover {*/
-    /*text-decoration: none;*/
-    /*color: #fff;*/
-/*}*/
-
-.my_nav {
-    position: absolute;
-    margin-top: -1000px;
-    z-index: -1;
-    height: 1000px;
-    width: 100%;
-}
-
 #pcit_ico {
     margin-top: -10px;
     width: 70px;

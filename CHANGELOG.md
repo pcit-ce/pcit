@@ -85,15 +85,15 @@
 
 ### 2018/06/06
 
-* [ ] Pull_request 增加 **php-cs-fixer** label，KhsCI 可以自动修复代码风格
+* [ ] Pull_request 增加 **php-cs-fixer** label，能够自动修复代码风格
 
 ### 2018/06/05
 
-* [x] Pull_request 增加 **merge** label，KhsCI 测试通过之后可以自动 merge
+* [x] Pull_request 增加 **merge** label，测试通过之后可以自动 merge
 
 ### 2018/06/03
 
-* [ ] AI + CI，人脸登录网站? 代号 `KhsCI Hello`
+* [ ] AI + CI，人脸登录网站? 代号 `PCIT Hello`
 
 ### 2018/06/03
 
@@ -145,7 +145,7 @@
 
 ### 2018/05/28
 
-* [x] KhsCI 虽然同时支持多个 Git 服务商，但各个 Git 服务商之间保持绝对独立，不支持跨 Git 服务商管理，即 GitHub 的账号不能管理 Gitee。
+* [x] PCIT 虽然同时支持多个 Git 服务商，但各个 Git 服务商之间保持绝对独立，不支持跨 Git 服务商管理，即 GitHub 的账号不能管理 Gitee。
 
 * [x] 不支持账号整合，关联。故，api 的 url 涉及到需要认证的，无需包含 git_type。
 
@@ -195,11 +195,11 @@
 
 ### 2018/05/15
 
-* [x] 使用 `.khsci.yml` 定义一切 https://github.com/khs1994-php/khsci/issues/66
+* [x] 使用 `.pcit.yml` 定义一切 https://github.com/khs1994-php/khsci/issues/66
 
 ### 2018/05/14
 
-* [x] `Tencent AI + Issue = ?`，欢迎体验 https://github.com/khs1994-php/khsci/issues/64
+* [x] `Tencent AI + Issue = ?`，欢迎体验 https://github.com/khs1994-php/pcit-demo/issues
 
 ### 2018/05/14
 
@@ -221,11 +221,11 @@
 
 ### 2018/05/13
 
-* [x] 引入 [Tencent AI](https://github.com/khs1994-php/tencent-ai)，[讨论](https://github.com/khs1994-php/khsci/issues/61).
+* [x] 引入 [Tencent AI](https://github.com/khs1994-php/tencent-ai)，[讨论](https://github.com/khs1994-php/pcit/issues/61).
 
 ### 2018/05/13
 
-* [x] KhsCI 是国内首家支持 GitHub [Checks API](https://blog.github.com/2018-05-07-introducing-checks-api/) 的 CI/CD 系统
+* [x] PCIT 是国内首家支持 GitHub [Checks API](https://blog.github.com/2018-05-07-introducing-checks-api/) 的 CI/CD 系统
 
 ### 2018/05/09
 

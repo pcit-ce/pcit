@@ -95,7 +95,7 @@
     left: -20px;
     top: 10px;
     padding-left: 50px;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .build_data .commit_message {
@@ -106,7 +106,7 @@
     left: 75px;
     top: 10px;
     padding-left: 20px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .build_data .commit_url {
@@ -160,7 +160,7 @@
     position: absolute;
     left: 600px;
     top: 10px;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .build_data .build_time {

@@ -2,19 +2,19 @@
 @import "common/header.css";
 @import "common/footer.css";
 
-footer{
-  margin-top: 100px;
+footer {
+    margin-top: 100px;
 }
 
-body{
-    overflow-y: scroll;
-}
+/*body{*/
+/*overflow-y: scroll;*/
+/*}*/
 
 #userinfo {
-    margin-top: 20px;
-    float: left;
-    margin-left: 15%;
-    width: 250px;
+    margin-top: 30px;
+    /*float: left;*/
+    /*margin-left: 15%;*/
+    /*width: 250px;*/
 }
 
 #userinfo .my_account {
@@ -22,14 +22,15 @@ body{
 }
 
 #details {
-    margin-top: 20px;
-    margin-left: 600px;
-    padding-left: 100px;
+    margin-top: 30px;
+    /*margin-left: 600px;*/
+    /*padding-left: 100px;*/
+    padding-bottom: 17px;
 }
 
-#user {
-    margin-left: 20%;
-}
+/*#user {*/
+/*margin-left: 20%;*/
+/*}*/
 
 #user a {
     text-decoration: none;
@@ -43,9 +44,10 @@ body{
 }
 
 #orgs {
-    float: left;
-    margin-left: 15%;
-    width: 350px;
+    /*float: left;*/
+    /*margin-left: 15%;*/
+    /*width: 350px;*/
+    margin-top: 30px;
 }
 
 #orgs .organization {
@@ -55,46 +57,51 @@ body{
 #repos {
     /*position: relative;*/
     /*margin-left: 30px;*/
-    height: 180px;
-    margin-top: -10px;
+    /*height: 180px;*/
+    margin-top: 60px;
 }
 
 #repos .repo_item > a {
     text-decoration: none;
     line-height: 60px;
     font-size: 25px;
-    color: rgb(3,102,214);
+    color: rgb(3, 102, 214);
 }
 
 #repos .repo_item a:hover {
-    text-decoration: underline;
-    color: rgb(3,102,214);
+    /*text-decoration: underline;*/
+    color: rgb(3, 102, 214);
 }
 
-#repos .repo_item {
-    position: relative;
-    margin-left: 400px;
-}
+/*#repos .repo_item {*/
+/*position: relative;*/
+/*margin-left: 400px;*/
+/*}*/
 
-#repos .repo_full_name {
+/*#repos .repo_full_name {*/
 
-}
+/*}*/
 
-#repos .settings {
-    position: absolute;
-    right: 270px;
-}
+/*#repos .settings {*/
+/*position: absolute;*/
+/*right: 270px;*/
+/*}*/
 
-#repos .repo_tips {
-    margin-top: 20px;
-}
+/*#repos .repo_tips {*/
+/*margin-top: 20px;*/
+/*}*/
 
-#repos .open_or_close {
-    position: absolute;
-    right: 340px;
-}
+/*#repos .open_or_close {*/
+/*position: absolute;*/
+/*right: 340px;*/
+/*}*/
 
 .progress {
     margin-top: 15px;
     width: 140px;
+}
+
+.header_img {
+    width: 160px;
+    height: 100px;
 }
