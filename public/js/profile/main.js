@@ -103,7 +103,7 @@ function list(data) {
     }
 
     // <p id="username/repo">username/repo</p>
-    let p = $('<a class="repo_full_name col-6"></a>')
+    let p = $('<a class="repo_full_name col-12 col-md-9"></a>')
       .text(repo_name)
       .attr({
         repo_name: repo_name,
@@ -112,7 +112,9 @@ function list(data) {
       })
       .css('display', 'inline');
 
-    let settings = $('<a class="settings material-icons col-6">settings</a>')
+    let settings = $(
+      '<a class="settings material-icons col-12 col-md-3">settings</a>',
+    )
       .attr('href', ci_host + [git_type, repo_name, 'settings'].join('/'))
       .attr('target', '_blank');
 

@@ -31,11 +31,14 @@ class Installation
 
         $account = $installation->account;
 
+        $repo = $obj->repositories;
+
         $org = 'Organization' === $account->type;
 
         return [
             'installation_id' => $installation_id,
             'action' => $action,
+            'repo' => $repo,
             // sender 可视为管理员
             'sender' => (new Sender($obj->sender)),
             'account' => (new Account($account, $org)),

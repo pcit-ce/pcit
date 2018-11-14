@@ -10,6 +10,7 @@ use App\Repo;
 use App\User;
 use Exception;
 use PCIT\PCIT;
+use PCIT\Support\DB;
 
 class SyncController
 {
@@ -44,15 +45,12 @@ class SyncController
         }
 
         // sync user basic info
-
         $this->getUserBasicInfo();
 
         // sync user repos
-
         $this->getRepo();
 
         // sync orgs
-
         $this->getOrgs();
     }
 
@@ -99,6 +97,8 @@ class SyncController
      */
     private function getOrgs(): void
     {
+        DB::beginTransaction();
+
         $orgs = $this->pcit->user_basic_info->listOrgs();
 
         if (!$orgs) {
@@ -126,13 +126,15 @@ class SyncController
             $output = $this->pcit->orgs->exists($org_name);
 
             if (!$output) {
-                User::delete($this->git_type, $org_name);
+                User::delete($org_name, $this->git_type);
             }
 
             if ('github' !== $this->git_type) {
                 $this->getOrgsRepo($org_name);
             }
         }
+
+        DB::commit();
     }
 
     /**

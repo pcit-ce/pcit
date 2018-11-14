@@ -400,7 +400,7 @@ class Server extends Kernel
      *
      * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
      *
-     * @param string $content
+     * @param string $json_content
      *
      * @throws Exception
      */
