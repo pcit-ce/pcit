@@ -30,16 +30,6 @@ module.exports = {
     hot: true,
   },
   plugins: [],
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-        include: path.join(__dirname, './src'),
-        exclude: /node_modules/,
-      },
-    ],
-  },
   optimization: {
     minimize: true, //是否进行代码压缩
     noEmitOnErrors: true, //取代 new webpack.NoEmitOnErrorsPlugin()，编译错误时不打印输出资源。

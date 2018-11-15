@@ -6,12 +6,14 @@ composer.lock
 
 public/node_modules
 public/package-lock.json
+public/assets/js
 
 .env.*
 .env
 .env.example
 
-framework/storage/private_key
+framework/storage/private_key/private.key
+framework/storage/private_key/public.key
 
 .php_cs.cache
 

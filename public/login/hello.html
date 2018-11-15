@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
-  <script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.bootcss.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">-->
+  <!--<script src="https://cdn.bootcss.com/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>-->
+  <!--<script src="https://cdn.bootcss.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>-->
   <title>PCIT Hello</title>
+  <link rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+        crossorigin="anonymous">
+  <script src="https://lib.baomitu.com/popper.js/1.14.5/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://lib.baomitu.com/twitter-bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <input type="button" title="开启摄像头" value="开启摄像头" onclick="getMedia();"/><br/>
@@ -95,7 +99,7 @@
       if (element.canPlayType('audio/mp4; codecs="mp4a.40.5"') !== '') {
         return ('aac');
       } else if (element.canPlayType('audio/ogg; codecs="vorbis"') !== '') {
-        return ("ogg");
+        return ('ogg');
       }
     }
     return false;

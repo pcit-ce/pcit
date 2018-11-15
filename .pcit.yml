@@ -31,7 +31,7 @@ pipeline:
   # before_install:
 
   install:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    image: khs1994/php:7.2.12-composer-alpine
     commands:
       - pwd
       - composer install
@@ -117,7 +117,7 @@ pipeline:
     tags: 7.2.12-swarm-${CI_TAG}
     # target: php
     build_args:
-      - a:1
+      - a=1
     # dockerfile: Dockerfile
     # dockerfile: path/to/Dockerfile
     when:
@@ -130,7 +130,7 @@ pipeline:
 
   # This is success after demo
   after_success:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    image: khs1994/php:${PHP_VERSION}-composer-alpine
     shell: bash
     when:
       status: success
@@ -142,12 +142,12 @@ pipeline:
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
 
   php-cs-fixer:
-    image: khs1994/php:7.2.12-fpm-alpine
+    image: khs1994/php:7.2.12-composer-alpine
     commands:
       - php-cs-fixer fix
 
   sami:
-    image: khs1994/php:7.2.12-fpm-alpine
+    image: khs1994/php:7.2.12-composer-alpine
     when:
       status: success
     commands:

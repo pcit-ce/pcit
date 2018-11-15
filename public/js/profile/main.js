@@ -17,7 +17,7 @@ let username = url_array[5];
 // eslint-disable-next-line no-undef
 let token = Cookies.get(git_type + '_api_token');
 
-function showUserBasicInfo(data) {
+function settings(data) {
   let { username, type } = data;
 
   $('#username')
@@ -37,14 +37,14 @@ function showUserBasicInfo(data) {
     .append(() =>
       $('<p></p>')
         .append('使用 PCIT API 请访问')
-        .append(() => {
-          return $('<a></a>')
+        .append(
+          $('<a></a>')
             .append('https://api.ci.khs1994.com')
             .attr({
               href: 'https://api.ci.khs1994.com',
               target: '_blank',
-            });
-        })
+            }),
+        )
         .append(() =>
           $('<input/>').attr({
             id: 'token',
@@ -82,7 +82,7 @@ function copyToken() {
 }
 
 // show repos
-function list(data) {
+function list_repos(data) {
   let repos_element = $('#repos');
 
   repos_element.empty();
@@ -90,20 +90,20 @@ function list(data) {
   $.each(data, function(num, repo) {
     let repo_item_el = $('<div class="repo_item row"></div>');
     let { build_status: status, repo_full_name: repo_name } = repo;
-    let button = $('<button></button>');
+    let button = $('<i class="col-12 col-md-2 toggle_off"></i>');
 
-    button.addClass('open_or_close btn btn-light').attr('repo_name', repo_name);
+    button
+      .addClass('open_or_close btn btn-link btn-sm')
+      .attr('repo_name', repo_name);
 
     if (status === 1 + '') {
-      button.text('Close');
-      button.css('color', 'green');
+      button.addClass('toggle_off');
     } else {
-      button.text('Open');
-      button.css('color', 'red');
+      button.addClass('toggle_on');
     }
 
     // <p id="username/repo">username/repo</p>
-    let p = $('<a class="repo_full_name col-12 col-md-9"></a>')
+    let p = $('<a class="repo_full_name col-12 col-md-8"></a>')
       .text(repo_name)
       .attr({
         repo_name: repo_name,
@@ -113,16 +113,18 @@ function list(data) {
       .css('display', 'inline');
 
     let settings = $(
-      '<a class="settings material-icons col-12 col-md-3">settings</a>',
+      '<a class="settings material-icons col-12 col-md-2">settings</a>',
     )
       .attr('href', ci_host + [git_type, repo_name, 'settings'].join('/'))
       .attr('target', '_blank');
 
+    console.log('github' === git_type);
+
     repo_item_el
-      .append(() => {
-        return 'github' === git_type ? button.hide() : button;
-      })
       .append(p)
+      .append(() => {
+        return 'github' === git_type ? '' : button;
+      })
       .append(settings);
 
     repos_element.append(repo_item_el);
@@ -137,13 +139,13 @@ function showOrg(data) {
     let { username: org_name } = org;
 
     $('.orgs')
-      .append(() => {
-        return $('<p class="org_name"></p>')
+      .append(
+        $('<p class="org_name"></p>')
           .append(org_name)
           .attr({
             org_name: org_name,
-          });
-      })
+          }),
+      )
       .css('height', count * 50);
   });
 }
@@ -189,17 +191,27 @@ function showGitHubAppInstall(uid) {
     });
 
     $('#repos').append(
-      $('<p class="repo_tips"></p>')
-        .append(() => '此账号或组织未安装 GitHub App 或未选择项目，点击 ')
-        .append(() => {
-          return $('<a></a>')
-            .attr({
-              href: installation_url,
-              target: '_blank',
-            })
-            .text('激活项目');
-        })
-        .append(' 在 GitHub 进行安装'),
+      $('<div class="card border-primary text-center repo_tips"></div>')
+        .append(
+          $('<div class="card-header"></div>').append(
+            '此账号或组织未安装 GitHub App',
+          ),
+        )
+        .append(
+          $('<div class="card-body text-primary"></div>')
+            .append($('<h5 class="card-title"></h5>'))
+            .append(
+              $('<p class="card-text"></p>').append(
+                '要使用 PCIT 必须安装 GitHub App，请点击下方按钮安装',
+              ),
+            )
+            .append(
+              $('<a class="btn btn-outline-primary">Activate</a>').attr({
+                href: installation_url,
+                target: '_blank',
+              }),
+            ),
+        ),
     );
   })();
 }
@@ -225,18 +237,7 @@ function click_user() {
 
     let { installation_id, uid, username, name, pic } = data[0];
 
-    let repo_data = await new Promise(resolve => {
-      $.ajax({
-        type: 'GET',
-        url: '/api/repos',
-        headers: {
-          Authorization: 'token ' + token,
-        },
-        success: function(data) {
-          resolve(data);
-        },
-      });
-    });
+    let repo_data = await get_user_repos();
 
     history.pushState(
       {},
@@ -244,11 +245,11 @@ function click_user() {
       ci_host + 'profile/' + git_type + '/' + username,
     );
 
-    $('.header_img').attr('src', pic);
+    $('.header_img').attr('src', pic ? pic : '/ico/pcit.png');
     $('.details_usernickname').text(name ? name : username);
     $('.details_username').text('@' + username);
 
-    list(repo_data);
+    list_repos(repo_data);
 
     if (git_type !== 'github') {
       return;
@@ -267,7 +268,7 @@ function show_org(data, org_name) {
 
   let { pic, username, name } = data[0];
 
-  $('.header_img').attr('src', pic);
+  $('.header_img').attr('src', pic ? pic : '/ico/pcit.png');
   $('.details_usernickname').text(name ? name : username);
   $('.details_username').text('@' + username);
 
@@ -293,7 +294,7 @@ function show_org(data, org_name) {
       ci_host + 'profile/' + git_type + '/' + org_name,
     );
 
-    list(org_data);
+    list_repos(org_data);
 
     if (git_type !== 'github') {
       return;
@@ -337,7 +338,7 @@ $(document).ready(function() {
   (async () => {
     let data = await get_userdata();
 
-    showUserBasicInfo(data[0]);
+    settings(data[0]);
 
     let { installation_id, username: api_username, uid } = data[0];
 
@@ -355,9 +356,7 @@ $(document).ready(function() {
       });
     }
 
-    let user_repo_data = await get_user_repos();
-
-    list(user_repo_data);
+    click_user();
 
     if ('github' === git_type) {
       parseInt(installation_id)

@@ -1,54 +1,40 @@
-#
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
-#
 
-ARG PHP_VERSION=7.2.12-fpm-alpine
-ARG NODE_VERSION=alpine
+ARG PHP_VERSION=7.2.12
+ARG NODE_VERSION=11.1.0
 
-#
-# 前端构建
-#
-
-FROM node:${NODE_VERSION} as frontend
+# 安装前端构建依赖
+FROM node:${NODE_VERSION}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
-COPY . /app/pcit
+COPY public/package.json /app/pcit/public/
 
 RUN cd /app/pcit/public \
-      && mkdir -p /app/pcit/framework/storage/private_key \
-      && npm install -g cross-env --registry=${NODE_REGISTRY} \
-      && npm install --registry=${NODE_REGISTRY} --production \
-      && npm run build \
-      && rm -rf node_modules
+      && npm install cross-env --registry=${NODE_REGISTRY} \
+      && npm install --registry=${NODE_REGISTRY} --production
 
-#
+COPY ./public/webpack.config.js /app/pcit/public/
+COPY ./public/js /app/pcit/public/js
+
+RUN cd /app/pcit/public \
+      && set PATH=./node_modules/.bin:$PATH \
+      && npm run build
+
 # 安装 composer 依赖
-#
+FROM khs1994/php:7.2.12-composer-alpine as composer
 
-FROM khs1994/php:${PHP_VERSION} as composer
-
-COPY --from=frontend /app/pcit /app/pcit
+COPY composer.json /app/pcit/
 
 RUN cd /app/pcit \
-      #
-      # 安装 composer 依赖
-      #
-      && if [ -f composer.json ];then \
-           echo "Composer packages installing..."; \
-           composer install --no-dev; \
-           echo "Composer packages install success"; \
-         else \
-           echo "composer.json NOT exists"; \
-         fi
+      && composer install --no-dev
 
-#
 # 将 PHP 项目打入 PHP 镜像
-#
+FROM khs1994/php:${PHP_VERSION}-fpm-alpine as php
 
-FROM khs1994/php:${PHP_VERSION} as php
-
-COPY --from=composer /app /app
+COPY . /app/pcit
+COPY --from=composer /app/pcit/vendor /app/pcit/vendor
+COPY --from=frontend /app/pcit/public/assets/js /app/pcit/public/assets/js
 
 CMD ["/app/pcit/bin/pcitd", "up"]
 
