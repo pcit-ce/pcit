@@ -76,15 +76,19 @@ footer {
     color: rgb(3, 102, 214);
 }
 
-#repos .repo_item a:hover {
+#repos .repo_full_name:hover {
     text-decoration: underline;
     color: rgb(3, 102, 214);
 }
 
-/*#repos .repo_item {*/
-/*position: relative;*/
-/*margin-left: 400px;*/
-/*}*/
+#repos .repo_item .toggle {
+    margin-top: 15px;
+    color: black;
+}
+
+#repos .repo_item .toggle:hover {
+    text-decoration: none;
+}
 
 /*#repos .repo_full_name {*/
 

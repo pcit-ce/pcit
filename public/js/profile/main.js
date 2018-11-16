@@ -89,18 +89,7 @@ function list_repos(data) {
 
   $.each(data, function(num, repo) {
     let repo_item_el = $('<div class="repo_item row"></div>');
-    let { build_status: status, repo_full_name: repo_name } = repo;
-    let button = $('<i class="col-12 col-md-2 toggle_off"></i>');
-
-    button
-      .addClass('open_or_close btn btn-link btn-sm')
-      .attr('repo_name', repo_name);
-
-    if (status === 1 + '') {
-      button.addClass('toggle_off');
-    } else {
-      button.addClass('toggle_on');
-    }
+    let { webhooks_status: status, repo_full_name: repo_name } = repo;
 
     // <p id="username/repo">username/repo</p>
     let p = $('<a class="repo_full_name col-12 col-md-8"></a>')
@@ -112,8 +101,21 @@ function list_repos(data) {
       })
       .css('display', 'inline');
 
+    let button = $('<i class="toggle col-6 col-md-2 material-icons"></i>')
+      .addClass('open_or_close btn btn-link btn-sm')
+      .attr('repo_name', repo_name);
+
+    if (status === 1 + '') {
+      button
+        .text('toggle_on')
+        .attr('title', 'disable')
+        .css('color', 'rgb(3,102,214)');
+    } else {
+      button.text('toggle_off').attr('title', 'activate');
+    }
+
     let settings = $(
-      '<a class="settings material-icons col-12 col-md-2">settings</a>',
+      '<a class="settings material-icons col-6 col-md-2">settings</a>',
     )
       .attr('href', ci_host + [git_type, repo_name, 'settings'].join('/'))
       .attr('target', '_blank');
@@ -439,35 +441,6 @@ $('#sync').on('click', function() {
   progress(97, 30000);
 });
 
-function open_or_close(target) {
-  let status = target.innerHTML;
-  let repo = target.id;
-
-  if ('Open' === status) {
-    $.ajax({
-      type: 'POST',
-      url: ci_host + 'webhooks/' + git_type + '/' + repo + '/activate',
-      dataType: 'json',
-      contentType: 'application/json;charset=utf-8',
-      success: function(data) {
-        target.innerHTML = 'Close';
-        target.style.color = 'Green';
-        console.log(data);
-      },
-    });
-  } else {
-    $.ajax({
-      type: 'delete',
-      url: ci_host + 'webhooks/' + git_type + '/' + repo + '/deactivate',
-      success: function(data) {
-        target.innerHTML = 'Open';
-        target.style.color = 'Red';
-        console.log(data);
-      },
-    });
-  }
-}
-
 $(document).on('click', '.org_name', function() {
   click_org($(this).attr('org_name'));
 });
@@ -479,8 +452,36 @@ $('#userinfo').click(function(event) {
 
 // append 添加元素绑定事件
 // https://www.cnblogs.com/liubaojing/p/8383960.html
-$('#repos').on('click', '.open_or_close', function(event) {
-  console.log(event);
+$('#repos').on('click', '.open_or_close', function() {
+  let status = $(this).text();
+  let repo = $(this).attr('repo_name');
+  let that = $(this);
 
-  open_or_close(event.target);
+  if ('toggle_on' === status) {
+    $.ajax({
+      type: 'DELETE',
+      url: ci_host + 'webhooks/' + git_type + '/' + repo + '/deactivate',
+      dataType: 'json',
+      contentType: 'application/json;charset=utf-8',
+      success(data) {
+        that
+          .text('toggle_off')
+          .css('color', 'black')
+          .attr('title', 'activate');
+        console.log(data);
+      },
+    });
+  } else {
+    $.ajax({
+      type: 'POST',
+      url: ci_host + 'webhooks/' + git_type + '/' + repo + '/activate',
+      success(data) {
+        that
+          .text('toggle_on')
+          .css('color', 'rgb(3,102,214)')
+          .attr('title', 'disable');
+        console.log(data);
+      },
+    });
+  }
 });

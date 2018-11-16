@@ -286,14 +286,12 @@ EOF;
     }
 
     /**
-     * @param string   $git_type
      * @param int      $rid
      * @param string   $repo_full_name
      * @param int|null $insert_admin
      * @param int|null $insert_collaborators
      * @param string   $default_branch
-     * @param int      $build_active
-     * @param int      $webhooks_status
+     * @param string   $git_type
      *
      * @throws Exception
      */
@@ -302,20 +300,18 @@ EOF;
                                           ?int $insert_admin,
                                           ?int $insert_collaborators,
                                           string $default_branch = 'master',
-                                          int $build_active = 1,
-                                          int $webhooks_status = 1,
                                           $git_type = 'github'): void
     {
         if ($repo_key_id = self::exists($rid, $git_type)) {
             $sql = <<<'EOF'
 UPDATE repo SET
 
-git_type=?,rid=?,repo_full_name=?,last_sync=?,build_activate=?,webhooks_status=?
+git_type=?,rid=?,repo_full_name=?,last_sync=?
 
 WHERE id=?;
 EOF;
             DB::update($sql, [
-                $git_type, $rid, $repo_full_name, time(), $build_active, $webhooks_status, $repo_key_id,
+                $git_type, $rid, $repo_full_name, time(), $repo_key_id,
             ]);
 
             goto a;
@@ -324,13 +320,13 @@ EOF;
         $sql = <<<'EOF'
 INSERT INTO repo(
 id,git_type, rid, repo_full_name,default_branch,
-last_sync,build_activate,webhooks_status
-) VALUES(null,?,?,?,?,?,?,?)
+last_sync
+) VALUES(null,?,?,?,?,?)
 EOF;
 
         DB::insert($sql, [
             $git_type, $rid, $repo_full_name,
-            $default_branch, time(), $build_active, $webhooks_status,
+            $default_branch, time(),
         ]);
 
         a:
@@ -382,22 +378,6 @@ EOF;
     }
 
     /**
-     * @param $webhooks_status
-     * @param $git_type
-     * @param $repo_full_name
-     *
-     * @return int
-     *
-     * @throws Exception
-     */
-    public static function updateBuildActive(int $webhooks_status, string $git_type, string $repo_full_name)
-    {
-        $sql = 'UPDATE repo SET webhooks_status=? WHERE git_type=? AND repo_full_name=?';
-
-        return DB::update($sql, [$webhooks_status, $git_type, $repo_full_name]);
-    }
-
-    /**
      * @param int    $build_active
      * @param string $git_type
      * @param string $repo_full_name
@@ -406,10 +386,75 @@ EOF;
      *
      * @throws Exception
      */
-    public static function updateWebhookStatus(int $build_active, string $git_type, string $repo_full_name)
+    public static function updateBuildActive(int $build_active, string $git_type, string $repo_full_name)
     {
-        $sql = 'UPDATE repo SET build_activate = ? WHERE git_type=? AND repo_full_name=?';
+        $sql = 'UPDATE repo SET build_activate=? WHERE git_type=? AND repo_full_name=?';
 
         return DB::update($sql, [$build_active, $git_type, $repo_full_name]);
+    }
+
+    /**
+     * @param int    $webhooks_status
+     * @param string $git_type
+     * @param string $repo_full_name
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
+    public static function updateWebhookStatus(int $webhooks_status, string $git_type, string $repo_full_name)
+    {
+        $sql = 'UPDATE repo SET webhooks_status = ? WHERE git_type=? AND repo_full_name=?';
+
+        return DB::update($sql, [$webhooks_status, $git_type, $repo_full_name]);
+    }
+
+    /**
+     * @param string $repo_full_name
+     * @param string $git_type
+     *
+     * @throws Exception
+     */
+    public static function active(string $repo_full_name, string $git_type = 'gitee'): void
+    {
+        DB::beginTransaction();
+        self::updateWebhookStatus(1, $git_type, $repo_full_name);
+        self::updateBuildActive(1, $git_type, $repo_full_name);
+        DB::commit();
+    }
+
+    /**
+     * @param string $repo_full_name
+     * @param string $git_type
+     *
+     * @throws Exception
+     */
+    public static function deactive(string $repo_full_name, string $git_type = 'gitee'): void
+    {
+        DB::beginTransaction();
+        self::updateWebhookStatus(0, $git_type, $repo_full_name);
+        self::updateBuildActive(0, $git_type, $repo_full_name);
+        DB::commit();
+    }
+
+    /**
+     * @param string $repo_full_name
+     * @param string $git_type
+     *
+     * @return bool
+     *
+     * @throws Exception
+     */
+    public static function canBuild(string $repo_full_name, string $git_type)
+    {
+        $sql = 'SELECT webhooks_status,build_activate FROM repo WHERE repo_full_name=? AND git_type=?';
+
+        $result = DB::select($sql, [$repo_full_name, $git_type]);
+
+        if (1 === $result[0]['webhooks_status'] and 1 === $result[0]['build_activate']) {
+            return true;
+        }
+
+        return false;
     }
 }

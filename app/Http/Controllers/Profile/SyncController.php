@@ -207,7 +207,6 @@ class SyncController
                     $insert_admin,
                     $insert_collaborators,
                     $default_branch,
-                    1, 1,
                     $this->git_type
                 );
             }

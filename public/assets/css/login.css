@@ -39,17 +39,20 @@ body {
     color: #ffffff;
 }
 
+
 .login {
     /*width: 80%;*/
     margin: 110px auto 0;
     /*height: 300px;*/
 }
 
-.login_tips {
-    /*float: left;*/
-    /*width: 60%;*/
-    /*line-height: 25px;*/
-    padding-top: 50px;
+@media screen and (min-width: 768px) {
+    .login_tips {
+        /*float: left;*/
+        /*width: 60%;*/
+        /*line-height: 25px;*/
+        padding-top: 50px;
+    }
 }
 
 .login_button {
@@ -134,7 +137,7 @@ footer a {
     color: #636b6f;
 }
 
-footer .about,.help,.legal,.status {
+footer .about, .help, .legal, .status {
     margin-bottom: 20px;
 }
 

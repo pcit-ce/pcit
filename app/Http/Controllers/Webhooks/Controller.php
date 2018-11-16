@@ -117,8 +117,10 @@ class Controller
 
         $getWebhooksStatus = $pcit->repo_webhooks->getStatus($webhooksUrl, ...$arg);
 
+        $repo_full_name = "$arg[1]/$arg[2]";
+
         if (1 === $getWebhooksStatus) {
-            Repo::updateWebhookStatus(1, $gitType, "$arg[1]/$arg[2]");
+            Repo::updateWebhookStatus(1, $gitType, $repo_full_name);
 
             return ['code' => 200, 'message' => 'Success, But hook already exists on this repository'];
         }
@@ -127,7 +129,7 @@ class Controller
             $json = $pcit->repo_webhooks->setWebhooks($data, ...$arg);
         } catch (Exception $e) {
             if (422 === $e->getCode()) {
-                Repo::updateWebhookStatus(1, $gitType, "$arg[1]/$arg[2]");
+                Repo::updateWebhookStatus(1, $gitType, $repo_full_name);
 
                 return ['code' => 200, 'message' => $e->getMessage()];
             } else {
@@ -156,9 +158,17 @@ class Controller
     {
         $arg = self::setGitType(...$arg);
 
+        [, $username, $repo] = $arg;
+
         $access_token = self::checkAccessToken();
 
         $pcit = new PCIT([self::$gitType.'_access_token' => $access_token], static::$gitType);
+
+        $repo_full_name = $username.'/'.$repo;
+
+        // Repo::deactive($username.'/'.$repo, static::$gitType);
+
+        Repo::updateWebhookStatus(0, self::$gitType, $repo_full_name);
 
         return $pcit->repo_webhooks->unsetWebhooks(...$arg);
     }
