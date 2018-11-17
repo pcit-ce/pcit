@@ -19,7 +19,7 @@ abstract class Kernel
     }
 
     /**
-     * @return bool
+     * @return bool true 不跳过
      *
      * @throws \Exception
      */

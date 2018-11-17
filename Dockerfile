@@ -18,7 +18,7 @@ COPY ./public/webpack.config.js /app/pcit/public/
 COPY ./public/js /app/pcit/public/js
 
 RUN cd /app/pcit/public \
-      && set PATH=./node_modules/.bin:$PATH \
+      # && set PATH=./node_modules/.bin:$PATH \
       && npm run build
 
 # 安装 composer 依赖

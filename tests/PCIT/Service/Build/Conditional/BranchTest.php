@@ -24,7 +24,7 @@ class BranchTest extends PCITTestCase
     /**
      * @throws \Exception
      */
-    public function testObj(): void
+    public function testInclude(): void
     {
         $obj = json_decode('{"include":"master"}');
         $result = (new Branch($obj, 'master'))->regHandle();
@@ -33,7 +33,10 @@ class BranchTest extends PCITTestCase
         $obj = json_decode('{"include":"master"}');
         $result = (new Branch($obj, 'dev'))->regHandle();
         $this->assertFalse($result);
+    }
 
+    public function testExclude(): void
+    {
         $obj = json_decode('{"exclude":"master"}');
         $result = (new Branch($obj, 'dev'))->regHandle();
 
@@ -43,9 +46,27 @@ class BranchTest extends PCITTestCase
         $result = (new Branch($obj, 'master'))->regHandle();
 
         $this->assertFalse($result);
+    }
 
+    public function testBoth(): void
+    {
         $obj = json_decode('{"exclude":"master","include":"master"}');
         $result = (new Branch($obj, 'master'))->regHandle();
         $this->assertFalse($result);
+    }
+
+    public function testObj(): void
+    {
+        $obj = json_decode('{"exclude":["dev"],"include":["master"]}');
+        $result = (new Branch($obj, 'master'))->regHandle();
+        $this->assertTrue($result);
+
+        $obj = json_decode('{"exclude":["dev","master"],"include":["master"]}');
+        $result = (new Branch($obj, 'master'))->regHandle();
+        $this->assertFalse($result);
+
+        $obj = json_decode('{"include":["master","dev"],"exclude":["test*"]}');
+        $result = (new Branch($obj, 'master'))->regHandle();
+        $this->assertTrue($result);
     }
 }

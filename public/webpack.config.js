@@ -1,9 +1,11 @@
 'use strict';
 
+const webpack = require('webpack');
+
 // const webpack = require('webpack');
 const path = require('path');
 
-module.exports = {
+let config = {
   mode: 'production',
   performance: {
     hints: 'warning',
@@ -29,9 +31,58 @@ module.exports = {
     inline: true,
     hot: true,
   },
-  plugins: [],
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
+  ],
   optimization: {
     minimize: true, //是否进行代码压缩
     noEmitOnErrors: true, //取代 new webpack.NoEmitOnErrorsPlugin()，编译错误时不打印输出资源。
   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'], // 注意顺序
+        // use [{loader:'style-loader'}]
+        // exclude:
+      },
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+      },
+      {
+        test: /\.(gif|jpg|png)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+              content: '',
+              // outputPath: 'images/'
+            },
+          },
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    // config.devtool = 'source-map';
+  }
+
+  if (argv.mode === 'production') {
+    //
+  }
+
+  return config;
 };

@@ -37,6 +37,7 @@ vim.exe.stackdump
 
 node_modules
 package-lock.json
+yarn.lock
 
 # pcit
 
