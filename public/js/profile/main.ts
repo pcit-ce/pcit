@@ -6,6 +6,9 @@ const git = require('../common/git');
 const app = require('../common/app');
 const title = require('../common/title');
 
+const ClipboardJS = require('clipboard');
+const Cookies = require('js-cookie');
+
 header.show();
 footer.show();
 
@@ -17,7 +20,7 @@ let username = url_array[5];
 // eslint-disable-next-line no-undef
 let token = Cookies.get(git_type + '_api_token');
 
-function settings(data) {
+function settings(data: any) {
   let { username, type } = data;
 
   $('#username')
@@ -72,7 +75,7 @@ function copyToken() {
   // eslint-disable-next-line no-undef
   let clipboard = new ClipboardJS('.copy_token');
 
-  clipboard.on('success', function(e) {
+  clipboard.on('success', function(e: any) {
     console.info('Action:', e.action);
     console.info('Text:', e.text);
     console.info('Trigger:', e.trigger);
@@ -82,12 +85,12 @@ function copyToken() {
 }
 
 // show repos
-function list_repos(data) {
+function list_repos(data: object) {
   let repos_element = $('#repos');
 
   repos_element.empty();
 
-  $.each(data, function(num, repo) {
+  $.each(data, function(num: number, repo: any) {
     let repo_item_el = $('<div class="repo_item row"></div>');
     let { webhooks_status: status, repo_full_name: repo_name } = repo;
 
@@ -134,10 +137,10 @@ function list_repos(data) {
 }
 
 // show org list
-function showOrg(data) {
+function showOrg(data: any) {
   let count = data.length;
 
-  $.each(data, (num, org) => {
+  $.each(data, (num: number, org: any) => {
     let { username: org_name } = org;
 
     $('.orgs')
@@ -152,7 +155,7 @@ function showOrg(data) {
   });
 }
 
-function showGitHubAppSettings(org_name, installation_id) {
+function showGitHubAppSettings(org_name: string, installation_id: number) {
   (async () => {
     let settings_url = await new Promise(resolve => {
       $.ajax({
@@ -180,7 +183,7 @@ function showGitHubAppSettings(org_name, installation_id) {
   })();
 }
 
-function showGitHubAppInstall(uid) {
+function showGitHubAppInstall(uid: number) {
   (async () => {
     let installation_url = await new Promise(resolve => {
       $.ajax({
@@ -218,7 +221,7 @@ function showGitHubAppInstall(uid) {
   })();
 }
 
-function get_userdata() {
+function get_userdata(): any {
   return new Promise(resolve => {
     $.ajax({
       type: 'GET',
@@ -263,7 +266,7 @@ function click_user() {
   })();
 }
 
-function show_org(data, org_name) {
+function show_org(data: any, org_name: string) {
   if (data[0] === undefined) {
     return;
   }
@@ -308,7 +311,7 @@ function show_org(data, org_name) {
   })();
 }
 
-function click_org(org_name) {
+function click_org(org_name: string) {
   $.ajax({
     type: 'GET',
     url: '/api/org/' + git_type + '/' + org_name,
@@ -380,16 +383,16 @@ $(document).ready(function() {
       });
     });
 
-    $('.tip').after(() => {
-      $('<p></p>').append(() => {
-        return $('<a></a>')
+    $('.tip').after(
+      $('<p></p>').append(
+        $('<a></a>')
           .append('<button>授权</button>')
           .attr({
             href: oauth_client_url,
             target: '_blank',
-          });
-      });
-    });
+          }),
+      ),
+    );
   })();
 });
 
@@ -415,7 +418,7 @@ $('#sync').on('click', function() {
       });
   });
 
-  function progress(progress, timeout) {
+  function progress(progress: number, timeout: number) {
     setTimeout(() => {
       $('.progress-bar')
         .attr('aria-valuenow', progress)
@@ -447,7 +450,7 @@ $(document).on('click', '.org_name', function() {
 
 $('#userinfo').click(function(event) {
   let username = event.target.innerHTML;
-  click_user(username);
+  click_user();
 });
 
 // append 添加元素绑定事件

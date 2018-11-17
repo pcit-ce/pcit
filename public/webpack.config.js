@@ -16,7 +16,7 @@ let config = {
   entry: {
     builds: path.resolve('./js/builds/main.js'),
     login: __dirname + '/js/login/main.js',
-    profile: __dirname + '/js/profile/main.js',
+    profile: __dirname + '/js/profile/main.ts',
     demo: path.resolve('./js/demo/main.js'),
   },
   output: {
@@ -32,9 +32,9 @@ let config = {
     hot: true,
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
+    // new webpack.DefinePlugin({
+    //   'process.env.NODE_ENV': JSON.stringify('production'),
+    // }),
   ],
   optimization: {
     minimize: true, //是否进行代码压缩
