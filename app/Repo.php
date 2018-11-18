@@ -227,9 +227,50 @@ EOF;
      */
     public static function allByUsername(string $username, $git_type = 'github')
     {
-        $sql = "SELECT * FROM repo WHERE git_type=? AND repo_full_name LIKE \"$username/%\"";
+        $sql = "SELECT rid FROM repo WHERE git_type=? AND repo_full_name LIKE \"$username/%\"";
 
-        return DB::select($sql, [$git_type]);
+        $result = DB::select($sql, [$git_type]);
+
+        $repos = [];
+
+        foreach ($result as $rids) {
+            $rid = $rids['rid'];
+
+            $sql = <<<EOF
+
+select repo.rid,
+       repo.repo_full_name,
+       repo.default_branch,
+       repo.git_type,
+       repo.webhooks_status,
+       builds.id as build_id,
+       builds.build_status,
+       builds.commit_id
+from repo
+       left join builds on repo.default_branch = builds.branch 
+       and repo.rid = builds.rid and builds.event_type='push' 
+                             and repo.repo_full_name LIKE "$username/%" 
+where repo.git_type = "$git_type"
+    and repo.rid = $rid order by build_id DESC limit 1;
+
+EOF;
+
+            $result = DB::select($sql, [])[0];
+
+            if ($result) {
+                if (null === $result['commit_id']) {
+                    $result['commit_id'] = '0';
+                }
+
+                if ('github' === $result['git_type']) {
+                    $result['webhooks_status'] = 1;
+                }
+            }
+
+            array_push($repos, $result);
+        }
+
+        return $repos;
     }
 
     /**

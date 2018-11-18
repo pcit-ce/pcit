@@ -28,19 +28,16 @@ module.exports = {
   getCommitUrl: (username, repo, commit_id, gitType = 'github') => {
     let commitUrl;
 
+    let repo_full_name = repo ? username + '/' + repo : username;
+
     switch (gitType) {
       case 'github':
         commitUrl =
-          'https://github.com/' +
-          username +
-          '/' +
-          repo +
-          '/commit/' +
-          commit_id;
+          'https://github.com/' + repo_full_name + '/commit/' + commit_id;
         break;
 
       case 'gitee':
-        commitUrl = `https://gitee.com/${username}/${repo}/commit/${commit_id}`;
+        commitUrl = `https://gitee.com/${repo_full_name}/commit/${commit_id}`;
 
         break;
     }

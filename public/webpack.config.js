@@ -1,6 +1,7 @@
 'use strict';
 
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // const webpack = require('webpack');
 const path = require('path');
@@ -23,6 +24,7 @@ let config = {
     path: __dirname + '/assets/js',
     filename: '[name].js',
     // pathinfo: true
+    // publicPath: 'https://cdn.example.com/assets/[hash]/',
   },
   devtool: 'none',
   devServer: {
@@ -35,6 +37,15 @@ let config = {
     // new webpack.DefinePlugin({
     //   'process.env.NODE_ENV': JSON.stringify('production'),
     // }),
+
+    new HtmlWebpackPlugin({
+      title: 'Demo',
+      template: path.resolve('./demo/source.html'),
+      filename: path.resolve('./demo/index.html'),
+      showErrors: true,
+      chunks: ['demo'], // 只包括指定的 js
+      // excludeChunks: ['demo'], // 排除指定的 js
+    }),
   ],
   optimization: {
     minimize: true, //是否进行代码压缩

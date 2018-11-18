@@ -38,6 +38,6 @@ class OrganizationsController
     {
         $pcit = new PCIT();
 
-        return User::getUserInfo($org_name, 0, $git_type);
+        return User::getUserInfo($org_name, null, $git_type);
     }
 }

@@ -37,9 +37,13 @@ class UserInfoController
      */
     public function find(string $git_type, string $username)
     {
-        JWTController::getUser();
+        try {
+            JWTController::getUser();
+        } catch (\Throwable $e) {
+            return User::getUserBasicInfo($username, null, $git_type);
+        }
 
-        $output = User::getUserInfo($username, 0, $git_type);
+        $output = User::getUserInfo($username, null, $git_type);
 
         if ($output) {
             return $output;

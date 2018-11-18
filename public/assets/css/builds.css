@@ -1,12 +1,12 @@
 @import "builds/pull_requests_list.css";
 @import "builds/builds_lists.css";
-@import "common/header.css";
 @import "common/footer.css";
 @import "builds/common.css";
 @import "common/body.css";
 @import "builds/jobs_list.css";
 @import "builds/settings.css";
 @import "builds/requests.css";
+@import "repos.css";
 
 #repo {
     margin-top: 40px;

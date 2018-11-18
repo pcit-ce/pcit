@@ -22,7 +22,7 @@ class User extends Model
      *
      * @throws Exception
      */
-    public static function getUserInfo(?string $username, int $uid = 0, $git_type = 'github')
+    public static function getUserInfo(?string $username, ?int $uid, $git_type = 'github')
     {
         $sql = 'SELECT * FROM user WHERE git_type=? AND username=?';
 
@@ -229,5 +229,25 @@ EOF;
 
             return;
         }
+    }
+
+    /**
+     * @param string   $username
+     * @param int|null $uid
+     * @param string   $git_type
+     *
+     * @return array|string
+     *
+     * @throws Exception
+     */
+    public static function getUserBasicInfo(?string $username, ?int $uid, string $git_type = 'github')
+    {
+        $sql = 'SELECT pic,username FROM user WHERE username=? AND git_type=?';
+
+        if ($uid) {
+            $sql = 'SELECT pic,username FROM user WHERE uid=? AND git_type=?';
+        }
+
+        return DB::select($sql, [$uid ?? $username, $git_type]);
     }
 }
