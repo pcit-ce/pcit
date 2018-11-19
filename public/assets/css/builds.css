@@ -7,19 +7,20 @@
 @import "builds/settings.css";
 @import "builds/requests.css";
 @import "repos.css";
+@import "cdn/google-material-icons.css";
 
 #repo {
-    margin-top: 40px;
-    /* margin-left: 15%; */
-    color: rgb(3,102,214);
+  margin-top: 40px;
+  /* margin-left: 15%; */
+  color: rgb(3, 102, 214);
 }
 
 #repo a {
-    color: rgb(3,102,214);
+  color: rgb(3, 102, 214);
 }
 
 .column {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
 .column .always {
@@ -31,85 +32,86 @@
 }
 
 /*解决父容器塌陷*/
-#display:after{
-    content: "";
-    display: block;
-    clear: both;
+#display:after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .details {
-    text-decoration: none;
-    color: blue;
+  text-decoration: none;
+  color: blue;
 }
 
 .details:hover {
-    text-decoration: underline;
-    color: blue;
+  text-decoration: underline;
+  color: blue;
 }
 
 .column {
-    border-bottom: 2px solid #f4f4f4;
+  border-bottom: 2px solid #f4f4f4;
 }
 
 #more_options {
-    color: black;
-    border: 1px solid;
-    width: 100px;
-    text-decoration: none;
+  color: black;
+  border: 1px solid;
+  width: 100px;
+  text-decoration: none;
 }
 
 .build_data {
-    margin-top: 10px;
-    position: relative;
-    border-top: 2px solid #f4f4f4;
-    border-bottom: 2px solid #f4f4f4;
-    border-right: 2px solid #f4f4f4;
-    height: 220px;
-    margin-left: 10px;
+  margin-top: 10px;
+  position: relative;
+  border-top: 2px solid #f4f4f4;
+  border-bottom: 2px solid #f4f4f4;
+  border-right: 2px solid #f4f4f4;
+  height: 220px;
+  margin-left: 10px;
 }
 
 .build_data a {
-    text-decoration: none;
-    color: #666666;
+  text-decoration: none;
+  color: #666666;
 }
 
 .build_data a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .build_data .build_id {
-    background: red;
-    width: 10px;
-    height: 221px;
-    margin-left: -10px;
-    border-top: 1px solid red;
-    margin-top: -1px;
-    border-bottom: 1px solid red;
+  background: red;
+  width: 10px;
+  height: 221px;
+  margin-left: -10px;
+  border-top: 1px solid red;
+  margin-top: -1px;
+  border-bottom: 1px solid red;
 }
 
 .build_data .branch {
-    /*background: yellow;*/
-    position: absolute;
-    width: 100px;
-    height: 30px;
-    left: -20px;
-    top: 10px;
-    padding-left: 50px;
-    font-size: 18px;
+  /*background: yellow;*/
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  left: -20px;
+  top: 10px;
+  padding-left: 50px;
+  font-size: 18px;
 }
 
 .build_data .commit_message {
-    /*background: bisque;*/
-    position: absolute;
-    height: 30px;
-    width: 300px;
-    left: 75px;
-    top: 10px;
-    padding-left: 20px;
-    font-size: 16px;
+  /*background: bisque;*/
+  position: absolute;
+  height: 30px;
+  width: 300px;
+  left: 80px;
+  top: 12px;
+  padding-left: 20px;
+  font-size: 16px;
 }
 
-.build_data .commit_url {
+@media screen and (min-width: 992px) {
+  .build_data .commit_url {
     /*background: green;*/
     width: 200px;
     height: 30px;
@@ -118,9 +120,9 @@
     top: 50px;
     padding-left: 50px;
     font-size: 15px;
-}
+  }
 
-.build_data .compare {
+  .build_data .compare {
     /*background: chocolate;*/
     position: absolute;
     left: 10px;
@@ -129,9 +131,9 @@
     height: 30px;
     padding-left: 50px;
     font-size: 15px;
-}
+  }
 
-.build_data .branch_url {
+  .build_data .branch_url {
     /*background: red;*/
     position: absolute;
     width: 300px;
@@ -140,9 +142,9 @@
     top: 110px;
     padding-left: 50px;
     font-size: 15px;
-}
+  }
 
-.build_data .committer {
+  .build_data .committer {
     /*background: lightgoldenrodyellow;*/
     position: absolute;
     height: 30px;
@@ -151,9 +153,9 @@
     bottom: 50px;
     padding-left: 50px;
     font-size: 15px;
-}
+  }
 
-.build_data .build_status {
+  .build_data .build_status {
     /*background: yellowgreen;*/
     width: 100px;
     height: 30px;
@@ -161,9 +163,9 @@
     left: 600px;
     top: 10px;
     font-size: 14px;
-}
+  }
 
-.build_data .build_time {
+  .build_data .build_time {
     /*background: firebrick;*/
     position: absolute;
     left: 600px;
@@ -172,9 +174,9 @@
     height: 30px;
     color: #666666;
     font-size: 15px;
-}
+  }
 
-.build_data .build_time_ago {
+  .build_data .build_time_ago {
     /*background: cornsilk;*/
     position: absolute;
     left: 600px;
@@ -183,9 +185,9 @@
     height: 30px;
     color: #666666;
     font-size: 15px;
-}
+  }
 
-.build_data .env {
+  .build_data .env {
     /*background: red;*/
     position: absolute;
     bottom: 10px;
@@ -193,30 +195,81 @@
     height: 30px;
     width: 900px;
     word-wrap: break-word;
+  }
 }
 
 .build_data .cancel_or_restart {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding-top: 10px;
+}
+
+@media screen and (max-width: 992px) {
+  .build_data .commit_url {
     position: absolute;
-    right: 10px;
-    top: 10px;
-    padding-top: 10px;
+    left: 30px;
+    top: 70px;
+  }
+
+  .build_data .compare {
+    position: absolute;
+    left: 30px;
+    top: 100px;
+  }
+
+  .build_data .branch_url {
+    position: absolute;
+    left: 30px;
+    top: 130px;
+  }
+
+  .build_data .committer {
+    position: absolute;
+    left: 30px;
+    top: 160px;
+  }
+
+  .build_data .build_status {
+    position: absolute;
+    left: 30px;
+    top: 190px;
+  }
+
+  .build_data .build_time {
+    position: absolute;
+    left: 30px;
+    top: 220px;
+  }
+
+  .build_data .build_time_ago {
+    position: absolute;
+    left: 30px;
+    top: 250px;
+  }
+
+  .build_data .commit_message {
+    top: 40px;
+    left: 10px;
+    font-size: 15px;
+  }
 }
 
 tr {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .build_log {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    line-height: 30px;
-    background: #222;
-    color: #f1f1f1;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 30px;
+  background: #222;
+  color: #f1f1f1;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
 }
 
 .material-icons {
-    color: #666666;
+  color: #666666;
 }

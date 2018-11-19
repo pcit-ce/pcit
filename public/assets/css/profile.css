@@ -1,5 +1,6 @@
 @import "common/body.css";
 @import "common/footer.css";
+@import "cdn/google-material-icons.css";
 
 footer {
     margin-top: 100px;
