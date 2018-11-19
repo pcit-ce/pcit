@@ -43,101 +43,94 @@ module.exports = {
       url.getRepo(),
       commit_id,
     );
-    let div_element = $('<div class="build_data"></div>');
 
-    div_element.append(() => {
-      let build_id_element = $('<div class="build_id"></div>');
-      build_id_element.append('').css({
-        background: status_color,
-        border: '1px solid ' + status_color,
-      });
-      return build_id_element;
-    });
+    let div_element = $('<div class="build_data"></div>').css(
+      'border-left',
+      '8px solid ' + status_color,
+    );
+
+    // div_element.append(() => {
+    //   let build_id_element = $('<div class="build_id"></div>');
+    //   build_id_element.append('').css({
+    //     background: status_color,
+    //     border: '1px solid ' + status_color,
+    //   });
+    //   return build_id_element;
+    // });
 
     div_element
-      .append(() => {
-        return $('<div class="branch"></div>')
+      .append(
+        $('<div class="branch"></div>')
           .append($('<strong></strong>').append(branch.slice(0, 7)))
           .attr('title', branch)
-          .css('color', status_color);
-      })
-      .append(() => {
-        let div_el = $('<a class="branch_url">Branch </a>');
-        div_el.append(branch);
-        div_el.attr('href', '');
-        div_el.attr('target', '_block');
-        div_el.attr('title', 'View branch on GitHub');
-        return div_el;
-      })
-      .append(() => {
-        return $('<div class="build_status"></div>')
+          .css('color', status_color),
+      )
+      .append(
+        $('<a class="branch_url">Branch </a>')
+          .append(branch)
+          .attr('href', '')
+          .attr('target', '_block')
+          .attr('title', 'View branch on GitHub'),
+      )
+      .append(
+        $('<div class="build_status"></div>')
           .append($('<strong></strong>').append('#' + id + ' ' + build_status))
-          .css('color', status_color);
-      })
-      .append(() => {
-        let commit_url_element = $('<a class="commit_url">Commit </a>');
-        commit_url_element.append(commit_id.slice(0, 7));
-        commit_url_element.attr('title', 'View commit on GitHub');
-        commit_url_element.attr('href', commit_url);
-        commit_url_element.attr('target', '_blank');
+          .css('color', status_color),
+      )
+      .append(
+        $('<a class="commit_url">Commit </a>')
+          .append(commit_id.slice(0, 7))
+          .attr('title', 'View commit on GitHub')
+          .attr('href', commit_url)
+          .attr('target', '_blank'),
+      );
 
-        return commit_url_element;
-      });
-
-    div_element.append(() => {
-      return $('<div class="commit_message"></div>')
+    div_element.append(
+      $('<div class="commit_message"></div>')
         .append(commit_message)
         .attr('title', commit_message)
-        .css('color', status_color);
-    });
+        .css('color', status_color),
+    );
 
-    div_element.append(() => {
-      return $('<div class="committer"></div>')
+    div_element.append(
+      $('<div class="committer"></div>')
         .append(committer_name)
-        .attr('title', committer_name);
-    });
+        .attr('title', committer_name),
+    );
 
-    div_element.append(() => {
-      return $('<a class="compare">Compare </a>')
+    div_element.append(
+      $('<a class="compare">Compare </a>')
         .append('Compare')
         .attr({
           title: 'View diff on GitHub',
           href: compare,
           target: '_blank',
-        });
-    });
+        }),
+    );
 
     div_element
-      .append(() => {
-        let stopped_at_element = $('<div class="build_time"></div>');
-        stopped_at_element.append('Ran for 7 min 17 sec');
-
-        return stopped_at_element;
-      })
-      .append(() => {
-        let div_el = $('<div class="build_time_ago"></div>');
-        div_el.append('about 9 hours ago');
-
-        return div_el;
-      })
-      .append(() => {
-        return $('<button class="cancel_or_restart"></button>')
-          .append(() => {
-            return $('<i></i>')
+      .append(
+        $('<div class="build_time"></div>').append('Ran for 7 min 17 sec'),
+      )
+      .append(
+        $('<div class="build_time_ago"></div>').append('about 9 hours ago'),
+      )
+      .append(
+        $('<button class="cancel_or_restart"></button>')
+          .append(
+            $('<i></i>')
               .addClass('material-icons')
               .append(() => {
                 return button_handle === 'cancel' ? 'cancel' : 'refresh';
-              });
-          })
+              }),
+          )
           .attr('handle', button_handle)
           .attr('title', button_title + (job ? ' job' : ' build'))
           .attr('event_id', id)
           .attr('job_or_build', job ? 'job' : 'build')
-          .addClass('btn btn-link');
-      })
-      .append(() => {
-        return $('<div class="env"></div>').append(env_vars);
-      });
+          .addClass('btn btn-link'),
+      )
+      .append($('<div class="env"></div>').append(env_vars));
 
     display_element.append(div_element);
   },

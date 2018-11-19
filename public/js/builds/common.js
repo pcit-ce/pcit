@@ -12,8 +12,14 @@ function mouseoverMethod(event) {
 }
 
 function more_options_click_handler(id) {
+  if (id === 'trigger_build') {
+    return;
+  }
+
   $('#pull_requests').after(() => {
-    let span_el = $('<span id="column_more_options"></span>');
+    let span_el = $(
+      '<span id="column_more_options" class="col-md-1 col-12 text-center"></span>',
+    );
 
     return span_el.append(id.slice(0, 1).toUpperCase() + id.slice(1));
   });
@@ -21,7 +27,7 @@ function more_options_click_handler(id) {
 
 module.exports = {
   column_span_click: id => {
-    let span_el = $('#' + id);
+    let span_el = $('column > #' + id);
     span_el.css('color', 'green');
     span_el.css('border-bottom-style', 'solid');
   },

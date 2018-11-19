@@ -42,11 +42,12 @@ function display(data, url) {
         : status.getColor('success');
 
     requests_el_item
-      .append(() => {
-        return $('<div class="event_type col-md-1"></div>')
-          .append(event_type === 'pull_request' ? 'pr' : event_type)
-          .css('border-left', '8px solid' + color);
-      })
+      .css('border-left', '8px solid' + color)
+      .append(
+        $('<div class="event_type col-md-1"></div>').append(
+          event_type === 'pull_request' ? 'pr' : event_type,
+        ),
+      )
       .append(() => {
         return $('<div class="branch col-md-1"></div>')
           .append(branch.substring(0, 10))

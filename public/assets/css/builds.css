@@ -8,6 +8,7 @@
 @import "builds/requests.css";
 @import "repos.css";
 @import "cdn/google-material-icons.css";
+@import "builds/main_992.css";
 
 #repo {
   margin-top: 40px;
@@ -65,8 +66,8 @@
   border-top: 2px solid #f4f4f4;
   border-bottom: 2px solid #f4f4f4;
   border-right: 2px solid #f4f4f4;
-  height: 220px;
-  margin-left: 10px;
+  /* height: 220px; */
+  /* margin-left: 10px; */
 }
 
 .build_data a {
@@ -99,18 +100,22 @@
   font-size: 18px;
 }
 
-.build_data .commit_message {
-  /*background: bisque;*/
-  position: absolute;
-  height: 30px;
-  width: 300px;
-  left: 80px;
-  top: 12px;
-  padding-left: 20px;
-  font-size: 16px;
-}
-
 @media screen and (min-width: 992px) {
+  .build_data {
+    height: 220px;
+  }
+
+  .build_data .commit_message {
+    /*background: bisque;*/
+    position: absolute;
+    height: 30px;
+    width: 300px;
+    left: 80px;
+    top: 12px;
+    padding-left: 20px;
+    font-size: 16px;
+  }
+
   .build_data .commit_url {
     /*background: green;*/
     width: 200px;
@@ -196,62 +201,12 @@
     width: 900px;
     word-wrap: break-word;
   }
-}
 
-.build_data .cancel_or_restart {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  padding-top: 10px;
-}
-
-@media screen and (max-width: 992px) {
-  .build_data .commit_url {
+  .build_data .cancel_or_restart {
     position: absolute;
-    left: 30px;
-    top: 70px;
-  }
-
-  .build_data .compare {
-    position: absolute;
-    left: 30px;
-    top: 100px;
-  }
-
-  .build_data .branch_url {
-    position: absolute;
-    left: 30px;
-    top: 130px;
-  }
-
-  .build_data .committer {
-    position: absolute;
-    left: 30px;
-    top: 160px;
-  }
-
-  .build_data .build_status {
-    position: absolute;
-    left: 30px;
-    top: 190px;
-  }
-
-  .build_data .build_time {
-    position: absolute;
-    left: 30px;
-    top: 220px;
-  }
-
-  .build_data .build_time_ago {
-    position: absolute;
-    left: 30px;
-    top: 250px;
-  }
-
-  .build_data .commit_message {
-    top: 40px;
-    left: 10px;
-    font-size: 15px;
+    right: 10px;
+    top: 10px;
+    padding-top: 10px;
   }
 }
 

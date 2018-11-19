@@ -254,7 +254,7 @@ jQuery(document).ready(function() {
     })
     .append(() => {
       let a_element = $('<a class="h1_status"></a>');
-      let img_element = $('<img alt="status" src=""/>');
+      let img_element = $('<img src=""/>');
 
       img_element.attr('src', url.getRepoFullNameUrl() + '/status');
       a_element

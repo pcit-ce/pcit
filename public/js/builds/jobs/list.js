@@ -101,7 +101,7 @@ module.exports = {
       mouseout: function() {
         let that = $(this);
 
-        that.css('background', 'none').css('border-left', 'none');
+        that.css('background', 'none').css('border-left', '5px solid white');
       },
     });
   },

@@ -12,6 +12,7 @@
   text-decoration: none;
   color: #666666;
   position: relative;
+  border-left: 5px solid white;
 }
 
 .job_list:hover {
@@ -87,7 +88,7 @@
 
 @media screen and (max-width: 767px) {
   .job_list {
-    height: 100px;
+    height: 46px;
   }
 
   .job_list .job_env_vars {

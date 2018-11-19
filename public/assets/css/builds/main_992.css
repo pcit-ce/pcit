@@ -1,0 +1,79 @@
+@media screen and (max-width:992px) {
+  .build_data {
+    height: 400px;
+  }
+
+  .build_data .commit_url {
+    position: absolute;
+    left: 30px;
+    top: 100px;
+  }
+
+  .build_data .compare {
+    position: absolute;
+    left: 30px;
+    top: 130px;
+  }
+
+  .build_data .branch_url {
+    position: absolute;
+    left: 30px;
+    top: 160px;
+  }
+
+  .build_data .committer {
+    position: absolute;
+    left: 30px;
+    top: 190px;
+  }
+
+  .build_data .build_status {
+    position: absolute;
+    left: 30px;
+    top: 220px;
+  }
+
+  .build_data .build_time {
+    position: absolute;
+    left: 30px;
+    top: 250px;
+  }
+
+  .build_data .build_time_ago {
+    position: absolute;
+    left: 30px;
+    top: 280px;
+  }
+
+  .build_data .commit_message {
+    position: absolute;
+    top: 40px;
+    left: 30px;
+    font-size: 18px;
+  }
+
+  .build_data .cancel_or_restart {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    padding-top: 10px;
+  }
+
+  .build_data .env {
+    /*background: red;*/
+    position: absolute;
+    /* bottom: 10px; */
+    left: 30px;
+    /* height: 30px; */
+    /* width: 900px; */
+    /* width:auto; */
+    top: 290px;
+    word-break: break-all
+  }
+
+  .more_options {
+    position: relative;
+    left: 37%;
+    margin-top: 10px;
+  }
+}
