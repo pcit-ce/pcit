@@ -75,15 +75,16 @@ function display(data, url) {
       let li_el = $('<li></li>');
 
       li_el
-        .append($('<div class="id"></div>').append())
-        .append(
-          $('<div class="build_id"></div>')
-            .append('')
-            .css({
-              background: status_color,
-              border: '1px solid' + status_color,
-            }),
-        )
+        // .append($('<div class="id"></div>').append())
+        // .append(
+        //   $('<div class="build_id"></div>')
+        //     .append('')
+        //     .css({
+        //       background: status_color,
+        //       border: '1px solid' + status_color,
+        //     }),
+        // )
+        .css('border-left', '8px solid ' + status_color)
         .append(
           $('<a class="pull_request_url"></a>')
             .append(`#PR ${pull_request_id}`)
@@ -133,8 +134,8 @@ function display(data, url) {
             .append(stopped_at)
             .attr('title', 'Finished ' + date.toLocaleString());
         })
-        .append(() => {
-          return $('<button class="cancel_or_restart"></button>')
+        .append(
+          $('<button class="cancel_or_restart"></button>')
             .append(
               $('<i class="material-icons"></i>').append(
                 button_handle === 'cancel' ? 'cancel' : 'refresh',
@@ -144,8 +145,8 @@ function display(data, url) {
             .attr('title', button_title + ' build')
             .attr('event_id', build_id)
             .attr('job_or_build', 'build')
-            .addClass('btn btn-link');
-        });
+            .addClass('btn btn-link'),
+        );
 
       ul_el.append(li_el);
     });

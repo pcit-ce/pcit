@@ -1,9 +1,10 @@
 .builds_list {
-    margin-left: -30px;
+    /* margin-left: -30px; */
     display: block;
     list-style-type: none;
     /*border: 1px solid red;*/
     overflow: auto;
+    padding: 0;
 }
 
 .builds_list li {

@@ -9,6 +9,8 @@
 @import "repos.css";
 @import "cdn/google-material-icons.css";
 @import "builds/main_992.css";
+@import "builds/builds_lists_992.css";
+@import "builds/pr_992.css";
 
 #repo {
   margin-top: 40px;
@@ -22,6 +24,8 @@
 
 .column {
   margin-top: 40px;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .column .always {

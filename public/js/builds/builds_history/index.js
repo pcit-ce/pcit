@@ -99,62 +99,47 @@ function display(data, url) {
       status_color = common_status.getColor(build_status);
       build_status = common_status.change(build_status);
 
-      li_el.append(() => {
-        let div_element = $('<div class="build_id"></div>');
-        div_element.append('').css({
-          background: status_color,
-          border: '1px solid' + status_color,
-        });
-
-        return div_element;
-      });
+      // li_el.append(() => {
+      //   let div_element = $('<div class="build_id"></div>');
+      //   div_element.append('').css({
+      //     background: status_color,
+      //     border: '1px solid' + status_color,
+      //   });
+      //
+      //   return div_element;
+      // });
 
       li_el
-        .append(() => {
-          let div_element = $('<div class="event_type"></div>');
-          div_element.append(event_type);
-
-          return div_element;
-        })
-        .append(() => {
-          let div_element = $('<div class="branch"></div>');
-          div_element
+        .css('border-left', '8px solid' + status_color)
+        .append($('<div class="event_type"></div>').append(event_type))
+        .append(
+          $('<div class="branch"></div>')
             .append($('<strong></strong>').append(branch.slice(0, 10)))
             .attr('title', branch)
-            .css('color', status_color);
-
-          return div_element;
-        })
-        .append(() => {
-          let div_el = $('<div class="committer"></div>');
-          div_el.append(committer_username).attr('title', committer_username);
-
-          return div_el;
-        })
-        .append(() => {
-          let div_element = $('<div class="commit_message"></div>');
-          div_element
+            .css('color', status_color),
+        )
+        .append(
+          $('<div class="committer"></div>')
+            .append(committer_username)
+            .attr('title', committer_username),
+        )
+        .append(
+          $('<div class="commit_message"></div>')
             .append(commit_message.slice(0, 40))
-            .attr('title', commit_message);
-
-          return div_element;
-        })
-        .append(() => {
-          let a_element = $('<a class="commit_id"></a>');
-          a_element
+            .attr('title', commit_message),
+        )
+        .append(
+          $('<a class="commit_id"></a>')
             .append(commit_id)
             .attr({
               href: commit_url,
               title: 'View commit on GitHub',
               target: '_block',
             })
-            .addClass('commit_url');
-
-          return a_element;
-        })
-        .append(() => {
-          let a_element = $('<a class="build_status"></a>');
-          a_element
+            .addClass('commit_url'),
+        )
+        .append(
+          $('<a class="build_status"></a>')
             .append(
               $('<strong></strong>').append(`#${build_id} ${build_status}`),
             )
@@ -162,44 +147,30 @@ function display(data, url) {
               href: `${location.href}/${build_id}`,
               target: '_self',
             })
-            .css('color', status_color);
-
-          return a_element;
-        })
-        .append(() => {
-          let div_element = $('<div class="build_time"></div>');
-          div_element.append(started_at);
-
-          return div_element;
-        })
-        .append(() => {
-          let div_element = $('<div></div>');
-          let data = new Date();
-
-          div_element
+            .css('color', status_color),
+        )
+        .append($('<div class="build_time"></div>').append(started_at))
+        .append(
+          $('<div></div>')
             .append(stopped_at)
             .addClass('build_time_ago')
-            .attr('title', 'Finished ' + data.toLocaleString());
-
-          return div_element;
-        })
-        .append(() => {
-          return (() => {
-            return $('<button class="cancel_or_restart"></button>')
-              .append(() => {
-                return $('<i class="material-icons"></i>').append(() => {
-                  return button_handle === 'cancel' ? 'cancel' : 'refresh';
-                });
-              })
-              .attr({
-                title: button_title + ' build',
-                event_id: build_id,
-                job_or_build: 'build',
-                handle: button_handle,
-              })
-              .addClass('btn btn-link');
-          })();
-        });
+            .attr('title', 'Finished ' + new Date().toLocaleString()),
+        )
+        .append(
+          $('<button class="cancel_or_restart"></button>')
+            .append(
+              $('<i class="material-icons"></i>').append(
+                'cancel' ? 'cancel' : 'refresh',
+              ),
+            )
+            .attr({
+              title: button_title + ' build',
+              event_id: build_id,
+              job_or_build: 'build',
+              handle: button_handle,
+            })
+            .addClass('btn btn-link'),
+        );
 
       ul_el.append(li_el);
     });

@@ -9,7 +9,7 @@ function display(data, url) {
 
   display_element.empty();
 
-  let requests_el = $('<div class="requests"></div>');
+  // let requests_el = $('<div class="requests"></div>');
 
   if (data.length === 0) {
     display_element.append(error_info('Not Event receive !'));
@@ -111,10 +111,10 @@ function display(data, url) {
           .append(message.substring(0, 26))
           .attr({ title: message });
       });
-    requests_el.append(requests_el_item);
+    display_element.append(requests_el_item);
   });
 
-  display_element.append(requests_el);
+  // display_element.append(requests_el);
 }
 
 module.exports = {

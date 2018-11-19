@@ -3,7 +3,8 @@
 .pull_requests_list {
     /*border: 1px solid;*/
     /*list-style-type: none;*/
-    margin-left: -30px;
+    /* margin-left: -30px; */
+    padding: 0;
 }
 
 .pull_requests_list a {
