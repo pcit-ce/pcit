@@ -10,6 +10,7 @@ use PCIT\PCIT;
 use PCIT\Service\OAuth\CodingClient;
 use PCIT\Service\OAuth\GiteeClient;
 use PCIT\Service\OAuth\GitHubClient;
+use PCIT\Support\Env;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 
@@ -123,7 +124,8 @@ abstract class OAuthKernel
         Session::put($git_type.'.username', $name);
         Session::put($git_type.'.pic', $pic);
         Session::put($git_type.'.email', $email);
-        Session::put($git_type.'.expire', time() + 24 * 60 * 60);
+        $remember_day = Env::get('CI_REMEMBER_DAY', 10);
+        Session::put($git_type.'.expire', time() + $remember_day * 24 * 60 * 60);
 
         Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
 

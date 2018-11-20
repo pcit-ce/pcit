@@ -16,6 +16,8 @@ RUN cd /app/pcit/public \
 
 COPY ./public/webpack.config.js /app/pcit/public/
 COPY ./public/js /app/pcit/public/js
+COPY ./public/demo /app/pcit/public/demo
+COPY ./public/css /app/pcit/public/css
 
 RUN cd /app/pcit/public \
       # && set PATH=./node_modules/.bin:$PATH \

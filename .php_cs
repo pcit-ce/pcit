@@ -11,6 +11,7 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('build')
     ->exclude('cache')
     ->exclude('vendor')
+    ->exclude('node_modules')
     // ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
     ->in(__DIR__)
     ->ignoreVCS(true);
