@@ -1,145 +1,145 @@
 /*使用绝对定位布局*/
 
 .pull_requests_list {
-    /*border: 1px solid;*/
-    /*list-style-type: none;*/
-    /* margin-left: -30px; */
-    padding: 0;
+  /*border: 1px solid;*/
+  /*list-style-type: none;*/
+  /* margin-left: -30px; */
+  padding: 0;
 }
 
 .pull_requests_list a {
-    display: block;
-    text-decoration: none;
-    color: #666666;
+  display: block;
+  text-decoration: none;
+  color: #666666;
 }
 
 .pull_requests_list a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .pull_requests_list li {
-    display: block;
-    position: relative;
-    list-style-type: none;
-    border: 2px solid #f4f4f4;
-    border-left: none;
-    margin-bottom: 10px;
-    height: 100px;
-    text-align: center;
+  display: block;
+  position: relative;
+  list-style-type: none;
+  border: 2px solid #f4f4f4;
+  border-left: none;
+  margin-bottom: 10px;
+  height: 100px;
+  text-align: center;
 }
 
 /*.pull_requests_list .id {*/
-   /**/
+/**/
 /*}*/
 
 .pull_requests_list .build_id {
-    /*background: red;*/
-    height: 100px;
-    width: 10px;
-    /*float: left;*/
-    margin-left: -10px;
+  /*background: red;*/
+  height: 100px;
+  width: 10px;
+  /*float: left;*/
+  margin-left: -10px;
 }
 
 .pull_requests_list .pull_request_url {
-    font-size: 18px;
-    /*background: yellow;*/
-    height: 100px;
-    width: 100px;
-    /*float: left;*/
-    position: absolute;
-    left: 10px;
-    top: 0;
-    text-align: center;
-    padding-top: 25px;
+  font-size: 18px;
+  /*background: yellow;*/
+  height: 100px;
+  width: 100px;
+  /*float: left;*/
+  position: absolute;
+  left: 10px;
+  top: 0;
+  text-align: center;
+  padding-top: 25px;
 }
 
 .pull_requests_list .branch {
-    /*background: orangered;*/
-    height: 50px;
-    width: 100px;
-    /*float: left;*/
-    position: absolute;
-    left: 110px;
-    top: 0;
-    font-size: 18px;
+  /*background: orangered;*/
+  height: 50px;
+  width: 100px;
+  /*float: left;*/
+  position: absolute;
+  left: 110px;
+  top: 0;
+  font-size: 18px;
 }
 
 .pull_requests_list .committer {
-    /*background: aqua;*/
-    height: 50px;
-    width: 100px;
-    /*float: left;*/
-    position: absolute;
-    left: 110px;
-    top: 50px;
+  /*background: aqua;*/
+  height: 50px;
+  width: 100px;
+  /*float: left;*/
+  position: absolute;
+  left: 110px;
+  top: 50px;
 }
 
 .pull_requests_list .commit_message {
-    /*background: green;*/
-    height: 100px;
-    width: 300px;
-    /*float: left;*/
-    position: absolute;
-    left: 210px;
-    top: 0;
-    font-size: 16px;
-    color: #666666;
-    text-align: left;
-    padding-left: 25px;
-    padding-top: 10px;
+  /*background: green;*/
+  height: 100px;
+  width: 300px;
+  /*float: left;*/
+  position: absolute;
+  left: 210px;
+  top: 0;
+  font-size: 16px;
+  color: #666666;
+  text-align: left;
+  padding-left: 25px;
+  padding-top: 10px;
 }
 
 .pull_requests_list .commit_id {
-    /*background: bisque;*/
-    height: 50px;
-    width: 200px;
-    /*float: left;*/
-    position: absolute;
-    left: 532px;
-    top: 50px;
-    text-align: center;
-    font-size: 13px;
+  /*background: bisque;*/
+  height: 50px;
+  width: 200px;
+  /*float: left;*/
+  position: absolute;
+  left: 532px;
+  top: 50px;
+  text-align: center;
+  font-size: 13px;
 }
 
 .pull_requests_list .build_status {
-    /*background: red;*/
-    height: 50px;
-    width: 200px;
-    /*float: left;*/
-    position: absolute;
-    left: 532px;
-    top: 0;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 18px;
+  /*background: red;*/
+  height: 50px;
+  width: 200px;
+  /*float: left;*/
+  position: absolute;
+  left: 532px;
+  top: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 18px;
 }
 
 .pull_requests_list .build_time {
-    /*background: yellowgreen;*/
-    height: 50px;
-    width: 200px;
-    /*float: left;*/
-    position: absolute;
-    left: 700px;
-    top: 0;
-    color: #666666;
+  /*background: yellowgreen;*/
+  height: 50px;
+  width: 200px;
+  /*float: left;*/
+  position: absolute;
+  left: 700px;
+  top: 0;
+  color: #666666;
 }
 
 .pull_requests_list .build_time_ago {
-    /*background: darksalmon;*/
-    height: 50px;
-    width: 200px;
-    /*float: left;*/
-    position: absolute;
-    left: 700px;
-    top: 50px;
-    color: #666666;
+  /*background: darksalmon;*/
+  height: 50px;
+  width: 200px;
+  /*float: left;*/
+  position: absolute;
+  left: 700px;
+  top: 50px;
+  color: #666666;
 }
 
 .pull_requests_list .cancel_or_restart {
-    display: block;
-    /*float: right;*/
-    position: absolute;
-    right: 0;
-    top: 26px;
+  display: block;
+  /*float: right;*/
+  position: absolute;
+  right: 0;
+  top: 26px;
 }

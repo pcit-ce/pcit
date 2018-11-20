@@ -4,7 +4,8 @@
   font-style: normal;
   font-weight: 400;
   /* src: url(./flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2'); */
-  src: url(https://fonts-gstatic.proxy.ustclug.org/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+  src: url(https://fonts-gstatic.proxy.ustclug.org/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2)
+    format('woff2');
 }
 
 .material-icons {

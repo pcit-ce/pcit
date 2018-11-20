@@ -36,7 +36,7 @@
   padding-top: 10px;
 }
 
-@media screen and (min-width: 992px){
+@media screen and (min-width: 992px) {
   .job_list .job_env_vars {
     /*background: yellow;*/
     position: absolute;
@@ -58,6 +58,7 @@
     /*background: rebeccapurple;*/
     position: absolute;
     right: 10px;
+    top: 5px;
   }
 }
 
@@ -82,7 +83,7 @@
     /*background: rebeccapurple;*/
     position: absolute;
     right: 10px;
-    top:30px;
+    top: 30px;
   }
 }
 
@@ -110,7 +111,7 @@
   }
 }
 
-@media screen and (max-width: 446px){
+@media screen and (max-width: 446px) {
   .job_list .job_run_time {
     position: absolute;
     left: 200px;

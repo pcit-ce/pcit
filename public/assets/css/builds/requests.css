@@ -1,11 +1,11 @@
 .requests_list {
-    border: 1px solid #f1f1f1;
-    margin-bottom: 10px;
-    /* position: relative; */
-    /* height: 30px; */
-    font-size: 19px;
-    margin-left: 0;
-    margin-right: 0;
+  border: 1px solid #f1f1f1;
+  margin-bottom: 10px;
+  /* position: relative; */
+  /* height: 30px; */
+  font-size: 19px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* .requests_list {
@@ -14,9 +14,9 @@
 } */
 
 .requests_list a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .requests_list a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }

@@ -34,7 +34,7 @@
     "webpack-dev": "cross-env node_modules/.bin/webpack-cli --mode=development",
     "webpack-pro": "cross-env node_modules/.bin/webpack-cli --mode=production",
     "build": "npm run webpack-pro",
-    "prettier": "npx prettier --write ./**/*.js ./**/*.ts"
+    "prettier": "npx prettier --write ./**/*.js ./**/*.ts ./**/*.css"
   },
   "license": "MIT",
   "keywords": [

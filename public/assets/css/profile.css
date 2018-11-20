@@ -1,9 +1,9 @@
-@import "common/body.css";
-@import "common/footer.css";
-@import "cdn/google-material-icons.css";
+@import 'common/body.css';
+@import 'common/footer.css';
+@import 'cdn/google-material-icons.css';
 
 footer {
-    margin-top: 100px;
+  margin-top: 100px;
 }
 
 /*body{*/
@@ -11,25 +11,25 @@ footer {
 /*}*/
 
 #userinfo {
-    margin-top: 40px;
-    /*float: left;*/
-    /*margin-left: 15%;*/
-    /*width: 250px;*/
+  margin-top: 40px;
+  /*float: left;*/
+  /*margin-left: 15%;*/
+  /*width: 250px;*/
 }
 
 #userinfo .my_account {
-    color: rgb(157, 157, 157);
+  color: rgb(157, 157, 157);
 }
 
 #details {
-    margin-top: 30px;
-    /*margin-left: 600px;*/
-    /*padding-left: 100px;*/
-    padding-bottom: 17px;
+  margin-top: 30px;
+  /*margin-left: 600px;*/
+  /*padding-left: 100px;*/
+  padding-bottom: 17px;
 }
 
 #username {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /*#user {*/
@@ -37,57 +37,57 @@ footer {
 /*}*/
 
 #user a {
-    text-decoration: none;
-    font-size: 20px;
-    color: blue;
+  text-decoration: none;
+  font-size: 20px;
+  color: blue;
 }
 
 #user a:hover {
-    text-decoration: none;
-    font-size: 20px;
+  text-decoration: none;
+  font-size: 20px;
 }
 
 #orgs {
-    /*float: left;*/
-    /*margin-left: 15%;*/
-    /*width: 350px;*/
-    margin-top: 30px;
+  /*float: left;*/
+  /*margin-left: 15%;*/
+  /*width: 350px;*/
+  margin-top: 30px;
 }
 
 #orgs .organization {
-    color: rgb(157, 157, 157);
+  color: rgb(157, 157, 157);
 }
 
 #orgs .org_name {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #repos {
-    /*position: relative;*/
-    /*margin-left: 30px;*/
-    /*height: 180px;*/
-    margin-top: 60px;
+  /*position: relative;*/
+  /*margin-left: 30px;*/
+  /*height: 180px;*/
+  margin-top: 60px;
 }
 
 #repos .repo_item > a {
-    text-decoration: none;
-    line-height: 60px;
-    font-size: 25px;
-    color: rgb(3, 102, 214);
+  text-decoration: none;
+  line-height: 60px;
+  font-size: 25px;
+  color: rgb(3, 102, 214);
 }
 
 #repos .repo_full_name:hover {
-    text-decoration: underline;
-    color: rgb(3, 102, 214);
+  text-decoration: underline;
+  color: rgb(3, 102, 214);
 }
 
 #repos .repo_item .toggle {
-    margin-top: 15px;
-    color: black;
+  margin-top: 15px;
+  color: black;
 }
 
 #repos .repo_item .toggle:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /*#repos .repo_full_name {*/
@@ -109,19 +109,19 @@ footer {
 /*}*/
 
 .progress {
-    margin-top: 15px;
-    width: 140px;
+  margin-top: 15px;
+  width: 140px;
 }
 
 .header_img {
-    width: 110px;
-    height: 110px;
+  width: 110px;
+  height: 110px;
 }
 
 .details_usernickname {
-    font-size: 40px;
+  font-size: 40px;
 }
 
 .details_username {
-    color: rgb(157, 157, 157);
+  color: rgb(157, 157, 157);
 }

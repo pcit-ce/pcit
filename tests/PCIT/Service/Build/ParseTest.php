@@ -36,6 +36,6 @@ class ParseTest extends PCITTestCase
             'vendor/bin/phpunit',
         ]);
 
-        $this->assertEquals(168, \strlen($command));
+        $this->assertEquals(180, \strlen($command));
     }
 }

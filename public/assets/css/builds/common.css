@@ -1,28 +1,26 @@
 .repo_title {
-    font-size: 36px;
+  font-size: 36px;
 }
 
 .repo_title a {
-    text-decoration: none;
-    color: #666666;
+  text-decoration: none;
+  color: #666666;
 }
 
 .repo_title a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .repo_title .h1_git_type {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .repo_title .h1_username {
-
 }
 
 .repo_title .h1_repo {
-
 }
 
 .repo_title .h1_status {
-    margin-left: 10px;
+  margin-left: 10px;
 }

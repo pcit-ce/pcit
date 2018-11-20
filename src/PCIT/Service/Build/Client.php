@@ -31,6 +31,8 @@ class Client
 
     public $job_id;
 
+    public $language;
+
     /**
      * @param $build
      *
@@ -69,6 +71,7 @@ class Client
         // 解析 .pcit.yml.
         $yaml_obj = json_decode($this->build->config);
 
+        $this->language = $language = $yaml_obj->language ?? 'php';
         $git = $yaml_obj->clone->git ?? null;
         $cache = $yaml_obj->cache ?? null;
         $workspace = $yaml_obj->workspace ?? null;

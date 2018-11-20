@@ -1,74 +1,76 @@
 .setting label {
-    display: block;
-    line-height: 30px;
-    font-size: 18px;
+  display: block;
+  line-height: 30px;
+  font-size: 18px;
 }
 
 .setting .general {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
-.setting .auto_cancellation, .env, .cron {
-    margin-top: 20px;
+.setting .auto_cancellation,
+.env,
+.cron {
+  margin-top: 20px;
 }
 
 .setting .setting_title {
-    font-size: 20px;
-    color: rgb(62, 170, 175);
-    margin-bottom: 10px;
+  font-size: 20px;
+  color: rgb(62, 170, 175);
+  margin-bottom: 10px;
 }
 
-.setting [name=maximum_number_of_builds] {
-    width: 40px;
-    margin-left: 10px;
+.setting [name='maximum_number_of_builds'] {
+  width: 40px;
+  margin-left: 10px;
 }
 
 .setting .env_list_item {
-    height: 40px;
-    position: relative;
-    background: #f1f1f1;
-    margin-bottom: 15px;
-    margin-top: 20px;
+  height: 40px;
+  position: relative;
+  background: #f1f1f1;
+  margin-bottom: 15px;
+  margin-top: 20px;
 }
 
 .setting .env_list_item .env_name {
-    /*background: red;*/
-    width: 400px;
-    /*position: absolute;*/
+  /*background: red;*/
+  width: 400px;
+  /*position: absolute;*/
 }
 
 .setting .env_list_item .env_value {
-    /*background: yellow;*/
-    position: absolute;
-    left: 500px;
-    width: 400px;
+  /*background: yellow;*/
+  position: absolute;
+  left: 500px;
+  width: 400px;
 }
 
 .setting .env_list_item button {
-    position: absolute;
-    right: 0;
+  position: absolute;
+  right: 0;
 }
 
 .setting .new_env {
-    position: relative;
-    margin-top: 50px;
+  position: relative;
+  margin-top: 50px;
 }
 
 .setting .new_env .name {
-    width: 300px;
+  width: 300px;
 }
 
 .setting .new_env .value {
-    width: 300px;
-    margin-left: 50px;
+  width: 300px;
+  margin-left: 50px;
 }
 
 .setting .new_env .is_public {
-    position: absolute;
-    left: 700px;
+  position: absolute;
+  left: 700px;
 }
 
 .setting .new_env button {
-    position: absolute;
-    right: 0;
+  position: absolute;
+  right: 0;
 }

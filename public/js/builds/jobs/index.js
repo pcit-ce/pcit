@@ -13,12 +13,14 @@ function display(job_data, build_data, url) {
   job_data.status = job_data.state;
   job_data.branch = build_data.branch;
 
+  $('#display').empty();
+
   details.show(job_data, url, true);
 
   // display log
   log.show(job_data.log);
 
-  let column_el = $('#pull_requests');
+  // let column_el = $('#pull_requests');
 }
 
 module.exports = {

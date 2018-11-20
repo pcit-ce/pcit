@@ -70,7 +70,7 @@ class Parse
 
         $content .= 'echo;echo\n\necho "==>" Pipeline '.$setup.' Run On "=>" '.$image;
 
-        $content .= '\n\necho;echo\n\nset -x\n\n';
+        $content .= '\n\nsleep 0.1;echo;echo\n\nset -x\n\n';
 
         for ($i = 0; $i < \count($commands); ++$i) {
             $command = addslashes($commands[$i]);

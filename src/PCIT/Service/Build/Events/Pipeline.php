@@ -7,6 +7,9 @@ namespace PCIT\Service\Build\Events;
 use Exception;
 use PCIT\PCIT as PCIT;
 use PCIT\Service\Build\BuildData;
+use PCIT\Service\Build\CIDefault\Commands;
+use PCIT\Service\Build\CIDefault\Image;
+use PCIT\Service\Build\CIDefault\Status as CIDefaultStatus;
 use PCIT\Service\Build\Client;
 use PCIT\Service\Build\Conditional\Branch;
 use PCIT\Service\Build\Conditional\Event;
@@ -57,10 +60,12 @@ class Pipeline
         foreach ($this->pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
 
-            $image = $array->image;
-            $commands = $array->commands ?? null;
+            $language = $this->client->language ?? 'php';
+
+            $image = $array->image ?? Image::get($language);
+            $commands = $array->commands ?? $array->command ?? Commands::get($language, $setup);
             $env = $array->environment ?? [];
-            $status = $array->when->status ?? null;
+            $status = $array->when->status ?? CIDefaultStatus::get($setup);
             $shell = $array->shell ?? 'sh';
 
             $when_platform = $array->when->platform ?? null;

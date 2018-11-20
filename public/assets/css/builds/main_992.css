@@ -1,4 +1,4 @@
-@media screen and (max-width:992px) {
+@media screen and (max-width: 992px) {
   .build_data {
     height: 400px;
   }
@@ -68,7 +68,7 @@
     /* width: 900px; */
     /* width:auto; */
     top: 290px;
-    word-break: break-all
+    word-break: break-all;
   }
 
   .more_options {

@@ -44,7 +44,7 @@ class Services
             $image = $array->image;
             $env = $array->environment ?? null;
             $entrypoint = $array->entrypoint ?? null;
-            $command = $array->command ?? null;
+            $commands = $array->commands ?? $array->command ?? null;
 
             $image = Parse::image($image, $this->matrix_config);
 
@@ -59,7 +59,7 @@ class Services
                     'com.khs1994.ci' => (string) $this->job_id,
                 ])
                 ->setImage($image)
-                ->setCmd($command)
+                ->setCmd($commands)
                 ->setNetworkingConfig([
                     'EndpointsConfig' => [
                         "$this->job_id" => [

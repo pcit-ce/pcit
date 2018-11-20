@@ -31,8 +31,9 @@ pipeline:
   # before_install:
 
   install:
-    image: khs1994/php:7.2.12-composer-alpine
-    commands:
+    # image: khs1994/php:7.2.12-composer-alpine
+    # commands or command
+    command:
       - pwd
       - composer install
       # - composer update
@@ -128,30 +129,17 @@ pipeline:
     # - DOCKER_USERNAME=username
     # - DOCKER_PASSWORD=password
 
-  # This is success after demo
-  after_success:
-    image: khs1994/php:${PHP_VERSION}-composer-alpine
-    shell: bash
-    when:
-      status: success
-    # please set env in settings
-    environment:
-      # - CODECOV_TOKEN=XXX
-      - PCIT_OS_NAME=linux
-    commands:
-      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
-
   php-cs-fixer:
-    image: khs1994/php:7.2.12-composer-alpine
+    # image: khs1994/php:7.2.12-composer-alpine
     commands:
       - php-cs-fixer fix
 
   sami:
-    image: khs1994/php:7.2.12-composer-alpine
+    # image: khs1994/php:7.2.12-composer-alpine
     when:
       status: success
-    commands:
-      - sami update .sami.php
+    # commands:
+    #  - sami update .sami.php
 
   pages:
     image: khs1994/pages
@@ -196,10 +184,23 @@ pipeline:
       - "CHANGELOG.md"
       - "ROADMAP.md"
 
+  # This is success after demo
+  after_success:
+    # image: khs1994/php:7.2.12-composer-alpine
+    shell: bash
+    # when:
+    #   status: success
+    # please set env in settings
+    environment:
+      # - CODECOV_TOKEN=XXX
+      - PCIT_OS_NAME=linux
+    commands:
+      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
+
   after_failure:
     image: bash
-    when:
-      status: failure
+    # when:
+    #   status: failure
     commands:
       - echo "build failure"
 
@@ -207,10 +208,10 @@ pipeline:
   # This is build status changed demo,example prev success current failure
   #
 
-  changed:
+  after_changed:
     image: bash
-    when:
-      status: changed
+    # when:
+    #   status: changed
     commands:
       - echo "build changed"
 
