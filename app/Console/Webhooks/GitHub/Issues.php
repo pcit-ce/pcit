@@ -65,7 +65,7 @@ class Issues
             return;
         }
 
-        self::checkTitle($repo_full_name, $issue_number, $rid, $title);
+        self::translateTitle($repo_full_name, (int) $issue_number, (int) $rid, $title);
 
         self::createComment($rid, $repo_full_name, $issue_number, $body);
 
@@ -90,11 +90,21 @@ class Issues
      *
      * @throws \Exception
      */
-    public static function checkTitle($repo_full_name, $issue_number, $rid, $title): void
+    public static function translateTitle(string $repo_full_name,
+                                          int $issue_number,
+                                          ?int $rid,
+                                          ?string $title): void
     {
-        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
+        $access_token = GetAccessToken::getGitHubAppAccessToken($rid ?: null, $repo_full_name);
 
         $app = new PCIT(['github_access_token' => $access_token]);
+
+        if (!$title) {
+            // get issue title
+            $result = $app->issue->getSingle($repo_full_name, $issue_number);
+
+            $title = \json_decode($result)->title;
+        }
 
         try {
             $result = $app->tencent_ai->translate->detect($title);
@@ -102,7 +112,7 @@ class Issues
             $lang = $result['data']['lang'] ?? 'en';
 
             if ('zh' === $lang) {
-                $result = $app->tencent_ai->translate->aILabText($title);
+                $result = $app->tencent_ai->translate->aILabText($title, 1);
 
                 $title = $result['data']['trans_text'] ?? null;
             }

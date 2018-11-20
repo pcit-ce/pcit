@@ -60,15 +60,17 @@ class GetAccessToken
     }
 
     /**
-     * @param $rid
+     * @param             $rid
+     * @param string|null $repo_full_name
      *
      * @return mixed
      *
      * @throws Exception
      */
-    public static function getGitHubAppAccessToken($rid)
+    public static function getGitHubAppAccessToken($rid, string $repo_full_name = null)
     {
-        $installation_id = Repo::getGitHubInstallationIdByRid((int) $rid);
+        $installation_id = $rid ? Repo::getGitHubInstallationIdByRid((int) $rid)
+            : Repo::getGitHubInstallationIdByRepoFullName($repo_full_name);
 
         if (!$installation_id) {
             throw new Exception('installation_id is error', 500);

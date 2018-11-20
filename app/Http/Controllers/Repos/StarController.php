@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Builds;
+namespace App\Http\Controllers\Repos;
 
 use App\Http\Controllers\Users\JWTController;
 

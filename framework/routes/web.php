@@ -198,8 +198,8 @@ Route::get('api/repo/{git_type}/{username}/{repo_name}/status', 'Builds\ShowStat
 Route::post('api/repo/{username}/{repo_name}/activate', 'Builds\ActiveController@activate');
 Route::post('api/repo/{username}/{repo_name}/deactivate', 'Builds\ActiveController@deactivate');
 
-Route::post('api/repo/{username}/{repo_name}/star', 'Builds\StarController');
-Route::post('api/repo/{username}/{repo_name}/unstar', 'Builds\StarController@unstar');
+Route::post('api/repo/{username}/{repo_name}/star', 'Repos\StarController');
+Route::post('api/repo/{username}/{repo_name}/unstar', 'Repos\StarController@unstar');
 
 /* Log */
 
@@ -240,6 +240,11 @@ Route::post('wechat', 'WeChat\MessageServer');
 Route::get('api/ci/oauth_client_id', 'System\SystemController@getOAuthClientId');
 Route::get('api/ci/github_app_installation/{uid}', 'System\SystemController@getGitHubAppInstallationUrl');
 Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@getGitHubAppSettingsUrl');
+
+/* Issues */
+
+Route::patch('api/repo/${username}/${repo_name}/issues/translate/${issue_number}',
+    'Repos\Issues@translate');
 
 /* Demo */
 Route::get('websocket/server', 'Demo\WebSocket\WebSocketController');

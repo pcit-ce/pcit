@@ -61,10 +61,16 @@ class Agent extends Kernel
 
             Job::updateFinishedAt((int) $job_id, time());
 
-            $subject
-                ->register(new LogHandle((int) $job_id))
-                ->register(new UpdateBuildStatus((int) $job_id, $config, $e->getMessage()))
-                ->handle();
+            try {
+                $subject
+                    ->register(new LogHandle((int) $job_id))
+                    ->register(new UpdateBuildStatus((int) $job_id, $config, $e->getMessage()))
+                    ->handle();
+            } catch (\Throwable $e) {
+                // catch curl error (timeout,etc)
+                Log::debug(__FILE__, __LINE__,
+                    $e->getMessage(), [], LOG::EMERGENCY);
+            }
         }
 
         // 恢复缓存队列
