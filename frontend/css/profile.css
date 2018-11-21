@@ -19,6 +19,7 @@ footer {
 
 #userinfo .my_account {
   color: rgb(157, 157, 157);
+  margin-bottom: 0;
 }
 
 #details {
@@ -29,7 +30,14 @@ footer {
 }
 
 #username {
+  padding-top: 10px;
   cursor: pointer;
+  margin-bottom: 0;
+  padding-bottom: 11px;
+}
+
+#sync {
+  margin-top: 10px;
 }
 
 /*#user {*/
@@ -59,7 +67,10 @@ footer {
 }
 
 #orgs .org_name {
+  height: 50px;
   cursor: pointer;
+  padding-top: 12px;
+  /* background-color: #f4f9f9;  */
 }
 
 #repos {
@@ -124,4 +135,10 @@ footer {
 
 .details_username {
   color: rgb(157, 157, 157);
+}
+
+@media screen and (min-width: 768px) {
+  .orgs_hr {
+    display: none;
+  }
 }

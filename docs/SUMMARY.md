@@ -48,3 +48,11 @@
 * [CLI](cli/README.md)
     * [Tencent AI](cli/tencent-ai-cli/README.md)
     * [GitHub](cli/github-cli/README.md)
+
+## Terms of Service
+
+* [Terms of Service](terms-of-service.md)
+
+## Privacy Policy
+
+* [Privacy Policy](privacy-policy.md)

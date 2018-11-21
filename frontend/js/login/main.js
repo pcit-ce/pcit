@@ -65,3 +65,7 @@ new Vue({
     },
   },
 });
+
+const footer = require('../common/footer.js');
+
+footer.show();

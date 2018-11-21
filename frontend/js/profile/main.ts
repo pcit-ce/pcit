@@ -140,20 +140,16 @@ function list_repos(data: object) {
 
 // show org list
 function showOrg(data: any) {
-  let count = data.length;
-
   $.each(data, (num: number, org: any) => {
     let { username: org_name } = org;
 
-    $('.orgs')
-      .append(
-        $('<p class="org_name"></p>')
-          .append(org_name)
-          .attr({
-            org_name: org_name,
-          }),
-      )
-      .css('height', count * 50);
+    $('.orgs').append(
+      $('<p class="org_name"></p>')
+        .append(org_name)
+        .attr({
+          org_name: org_name,
+        }),
+    );
   });
 }
 
@@ -239,6 +235,12 @@ function get_userdata(): any {
 }
 
 function click_user() {
+  $('#orgs .org_name').css({ 'background-color': 'white', color: 'black' });
+
+  $('#username').css({
+    'background-color': '#f4f9f9',
+    color: 'rgb(3, 102, 214)',
+  });
   (async () => {
     let data = await get_userdata();
 
@@ -447,6 +449,11 @@ $('#sync').on('click', function() {
 });
 
 $(document).on('click', '.org_name', function() {
+  $('#username').css({ 'background-color': 'white', color: 'black' });
+
+  $('#orgs .org_name').css({ 'background-color': 'white', color: 'black' });
+
+  $(this).css({ 'background-color': '#f4f9f9', color: 'rgb(3, 102, 214)' });
   click_org($(this).attr('org_name'));
 });
 

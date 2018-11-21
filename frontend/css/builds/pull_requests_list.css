@@ -108,7 +108,7 @@
   /*float: left;*/
   position: absolute;
   left: 532px;
-  top: 0;
+  top: 5px;
   font-size: 16px;
   font-weight: 500;
   line-height: 18px;
@@ -121,7 +121,7 @@
   /*float: left;*/
   position: absolute;
   left: 700px;
-  top: 0;
+  top: 2px;
   color: #666666;
 }
 

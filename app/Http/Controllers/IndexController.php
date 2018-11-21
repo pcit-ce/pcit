@@ -110,19 +110,14 @@ class IndexController
         return $array;
     }
 
-    public function docs()
+    public function docs(): void
     {
-        return [
-            'code' => 200,
-            'data' => 'https://github.com/khs1994-php/pcit/tree/master/docs',
-        ];
+        Response::redirect('https://github.com/khs1994-php/pcit/tree/master/docs');
     }
 
-    public function plugins()
+    public function plugins(): void
     {
-        $data = 'https://docs.ci.khs1994.com/plugins/';
-
-        return compact('data');
+        Response::redirect('https://docs.ci.khs1994.com/plugins/');
     }
 
     public function sitemap()
@@ -234,35 +229,25 @@ class IndexController
         ];
     }
 
-    public function status()
+    public function status(): void
     {
-        return [
-            'code' => 200,
-            'status' => 'https://status.khs1994.com',
-        ];
+        Response::redirect('https://status.khs1994.com');
     }
 
-    public function team()
+    public function team(): void
     {
-        return [
-            'code' => 200,
-            'team' => 'https://github.com/khs1994-php/pcit/graphs/contributors',
-        ];
+        Response::redirect('https://github.com/khs1994-php/pcit/graphs/contributors');
     }
 
-    public function wechat()
+    public function wechat(): void
     {
-        return [
-            'code' => 200,
-            'data' => 'https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg',
-        ];
+        Response::redirect(
+            'https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg');
     }
 
-    public function changelog()
+    public function changelog(): void
     {
-        $data = 'https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md';
-
-        return compact('data');
+        Response::redirect('https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md');
     }
 
     public function donate(): void
@@ -270,49 +255,33 @@ class IndexController
         Response::redirect('https://zan.khs1994.com');
     }
 
-    public function issues()
+    public function issues(): void
     {
-        $data = 'https://github.com/khs1994-php/pcit/issues';
-
-        return compact('data');
+        Response::redirect('https://github.com/khs1994-php/pcit/issues');
     }
 
-    public function ce()
+    public function ce(): void
     {
-        $data = 'https://docs.ci.khs1994.com/install/ce.html';
-
-        return compact('data');
+        Response::redirect('https://docs.ci.khs1994.com/install/ce.html');
     }
 
-    public function ee()
+    public function ee(): void
     {
-        $data = 'https://docs.ci.khs1994.com/install/ee.html';
-
-        return compact('data');
+        Response::redirect('https://docs.ci.khs1994.com/install/ee.html');
     }
 
-    public function why()
+    public function why(): void
     {
-        $data = 'https://docs.ci.khs1994.com/why.html';
-
-        return compact('data');
+        Response::redirect('https://docs.ci.khs1994.com/why.html');
     }
 
-    public function privacy_policy()
+    public function privacy_policy(): void
     {
-        $data = '我们会充分利用 Git API 提供的数据以实现更加智能的 CI 工具集（CI TOOLKIT）';
-
-        return compact('data');
+        Response::redirect('https://docs.ci.khs1994.com/privacy-policy.html');
     }
 
-    public function terms_of_service()
+    public function terms_of_service(): void
     {
-        $data = <<<EOF
-1. 我们会在不影响用户体验的前提下，尽一切可能在包括但不仅限于仓库主页，构建页面等加入广告。
-2.任何个人或组织不得将 PCIT 用于商业用途。
-3.严禁修改 PCIT 源码进行二次打包。
-EOF;
-
-        return compact('data');
+        Response::redirect('https://docs.ci.khs1994.com/terms-of-service.html');
     }
 }

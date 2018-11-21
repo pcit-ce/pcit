@@ -32,6 +32,10 @@ module.exports.show = () => {
         <li class="nav-item">
           <a class="nav-link" target="_blank" href="//ci.khs1994.com/donate">Donate</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61">
+          Try Kubernetes</a></div>
+        </li>
     </ul>
     </div>
     </div>
