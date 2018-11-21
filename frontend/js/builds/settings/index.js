@@ -168,8 +168,8 @@ function display(data, url, token) {
           key === 'maximum_number_of_builds'
             ? value
             : value === '1'
-            ? '1'
-            : '0',
+              ? '1'
+              : '0',
         );
     });
   }

@@ -8,18 +8,18 @@ FROM node:${NODE_VERSION}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
-COPY public/package.json /app/pcit/public/
+COPY frontend/package.json /app/pcit/frontend/
 
-RUN cd /app/pcit/public \
+RUN cd /app/pcit/frontend \
       && npm install cross-env --registry=${NODE_REGISTRY} \
       && npm install --registry=${NODE_REGISTRY} --production
 
-COPY ./public/webpack.config.js /app/pcit/public/
-COPY ./public/js /app/pcit/public/js
-COPY ./public/demo /app/pcit/public/demo
-COPY ./public/css /app/pcit/public/css
+COPY ./frontend/webpack.config.js /app/pcit/frontend/
+COPY ./frontend/js /app/pcit/frontend/js
+COPY ./frontend/html /app/pcit/frontend/html
+COPY ./frontend/css /app/pcit/frontend/css
 
-RUN cd /app/pcit/public \
+RUN cd /app/pcit/frontend \
       # && set PATH=./node_modules/.bin:$PATH \
       && npm run build
 
@@ -36,7 +36,7 @@ FROM khs1994/php:${PHP_VERSION}-fpm-alpine as php
 
 COPY . /app/pcit
 COPY --from=composer /app/pcit/vendor /app/pcit/vendor
-COPY --from=frontend /app/pcit/public/assets/js /app/pcit/public/assets/js
+COPY --from=frontend /app/pcit/public/ /app/pcit/public/
 
 CMD ["/app/pcit/bin/pcitd", "up"]
 

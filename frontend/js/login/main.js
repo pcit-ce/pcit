@@ -1,5 +1,7 @@
 'use strict';
 
+import css from '../../css/login.css';
+
 /* eslint-disable no-undef */
 
 // eslint-disable-next-line no-unused-vars

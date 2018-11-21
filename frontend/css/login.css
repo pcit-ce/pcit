@@ -1,7 +1,8 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Source Sans Pro', serif;
+  font-family: 'Microsoft YaHei', 'PingFangSC-Regular', tahoma, arial,
+    sans-serif;
 }
 
 #pcit_ico {

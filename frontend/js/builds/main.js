@@ -1,5 +1,7 @@
 'use strict';
 
+import css from '../../css/builds.css';
+
 const header = require('../common/header');
 const footer = require('../common/footer');
 const git = require('../common/git');

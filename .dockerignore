@@ -4,9 +4,15 @@
 vendor
 composer.lock
 
-public/node_modules
-public/package-lock.json
-public/assets/js
+frontend/node_modules
+frontend/package-lock.json
+frontend/assets/js
+
+/public/*
+!/public/demo
+!/public/index.php
+!/public/ico
+!/public/robots.txt
 
 .env.*
 .env

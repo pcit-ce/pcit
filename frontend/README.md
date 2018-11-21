@@ -1,5 +1,9 @@
 # PCIT 前端
 
+## 前端开发目录
+
+未来可能分离到 https://github.com/khs1994-php/pcit-ui
+
 ## 前端页面
 
 * `profile` 个人主页 `/profile/github/khs1994`
@@ -32,7 +36,7 @@
 
 ```bash
 # global
-$ npm i -g cross-env 
+$ npm i -g cross-env
 
 # local
 $ npm install
@@ -45,7 +49,7 @@ $ npm install
 ```bash
 $ npm run webpack-pro
 
-# or 
+# or
 
 $ npm run build
 ```

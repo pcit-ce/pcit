@@ -1,6 +1,6 @@
-test
-
-# TODO
-# /assets
-
-yarn.lock
+/*
+!.gitignore
+!ico
+!index.php
+!demo
+!robots.txt

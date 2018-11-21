@@ -185,7 +185,7 @@ pipeline:
       - "ROADMAP.md"
 
   # This is success after demo
-  after_success:
+  codecov:
     # image: khs1994/php:7.2.12-composer-alpine
     shell: bash
     # when:
@@ -196,6 +196,10 @@ pipeline:
       - PCIT_OS_NAME=linux
     commands:
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
+
+  after_success:
+    command:
+      - echo "after success"
 
   after_failure:
     image: bash
@@ -256,10 +260,10 @@ matrix:
   NGINX_VERSION:
     - 1.15.6
   REDIS_VERSION:
-    - 5.0.0
+    - 5.0.1
   MYSQL_VERSION:
-    - 5.7.23
-    # - 8.0.12
+    - 5.7.24
+    # - 8.0.13
   # MONGODB_VERSION:
     # - 4.1.4
   # POSTGRESQL_VERSION:

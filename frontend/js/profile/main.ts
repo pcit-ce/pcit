@@ -1,5 +1,7 @@
 'use strict';
 
+const css = require('../../css/profile.css');
+
 const header = require('../common/header');
 const footer = require('../common/footer');
 const git = require('../common/git');
