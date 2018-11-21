@@ -1,5 +1,3 @@
-'use strict';
-
 const git = require('../../common/git');
 
 /*
@@ -74,7 +72,7 @@ function display_username(username_data, git_type = 'github') {
 
   username_data = username_data[0];
 
-  console.log(username_data);
+  // console.log(username_data);
 
   new Vue({
     el: '#username_display',

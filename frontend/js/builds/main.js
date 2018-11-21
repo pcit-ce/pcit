@@ -1,5 +1,3 @@
-'use strict';
-
 import css from '../../css/builds.css';
 
 const header = require('../common/header');
@@ -25,8 +23,10 @@ const token = require('../common/token');
 
 header.show();
 footer.show();
+
 const on_event = require('./on');
 
+// 游客模式 隐藏部分按钮
 if (!token.getToken(url.getGitType())) {
   $('.more_options .auth').hide();
 }
@@ -104,7 +104,7 @@ function column_el_click(id, change_url = true) {
       break;
 
     case 'trigger_build':
-      trigger_build.handle(url, token);
+      trigger_build.handle(url);
       break;
 
     case 'jobs':
@@ -137,7 +137,7 @@ $('.column .col-md-1').on({
     let target = event.target;
     let id = target.id;
 
-    console.log(id);
+    // console.log(id);
 
     column_el_click(id);
     common.column_remove();
@@ -153,7 +153,7 @@ $('.column .col-md-1').on({
 
 $('.more_options').on({
   click: function(event) {
-    console.log(url.getUrlWithArray());
+    // console.log(url.getUrlWithArray());
 
     let id = event.target.id;
 
@@ -166,6 +166,11 @@ $('.more_options').on({
     // }
 
     column_el_click(id); // 渲染 display 页面
+
+    if (id === 'trigger_build') {
+      return;
+    }
+
     common.column_remove(); // 移除其他元素
     common.column_click_handle(id); // 增加元素
   },
@@ -269,7 +274,7 @@ jQuery(document).ready(function() {
 
   $('#repo').append(content);
 
-  console.log(type);
+  // console.log(type);
 
   common.column_remove(); // 移除 column
   column_el_click(type, false); // 渲染 display 页面
@@ -289,7 +294,7 @@ jQuery(document).ready(function() {
 // 处理回退事件
 window.onpopstate = event => {
   let id = event.state.key_id;
-  console.log(id);
+  // console.log(id);
 
   column_el_click(id, false); // 渲染 display 页面
   common.column_remove(); // 移除 column

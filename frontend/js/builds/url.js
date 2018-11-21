@@ -1,5 +1,3 @@
-'use strict';
-
 const git = require('../common/git');
 const app = require('../common/app');
 

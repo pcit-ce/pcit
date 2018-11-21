@@ -1,5 +1,3 @@
-'use strict';
-
 function get_env(url, token) {
   return new Promise(resolve => {
     $.ajax({
@@ -177,7 +175,7 @@ function display(data, url, token) {
 
 module.exports = {
   handle: (url, token) => {
-    console.log(location.href);
+    // console.log(location.href);
     $.ajax({
       type: 'get',
       url: '/api/repo/' + url.getRepoFullName() + '/settings',

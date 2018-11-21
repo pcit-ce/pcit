@@ -1,5 +1,3 @@
-'use strict';
-
 const { column_span_click } = require('../common');
 const build = require('../builds');
 const error_info = require('../error/error').error_info;

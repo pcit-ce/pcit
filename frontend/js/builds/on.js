@@ -1,5 +1,3 @@
-'use strict';
-
 const url = require('./url');
 const common = require('./common');
 const title = require('./title');
@@ -68,13 +66,13 @@ $(document).on('click', '.env_list_item .delete', function() {
 $(document).on('click', '.new_env input[name="is_public"]', function() {
   let that = $(this);
 
-  console.log(that.attr('value') === '0');
+  // console.log(that.attr('value') === '0');
 
   that.attr('value') === '0'
     ? that.prop('checked', 'checked').prop('value', '1')
     : that.prop('checked', false).prop('value', '0');
 
-  console.log(that.prop('checked'));
+  // console.log(that.prop('checked'));
 });
 
 $(document).on('click', '.new_env button', function() {
@@ -92,9 +90,9 @@ $(document).on('click', '.new_env button', function() {
     .prev()
     .val();
 
-  console.log(is_public);
-  console.log(value);
-  console.log(name);
+  // console.log(is_public);
+  // console.log(value);
+  // console.log(name);
 
   // 发起请求
   function getData() {
@@ -115,7 +113,7 @@ $(document).on('click', '.new_env button', function() {
 
   (async () => {
     let id = await getData();
-    console.log(id);
+    // console.log(id);
     // 增加列表
     let env_el = $('.env_list_item:nth-last-of-type(2)');
 
@@ -187,7 +185,7 @@ $(document).on(
 $('.column').click(function(event) {
   let id = event.target.id;
 
-  console.log('事件冒泡 ' + id);
+  // console.log('事件冒泡 ' + id);
 
   if (id === 'more_options') {
     return;
@@ -211,7 +209,7 @@ $('.trigger_build_modal_button').on('click', () => {
 
   let config = $('#trigger_build_config').val();
 
-  console.log(config);
+  // console.log(config);
 
   let request_url = '/api/repo/' + url.getRepoFullName() + '/trigger/' + branch;
 
@@ -242,7 +240,7 @@ $('.trigger_build_modal_button').on('click', () => {
       common.column_click_handle('build'); // 渲染被点击的 column
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
     });
 });
 

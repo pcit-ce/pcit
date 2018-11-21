@@ -1,5 +1,3 @@
-'use strict';
-
 function mouseoutMethod(event) {
   event.target.style.color = 'black';
   event.target.style.borderBottomStyle = 'none';

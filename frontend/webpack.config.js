@@ -1,5 +1,3 @@
-'use strict';
-
 // const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 分离 css 文件

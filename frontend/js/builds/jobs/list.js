@@ -1,5 +1,3 @@
-'use strict';
-
 const common_status = require('../../common/status');
 
 // list builds all jobs

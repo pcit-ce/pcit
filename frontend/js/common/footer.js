@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports.show = () => {
   $('footer').append(`
       <div class="row">

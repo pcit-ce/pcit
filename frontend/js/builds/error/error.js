@@ -1,5 +1,3 @@
-'use strict';
-
 function error_info(
   header,
   title = '',
@@ -44,7 +42,6 @@ function error_info(
             .attr({
               src:
                 'https://user-images.githubusercontent.com/16733187/41330207-9416717c-6f04-11e8-961f-c606303e7bb5.jpg',
-              alt: 'card image',
             })
             .css({ 'margin-top': '20px' }),
         ),

@@ -1,5 +1,3 @@
-'use strict';
-
 const status = require('../../common/status');
 const git = require('../../common/git');
 const error_info = require('../error/error').error_info;

@@ -1,12 +1,10 @@
-'use strict';
-
 const details = require('../log/details');
 const list = require('../jobs/list');
 const log = require('../log');
 
 module.exports = {
   show: (data, url) => {
-    console.log(data);
+    // console.log(data);
 
     // 没有 build 数据
     if (!data) {

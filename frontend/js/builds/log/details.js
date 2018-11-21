@@ -1,11 +1,9 @@
-'use strict';
-
 const common_status = require('../../common/status');
 const git = require('../../common/git');
 
 module.exports = {
   show: (data, url, job = false) => {
-    console.log(data);
+    // console.log(data);
     let display_element = $('#display');
 
     let {
@@ -29,7 +27,7 @@ module.exports = {
     status_color = common_status.getColor(status);
     let build_status = common_status.change(status);
 
-    console.log(build_status);
+    // console.log(build_status);
     if (null === stopped_at) {
       stopped_at = 'This build is ' + build_status;
     } else {

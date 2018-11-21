@@ -11,7 +11,7 @@ module.exports = {
     // ecmaVersion: 2015,
     ecmaVersion: 9,
     impliedStrict: true,
-    sourceType: 'script',
+    sourceType: 'module',
   },
   rules: {
     indent: [
@@ -29,7 +29,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    'no-console': 'off',
+    'no-console': 1,
     strict: 2,
     'prettier/prettier': ['error', { trailingComma: 'all' }],
   },

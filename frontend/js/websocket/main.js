@@ -5,7 +5,7 @@ ws.onopen = function() {
 };
 
 ws.onmessage = function(evt) {
-  console.log(evt);
+  // console.log(evt);
 
   let div_el = document.getElementById('message');
   div_el.innerHTML = 1;

@@ -1,5 +1,3 @@
-'use strict';
-
 const details = require('../log/details');
 const log = require('../log');
 

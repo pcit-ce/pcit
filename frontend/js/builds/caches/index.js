@@ -1,5 +1,3 @@
-'use strict';
-
 const error_info = require('../error/error').error_info;
 
 function display(data) {
@@ -13,7 +11,7 @@ function display(data) {
 
 module.exports = {
   handle: (url, token) => {
-    console.log(location.href);
+    // console.log(location.href);
     $.ajax({
       type: 'get',
       url: '/api/repo/' + url.getRepoFullName() + '/caches',

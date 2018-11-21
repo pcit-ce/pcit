@@ -1,5 +1,3 @@
-'use strict';
-
 const { column_span_click } = require('../common');
 const git = require('../../common/git');
 const common_status = require('../../common/status');

@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
   format: gittype => {
     switch (gittype) {

@@ -125,7 +125,7 @@ function list_repos(data: object) {
       .attr('href', ci_host + [git_type, repo_name, 'settings'].join('/'))
       .attr('target', '_blank');
 
-    console.log('github' === git_type);
+    // console.log('github' === git_type);
 
     repo_item_el
       .append(p)
@@ -438,7 +438,7 @@ $('#sync').on('click', function() {
     },
     success: function(data) {
       location.reload();
-      console.log(data);
+      // console.log(data);
     },
   });
 
@@ -480,7 +480,7 @@ $('#repos').on('click', '.open_or_close', function() {
           .text('toggle_off')
           .css('color', 'black')
           .attr('title', 'activate');
-        console.log(data);
+        // console.log(data);
       },
     });
   } else {
@@ -492,7 +492,7 @@ $('#repos').on('click', '.open_or_close', function() {
           .text('toggle_on')
           .css('color', 'rgb(3,102,214)')
           .attr('title', 'disable');
-        console.log(data);
+        // console.log(data);
       },
     });
   }

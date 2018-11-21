@@ -1,5 +1,3 @@
-'use strict';
-
 const token = require('./token');
 const url = require('../builds/url');
 const ucfirst = require('../common/util').ucfirst;

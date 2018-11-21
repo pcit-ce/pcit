@@ -1,5 +1,3 @@
-'use strict';
-
 import css from '../../css/login.css';
 
 /* eslint-disable no-undef */

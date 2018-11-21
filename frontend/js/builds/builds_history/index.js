@@ -1,5 +1,3 @@
-'use strict';
-
 const { column_span_click } = require('../common');
 const git = require('../../common/git');
 const builds = require('../builds');
@@ -13,7 +11,7 @@ function display(data, url) {
 
   let url_array = url.getUrlWithArray();
 
-  console.log(url_array);
+  // console.log(url_array);
 
   if (8 === url_array.length) {
     // 展示某个 build 详情
