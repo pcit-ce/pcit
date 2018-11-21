@@ -38,7 +38,12 @@ COPY . /app/pcit
 COPY --from=composer /app/pcit/vendor /app/pcit/vendor
 COPY --from=frontend /app/pcit/public/ /app/pcit/public/
 
-CMD ["/app/pcit/bin/pcitd", "up"]
+ENTRYPOINT ["/app/pcit/bin/pcitd"]
+
+CMD ["up"]
+# CMD ["server"]
+# CMD ["agent"]
+# CMD ["gc"]
 
 #
 # $ docker build -t khs1994/pcit --target=php .
