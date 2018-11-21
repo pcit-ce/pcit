@@ -98,15 +98,15 @@ module.exports = {
         .attr('title', committer_name),
     );
 
-    div_element.append(
-      $('<a class="compare">Compare </a>')
-        .append('Compare')
-        .attr({
-          title: 'View diff on GitHub',
-          href: compare,
-          target: '_blank',
-        }),
-    );
+    // div_element.append(
+    //   $('<a class="compare"></a>')
+    //     .append('Compare')
+    //     .attr({
+    //       title: 'View diff on GitHub',
+    //       href: compare,
+    //       target: '_blank',
+    //     }),
+    // );
 
     div_element
       .append(

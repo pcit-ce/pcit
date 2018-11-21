@@ -2,14 +2,15 @@
 
 # DROP TABLE IF EXISTS `builds`;
 
-CREATE TABLE IF NOT EXISTS `builds` (
-  `id`                  BIGINT       AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `builds`
+(
+  `id`                  BIGINT AUTO_INCREMENT,
   `git_type`            VARCHAR(20)  DEFAULT 'github_app',
   `rid`                 BIGINT UNSIGNED,
   `event_type`          VARCHAR(20)  DEFAULT 'push'
-  COMMENT 'push tag pr',
+    COMMENT 'push tag pr',
   `build_status`        VARCHAR(20)  DEFAULT 'pending'
-  COMMENT 'pending | canceled | passed | errored | failed | skip | inactive',
+    COMMENT 'pending | canceled | passed | errored | failed | skip | inactive',
   `branch`              VARCHAR(100) DEFAULT 'master',
   `tag`                 VARCHAR(100),
   `pull_request_title`  VARCHAR(100),
@@ -35,9 +36,11 @@ CREATE TABLE IF NOT EXISTS `builds` (
   `check_suites_id`     BIGINT,
   `internal`            INT UNSIGNED DEFAULT 1,
   `private`             INT          DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY (`git_type`, `rid`, `event_type`, `branch`, `commit_id`)
+  PRIMARY KEY (`id`)
 );
 
 ALTER TABLE builds
   MODIFY config TEXT;
+
+ALTER TABLE builds
+  DROP INDEX git_type;

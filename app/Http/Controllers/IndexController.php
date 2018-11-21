@@ -17,12 +17,9 @@ class IndexController
         ];
     }
 
-    public function blog()
+    public function blog(): void
     {
-        return [
-            'code' => 200,
-            'data' => 'https://ci.khs1994.com/blog',
-        ];
+        Response::redirect('https://www.khs1994.com/categories/PCIT');
     }
 
     public function api()
@@ -258,6 +255,11 @@ class IndexController
     public function issues(): void
     {
         Response::redirect('https://github.com/khs1994-php/pcit/issues');
+    }
+
+    public function support(): void
+    {
+        $this->issues();
     }
 
     public function ce(): void

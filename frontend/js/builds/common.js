@@ -40,18 +40,25 @@ module.exports = {
     ) {
       more_options_click_handler(id);
       column_el.css('color', '#000000').css('border-bottom-style', 'none');
-      $('.column #column_more_options')
-        .css('color', 'green')
-        .css('border-bottom-style', 'solid');
+      $('.column #column_more_options').css({
+        color: 'green',
+        'border-bottom-style': 'solid',
+      });
+
+      column_el.on({
+        mouseout(event) {
+          mouseoutMethod(event);
+        },
+      });
 
       return;
     }
 
     // 移除其他元素的颜色
-    column_el.css('color', '#000000').css('border-bottom-style', 'none');
+    column_el.css({ color: '#000000', 'border-bottom-style': 'none' });
     // 启用其他元素的鼠标移出事件
     column_el.on({
-      mouseout: event => {
+      mouseout(event) {
         mouseoutMethod(event);
       },
     });

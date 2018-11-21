@@ -200,3 +200,62 @@ $('.column').click(function(event) {
 
   title.show(url.getBaseTitle(), id);
 });
+
+// 手动触发构建
+$('.trigger_build_modal_button').on('click', () => {
+  // 提交数据
+  // 用户所选择的分支
+  let branch = $('#branches_list').val();
+
+  // 用户自定义的 config
+
+  let config = $('#trigger_build_config').val();
+
+  console.log(config);
+
+  let request_url = '/api/repo/' + url.getRepoFullName() + '/trigger/' + branch;
+
+  fetch(request_url, {
+    method: 'post',
+    headers: {
+      Authorization: 'token ' + token.getToken(url.getGitType()),
+    },
+    body: config ? config : '',
+  })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        return Promise.reject('wrong!');
+      }
+    })
+    .then(res => {
+      // 关闭模态窗口
+      $('#trigger_build_modal').modal('hide');
+      // 跳转到构建页面
+      history.pushState(
+        { key_id: 'build' },
+        null,
+        url.getRepoFullNameUrl() + '/builds/' + res.build_id,
+      );
+
+      common.column_click_handle('build'); // 渲染被点击的 column
+    })
+    .catch(error => {
+      console.log(error);
+    });
+});
+
+// $.ajax({
+//   type: 'post',
+//   url: '/api/repo/' + url.getRepoFullName() + '/trigger',
+//   headers: {
+//     Authorization: 'token ' + token.getToken(url.getGitType()),
+//   },
+//   success: function(data) {
+//     display(data);
+//   },
+//   error: () => {
+//     display('');
+//   },
+// });

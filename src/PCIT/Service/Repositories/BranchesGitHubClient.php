@@ -14,8 +14,22 @@ class BranchesGitHubClient
     {
     }
 
-    public function get(): void
+    /**
+     * @param string $username
+     * @param string $repo_name
+     * @param string $branch
+     *
+     * @see https://developer.github.com/v3/repos/branches/#get-branch
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function get(string $username, string $repo_name, string $branch)
     {
+        $url = $this->api_url.'/repos/'.$username.'/'.$repo_name.'/branches/'.$branch;
+
+        return $this->curl->get($url);
     }
 
     public function getBranchProtection(): void

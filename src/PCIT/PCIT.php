@@ -43,6 +43,7 @@ use WeChat\WeChat;
  * @property Service\Issue\MilestonesGitHubClient           $issue_milestones
  * @property Service\Miscellaneous\GitHubClient             $miscellaneous
  * @property Service\Organizations\GitHubClient             $orgs
+ * @property Service\Repositories\BranchesGitHubClient      $repo_branches
  * @property Service\Repositories\CollaboratorsGitHubClient $repo_collaborators
  * @property Service\Repositories\CommitsGitHubClient       $repo_commits
  * @property Service\Repositories\CommunityGitHubClient     $repo_community

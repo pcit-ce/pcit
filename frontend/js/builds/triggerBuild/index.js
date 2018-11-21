@@ -1,28 +1,30 @@
 'use strict';
 
 function display(data) {
-  let display_element = $('#display');
+  // console.log(data);
 
-  display_element.empty();
+  // 移除之前的元素
+  $('#branches_list option').remove();
 
-  display_element.append('手动触发构建功能即将上线');
-  //.innerHeight(55);
+  // branches 列表为空，则为 master
+  data = data ? data : ['master'];
+
+  // 填充 branches 列表
+  $.each(data, (index, key) => {
+    $('#branches_list').append($('<option></option>').append(key));
+  });
+
+  // 展示模态窗口
+  $('#trigger_build_modal').modal('show');
 }
 
 module.exports = {
-  handle: (url, token) => {
-    console.log(location.href);
+  handle: url => {
     $.ajax({
-      type: 'post',
-      url: '/api/repo/' + url.getRepoFullName() + '/trigger',
-      headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType()),
-      },
+      type: 'GET',
+      url: '/api/repo/' + url.getGitRepoFullName() + '/branches',
       success: function(data) {
         display(data);
-      },
-      error: () => {
-        display('');
       },
     });
   },

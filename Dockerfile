@@ -34,8 +34,8 @@ RUN cd /app/pcit \
 # 将 PHP 项目打入 PHP 镜像
 FROM khs1994/php:${PHP_VERSION}-fpm-alpine as php
 
-COPY . /app/pcit
 COPY --from=composer /app/pcit/vendor /app/pcit/vendor
+COPY . /app/pcit
 COPY --from=frontend /app/pcit/public/ /app/pcit/public/
 
 ENTRYPOINT ["/app/pcit/bin/pcitd"]

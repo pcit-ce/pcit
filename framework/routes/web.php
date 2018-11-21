@@ -36,6 +36,7 @@ Route::get('docs', 'IndexController@docs');
 Route::get('wechat', 'IndexController@wechat');
 Route::get('blog', 'IndexController@blog');
 Route::get('issues', 'IndexController@issues');
+Route::get('support', 'IndexController@support');
 Route::get('changelog', 'IndexController@changelog');
 Route::get('ce', 'IndexController@ce');
 Route::get('ee', 'IndexController@ee');
@@ -200,6 +201,8 @@ Route::post('api/repo/{username}/{repo_name}/deactivate', 'Builds\ActiveControll
 
 Route::post('api/repo/{username}/{repo_name}/star', 'Repos\StarController');
 Route::post('api/repo/{username}/{repo_name}/unstar', 'Repos\StarController@unstar');
+
+Route::post('api/repo/{username}/{repo_name}/trigger/{branch}', 'Builds\TriggerController');
 
 /* Log */
 
