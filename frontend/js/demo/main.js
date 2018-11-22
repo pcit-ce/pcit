@@ -12,4 +12,4 @@ import '../../images/pcit.png';
 
 import html from 'html-loader!../../html/demo/component.html';
 
-$('body').append(html)
+$('body').append(html);

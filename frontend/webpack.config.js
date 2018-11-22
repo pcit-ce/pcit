@@ -66,49 +66,65 @@ let config = {
       showErrors: true,
       chunks: ['demo'], // 只包括指定的 js
       // excludeChunks: ['demo'], // 排除指定的 js
-      // minify: true,
+      minify: {
+        // removeAttributeQuotes: true, // 移除属性的引号
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true,
+      },
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/builds/index.html'),
       filename: path.resolve('../public/builds/index.html'),
       showErrors: true,
-      chunks: ['builds'], // 只包括指定的 js
+      chunks: ['builds'], // 只插入指定的 js
+      // v4
+      minify: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/login/index.html'),
       filename: path.resolve('../public/login/index.html'),
       showErrors: true,
       chunks: ['login'], // 只包括指定的 js
+      minify: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/login/hello.html'),
       filename: path.resolve('../public/login/hello.html'),
       showErrors: true,
       chunks: ['login'], // 只包括指定的 js
+      minify: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/profile/index.html'),
       filename: path.resolve('../public/profile/index.html'),
       showErrors: true,
       chunks: ['profile'], // 只包括指定的 js
+      minify: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/sse/index.html'),
       filename: path.resolve('../public/sse/index.html'),
       showErrors: true,
       chunks: ['sse'], // 只包括指定的 js
+      minify: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/websocket/index.html'),
       filename: path.resolve('../public/websocket/index.html'),
       showErrors: true,
       chunks: ['websocket'], // 只包括指定的 js
+      minify: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/index.html'),
       filename: path.resolve('../public/index.html'),
       showErrors: true,
       chunks: ['index*'], // 只包括指定的 js
+      minify: true,
     }),
     // 分离 css 文件
     new MiniCssExtractPlugin({
