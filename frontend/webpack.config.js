@@ -1,11 +1,18 @@
+// https://github.com/fouber/blog/issues/6
+
 // const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // 分离 css 文件
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+// 清理目录
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
 const path = require('path');
 
 const devMode = process.env.NODE_ENV !== 'production';
+
+const CDN_URL = 'https://cdn.ci.khs1994.com:10000';
 
 let config = {
   mode: 'production',
@@ -27,11 +34,11 @@ let config = {
   output: {
     path: devMode
       ? __dirname + '/../public/assets/'
-      : __dirname + '/../public/assets/[hash]/',
-    filename: 'js/[name].js',
+      : __dirname + '/../public/assets/',
+    filename: 'js/[name]_[hash].js',
     // pathinfo: true
-    // publicPath: 'https://cdn.example.com/assets/js/[hash]/',
-    publicPath: devMode ? '/assets/' : '/assets/[hash]/',
+    // publicPath: CDN_URL + '/assets/',
+    publicPath: devMode ? '/assets/' : '/assets/',
   },
   devtool: 'none',
   devServer: {
@@ -44,6 +51,11 @@ let config = {
     // new webpack.DefinePlugin({
     //   'process.env.NODE_ENV': JSON.stringify('production'),
     // }),
+
+    // https://github.com/johnagan/clean-webpack-plugin
+    new CleanWebpackPlugin('assets', {
+      root: __dirname + '/../public/',
+    }),
 
     new HtmlWebpackPlugin({
       title: 'Demo',
@@ -97,7 +109,7 @@ let config = {
     }),
     // 分离 css 文件
     new MiniCssExtractPlugin({
-      filename: 'css/[name].css',
+      filename: 'css/[name]_[hash].css',
       chunkFilename: '[id].css',
     }),
   ],
@@ -132,6 +144,18 @@ let config = {
         use: 'ts-loader',
       },
       {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+            options: {
+              minimize: true,
+              interpolate: 'require',
+            },
+          },
+        ],
+      },
+      {
         test: /\.(gif|jpg|png)$/,
         use: [
           // {
@@ -156,7 +180,7 @@ let config = {
             loader: 'url-loader',
             options: {
               limit: 8192, // 表示小于 8kb 的图片转为 base64,大于 8kb 的是路径
-              name: '[name].[ext]',
+              name: '[name]_[hash].[ext]',
               content: '',
               outputPath: 'images/',
               // publicPath: '/assets/images/',
