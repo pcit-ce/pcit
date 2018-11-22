@@ -35,7 +35,8 @@ let config = {
     path: devMode
       ? __dirname + '/../public/assets/'
       : __dirname + '/../public/assets/',
-    filename: 'js/[name]_[hash].js',
+    // filename: 'js/[name]_[hash].js',
+    filename: 'js/[name]_[chunkhash].js',
     // pathinfo: true
     // publicPath: CDN_URL + '/assets/',
     publicPath: devMode ? '/assets/' : '/assets/',
@@ -57,6 +58,7 @@ let config = {
       root: __dirname + '/../public/',
     }),
 
+    // 将 js css 插入到 html
     new HtmlWebpackPlugin({
       title: 'Demo',
       template: path.resolve('./html/demo/source.html'), // 模板地址
@@ -64,6 +66,7 @@ let config = {
       showErrors: true,
       chunks: ['demo'], // 只包括指定的 js
       // excludeChunks: ['demo'], // 排除指定的 js
+      // minify: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve('./html/builds/index.html'),
@@ -109,13 +112,14 @@ let config = {
     }),
     // 分离 css 文件
     new MiniCssExtractPlugin({
-      filename: 'css/[name]_[hash].css',
+      filename: 'css/[name]_[chunkhash].css',
       chunkFilename: '[id].css',
     }),
   ],
   optimization: {
     minimize: true, //是否进行代码压缩
     noEmitOnErrors: true, //取代 new webpack.NoEmitOnErrorsPlugin()，编译错误时不打印输出资源。
+    // runtimeChunk: 'single',
   },
   // Webpack 中所有类型的文件都是模块，包括JS、CSS、图片、字体、JSON...
   // 万物皆模块
@@ -143,18 +147,25 @@ let config = {
         test: /\.ts$/,
         use: 'ts-loader',
       },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              minimize: true,
-              interpolate: 'require',
-            },
-          },
-        ],
-      },
+      // html-loader 是将 require 或者 import 的 html 文件转换为 html 字符串并导出。
+      // html-loader 将 html 文件作为 js 的一个模块，
+      // 模块向外提供编译后的 html 文件内容字符串，其实可以将其看成一个输出字符串的模块而已。
+
+      // html-loader 与 html-webpack-plugin 冲突
+      // https://www.imooc.com/article/18513?block_id=tuijian_wz
+
+      // {
+      //   test: /\.html$/,
+      //   use: [
+      //     {
+      //       loader: 'html-loader',
+      //       options: {
+      //         minimize: true,
+      //         interpolate: 'require',
+      //       },
+      //     },
+      //   ],
+      // },
       {
         test: /\.(gif|jpg|png)$/,
         use: [
