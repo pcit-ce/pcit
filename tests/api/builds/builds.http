@@ -10,17 +10,17 @@ Authorization: token {{api_token}}
 
 ### List By Repo
 
-GET https://{{ci_host}}/api/repo/github_app/khs1994-php/pcit/builds
+GET https://{{ci_host}}/api/repo/github_app/pcit-ce/pcit/builds
 Authorization: token {{api_token}}
 
 ###
 
-GET https://{{ci_host}}/api/repo/github_app/khs1994-php/pcit/builds?before=10&limit=2
+GET https://{{ci_host}}/api/repo/github_app/pcit-ce/pcit/builds?before=10&limit=2
 Authorization: token {{api_token}}
 
 ### Find By Repo Current
 
-GET https://{{ci_host}}/api/repo/github_app/khs1994-php/pcit/build/current
+GET https://{{ci_host}}/api/repo/github_app/pcit-ce/pcit/build/current
 
 ### Find
 

@@ -56,7 +56,7 @@ $ git push origin master
 
 **PCIT** 由 **PHP 后端**（Webhooks Server + Daemon CLI）和 **GitHub App** 组成。
 
-[Coming Soon !](https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md)
+[Coming Soon !](https://github.com/pcit-ce/pcit/blob/master/docs/install/ee.md)
 
 # About PCIT CE and EE
 

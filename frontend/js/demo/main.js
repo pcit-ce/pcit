@@ -6,4 +6,6 @@ import { a, c } from './demo2';
 
 console.log(a, c);
 
-import css from '../../css/demo/demo.css';
+import '../../css/demo/demo.css';
+
+import '../../images/pcit.png';

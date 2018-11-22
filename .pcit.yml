@@ -1,5 +1,5 @@
 #
-# @see https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
+# @see https://github.com/pcit-ce/pcit/blob/master/docs/SUMMARY.md
 #
 
 language: php
@@ -149,7 +149,7 @@ pipeline:
     environment:
       - keep_history=true
       - target_branch=gh-pages
-      - git_url=gitee.com/khs1994-php/pcit
+      - git_url=gitee.com/pcit-ce/pcit
       - local_dir=build
       - email=khs1994@khs1994.com
       - name=khs1994

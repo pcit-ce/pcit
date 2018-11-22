@@ -51,7 +51,7 @@ class PCITCommand
             'repo',
             'r',
             InputOption::VALUE_REQUIRED,
-            'Repository to use (will try to detect from current git clone) <comment>[example: "khs1994-php/pcit"]</comment>',
+            'Repository to use (will try to detect from current git clone) <comment>[example: "pcit-ce/pcit"]</comment>',
         ];
     }
 

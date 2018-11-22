@@ -29,7 +29,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    'no-console': 1,
+    'no-console': 2,
     strict: 2,
     'prettier/prettier': ['error', { trailingComma: 'all' }],
   },

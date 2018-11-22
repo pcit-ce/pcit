@@ -207,7 +207,7 @@
 
 ### 2018/05/14
 
-* [x] `Tencent AI + Issue = ?`，欢迎体验 https://github.com/khs1994-php/pcit-demo/issues
+* [x] `Tencent AI + Issue = ?`，欢迎体验 https://github.com/pcit-ce/pcit-demo/issues
 
 ### 2018/05/14
 
@@ -229,7 +229,7 @@
 
 ### 2018/05/13
 
-* [x] 引入 [Tencent AI](https://github.com/khs1994-php/tencent-ai)，[讨论](https://github.com/khs1994-php/pcit/issues/61).
+* [x] 引入 [Tencent AI](https://github.com/khs1994-php/tencent-ai)，[讨论](https://github.com/pcit-ce/pcit/issues/61).
 
 ### 2018/05/13
 

@@ -10,7 +10,7 @@ This returns a list of environment variables for an individual repository.
 | :----- | :------------------------------------------------  |
 | `GET`  | `/repo/{username}/{repo.name}/env_vars` |
 
-**Example:** `GET` `/repo/khs1994-php/pcit/env_vars`
+**Example:** `GET` `/repo/pcit-ce/pcit/env_vars`
 
 ## Create
 
@@ -24,7 +24,7 @@ $ curl -X POST \
     -H "PCIT-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "env_var.name": "FOO", "env_var.value": "bar", "env_var.public": false }' \
-    https://ci.khs1994.com/api/repo/khs1994-php/pcit/env_vars
+    https://ci.khs1994.com/api/repo/pcit-ce/pcit/env_vars
 ```
 
 | Method   | URL                                                            |
@@ -47,7 +47,7 @@ This returns a single environment variable.
 | :----- | :------------------------------------------------------------- |
 | `GET`  | `/repo/{username}/{repo.name}/env_var/{env_var.id}` |
 
-**Example:** `GET` `/repo/khs1994-php/pcit/env_var/666`
+**Example:** `GET` `/repo/pcit-ce/pcit/env_var/666`
 
 ## Update
 
@@ -61,7 +61,7 @@ $ curl -X PATCH \
     -H "PCIT-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "env_var.value": "bar", "env_var.public": false }' \
-    https://ci.khs1994.com/api/repo/khs1994-php/pcit/{env_var.id}
+    https://ci.khs1994.com/api/repo/pcit-ce/pcit/{env_var.id}
 ```
 
 | Method   | URL                                                            |
@@ -84,4 +84,4 @@ This deletes a single environment variable.
 | :-----    | :------------------------------------------------------------- |
 | `DELETE`  | `/repo/{username}/{repo.name}/env_var/{env_var.id}` |
 
-**Example:** `DELETE` `/repo/khs1994-php/pcit/env_var/666`
+**Example:** `DELETE` `/repo/pcit-ce/pcit/env_var/666`

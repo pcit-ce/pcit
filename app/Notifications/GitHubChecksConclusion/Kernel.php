@@ -24,13 +24,13 @@ abstract class Kernel
 
 * [Official Website](https://ci.khs1994.com)
 
-* [Support Documents](https://github.com/khs1994-php/pcit/tree/master/docs)
+* [Support Documents](https://github.com/pcit-ce/pcit/tree/master/docs)
 
-* [Community Support](https://github.com/khs1994-php/pcit/issues)
+* [Community Support](https://github.com/pcit-ce/pcit/issues)
 
 # Try PCIT ?
 
-Please See [PCIT Support Docs](https://github.com/khs1994-php/pcit/tree/master/docs)
+Please See [PCIT Support Docs](https://github.com/pcit-ce/pcit/tree/master/docs)
 
 EOF;
 

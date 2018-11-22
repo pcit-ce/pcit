@@ -1,4 +1,4 @@
-@import 'builds/pull_requests_list.css';
+@import url('builds/pull_requests_list.css');
 @import 'builds/builds_lists.css';
 @import 'common/footer.css';
 @import 'builds/common.css';

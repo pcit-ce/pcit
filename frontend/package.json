@@ -7,16 +7,18 @@
   },
   "description": "PCIT is not PHP CI TOOLKIT",
   "dependencies": {
+    "typescript": "^3.1.6",
     "@types/jquery": "^3.3.22",
     "@types/node": "^10.12.9",
     "clipboard": "^2.0.4",
-    "css-loader": "^1.0.1",
-    "html-webpack-plugin": "^3.2.0",
     "js-cookie": "^2.2.0",
+    "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.4",
     "style-loader": "^0.23.1",
+    "css-loader": "^1.0.1",
     "ts-loader": "^5.3.0",
-    "typescript": "^3.1.6",
+    "url-loader": "^1.1.2",
+    "file-loader": "^2.0.0",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2"
   },
@@ -29,12 +31,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/khs1994-php/pcit.git"
+    "url": "git+https://github.com/pcit-ce/pcit.git"
   },
   "scripts": {
-    "webpack-dev": "cross-env node_modules/.bin/webpack-cli --mode=development",
-    "webpack-pro": "cross-env node_modules/.bin/webpack-cli --mode=production",
+    "webpack-dev": "cross-env NODE_ENV='development' node_modules/.bin/webpack-cli --mode=development",
+    "webpack-pro": "cross-env NODE_ENV='production' node_modules/.bin/webpack-cli --mode=production",
     "build": "npm run webpack-pro",
+    "dev": "npm run webpack-dev",
     "prettier": "npx prettier --write ./**/*.js ./**/*.ts ./**/*.css"
   },
   "license": "MIT",

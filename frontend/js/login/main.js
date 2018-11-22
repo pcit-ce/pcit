@@ -1,4 +1,4 @@
-import css from '../../css/login.css';
+import '../../css/login.css';
 
 /* eslint-disable no-undef */
 

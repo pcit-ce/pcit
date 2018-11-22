@@ -37,7 +37,7 @@ class InitCommand extends Command
         }
 
         $content = <<<'EOF'
-# https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
+# https://github.com/pcit-ce/pcit/blob/master/docs/SUMMARY.md
 # https://ci.khs1994.com
 # https://github.com/apps/pcit-ce
 

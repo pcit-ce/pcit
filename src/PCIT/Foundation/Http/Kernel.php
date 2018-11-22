@@ -49,7 +49,7 @@ class Kernel
             return Response::json(array_filter([
                 'code' => $e->getCode() ?? 500,
                 'message' => $e->getMessage() ?? 'ERROR',
-                'documentation_url' => 'https://github.com/khs1994-php/pcit/tree/master/docs/api',
+                'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
                 'file' => $debug ? $e->getFile() : null,
                 'line' => $debug ? $e->getLine() : null,
                 'details' => $debug ? (array) $e->getPrevious() : null,

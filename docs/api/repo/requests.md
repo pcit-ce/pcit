@@ -10,7 +10,7 @@ This will return a list of requests belonging to a repository.
 | :----- | :------------------------------------------------- |
 | `GET`  | `/repo/{username}/{repo.name}/requests` |
 
-**Example:** `GET` `/repo/khs1994-php/pcit/requests`
+**Example:** `GET` `/repo/pcit-ce/pcit/requests`
 
 ## Create
 
@@ -25,7 +25,7 @@ $ curl -X POST \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "request": {
         "message": "Override the commit message: this is an api request", "branch": "master" }}'\
-    https://ci.khs1994.com/api/repo/khs1994-php/pcit/requests
+    https://ci.khs1994.com/api/repo/pcit-ce/pcit/requests
 ```
 
 | Method  | URL                                                |
@@ -48,4 +48,4 @@ This will return information about an individual request.
 | :----- | :------------------------------------------------------------- |
 | `GET`  | `/repo/{username}/{repo.name}/request/{request.id}` |
 
-**Example** `GET` `/repo/khs1994-php/pcit/request/666`
+**Example** `GET` `/repo/pcit-ce/pcit/request/666`

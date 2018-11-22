@@ -10,7 +10,7 @@ This returns a list of the settings for that repository.
 | :----- | :------------------------------------------------- |
 | `GET`  | `/repo/{username}/{repo.name}/settings` |
 
-**Example:** `GET` `/repo/khs1994-php/pcit/settings`
+**Example:** `GET` `/repo/pcit-ce/pcit/settings`
 
 ## Get
 
@@ -34,7 +34,7 @@ $ curl -X PATCH \
     -H "PCIT-API-Version: 3" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "setting.value": true }' \
-    https://ci.khs1994.com/api/repo/khs1994-php/pcit/setting/{setting.name}
+    https://ci.khs1994.com/api/repo/pcit-ce/pcit/setting/{setting.name}
 ```
 
 | Method   | URL                                                              |

@@ -109,7 +109,7 @@ class IndexController
 
     public function docs(): void
     {
-        Response::redirect('https://github.com/khs1994-php/pcit/tree/master/docs');
+        Response::redirect('https://github.com/pcit-ce/pcit/tree/master/docs');
     }
 
     public function plugins(): void
@@ -133,7 +133,7 @@ class IndexController
             'docs' => $host.'/docs',
             'wechat' => $host.'/wechat',
             'status' => $host.'/status',
-            'feedback' => 'https://github.com/khs1994-php/pcit/issues',
+            'feedback' => 'https://github.com/pcit-ce/pcit/issues',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
                 'test' => $host.'/test5',
@@ -233,7 +233,7 @@ class IndexController
 
     public function team(): void
     {
-        Response::redirect('https://github.com/khs1994-php/pcit/graphs/contributors');
+        Response::redirect('https://github.com/pcit-ce/pcit/graphs/contributors');
     }
 
     public function wechat(): void
@@ -244,7 +244,7 @@ class IndexController
 
     public function changelog(): void
     {
-        Response::redirect('https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md');
+        Response::redirect('https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md');
     }
 
     public function donate(): void
@@ -254,7 +254,7 @@ class IndexController
 
     public function issues(): void
     {
-        Response::redirect('https://github.com/khs1994-php/pcit/issues');
+        Response::redirect('https://github.com/pcit-ce/pcit/issues');
     }
 
     public function support(): void

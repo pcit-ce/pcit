@@ -5,7 +5,7 @@ module.exports.show = () => {
         <div><a target="_blank" title="Author of PCIT From Datong,Shanxi"
                href="https://www.bilibili.com/video/av34549860?from=search&seid=4430979976495551124"><strong>@PCIT, Datong,
           Shanxi</strong></a></div>
-        <div><a href="https://github.com/khs1994-php/pcit" target="_blank">GitHub</a></div>
+        <div><a href="https://github.com/pcit-ce/pcit" target="_blank">GitHub</a></div>
         <div><a href="https://ci.khs1994.com/wechat" target="_blank">WeChat</a></div>
         <div><a href="https://ci.khs1994.com/team" target="_blank">Team</a></div>
         <div><a href="mailto:ci@khs1994.com">Email</a></div>

@@ -1,4 +1,4 @@
-import css from '../../css/builds.css';
+import '../../css/builds.css';
 
 const header = require('../common/header');
 const footer = require('../common/footer');

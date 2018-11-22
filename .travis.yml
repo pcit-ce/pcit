@@ -87,7 +87,7 @@ jobs:
         - sudo echo "docs.ci.khs1994.com" | sudo tee _book/CNAME
       deploy:
         provider: pages
-        repo: khs1994-php/pcit-docs
+        repo: pcit-ce/docs
         skip-cleanup: true
         local-dir: docs/_book
         github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
@@ -103,7 +103,7 @@ jobs:
       # https://docs.travis-ci.com/user/deployment/pages/
       deploy:
         provider: pages
-        repo: khs1994-php/pcit-api-docs
+        repo: pcit-ce/api-docs
         skip-cleanup: true
         local-dir: docs/api/_book
         github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
