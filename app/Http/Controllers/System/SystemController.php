@@ -26,7 +26,9 @@ class SystemController
                 break;
         }
 
-        return $url.Env::get('CI_'.strtoupper($git_type).'_CLIENT_ID');
+        $url = $url.Env::get('CI_'.strtoupper($git_type).'_CLIENT_ID');
+
+        return compact('url');
     }
 
     public function getGitHubAppSettingsUrl(string $org_name = null)
@@ -41,7 +43,7 @@ class SystemController
             $url = "https://github.com/organizations/{$org_name}/settings/installations";
         }
 
-        return $url;
+        return compact('url');
     }
 
     public function getGitHubAppInstallationUrl($uid)
@@ -50,6 +52,6 @@ class SystemController
 
         $url = "https://github.com/apps/{$app_name}/installations/new/permissions?suggested_target_id=".$uid;
 
-        return $url;
+        return compact('url');
     }
 }

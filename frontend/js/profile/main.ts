@@ -22,6 +22,12 @@ let username = url_array[5];
 // eslint-disable-next-line no-undef
 let token = Cookies.get(git_type + '_api_token');
 
+const pcit = require('@pcit/pcit-js');
+const pcit_system = new pcit.System(token, '');
+const pcit_user = new pcit.User(token, '');
+const pcit_repo = new pcit.Repo(token, '');
+const pcit_orgs = new pcit.Orgs(token, '');
+
 function settings(data: any) {
   let { username, type } = data;
 
@@ -154,16 +160,20 @@ function showOrg(data: any) {
 }
 
 function showGitHubAppSettings(org_name: string, installation_id: number) {
-  const pcit = require('@pcit/pcit-js')(async () => {
-    let settings_url = await new Promise(resolve => {
-      $.ajax({
-        type: 'GET',
-        url: '/api/ci/github_app_settings/' + org_name,
-        success(data) {
-          resolve(data);
-        },
-      });
-    });
+  (async () => {
+    // let settings_url = await new Promise(resolve => {
+    //   $.ajax({
+    //     type: 'GET',
+    //     url: '/api/ci/github_app_settings/' + org_name,
+    //     success(data) {
+    //       resolve(data);
+    //     },
+    //   });
+    // });
+
+    let result = await pcit_system.getGitHubAppSettingsAddress(org_name);
+
+    let settings_url = result.url;
 
     $('#repos').append(() => {
       return $('<p class="repo_tips"></p>')
@@ -183,15 +193,19 @@ function showGitHubAppSettings(org_name: string, installation_id: number) {
 
 function showGitHubAppInstall(uid: number) {
   (async () => {
-    let installation_url = await new Promise(resolve => {
-      $.ajax({
-        type: 'GET',
-        url: '/api/ci/github_app_installation/' + uid,
-        success: function(data) {
-          resolve(data);
-        },
-      });
-    });
+    // let installation_url = await new Promise(resolve => {
+    //   $.ajax({
+    //     type: 'GET',
+    //     url: '/api/ci/github_app_installation/' + uid,
+    //     success: function(data) {
+    //       resolve(data);
+    //     },
+    //   });
+    // });
+
+    let result = await pcit_system.getGitHubAppInstallationAddress(uid);
+
+    let installation_url = result.url;
 
     $('#repos').append(
       $('<div class="card border-primary text-center repo_tips"></div>')
@@ -220,18 +234,20 @@ function showGitHubAppInstall(uid: number) {
 }
 
 function get_userdata(): any {
-  return new Promise(resolve => {
-    $.ajax({
-      type: 'GET',
-      url: '/api/user',
-      headers: {
-        Authorization: 'token ' + token,
-      },
-      success: function(data) {
-        resolve(data);
-      },
-    });
-  });
+  // return new Promise(resolve => {
+  //   $.ajax({
+  //     type: 'GET',
+  //     url: '/api/user',
+  //     headers: {
+  //       Authorization: 'token ' + token,
+  //     },
+  //     success: function(data) {
+  //       resolve(data);
+  //     },
+  //   });
+  // });
+
+  return pcit_user.findByCurrent();
 }
 
 function click_user() {
@@ -284,18 +300,20 @@ function show_org(data: any, org_name: string) {
   let { installation_id, uid } = data[0];
 
   (async () => {
-    let org_data = await new Promise(resolve => {
-      $.ajax({
-        type: 'GET',
-        url: '/api/repos/' + git_type + '/' + org_name,
-        headers: {
-          Authorization: 'token ' + token,
-        },
-        success: function(data) {
-          resolve(data);
-        },
-      });
-    });
+    // let org_data = await new Promise(resolve => {
+    //   $.ajax({
+    //     type: 'GET',
+    //     url: '/api/repos/' + git_type + '/' + org_name,
+    //     headers: {
+    //       Authorization: 'token ' + token,
+    //     },
+    //     success: function(data) {
+    //       resolve(data);
+    //     },
+    //   });
+    // });
+
+    let org_data = await pcit_repo.listByOwner(git_type, org_name);
 
     history.pushState(
       {},
@@ -316,31 +334,39 @@ function show_org(data: any, org_name: string) {
 }
 
 function click_org(org_name: string) {
-  $.ajax({
-    type: 'GET',
-    url: '/api/org/' + git_type + '/' + org_name,
-    headers: {
-      Authorization: 'token ' + token,
-    },
-    success: function(data) {
-      show_org(data, org_name);
-    },
-  });
+  // $.ajax({
+  //   type: 'GET',
+  //   url: '/api/org/' + git_type + '/' + org_name,
+  //   headers: {
+  //     Authorization: 'token ' + token,
+  //   },
+  //   success: function(data) {
+  //     show_org(data, org_name);
+  //   },
+  // });
+
+  (async () => {
+    let result = await pcit_user.find(git_type, org_name);
+
+    show_org(result, org_name);
+  })();
 }
 
 function get_user_repos() {
-  return new Promise(resolve => {
-    $.ajax({
-      type: 'GET',
-      url: '/api/repos',
-      headers: {
-        Authorization: 'token ' + token,
-      },
-      success: function(data) {
-        resolve(data);
-      },
-    });
-  });
+  // return new Promise(resolve => {
+  //   $.ajax({
+  //     type: 'GET',
+  //     url: '/api/repos',
+  //     headers: {
+  //       Authorization: 'token ' + token,
+  //     },
+  //     success: function(data) {
+  //       resolve(data);
+  //     },
+  //   });
+  // });
+
+  return pcit_repo.list();
 }
 
 $(document).ready(function() {
@@ -352,17 +378,23 @@ $(document).ready(function() {
     let { installation_id, username: api_username, uid } = data[0];
 
     if (api_username === username) {
-      $.ajax({
-        type: 'GET',
-        url: '/api/orgs',
-        headers: {
-          Authorization: 'token ' + token,
-        },
+      // $.ajax({
+      //   type: 'GET',
+      //   url: '/api/orgs',
+      //   headers: {
+      //     Authorization: 'token ' + token,
+      //   },
+      //
+      //   success: function(data) {
+      //     showOrg(data);
+      //   },
+      // });
 
-        success: function(data) {
-          showOrg(data);
-        },
-      });
+      (async () => {
+        let result = await pcit_orgs.list();
+
+        showOrg(result);
+      })();
     }
 
     click_user();
@@ -374,18 +406,22 @@ $(document).ready(function() {
       return;
     }
 
-    let oauth_client_url = await new Promise(resolve => {
-      $.ajax({
-        type: 'GET',
-        url: '/api/ci/oauth_client_id',
-        headers: {
-          Authorization: 'token ' + token,
-        },
-        success: function(data) {
-          resolve(data);
-        },
-      });
-    });
+    // let oauth_client_url = await new Promise(resolve => {
+    //   $.ajax({
+    //     type: 'GET',
+    //     url: '/api/ci/oauth_client_id',
+    //     headers: {
+    //       Authorization: 'token ' + token,
+    //     },
+    //     success: function(data) {
+    //       resolve(data);
+    //     },
+    //   });
+    // });
+
+    let result = await pcit_system.getOauthClientId();
+
+    let oauth_client_url = result.url;
 
     $('.tip').after(
       $('<p></p>').append(
@@ -406,11 +442,11 @@ $('#sync').on('click', function() {
     .append('账户信息同步中')
     .attr('disabled', 'disabled');
 
-  $(this).after(() => {
-    return $('<div></div>')
+  $(this).after(
+    $('<div></div>')
       .addClass('progress')
-      .append(() => {
-        return $('<div></div>')
+      .append(
+        $('<div></div>')
           .addClass('progress-bar progress-bar-striped progress-bar-animated')
           .attr({
             role: 'progressbar',
@@ -418,9 +454,9 @@ $('#sync').on('click', function() {
             'aria-valuemin': 0,
             'aria-valuemax': 100,
           })
-          .css('width', '20%');
-      });
-  });
+          .css('width', '20%'),
+      ),
+  );
 
   function progress(progress: number, timeout: number) {
     setTimeout(() => {
@@ -430,17 +466,22 @@ $('#sync').on('click', function() {
     }, timeout);
   }
 
-  $.ajax({
-    type: 'POST',
-    url: '/api/user/sync',
-    headers: {
-      Authorization: 'token ' + token,
-    },
-    success: function(data) {
-      location.reload();
-      // console.log(data);
-    },
-  });
+  // $.ajax({
+  //   type: 'POST',
+  //   url: '/api/user/sync',
+  //   headers: {
+  //     Authorization: 'token ' + token,
+  //   },
+  //   success: function(data) {
+  //     location.reload();
+  //     // console.log(data);
+  //   },
+  // });
+
+  (async () => {
+    let result = await pcit_user.sync();
+    location.reload();
+  })();
 
   progress(20, 2000);
   progress(40, 10000);
