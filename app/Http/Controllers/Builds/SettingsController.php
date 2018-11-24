@@ -82,7 +82,6 @@ class SettingsController
         $json = file_get_contents('php://input');
 
         foreach (json_decode($json, true) as $k => $v) {
-            $setting_name = $k;
             $setting_value = $v;
 
             return Setting::update($rid, $setting_name, (string) $setting_value, $git_type);

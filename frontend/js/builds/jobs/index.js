@@ -25,20 +25,18 @@ module.exports = {
   handle: url => {
     let job_id = url.getUrlWithArray()[7];
 
-    $.ajax({
-      type: 'get',
-      url: '/api/job/' + job_id,
-      success: function(data) {
-        let { build_id } = data;
+    const pcit = require('@pcit/pcit-js');
+    const jobs = new pcit.Jobs('', '/api');
+    const builds = new pcit.Builds('', '/api');
 
-        $.ajax({
-          url: '/api/build/' + build_id,
+    (async () => {
+      let job_data = await jobs.find(job_id);
 
-          success: build_data => {
-            display(data, build_data, url);
-          },
-        });
-      },
-    });
+      let { build_id } = job_data;
+
+      let build_data = await builds.find(build_id);
+
+      display(job_data, build_data, url);
+    })();
   },
 };

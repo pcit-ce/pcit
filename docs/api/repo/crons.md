@@ -65,7 +65,7 @@ $ curl -X POST \
 
 | Method    | URL                                                                 |
 | :-----    | :------------------------------------------------------------------ |
-| `CREATE`  | `/repo/{username}/{repo.name}/branch/{branch.name}/cron` |
+| `POST`  | `/repo/{username}/{repo.name}/branch/{branch.name}/cron` |
 
 | Accepted Parameter                     | Type    | Description                      |
 | :-----------------------------------   | :------ | ------------------------------   |

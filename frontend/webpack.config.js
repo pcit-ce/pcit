@@ -1,4 +1,5 @@
 // https://github.com/fouber/blog/issues/6
+// v4 https://segmentfault.com/a/1190000014247030
 
 // const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -136,6 +137,35 @@ let config = {
     minimize: true, //是否进行代码压缩
     noEmitOnErrors: true, //取代 new webpack.NoEmitOnErrorsPlugin()，编译错误时不打印输出资源。
     // runtimeChunk: 'single',
+    // v4 add, replace CommonsChunkPlugin
+
+    // 首先，在新版本的 webpack 会默认对代码进行拆分，拆分的规则是：
+    // 模块被重复引用或者来自 node_modules 中的模块
+    // 在压缩前最小为 30kb
+    // 在按需加载时，请求数量小于等于 5
+    // 在初始化加载时，请求数量小于等于 3
+
+    splitChunks: {
+      // miniSize: 0,
+      cacheGroups: {
+        vendors: {
+          test: /node_modules/,
+          priority: -10,
+          minSize: 0,
+        },
+        pcit: {
+          name: 'pcit', // 拆分出来块的名字(Chunk Names)，默认由块名和 hash 值自动生成
+          test: /pcit.js/,
+          priority: -10, // 表示缓存的优先级；
+          minSize: 0, // 形成一个新代码块最小的体积, 30000
+          chunks: 'initial', // 表示显示块的范围,必须三选一： "initial" | "all" | "async"(默认就是async)
+          minChunks: 1, // 表示被引用次数，默认为 1
+          maxAsyncRequests: 1, // 最大的按需(异步)加载次数，默认为 1
+          maxInitialRequests: 1, // 最大的初始化加载次数，默认为 1
+          // reuseExistingChunk: // 使用已经存在的块，即如果满足条件的块已经存在就使用已有的，不再创建一个新的块。
+        },
+      },
+    },
   },
   // Webpack 中所有类型的文件都是模块，包括JS、CSS、图片、字体、JSON...
   // 万物皆模块

@@ -2,6 +2,9 @@ const url = require('./url');
 const common = require('./common');
 const title = require('./title');
 const token = require('../common/token');
+const pcit = require('@pcit/pcit-js');
+
+const repo = new pcit.Repo(token.getToken(url.getGitType()), '');
 
 $(document).on(
   'click',
@@ -19,16 +22,26 @@ $(document).on(
     // console.log(that);
 
     // 发起请求
-    $.ajax({
-      type: 'patch',
-      headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType()),
-      },
-      data: `{"${that.attr('name')}":${that.prop('value')}}`,
-      url:
-        '/api/repo/' +
-        [url.getRepoFullName(), 'setting', that.attr('name')].join('/'),
-    });
+
+    const repo = new pcit.Repo(token.getToken(url.getGitType()), '');
+
+    repo.settings.update(
+      url.getRepoFullName(),
+      '',
+      that.attr('name'),
+      that.prop('value'),
+    );
+
+    // $.ajax({
+    //   type: 'patch',
+    //   headers: {
+    //     Authorization: 'token ' + token.getToken(url.getGitType()),
+    //   },
+    //   data: `{"${that.attr('name')}":${that.prop('value')}}`,
+    //   url:
+    //     '/api/repo/' +
+    //     [url.getRepoFullName(), 'setting', that.attr('name')].join('/'),
+    // });
   },
 );
 
@@ -90,30 +103,40 @@ $(document).on('click', '.new_env button', function() {
     .prev()
     .val();
 
-  // console.log(is_public);
+  console.log(is_public);
   // console.log(value);
   // console.log(name);
 
   // 发起请求
   function getData() {
     return new Promise(resolve => {
-      $.ajax({
-        type: 'post',
-        data: `{"env_var.name":"${name}","env_var.value":"${value}","env_var.public":"${is_public}"}`,
-        url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
-        headers: {
-          Authorization: 'token ' + token.getToken(url.getGitType()),
-        },
-        success: res => {
-          resolve(res);
-        },
-      });
+      let result = repo.env.create(
+        url.getRepoFullName(),
+        '',
+        name,
+        value,
+        is_public,
+      );
+
+      resolve(result);
+
+      // $.ajax({
+      //   type: 'post',
+      //   data: `{"env_var.name":"${name}","env_var.value":"${value}","env_var.public":"${is_public}"}`,
+      //   url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
+      //   headers: {
+      //     Authorization: 'token ' + token.getToken(url.getGitType()),
+      //   },
+      //   success: res => {
+      //     resolve(res);
+      //   },
+      // });
     });
   }
 
   (async () => {
     let id = await getData();
-    // console.log(id);
+    console.log(id);
     // 增加列表
     let env_el = $('.env_list_item:nth-last-of-type(2)');
 
@@ -165,18 +188,25 @@ $(document).on(
       return;
     }
 
-    $.ajax({
-      type: 'patch',
-      url:
-        '/api/repo/' +
-        [url.getRepoFullName(), 'setting', 'maximum_number_of_builds'].join(
-          '/',
-        ),
-      data: `{"maximum_number_of_builds":${value}}`,
-      headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType()),
-      },
-    });
+    repo.settings.update(
+      url.getRepoFullName(),
+      '',
+      'maximum_number_of_builds',
+      value,
+    );
+
+    // $.ajax({
+    //   type: 'patch',
+    //   url:
+    //     '/api/repo/' +
+    //     [url.getRepoFullName(), 'setting', 'maximum_number_of_builds'].join(
+    //       '/',
+    //     ),
+    //   data: `{"maximum_number_of_builds":${value}}`,
+    //   headers: {
+    //     Authorization: 'token ' + token.getToken(url.getGitType()),
+    //   },
+    // });
   },
 );
 

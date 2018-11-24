@@ -8,7 +8,7 @@
 // @link https://github.com/FriendsOfPHP/PHP-CS-Fixer
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude('build')
+    ->exclude('/build')
     ->exclude('cache')
     ->exclude('vendor')
     ->exclude('node_modules')

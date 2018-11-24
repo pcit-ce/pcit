@@ -48,12 +48,19 @@ function display(data) {
 module.exports = {
   handle: url => {
     column_span_click('branches');
-    $.ajax({
-      type: 'GET',
-      url: '/api/repo/' + url.getGitRepoFullName() + '/branches',
-      success: function(data) {
+    const pcit = require('@pcit/pcit-js');
+    const repo = new pcit.Repo('', '/api');
+
+    (async () => {
+      try {
+        let data = await repo.branches.list(
+          url.getGitType(),
+          url.getRepoFullName(),
+        );
         display(data);
-      },
-    });
+      } catch (e) {
+        display('');
+      }
+    })();
   },
 };

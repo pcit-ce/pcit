@@ -154,7 +154,7 @@ function showOrg(data: any) {
 }
 
 function showGitHubAppSettings(org_name: string, installation_id: number) {
-  (async () => {
+  const pcit = require('@pcit/pcit-js')(async () => {
     let settings_url = await new Promise(resolve => {
       $.ajax({
         type: 'GET',

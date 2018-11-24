@@ -197,37 +197,71 @@ module.exports = {
       column_span_click('builds');
     }
 
+    const pcit = require('@pcit/pcit-js');
+
+    const builds = new pcit.Builds('', '');
+
     if (build_id) {
-      $.ajax({
-        type: 'GET',
-        url: '/api/build/' + build_id,
-        success: function(data) {
-          display(data, url);
-        },
-        error: function(data) {
+      // $.ajax({
+      //   type: 'GET',
+      //   url: '/api/build/' + build_id,
+      //   success: function(data) {
+      //     display(data, url);
+      //   },
+      //   error: function(data) {
+      //     build_not_find(
+      //       "Oops, we couldn't find that build!",
+      //       '',
+      //       'The build may not exist or may belong to another repository.',
+      //     );
+      //     // console.log(data);
+      //   },
+      // });
+
+      (async () => {
+        try {
+          let result = await builds.find(build_id);
+          display(result, url);
+        } catch (e) {
           build_not_find(
             "Oops, we couldn't find that build!",
             '',
             'The build may not exist or may belong to another repository.',
           );
-          // console.log(data);
-        },
-      });
+        }
+      })();
 
       return;
     }
 
-    $.ajax({
-      type: 'GET',
-      url: '/api/repo/' + url.getGitRepoFullName() + '/builds',
-      success: function(data) {
-        display(data, url);
-      },
-      error: function(data) {
+    // 加载中，动画 TODO
+
+    // display_element.empty().append('加载中...');
+
+    (async () => {
+      try {
+        let result = await builds.findByRepo(
+          url.getGitType(),
+          url.getRepoFullName(),
+        );
+        display(result, url);
+      } catch (e) {
         display_element.empty();
         display_element.append(build_not_find('Not Build Yet !', '', ''));
-        // console.log(data);
-      },
-    });
+      }
+    })();
+
+    // $.ajax({
+    //   type: 'GET',
+    //   url: '/api/repo/' + url.getGitRepoFullName() + '/builds',
+    //   success: function(data) {
+    //     display(data, url);
+    //   },
+    //   error: function(data) {
+    //     display_element.empty();
+    //     display_element.append(build_not_find('Not Build Yet !', '', ''));
+    //     // console.log(data);
+    //   },
+    // });
   },
 };
