@@ -66,6 +66,15 @@ footer {
   color: rgb(157, 157, 157);
 }
 
+.miss_org_title {
+  color: rgb(157, 157, 157);
+  text-transform: uppercase;
+}
+
+.org_tips {
+  font-size: 15px;
+}
+
 #orgs .org_name {
   height: 50px;
   cursor: pointer;

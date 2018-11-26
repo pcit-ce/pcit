@@ -8,10 +8,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="/ico/pcit.png" type="image/x-icon" />
+  <script src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
   <title>PCIT | khs1994.com</title>
   <!-- Fonts -->
   <!--<link href="https://fonts.lug.ustc.edu.cn/css?family=Raleway:100,600" rel="stylesheet" type="text/css">-->
   <!-- <link href="/assets/css/index.css" rel="stylesheet" type="text/css"> -->
+  <link rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
+  <script src="https://lib.baomitu.com/popper.js/1.14.5/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://lib.baomitu.com/twitter-bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <style>
     /* raleway-100 */
     @font-face {
@@ -70,7 +74,7 @@
     }
 
     .full-height {
-      height: 100vh;
+      height: 60vh;
     }
 
     .flex-center {
@@ -115,6 +119,12 @@
       font-size: 28px;
       color: #aaa;
     }
+
+    .col-md-2 {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: 900;
+    }
   </style>
 </head>
 
@@ -122,11 +132,19 @@
   <div class="flex-center position-ref full-height">
     <div class="content">
       <div class="title m-b-md">Test, Build & Deploy Code </div>
-      <a class="coming" href="https://github.com/pcit-ce/pcit" target="_blank">PCIT (PCIT is not PHP CI Toolkit) Open Source On GitHub</a>
-      <a class="coming" href="login">
-        <h3>立即体验</h3>
-      </a>
     </div>
+  </div>
+
+  <div class='container'>
+    <div class="container">
+      <div class="row text-center">
+        <a href='https://github.com/pcit-ce/pcit' target="_blank"
+        class="col-md-2 col-sm-12 offset-md-2 btn btn-outline-info">GitHub</a>
+        <a href='login' class="col-md-2 col-sm-12 offset-md-1 btn btn-outline-info">立即体验</a>
+        <a href='https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61'
+        target="_blank" class="col-md-2 col-sm-12 offset-md-1 btn btn-outline-info">Try K8s</a>
+        <!-- <a href='' class="col-md-2 offset-md-1 btn btn-outline-info">Docs</a> -->
+      </div>
   </div>
 </body>
 

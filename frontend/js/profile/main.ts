@@ -157,6 +157,21 @@ function showOrg(data: any) {
         }),
     );
   });
+
+  (async () => {
+    let oauth_url = await pcit_system.getOauthClientId();
+
+    $('#miss_org').append(
+      $('<p class="org_tips">找不到组织?请点击 </p>').append(
+        $('<a></a>')
+          .append('授权')
+          .attr({
+            href: oauth_url.url,
+            target: '_black',
+          }),
+      ),
+    );
+  })();
 }
 
 function showGitHubAppSettings(org_name: string, installation_id: number) {
