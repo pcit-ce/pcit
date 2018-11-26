@@ -178,7 +178,7 @@ Route::get('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\Set
 Route::patch('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@update');
 
 Route::get('{git_type}/{username}/{repo_name}/requests', 'Builds\IndexController');
-Route::get('api/repo/{username}/{repo_name}/requests', 'Builds\RequestsController');
+Route::get('api/repo/{git_type}/{username}/{repo_name}/requests', 'Builds\RequestsController');
 Route::post('api/repo/{username}/{repo_name}/requests', 'Builds\RequestsController@create');
 Route::get('api/repo/{username}/{repo_name}/request/{requests_id}', 'Builds\RequestsController@find');
 
@@ -201,8 +201,6 @@ Route::post('api/repo/{username}/{repo_name}/deactivate', 'Builds\ActiveControll
 
 Route::post('api/repo/{username}/{repo_name}/star', 'Repos\StarController');
 Route::post('api/repo/{username}/{repo_name}/unstar', 'Repos\StarController@unstar');
-
-Route::post('api/repo/{username}/{repo_name}/trigger/{branch}', 'Builds\TriggerController');
 
 /* Log */
 

@@ -156,12 +156,27 @@ module.exports = {
   handle: url => {
     column_span_click('pull_requests');
 
-    $.ajax({
-      type: 'GET',
-      url: '/api/repo/' + url.getGitRepoFullName() + '/builds?type=pr',
-      success: function(data) {
-        display(data, url);
-      },
-    });
+    // $.ajax({
+    //   type: 'GET',
+    //   url: '/api/repo/' + url.getGitRepoFullName() + '/builds?type=pr',
+    //   success: function(data) {
+    //     display(data, url);
+    //   },
+    // });
+
+    const pcit = require('@pcit/pcit-js');
+
+    const builds = new pcit.Builds('', '');
+
+    (async () => {
+      let result = await builds.findByRepo(
+        url.getGitType(),
+        url.getRepoFullName(),
+        undefined,
+        true,
+      );
+
+      display(result, url);
+    })();
   },
 };

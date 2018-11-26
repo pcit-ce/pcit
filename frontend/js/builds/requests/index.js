@@ -117,18 +117,34 @@ function display(data, url) {
 
 module.exports = {
   handle: (url, token) => {
-    $.ajax({
-      type: 'get',
-      url: '/api/repo/' + url.getRepoFullName() + '/requests',
-      headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType()),
-      },
-      success: function(data) {
-        display(data, url);
-      },
-      error: () => {
+    // $.ajax({
+    //   type: 'get',
+    //   url: '/api/repo/' + url.getGitRepoFullName() + '/requests',
+    //   headers: {
+    //     Authorization: 'token ' + token.getToken(url.getGitType()),
+    //   },
+    //   success: function(data) {
+    //     display(data, url);
+    //   },
+    //   error: () => {
+    //     display('', url);
+    //   },
+    // });
+
+    const pcit = require('@pcit/pcit-js');
+
+    const repo = new pcit.Repo(token, '');
+
+    (async () => {
+      try {
+        const result = await repo.requests.list(
+          url.getGitType(),
+          url.getRepoFullName(),
+        );
+        display(result, url);
+      } catch (e) {
         display('', url);
-      },
-    });
+      }
+    })();
   },
 };

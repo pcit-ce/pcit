@@ -239,16 +239,18 @@ $('.trigger_build_modal_button').on('click', () => {
 
   let config = $('#trigger_build_config').val();
 
+  config = config ? config : '';
+
   // console.log(config);
 
-  let request_url = '/api/repo/' + url.getRepoFullName() + '/trigger/' + branch;
+  let request_url = '/api/repo/' + url.getRepoFullName() + '/requests';
 
   fetch(request_url, {
     method: 'post',
     headers: {
       Authorization: 'token ' + token.getToken(url.getGitType()),
     },
-    body: config ? config : '',
+    body: { request: { config, branch } },
   })
     .then(res => {
       if (res.ok) {

@@ -1,15 +1,20 @@
+const pcit = require('@pcit/pcit-js');
+
 function get_env(url, token) {
-  return new Promise(resolve => {
-    $.ajax({
-      url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
-      headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType()),
-      },
-      success: data => {
-        resolve(data);
-      },
-    });
-  });
+  // return new Promise(resolve => {
+  //   $.ajax({
+  //     url: '/api/repo/' + [url.getRepoFullName(), 'env_vars'].join('/'),
+  //     headers: {
+  //       Authorization: 'token ' + token.getToken(url.getGitType()),
+  //     },
+  //     success: data => {
+  //       resolve(data);
+  //     },
+  //   });
+  // });
+  const pcit_repo = new pcit.Repo(token.getToken(url.getGitType()), '');
+
+  return pcit_repo.env.list(url.getRepoFullName());
 }
 
 function display(data, url, token) {
@@ -176,15 +181,23 @@ function display(data, url, token) {
 module.exports = {
   handle: (url, token) => {
     // console.log(location.href);
-    $.ajax({
-      type: 'get',
-      url: '/api/repo/' + url.getRepoFullName() + '/settings',
-      headers: {
-        Authorization: 'token ' + token.getToken(url.getGitType()),
-      },
-      success: function(data) {
-        display(data, url, token);
-      },
-    });
+    // $.ajax({
+    //   type: 'get',
+    //   url: '/api/repo/' + url.getRepoFullName() + '/settings',
+    //   headers: {
+    //     Authorization: 'token ' + token.getToken(url.getGitType()),
+    //   },
+    //   success: function(data) {
+    //     display(data, url, token);
+    //   },
+    // });
+
+    const pcit_repo = new pcit.Repo(token.getToken(url.getGitType()), '');
+
+    (async () => {
+      let result = await pcit_repo.settings.list(url.getRepoFullName());
+
+      display(result, url, token);
+    })();
   },
 };
