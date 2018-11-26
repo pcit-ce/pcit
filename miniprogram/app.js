@@ -34,6 +34,7 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    PCIT_ENTRYPOINT: "https://ci.khs1994.com/api"
   }
 })

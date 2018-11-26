@@ -1,4 +1,8 @@
 // pages/profile/index.js
+
+const pcit = require('@pcit/pcit-js');
+const app = getApp();
+
 Page({
 
   /**
@@ -26,7 +30,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    const repo = new pcit.Builds('',app.PCIT_ENTRYPOINT);
+    repo.find(100).then(res=>console.log(res));
   },
 
   /**
