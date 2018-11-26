@@ -24,10 +24,10 @@ module.exports = {
     // });
 
     const pcit = require('@pcit/pcit-js');
-    const pcit_cache = new pcit.Caches(token.getToken(url.getGitType()), '');
+    const pcit_repo = new pcit.Repo(token.getToken(url.getGitType()), '');
 
     (async () => {
-      let result = await pcit_cache.list(url.getRepoFullName());
+      let result = await pcit_repo.caches.list(url.getRepoFullName());
 
       display(result);
     })();

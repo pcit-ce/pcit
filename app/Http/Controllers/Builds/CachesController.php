@@ -17,11 +17,13 @@ class CachesController
      *
      * @throws \Exception
      */
-    public function __invoke(...$args): void
+    public function __invoke(...$args)
     {
         list($username, $repo_name) = $args;
 
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
+
+        return [];
     }
 
     /**

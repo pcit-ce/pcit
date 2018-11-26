@@ -12,6 +12,7 @@ use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
 use PCIT\PCIT;
+use Symfony\Component\Yaml\Yaml;
 
 class RequestsController
 {
