@@ -54,4 +54,42 @@ class SystemController
 
         return compact('url');
     }
+
+    public function about()
+    {
+        $data = <<<EOF
+`PCIT` 是国内首个基于 `GitHub Checks API` 使用 **PHP** 编写的开源持续集成/持续部署 (CI/CD) 系统。
+
+在 **2018** 年主要基于 `GitHub` 进行开发。
+
+预计将在 **2019** 年支持国内主流 Git 服务商 `gitee.com`，让国内开发者体验到现代化的 CI/CD 工具集。
+
+开发者可以使用 `.pcit.yml` 定义 CI/CD 工作流。
+
+```yaml
+# .pcit.yml 示例文件
+
+language: php
+
+pipeline:
+
+  test:
+    command:
+      - composer install
+
+  script:
+    commands:
+      - ./vendor/bin/phpunit
+
+  after_success:
+    commands:
+      - echo "Build is success"
+```
+
+更多信息在 `https://docs.ci.khs1994.com` 查看。
+
+EOF;
+
+        return compact('data');
+    }
 }

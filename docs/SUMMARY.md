@@ -31,13 +31,9 @@
 ## Example
 
 * Example
-    * PHP
-        * [PHPUnit](examples/php/phpunit.md)
-        * [PHP-CS-Fixer](examples/php/php-cs-fixer.md)
-    * Java
-    * Node.js
-        * [Hexo](examples/nodejs/hexo.md)
-        * [GitBook](examples/nodejs/gitbook.md)
+    * [PHP](examples/php.md)
+    * [Java](examples/java.md)
+    * [Node.js](examples/node_js.md)
 
 ## Plugins
 

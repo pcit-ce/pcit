@@ -26,3 +26,10 @@
 | :----- | :-----------------------               |
 | `GET`    | `/ci/github_app_settings/{org_name}` |
 
+## About
+
+> 获取 PCIT 描述文件（md 格式）
+
+| Method | URL |
+| :---   | :--- |
+| `GET` | `/ci/about` |
