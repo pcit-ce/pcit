@@ -42,3 +42,5 @@ yarn.lock
 # pcit
 
 .pcit.yml.example
+
+frontend

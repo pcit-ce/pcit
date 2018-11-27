@@ -46,6 +46,10 @@ class JobController
 
         $this->handleCancel($job_id);
 
+        if(function_exists(fastcgi_finish_request)){
+            fastcgi_finish_request();
+        }
+
         $this->updateBuildStatus((int) $job_id);
     }
 
