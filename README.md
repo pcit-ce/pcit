@@ -1,18 +1,18 @@
 # PCIT (PCIT is not PHP CI TOOLKIT)
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-php/pcit.svg?style=social&label=Stars)](https://github.com/khs1994-php/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-php/pcit/all.svg)](https://github.com/khs1994-php/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/khs1994-php/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/khs1994-php/pcit) [![codecov](https://codecov.io/gh/khs1994-php/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/khs1994-php/pcit)
+[![GitHub stars](https://img.shields.io/github/stars/pcit-ce/pcit.svg?style=social&label=Stars)](https://github.com/pcit-ce/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/pcit-ce/pcit/all.svg)](https://github.com/pcit-ce/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/pcit-ce/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/pcit-ce/pcit) [![codecov](https://codecov.io/gh/pcit-ce/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/pcit-ce/pcit)
 
 **国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的开源云原生 CI/CD 系统**
 
 * [Support Docs](https://docs.ci.khs1994.com)
-* [Changelog](https://github.com/khs1994-php/pcit/blob/master/CHANGELOG.md)
-* [Feedback](https://github.com/khs1994-php/pcit/issues)
+* [Changelog](https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md)
+* [Feedback](https://github.com/pcit-ce/pcit/issues)
 * [API](https://ci.khs1994.com/api)
 * [API Docs](https://api.ci.khs1994.com)
-* [Plugins](https://github.com/khs1994-php/pcit/tree/master/plugins)
+* [Plugins](https://github.com/pcit-ce/pcit/tree/master/plugins)
 * [PHP Docs](https://khs1994-php.github.io/pcit)
 * [Donate](https://zan.khs1994.com)
-* [PCIT EE](https://github.com/khs1994-php/pcit/tree/master/docs#about-pcit-ce-and-ee)
+* [PCIT EE](https://github.com/pcit-ce/pcit/tree/master/docs#about-pcit-ce-and-ee)
 
 ## 项目状态
 
@@ -20,7 +20,7 @@
 
 **预览** 点击 https://ci.khs1994.com/github/khs1994-docker/lnmp 查看 PCIT 功能界面。
 
-本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎开发者 [参与 PCIT 开发](https://github.com/khs1994-php/pcit/blob/master/CONTRIBUTING.md)。
+本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎开发者 [参与 PCIT 开发](https://github.com/pcit-ce/pcit/blob/master/CONTRIBUTING.md)。
 
 ## 微信订阅号
 
@@ -72,7 +72,7 @@ push by you, test and deploy by us.
 
 * 点击 [PCIT-CE GitHub App](https://github.com/apps/pcit-ce) 进行安装
 
-* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/khs1994-php/pcit/tree/master/yml_examples) 来配置 CI 规则
+* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/pcit-ce/pcit/tree/master/yml_examples) 来配置 CI 规则
 
 ```yaml
 language: php
@@ -82,7 +82,7 @@ pipeline:
   install:
     image: khs1994/php:7.2.10-fpm-alpine
     commands:
-      - composer install  
+      - composer install
 
   script:
     image: khs1994/php:7.2.10-fpm-alpine
@@ -92,7 +92,7 @@ pipeline:
   after_success:
     image: bash
     commands:
-      - echo "build is success"    
+      - echo "build is success"
 ```
 
 * 推送 git 仓库到 GitHub，PCIT 开始进行 **构建** **测试** **部署** 等一系列工作。
@@ -148,7 +148,7 @@ $ ./lnmp-docker pcit-up
 
 **6.** Git 仓库根目录包含 `.pcit.yml` 文件，推送到 GitHub，在 Commit 详情处查看构建。
 
-详细的步骤请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
+详细的步骤请查看 https://github.com/pcit-ce/pcit/blob/master/docs/install/ee.md
 
 ### 视频教程
 
@@ -170,7 +170,7 @@ $ ./lnmp-docker pcit-up
 
 ## Why PCIT
 
-* https://github.com/khs1994-php/pcit/blob/master/docs/why.md
+* https://github.com/pcit-ce/pcit/blob/master/docs/why.md
 
 ## PCIT 子项目
 
@@ -188,14 +188,18 @@ $ ./lnmp-docker pcit-up
 
 ## 项目拆分
 
-未来本项目可能会将以下模块进行拆分
+### 待拆分
 
-* [前端 UI](https://github.com/khs1994-php/pcit-ui)
-* [YML 转化为 PCIT 配置](https://github.com/khs1994-php/pcit-yml)
-* [缓存后端驱动](https://github.com/khs1994-php/pcit-cache)
-* [日志处理组件](https://github.com/khs1994-php/pcit-logs)
-* [API 组件](https://github.com/khs1994-php/pcit-api)
-* [部署组件 Deployer](https://github.com/khs1994-php/pcit-deployer)
+* [YML 转化为 PCIT 配置](https://github.com/pcit-ce/yml)
+* [缓存后端驱动](https://github.com/pcit-ce/cache)
+* [日志处理组件](https://github.com/pcit-ce/logs)
+* [API 组件](https://github.com/pcit-ce/api)
+* [部署组件 Deployer](https://github.com/pcit-ce/deployer)
+
+### 已拆分
+
+* [前端 UI](https://github.com/pcit-ce/ui)
+* [微信小程序](https://github.com/pcit-ce/miniprogram)
 
 ## 致谢
 
