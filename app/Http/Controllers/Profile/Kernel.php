@@ -47,7 +47,8 @@ abstract class Kernel
             exit;
         }
 
-        $api_token = JWTController::generate($git_type, $username, (int) $uid);
+        $result = JWTController::generate($git_type, $username, (int) $uid);
+        $api_token = $result['token'];
 
         setcookie(
             $git_type.'_api_token',

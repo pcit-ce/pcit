@@ -167,7 +167,7 @@ class JWTController
         $git_obj = json_decode($curl->get('https://api.github.com/user'));
 
         if (200 !== $curl->getCode()) {
-            throw new Exception('Requires authentication', 401);
+            throw new Exception('Requires authentication, maybe username or password not incorrect', 401);
         }
 
         $uid = $git_obj->id;
@@ -179,12 +179,14 @@ class JWTController
 
         // 验证通过 返回 jwt
         a:
-        return JWT::encode(
+        $token = JWT::encode(
             base_path().'framework/storage/private_key/private.key',
             (string) $git_type,
             (string) $username,
             (int) $uid,
             time() + 100 * 24 * 60 * 60
         );
+
+        return compact('token');
     }
 }

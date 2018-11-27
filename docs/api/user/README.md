@@ -1,5 +1,19 @@
 # User
 
+## Get Token
+
+> 通过 Git 用户名、密码获取 Token.
+
+```bash
+$ curl -X POST \
+    -d '{"git_type":"github","username":"username","password":"MyPassword"}' \
+    https://ci.khs1994.com/api/user/token
+```
+
+| Method | URL |
+| :----  | --- |
+| `POST` | `/user/token` |
+
 ## Find By Current
 
 This will return information about the current user.

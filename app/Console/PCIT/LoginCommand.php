@@ -55,11 +55,13 @@ class LoginCommand extends Command
 
         $curl = new Curl();
 
-        $token = $curl->post($api_endpoint.'/api/user/token', $request);
+        $result = $curl->post($api_endpoint.'/api/user/token', $request);
+
+        $token = json_decode($result)->token ?? '';
 
         $http_return_code = $curl->getCode();
 
-        if (200 !== $http_return_code) {
+        if (200 !== $http_return_code or !$token) {
             throw new Exception('Incorrect username or password or git_type', $http_return_code);
         }
 

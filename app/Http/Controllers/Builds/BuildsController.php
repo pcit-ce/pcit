@@ -131,7 +131,7 @@ class BuildsController
 
         JWTController::check($build_id);
 
-        if(function_exists(fastcgi_finish_request)){
+        if (\function_exists(fastcgi_finish_request)) {
             fastcgi_finish_request();
         }
 
