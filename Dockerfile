@@ -11,13 +11,16 @@ ARG NODE_REGISTRY=https://registry.npmjs.org
 COPY frontend/package.json /app/pcit/frontend/
 
 RUN cd /app/pcit/frontend \
-      && npm install cross-env --registry=${NODE_REGISTRY} \
-      && npm install --registry=${NODE_REGISTRY} --production
+      # && npm install cross-env --registry=${NODE_REGISTRY} \
+      # && npm install --registry=${NODE_REGISTRY} --production
+      && npm install --registry=${NODE_REGISTRY}
 
 COPY ./frontend/webpack.config.js /app/pcit/frontend/
+COPY ./frontend/images /app/pcit/frontend/images
 COPY ./frontend/js /app/pcit/frontend/js
 COPY ./frontend/html /app/pcit/frontend/html
 COPY ./frontend/css /app/pcit/frontend/css
+COPY ./frontend/src /app/pcit/frontend/src
 
 RUN cd /app/pcit/frontend \
       # && set PATH=./node_modules/.bin:$PATH \

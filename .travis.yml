@@ -8,7 +8,8 @@
 language: php
 
 cache:
-  directories:
+  - npm
+  - directories:
     - cache
 
 sudo: required
@@ -113,6 +114,7 @@ jobs:
           branch: master
     - stage: deploy
       script:
+        - git clone --depth=1 https://github.com/pcit-ce/ui frontend
         - docker build -t khs1994/pcit:alpine .
 
 stages:
