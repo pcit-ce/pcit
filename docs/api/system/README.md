@@ -33,3 +33,11 @@
 | Method | URL |
 | :---   | :--- |
 | `GET` | `/ci/about` |
+
+## Changelog
+
+> 获取 PCIT `CHANGELOG` 描述文件（md 格式）
+
+| Method | URL |
+| :---   | :--- |
+| `GET` | `/ci/changelog` |

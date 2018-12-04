@@ -92,4 +92,11 @@ EOF;
 
         return compact('data');
     }
+
+    public function changelog()
+    {
+        $data = file_get_contents(base_path().'CHANGELOG.md');
+
+        return compact('data');
+    }
 }

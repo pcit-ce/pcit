@@ -242,6 +242,7 @@ Route::get('api/ci/oauth_client_id', 'System\SystemController@getOAuthClientId')
 Route::get('api/ci/github_app_installation/{uid}', 'System\SystemController@getGitHubAppInstallationUrl');
 Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@getGitHubAppSettingsUrl');
 Route::get('api/ci/about', 'System\SystemController@about');
+Route::get('api/ci/changelog', 'System\SystemController@changelog');
 
 /* Issues */
 
