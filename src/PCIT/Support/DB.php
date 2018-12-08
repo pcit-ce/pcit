@@ -26,11 +26,11 @@ class DB
     public static function connection()
     {
         if (!(self::$pdo instanceof PDO)) {
-            $mysql_host = Env::get('CI_MYSQL_HOST', 'mysql');
-            $mysql_port = Env::get('CI_MYSQL_PORT', 3306);
-            $mysql_username = Env::get('CI_MYSQL_USERNAME', 'root');
-            $mysql_password = Env::get('CI_MYSQL_PASSWORD', 'mytest');
-            $mysql_dbname = Env::get('CI_MYSQL_DATABASE', 'test');
+            $mysql_host = env('CI_MYSQL_HOST', 'mysql');
+            $mysql_port = env('CI_MYSQL_PORT', 3306);
+            $mysql_username = env('CI_MYSQL_USERNAME', 'root');
+            $mysql_password = env('CI_MYSQL_PASSWORD', 'mytest');
+            $mysql_dbname = env('CI_MYSQL_DATABASE', 'test');
 
             $dsn = 'mysql:host='.$mysql_host.';port='.$mysql_port.';dbname='.$mysql_dbname;
 

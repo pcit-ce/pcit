@@ -88,7 +88,7 @@ class Log
      */
     public static function connect(string $name = 'pcit', string $log_path = null)
     {
-        date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
+        date_default_timezone_set(env('CI_TZ', 'PRC'));
 
         $log_path = $log_path ?? sys_get_temp_dir().\DIRECTORY_SEPARATOR.'pcit.'.date('Y-m-d').'.log';
 
@@ -118,7 +118,7 @@ class Log
                                  array $context = [],
                                  $level = 'debug'): void
     {
-        $log_level = Env::get('CI_LOG_LEVEL', 'info');
+        $log_level = env('CI_LOG_LEVEL', 'info');
 
         if (self::$$log_level > self::$$level) {
             return;

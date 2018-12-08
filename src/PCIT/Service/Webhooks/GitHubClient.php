@@ -63,11 +63,11 @@ class GitHubClient
      */
     private function secret(string $content): void
     {
-        if (Env::get('CI_WEBHOOKS_DEBUG', false)) {
+        if (env('CI_WEBHOOKS_DEBUG', false)) {
             return;
         }
 
-        $secret = Env::get('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
+        $secret = env('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
 
         $signature = Request::getHeader('X-Hub-Signature');
 

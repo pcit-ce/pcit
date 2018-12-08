@@ -8,7 +8,7 @@ class SendMail
 {
     public static function build(): void
     {
-        if (!Env::get('CI_EMAIL_PASSWORD', false)) {
+        if (!env('CI_EMAIL_PASSWORD', false)) {
             Log::debug(__FILE__, __LINE__, 'mail settings not found, send Mail skip', [], Log::INFO);
 
             return;

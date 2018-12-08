@@ -194,7 +194,7 @@ class Client
             return $jwt;
         }
 
-        $jwt = JWT::getJWT($private_key_path, (int) Env::get('CI_GITHUB_APP_ID'));
+        $jwt = JWT::getJWT($private_key_path, (int) env('CI_GITHUB_APP_ID'));
 
         Cache::store()->set('github_app_jwt', $jwt, 8 * 60);
 
@@ -259,7 +259,7 @@ class Client
      */
     public function getInstallUrl(int $rid)
     {
-        return $url = 'https://github.com/apps/'.Env::get('CI_GITHUB_APP_NAME').
+        return $url = 'https://github.com/apps/'.env('CI_GITHUB_APP_NAME').
             '/installations/new/permissions?suggested_target_id='.$rid;
     }
 

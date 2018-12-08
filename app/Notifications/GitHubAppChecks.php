@@ -70,7 +70,7 @@ class GitHubAppChecks
         $commit_id = $output_array['commit_id'];
         $event_type = $output_array['event_type'];
 
-        $details_url = Env::get('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
+        $details_url = env('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
 
         $config = JSON::beautiful(Build::getConfig((int) $build_key_id));
 

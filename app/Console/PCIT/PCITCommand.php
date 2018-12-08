@@ -62,7 +62,7 @@ class PCITCommand
             'e',
             InputOption::VALUE_OPTIONAL,
             'PCIT API server to talk to',
-            Env::get('CI_HOST', 'https://ci.khs1994.com'),
+            env('CI_HOST', 'https://ci.khs1994.com'),
         ];
     }
 

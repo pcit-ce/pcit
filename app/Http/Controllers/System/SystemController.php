@@ -26,7 +26,7 @@ class SystemController
                 break;
         }
 
-        $url = $url.Env::get('CI_'.strtoupper($git_type).'_CLIENT_ID');
+        $url = $url.env('CI_'.strtoupper($git_type).'_CLIENT_ID');
 
         return compact('url');
     }
@@ -48,7 +48,7 @@ class SystemController
 
     public function getGitHubAppInstallationUrl($uid)
     {
-        $app_name = strtolower(Env::get('CI_GITHUB_APP_NAME'));
+        $app_name = strtolower(env('CI_GITHUB_APP_NAME'));
 
         $url = "https://github.com/apps/{$app_name}/installations/new/permissions?suggested_target_id=".$uid;
 

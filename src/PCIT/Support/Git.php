@@ -219,7 +219,7 @@ class Git
                 break;
             case 'coding':
                 // 支持 Coding 企业版
-                $url = Env::get('CI_CODING_HOST', null) ?? 'dev.tencent.com';
+                $url = env('CI_CODING_HOST', null) ?? 'dev.tencent.com';
                 $url .= '/api';
                 break;
 

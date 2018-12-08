@@ -18,9 +18,9 @@ class GitHubClientTest extends PCITTestCase
     {
         $pcit = self::getTest();
 
-        $username = Env::get('CI_GITHUB_TEST_USERNAME');
+        $username = env('CI_GITHUB_TEST_USERNAME');
 
-        $password = Env::get('CI_GITHUB_TEST_PASSWORD');
+        $password = env('CI_GITHUB_TEST_PASSWORD');
 
         $result = $pcit->user_basic_info->getUserInfo();
     }

@@ -24,7 +24,7 @@ class IndexController
 
     public function api()
     {
-        $ci_host = Env::get('CI_HOST').'/api';
+        $ci_host = env('CI_HOST').'/api';
 
         $array = [
             'user' => [
@@ -102,7 +102,7 @@ class IndexController
 
         ksort($array);
 
-        $array['sitemap'] = Env::get('CI_HOST').'/sitemap';
+        $array['sitemap'] = env('CI_HOST').'/sitemap';
 
         return $array;
     }

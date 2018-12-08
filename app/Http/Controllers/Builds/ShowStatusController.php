@@ -51,7 +51,7 @@ class ShowStatusController
     public function getStatus(...$arg)
     {
         list($git_type, $username, $repo) = $arg;
-        $host = Env::get('CI_HOST');
+        $host = env('CI_HOST');
 
         return <<<EOF
 <pre>

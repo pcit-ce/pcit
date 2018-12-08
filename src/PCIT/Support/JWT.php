@@ -48,7 +48,7 @@ class JWT
     {
         $privateKey = file_get_contents($privateKey);
 
-        $ci_host = Env::get('CI_HOST');
+        $ci_host = env('CI_HOST');
 
         $token = [
             'iss' => $ci_host,

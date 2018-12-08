@@ -71,7 +71,7 @@ abstract class Kernel extends Command
             $this->handler->handle();
             unset($up);
 
-            if (Env::get('CI_DEBUG_MEMORY', false)) {
+            if (env('CI_DEBUG_MEMORY', false)) {
                 Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
             }
 
@@ -90,7 +90,7 @@ abstract class Kernel extends Command
         if (0 === $pid) {
             $this->handler->handle();
 
-            if (Env::get('CI_DEBUG_MEMORY', false)) {
+            if (env('CI_DEBUG_MEMORY', false)) {
                 Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
             }
 

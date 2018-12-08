@@ -12,19 +12,15 @@ if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
 
-'true' === Env::get('CI_DEBUG', false) && CI::enableDebug();
+'true' === env('CI_DEBUG', false) && CI::enableDebug();
 
-$env_file = '.env';
+$app_env = CI::environment();
 
-if ($app_env = Env::get('APP_ENV')) {
-    $env_file = '.env.'.$app_env;
-}
+$env_file = $app_env ? '.env.'.$app_env : '.env';
 
-if (file_exists(base_path().$env_file)) {
-    (new Dotenv(base_path(), $env_file))->load();
-}
+file_exists(base_path().$env_file) && (new Dotenv(base_path(), $env_file))->load();
 
-date_default_timezone_set(Env::get('CI_TZ', 'PRC'));
+date_default_timezone_set(env('CI_TZ', 'PRC'));
 
 $app = new \PCIT\Foundation\Application([]);
 

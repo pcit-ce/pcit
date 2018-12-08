@@ -73,11 +73,11 @@ class Cache
         $prefix = $this->getPrefix();
 
         $env = [
-            'S3_ENDPOINT='.Env::get('CI_S3_ENDPOINT'),
-            'S3_ACCESSKEYID='.Env::get('CI_S3_ACCESSKEYID'),
-            'S3_SECRETACCESSKEY='.Env::get('CI_S3_SECRETACCESSKEY'),
-            'S3_BUCKET='.Env::get('', 'pcit'),
-            'S3_REGION='.Env::get('', 'us-east-1'),
+            'S3_ENDPOINT='.env('CI_S3_ENDPOINT'),
+            'S3_ACCESSKEYID='.env('CI_S3_ACCESSKEYID'),
+            'S3_SECRETACCESSKEY='.env('CI_S3_SECRETACCESSKEY'),
+            'S3_BUCKET='.env('', 'pcit'),
+            'S3_REGION='.env('', 'us-east-1'),
             'S3_CACHE_PREFIX='.$prefix,
             'S3_CACHE='.json_encode($this->cache->directories),
             'S3_CACHE_DOWNLOAD=true',

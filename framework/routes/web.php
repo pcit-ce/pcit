@@ -86,7 +86,7 @@ Route::post('webhooks/gitee', 'Webhooks\GiteeController');
 
 Route::post('webhooks/coding', 'Webhooks\CodingController');
 
-Route::post('webhooks/'.Env::get('CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS', 'aliyun_docker_registry'),
+Route::post('webhooks/'.env('CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS', 'aliyun_docker_registry'),
     'Webhooks\AliyunDockerRegistryController');
 
 // 获取所有接收到的 webhooks -> requests
@@ -254,6 +254,13 @@ Route::get('websocket/server', 'Demo\WebSocket\WebSocketController');
 Route::get('sse/server', 'Demo\SSE\SSEController');
 Route::get('websocket/client', 'Demo\WebSocket\WebSocketController@client');
 Route::get('sse/client', 'Demo\SSE\SSEController@client');
+
+/* Dashboard */
+Route::get('dashboard', function () {
+    $message = 'coming soon';
+
+    return compact('message');
+});
 
 /* Test */
 

@@ -16,6 +16,6 @@ class LogOut
 
         Session::pull($git_type.'.access_token');
 
-        Response::redirect(Env::get('CI_HOST'));
+        Response::redirect(env('CI_HOST'));
     }
 }

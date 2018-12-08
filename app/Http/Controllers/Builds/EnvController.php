@@ -77,7 +77,7 @@ class EnvController
 
         list($rid, $git_type, $uid) = JWTController::checkByRepo($username, $repo_name);
 
-        return Env::get((int) $env_var_id, $rid, $git_type);
+        return env((int) $env_var_id, $rid, $git_type);
     }
 
     /**

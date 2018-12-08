@@ -13,8 +13,9 @@ class Kernel
 {
     private function sendRequestThroughRouter()
     {
-        $debug = true === Env::get('CI_DEBUG', false);
+        $debug = true === env('CI_DEBUG', false);
 
+        // ci.khs1994.com/index.php redirect to /dashboard
         if ('/index.php' === $_SERVER['REQUEST_URI']) {
             Response::redirect('dashboard');
             exit;

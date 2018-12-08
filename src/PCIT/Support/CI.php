@@ -86,15 +86,17 @@ class CI
      *
      * @param string|null|array $env
      *
-     * @return array|false|string
+     * @return false|string
      */
     public static function environment($env = null)
     {
-        $current_env = getenv('APP_ENV');
+        $current_env = env('APP_ENV');
 
         if (null === $env) {
             return $current_env;
-        } elseif (\is_array($env)) {
+        }
+
+        if (\is_array($env)) {
             return \in_array($current_env, $env, true);
         }
 

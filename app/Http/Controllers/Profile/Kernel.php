@@ -36,7 +36,7 @@ abstract class Kernel
         $email = Session::get($git_type.'.email');
 
         if (null === $username or null === $access_token) {
-            Response::redirect(Env::get('CI_HOST').'/login');
+            Response::redirect(env('CI_HOST').'/login');
 
             exit;
         }
@@ -55,7 +55,7 @@ abstract class Kernel
             $api_token,
             time() + 24 * 60 * 60,
             '/',
-            Env::get('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
+            env('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
         );
 
         User::updateUserInfo((int) $uid, null, (string) $username, (string) $email, (string) $pic, false, $git_type);

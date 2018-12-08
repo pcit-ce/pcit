@@ -32,7 +32,7 @@ class CheckAdmin
     {
         $build = $this->build;
 
-        $ci_root = Env::get('CI_ROOT');
+        $ci_root = env('CI_ROOT');
 
         while ($ci_root) {
             Log::debug(__FILE__, __LINE__, 'PCIT already set ci root', [], Log::INFO);
