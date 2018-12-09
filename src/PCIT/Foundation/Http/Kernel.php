@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Foundation\Http;
 
-use PCIT\Support\Env;
 use PCIT\Support\Response;
 use PCIT\Support\Route;
 use Throwable;
@@ -13,10 +12,10 @@ class Kernel
 {
     private function sendRequestThroughRouter()
     {
-        $debug = true === env('CI_DEBUG', false);
+        $debug = config('app.debug');
 
         if (!\defined('PCIT_START')) {
-            \define('PCIT_START', microtime(true));
+            \define('PCIT_START', 0);
         }
 
         // ci.khs1994.com/index.php redirect to /dashboard

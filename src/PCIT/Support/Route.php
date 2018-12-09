@@ -79,7 +79,8 @@ class Route
     private static function handle($targetUrl, $action): void
     {
         // ?a=1&b=2
-        $queryString = $_SERVER['QUERY_STRING'];
+        // $queryString = $_SERVER['QUERY_STRING'];
+        $queryString = app('request')->query->all();
 
         //$url = $_SERVER['REQUEST_URI'];
         $url = app('request')->getPathInfo();

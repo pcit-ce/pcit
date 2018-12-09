@@ -90,4 +90,8 @@ class Application extends Container
 
         return static::$instance;
     }
+
+    public function resolving(): void
+    {
+    }
 }

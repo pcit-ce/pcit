@@ -37,6 +37,25 @@ if (!function_exists('env')) {
     }
 }
 
+if (!function_exists('config')) {
+    function config($key, $default = null)
+    {
+        $key = trim($key, '.');
+
+        [$file] = $array = explode('.', $key);
+
+        array_shift($array);
+
+        $config = require base_path().'framework/config/'.$file.'.php';
+
+        foreach ($array as $key) {
+            $config = $config[$key];
+        }
+
+        return $config;
+    }
+}
+
 if (!function_exists('base_path')) {
     function base_path()
     {

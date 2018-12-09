@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 return [
-    'name' => env('APP_NAME', 'PCIT'),
-  'providers' => [
-'App\Providers\AppServiceProvider',
-  ],
+    'name' => env('CI_NAME', 'PCIT'),
+    'debug' => env('CI_DEBUG', false),
+    'providers' => [
+        'App\Providers\AppServiceProvider',
+    ],
 ];

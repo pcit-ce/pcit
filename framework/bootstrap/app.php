@@ -10,7 +10,7 @@ if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
 
-'true' === env('CI_DEBUG', false) && CI::enableDebug();
+config('app.debug') && CI::enableDebug();
 
 $app_env = CI::environment();
 
