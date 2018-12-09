@@ -18,7 +18,6 @@ use App\Console\Webhooks\GitHub\PullRequest;
 use App\Console\Webhooks\GitHub\Push;
 use Error;
 use Exception;
-use PCIT\PCIT;
 use PCIT\Support\Cache;
 use PCIT\Support\CI;
 use PCIT\Support\DB;
@@ -86,7 +85,7 @@ class Server extends Kernel
 
         try {
             // exec build
-            (new PCIT())->build->handle($buildData);
+            $this->pcit->build->handle($buildData);
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [
                 'message' => $e->getMessage(), 'code' => $e->getCode(), ], Log::EMERGENCY);
@@ -124,7 +123,7 @@ class Server extends Kernel
     {
         Log::debug(__FILE__, __LINE__, 'start handle webhooks');
 
-        $webhooks = (new PCIT())->webhooks;
+        $webhooks = $this->pcit->webhooks;
 
         while (true) {
             Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');

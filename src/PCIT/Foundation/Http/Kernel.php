@@ -15,6 +15,10 @@ class Kernel
     {
         $debug = true === env('CI_DEBUG', false);
 
+        if (!\defined('PCIT_START')) {
+            \define('PCIT_START', microtime(true));
+        }
+
         // ci.khs1994.com/index.php redirect to /dashboard
         if ('/index.php' === $_SERVER['REQUEST_URI']) {
             Response::redirect('dashboard');
@@ -68,13 +72,17 @@ class Kernel
         ]), PCIT_START);
     }
 
-    public function handle($requests)
+    public function handle($request)
     {
-        ini_set('session.cookie_path', '/');
-        ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
-        ini_set('session.gc_maxlifetime', '690000'); // s
-        ini_set('session.cookie_lifetime', '690000'); // s
-        ini_set('session.cookie_secure', 'On');
+        try {
+            ini_set('session.cookie_path', '/');
+            ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
+            ini_set('session.gc_maxlifetime', '690000'); // s
+            ini_set('session.cookie_lifetime', '690000'); // s
+            ini_set('session.cookie_secure', 'On');
+        } catch (Throwable $e) {
+        }
+        app()->instance('request', $request);
 
         // session_set_cookie_params(1800 , '/', '.'getenv('CI_SESSION_DOMAIN', true));
 

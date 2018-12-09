@@ -81,12 +81,12 @@ class Route
         // ?a=1&b=2
         $queryString = $_SERVER['QUERY_STRING'];
 
+        //$url = $_SERVER['REQUEST_URI'];
+        $url = app('request')->getPathInfo();
+
         if ((bool) $queryString) {
-            $url = $_SERVER['REQUEST_URI'];
             // 使用 ? 分隔 url
             $url = (explode('?', $url))[0];
-        } else {
-            $url = $_SERVER['REQUEST_URI'];
         }
 
         $url = trim($url, '/');

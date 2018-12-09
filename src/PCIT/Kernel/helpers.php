@@ -5,10 +5,28 @@ declare(strict_types=1);
 use PCIT\PCIT;
 use PCIT\Support\Env;
 
-if (!function_exists('app')) {
+if (!function_exists('pcit')) {
     function pcit()
     {
         return new PCIT();
+    }
+}
+
+if (!function_exists('app')) {
+    function app(string $abstract = null)
+    {
+        if (null === $abstract) {
+            return \PCIT\Foundation\Application::getInstance();
+        }
+
+        return \PCIT\Foundation\Application::getInstance()->make($abstract);
+    }
+}
+
+if (!function_exists('resolve')) {
+    function resolve($name)
+    {
+        return app($name);
     }
 }
 

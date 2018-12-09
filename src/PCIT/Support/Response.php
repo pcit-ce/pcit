@@ -25,10 +25,16 @@ class Response extends \Symfony\Component\HttpFoundation\Response
      *
      * @return false|string
      */
-    public static function json(array $array, float $startedAt)
+    public static function json(array $array)
     {
-        $time = microtime(true) - $startedAt;
-        header("X-Runtime-rack: $time");
+        if (\defined('PCIT_START')) {
+            $time = microtime(true) - PCIT_START;
+            try {
+                header("X-Runtime-rack: $time");
+            } catch (\Throwable $e) {
+            }
+        }
+
         $code = $array['code'] ?? 200;
 
         if (\in_array($code, self::HTTP_CODE, true)) {

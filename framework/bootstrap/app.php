@@ -6,8 +6,6 @@ use Dotenv\Dotenv;
 use PCIT\Support\CI;
 use PCIT\Support\Env;
 
-require __DIR__.'/../../vendor/autoload.php';
-
 if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
@@ -24,8 +22,8 @@ date_default_timezone_set(env('CI_TZ', 'PRC'));
 
 $app = new \PCIT\Foundation\Application([]);
 
-$app[\App\Http\Kernel::class] = function ($app) {
+$app->singleton(\App\Http\Kernel::class, function ($app) {
     return new \App\Http\Kernel();
-};
+});
 
 return $app;

@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+define('PCIT_START', microtime(true));
+
+require __DIR__.'/../vendor/autoload.php';
+
 use Symfony\Component\HttpFoundation\Request;
 
 ob_start();
-
-define('PCIT_START', microtime(true));
 
 $app = require __DIR__.'/../framework/bootstrap/app.php';
 

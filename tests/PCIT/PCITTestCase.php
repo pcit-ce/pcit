@@ -8,11 +8,11 @@ use App\Console\PCITDaemon\Migrate;
 use App\User;
 use Dotenv\Dotenv;
 use Exception;
+use PCIT\Foundation\Testing\TestCase as BaseTestCase;
 use PCIT\PCIT;
 use PCIT\Support\DB;
-use PHPUnit\Framework\TestCase;
 
-abstract class PCITTestCase extends TestCase
+abstract class PCITTestCase extends BaseTestCase
 {
     private static $test;
 

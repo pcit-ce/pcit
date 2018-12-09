@@ -9,7 +9,6 @@ use App\Console\Events\LogHandle;
 use App\Console\Events\Subject;
 use App\Console\Events\UpdateBuildStatus;
 use App\Job;
-use PCIT\PCIT;
 use PCIT\Support\Cache;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
@@ -27,7 +26,7 @@ class Agent extends Kernel
         Log::debug(__FILE__, __LINE__, 'Docker connect ...');
 
         try {
-            (new PCIT())->docker->system->ping(1);
+            $this->pcit->docker->system->ping(1);
         } catch (\Throwable $e) {
             return;
         }
@@ -55,7 +54,7 @@ class Agent extends Kernel
             ->handle();
 
         try {
-            (new PCIT())->build_agent->handle((int) $job_id);
+            $this->pcit->build_agent->handle((int) $job_id);
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, 'Handle job success', ['job_id' => $job_id, 'message' => $e->getMessage()], Log::EMERGENCY);
 
