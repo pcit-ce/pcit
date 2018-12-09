@@ -233,8 +233,8 @@ Route::get('ico/unknown', 'Status\ShowStatusByICOController@unknown');
 
 Route::post('api/user/token', 'Users\JWTController@generate');
 
-Route::get('wechat', 'WeChat\MessageServer');
-Route::post('wechat', 'WeChat\MessageServer');
+Route::match(['get', 'post'], 'wechat', 'WeChat\MessageServer');
+// Route::post('wechat', 'WeChat\MessageServer');
 
 /* System */
 

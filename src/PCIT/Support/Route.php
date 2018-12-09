@@ -145,7 +145,27 @@ class Route
      */
     public static function __callStatic($name, $arg): void
     {
-        if (!self::checkMethod($name)) {
+        if ('match' === $name) {
+            $methods = $arg[0];
+
+            array_shift($arg);
+
+            if (\is_string($methods)) {
+                return;
+            }
+
+            foreach ($methods as $key) {
+                if (self::checkMethod($key)) {
+                    self::handle(...$arg);
+
+                    return;
+                }
+            }
+
+            return;
+        }
+
+        if ('any' !== $name && !self::checkMethod($name)) {
             return;
         }
 
