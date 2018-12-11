@@ -1,7 +1,7 @@
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
 
-ARG PHP_VERSION=7.2.12
-ARG NODE_VERSION=11.1.0
+ARG PHP_VERSION=7.3.0
+ARG NODE_VERSION=11.4.0
 
 # 安装前端构建依赖
 FROM node:${NODE_VERSION}-alpine as frontend
@@ -27,7 +27,7 @@ RUN cd /app/pcit/frontend \
       && npm run build
 
 # 安装 composer 依赖
-FROM khs1994/php:7.2.12-composer-alpine as composer
+FROM khs1994/php:7.3.0-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 

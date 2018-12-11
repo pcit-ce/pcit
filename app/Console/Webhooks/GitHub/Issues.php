@@ -67,7 +67,7 @@ class Issues
 
         self::translateTitle($repo_full_name, (int) $issue_number, (int) $rid, $title);
 
-        self::createComment($rid, $repo_full_name, $issue_number, $body);
+        // self::createComment($rid, $repo_full_name, $issue_number, $body);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
@@ -177,9 +177,9 @@ class Issues
 
         Cache::store()->lPush(self::$cache_key_github_issue, $last_insert_id);
 
-        self::createComment($rid, $repo_full_name, $issue_number, $body);
+        // self::createComment($rid, $repo_full_name, $issue_number, $body);
 
-        Log::debug(__FILE__, __LINE__, 'Create AI Bot Issue Comment', [], Log::INFO);
+        // Log::debug(__FILE__, __LINE__, 'Create AI Bot Issue Comment', [], Log::INFO);
     }
 
     /**
