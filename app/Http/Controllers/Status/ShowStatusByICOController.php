@@ -26,17 +26,15 @@ class ShowStatusByICOController
     {
         try {
             header('content-type: image/svg+xml;charset=utf-8');
+            header('Cache-Control: no-cache');
+            // header('Cache-Control: max-age=100');
             $file = __DIR__.'/../../../../public/ico/'.$k.'.svg';
 
             if (file_exists($file)) {
-                require $file;
-
-                exit();
+                return file_get_contents($file);
             }
-
-            throw new Exception();
         } catch (Error $e) {
-            require __DIR__.'/../../../../public/ico/unknown.svg';
+            return file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg');
         }
     }
 }

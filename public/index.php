@@ -8,7 +8,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
 
-ob_start();
+// ob_start();
 
 $app = require __DIR__.'/../framework/bootstrap/app.php';
 

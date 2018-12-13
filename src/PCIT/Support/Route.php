@@ -6,6 +6,7 @@ namespace PCIT\Support;
 
 use Closure;
 use Exception;
+use Throwable;
 
 /**
  * @method static get(string $url, Closure|string $action)
@@ -40,34 +41,86 @@ class Route
         $array = explode('@', $action);
 
         $obj = 'App\\Http\\Controllers'.'\\'.$array[0];
+
         // 没有 @ 说明是 __invoke() 方法
         $method = $array[1] ?? '__invoke';
 
-        if (true === class_exists($obj)) {
-            $obj = new $obj();
-
-            try {
-                if ('__invoke' === $method) {
-                    $response = $obj(...$arg);
-                } else {
-                    $response = $obj->$method(...$arg);
-                }
-                self::$output = $response;
-            } catch (\Throwable $e) {
-                // 捕获类方法不存在错误
-                $code = $e->getCode();
-
-                0 === $code && $code = 500;
-
-                throw new Exception($e->getMessage(), $code, $e);
-            }
-
-            // 处理完毕，退出
-            throw new Exception('Finish', 200);
-        } else {
+        if (!class_exists($obj)) {
+            // 类不存在，返回
             self::$obj[] = $obj;
             self::$method[] = $method;
+
+            return;
         }
+
+        // 获取方法参数
+        $args = self::getArgs($obj, $method, $arg);
+        // 获取类构造函数参数
+        $construct_args = self::getArgs($obj, '__construct');
+
+        // var_dump($args);
+        // var_dump($construct_args);
+
+        $instance = new $obj(...$construct_args);
+
+        try {
+            $response = '__invoke' === $method ?
+                $instance(...$args) : $instance->$method(...$args);
+
+            self::$output = $response;
+        } catch (\Throwable $e) {
+            // 捕获类方法不存在错误
+            $code = $e->getCode();
+
+            0 === $code && $code = 500;
+
+            throw new Exception($e->getMessage(), $code, $e);
+        }
+
+        // 处理完毕，退出
+        throw new Exception('Finish', 200);
+    }
+
+    /**
+     * 获取方法参数列表.
+     */
+    private static function getArgs($obj, $method, $arg = [])
+    {
+        try {
+            $reflection = new \ReflectionMethod($obj, $method);
+        } catch (Throwable $e) {
+            return [];
+        }
+
+        // 获取方法的参数列表
+        $method_parameters = $reflection->getParameters();
+
+        $args = [];
+
+        // 遍历
+        foreach ($reflection->getParameters() as $key => $value) {
+            $name = $value->name;
+
+            // 获取参数类型
+            $name = new \ReflectionParameter([$obj, $method], $name);
+
+            $name_class = $name->getClass()->name ?? null;
+
+            if ($name_class) {
+                try {
+                    $args[$key] = app($name_class);
+                } catch (Throwable $e) {
+                    // 获取构造函数参数
+                    $construct_args = self::getArgs($name_class, '__construct');
+                    $args[$key] = new $name_class(...$construct_args);
+                }
+            } else {
+                // 参数类型不是类型实例
+                $args[$key] = array_shift($arg);
+            }
+        }
+
+        return $args;
     }
 
     /**
@@ -134,7 +187,8 @@ class Route
 
     private static function checkMethod($type)
     {
-        return strtoupper($type) === $_SERVER['REQUEST_METHOD'];
+        // return strtoupper($type) === $_SERVER['REQUEST_METHOD'];
+        return strtoupper($type) === app('request')->server->get('REQUEST_METHOD');
     }
 
     /**
