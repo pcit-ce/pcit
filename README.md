@@ -1,6 +1,6 @@
 # PCIT (PCIT is not PHP CI TOOLKIT)
 
-[![GitHub stars](https://img.shields.io/github/stars/pcit-ce/pcit.svg?style=social&label=Stars)](https://github.com/pcit-ce/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/pcit.svg)](https://packagist.org/packages/khs1994/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/pcit-ce/pcit/all.svg)](https://github.com/pcit-ce/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/pcit-ce/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/pcit-ce/pcit) [![codecov](https://codecov.io/gh/pcit-ce/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/pcit-ce/pcit)
+[![GitHub stars](https://img.shields.io/github/stars/pcit-ce/pcit.svg?style=social&label=Stars)](https://github.com/pcit-ce/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/pcit/pcit.svg)](https://packagist.org/packages/pcit/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/pcit-ce/pcit/all.svg)](https://github.com/pcit-ce/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/pcit-ce/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/pcit-ce/pcit) [![codecov](https://codecov.io/gh/pcit-ce/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/pcit-ce/pcit)
 
 **国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的开源云原生 CI/CD 系统**
 
@@ -80,12 +80,12 @@ language: php
 pipeline:
 
   install:
-    image: khs1994/php:7.2.10-fpm-alpine
+    image: khs1994/php:7.3.0-fpm-alpine
     commands:
       - composer install
 
   script:
-    image: khs1994/php:7.2.10-fpm-alpine
+    image: khs1994/php:7.3.0-fpm-alpine
     commands:
       - vendor/bin/phpunit
 
