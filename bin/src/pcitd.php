@@ -6,13 +6,10 @@ use App\Console\PCITDaemon\Commands\AgentCommand;
 use App\Console\PCITDaemon\Commands\MigrateCommand;
 use App\Console\PCITDaemon\Commands\ServerCommand;
 use App\Console\PCITDaemon\Commands\UpCommand;
-use PCIT\PCIT;
 use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
 $app = require __DIR__.'/../../framework/bootstrap/app.php';
-
-$app->instance(PCIT::class, new PCIT());
 
 try {
     /**

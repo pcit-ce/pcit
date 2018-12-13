@@ -2,13 +2,11 @@
 
 <?php
 
-use PCIT\PCIT;
 use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
 
 $app = require __DIR__.'/../../framework/bootstrap/app.php';
-$app->instance(PCIT::class, new PCIT());
 
 $cli = new Application('PCIT CLI', 'v18.06');
 

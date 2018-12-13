@@ -14,10 +14,8 @@ class MessageServer
      *
      * @throws Exception
      */
-    public function __invoke()
+    public function __invoke(PCIT $pcit)
     {
-        $pcit = new PCIT();
-
         return $pcit->wechat->server->pushHandler(function ($message) {
             return null;
         })->register();

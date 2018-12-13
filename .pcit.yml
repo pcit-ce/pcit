@@ -31,7 +31,7 @@ pipeline:
   # before_install:
 
   install:
-    # image: khs1994/php:7.2.12-composer-alpine
+    # image: khs1994/php:7.2.13-composer-alpine
     # commands or command
     command:
       - pwd
@@ -80,21 +80,21 @@ pipeline:
       # ^[0-9.]+      1.2.0-rc
       # ^v([0-9.]+)$  v1.2.3
 
-  test_platform:
+  when_platform:
     image: bash
     when:
       platform: Windows/amd64
     commands:
       - echo "Only run on Windows amd64"
 
-  test_when_branch:
+  when_branch:
     image: bash
     when:
       branch: master
     commands:
       - echo "Only run on master branch"
 
-  test_when_branch_include:
+  when_branch_include:
     image: bash
     when:
       branch:
@@ -102,7 +102,7 @@ pipeline:
     commands:
       - echo "Only run on dev branch"
 
-  test_when_branch_exclude:
+  when_branch_exclude:
     image: bash
     when:
       branch:
@@ -115,7 +115,7 @@ pipeline:
     image: khs1994/docker
     # registry: docker.khs1994.com
     repo: khs1994/php
-    tags: 7.2.12-swarm-${CI_TAG}
+    tags: 7.2.13-swarm-${CI_TAG}
     # target: php
     build_args:
       - a=1
@@ -130,12 +130,12 @@ pipeline:
     # - DOCKER_PASSWORD=password
 
   php-cs-fixer:
-    # image: khs1994/php:7.2.12-composer-alpine
+    # image: khs1994/php:7.2.13-composer-alpine
     commands:
       - php-cs-fixer fix
 
   sami:
-    # image: khs1994/php:7.2.12-composer-alpine
+    # image: khs1994/php:7.2.13-composer-alpine
     when:
       status: success
     # commands:
@@ -186,7 +186,7 @@ pipeline:
 
   # This is success after demo
   codecov:
-    # image: khs1994/php:7.2.12-composer-alpine
+    # image: khs1994/php:7.2.13-composer-alpine
     shell: bash
     # when:
     #   status: success
@@ -219,16 +219,16 @@ pipeline:
     commands:
       - echo "build changed"
 
-  test_matrix:
+  when_matrix:
     image: bash
     commands:
       - echo "test when matrix"
     when:
       matrix:
-        - PHP_VERSION: 7.2.12
-          NGINX_VERSION: 1.15.6
-          REDIS_VERSION: 5.0.0
-          MYSQL_VERSION: 5.7.23
+        - PHP_VERSION: 7.2.13
+          NGINX_VERSION: 1.15.7
+          REDIS_VERSION: 5.0.2
+          MYSQL_VERSION: 5.7.24
 
 services:
   mysql:
@@ -255,12 +255,13 @@ services:
 
 matrix:
   PHP_VERSION:
-    - 7.2.12
-    - 7.1.23
+    - 7.3.0
+    - 7.2.13
+    # - 7.1.25
   NGINX_VERSION:
-    - 1.15.6
+    - 1.15.7
   REDIS_VERSION:
-    - 5.0.1
+    - 5.0.2
   MYSQL_VERSION:
     - 5.7.24
     # - 8.0.13
@@ -271,12 +272,12 @@ matrix:
 
 # matrix:
 #   include:
-#     - PHP_VERSION: 7.2.12
-#       MYSQL_VERSION: 5.7.23
-#       REDIS_VERSION: 5.0.0
-#     - PHP_VERSION: 7.1.23
-#       MYSQL_VERSION: 5.7.23
-#       REDIS_VERSION: 5.0.0
+#     - PHP_VERSION: 7.2.13
+#       MYSQL_VERSION: 5.7.24
+#       REDIS_VERSION: 5.0.2
+#     - PHP_VERSION: 7.1.25
+#       MYSQL_VERSION: 5.7.24
+#       REDIS_VERSION: 5.0.2
 
 branches:
   include: [ master,dev ]
