@@ -10,6 +10,7 @@ use App\Console\Events\CheckAdmin;
 use App\Console\Events\Subject;
 use App\Console\Webhooks\AliYunRegistry;
 use App\Console\Webhooks\GitHub\Check;
+use App\Console\Webhooks\GitHub\Content;
 use App\Console\Webhooks\GitHub\Delete;
 use App\Console\Webhooks\GitHub\Installation;
 use App\Console\Webhooks\GitHub\Issues;
@@ -406,6 +407,11 @@ class Server extends Kernel
     public function check_run(string $json_content): void
     {
         Check::run($json_content);
+    }
+
+    public function content_reference(string $json_content): void
+    {
+        Content::handle($json_content);
     }
 
     /**

@@ -120,6 +120,7 @@ class Route
 
             $name_class = $name->getClass()->name ?? null;
 
+            // 可变参数列表 function demo(...$args){}
             if ($name->isVariadic()) {
                 $args = array_merge($args, $arg);
 

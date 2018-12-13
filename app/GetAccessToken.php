@@ -67,15 +67,16 @@ class GetAccessToken
      *
      * @throws Exception
      */
-    public static function getGitHubAppAccessToken($rid, string $repo_full_name = null)
+    public static function getGitHubAppAccessToken($rid = null, string $repo_full_name = null, int $installation_id = null)
     {
-        $installation_id = $rid ? Repo::getGitHubInstallationIdByRid((int) $rid)
+        if (!$installation_id) {
+            $installation_id = $rid ? Repo::getGitHubInstallationIdByRid((int) $rid)
             : Repo::getGitHubInstallationIdByRepoFullName($repo_full_name);
 
-        if (!$installation_id) {
-            throw new Exception('installation_id is error', 500);
+            if (!$installation_id) {
+                throw new Exception('installation_id is error', 500);
+            }
         }
-
         $access_token = pcit()->github_apps_installations->getAccessToken(
             (int) $installation_id,
             base_path().'framework/storage/private_key/private.key'

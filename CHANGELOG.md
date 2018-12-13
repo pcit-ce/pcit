@@ -4,6 +4,7 @@
 
 ### 2018/12/13
 
+* [x] 支持 [`content-attachments-api`](https://developer.github.com/changes/2018-12-10-content-attachments-api/) 响应用户 issue、pr 中的 url
 * [x] 底层 framework：使用 `反射` 注入参数。
 * [x] 底层 framework：调用 `废弃(@deprecated)` 方法，返回 500
 

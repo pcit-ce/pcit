@@ -283,4 +283,16 @@ class Client
     {
         return $url = 'https://github.com/organizations/'.$org_name.'/settings/installations/'.$installation_id;
     }
+
+    /**
+     * @see https://developer.github.com/v3/apps/#create-a-content-attachment
+     */
+    public function createContentAttachment($content_reference_id, string $title, string $body)
+    {
+        $url = $this->api_url.'/content_references/'.$content_reference_id.'/attachments';
+
+        return $this->curl->post($url, json_encode(compact('title', 'body')), [
+            'Accept' => 'application/vnd.github.corsair-preview+json',
+        ]);
+    }
 }
