@@ -100,6 +100,15 @@ class Route
             echo '已废弃';
         }
 
+        // 通过检查注释，查看是否被废弃.
+        if ($reflection->getDocComment()) {
+            if (strpos($reflection->getDocComment(), '@deprecated')) {
+                self::$obj[] = $obj;
+                self::$method[] = $method;
+                throw new Exception("$obj::$method is deprecated", 500);
+            }
+        }
+
         $args = [];
 
         // 遍历
