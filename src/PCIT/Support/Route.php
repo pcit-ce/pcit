@@ -95,16 +95,27 @@ class Route
         // 获取方法的参数列表
         $method_parameters = $reflection->getParameters();
 
+        // 是否废弃
+        if ($reflection->isDeprecated()) {
+            echo '已废弃';
+        }
+
         $args = [];
 
         // 遍历
-        foreach ($reflection->getParameters() as $key => $value) {
+        foreach ($method_parameters as $key => $value) {
             $name = $value->name;
 
             // 获取参数类型
             $name = new \ReflectionParameter([$obj, $method], $name);
 
             $name_class = $name->getClass()->name ?? null;
+
+            if ($name->isVariadic()) {
+                $args = array_merge($args, $arg);
+
+                break;
+            }
 
             if ($name_class) {
                 try {

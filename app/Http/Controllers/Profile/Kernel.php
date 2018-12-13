@@ -18,6 +18,8 @@ abstract class Kernel
     protected $git_type;
 
     /**
+     * 个人中心 profile.
+     *
      * @param mixed ...$args
      *
      * @return mixed
@@ -59,7 +61,6 @@ abstract class Kernel
         );
 
         User::updateUserInfo((int) $uid, null, (string) $username, (string) $email, (string) $pic, false, $git_type);
-
         User::updateAccessToken((int) $uid, $access_token, $git_type);
 
         return view('profile/index.html');

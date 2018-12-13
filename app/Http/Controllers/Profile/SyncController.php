@@ -39,13 +39,14 @@ class SyncController
         );
 
         if ('github' === $this->git_type) {
+            // github 只获取用户组织，不获取用户仓库
             $this->getOrgs();
 
             return;
         }
 
         // sync user basic info
-        $this->getUserBasicInfo();
+        $this->updateBasicInfo();
 
         // sync user repos
         $this->getRepo();
@@ -59,7 +60,7 @@ class SyncController
      *
      * @throws Exception
      */
-    private function getUserBasicInfo(): void
+    private function updateBasicInfo(): void
     {
         list('uid' => $uid,
             'name' => $name,
@@ -168,6 +169,7 @@ class SyncController
      */
     private function parseRepo(string $json): void
     {
+        DB::beginTransaction();
         if ($obj = json_decode($json)) {
             for ($i = 0; $i < 30; ++$i) {
                 $obj_repo = $obj[$i] ?? false;
@@ -211,5 +213,6 @@ class SyncController
                 );
             }
         }
+        DB::commit();
     }
 }
