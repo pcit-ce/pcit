@@ -32,7 +32,7 @@ class CacheTest extends PCITTestCase
 
         $cache->handle();
 
-        $this->cache = \PCIT\Support\Cache::store()->hGet('cache', '1');
+        $this->cache = \PCIT\Support\Cache::store()->hGet('/pcit/cache', '1');
     }
 
     /**
@@ -44,7 +44,7 @@ class CacheTest extends PCITTestCase
         DB::close();
 
         $yaml = <<<'EOF'
-cache: 
+cache:
   directories:
   - dir
 EOF;

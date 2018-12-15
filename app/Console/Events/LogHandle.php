@@ -23,7 +23,7 @@ class LogHandle
     public function handle(): void
     {
         // 日志美化
-        $output = Cache::store()->hGet('build_log', (string) $this->job_id);
+        $output = Cache::store()->hGet('pcit/build_log', (string) $this->job_id);
 
         if (!$output) {
             Log::debug(__FILE__, __LINE__,

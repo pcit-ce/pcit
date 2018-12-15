@@ -72,7 +72,7 @@ class Services
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            Cache::store()->lPush((string) $this->job_id.'_services', $container_config);
+            Cache::store()->hset('pcit/'.$this->job_id.'/services', $service_name, $container_config);
         }
     }
 }

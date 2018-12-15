@@ -33,6 +33,7 @@ class Route
     private static function make($action, ...$arg): void
     {
         if ($action instanceof Closure) {
+            $arg = self::getParameters(null, $action, $arg);
             self::$output = \call_user_func($action, ...$arg);
 
             throw new Exception('Finish', 200);
@@ -54,9 +55,9 @@ class Route
         }
 
         // 获取方法参数
-        $args = self::getArgs($obj, $method, $arg);
+        $args = self::getParameters($obj, $method, $arg);
         // 获取类构造函数参数
-        $construct_args = self::getArgs($obj, '__construct');
+        $construct_args = self::getParameters($obj, '__construct');
 
         // var_dump($args);
         // var_dump($construct_args);
@@ -84,16 +85,19 @@ class Route
     /**
      * 获取方法参数列表.
      */
-    private static function getArgs($obj, $method, $arg = [])
+    private static function getParameters($obj = null, $method, $arg = [])
     {
         try {
-            $reflection = new \ReflectionMethod($obj, $method);
+            $reflection = $obj ?
+                new \ReflectionMethod($obj, $method) : new \ReflectionFunction($method);
         } catch (Throwable $e) {
             return [];
         }
 
         // 获取方法的参数列表
         $method_parameters = $reflection->getParameters();
+
+        // var_dump($method_parameters);
 
         // 是否废弃
         if ($reflection->isDeprecated()) {
@@ -112,28 +116,24 @@ class Route
         $args = [];
 
         // 遍历
-        foreach ($method_parameters as $key => $value) {
-            $name = $value->name;
-
+        foreach ($method_parameters as $key => $parameter) {
             // 获取参数类型
-            $name = new \ReflectionParameter([$obj, $method], $name);
-
-            $name_class = $name->getClass()->name ?? null;
+            $parameter_class = $parameter->getClass()->name ?? null;
 
             // 可变参数列表 function demo(...$args){}
-            if ($name->isVariadic()) {
+            if ($parameter->isVariadic()) {
                 $args = array_merge($args, $arg);
 
                 break;
             }
 
-            if ($name_class) {
+            if ($parameter_class) {
                 try {
-                    $args[$key] = app($name_class);
+                    $args[$key] = app($parameter_class);
                 } catch (Throwable $e) {
-                    // 获取构造函数参数
-                    $construct_args = self::getArgs($name_class, '__construct');
-                    $args[$key] = new $name_class(...$construct_args);
+                    // 参数提示为类，获取构造函数参数
+                    $construct_args = self::getParameters($parameter_class, '__construct');
+                    $args[$key] = new $parameter_class(...$construct_args);
                 }
             } else {
                 // 参数类型不是类型实例

@@ -9,7 +9,6 @@ use App\Console\Events\LogHandle;
 use App\Console\Events\Subject;
 use App\Console\Events\UpdateBuildStatus;
 use App\Job;
-use PCIT\Support\Cache;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
 
@@ -18,6 +17,14 @@ use PCIT\Support\Log;
  */
 class Agent extends Kernel
 {
+    /**
+     * TODO 从服务端获取待执行 job.
+     */
+    public function getJob()
+    {
+        return Job::getQueuedJob()[0] ?? null;
+    }
+
     /**
      * @throws \Exception
      */
@@ -34,7 +41,7 @@ class Agent extends Kernel
         Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
 
         // 取出一个 job,包括 job config, build key id
-        $job_data = Job::getQueuedJob()[0] ?? null;
+        $job_data = $this->getJob();
 
         if (!$job_data) {
             return;
@@ -42,15 +49,15 @@ class Agent extends Kernel
 
         ['id' => $job_id, 'build_id' => $build_key_id] = $job_data;
 
-        $config = Build::getConfig((int) $build_key_id) ?? '';
+        Log::debug(__FILE__, __LINE__, 'Handle build jobs',
+            ['job_id' => $job_id], Log::EMERGENCY);
 
         $subject = new Subject();
 
-        Log::debug(__FILE__, __LINE__, 'Handle build jobs', ['job_id' => $job_id], Log::EMERGENCY);
-
         $subject
             // update build status in progress
-            ->register(new UpdateBuildStatus((int) $job_id, $config, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS))
+            ->register(new UpdateBuildStatus(
+                (int) $job_id, (int) $build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS))
             ->handle();
 
         try {
@@ -63,7 +70,7 @@ class Agent extends Kernel
             try {
                 $subject
                     ->register(new LogHandle((int) $job_id))
-                    ->register(new UpdateBuildStatus((int) $job_id, $config, $e->getMessage()))
+                    ->register(new UpdateBuildStatus((int) $job_id, (int) $build_key_id, $e->getMessage()))
                     ->handle();
             } catch (\Throwable $e) {
                 // catch curl error (timeout,etc)
@@ -72,53 +79,14 @@ class Agent extends Kernel
             }
         }
 
-        // 恢复缓存队列
-        $this->cacheHandler((string) $job_id);
-
         // 运行一个 job 之后更新 build 状态
-        $status = Job::getBuildStatusByBuildKeyId((int) $build_key_id);
-
-        Build::updateBuildStatus((int) $build_key_id, $status);
+        $this->updateBuildStatus((int) $build_key_id);
     }
 
-    /**
-     * @param string $job_id
-     *
-     * @throws \Exception
-     */
-    public function cacheHandler(string $job_id): void
+    public function updateBuildStatus(int $build_key_id): void
     {
-        $cache = Cache::store();
+        $status = Job::getBuildStatusByBuildKeyId($build_key_id);
 
-        $services_key = $job_id.'_services';
-        $pipeline_key = $job_id.'_pipeline';
-        $success_key = $job_id.'_success';
-        $failure_key = $job_id.'_failure';
-        $changed_key = $job_id.'_changed';
-
-        $key_array = [$services_key, $pipeline_key, $success_key, $failure_key, $changed_key];
-
-        foreach ($key_array as $key) {
-            if ($cache->lLen($key) <= 1) {
-                return;
-            }
-
-            $result = $cache->lpop($key);
-
-            if ('end' === $result) {
-                $cache->rpush($key, 'end');
-            } else {
-                $length = $cache->lLen($key);
-
-                for ($i = 1; $i > $length; ++$i) {
-                    $result = $cache->rpoplpush($key, $key);
-
-                    if ('end' === $result) {
-                        $cache->lpop($key);
-                        $cache->rpush($key, 'end');
-                    }
-                }
-            }
-        }
+        Build::updateBuildStatus($build_key_id, $status);
     }
 }

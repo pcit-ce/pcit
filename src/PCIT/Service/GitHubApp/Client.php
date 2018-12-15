@@ -165,7 +165,7 @@ class Client
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
 
-            Cache::store()->delete('github_app_jwt');
+            Cache::store()->delete('/pcit/github_app_jwt');
 
             throw new Exception('Get GitHub App AccessToken Error '.$access_token_json, $http_return_code);
         }
@@ -188,7 +188,7 @@ class Client
      */
     private function getJWT(string $private_key_path)
     {
-        $jwt = Cache::store()->get('github_app_jwt');
+        $jwt = Cache::store()->get('/pcit/github_app_jwt');
 
         if ($jwt) {
             return $jwt;
@@ -196,7 +196,7 @@ class Client
 
         $jwt = JWT::getJWT($private_key_path, (int) env('CI_GITHUB_APP_ID'));
 
-        Cache::store()->set('github_app_jwt', $jwt, 8 * 60);
+        Cache::store()->set('/pcit/github_app_jwt', $jwt, 8 * 60);
 
         return $jwt;
     }

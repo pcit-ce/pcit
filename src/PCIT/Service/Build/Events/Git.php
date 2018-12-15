@@ -129,6 +129,6 @@ class Git
             ->setCreateJson(null)
             ->getCreateJson();
 
-        Cache::store()->lpush((string) $client->job_id, $config);
+        Cache::store()->set('pcit/'.(string) $client->job_id.'/clone', $config);
     }
 }

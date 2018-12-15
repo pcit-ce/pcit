@@ -138,6 +138,11 @@ pipeline:
     # image: khs1994/php:7.2.13-composer-alpine
     when:
       status: success
+      matrix:
+      - PHP_VERSION: 7.2.13
+        NGINX_VERSION: 1.15.7
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
     # commands:
     #  - sami update .sami.php
 
@@ -146,6 +151,11 @@ pipeline:
     shell: bash
     when:
       status: success
+      matrix:
+      - PHP_VERSION: 7.2.13
+        NGINX_VERSION: 1.15.7
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
     environment:
       - keep_history=true
       - target_branch=gh-pages
@@ -161,6 +171,11 @@ pipeline:
       status: success
       event: tag
       branch: alpha
+      matrix:
+      - PHP_VERSION: 7.2.13
+        NGINX_VERSION: 1.15.7
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
     file:
       README.md: pcit/tencent_cloud_cos_file_name_${PCIT_TAG}
       Dockerfile: pcit/tencent_cloud_cos_file_name2_${PCIT_TAG}
@@ -219,17 +234,6 @@ pipeline:
     commands:
       - echo "build changed"
 
-  when_matrix:
-    image: bash
-    commands:
-      - echo "test when matrix"
-    when:
-      matrix:
-        - PHP_VERSION: 7.2.13
-          NGINX_VERSION: 1.15.7
-          REDIS_VERSION: 5.0.2
-          MYSQL_VERSION: 5.7.24
-
 services:
   mysql:
     image: mysql:${MYSQL_VERSION}
@@ -261,7 +265,7 @@ matrix:
   NGINX_VERSION:
     - 1.15.7
   REDIS_VERSION:
-    - 5.0.2
+    - 5.0.3
   MYSQL_VERSION:
     - 5.7.24
     # - 8.0.13
@@ -274,10 +278,10 @@ matrix:
 #   include:
 #     - PHP_VERSION: 7.2.13
 #       MYSQL_VERSION: 5.7.24
-#       REDIS_VERSION: 5.0.2
+#       REDIS_VERSION: 5.0.3
 #     - PHP_VERSION: 7.1.25
 #       MYSQL_VERSION: 5.7.24
-#       REDIS_VERSION: 5.0.2
+#       REDIS_VERSION: 5.0.3
 
 branches:
   include: [ master,dev ]

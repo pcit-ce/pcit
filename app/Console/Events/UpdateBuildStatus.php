@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Events;
 
+use App\Build;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
 use App\Notifications\GitHubChecksConclusion\Failed;
 use App\Notifications\GitHubChecksConclusion\InProgress;
@@ -21,13 +22,13 @@ class UpdateBuildStatus
     private $config;
 
     public function __construct(int $job_key_id,
-                                string $config,
+                                ?int $build_key_id,
                                 string $build_status,
                                 $build_log = null)
     {
         $this->job_key_id = $job_key_id;
 
-        $this->config = $config;
+        $this->config = $config = Build::getConfig((int) $build_key_id) ?? '';
 
         $this->build_status = $build_status;
 

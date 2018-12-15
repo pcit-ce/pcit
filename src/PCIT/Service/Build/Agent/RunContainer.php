@@ -35,7 +35,7 @@ class RunContainer
      */
     public function __construct()
     {
-        $docker = (new PCIT())->docker;
+        $docker = app(PCIT::class)->docker;
         $this->docker_container = $docker->container;
         $this->docker_network = $docker->network;
     }
@@ -102,16 +102,15 @@ class RunContainer
 
         $this->docker_network->create((string) $job_id);
 
-        // 处理缓存
-        $this->cacheHandle((string) $job_id);
         $cache = Cache::store();
 
         // git container
         LogSupport::debug(__FILE__, __LINE__, 'Run git clone container', [], LogSupport::EMERGENCY);
 
-        $git_container_config = $cache->rpoplpush((string) $job_id, (string) $job_id);
+        $git_container_config = $cache->get('pcit/'.$job_id.'/clone');
+        $cache->hdel('pcit/build_log', $job_id);
 
-        $this->runPipeline($job_id, $git_container_config);
+        $this->runPipeline($job_id, $git_container_config, 'clone');
 
         // download cache
         LogSupport::debug(__FILE__, __LINE__, '', [], LogSupport::EMERGENCY);
@@ -130,23 +129,28 @@ class RunContainer
                 'this job not include services', [], LogSupport::EMERGENCY);
         }
 
-        $pipeline_key = $job_id.'_pipeline';
+        // 复制原始 key
+        $cache->del('pcit/'.$job_id.'/pipeline/list_copy');
+
+        $cache->restore('pcit/'.$job_id.'/pipeline/list_copy',0,
+          $cache->dump('pcit/'.$job_id.'/pipeline/list'));
 
         while (1) {
-            $container_config = $cache->rpoplpush($pipeline_key, $pipeline_key);
+            $pipeline = $cache->rpop('pcit/'.$job_id.'/pipeline/list_copy');
 
-            if ('end' === $container_config) {
+            if (!$pipeline) {
+                $cache->del('pcit/'.$job_id.'/pipeline/list_copy');
                 break;
             }
+
+            $container_config = $cache->hget('pcit/'.$job_id.'/pipeline', $pipeline);
 
             if (!\is_string($container_config)) {
                 LogSupport::debug(__FILE__, __LINE__, 'Container config empty', [], LogSupport::EMERGENCY);
-
-                break;
             }
 
             try {
-                $this->runPipeline($job_id, $container_config);
+                $this->runPipeline($job_id, $container_config, $pipeline);
             } catch (\Throwable $e) {
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
                     throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
@@ -162,35 +166,6 @@ class RunContainer
     }
 
     /**
-     * @param string $job_id
-     *
-     * @throws PCITException
-     * @throws \Exception
-     */
-    public function cacheHandle(string $job_id): void
-    {
-        $cache = Cache::store();
-        $pipeline_key = $job_id.'_pipeline';
-        $success_key = $job_id.'_success';
-        $failure_key = $job_id.'_failure';
-        $changed_key = $job_id.'_changed';
-
-        $key_array = [$pipeline_key, $success_key, $failure_key, $changed_key];
-
-        foreach ($key_array as $key) {
-            $result = $cache->rpoplpush($key, $key);
-
-            if ('end' !== $result) {
-                LogSupport::debug(
-                    __FILE__, __LINE__,
-                    $key.' list handle failure', [], LogSupport::EMERGENCY);
-
-                throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
-            }
-        }
-    }
-
-    /**
      * @param      $job_id
      * @param bool $download
      *
@@ -200,14 +175,14 @@ class RunContainer
     {
         $cache_hash_key = $download ? 'cache_download' : 'cache_upload';
 
-        $container_config = Cache::store()->hGet($cache_hash_key, (string) $job_id);
+        $container_config = Cache::store()->get('pcit/'.$job_id.'/'.$cache_hash_key);
 
         if (!$container_config) {
             return;
         }
 
         try {
-            $this->runPipeline($job_id, $container_config);
+            $this->runPipeline($job_id, $container_config, $cache_hash_key);
         } catch (\Throwable $e) {
             LogSupport::debug(__FILE__, __LINE__, 'fetch cache error',
                 ['message' => $e->getMessage(), 'code' => $e->getCode()],
@@ -223,7 +198,7 @@ class RunContainer
      *
      * @throws \Exception
      */
-    public function runPipeline(int $job_id, string $container_config): void
+    public function runPipeline(int $job_id, string $container_config, string $pipeline = null): void
     {
         LogSupport::debug(__FILE__, __LINE__,
             'Run job container', ['job_id' => $job_id,
@@ -234,7 +209,7 @@ class RunContainer
             ->create(false)
             ->start(null);
 
-        (new Log($job_id, $container_id))->handle();
+        (new Log($job_id, $container_id, $pipeline))->handle();
 
         LogSupport::debug(__FILE__, __LINE__, 'Run job container success', [
             'job_id' => $job_id, ], LogSupport::EMERGENCY);
@@ -273,38 +248,19 @@ class RunContainer
             return;
         }
 
-        $status_key = $job_id.'_'.$status;
+        $container_configs = Cache::store()->hgetall('pcit/'.$job_id.'/'.$status);
 
-        if (1 === Cache::store()->lLen($status_key)) {
-            if ('changed' === $status) {
-                return;
-            }
-
-            $this->after($job_id, 'changed');
-
-            return;
-        }
-
-        while (1) {
-            $container_config = Cache::store()->rPoplpush($status_key, $status_key);
-
-            if ('end' === $container_config) {
-                break;
-            }
-
+        foreach ($container_configs as $setup => $container_config) {
             try {
-                $this->runPipeline($job_id, $container_config);
+                $this->runPipeline($job_id, $container_config, $setup);
             } catch (\Throwable $e) {
                 LogSupport::debug(__FILE__, __LINE__, $e->__toString(), [], LogSupport::EMERGENCY);
             }
         }
 
-        if ('changed' === $status) {
-            return;
+        if ('changed' !== $status) {
+            $this->after($job_id, 'changed');
         }
-
-        $this->after($job_id, 'changed');
-
         LogSupport::debug(__FILE__, __LINE__, 'Run job after finished', ['status' => $status], LogSupport::EMERGENCY);
     }
 
@@ -319,14 +275,9 @@ class RunContainer
     {
         LogSupport::debug(__FILE__, __LINE__, 'Run job services', ['job_id' => $job_id], LogSupport::EMERGENCY);
 
-        while (1) {
-            $container_config = Cache::store()
-                ->rPoplpush((string) $job_id.'_services', (string) $job_id.'_services');
+        $container_configs = Cache::store()->hgetall('pcit/'.$job_id.'/services');
 
-            if ('end' === $container_config) {
-                break;
-            }
-
+        foreach ($container_configs as $service => $container_config) {
             $container_id = $this->docker_container
                 ->setCreateJson($container_config)
                 ->create(false)

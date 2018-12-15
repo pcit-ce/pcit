@@ -37,6 +37,7 @@ class Pipeline
         $this->matrix_config = $matrix_config;
         $this->build = $build;
         $this->client = $client;
+        $this->cache = Cache::store();
     }
 
     /**
@@ -44,18 +45,13 @@ class Pipeline
      */
     public function handle(): void
     {
-        $docker_container = (new PCIT())->docker->container;
+        $docker_container = app(PCIT::class)->docker->container;
 
         $job_id = $this->client->job_id;
 
         $workdir = $this->client->workdir;
 
-        // push
-        $cache = Cache::store();
-        $cache->lPush((string) $job_id.'_pipeline', 'end');
-        $cache->lPush((string) $job_id.'_success', 'end');
-        $cache->lPush((string) $job_id.'_failure', 'end');
-        $cache->lPush((string) $job_id.'_changed', 'end');
+        $cache = $this->cache;
 
         foreach ($this->pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
@@ -158,24 +154,25 @@ class Pipeline
 
             if ($failure) {
                 $is_status = true;
-                $cache->lPush((string) $job_id.'_failure', $container_config);
+                $cache->hset('pcit/'.$job_id.'/failure', $setup, $container_config);
             }
 
             if ($success) {
                 $is_status = true;
-                $cache->lPush((string) $job_id.'_success', $container_config);
+                $cache->hset('pcit/'.$job_id.'/success', $setup, $container_config);
             }
 
             if ($changed) {
                 $is_status = true;
-                $cache->lPush((string) $job_id.'_changed', $container_config);
+                $cache->hset('pcit/'.$job_id.'/changed', $setup, $container_config);
             }
 
             if (true === $is_status) {
                 continue;
             }
 
-            $cache->lPush((string) $job_id.'_pipeline', $container_config);
+            $cache->lpush('pcit/'.$job_id.'/pipeline/list', $setup);
+            $cache->hset('pcit/'.$job_id.'/pipeline', $setup, $container_config);
         }
     }
 }

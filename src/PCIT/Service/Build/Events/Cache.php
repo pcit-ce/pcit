@@ -84,16 +84,14 @@ class Cache
         ];
 
         \PCIT\Support\Cache::store()
-            ->hSet('cache_download',
-                (string) $this->job_id,
+            ->set('pcit/'.$this->job_id.'/cache_download',
                 $this->getContainerConfig($docker_container, $env)
             );
 
         array_pop($env);
 
         \PCIT\Support\Cache::store()
-            ->hSet('cache_upload',
-                (string) $this->job_id,
+            ->set('pcit/'.$this->job_id.'/cache_upload',
                 $this->getContainerConfig($docker_container, $env)
             );
     }

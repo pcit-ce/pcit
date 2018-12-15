@@ -22,7 +22,7 @@ class ShowStatusByICOController
      *
      * @throws Exception
      */
-    public function __call(string $k, array $v): void
+    public function __call(string $k, array $v)
     {
         try {
             header('content-type: image/svg+xml;charset=utf-8');
