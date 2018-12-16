@@ -10,11 +10,12 @@ use PCIT\Support\Log;
 
 class LogHandle
 {
-    private $job_id;
+    private $jobId;
 
-    public function __construct(int $job_id)
+    public function __construct(int $jobId)
     {
-        $this->job_id = $job_id;
+        $this->jobId = $jobId;
+        $this->cache = Cache::store();
     }
 
     /**
@@ -22,48 +23,102 @@ class LogHandle
      */
     public function handle(): void
     {
+        $logs = [];
+        $pipelines = [];
+        $cache = $this->cache;
+        $jobId = $this->jobId;
+
+        $types = [
+          'pipeline',
+          'failure',
+          'success',
+          'changed',
+        ];
+
+        foreach ($types as $type) {
+            $cache->del('pcit/'.$jobId.'/'.$type.'/list_copy');
+
+            $cache->restore('pcit/'.$jobId.'/'.$type.'/list_copy',
+              0,
+              $cache->dump('pcit/'.$jobId.'/'.$type.'/list'));
+        }
+
+        foreach ($types as $type) {
+            while (1) {
+                $pipeline = $cache->rpop('pcit/'.$jobId.'/'.$type.'/list_copy');
+
+                if (!$pipeline) {
+                    break;
+                }
+
+                $pipelines[] = $pipeline;
+            }
+        }
+
+        array_unshift($pipelines, 'clone', 'cache_download');
+        array_push($pipelines, 'cache_upload');
+
+        foreach ($pipelines as $pipeline) {
+            $log = $this->handlePipeline($pipeline);
+
+            $logs[$pipeline] = $log;
+        }
+
+        $logs = array_filter($logs);
+
+        Job::updateLog($this->jobId, json_encode($logs));
+    }
+
+    private function handlePipeline($pipeline)
+    {
+        $cache = $this->cache;
         // 日志美化
-        $output = Cache::store()->hGet('pcit/build_log', (string) $this->job_id);
+        $output = $cache->hGet(
+            'pcit/'.$this->jobId.'/build_log', $pipeline);
 
         if (!$output) {
             Log::debug(__FILE__, __LINE__,
-                'job Log empty, skip', ['job_id' => $this->job_id], Log::WARNING);
+                'job Log empty, skip', ['jobId' => $this->jobId], Log::WARNING);
 
             return;
         }
 
         Log::debug(__FILE__, __LINE__,
-            'Handle job log', ['job_id' => $this->job_id], Log::EMERGENCY);
+            'Handle job log', ['jobId' => $this->jobId], Log::EMERGENCY);
 
         $folder_name = sys_get_temp_dir().'/.pcit';
 
         !is_dir($folder_name) && mkdir($folder_name);
 
-        file_put_contents($folder_name.'/'.$this->job_id, "$output");
+        file_put_contents($folder_name.'/'.$this->jobId, "$output");
 
-        $fh = fopen($folder_name.'/'.$this->job_id, 'rb');
+        $fh = fopen($folder_name.'/'.$this->jobId, 'rb');
 
-        $redis_key = (string) $this->job_id.'_log';
+        $redis_key = (string) $this->jobId.'_log';
 
-        Cache::store()->del($redis_key);
+        $cache->del($redis_key);
 
         while (!feof($fh)) {
             $one_line_content = fgets($fh);
 
             $one_line_content = substr("$one_line_content", 8);
 
-            Cache::store()->append($redis_key, $one_line_content);
+            $cache->append($redis_key, $one_line_content);
         }
 
         fclose($fh);
 
-        $log_content = Cache::store()->get($redis_key);
-
-        Job::updateLog($this->job_id, $log_content);
+        $log_content = $cache->get($redis_key);
 
         // cleanup
-        unlink($folder_name.'/'.$this->job_id);
+        $this->gc($folder_name, $redis_key);
 
-        Cache::store()->del($redis_key);
+        return $log_content;
+    }
+
+    private function gc(string $folder_name, string $redis_key): void
+    {
+        unlink($folder_name.'/'.$this->jobId);
+        $this->cache->del($redis_key);
     }
 }

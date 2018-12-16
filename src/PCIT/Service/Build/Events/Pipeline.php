@@ -154,16 +154,19 @@ class Pipeline
 
             if ($failure) {
                 $is_status = true;
+                $cache->lpush('pcit/'.$job_id.'/failure/list', $setup);
                 $cache->hset('pcit/'.$job_id.'/failure', $setup, $container_config);
             }
 
             if ($success) {
                 $is_status = true;
+                $cache->lpush('pcit/'.$job_id.'/success/list', $setup);
                 $cache->hset('pcit/'.$job_id.'/success', $setup, $container_config);
             }
 
             if ($changed) {
                 $is_status = true;
+                $cache->lpush('pcit/'.$job_id.'/changed/list', $setup);
                 $cache->hset('pcit/'.$job_id.'/changed', $setup, $container_config);
             }
 

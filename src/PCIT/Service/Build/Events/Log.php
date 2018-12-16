@@ -17,6 +17,8 @@ class Log
 
     private $job_id;
 
+    private $pipeline;
+
     public function __construct(int $job_id, string $container_id, string $pipeline = null)
     {
         $this->job_id = $job_id;
@@ -43,7 +45,7 @@ class Log
      */
     public function handle()
     {
-        $redis = Cache::store();
+        $cache = Cache::store();
 
         $i = -1;
 
@@ -84,12 +86,8 @@ class Log
                     $this->container_id, false, true, true, 0, 0, true
                 );
 
-                $prev_docker_log = $redis->hget('pcit/build_log', (string) $this->job_id);
-
-                $redis->hset(
-                    'pcit/build_log',
-                    (string) $this->job_id, $prev_docker_log.PHP_EOL.PHP_EOL.$image_log
-                );
+                $cache->hset(
+                    'pcit/'.$this->job_id.'/build_log', $this->pipeline, $image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z

@@ -203,8 +203,8 @@ pipeline:
   codecov:
     # image: khs1994/php:7.2.13-composer-alpine
     shell: bash
-    # when:
-    #   status: success
+    when:
+      status: success
     # please set env in settings
     environment:
       # - CODECOV_TOKEN=XXX

@@ -38,6 +38,7 @@ class RunContainer
         $docker = app(PCIT::class)->docker;
         $this->docker_container = $docker->container;
         $this->docker_network = $docker->network;
+        $this->cache = Cache::store();
     }
 
     /**
@@ -248,11 +249,25 @@ class RunContainer
             return;
         }
 
-        $container_configs = Cache::store()->hgetall('pcit/'.$job_id.'/'.$status);
+        $cache = $this->cache;
 
-        foreach ($container_configs as $setup => $container_config) {
+        // 复制 key
+
+        $cache->del('pcit/'.$job_id.'/'.$status.'/list_copy');
+        $cache->restore('pcit/'.$job_id.'/'.$status.'/list_copy', 0,
+          $cache->dump('pcit/'.$job_id.'/'.$status.'/list'));
+
+        while (1) {
+            $pipeline = $cache->rpop('pcit/'.$job_id.'/'.$status.'/list_copy');
+
+            if (!$pipeline) {
+                break;
+            }
+
+            $container_config = $cache->hget('pcit/'.$job_id.'/'.$status, $pipeline);
+
             try {
-                $this->runPipeline($job_id, $container_config, $setup);
+                $this->runPipeline($job_id, $container_config, $pipeline);
             } catch (\Throwable $e) {
                 LogSupport::debug(__FILE__, __LINE__, $e->__toString(), [], LogSupport::EMERGENCY);
             }
@@ -261,6 +276,7 @@ class RunContainer
         if ('changed' !== $status) {
             $this->after($job_id, 'changed');
         }
+
         LogSupport::debug(__FILE__, __LINE__, 'Run job after finished', ['status' => $status], LogSupport::EMERGENCY);
     }
 

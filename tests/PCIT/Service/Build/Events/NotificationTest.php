@@ -28,7 +28,7 @@ class NotificationTest extends PCITTestCase
 
         $notification->handle();
 
-        $this->notifications = Cache::store()->hGet('notifications', '1');
+        $this->notifications = Cache::store()->hGet('pcit/1/notifications', 'email');
     }
 
     /**
