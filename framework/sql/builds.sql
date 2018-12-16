@@ -35,12 +35,17 @@ CREATE TABLE IF NOT EXISTS `builds`
   `action`              VARCHAR(100),
   `check_suites_id`     BIGINT,
   `internal`            INT UNSIGNED DEFAULT 1,
-  `private`             INT          DEFAULT 0,
+  `private`             BIGINT       DEFAULT 0,
+  `unique_key`          BIGINT       DEFAULT 0,
+  UNIQUE KEY (`git_type`, `rid`, `event_type`, `branch`, `commit_id`, `unique_key`),
   PRIMARY KEY (`id`)
 );
 
 ALTER TABLE builds
   MODIFY config TEXT;
 
+ALTER TABLE `builds`
+  ADD UNIQUE (`git_type`, `rid`, `event_type`, `branch`, `commit_id`, `unique_key`);
+
 ALTER TABLE builds
-  DROP INDEX git_type;
+  ADD `unique_key` BIGINT;

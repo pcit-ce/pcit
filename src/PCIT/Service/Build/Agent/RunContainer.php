@@ -61,6 +61,9 @@ class RunContainer
                 $this->after($job_id, 'failure');
                 Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
 
+                // 清理 job 的构建环境
+                Cleanup::systemDelete((string) $job_id, true);
+
                 throw new PCITException($e->getMessage(), $e->getCode());
             } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                 // job success

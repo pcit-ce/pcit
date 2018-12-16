@@ -484,6 +484,7 @@ EOF;
      * @param $rid
      * @param $event_time
      * @param $config
+     * @param $unique
      *
      * @return int
      *
@@ -503,7 +504,8 @@ EOF;
                                   $rid,
                                   $event_time,
                                   $config,
-                                  $git_type = 'github')
+                                  $git_type = 'github',
+                                  bool $unique = false)
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -512,17 +514,19 @@ git_type,event_type,branch,compare,
 commit_id,commit_message,
 committer_name,committer_email,committer_username,
 author_name,author_email,author_username,
-rid,created_at,config
+rid,created_at,config,unique_key
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
+
+        $unique_key = $unique ? time() : 0;
 
         $last_insert_id = DB::insert($sql, [
             $git_type, $event_type, $branch, $compare,
             $commit_id, $commit_message,
             $committer_name, $committer_email, $committer_username,
             $author_name, $author_email, $author_username,
-            $rid, $event_time, $config,
+            $rid, $event_time, $config, $unique_key,
         ]);
 
         return $last_insert_id;

@@ -109,7 +109,7 @@ class RequestsController
         $last_insert_id = Build::insert('push', $branch, $compare, $commit_id,
             $commit_message, $committer->name, $committer->email, $committer->name,
             $author->name, $author->email, $author->name,
-            $rid, $event_time, $config);
+            $rid, $event_time, $config, 'github', true);
 
         // trigger build 不检测是否跳过
 
