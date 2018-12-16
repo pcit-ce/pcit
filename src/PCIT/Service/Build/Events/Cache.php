@@ -68,7 +68,7 @@ class Cache
             return;
         }
 
-        $docker_container = (new PCIT())->docker->container;
+        $docker_container = app(PCIT::class)->docker->container;
 
         $prefix = $this->getPrefix();
 

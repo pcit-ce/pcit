@@ -8,6 +8,9 @@ use PCIT\Support\Env;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 
+/**
+ * 注销
+ */
 class LogOut
 {
     public function __invoke(...$args): void

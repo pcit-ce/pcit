@@ -28,7 +28,7 @@ class Cleanup
 
         $label = 'com.khs1994.ci.service='.$id;
 
-        $docker = (new PCIT())->docker;
+        $docker = app(PCIT::class)->docker;
 
         $docker_container = $docker->container;
 

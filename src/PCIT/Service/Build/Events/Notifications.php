@@ -37,8 +37,8 @@ class Notifications
 
         \PCIT\Support\Cache::store()
             ->hSet(
-                'notifications',
-                (string) $this->build_key_id,
+                'pcit/'.$this->build_key_id.'/notifications',
+                'email',
                 json_encode($email)
             );
     }

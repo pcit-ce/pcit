@@ -50,17 +50,17 @@ Route::get('privacy-policy', 'IndexController@privacy_policy');
 
 Route::get('oauth', 'Users\LoginController@index');
 
-Route::get('oauth/coding/login', 'Users\OAuthCodingController@getLoginUrl');
+Route::get('oauth/coding/login', 'Users\OAuth\CodingController@getLoginUrl');
 
-Route::get('oauth/coding', 'Users\OAuthCodingController@getAccessToken');
+Route::get('oauth/coding', 'Users\OAuth\CodingController@getAccessToken');
 
-Route::get('oauth/github/login', 'Users\OAuthGitHubController@getLoginUrl');
+Route::get('oauth/github/login', 'Users\OAuth\GitHubController@getLoginUrl');
 
-Route::get('oauth/github', 'Users\OAuthGitHubController@getAccessToken');
+Route::get('oauth/github', 'Users\OAuth\GitHubController@getAccessToken');
 
-Route::get('oauth/gitee/login', 'Users\OAuthGiteeController@getLoginUrl');
+Route::get('oauth/gitee/login', 'Users\OAuth\GiteeController@getLoginUrl');
 
-Route::get('oauth/gitee', 'Users\OAuthGiteeController@getAccessToken');
+Route::get('oauth/gitee', 'Users\OAuth\GiteeController@getAccessToken');
 
 Route::get('{git_type}/logout', 'Profile\LogOut');
 

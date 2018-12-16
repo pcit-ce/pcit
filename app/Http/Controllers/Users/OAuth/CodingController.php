@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Users;
+namespace App\Http\Controllers\Users\OAuth;
 
 use PCIT\Service\OAuth\CodingClient;
 
-class OAuthCodingController extends OAuthKernel
+class CodingController extends Kernel
 {
     /**
      * @var CodingClient

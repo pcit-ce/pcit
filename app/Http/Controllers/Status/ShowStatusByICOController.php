@@ -8,6 +8,8 @@ use Error;
 use Exception;
 
 /**
+ * 获取状态小图标.
+ *
  * @method static canceled()
  * @method static errored()
  * @method static failing()

@@ -48,7 +48,7 @@ class Services
 
             $image = Parse::image($image, $this->matrix_config);
 
-            $docker_container = (new PCIT())->docker->container;
+            $docker_container = app(PCIT::class)->docker->container;
 
             $container_config = $docker_container
                 ->setEnv($env)

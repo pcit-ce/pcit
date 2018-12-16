@@ -10,6 +10,9 @@ use PCIT\Support\Env;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 
+/**
+ * 个人中心.
+ */
 abstract class Kernel
 {
     /**

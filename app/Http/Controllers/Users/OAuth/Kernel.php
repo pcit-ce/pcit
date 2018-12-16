@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Users;
+namespace App\Http\Controllers\Users\OAuth;
 
 use Error;
 use Exception;
@@ -14,7 +14,7 @@ use PCIT\Support\Env;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 
-abstract class OAuthKernel
+abstract class Kernel
 {
     /**
      * @var GitHubClient|GitHubClient|CodingClient|GiteeClient

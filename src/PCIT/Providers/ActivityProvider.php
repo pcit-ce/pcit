@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace PCIT\Providers;
 
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 
-class ActivityProvider implements ServiceProviderInterface
+class ActivityProvider extends \PCIT\Support\ServiceProvider
 {
     public function register(Container $pimple): void
     {

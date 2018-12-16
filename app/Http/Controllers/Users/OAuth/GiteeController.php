@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Users;
+namespace App\Http\Controllers\Users\OAuth;
 
-class OAuthGiteeController extends OAuthKernel
+class GiteeController extends Kernel
 {
     protected static $oauth;
 

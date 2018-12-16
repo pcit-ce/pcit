@@ -8,6 +8,9 @@ use App\Http\Controllers\Users\JWTController;
 use Exception;
 use PCIT\Support\Env;
 
+/**
+ * 系统 API.
+ */
 class SystemController
 {
     /**

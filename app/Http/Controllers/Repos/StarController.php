@@ -6,6 +6,9 @@ namespace App\Http\Controllers\Repos;
 
 use App\Http\Controllers\Users\JWTController;
 
+/**
+ * 收藏.
+ */
 class StarController
 {
     /**

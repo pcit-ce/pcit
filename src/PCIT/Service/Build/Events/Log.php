@@ -51,7 +51,7 @@ class Log
         $finishedAt = null;
         $until_time = 0;
 
-        $docker_container = (new PCIT())->docker->container;
+        $docker_container = app(PCIT::class)->docker->container;
 
         while (1) {
             $i = $i + 1;

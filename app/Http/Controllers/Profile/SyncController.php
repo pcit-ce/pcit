@@ -12,6 +12,9 @@ use Exception;
 use PCIT\PCIT;
 use PCIT\Support\DB;
 
+/**
+ * 同步用户数据.
+ */
 class SyncController
 {
     /**

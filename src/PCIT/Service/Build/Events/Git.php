@@ -68,7 +68,7 @@ class Git
      */
     public function handle(): void
     {
-        $docker_container = (new PCIT())->docker->container;
+        $docker_container = app(PCIT::class)->docker->container;
         $git = $this->git;
         $client = $this->client;
         $build = $this->build;
