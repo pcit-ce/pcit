@@ -15,6 +15,9 @@ $options = [
         'key' => getenv('S3_ACCESSKEYID'),
         'secret' => getenv('S3_SECRETACCESSKEY'),
     ],
+    'http' => [
+        'connect_timeout' => 20,
+    ],
 ];
 
 $flysystem = new League\Flysystem\Filesystem(new AwsS3Adapter(new \Aws\S3\S3Client($options), getenv('S3_BUCKET')));

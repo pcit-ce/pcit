@@ -15,7 +15,7 @@ class MatrixTest extends PCITTestCase
         $conditional_yaml = <<<EOF
 when:
   matrix:
-    - PHP_VERSION: 7.2.12
+    - PHP_VERSION: 7.2.13
       NGINX_VERSION: 1.15.6
       REDIS_VERSION: 5.0.0
       MYSQL_VERSION: 5.7.23
@@ -24,7 +24,7 @@ EOF;
         $current_yaml = <<<EOF
 matrix:
   PHP_VERSION:
-    - 7.2.12
+    - 7.2.13
   NGINX_VERSION:
     - 1.15.6
   REDIS_VERSION:

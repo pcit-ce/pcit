@@ -1,4 +1,4 @@
-FROM khs1994/php:7.2.10-fpm-alpine
+FROM khs1994/php:7.2.13-fpm-alpine
 
 COPY composer.json /srv/pcit/plugin/email/
 

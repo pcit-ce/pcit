@@ -14,7 +14,7 @@ class ParseTest extends PCITTestCase
      */
     public function test_image(): void
     {
-        $php_version = '7.2.10';
+        $php_version = '7.2.13';
 
         $image = Parse::image('khs1994/php:${PHP_VERSION}-fpm-alpine',
             [

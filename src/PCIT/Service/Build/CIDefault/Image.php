@@ -10,7 +10,7 @@ class Image
 {
     public static $array = [
         'node_js' => 'node:11.2.0-alpine',
-        'php' => 'khs1994/php:7.2.12-composer-alpine',
+        'php' => 'khs1994/php:7.2.13-composer-alpine',
         'bash' => 'bash',
         'sh' => 'alpine',
     ];

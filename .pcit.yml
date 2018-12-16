@@ -26,6 +26,7 @@ cache:
     - cache
     # - vendor
     - .php_cs.cache
+    - vendor
 
 pipeline:
   # before_install:
