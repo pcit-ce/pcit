@@ -110,10 +110,13 @@ class PCIT extends Container
      *
      * @param array  $config
      * @param string $git_type
+     * @param string $accessToken
      *
      * @throws Exception
      */
-    public function __construct(array $config = [], string $git_type = 'github')
+    public function __construct(array $config = [],
+                                string $git_type = 'github',
+                                string $accessToken = 'null')
     {
         parent::__construct($config);
 

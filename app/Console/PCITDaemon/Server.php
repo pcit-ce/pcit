@@ -42,7 +42,6 @@ class Server extends Kernel
             // 从 Webhooks 缓存中拿出数据，存入数据库
             $this->webhooks();
 
-            // Docker 构建队列
             // 从数据库中取出数据，生成 jobs
             try {
                 $this->build();

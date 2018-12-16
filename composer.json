@@ -3,7 +3,8 @@
   "description": "A CI/CD System Based Docker Written by PHP",
   "keywords": [
     "ci",
-    "docker"
+    "docker",
+    "pcit"
   ],
   "homepage": "https://github.com/pcit-ce/pcit",
   "type": "project",

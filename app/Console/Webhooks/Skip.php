@@ -47,34 +47,38 @@ class Skip
     {
         $build_key_id = $this->build_key_id;
 
+        // check config
+        if (null === $this->config || '[]' === $this->config) {
+            Log::debug(__FILE__, __LINE__, $build_key_id.' skip, because config is empty', [], Log::INFO);
+
+            $this->writeSkipToDB();
+
+            return;
+        }
+
         // check commit message
         if (preg_match(
             '#(\[skip ci\])|(\[ci skip\])|(\[pcit skip\])|(\[skip pcit\])#i',
             $this->commit_message)) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message', [], Log::INFO);
 
-            self::writeSkipToDB($build_key_id);
+            $this->writeSkipToDB();
 
             return;
         }
 
-        if (null === $this->config) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' not skip, because config is empty', [], Log::INFO);
-
-            return;
-        }
-
+        // check branch
         $yaml_obj = json_decode($this->config);
-
         $branches = $yaml_obj->branches ?? null;
-
         $result = (new Branch($branches, $this->branch))->regHandle();
 
-        if ($result) {
+        if (!$result) {
+            $this->writeSkipToDB();
+
             return;
         }
 
-        self::writeSkipToDB($build_key_id);
+        Build::updateBuildStatus($this->build_key_id, 'pending');
     }
 
     /**
@@ -82,10 +86,8 @@ class Skip
      *
      * @throws Exception
      */
-    public static function writeSkipToDB(int $build_key_id): void
+    private function writeSkipToDB(): void
     {
-        Build::updateBuildStatus($build_key_id, 'skip');
-
-        throw new Exception('build skip by commit message or branch ruler');
+        Build::updateBuildStatus($this->build_key_id, 'skip');
     }
 }
