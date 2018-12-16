@@ -66,7 +66,7 @@ class LogHandle
 
         $logs = array_filter($logs);
 
-        Job::updateLog($this->jobId, json_encode($logs));
+        Job::updateLog($this->jobId, json_encode($logs, JSON_UNESCAPED_UNICODE));
     }
 
     private function handlePipeline($pipeline)
