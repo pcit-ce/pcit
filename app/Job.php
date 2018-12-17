@@ -210,6 +210,13 @@ EOF;
         return DB::select($sql, [$job_id], true);
     }
 
+    public static function getFinishedAtByBuildId(int $build_id)
+    {
+        $sql = 'SELECT max(finished_at) FROM jobs WHERE build_id=?';
+
+        return DB::select($sql, [$build_id], true);
+    }
+
     /**
      * @param int    $job_key_id
      * @param string $status

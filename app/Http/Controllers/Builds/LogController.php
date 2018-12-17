@@ -26,7 +26,7 @@ class LogController
         $log = Job::getLog((int) $job_id);
 
         if ($log) {
-            return $log;
+            return json_decode($log, true);
         }
 
         throw new Exception('Not Found', 404);

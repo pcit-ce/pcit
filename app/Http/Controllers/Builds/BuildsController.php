@@ -109,6 +109,7 @@ class BuildsController
 
         if ($output) {
             $output['jobs'] = Job::allByBuildKeyID((int) $build_id);
+            $output['finished_at'] = JOb::getFinishedAtByBuildId((int) $build_id);
 
             return $output;
         }

@@ -29,10 +29,6 @@ class Response extends \Symfony\Component\HttpFoundation\Response
     {
         if (\defined('PCIT_START')) {
             $time = microtime(true) - PCIT_START;
-            try {
-                header("X-Runtime-rack: $time");
-            } catch (\Throwable $e) {
-            }
         }
 
         $code = $array['code'] ?? 200;
@@ -43,7 +39,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response
             unset($array['code']);
         }
 
-        return new JsonResponse($array, $code);
+        return new JsonResponse($array, $code, ["X-Runtime-rack: $time"]);
     }
 
     /**

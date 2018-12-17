@@ -66,7 +66,7 @@ class LogHandle
 
         $logs = array_filter($logs);
 
-        Job::updateLog($this->jobId, json_encode($logs, JSON_UNESCAPED_UNICODE));
+        Job::updateLog($this->jobId, $logs = json_encode($logs, JSON_UNESCAPED_UNICODE));
     }
 
     private function handlePipeline($pipeline)
@@ -84,13 +84,14 @@ class LogHandle
         }
 
         Log::debug(__FILE__, __LINE__,
-            'Handle job log', ['jobId' => $this->jobId], Log::EMERGENCY);
+            'Handle job log', ['jobId' => $this->jobId, 'pipeline' => $pipeline],
+            Log::EMERGENCY);
 
         $folder_name = sys_get_temp_dir().'/.pcit';
 
         !is_dir($folder_name) && mkdir($folder_name);
 
-        file_put_contents($folder_name.'/'.$this->jobId, "$output");
+        file_put_contents($folder_name.'/'.$this->jobId, $output);
 
         $fh = fopen($folder_name.'/'.$this->jobId, 'rb');
 
