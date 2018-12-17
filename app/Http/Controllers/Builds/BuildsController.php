@@ -31,7 +31,7 @@ class BuildsController
 
         list($git_type, $uid) = JWTController::getUser();
 
-        $array = Build::allByAdmin((int) $uid, $before, $limit, $git_type);
+        $array = Build::allByAdmin((int) $uid, (int) $before, (int) $limit, $git_type);
 
         return $array;
     }
@@ -63,7 +63,7 @@ class BuildsController
 
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $array = Build::allByRid((int) $rid, $before, $limit, (bool) $pr, false, $git_type);
+        $array = Build::allByRid((int) $rid, (int) $before, (int) $limit, (bool) $pr, false, $git_type);
 
         $return_array = [];
 

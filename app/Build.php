@@ -291,9 +291,15 @@ EOF;
                                        ?int $limit,
                                        $git_type = 'github')
     {
+        $before = 0 === $before ? null : $before;
+
         $before = $before ?? self::getLastKeyId();
 
+        $limit = 0 === $limit ? null : $limit;
+
         $limit = $limit ?? 25;
+
+        $limit = $limit <= 25 ? $limit : 25;
 
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag,commit_message,
@@ -327,9 +333,15 @@ EOF;
                                     $all = false,
                                     $git_type = 'github')
     {
+        $before = 0 === $before ? null : $before;
+
         $before = $before ?? self::getLastKeyId();
 
+        $limit = 0 === $limit ? null : $limit;
+
         $limit = $limit ?? 25;
+
+        $limit = $limit <= 25 ? $limit : 25;
 
         $exclude = $all ? 'null' : 'skip';
 
@@ -367,9 +379,15 @@ EOF;
      */
     public static function allByAdmin(int $uid, ?int $before, ?int $limit, $git_type = 'github')
     {
+        $before = 0 === $before ? null : $before;
+
         $before = $before ?? self::getLastKeyId();
 
+        $limit = 0 === $limit ? null : $limit;
+
         $limit = $limit ?? 25;
+
+        $limit = $limit <= 25 ? $limit : 25;
 
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag,commit_message,compare,
