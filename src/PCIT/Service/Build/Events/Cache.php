@@ -7,6 +7,7 @@ namespace PCIT\Service\Build\Events;
 use App\Build;
 use Docker\Container\Client;
 use PCIT\PCIT as PCIT;
+use PCIT\Support\CacheKey;
 use PCIT\Support\Env;
 
 class Cache
@@ -84,14 +85,14 @@ class Cache
         ];
 
         \PCIT\Support\Cache::store()
-            ->set('pcit/'.$this->job_id.'/cache_download',
+            ->set(CacheKey::cacheKey($this->job_id, 'download'),
                 $this->getContainerConfig($docker_container, $env)
             );
 
         array_pop($env);
 
         \PCIT\Support\Cache::store()
-            ->set('pcit/'.$this->job_id.'/cache_upload',
+            ->set(CacheKey::cacheKey($this->job_id, 'upload'),
                 $this->getContainerConfig($docker_container, $env)
             );
     }

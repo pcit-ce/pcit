@@ -13,6 +13,7 @@ use PCIT\PCIT as PCIT;
 use PCIT\Service\Build\Cleanup;
 use PCIT\Service\Build\Events\Log;
 use PCIT\Support\Cache;
+use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 use PCIT\Support\Log as LogSupport;
 
@@ -76,7 +77,7 @@ class RunContainer
                 // 清理 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);
 
-                throw new \Exception($e->getMessage(), $e->getCode());
+                throw new \Exception($e->__toString(), $e->getCode());
             }
         }
 
@@ -106,13 +107,12 @@ class RunContainer
 
         $this->docker_network->create((string) $job_id);
 
-        $cache = Cache::store();
+        $cache = $this->cache;
 
         // git container
         LogSupport::debug(__FILE__, __LINE__, 'Run git clone container', [], LogSupport::EMERGENCY);
 
-        $git_container_config = $cache->get('pcit/'.$job_id.'/clone');
-        $cache->hdel('pcit/build_log', $job_id);
+        $git_container_config = $cache->get(CacheKey::cloneKey($job_id));
 
         $this->runPipeline($job_id, $git_container_config, 'clone');
 
@@ -120,34 +120,19 @@ class RunContainer
         LogSupport::debug(__FILE__, __LINE__, '', [], LogSupport::EMERGENCY);
         $this->runCacheContainer($job_id);
 
-        // service
-        $services_key = (string) $job_id.'_services';
-        $result = $cache->rpoplpush($services_key, $services_key);
-
-        if ('end' === $result) {
-            // run service
-            $this->runService($job_id);
-        } else {
-            LogSupport::debug(
-                __FILE__, __LINE__,
-                'this job not include services', [], LogSupport::EMERGENCY);
-        }
+        $this->runService($job_id);
 
         // 复制原始 key
-        $cache->del('pcit/'.$job_id.'/pipeline/list_copy');
-
-        $cache->restore('pcit/'.$job_id.'/pipeline/list_copy',0,
-          $cache->dump('pcit/'.$job_id.'/pipeline/list'));
+        $copyKey = CacheKey::pipelineListCopyKey($job_id);
 
         while (1) {
-            $pipeline = $cache->rpop('pcit/'.$job_id.'/pipeline/list_copy');
+            $pipeline = $cache->rpop($copyKey);
 
             if (!$pipeline) {
-                $cache->del('pcit/'.$job_id.'/pipeline/list_copy');
                 break;
             }
 
-            $container_config = $cache->hget('pcit/'.$job_id.'/pipeline', $pipeline);
+            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id), $pipeline);
 
             if (!\is_string($container_config)) {
                 LogSupport::debug(__FILE__, __LINE__, 'Container config empty', [], LogSupport::EMERGENCY);
@@ -177,9 +162,9 @@ class RunContainer
      */
     public function runCacheContainer(int $job_id, bool $download = true): void
     {
-        $cache_hash_key = $download ? 'cache_download' : 'cache_upload';
+        $type = $download ? 'download' : 'upload';
 
-        $container_config = Cache::store()->get('pcit/'.$job_id.'/'.$cache_hash_key);
+        $container_config = Cache::store()->get(CacheKey::cacheKey($job_id, $type));
 
         if (!$container_config) {
             return;
@@ -256,18 +241,16 @@ class RunContainer
 
         // 复制 key
 
-        $cache->del('pcit/'.$job_id.'/'.$status.'/list_copy');
-        $cache->restore('pcit/'.$job_id.'/'.$status.'/list_copy', 0,
-          $cache->dump('pcit/'.$job_id.'/'.$status.'/list'));
+        $copyKey = CacheKey::pipelineListCopyKey($job_id, $status);
 
         while (1) {
-            $pipeline = $cache->rpop('pcit/'.$job_id.'/'.$status.'/list_copy');
+            $pipeline = $cache->rpop($copyKey);
 
             if (!$pipeline) {
                 break;
             }
 
-            $container_config = $cache->hget('pcit/'.$job_id.'/'.$status, $pipeline);
+            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id, $status), $pipeline);
 
             try {
                 $this->runPipeline($job_id, $container_config, $pipeline);
@@ -294,7 +277,7 @@ class RunContainer
     {
         LogSupport::debug(__FILE__, __LINE__, 'Run job services', ['job_id' => $job_id], LogSupport::EMERGENCY);
 
-        $container_configs = Cache::store()->hgetall('pcit/'.$job_id.'/services');
+        $container_configs = Cache::store()->hgetall(CacheKey::serviceHashKey($job_id));
 
         foreach ($container_configs as $service => $container_config) {
             $container_id = $this->docker_container

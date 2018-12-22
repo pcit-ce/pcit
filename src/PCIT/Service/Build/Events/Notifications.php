@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Service\Build\Events;
 
+use PCIT\Support\CacheKey;
+
 class Notifications
 {
     public $build_key_id;
@@ -37,7 +39,7 @@ class Notifications
 
         \PCIT\Support\Cache::store()
             ->hSet(
-                'pcit/'.$this->build_key_id.'/notifications',
+                CacheKey::notificationsHashKey($this->build_key_id),
                 'email',
                 json_encode($email)
             );

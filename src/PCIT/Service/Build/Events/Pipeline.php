@@ -19,6 +19,7 @@ use PCIT\Service\Build\Conditional\Status;
 use PCIT\Service\Build\Conditional\Tag;
 use PCIT\Service\Build\Parse;
 use PCIT\Support\Cache;
+use PCIT\Support\CacheKey;
 use PCIT\Support\Log;
 
 class Pipeline
@@ -47,7 +48,7 @@ class Pipeline
     {
         $docker_container = app(PCIT::class)->docker->container;
 
-        $job_id = $this->client->job_id;
+        $jobId = $this->client->job_id;
 
         $workdir = $this->client->workdir;
 
@@ -124,23 +125,23 @@ class Pipeline
 
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setBinds(["$job_id:$workdir", 'tmp:/tmp'])
+                ->setBinds(["$jobId:$workdir", 'tmp:/tmp'])
                 ->setEntrypoint($entrypoint)
                 ->setLabels([
-                    'com.khs1994.ci.pipeline' => "$job_id",
+                    'com.khs1994.ci.pipeline' => "$jobId",
                     'com.khs1994.ci.pipeline.name' => $setup,
                     'com.khs1994.ci.pipeline.status.no_status' => (string) $no_status,
                     'com.khs1994.ci.pipeline.status.failure' => (string) $failure,
                     'com.khs1994.ci.pipeline.status.success' => (string) $success,
                     'com.khs1994.ci.pipeline.status.changed' => (string) $changed,
-                    'com.khs1994.ci' => (string) $job_id,
+                    'com.khs1994.ci' => (string) $jobId,
                 ])
                 ->setWorkingDir($workdir)
                 ->setCmd($cmd)
                 ->setImage($image)
                 ->setNetworkingConfig([
                     'EndpointsConfig' => [
-                        "$job_id" => [
+                        "$jobId" => [
                             'Aliases' => [
                                 $setup,
                             ],
@@ -154,28 +155,28 @@ class Pipeline
 
             if ($failure) {
                 $is_status = true;
-                $cache->lpush('pcit/'.$job_id.'/failure/list', $setup);
-                $cache->hset('pcit/'.$job_id.'/failure', $setup, $container_config);
+                $cache->lpush(CacheKey::pipelineListKey($jobId, 'failure'), $setup);
+                $cache->hset(CacheKey::pipelineHashKey($jobId, 'failure'), $setup, $container_config);
             }
 
             if ($success) {
                 $is_status = true;
-                $cache->lpush('pcit/'.$job_id.'/success/list', $setup);
-                $cache->hset('pcit/'.$job_id.'/success', $setup, $container_config);
+                $cache->lpush(CacheKey::pipelineListKey($jobId, 'success'), $setup);
+                $cache->hset(CacheKey::pipelineHashKey($jobId, 'success'), $setup, $container_config);
             }
 
             if ($changed) {
                 $is_status = true;
-                $cache->lpush('pcit/'.$job_id.'/changed/list', $setup);
-                $cache->hset('pcit/'.$job_id.'/changed', $setup, $container_config);
+                $cache->lpush(CacheKey::pipelineListKey($jobId, 'changed'), $setup);
+                $cache->hset(CacheKey::pipelineHashKey($jobId, 'changed'), $setup, $container_config);
             }
 
             if (true === $is_status) {
                 continue;
             }
 
-            $cache->lpush('pcit/'.$job_id.'/pipeline/list', $setup);
-            $cache->hset('pcit/'.$job_id.'/pipeline', $setup, $container_config);
+            $cache->lpush(CacheKey::pipelineListKey($jobId), $setup);
+            $cache->hset(CacheKey::pipelineHashKey($jobId), $setup, $container_config);
         }
     }
 }

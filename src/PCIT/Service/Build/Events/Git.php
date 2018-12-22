@@ -9,6 +9,7 @@ use PCIT\PCIT;
 use PCIT\Service\Build\BuildData;
 use PCIT\Service\Build\Client;
 use PCIT\Support\Cache;
+use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 use PCIT\Support\Git as GitSupport;
 
@@ -129,6 +130,6 @@ class Git
             ->setCreateJson(null)
             ->getCreateJson();
 
-        Cache::store()->set('pcit/'.(string) $client->job_id.'/clone', $config);
+        Cache::store()->set(CacheKey::cloneKey($client->job_id), $config);
     }
 }

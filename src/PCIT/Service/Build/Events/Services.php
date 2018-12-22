@@ -9,6 +9,7 @@ use Exception;
 use PCIT\PCIT;
 use PCIT\Service\Build\Parse;
 use PCIT\Support\Cache;
+use PCIT\Support\CacheKey;
 
 class Services
 {
@@ -37,8 +38,6 @@ class Services
         }
 
         Job::updateEnv($this->job_id, json_encode($this->matrix_config));
-
-        Cache::store()->lPush((string) $this->job_id.'_services', 'end');
 
         foreach ($this->service as $service_name => $array) {
             $image = $array->image;
@@ -72,7 +71,7 @@ class Services
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            Cache::store()->hset('pcit/'.$this->job_id.'/services', $service_name, $container_config);
+            Cache::store()->hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace PCIT\Service\Build\Events;
 use Exception;
 use PCIT\PCIT;
 use PCIT\Support\Cache;
+use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 use PCIT\Support\Date;
 use PCIT\Support\Log as LogSupport;
@@ -19,11 +20,14 @@ class Log
 
     private $pipeline;
 
+    private $cache;
+
     public function __construct(int $job_id, string $container_id, string $pipeline = null)
     {
         $this->job_id = $job_id;
         $this->container_id = $container_id;
         $this->pipeline = $pipeline;
+        $this->cache = Cache::store();
     }
 
     /**
@@ -31,11 +35,11 @@ class Log
      *
      * @throws Exception
      */
-    public static function drop($job_id): void
+    public static function drop(int $job_id): void
     {
         LogSupport::debug(__FILE__, __LINE__, 'Drop prev logs '.$job_id, [], LogSupport::EMERGENCY);
 
-        Cache::store()->hDel('build_log', $job_id);
+        Cache::store()->del(CacheKey::logHashKey($job_id));
     }
 
     /**
@@ -45,7 +49,7 @@ class Log
      */
     public function handle()
     {
-        $cache = Cache::store();
+        $cache = $this->cache;
 
         $i = -1;
 
@@ -78,7 +82,7 @@ class Log
 
                 // echo $image_log;
 
-                sleep(1);
+                sleep(2);
 
                 continue;
             } else {
@@ -87,7 +91,7 @@ class Log
                 );
 
                 $cache->hset(
-                    'pcit/'.$this->job_id.'/build_log', $this->pipeline, $image_log);
+                    CacheKey::logHashKey($this->job_id), $this->pipeline, $image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z

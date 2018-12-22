@@ -6,6 +6,7 @@ namespace App\Console\Events;
 
 use App\Job;
 use PCIT\Support\Cache;
+use PCIT\Support\CacheKey;
 use PCIT\Support\Log;
 
 class LogHandle
@@ -36,16 +37,10 @@ class LogHandle
         ];
 
         foreach ($types as $type) {
-            $cache->del('pcit/'.$jobId.'/'.$type.'/list_copy');
+            $copyKey = CacheKey::pipelineListCopyKey($jobId, $type);
 
-            $cache->restore('pcit/'.$jobId.'/'.$type.'/list_copy',
-              0,
-              $cache->dump('pcit/'.$jobId.'/'.$type.'/list'));
-        }
-
-        foreach ($types as $type) {
             while (1) {
-                $pipeline = $cache->rpop('pcit/'.$jobId.'/'.$type.'/list_copy');
+                $pipeline = $cache->rpop($copyKey);
 
                 if (!$pipeline) {
                     break;
@@ -73,8 +68,7 @@ class LogHandle
     {
         $cache = $this->cache;
         // 日志美化
-        $output = $cache->hGet(
-            'pcit/'.$this->jobId.'/build_log', $pipeline);
+        $output = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
         if (!$output) {
             Log::debug(__FILE__, __LINE__,

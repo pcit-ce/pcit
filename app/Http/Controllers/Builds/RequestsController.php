@@ -33,12 +33,16 @@ class RequestsController
 
         list($git_type, $username, $repo_name) = $args;
 
+        $before = (int) $_GET['before'] ?? null;
+
+        $limit = (int) $_GET['limit'] ?? null;
+
         // list($uid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
         $output = Build::allByRid(
-            (int) $rid, null, null, true, true, $git_type);
+            (int) $rid, $before, $limit, true, true, $git_type);
 
         if ($output) {
             return $output;
@@ -82,10 +86,10 @@ class RequestsController
 
         $body = file_get_contents('php://input');
 
-        $body_obj = json_decode($body, true);
+        $body_obj = json_decode($body);
 
-        $config = $body_obj->config ?? [];
-        $branch = $body_obj->branch ?? 'master';
+        $config = $body_obj->request->config ?? [];
+        $branch = $body_obj->request->branch ?? 'master';
 
         $result = $app->repo_branches->get($username, $repo_name, $branch);
 

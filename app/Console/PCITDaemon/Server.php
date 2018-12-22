@@ -7,7 +7,6 @@ namespace App\Console\PCITDaemon;
 use App\Build;
 use App\Console\Events\Build as BuildEvent;
 use App\Console\Events\CheckAdmin;
-use App\Console\Events\Subject;
 use App\Console\Webhooks\AliYunRegistry;
 use App\Console\Webhooks\GitHub\Check;
 use App\Console\Webhooks\GitHub\Content;
@@ -24,6 +23,7 @@ use PCIT\Support\CI;
 use PCIT\Support\DB;
 use PCIT\Support\HTTP;
 use PCIT\Support\Log;
+use PCIT\Support\Subject;
 use TencentAI\TencentAI;
 
 /**

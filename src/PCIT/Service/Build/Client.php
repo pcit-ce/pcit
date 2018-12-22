@@ -12,9 +12,9 @@ use PCIT\Service\Build\Events\Matrix;
 use PCIT\Service\Build\Events\Notifications;
 use PCIT\Service\Build\Events\Pipeline;
 use PCIT\Service\Build\Events\Services;
-use PCIT\Service\Build\Events\Subject;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
+use PCIT\Support\Subject;
 
 class Client
 {

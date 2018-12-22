@@ -6,11 +6,11 @@ namespace App\Console\PCITDaemon;
 
 use App\Build;
 use App\Console\Events\LogHandle;
-use App\Console\Events\Subject;
 use App\Console\Events\UpdateBuildStatus;
 use App\Job;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
+use PCIT\Support\Subject;
 
 /**
  * Agent run job, need docker.
