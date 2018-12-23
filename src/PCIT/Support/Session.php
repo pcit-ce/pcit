@@ -49,10 +49,10 @@ class Session
     public static function has(string $name)
     {
         session_start();
-        $output = $_SESSION[$name] ?? false;
+        $result = $_SESSION[$name] ?? false;
         session_write_close();
 
-        return !(false === $output);
+        return !(false === $result);
     }
 
     /**
@@ -86,13 +86,13 @@ class Session
      */
     public static function pull(string $name)
     {
-        $output = self::has($name);
+        $result = self::has($name);
 
-        if ($output) {
-            $output = self::get($name);
+        if ($result) {
+            $result = self::get($name);
             self::forget($name);
 
-            return $output;
+            return $result;
         }
 
         return null;

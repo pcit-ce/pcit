@@ -257,9 +257,9 @@ EOF;
     {
         $sql = 'SELECT check_run_id FROM jobs WHERE id=? LIMIT 1';
 
-        $output = DB::select($sql, [$build_key_id], true);
+        $result = DB::select($sql, [$build_key_id], true);
 
-        return $output;
+        return $result;
     }
 
     /**

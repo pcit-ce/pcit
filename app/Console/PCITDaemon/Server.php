@@ -33,6 +33,15 @@ class Server extends Kernel
 {
     private $git_type;
 
+    private $subject;
+
+    public function __construct()
+    {
+        $this->subject = new Subject();
+
+        parent::__construct();
+    }
+
     /**
      * @throws Exception
      */
@@ -63,11 +72,8 @@ class Server extends Kernel
         // get build info
         $buildData = (new BuildEvent())->handle();
 
-        // 观察者模式
-        $subject = new Subject();
-
         try {
-            $subject
+            $this->subject
                 // check ci root
                 ->register(new CheckAdmin($buildData))
                 ->handle();

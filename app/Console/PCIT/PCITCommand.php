@@ -155,13 +155,13 @@ class PCITCommand
 
         $url = $endpoints_url.'/api/'.$entrypoint;
 
-        $output = self::getCurl()->get($url, $data, $header);
+        $result = self::getCurl()->get($url, $data, $header);
 
         if ($target_code === self::getCurl()->getCode()) {
-            return $output;
+            return $result;
         }
 
-        throw new Exception($output, 500);
+        throw new Exception($result, 500);
     }
 
     /**
@@ -190,13 +190,13 @@ class PCITCommand
         $auth && $header = self::getToken($input);
         $json && $header = array_merge($header, ['Content-Type' => 'application/json']);
 
-        $output = self::getCurl()->post($endpoints_url.'/api/'.$entrypoint, $data, $header);
+        $result = self::getCurl()->post($endpoints_url.'/api/'.$entrypoint, $data, $header);
 
         if ($target_code === self::getCurl()->getCode()) {
-            return $output;
+            return $result;
         }
 
-        throw new Exception($output, 500);
+        throw new Exception($result, 500);
     }
 
     /**
@@ -222,13 +222,13 @@ class PCITCommand
 
         $auth && $header = self::getToken($input);
 
-        $output = self::getCurl()->delete($endpoints_url.'/api/'.$entrypoint, $data, $header);
+        $result = self::getCurl()->delete($endpoints_url.'/api/'.$entrypoint, $data, $header);
 
         if ($target_code === self::getCurl()->getCode()) {
-            return $output;
+            return $result;
         }
 
-        throw new Exception($output, 500);
+        throw new Exception($result, 500);
     }
 
     /**
@@ -259,13 +259,13 @@ class PCITCommand
 
         $url = $endpoints_url.'/api/'.$entrypoint;
 
-        $output = self::getCurl()->patch($url, $data, $header);
+        $result = self::getCurl()->patch($url, $data, $header);
 
         if ($target_code === self::getCurl()->getCode()) {
-            return $output;
+            return $result;
         }
 
-        throw new Exception($output, 500);
+        throw new Exception($result, 500);
     }
 
     /**

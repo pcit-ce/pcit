@@ -88,9 +88,9 @@ class JWTController
         }
 
         // 检查 token uid 是否为仓库管理员
-        $output = Repo::checkAdmin((int) $rid, (int) $uid, false, $git_type);
+        $result = Repo::checkAdmin((int) $rid, (int) $uid, false, $git_type);
 
-        if ($output) {
+        if ($result) {
             return [$rid, $git_type, $uid];
         }
 
@@ -117,9 +117,9 @@ class JWTController
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
         // 比对管理员列表
-        $output = Repo::checkAdmin((int) $rid, (int) $uid, false, $git_type);
+        $result = Repo::checkAdmin((int) $rid, (int) $uid, false, $git_type);
 
-        if ($output) {
+        if ($result) {
             return [(int) $rid, $git_type, (int) $uid];
         }
 

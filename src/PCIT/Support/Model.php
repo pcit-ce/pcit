@@ -71,10 +71,10 @@ class Model
 
         $sql = "SELECT * from $table WHERE id=?";
 
-        $output = DB::select($sql, [$table_primary_key_id]);
+        $result = DB::select($sql, [$table_primary_key_id]);
 
-        if ($output) {
-            return $output[0];
+        if ($result) {
+            return $result[0];
         }
 
         return false;
@@ -98,10 +98,10 @@ class Model
      */
     public static function findOrFail($table_primary_key_id)
     {
-        $output = static::find($table_primary_key_id);
+        $result = static::find($table_primary_key_id);
 
-        if ($output) {
-            return $output;
+        if ($result) {
+            return $result;
         }
 
         throw new Exception(__FILE__.' : '.__LINE__.' Not Found', 404);

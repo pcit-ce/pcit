@@ -43,10 +43,10 @@ class UserInfoController
             return User::getUserBasicInfo($username, null, $git_type);
         }
 
-        $output = User::getUserInfo($username, null, $git_type);
+        $result = User::getUserInfo($username, null, $git_type);
 
-        if ($output) {
-            return $output;
+        if ($result) {
+            return $result;
         }
 
         throw new Exception('Not Found', 404);

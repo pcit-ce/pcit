@@ -24,7 +24,7 @@ class WeChatTemplate
     {
         $pcit = new PCIT();
 
-        $output = Build::find($build_key_id);
+        $result = Build::find($build_key_id);
 
         list(
             'build_status' => $build_status,
@@ -36,11 +36,11 @@ class WeChatTemplate
             'committer_username' => $committer_username,
             'git_type' => $git_type,
             'commit_id' => $commit_id
-            ) = $output;
+            ) = $result;
 
         $repo_full_name = Repo::getRepoFullName((int) $rid, $git_type);
 
-        $output = $pcit->wechat_template_message->sendTemplateMessage(
+        $result = $pcit->wechat_template_message->sendTemplateMessage(
             $build_status,
             Date::Int2ISO((int) $time),
             $event_type,
@@ -52,6 +52,6 @@ class WeChatTemplate
             Git::getCommitUrl($git_type, $repo_full_name, $commit_id)
         );
 
-        Log::debug(__FILE__, __LINE__, $output);
+        Log::debug(__FILE__, __LINE__, $result);
     }
 }

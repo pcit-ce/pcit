@@ -33,18 +33,18 @@ FROM builds WHERE git_type=? AND event_type IN (?) AND rid=
 
 AND action IN (?,?)
 
-ORDER BY id DESC 
+ORDER BY id DESC
 
 EOF;
 
-        $output = DB::select($sql, [
+        $result = DB::select($sql, [
                $git_type, CI::BUILD_EVENT_PR, $git_type, $repo_full_name, 'synchronize', 'opened',
             ]
         );
 
         $array = [];
 
-        foreach ($output as $k) {
+        foreach ($result as $k) {
             $merge_array = [
                 'commit_url' => Git::getCommitUrl($git_type, $repo_full_name, $k['commit_id']),
                 'commit_id' => substr($k['commit_id'], 0, 7),

@@ -93,16 +93,16 @@ class Env extends Model
     {
         $sql = 'SELECT name,value,public FROM env_vars WHERE id=? AND git_type=? AND rid=?';
 
-        $output = DB::select($sql, [$id, $git_type, $rid]);
+        $result = DB::select($sql, [$id, $git_type, $rid]);
 
-        if (!$output) {
+        if (!$result) {
             throw new Exception('Not Found', 404);
         }
 
-        if ($public = $output[0]['public'] || $show) {
-            return $output[0]['name'].'='.$output[0]['value'];
+        if ($public = $result[0]['public'] || $show) {
+            return $result[0]['name'].'='.$result[0]['value'];
         }
 
-        return $output[0]['name'].'=[secure]';
+        return $result[0]['name'].'=[secure]';
     }
 }

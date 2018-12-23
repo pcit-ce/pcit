@@ -68,9 +68,9 @@ class LogHandle
     {
         $cache = $this->cache;
         // 日志美化
-        $output = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
+        $result = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
-        if (!$output) {
+        if (!$result) {
             Log::debug(__FILE__, __LINE__,
                 'job Log empty, skip', ['jobId' => $this->jobId], Log::WARNING);
 
@@ -85,7 +85,7 @@ class LogHandle
 
         !is_dir($folder_name) && mkdir($folder_name);
 
-        file_put_contents($folder_name.'/'.$this->jobId, $output);
+        file_put_contents($folder_name.'/'.$this->jobId, $result);
 
         $fh = fopen($folder_name.'/'.$this->jobId, 'rb');
 

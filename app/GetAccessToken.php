@@ -43,10 +43,10 @@ class GetAccessToken
 
         foreach (json_decode($admin, true) as $k) {
             $sql = 'SELECT access_token FROM user WHERE uid=? AND git_type=? LIMIT 1';
-            $output = DB::select($sql, [$k, 'github'], true);
+            $result = DB::select($sql, [$k, 'github'], true);
 
-            if ($output) {
-                $accessToken = $output;
+            if ($result) {
+                $accessToken = $result;
 
                 break;
             }

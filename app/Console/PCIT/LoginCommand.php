@@ -14,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class LoginCommand extends Command
 {
+    private $curl;
+
     public function configure(): void
     {
         $this->setName('login');

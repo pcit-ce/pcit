@@ -127,9 +127,9 @@ class SyncController
 
         foreach ($orgs as $k) {
             $org_name = $k['username'];
-            $output = $this->pcit->orgs->exists($org_name);
+            $result = $this->pcit->orgs->exists($org_name);
 
-            if (!$output) {
+            if (!$result) {
                 User::delete($org_name, $this->git_type);
             }
 

@@ -110,13 +110,13 @@ class BuildsController
     public function find($build_id)
     {
         // APITokenController::check((int) $build_id);
-        $output = Build::find((int) $build_id);
+        $result = Build::find((int) $build_id);
 
-        if ($output) {
-            $output['jobs'] = Job::allByBuildKeyID((int) $build_id);
-            $output['finished_at'] = JOb::getFinishedAtByBuildId((int) $build_id);
+        if ($result) {
+            $result['jobs'] = Job::allByBuildKeyID((int) $build_id);
+            $result['finished_at'] = JOb::getFinishedAtByBuildId((int) $build_id);
 
-            return $output;
+            return $result;
         }
 
         throw new Exception('Not Found', 404);

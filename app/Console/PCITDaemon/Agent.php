@@ -13,10 +13,23 @@ use PCIT\Support\Log;
 use PCIT\Support\Subject;
 
 /**
+ * TODO.
+ *
+ * 与数据库交互的操作全部移到 Server 节点，Agent 节点严禁与数据库直接交互
+ *
  * Agent run job, need docker.
  */
 class Agent extends Kernel
 {
+    private $subject;
+
+    public function __construct()
+    {
+        $this->subject = new Subject();
+
+        parent::__construct();
+    }
+
     /**
      * TODO 从服务端获取待执行 job.
      */
@@ -52,10 +65,8 @@ class Agent extends Kernel
         Log::debug(__FILE__, __LINE__, 'Handle build jobs',
             ['job_id' => $job_id], Log::EMERGENCY);
 
-        $subject = new Subject();
-
-        $subject
-            // update build status in progress
+        $this->subject
+            // TODO update build status in progress
             ->register(new UpdateBuildStatus(
                 (int) $job_id, (int) $build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS))
             ->handle();
@@ -68,7 +79,8 @@ class Agent extends Kernel
             Job::updateFinishedAt((int) $job_id, time());
 
             try {
-                $subject
+                // TODO
+                $this->subject
                     ->register(new LogHandle((int) $job_id))
                     ->register(new UpdateBuildStatus((int) $job_id, (int) $build_key_id, $e->getMessage()))
                     ->handle();
@@ -83,6 +95,9 @@ class Agent extends Kernel
         $this->updateBuildStatus((int) $build_key_id);
     }
 
+    /**
+     * TODO.
+     */
     public function updateBuildStatus(int $build_key_id): void
     {
         $status = Job::getBuildStatusByBuildKeyId($build_key_id);

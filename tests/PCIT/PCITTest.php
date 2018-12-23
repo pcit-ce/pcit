@@ -27,9 +27,9 @@ class PCITTest extends PCITTestCase
     {
         $redis = Cache::store();
 
-        $output = $redis->set('k', 1);
+        $result = $redis->set('k', 1);
 
-        $this->assertEquals(1, $output);
+        $this->assertEquals(1, $result);
     }
 
     /**
@@ -37,8 +37,8 @@ class PCITTest extends PCITTestCase
      */
     public function testDB(): void
     {
-        $output = DB::statement('select 1');
+        $result = DB::statement('select 1');
 
-        $this->assertEquals(0, $output);
+        $this->assertEquals(0, $result);
     }
 }

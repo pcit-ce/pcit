@@ -33,10 +33,10 @@ class HTTP
     public static function post(string $url, string $data = null, array $header = [])
     {
         $curl = self::getCurl();
-        $output = $curl->post($url, $data, $header);
+        $result = $curl->post($url, $data, $header);
         self::$code = $curl->getCode();
 
-        return $output;
+        return $result;
     }
 
     private static function getCurl()

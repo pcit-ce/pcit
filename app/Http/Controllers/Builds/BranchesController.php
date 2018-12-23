@@ -31,13 +31,13 @@ class BranchesController
 
         $branchArray = Build::getBranches((int) $rid, $git_type);
 
-        $return_array = [];
+        $result = [];
 
         foreach ($branchArray as $k) {
-            $return_array[] = $k['branch'];
+            $result[] = $k['branch'];
         }
 
-        return $return_array;
+        return $result;
     }
 
     /**
@@ -66,10 +66,10 @@ class BranchesController
 
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $output = Build::allByBranch((int) $rid, $branch_name, $before, $limit, $git_type);
+        $result = Build::allByBranch((int) $rid, $branch_name, $before, $limit, $git_type);
 
-        if ($output) {
-            return $output;
+        if ($result) {
+            return $result;
         }
 
         throw new Exception('Not Found', 404);

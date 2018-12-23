@@ -18,8 +18,8 @@ abstract class Kernel
     {
         $pcit = new PCIT([], static::$git_type);
 
-        $output = $pcit->webhooks->server();
+        $result = $pcit->webhooks->server();
 
-        return [$output];
+        return [$result];
     }
 }

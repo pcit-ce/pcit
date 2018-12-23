@@ -42,11 +42,11 @@ class RequestsController
 
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $output = Build::allByRid(
+        $result = Build::allByRid(
             (int) $rid, $before, $limit, true, true, $git_type);
 
-        if ($output) {
-            return $output;
+        if ($result) {
+            return $result;
         }
 
         throw new Exception('Not Found', 404);
@@ -144,10 +144,10 @@ class RequestsController
 
         JWTController::checkByRepo(...$args);
 
-        $output = Build::find((int) $request_id);
+        $result = Build::find((int) $request_id);
 
-        if ($output) {
-            return $output;
+        if ($result) {
+            return $result;
         }
 
         throw new Exception('Not Found', 404);

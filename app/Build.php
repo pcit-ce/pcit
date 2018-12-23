@@ -180,9 +180,9 @@ class Build extends Model
     {
         $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip") ORDER BY id DESC LIMIT 2';
 
-        $output = DB::select($sql, [$rid, $branch]);
+        $result = DB::select($sql, [$rid, $branch]);
 
-        if (($output[1] ?? null) === $output[0]) {
+        if (($result[1] ?? null) === $result[0]) {
             return false;
         }
 

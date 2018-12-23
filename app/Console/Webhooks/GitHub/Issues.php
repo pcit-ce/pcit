@@ -162,9 +162,9 @@ class Issues
         }
 
         if ('deleted' === $action) {
-            $output = Issue::comment_deleted($issue_id, $comment_id, $updated_at);
+            $result = Issue::comment_deleted($issue_id, $comment_id, $updated_at);
 
-            if (1 === $output) {
+            if (1 === $result) {
                 $debug_info = 'Delete Issue Comment SUCCESS';
 
                 Log::debug(__FILE__, __LINE__, $debug_info, [], Log::INFO);

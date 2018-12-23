@@ -35,22 +35,22 @@ FROM
 builds WHERE build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id ASC LIMIT 1;
 EOF;
 
-        $output = DB::select($sql, [
+        $result = DB::select($sql, [
             'pending',
             CI::BUILD_EVENT_PUSH,
             CI::BUILD_EVENT_TAG,
             CI::BUILD_EVENT_PR,
         ]);
 
-        $output = $output[0] ?? null;
+        $result = $result[0] ?? null;
 
         // 数据库没有结果，跳过构建，也就没有 build_key_id
 
-        if (!$output) {
+        if (!$result) {
             throw new PCITException('Build not Found, skip', 01404);
         }
 
-        $output = array_values($output);
+        $result = array_values($result);
 
         list($build_key_id,
             $this->git_type,
@@ -61,7 +61,7 @@ EOF;
             $this->event_type,
             $pull_request_number,
             $this->tag,
-            $this->config) = $output;
+            $this->config) = $result;
 
         if (!$this->config) {
             throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
