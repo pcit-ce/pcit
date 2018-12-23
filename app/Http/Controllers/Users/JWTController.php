@@ -143,7 +143,10 @@ class JWTController
             goto a;
         }
 
-        $json = file_get_contents('php://input');
+        $request = app('request');
+
+        // $json = file_get_contents('php://input');
+        $json = $request->getContent();
 
         $obj = json_decode($json);
 

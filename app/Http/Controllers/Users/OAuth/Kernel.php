@@ -94,7 +94,10 @@ abstract class Kernel
      */
     public function getAccessTokenCommon(?string $state): void
     {
-        $code = $_GET['code'] ?? false;
+        $request = app('request');
+
+        // $code = $_GET['code'] ?? false;
+        $code = $request->query->get('code');
 
         if (false === $code) {
             throw new Exception('code not found');

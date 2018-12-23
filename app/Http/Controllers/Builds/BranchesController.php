@@ -53,8 +53,11 @@ class BranchesController
      */
     public function find(...$args)
     {
-        $before = $_GET['before'] ?? null;
-        $limit = $_GET['limit'] ?? null;
+        $request = app('request');
+        // $before = $_GET['before'] ?? null;
+        $before = $request->query->get('before');
+        // $limit = $_GET['limit'] ?? null;
+        $limit = $request->query->get('limit');
 
         $before && $before = (int) $before;
         $limit && $limit = (int) $before;

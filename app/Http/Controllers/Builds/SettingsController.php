@@ -75,11 +75,14 @@ class SettingsController
      */
     public function update(...$args)
     {
+        $request = app('request');
+
         list($username, $repo_name, $setting_name) = $args;
 
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        $json = file_get_contents('php://input');
+        // $json = file_get_contents('php://input');
+        $json = $request->getContent();
 
         foreach (json_decode($json, true) as $k => $v) {
             $setting_value = $v;

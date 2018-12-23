@@ -25,10 +25,10 @@ class BuildsController
      */
     public function __invoke()
     {
-        $before = (int) $_GET['before'] ?? null;
-
-        $limit = (int) $_GET['limit'] ?? null;
-
+        // $before = (int) $_GET['before'] ?? null;
+        $before = app('request')->query->get('before');
+        // $limit = (int) $_GET['limit'] ?? null;
+        $limit = app('request')->query->get('limit');
         list($git_type, $uid) = JWTController::getUser();
 
         $array = Build::allByAdmin((int) $uid, (int) $before, (int) $limit, $git_type);
@@ -52,11 +52,16 @@ class BuildsController
      */
     public function listByRepo(...$args)
     {
+        $request = app('request');
+
         list($git_type, $username, $repo_name) = $args;
 
-        $before = $_GET['before'] ?? null;
-        $limit = $_GET['limit'] ?? null;
-        $pr = $_GET['type'] ?? null;
+        // $before = $_GET['before'] ?? null;
+        $before = $request->query->get('before');
+        // $limit = $_GET['limit'] ?? null;
+        $limit = $request->query->get('limit');
+        // $pr = $_GET['type'] ?? null;
+        $pr = $request->query->get('type');
 
         $before && $before = (int) $before;
         $limit && $limit = (int) $before;

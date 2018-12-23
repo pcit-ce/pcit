@@ -47,7 +47,10 @@ class EnvController
      */
     public function create(...$args)
     {
-        $json = file_get_contents('php://input');
+        $request = app('request');
+
+        // $json = file_get_contents('php://input');
+        $json = $request->getContent();
 
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
@@ -97,11 +100,14 @@ class EnvController
      */
     public function update(...$args): void
     {
+        $request = app('request');
+
         list($username, $repo_name, $env_var_id) = $args;
 
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        $json = file_get_contents('php://input');
+        // $json = file_get_contents('php://input');
+        $json = $request->getContent();
 
         list('env_var.value' => $value, 'env_var.public' => $public) = json_decode($json, true);
 

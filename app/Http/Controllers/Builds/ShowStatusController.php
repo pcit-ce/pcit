@@ -18,7 +18,9 @@ class ShowStatusController
      */
     public function __invoke(...$arg): void
     {
-        $branch = $_GET['branch'] ?? null;
+        $request = app('request');
+        // $branch = $_GET['branch'] ?? null;
+        $branch = $request->query->get('branch');
 
         list($git_type, $username, $repo) = $arg;
 

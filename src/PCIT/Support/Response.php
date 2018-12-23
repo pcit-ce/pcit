@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Support;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
-class Response extends \Symfony\Component\HttpFoundation\Response
+class Response extends BaseResponse
 {
     const HTTP_CODE = [
         200,

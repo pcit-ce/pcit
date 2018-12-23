@@ -29,13 +29,14 @@ class RequestsController
      */
     public function __invoke(...$args)
     {
-        // $limit = $_GET['limit'];
+        $request = app('request');
 
         list($git_type, $username, $repo_name) = $args;
 
-        $before = (int) $_GET['before'] ?? null;
-
-        $limit = (int) $_GET['limit'] ?? null;
+        // $before = (int) $_GET['before'] ?? null;
+        $before = $request->query->get('before');
+        // $limit = (int) $_GET['limit'] ?? null;
+        $limit = $request->query->get('limit');
 
         // list($uid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
@@ -75,6 +76,8 @@ class RequestsController
      */
     public function create(...$args)
     {
+        $request = app('request');
+
         list($username, $repo_name) = $args;
 
         list($rid) = JWTController::checkByRepo($username, $repo_name);
@@ -84,7 +87,9 @@ class RequestsController
 
         $app = new PCIT(['github_access_token' => $token], 'github');
 
-        $body = file_get_contents('php://input');
+        // $body = file_get_contents('php://input');
+
+        $body = $request->getContent();
 
         $body_obj = json_decode($body);
 
