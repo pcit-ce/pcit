@@ -19,7 +19,7 @@ class IndexController
 
     public function blog(): void
     {
-        Response::redirect('https://www.khs1994.com/categories/PCIT');
+        Response::redirect('https://khs1994.github.io/categories/CI/PCIT/');
     }
 
     public function api()
@@ -239,7 +239,7 @@ class IndexController
     public function wechat(): void
     {
         Response::redirect(
-            'https://user-images.githubusercontent.com/16733187/41222863-c610772e-6d9a-11e8-8847-27ac16c8fb54.jpg');
+            'https://user-images.githubusercontent.com/16733187/49062650-de41ea00-f24f-11e8-9f22-99b5cd3d0195.jpg');
     }
 
     public function changelog(): void

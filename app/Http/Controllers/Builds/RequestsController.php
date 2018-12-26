@@ -43,7 +43,7 @@ class RequestsController
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
         $result = Build::allByRid(
-            (int) $rid, $before, $limit, true, true, $git_type);
+            (int) $rid, (int) $before, (int) $limit, true, true, $git_type);
 
         if ($result) {
             return $result;
