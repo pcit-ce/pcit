@@ -76,7 +76,7 @@ language: php
 
 pipeline:
 
-  test:
+  install:
     command:
       - composer install
 

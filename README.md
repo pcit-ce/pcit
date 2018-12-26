@@ -36,9 +36,17 @@
 
 push by you, test and deploy by us.
 
+## 掌上 PCIT
+
+<p align="center">
+<img width="200" src="https://user-images.githubusercontent.com/16733187/49062650-de41ea00-f24f-11e8-9f22-99b5cd3d0195.jpg">
+</p>
+
+<p align="center"><strong>掌上 PCIT</strong></p>
+
 ## 博客
 
-将来我会在 https://blog.ci.khs1994.com 中对 PCIT 所涉及的概念进行系统讲解，敬请期待。
+将来我会在 https://ci.khs1994.com/blog 中对 PCIT 所涉及的概念进行系统讲解，敬请期待。
 
 ## 什么是持续集成 Continuous Integration (CI)?
 
