@@ -10,7 +10,7 @@ use Throwable;
 
 class Kernel
 {
-    private function sendRequestThroughRouter()
+    private function sendRequestThroughRouter($request)
     {
         $debug = config('app.debug');
 
@@ -19,7 +19,9 @@ class Kernel
         }
 
         // ci.khs1994.com/index.php redirect to /dashboard
-        if ('/index.php' === $_SERVER['REQUEST_URI']) {
+
+        // if ('/index.php' === $_SERVER['REQUEST_URI']) {
+        if ('/index.php' === $request->server->get('REQUEST_URI')) {
             Response::redirect('dashboard');
             exit;
         }
@@ -29,6 +31,10 @@ class Kernel
         } catch (Throwable $e) {
             if ('Finish' === $e->getMessage()) {
                 $output = Route::$output;
+
+                if ($output instanceof Response) {
+                    return $output;
+                }
 
                 switch (\gettype($output)) {
                     case 'array':
@@ -51,8 +57,8 @@ class Kernel
             }
 
             return Response::json(array_filter([
-                'code' => $e->getCode() ?? 500,
-                'message' => $e->getMessage() ?? 'ERROR',
+                'code' => 500,
+                'message' => $e->getMessage() ?: 'ERROR',
                 'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
                 'file' => $debug ? $e->getFile() : null,
                 'line' => $debug ? $e->getLine() : null,
@@ -85,7 +91,7 @@ class Kernel
 
         // session_set_cookie_params(1800 , '/', '.'getenv('CI_SESSION_DOMAIN', true));
 
-        $response = $this->sendRequestThroughRouter();
+        $response = $this->sendRequestThroughRouter($request);
 
         return $response;
     }

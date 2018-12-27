@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Status;
 
 use Error;
 use Exception;
+use PCIT\Support\Response;
 
 /**
  * 获取状态小图标.
@@ -27,16 +28,20 @@ class ShowStatusByICOController
     public function __call(string $k, array $v)
     {
         try {
-            header('content-type: image/svg+xml;charset=utf-8');
-            header('Cache-Control: no-cache');
-            // header('Cache-Control: max-age=100');
             $file = __DIR__.'/../../../../public/ico/'.$k.'.svg';
 
             if (file_exists($file)) {
-                return file_get_contents($file);
+                $svg = file_get_contents($file);
             }
         } catch (Error $e) {
-            return file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg');
+            $svg = file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg');
         }
+
+        return new Response($svg, 200, [
+            'content-type' => 'image/svg+xml;charset=utf-8',
+            'Cache-Control' => 'max-age=300',
+            // header('Cache-Control: max-age=100');
+            // no-cache
+        ]);
     }
 }

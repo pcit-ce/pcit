@@ -8,6 +8,7 @@ use App\Build;
 use App\Repo;
 use Exception;
 use PCIT\Support\Env;
+use PCIT\Support\Response;
 
 class ShowStatusController
 {
@@ -16,7 +17,7 @@ class ShowStatusController
      *
      * @throws Exception
      */
-    public function __invoke(...$arg): void
+    public function __invoke(...$arg)
     {
         $request = app('request');
         // $branch = $_GET['branch'] ?? null;
@@ -34,15 +35,15 @@ class ShowStatusController
 
         $status = Build::getLastBuildStatus((int) $rid, $branch);
 
-        if (null === $status) {
-            header('Content-Type: image/svg+xml;charset=utf-8');
-            require __DIR__.'/../../../../public/ico/unknown.svg';
-            exit;
-        }
+        $svg = null === $status ?
+            file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg')
+        : file_get_contents(__DIR__.'/../../../../public/ico/'.$status.'.svg');
 
-        header('Content-Type: image/svg+xml;charset=utf-8');
-
-        require __DIR__.'/../../../../public/ico/'.$status.'.svg';
+        return new Response($svg, 200, [
+            'Content-Type' => 'image/svg+xml;charset=utf-8',
+            'Cache-Controller' => 'max-age=300',
+            // no-cache
+        ]);
     }
 
     /**

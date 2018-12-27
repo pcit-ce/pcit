@@ -152,7 +152,7 @@ $ cd ~/lnmp
 $ ./lnmp-docker pcit-up
 ```
 
-**5.** 点击刚才注册好的 GitHub App 地址为 https://github.com/apps/YOUR_APP_NAME ，进行安装。
+**5.** 点击刚才注册好的 GitHub App 地址 https://github.com/apps/YOUR_APP_NAME ，进行安装。
 
 **6.** Git 仓库根目录包含 `.pcit.yml` 文件，推送到 GitHub，在 Commit 详情处查看构建。
 
