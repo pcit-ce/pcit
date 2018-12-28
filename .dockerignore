@@ -34,3 +34,5 @@ framework/storage/private_key/public.key
 /tests
 /yaml_examples
 /coverage.xml
+
+app/Http/Controllers/Test

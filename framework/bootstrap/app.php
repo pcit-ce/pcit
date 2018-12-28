@@ -10,8 +10,6 @@ if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
 
-config('app.debug') && CI::enableDebug();
-
 $app_env = CI::environment();
 
 $env_file = $app_env ? '.env.'.$app_env : '.env';
@@ -19,6 +17,16 @@ $env_file = $app_env ? '.env.'.$app_env : '.env';
 file_exists(base_path().$env_file) && (new Dotenv(base_path(), $env_file))->load();
 
 date_default_timezone_set(env('CI_TZ', 'PRC'));
+
+$debug = config('app.debug');
+
+if ($debug) {
+    $whoops = new \Whoops\Run();
+    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
+    $whoops->register();
+
+    CI::enableDebug();
+}
 
 $app = new \PCIT\Foundation\Application([]);
 
