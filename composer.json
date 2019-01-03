@@ -34,7 +34,7 @@
     "nunomaduro/collision": "^2.0",
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
-    "vlucas/phpdotenv": "*",
+    "vlucas/phpdotenv": "^3.0.0",
     "pcit/framework": "*"
   },
   "require-dev": {

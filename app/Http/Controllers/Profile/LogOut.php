@@ -19,6 +19,14 @@ class LogOut
 
         Session::pull($git_type.'.access_token');
 
+        setcookie(
+            $git_type.'_api_token',
+            '',
+            time() - 3600,
+            '/',
+            env('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
+        );
+
         Response::redirect(env('CI_HOST'));
     }
 }

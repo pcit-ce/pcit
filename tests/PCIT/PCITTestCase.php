@@ -43,7 +43,7 @@ abstract class PCITTestCase extends BaseTestCase
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         if (file_exists(base_path().'.env.testing')) {
-            (new Dotenv(base_path(), '.env.testing'))->load();
+            (Dotenv::create(base_path(), '.env.testing'))->load();
         }
 
         ob_start();

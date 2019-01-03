@@ -11,7 +11,7 @@ class TencentCosV5Test extends TestCase
 {
     public function setUp(): void
     {
-        (new Dotenv(__DIR__))->load();
+        (Dotenv::create(__DIR__))->load();
     }
 
     /**

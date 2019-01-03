@@ -14,7 +14,7 @@ $app_env = CI::environment();
 
 $env_file = $app_env ? '.env.'.$app_env : '.env';
 
-file_exists(base_path().$env_file) && (new Dotenv(base_path(), $env_file))->load();
+file_exists(base_path().$env_file) && (Dotenv::create(base_path(), $env_file))->load();
 
 date_default_timezone_set(env('CI_TZ', 'PRC'));
 

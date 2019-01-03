@@ -11,7 +11,7 @@ class EmailTest extends TestCase
 {
     protected function setUp(): void
     {
-        (new Dotenv(__DIR__))->load();
+        (Dotenv::create(__DIR__))->load();
     }
 
     /**
