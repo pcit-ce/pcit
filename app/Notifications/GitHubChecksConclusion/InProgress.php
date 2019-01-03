@@ -40,10 +40,10 @@ class InProgress extends Kernel
     {
         return self::$header.<<<EOF
 
-# Build Configuration
+## Build Configuration
 
 |Build Option      | Setting    |
-| --               |   --       |  
+| --               |   --       |
 | Language         | $this->language  |
 | Operating System | $this->os        |
 

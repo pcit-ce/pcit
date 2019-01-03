@@ -14,7 +14,7 @@ use PCIT\Support\JSON;
 abstract class Kernel
 {
     protected static $header = <<<'EOF'
-# About PCIT (PHP CI TOOLKIT)
+## About PCIT (PCIT is CI TOOLKIT Written by PHP)
 
 **China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI**
 
@@ -28,7 +28,7 @@ abstract class Kernel
 
 * [Community Support](https://github.com/pcit-ce/pcit/issues)
 
-# Try PCIT ?
+## Try PCIT ?
 
 Please See [PCIT Support Docs](https://github.com/pcit-ce/pcit/tree/master/docs)
 

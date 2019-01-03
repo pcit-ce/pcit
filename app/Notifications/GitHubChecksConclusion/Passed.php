@@ -17,7 +17,7 @@ class Passed extends Kernel
     {
         return self::$header.<<<EOF
 
-# Build Configuration
+## Build Configuration
 
 |Build Option      | Setting    |
 | --               |   --       |

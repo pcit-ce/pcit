@@ -1,4 +1,4 @@
-# PCIT (PCIT is not PHP CI TOOLKIT)
+# PCIT (PCIT is CI TOOLKIT Written by PHP)
 
 [![GitHub stars](https://img.shields.io/github/stars/pcit-ce/pcit.svg?style=social&label=Stars)](https://github.com/pcit-ce/pcit) [![PHP from Packagist](https://img.shields.io/packagist/php-v/pcit/pcit.svg)](https://packagist.org/packages/pcit/pcit) [![GitHub (pre-)release](https://img.shields.io/github/release/pcit-ce/pcit/all.svg)](https://github.com/pcit-ce/pcit/releases) [![Build Status](https://ci2.khs1994.com:10000/github/pcit-ce/pcit/status?branch=master)](https://ci2.khs1994.com:10000/github/pcit-ce/pcit) [![codecov](https://codecov.io/gh/pcit-ce/pcit/branch/master/graph/badge.svg)](https://codecov.io/gh/pcit-ce/pcit)
 
@@ -10,7 +10,7 @@
 * [API](https://ci.khs1994.com/api)
 * [API Docs](https://api.ci.khs1994.com)
 * [Plugins](https://github.com/pcit-ce/pcit/tree/master/plugins)
-* [PHP Docs](https://khs1994-php.github.io/pcit)
+* [PHP Docs](https://pcit-ce.github.io/pcit/)
 * [Donate](https://zan.khs1994.com)
 * [PCIT EE](https://github.com/pcit-ce/pcit/tree/master/docs#about-pcit-ce-and-ee)
 
