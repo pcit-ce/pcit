@@ -12,6 +12,9 @@ use PCIT\Support\CI;
 use PCIT\Support\JSON;
 use PCIT\Support\Log;
 
+/**
+ * 处理 Aliyun 容器镜像服务的 webhooks.
+ */
 class AliYunRegistry
 {
     /**

@@ -14,6 +14,9 @@ use PCIT\Support\DB;
 use PCIT\Support\JSON;
 use PCIT\Support\Log;
 
+/**
+ * 获取 build 数据.
+ */
 class Build extends BuildData
 {
     /**

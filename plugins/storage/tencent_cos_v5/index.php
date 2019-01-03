@@ -18,7 +18,7 @@ try {
         $result = $cosClient->putObject([
             'Bucket' => getenv('COS_V5_BUCKET'),
             'Key' => $label,
-            'Body' => fopen($file, 'rb'),
+            'Body' => fopen($file, 'r'),
         ]);
 
         var_dump($result);

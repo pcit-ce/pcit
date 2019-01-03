@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-dir=$(cd "${0%[/\\]*}" > /dev/null 2>&1 ; pwd)

@@ -11,6 +11,9 @@ use PCIT\Support\HTTP;
 use PCIT\Support\Log;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * 从 git 仓库获取 PCIT 配置文件 .pcit.yml.
+ */
 class GetConfig
 {
     private $rid;

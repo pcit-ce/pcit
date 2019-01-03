@@ -12,6 +12,9 @@
 
 ### Git API
 
+* GitHub
+* Gitee
+
 ### PCITD Command
 
 ### PCIT Command

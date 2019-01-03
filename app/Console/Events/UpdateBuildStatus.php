@@ -11,6 +11,9 @@ use App\Notifications\GitHubChecksConclusion\InProgress;
 use App\Notifications\GitHubChecksConclusion\Passed;
 use PCIT\Support\CI;
 
+/**
+ * 更新状态
+ */
 class UpdateBuildStatus
 {
     public $build_status;

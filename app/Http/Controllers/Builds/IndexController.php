@@ -8,7 +8,7 @@ class IndexController
 {
     public function __invoke(...$arg): void
     {
-        require __DIR__.'/../../../../public/builds/index.html';
+        view('builds/index.html');
         exit;
     }
 }

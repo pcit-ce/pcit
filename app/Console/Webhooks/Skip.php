@@ -9,6 +9,9 @@ use Exception;
 use PCIT\Service\Build\Conditional\Branch;
 use PCIT\Support\Log;
 
+/**
+ * 是否跳过构建.
+ */
 class Skip
 {
     private $commit_message;

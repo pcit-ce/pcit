@@ -11,6 +11,9 @@ use PCIT\Service\Build\BuildData;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
 
+/**
+ * CI 测试通过，自动合并.
+ */
 class AutoMerge
 {
     /**

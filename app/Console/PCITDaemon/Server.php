@@ -79,7 +79,6 @@ class Server extends Kernel
                 ->handle();
         } catch (\Throwable $e) {
             // 出现异常，直接将 build 状态改为 取消
-
             Build::updateBuildStatus(
                 $buildData->build_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
 
@@ -90,7 +89,7 @@ class Server extends Kernel
             $buildData->build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_QUEUED);
 
         try {
-            // exec build
+            // 处理 build
             $this->pcit->build->handle($buildData);
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [

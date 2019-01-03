@@ -32,7 +32,7 @@ class GitHubAppChecks
      * @param array|null  $annotations  [$annotation, $annotation2]
      * @param array|null  $images       [$image, $image2]
      * @param array|null  $actions      [$action]
-     * @param bool        $force_create 默认请款下若 check_run_id 已存在，则更新此 check_run_id
+     * @param bool        $force_create 默认情况下若 check_run_id 已存在，则更新此 check_run_id
      *                                  若设为 true 则新建一个 check_run ,适用于第三方服务完成状态展示
      *                                  或是没有过程，直接完成的构建
      *
@@ -70,7 +70,7 @@ class GitHubAppChecks
         $commit_id = $output_array['commit_id'];
         $event_type = $output_array['event_type'];
 
-        $details_url = env('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
+        $details_url = env('CI_HOST').'/github/'.$repo_full_name.'/jobs/'.$job_key_id;
 
         $config = JSON::beautiful(Build::getConfig((int) $build_key_id));
 

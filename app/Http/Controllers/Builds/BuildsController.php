@@ -31,9 +31,9 @@ class BuildsController
         $limit = app('request')->query->get('limit');
         list($git_type, $uid) = JWTController::getUser();
 
-        $array = Build::allByAdmin((int) $uid, (int) $before, (int) $limit, $git_type);
+        $result = Build::allByAdmin((int) $uid, (int) $before, (int) $limit, $git_type);
 
-        return $array;
+        return $result;
     }
 
     /**
@@ -68,15 +68,15 @@ class BuildsController
 
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
-        $array = Build::allByRid((int) $rid, (int) $before, (int) $limit, (bool) $pr, false, $git_type);
+        $preResult = Build::allByRid((int) $rid, (int) $before, (int) $limit, (bool) $pr, false, $git_type);
 
-        $return_array = [];
+        $result = [];
 
-        foreach ($array as $k) {
-            $return_array[] = $k;
+        foreach ($preResult as $k) {
+            $result[] = $k;
         }
 
-        return $return_array;
+        return $result;
     }
 
     /**
@@ -138,7 +138,7 @@ class BuildsController
         JWTController::check($build_id);
 
         if (\function_exists('fastcgi_finish_request')) {
-            fastcgi_finish_request();
+            \fastcgi_finish_request();
         }
 
         Build::updateBuildStatus($build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);

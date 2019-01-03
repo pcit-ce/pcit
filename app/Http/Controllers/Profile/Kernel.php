@@ -29,7 +29,7 @@ abstract class Kernel
      *
      * @throws \Exception
      */
-    public function __invoke(...$args)
+    public function __invoke(...$args):void
     {
         $git_type = $this->git_type;
 
@@ -66,6 +66,6 @@ abstract class Kernel
         User::updateUserInfo((int) $uid, null, (string) $username, (string) $email, (string) $pic, false, $git_type);
         User::updateAccessToken((int) $uid, $access_token, $git_type);
 
-        return view('profile/index.html');
+        view('profile/index.html');
     }
 }

@@ -9,6 +9,9 @@ use PCIT\Support\Cache;
 use PCIT\Support\CacheKey;
 use PCIT\Support\Log;
 
+/**
+ * 处理日志.
+ */
 class LogHandle
 {
     private $jobId;
@@ -87,7 +90,7 @@ class LogHandle
 
         file_put_contents($folder_name.'/'.$this->jobId, $result);
 
-        $fh = fopen($folder_name.'/'.$this->jobId, 'rb');
+        $fh = fopen($folder_name.'/'.$this->jobId, 'r');
 
         $redis_key = (string) $this->jobId.'_log';
 

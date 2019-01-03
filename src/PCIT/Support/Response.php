@@ -40,7 +40,7 @@ class Response extends BaseResponse
             unset($array['code']);
         }
 
-        return new JsonResponse($array, $code, ["X-Runtime-rack: $time"]);
+        return new JsonResponse($array, $code, ['X-Runtime-rack' => $time]);
     }
 
     /**
