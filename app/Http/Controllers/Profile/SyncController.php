@@ -31,7 +31,7 @@ class SyncController
     /**
      * @throws Exception
      */
-    public function __invoke(): void
+    public function __invoke()
     {
         list($this->git_type, $this->uid) = JwtController::getUser();
 
@@ -45,7 +45,7 @@ class SyncController
             // github 只获取用户组织，不获取用户仓库
             $this->getOrgs();
 
-            return;
+            return [];
         }
 
         // sync user basic info
@@ -56,6 +56,8 @@ class SyncController
 
         // sync orgs
         $this->getOrgs();
+
+        return [];
     }
 
     /**

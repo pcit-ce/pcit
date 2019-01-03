@@ -29,7 +29,7 @@ abstract class Kernel
      *
      * @throws \Exception
      */
-    public function __invoke(...$args):void
+    public function __invoke(...$args): void
     {
         $git_type = $this->git_type;
 
