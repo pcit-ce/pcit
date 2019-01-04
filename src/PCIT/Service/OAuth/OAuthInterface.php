@@ -13,16 +13,16 @@ interface OAuthInterface
     /**
      * @param null|string $state
      *
-     * @return mixed
+     * @return string
      */
-    public function getLoginUrl(?string $state);
+    public function getLoginUrl(?string $state): string;
 
     /**
      * @param string      $code
      * @param null|string $state
      * @param bool        $raw
      *
-     * @return mixed
+     * @return array
      */
-    public function getAccessToken(string $code, ?string $state, bool $raw = false);
+    public function getAccessToken(string $code, ?string $state, bool $raw = false): array;
 }

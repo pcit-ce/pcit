@@ -111,6 +111,20 @@ class User extends Model
 
     /**
      * @param string $git_type
+     * @param int    $uid
+     * @param string $refresh_token
+     *
+     * @throws Exception
+     */
+    public static function updateRefreshToken(int $uid, string $refresh_token, string $git_type = 'github'): void
+    {
+        $sql = 'UPDATE user SET refresh_token=? WHERE git_type=? AND uid=?';
+
+        DB::insert($sql, [$refresh_token, $git_type, $uid]);
+    }
+
+    /**
+     * @param string $git_type
      * @param int    $org_id
      * @param        $admin_uid
      *

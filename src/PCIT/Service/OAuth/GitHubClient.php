@@ -66,7 +66,7 @@ class GitHubClient implements OAuthInterface
         $this->curl = $curl;
     }
 
-    public function getLoginUrl(?string $state)
+    public function getLoginUrl(?string $state): string
     {
         $url = static::URL.http_build_query([
                 'client_id' => $this->clientId,
@@ -84,11 +84,11 @@ class GitHubClient implements OAuthInterface
      * @param null|string $state
      * @param bool        $json
      *
-     * @throws Exception
+     * @return array
      *
-     * @return mixed
+     * @throws Exception
      */
-    public function getAccessToken(string $code, ?string $state, bool $json = true)
+    public function getAccessToken(string $code, ?string $state, bool $json = true): array
     {
         $url = static::POST_URL.http_build_query([
                     'client_id' => $this->clientId,
@@ -112,7 +112,7 @@ class GitHubClient implements OAuthInterface
         true === $json && $accessToken = json_decode($accessToken)->access_token ?? false;
 
         if ($accessToken) {
-            return $accessToken;
+            return [$accessToken, ''];
         }
 
         throw new Exception('access_token not fount');

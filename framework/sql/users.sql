@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email`        varchar(100),
   `pic`          varchar(200),
   `access_token` varchar(200),
+  `refresh_token` varchar(200),
   `org_admin`    JSON,
   `type`         VARCHAR(100) DEFAULT 'user',
   PRIMARY KEY (`id`),
@@ -22,3 +23,6 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 ALTER TABLE user
   ADD COLUMN `installation_id` BIGINT DEFAULT 0;
+
+ALTER TABLE user
+  ADD COLUMN `refresh_token` varchar(200);

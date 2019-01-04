@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users\OAuth;
 
+use App\User;
 use Error;
 use Exception;
 use PCIT\PCIT;
@@ -17,7 +18,7 @@ use PCIT\Support\Session;
 abstract class Kernel
 {
     /**
-     * @var GitHubClient|GitHubClient|CodingClient|GiteeClient
+     * @var GitHubClient|CodingClient|GiteeClient
      */
     protected static $oauth;
 
@@ -34,8 +35,6 @@ abstract class Kernel
     protected $state = false;
 
     /**
-     * OAuthTrait constructor.
-     *
      * @throws Exception
      */
     public function __construct()
@@ -46,7 +45,7 @@ abstract class Kernel
     }
 
     /**
-     * 返回登录的 URL.
+     * 获取登录的 URL.
      */
     public function getLoginUrl(): void
     {
@@ -60,6 +59,7 @@ abstract class Kernel
         if (Session::get($git_type.'.access_token') and Session::get($git_type.'.expire') > time()) {
             $username_from_session = Session::get($git_type.'.username');
 
+            // 重定向到个人主页
             Response::redirect(implode('/', ['/profile', $git_type, $username_from_session]));
         }
 
@@ -69,12 +69,15 @@ abstract class Kernel
 
         $url = static::$oauth->getLoginUrl($state);
 
+        // 重定向到登录 url
         Response::redirect($url);
 
         exit;
     }
 
     /**
+     * 服务器重定向页面.
+     *
      * @throws Exception
      */
     public function getAccessToken(): void
@@ -82,6 +85,8 @@ abstract class Kernel
         if ($this->state ?? false) {
             $state = Session::pull(static::$git_type.'.state');
             $this->getAccessTokenCommon($state);
+
+            return;
         }
 
         $this->getAccessTokenCommon(null);
@@ -94,24 +99,23 @@ abstract class Kernel
      */
     public function getAccessTokenCommon(?string $state): void
     {
+        $git_type = static::$git_type;
+
         $request = app('request');
 
         // $code = $_GET['code'] ?? false;
         $code = $request->query->get('code');
 
-        if (false === $code) {
+        if (!$code) {
             throw new Exception('code not found');
         }
 
         try {
-            $access_token = static::$oauth->getAccessToken((string) $code, $state)
-                ?? false;
+            list($accessToken, $refreshToken) = static::$oauth->getAccessToken((string) $code, $state);
 
-            $git_type = static::$git_type;
+            $accessToken && Session::put($git_type.'.access_token', $accessToken);
 
-            false !== $access_token && Session::put($git_type.'.access_token', $access_token);
-
-            $pcit = new PCIT([$git_type.'_access_token' => $access_token], $git_type);
+            $pcit = new PCIT([$git_type.'_access_token' => $accessToken], $git_type);
 
             $userInfoArray = $pcit->user_basic_info->getUserInfo();
         } catch (Error $e) {
@@ -123,6 +127,8 @@ abstract class Kernel
         $pic = $userInfoArray['pic'];
         $email = $userInfoArray['email'];
 
+        $this->handleRefreshToken((int) $uid, $refreshToken, $git_type);
+
         Session::put($git_type.'.uid', $uid);
         Session::put($git_type.'.username', $name);
         Session::put($git_type.'.pic', $pic);
@@ -133,5 +139,14 @@ abstract class Kernel
         Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
 
         exit;
+    }
+
+    public function handleRefreshToken(int $uid, $refreshToken, $gitType): void
+    {
+        if (!$refreshToken) {
+            return;
+        }
+
+        User::updateRefreshToken($uid, $refreshToken, $gitType);
     }
 }

@@ -33,7 +33,7 @@ class GiteeClient extends GitHubClient implements OAuthInterface
         $this->curl = $curl;
     }
 
-    public function getLoginUrl(?string $state)
+    public function getLoginUrl(?string $state): string
     {
         $url = static::URL.http_build_query([
                 'client_id' => $this->clientId,
@@ -44,7 +44,10 @@ class GiteeClient extends GitHubClient implements OAuthInterface
         return $url;
     }
 
-    public function getAccessToken(string $code, ?string $state, bool $raw = false)
+    /**
+     * @return array
+     */
+    public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {
         $url = static::POST_URL.http_build_query([
                 'code' => $code,
@@ -64,8 +67,39 @@ class GiteeClient extends GitHubClient implements OAuthInterface
             return $json;
         }
 
-        $accessToken = json_decode($json)->access_token;
+        return $result = $this->parseTokenResult($json);
+    }
 
-        return $accessToken;
+    /**
+     * @return array
+     */
+    public function getTokenByRefreshToken($refreshToken): array
+    {
+        // grant_type=refresh_token&refresh_token={refresh_token}
+        $url = static::POST_URL.http_build_query([
+          'grant_type' => 'refresh_token',
+          'refresh_token' => $refreshToken,
+      ]);
+
+        $json = $this->curl->post($url);
+
+        Log::connect()->debug('Gitee RefreshAccessToken Raw '.$json);
+
+        return $this->parseTokenResult($json);
+    }
+
+    /**
+     * 解析服务器返回的结果.
+     *
+     * @return array
+     */
+    public function parseTokenResult($json): array
+    {
+        $resultObject = json_decode($json);
+
+        $accessToken = $resultObject->access_token;
+        $refreshToken = $resultObject->refresh_token;
+
+        return [$accessToken, $refreshToken];
     }
 }

@@ -58,9 +58,9 @@ class CodingClient implements OAuthInterface
     /**
      * @param null|string $state
      *
-     * @return mixed|string
+     * @return string
      */
-    public function getLoginUrl(?string $state)
+    public function getLoginUrl(?string $state): string
     {
         $url = $this::URL.http_build_query([
                 'client_id' => $this->clientId,
@@ -77,11 +77,11 @@ class CodingClient implements OAuthInterface
      * @param null|string $state
      * @param bool        $raw
      *
-     * @return mixed
+     * @return array
      *
      * @throws Exception
      */
-    public function getAccessToken(string $code, ?string $state, bool $raw = false)
+    public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {
         $json = $this->curl->post($this::POST_URL.http_build_query([
                     'client_id' => $this->clientId,
@@ -100,8 +100,21 @@ class CodingClient implements OAuthInterface
 
         // {"access_token":"f2d0","refresh_token":"45924","expires_in":"692804"}
 
-        $accessToken = json_decode($json)->access_token;
+        return $this->parseTokenResult($json);
+    }
 
-        return $accessToken;
+    /**
+     * 解析服务器返回的结果.
+     *
+     * @return array
+     */
+    public function parseTokenResult($json): array
+    {
+        $resultObject = json_decode($json);
+
+        $accessToken = $resultObject->access_token;
+        $refreshToken = $resultObject->refresh_token;
+
+        return [$accessToken, $refreshToken];
     }
 }
