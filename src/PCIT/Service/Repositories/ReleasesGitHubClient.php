@@ -204,7 +204,7 @@ class ReleasesGitHubClient
      * @param int         $release_id
      * @param string      $tag_name
      * @param string      $name
-     * @param null|string $label
+     * @param string|null $label
      * @param string      $content_type
      * @param bool        $replace
      *

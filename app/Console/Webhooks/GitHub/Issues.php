@@ -103,7 +103,7 @@ class Issues
             // get issue title
             $result = $app->issue->getSingle($repo_full_name, $issue_number);
 
-            $title = \json_decode($result)->title;
+            $title = json_decode($result)->title;
         }
 
         try {

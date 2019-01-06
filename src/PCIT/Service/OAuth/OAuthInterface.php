@@ -11,7 +11,7 @@ interface OAuthInterface
     public function __construct($config, Curl $curl);
 
     /**
-     * @param null|string $state
+     * @param string|null $state
      *
      * @return string
      */
@@ -19,7 +19,7 @@ interface OAuthInterface
 
     /**
      * @param string      $code
-     * @param null|string $state
+     * @param string|null $state
      * @param bool        $raw
      *
      * @return array

@@ -25,7 +25,7 @@ class Skip
     /**
      * Skip constructor.
      *
-     * @param null|string $commit_message
+     * @param string|null $commit_message
      * @param int         $build_key_id
      * @param string|null $branch
      * @param string|null $config

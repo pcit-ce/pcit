@@ -22,7 +22,7 @@ class GetAccessToken
     }
 
     /**
-     * @param null|string $repo_full_name
+     * @param string|null $repo_full_name
      * @param int|null    $rid
      *
      * @return string

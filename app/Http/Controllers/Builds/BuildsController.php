@@ -138,7 +138,7 @@ class BuildsController
         JWTController::check($build_id);
 
         if (\function_exists('fastcgi_finish_request')) {
-            \fastcgi_finish_request();
+            fastcgi_finish_request();
         }
 
         Build::updateBuildStatus($build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);

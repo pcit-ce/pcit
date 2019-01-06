@@ -102,9 +102,7 @@ To install **PCIT EE** in your host, simply:
 ```bash
 # install khs1994-docker/lnmp
 
-$ git clone --recursive https://github.com/khs1994-docker/lnmp.git ~/lnmp
-
-$ composer create-project pcit/pcit ~/lnmp/app/pcit
+$ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git ~/lnmp
 
 $ cd lnmp
 

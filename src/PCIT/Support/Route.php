@@ -145,7 +145,7 @@ class Route
     }
 
     /**
-     * @param $targetUrl
+     * @param $targetUrl route 定义的 URL
      * @param $action
      *
      * @throws Exception

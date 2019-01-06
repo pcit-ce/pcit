@@ -132,10 +132,10 @@ pipeline:
 
 # 安装 khs1994-docker/lnmp
 
-$ git clone https://github.com/khs1994-docker/lnmp.git ~/lnmp
+$ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git ~/lnmp
 
 # 中国镜像
-# $ git clone https://gitee.com/khs1994-docker/lnmp.git ~/lnmp
+# $ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git ~/lnmp
 
 $ cd ~/lnmp
 ```

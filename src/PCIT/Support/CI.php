@@ -84,7 +84,7 @@ class CI
      *
      * 传入 env, 判断是否与当前环境匹配
      *
-     * @param string|null|array $env
+     * @param string|array|null $env
      *
      * @return false|string
      */

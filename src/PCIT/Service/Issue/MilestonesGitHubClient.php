@@ -65,8 +65,8 @@ class MilestonesGitHubClient
      * @param string      $repo_full_name
      * @param int         $milestone_number
      * @param string      $title
-     * @param null|string $description
-     * @param null|string $due_on
+     * @param string|null $description
+     * @param string|null $due_on
      * @param string      $state
      *
      * @throws \Exception

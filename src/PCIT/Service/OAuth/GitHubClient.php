@@ -81,7 +81,7 @@ class GitHubClient implements OAuthInterface
 
     /**
      * @param string      $code
-     * @param null|string $state
+     * @param string|null $state
      * @param bool        $json
      *
      * @return array

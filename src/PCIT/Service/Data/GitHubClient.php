@@ -244,9 +244,9 @@ class GitHubClient
      * @param string      $tag_message
      * @param string      $object
      * @param string      $type
-     * @param null|string $committer_name
-     * @param null|string $committer_email
-     * @param null|string $date
+     * @param string|null $committer_name
+     * @param string|null $committer_email
+     * @param string|null $date
      *
      * @throws \Exception
      */

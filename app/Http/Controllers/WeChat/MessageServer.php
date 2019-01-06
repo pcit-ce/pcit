@@ -10,7 +10,7 @@ use PCIT\PCIT;
 class MessageServer
 {
     /**
-     * @return array|null|string
+     * @return array|string|null
      *
      * @throws Exception
      */

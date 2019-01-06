@@ -56,7 +56,7 @@ class CodingClient implements OAuthInterface
     }
 
     /**
-     * @param null|string $state
+     * @param string|null $state
      *
      * @return string
      */
@@ -74,7 +74,7 @@ class CodingClient implements OAuthInterface
 
     /**
      * @param string      $code
-     * @param null|string $state
+     * @param string|null $state
      * @param bool        $raw
      *
      * @return array

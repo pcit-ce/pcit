@@ -93,7 +93,7 @@ abstract class Kernel
     }
 
     /**
-     * @param null|string $state
+     * @param string|null $state
      *
      * @throws Exception
      */

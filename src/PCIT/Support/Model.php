@@ -112,7 +112,7 @@ class Model
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public static function getTableName()
     {

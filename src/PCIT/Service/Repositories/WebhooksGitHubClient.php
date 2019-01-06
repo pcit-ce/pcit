@@ -88,7 +88,7 @@ class WebhooksGitHubClient
      * @param             $data
      * @param string      $username
      * @param string      $repo
-     * @param null|string $id
+     * @param string|null $id
      *
      * @return mixed
      *

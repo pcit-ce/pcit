@@ -34,7 +34,7 @@ abstract class PCITTestCase extends BaseTestCase
     }
 
     /**
-     * @param null|string $name
+     * @param string|null $name
      * @param array       $data
      * @param string      $dataName
      *

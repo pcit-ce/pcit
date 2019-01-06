@@ -51,9 +51,9 @@ EOF;
      *
      * @param int         $job_key_id
      * @param string      $config
-     * @param null|string $build_log
+     * @param string|null $build_log
      * @param string      $language
-     * @param null|string $os
+     * @param string|null $os
      * @param string      $git_type
      *
      * @throws Exception
