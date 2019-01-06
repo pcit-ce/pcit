@@ -39,9 +39,17 @@ class ShowStatusController
             file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg')
         : file_get_contents(__DIR__.'/../../../../public/ico/'.$status.'.svg');
 
+        $ts = gmdate('D, d M Y H:i:s', time() + 300).' GMT';
+        // ini_set('expose_php', 'Off');
+
+        header_remove('x-powered-by');
+
         return new Response($svg, 200, [
+            'Expires' => $ts,
             'Content-Type' => 'image/svg+xml;charset=utf-8',
-            'Cache-Controller' => 'max-age=300',
+            'Cache-Control' => 'max-age=300,public',
+            'X-Powered-By' => 'pcit https://ci.khs1994.com',
+            'X-PCIT-Author' => 'https://khs1994.com',
             // no-cache
         ]);
     }
