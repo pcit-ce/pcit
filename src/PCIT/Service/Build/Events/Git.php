@@ -34,7 +34,7 @@ class Git
 
         $git = $this->git;
 
-        $depth = $git->depth ?? 10;
+        $depth = $git->depth ?? 25;
         $recursive = $git->recursive ?? false;
         $skip_verify = $git->skip_verify ?? false;
         $tags = $git->tags ?? false;

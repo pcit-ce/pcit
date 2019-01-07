@@ -116,7 +116,8 @@ jobs:
     - stage: deploy
       script:
         - git clone --depth=1 https://github.com/pcit-ce/ui frontend
-        - docker build -t khs1994/pcit:alpine .
+        - composer run docker:build
+        # - composer run docker:push
 
 stages:
   - test
@@ -133,6 +134,7 @@ env:
     - CI_MYSQL_PASSWORD=mytest
     - CI_MYSQL_DATABASE=pcit_test
     - CI_WEBHOOKS_TOKEN=pcit
+    - DOCKER_BUILDKIT=1
   matrix:
     # - DB=sqlite
     - DB=mysql

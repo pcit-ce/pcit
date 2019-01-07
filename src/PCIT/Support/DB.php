@@ -88,14 +88,15 @@ class DB
             $stmt->execute($data);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             self::setDebugInfo($stmt);
-            $output = $stmt->fetchAll();
+            $result = $stmt->fetchAll();
+            // $stmt->closeCursor();
         } catch (PDOException $e) {
             throw new Exception($e->getMessage(), 500);
         }
 
         if ($single) {
-            if (1 === \count($output)) {
-                foreach ($output[0] as $k => $v) {
+            if (1 === \count($result)) {
+                foreach ($result[0] as $k => $v) {
                     return $v;
                 }
             } else {
@@ -103,7 +104,7 @@ class DB
             }
         }
 
-        return $output;
+        return $result;
     }
 
     /**

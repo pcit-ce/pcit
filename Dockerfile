@@ -1,7 +1,10 @@
+# syntax=docker/dockerfile:experimental
+
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
+# @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 
 ARG PHP_VERSION=7.3.0
-ARG NODE_VERSION=11.4.0
+ARG NODE_VERSION=11.6.0
 
 # 安装前端构建依赖
 FROM node:${NODE_VERSION}-alpine as frontend
@@ -10,7 +13,7 @@ ARG NODE_REGISTRY=https://registry.npmjs.org
 
 COPY frontend/package.json /app/pcit/frontend/
 
-RUN cd /app/pcit/frontend \
+RUN --mount=type=cache,target=/root/.npm,id=npm_cache cd /app/pcit/frontend \
       # && npm install cross-env --registry=${NODE_REGISTRY} \
       # && npm install --registry=${NODE_REGISTRY} --production
       && npm install --registry=${NODE_REGISTRY}
@@ -31,7 +34,7 @@ FROM khs1994/php:7.3.0-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 
-RUN cd /app/pcit \
+RUN --mount=type=cache,target=/tmp/cache,id=composer_cache cd /app/pcit \
       && composer install --no-dev
 
 # 将 PHP 项目打入 PHP 镜像

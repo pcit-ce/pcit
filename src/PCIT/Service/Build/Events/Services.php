@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Service\Build\Events;
 
 use App\Job;
+use Docker\Container\Client;
 use Exception;
 use PCIT\PCIT;
 use PCIT\Service\Build\Parse;
@@ -40,13 +41,25 @@ class Services
         Job::updateEnv($this->job_id, json_encode($this->matrix_config));
 
         foreach ($this->service as $service_name => $array) {
-            $image = $array->image;
-            $env = $array->environment ?? null;
-            $entrypoint = $array->entrypoint ?? null;
-            $commands = $array->commands ?? $array->command ?? null;
+            list(
+                'image' => $image,
+                'env' => $env,
+                'entrypoint' => $entrypoint,
+                'commands' => $commands
+                ) = ServiceDefault::handle($service_name);
 
-            $image = Parse::image($image, $this->matrix_config);
+            if (\is_array($array)) {
+                $image = $array->image ?? $image;
+                $env = $array->environment ?? $env;
+                $entrypoint = $array->entrypoint ?? $entrypoint;
+                $commands = $array->commands ?? $array->command ?? $commands;
 
+                $image = Parse::image($image, $this->matrix_config);
+            }
+
+            /**
+             * @var Client
+             */
             $docker_container = app(PCIT::class)->docker->container;
 
             $container_config = $docker_container

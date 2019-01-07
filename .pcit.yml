@@ -7,7 +7,7 @@ language: php
 clone:
   git:
     # image: plugins/git
-    depth: 10
+    depth: 25 # default 25
     # recursive: true
     # skip_verify: false
     # tags: false
@@ -29,10 +29,11 @@ cache:
     - vendor
 
 pipeline:
-  # before_install:
+  before_install:
+    commands: ["echo init script"]
 
   install:
-    # image: khs1994/php:7.2.13-composer-alpine
+    # image: khs1994/php:7.3.0-composer-alpine
     # commands or command
     command:
       - pwd
@@ -115,8 +116,8 @@ pipeline:
   publish_php:
     image: khs1994/docker
     # registry: docker.khs1994.com
-    repo: khs1994/php
-    tags: 7.2.13-swarm-${CI_TAG}
+    repo: khs1994/pcit
+    tags: 7.3.0-swarm-${CI_TAG}
     # target: php
     build_args:
       - a=1
@@ -131,17 +132,17 @@ pipeline:
     # - DOCKER_PASSWORD=password
 
   php-cs-fixer:
-    # image: khs1994/php:7.2.13-composer-alpine
+    # image: khs1994/php:7.3.0-composer-alpine
     commands:
       - php-cs-fixer fix
 
   sami:
-    # image: khs1994/php:7.2.13-composer-alpine
+    # image: khs1994/php:7.3.0-composer-alpine
     when:
       status: success
       matrix:
-      - PHP_VERSION: 7.2.13
-        NGINX_VERSION: 1.15.7
+      - PHP_VERSION: 7.3.0
+        NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     # commands:
@@ -153,8 +154,8 @@ pipeline:
     when:
       status: success
       matrix:
-      - PHP_VERSION: 7.2.13
-        NGINX_VERSION: 1.15.7
+      - PHP_VERSION: 7.3.0
+        NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     environment:
@@ -173,8 +174,8 @@ pipeline:
       event: tag
       branch: alpha
       matrix:
-      - PHP_VERSION: 7.2.13
-        NGINX_VERSION: 1.15.7
+      - PHP_VERSION: 7.3.0
+        NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     file:
@@ -202,7 +203,7 @@ pipeline:
 
   # This is success after demo
   codecov:
-    # image: khs1994/php:7.2.13-composer-alpine
+    # image: khs1994/php:7.3.0-composer-alpine
     shell: bash
     when:
       status: success
@@ -237,12 +238,14 @@ pipeline:
 
 services:
   mysql:
-    image: mysql:${MYSQL_VERSION}
-    environment:
-      - MYSQL_DATABASE=test
-      - MYSQL_ROOT_PASSWORD=mytest
-    # entrypoint: [ "mysqld" ]
-    commands: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
+
+  # mysql:
+  #   image: mysql:${MYSQL_VERSION}
+  #   environment:
+  #     - MYSQL_DATABASE=test
+  #     - MYSQL_ROOT_PASSWORD=mytest
+  #   entrypoint: [ "mysqld" ]
+  #   commands: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # postgresql:
   #   image: postgres:${POSTGRESQL_VERSION}-alpine
@@ -251,8 +254,10 @@ services:
   #     - POSTGRES_DB=test
 
   redis:
-    image: redis:${REDIS_VERSION}-alpine
-    commands: ["--bind", "0.0.0.0"]
+
+  # redis:
+  #   image: redis:${REDIS_VERSION}-alpine
+  #   commands: ["--bind", "0.0.0.0"]
 
   # mongodb:
   #   image: mongo:${MONGODB_VERSION}
@@ -261,10 +266,11 @@ services:
 matrix:
   PHP_VERSION:
     - 7.3.0
+    # - nightly
     - 7.2.13
     # - 7.1.25
   NGINX_VERSION:
-    - 1.15.7
+    - 1.15.8
   REDIS_VERSION:
     - 5.0.3
   MYSQL_VERSION:
@@ -299,3 +305,10 @@ notifications:
 
     # email:
     # - khs1994@khs1994.com
+
+# 网络相关配置
+networks:
+  # 自定义 hosts
+  hosts:
+    - "git.khs1994.com:127.0.0.1"
+    - "docker.khs1994.com:127.0.0.1"

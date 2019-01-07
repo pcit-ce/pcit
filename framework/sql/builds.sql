@@ -5,10 +5,10 @@
 CREATE TABLE IF NOT EXISTS `builds`
 (
   `id`                  BIGINT AUTO_INCREMENT,
-  `git_type`            VARCHAR(20)  DEFAULT 'github_app',
+  `git_type`            VARCHAR(20)  DEFAULT 'github',
   `rid`                 BIGINT UNSIGNED,
   `event_type`          VARCHAR(20)  DEFAULT 'push'
-    COMMENT 'push tag pr',
+    COMMENT 'push | tag | pr',
   `build_status`        VARCHAR(20)  DEFAULT 'pending'
     COMMENT 'pending | canceled | passed | errored | failed | skip | inactive',
   `branch`              VARCHAR(100) DEFAULT 'master',
@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS `builds`
   `author_username`     VARCHAR(100),
   `author_email`        VARCHAR(100),
   `author_pic`          VARCHAR(255),
-  `created_at`          BIGINT,
+  `created_at`          BIGINT UNSIGNED,
+  `finished_at`         BIGINT UNSIGNED,
   `deleted_at`          BIGINT UNSIGNED,
   `config`              TEXT,
   `action`              VARCHAR(100),
@@ -49,3 +50,6 @@ ALTER TABLE `builds`
 
 ALTER TABLE builds
   ADD `unique_key` BIGINT;
+
+ALTER TABLE builds
+  ADD `finished_at` BIGINT UNSIGNED AFTER `created_at`;

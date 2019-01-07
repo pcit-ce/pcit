@@ -9,6 +9,6 @@ services:
       target: php
       args:
         - PHP_VERSION=${PHP_VERSION:-7.3.0}
-        - NODE_VERSION=${NODE_VERSION:-11.4.0}
+        - NODE_VERSION=${NODE_VERSION:-11.6.0}
         - NODE_REGISTRY=https://registry.npm.taobao.org
     image: khs1994/pcit:alpine

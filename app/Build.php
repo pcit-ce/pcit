@@ -347,7 +347,7 @@ EOF;
 
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag,commit_message,compare,
-committer_name,committer_username,build_status,event_type,pull_request_number,created_at
+committer_name,committer_username,build_status,event_type,pull_request_number,created_at,finished_at
 FROM builds WHERE
 id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?) AND build_status NOT IN('$exclude')
 ORDER BY id DESC LIMIT $limit

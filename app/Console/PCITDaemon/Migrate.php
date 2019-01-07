@@ -31,7 +31,7 @@ class Migrate
     public static function all(): void
     {
         foreach (self::getSqlList() as $file) {
-            echo "Migrate $file ...\n\n";
+            echo "\n\n===> Migrate $file ...\n\n";
 
             self::execFromFile(base_path().'framework/sql/'.$file);
         }
@@ -50,6 +50,9 @@ class Migrate
 
         foreach (explode(';', $content) as $k) {
             try {
+                if (!$k) {
+                    continue;
+                }
                 DB::statement($k);
             } catch (\Throwable $e) {
                 echo $e->getMessage().$e->getCode();
