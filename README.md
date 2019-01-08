@@ -101,6 +101,10 @@ pipeline:
     image: bash
     commands:
       - echo "build is success"
+
+services:
+  redis:
+  mysql:  
 ```
 
 * 推送 git 仓库到 GitHub，PCIT 开始进行 **构建** **测试** **部署** 等一系列工作。

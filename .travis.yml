@@ -12,8 +12,6 @@ cache:
   - directories:
     - cache
 
-sudo: required
-
 services:
   - docker
   # - rabbitmq
@@ -23,6 +21,8 @@ services:
   # - mariadb
   # - postgresql
   # - mongodb
+
+dist: xenial
 
 php:
   # - 5.6
