@@ -56,7 +56,7 @@ pipeline:
       - CI_MYSQL_HOST=mysql
       - CI_MYSQL_PORT=3306
       - CI_MYSQL_USERNAME=root
-      - CI_MYSQL_PASSWORD=mytest
+      - CI_MYSQL_PASSWORD=test
       - CI_MYSQL_DATABASE=test
       - CI_WEBHOOKS_TOKEN=pcit
     commands:
@@ -249,7 +249,7 @@ services:
   #   image: mysql:${MYSQL_VERSION}
   #   environment:
   #     - MYSQL_DATABASE=test
-  #     - MYSQL_ROOT_PASSWORD=mytest
+  #     - MYSQL_ROOT_PASSWORD=test
   #   entrypoint: [ "mysqld" ]
   #   commands: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 

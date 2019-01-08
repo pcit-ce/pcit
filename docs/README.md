@@ -6,33 +6,31 @@
 
 **EE** 需要用户在 **自有主机** 私有部署，**支持** 项目构建。
 
-## 体验 PCIT CE
+## 一、体验 PCIT CE
 
-### GitHub 新建仓库
+### 1. GitHub 新建仓库
 
-### 安装 PCIT GitHub App
+### 2. 安装 PCIT GitHub App
 
 在 https://github.com/apps/pcit-ce 点击右边的 `Install` 按钮，在稍后跳转的页面中选择你新建的 **仓库**
 
-### 体验 Issue 标题中文翻译为英文
+### 3. 体验 Issue 标题中文翻译为英文
 
-在你的 **仓库** 新建一个 Issue (标题为中文)，提交之后，可以看到 `pcit[bot]` 将这个标题修改为 英文。
+在你的 **仓库** 新建一个 Issue (标题为中文)，提交之后，可以看到 `pcit[bot]` 将这个标题修改为 了英文。
 
-## PCIT EE
+## 二、PCIT EE
 
-**PCIT EE 需要自行部署，部署方法请看下一节**
+**PCIT EE 需要自行部署，部署方法请看下一节** 本小节介绍如何使用 PCIT 进行项目测试、构建。
 
-### 项目测试、构建
+### 1. 准备 PHP 项目
 
-1. 准备 PHP 项目
-
-2. 初始化 `.pcit.yml` 文件
+### 2. 初始化 `.pcit.yml` 文件
 
 ```bash
 $ pcitinit php
 ```
 
-3. 推送到 GitHub
+### 3. 推送到 GitHub
 
 ```bash
 $ cd myProject
@@ -48,13 +46,13 @@ $ git push origin master
 
 在 **GitHub** 点击 `commits`，点击 commit 信息后的小图标，进入到构建详情页，查看构建过程及结果
 
-## 私有部署 PCIT EE
+## 三、私有部署 PCIT EE
 
 **PCIT** 由 **PHP 后端**（Webhooks Server + Daemon CLI）和 **GitHub App** 组成。
 
 [立即部署](https://github.com/pcit-ce/pcit/blob/master/docs/install/ee.md)
 
-# PCIT CE vs EE
+## 四、PCIT CE vs EE
 
 | Compare       | PCIT CE             | PCIT EE      |
 | :------------ | :------------------- | :------------ |
@@ -73,7 +71,7 @@ $ git push origin master
 
 * 本项目优先支持 GitHub，部分功能可能不支持其他 Git 服务商
 
-## 未来 CE 和 EE 版本价格问题
+## 五、未来 CE 和 EE 版本价格问题
 
 总的来说 **CE** 和 **EE** 的最大区别就是 **是否需要自己部署**。
 
@@ -85,4 +83,4 @@ $ git push origin master
 
 ## 支持 PCIT CE 项目
 
-访问 https://ci.khs1994.com/donate 赞助本项目。
+访问 https://ci.khs1994.com/donate 赞助 **PCIT** 项目。

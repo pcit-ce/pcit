@@ -15,7 +15,7 @@ CREATE TABLE `default_services`
 INSERT INTO `default_services`
 VALUES ('mysql',
         'mysql:5.7.24',
-        JSON_ARRAY('MYSQL_DATABASE=test', 'MYSQL_ROOT_PASSWORD=mytest'),
+        JSON_ARRAY('MYSQL_DATABASE=test', 'MYSQL_ROOT_PASSWORD=test'),
         JSON_ARRAY(),
         JSON_ARRAY('--character-set-server=utf8mb4', '--default-authentication-plugin=mysql_native_password'));
 

@@ -104,7 +104,7 @@ services:
     image: mysql:${MYSQL_VERSION}
     environment:
       - MYSQL_DATABASE=test
-      - MYSQL_ROOT_PASSWORD=mytest
+      - MYSQL_ROOT_PASSWORD=test
     # entrypoint: [ "mysqld" ]
     command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 

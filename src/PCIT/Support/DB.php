@@ -29,7 +29,7 @@ class DB
             $mysql_host = env('CI_MYSQL_HOST', 'mysql');
             $mysql_port = env('CI_MYSQL_PORT', 3306);
             $mysql_username = env('CI_MYSQL_USERNAME', 'root');
-            $mysql_password = env('CI_MYSQL_PASSWORD', 'mytest');
+            $mysql_password = env('CI_MYSQL_PASSWORD', 'test');
             $mysql_dbname = env('CI_MYSQL_DATABASE', 'test');
 
             $dsn = 'mysql:host='.$mysql_host.';port='.$mysql_port.';dbname='.$mysql_dbname;

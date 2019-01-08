@@ -11,6 +11,7 @@ cache:
   - npm
   - directories:
     - cache
+    - /var/lib/docker/builder
 
 services:
   - docker
@@ -28,7 +29,7 @@ php:
   # - 5.6
   # - 7.0
   # - 7.1
-  - 7.2
+  # - 7.2
   - 7.3
 
 addons:
@@ -48,6 +49,8 @@ addons:
 #   mariadb: '10.0'
 #   postgresql: '9.4'
 before_script:
+  - sudo systemctl unmask mysql.service
+  - sudo systemctl start mysql.service
   - sleep 15
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS tests;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS tests_tmp;' -U postgres; fi"
@@ -55,8 +58,8 @@ before_script:
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'CREATE DATABASE tests_tmp;' -U postgres; fi"
   - sh -c "if [ '$ENABLE_MONGODB' = 'enable' ]; then mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS pcit_test;'; fi"
-  - if [ "$DB" = 'mysql' ]; then sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('mytest') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"; fi
-  - if [ "$DB" = 'mysql' ]; then sudo mysql_upgrade -u root -pmytest; fi
+  - if [ "$DB" = 'mysql' ]; then sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('test') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"; fi
+  - if [ "$DB" = 'mysql' ]; then sudo mysql_upgrade -u root -ptest; fi
   - if [ "$DB" = 'mysql' ]; then sudo service mysql restart; fi
 
 jobs:
@@ -113,8 +116,14 @@ jobs:
         target-branch: gh-pages
         on:
           branch: master
-    - stage: deploy
+    - stage: docker_build
       script:
+        - docker --version
+        - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        - sudo apt-get update
+        - sudo apt-get -y install docker-ce
+        - docker --version
         - git clone --depth=1 https://github.com/pcit-ce/ui frontend
         - composer run docker:build
         # - composer run docker:push
@@ -131,7 +140,7 @@ env:
     - CI_REDIS_NAME=15
     - CI_MYSQL_HOST=127.0.0.1
     - CI_MYSQL_USERNAME=root
-    - CI_MYSQL_PASSWORD=mytest
+    - CI_MYSQL_PASSWORD=test
     - CI_MYSQL_DATABASE=pcit_test
     - CI_WEBHOOKS_TOKEN=pcit
     - DOCKER_BUILDKIT=1

@@ -13,5 +13,5 @@ $ git commit -m "Update docs [skip ci]"
 ```
 
 ```bash
-$ git commit -m "Update news [pcit ci]"
+$ git commit -m "Update news [pcit skip]"
 ```
