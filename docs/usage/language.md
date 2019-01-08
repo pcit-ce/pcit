@@ -1,7 +1,7 @@
 # language
 
+设置项目的语言，该指令影响 `pipeline` 的默认 `image` 等值。
+
 ```yaml
 language: php
 ```
-
-> 目前该指令不起任何作用！

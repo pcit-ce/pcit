@@ -45,4 +45,4 @@ $pdo = new PDO('mysql:host=mysql;dbname=test;port=3306','root','mytest');
 ### MySQL
 
 版本 `5.7.24`
-密码 `mytest`
+密码 `test`

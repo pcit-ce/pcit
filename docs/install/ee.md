@@ -16,7 +16,7 @@ $ cd ~/lnmp
 
 ## 配置 NGINX
 
-编辑 `pcit/conf/pcit.conf`
+编辑 `~/lnmp/pcit/conf/pcit.conf`
 
 ## 新建 GitHub OAuth App
 
@@ -32,13 +32,13 @@ $ cd ~/lnmp
 
 部分重要信息填写如下：
 
-* `Homepage URL` 网站域名 https://ci.example.com:port
+* `Homepage URL` 网站域名 `https://ci.example.com:port`
 
-* `Webhook URL` Webhooks 接收地址 https://ci.example.com:port/webhooks/github
+* `Webhook URL` Webhooks 接收地址 `https://ci.example.com:port/webhooks/github`
 
 创建完毕之后，生成应用私钥
 
-在 GitHub App 设置(General)->Private keys->右边按钮(Generate a private key)，下载到本地
+在 GitHub App 设置(**General**)-> `Private keys` ->右边按钮(**Generate a private key**)，下载到本地
 
 例如该私钥文件名为 `pcit.2018-04-28.private-key.pem`
 

@@ -5,7 +5,7 @@
 ```yaml
 clone:
   git:
-    image: plugins/git
+    image: pcit/git
     depth: 2
     recursive: true
     skip_verify: false

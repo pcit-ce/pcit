@@ -13,7 +13,7 @@
 * `CI_DEBUG` Bool 是否开启 Debug
 * `CI_DEBUG_MEMORY` Bool 是否调试程序内存占用信息
 
-* `CI_SESSION_DOMAIN` String SESSION domain
+* `CI_SESSION_DOMAIN` String SESSION 域名
 
 * `CI_CODING_HOST` String Coding 企业版部署地址
 * `CI_CODING_CLIENT_ID` String Coding.net 应用 ID
@@ -33,16 +33,7 @@
 
 * `CI_TZ` String 时区设置
 
-* `CI_REDIS_HOST` String 若使用 khs1994-docker/lnmp LNMP 解决方案，以下信息无需填写
-* `CI_REDIS_PORT` String
-
-* `CI_MYSQL_HOST` String
-* `CI_MYSQL_PORT` String
-* `CI_MYSQL_USERNAME` String
-* `CI_MYSQL_PASSWORD` String
-* `CI_MYSQL_DATABASE` String
-
-* `CI_WEBHOOKS_TOKEN` String Webhooks Secert (仅支持 GitHub)
+* `CI_WEBHOOKS_TOKEN` String Webhooks Secert (仅 GitHub)
 * `CI_WEBHOOKS_DEBUG` Bool Webhooks 是否开启 Debug，若开启系统将不验证 Secret
 
 * `CI_WECHAT_APP_ID` 微信公众平台 APP_ID
@@ -65,3 +56,12 @@
 * `CI_EMAIL_PASSWORD` String
 * `CI_EMAIL_FROM` String 电子邮件地址
 * `CI_EMAIL_FROM_NAME` String 电子邮件来源名称
+
+* `CI_REDIS_HOST` String 若使用 khs1994-docker/lnmp LNMP 解决方案，以下信息无需填写
+* `CI_REDIS_PORT` String
+
+* `CI_MYSQL_HOST` String
+* `CI_MYSQL_PORT` String
+* `CI_MYSQL_USERNAME` String
+* `CI_MYSQL_PASSWORD` String
+* `CI_MYSQL_DATABASE` String

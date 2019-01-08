@@ -47,7 +47,8 @@ pipeline:
 
   script:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
-    pull: true
+    pull: true # default is false
+    privileged: true # default is false
     environment:
       - CI_REDIS_HOST=redis
       - CI_REDIS_PORT=6379
@@ -117,17 +118,17 @@ pipeline:
     commands:
       - echo "Don't run on master branch"
 
-  # This is a build docker image demo，when tag push
   publish_php:
     image: pcit/docker
-    # registry: docker.khs1994.com
-    repo: pcit/pcit
-    tags: 7.3.0-swarm-${CI_TAG}
-    # target: php
-    build_args:
-      - a=1
-    # dockerfile: Dockerfile
-    # dockerfile: path/to/Dockerfile
+    settings:
+      # registry: docker.khs1994.com
+      repo: pcit/pcit
+      tags: 7.3.0-swarm-${CI_TAG}
+      # target: php
+      build_args:
+        - a=1
+      # dockerfile: Dockerfile
+      # dockerfile: path/to/Dockerfile
     when:
       event: tag
       branch: alpha
@@ -164,6 +165,7 @@ pipeline:
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     environment:
+      - provider=gitee
       - keep_history=true
       - target_branch=gh-pages
       - git_url=gitee.com/pcit-ce/pcit

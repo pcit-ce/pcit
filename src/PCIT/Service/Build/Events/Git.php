@@ -57,7 +57,7 @@ class Git
             $git_config, 'PLUGIN_SUBMODULE_OVERRIDE='.json_encode($submodule_override)
         );
 
-        $git_image = $git->image ?? 'plugins/git';
+        $git_image = $git->image ?? 'pcit/git';
 
         return [$git_config, $git_image, $hosts];
     }
@@ -74,7 +74,7 @@ class Git
         $client = $this->client;
         $build = $this->build;
 
-        $git_image = 'plugins/git';
+        $git_image = 'pcit/git';
         $git_config = [];
         $hosts = [];
         $git_env = null;

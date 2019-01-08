@@ -25,13 +25,20 @@ services:
 
   npm:
     image: pcit/npm
+    build: package/npm
 
   pypi:
     image: pcit/pypi
+    build: package/pypi
 
   github_release:
     image: pcit/github_release
+    build: releases/github
 
   pages:
     image: pcit/pages
     build: pages
+
+  git:
+    image: pcit/git
+    build: git

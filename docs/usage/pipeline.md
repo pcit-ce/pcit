@@ -21,9 +21,17 @@ pipeline:
     ...      
 ```
 
-## 环境变量
+## 1. `image`
 
-除了以上两个基本指令外，还可以像我们平时使用 `$ docker container run` 命令那样设置 **环境变量** 等信息。
+设置构建步骤所使用的镜像。
+
+## 2. `commands`
+
+设置构建步骤所运行的命令。
+
+## 3. `environment` 环境变量
+
+除了以上两个基本指令外，还可以像我们平时使用 `$ docker container run -e "K=V" ...` 命令那样设置 **环境变量**。
 
 ```yaml
 pipeline:
@@ -36,9 +44,9 @@ pipeline:
       - vendor/bin/phpunit
 ```
 
-## 镜像拉取策略
+## 4. `pull` 镜像拉取策略
 
-每次构建时，无论 Docker Image 是否存在总是拉取镜像，可以使用 `pull` 指令。
+每次构建时，无论 Docker Image 是否存在总是拉取镜像，可以使用 `pull: true` 指令(默认为 `false`)。
 
 ```yaml
 pipeline:
@@ -50,9 +58,9 @@ pipeline:
       - vendor/bin/phpunit
 ```
 
-## shell
+## 5. `shell`
 
-default shell is `sh`
+默认的 shell 为 `sh`，你可以改为 `bash`
 
 ```yaml
 pipeline:
@@ -61,10 +69,9 @@ pipeline:
     shell: bash
 ```
 
-## 构建条件
+## 6. `when` 构建条件
 
-还可以设置构建条件，通过 `when` 指令设置。
-
+可以通过 `when` 指令设置构建条件。
 
 ```yaml
 pipeline:
@@ -77,7 +84,7 @@ pipeline:
       event: tag
 ```
 
-以上设置构建仅在 Git 打标签之后执行，其余例如 push、pull_request 均不构建。
+增加以上的 `when` 指令之后，构建仅在 Git 打标签之后执行，当 push、pull_request 均不进行构建。
 
 全部可用的设置如下：
 
@@ -100,3 +107,11 @@ when:
   #   include: [ master, release/* ]
   #   exclude: [ release/1.0.0, release/1.1.* ]
 ```
+
+## 7. `privileged`
+
+与 `docker run --privileged` 参数的行为一致。
+
+## 8. `settings`
+
+该指令用来配置插件。
