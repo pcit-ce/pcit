@@ -1,9 +1,11 @@
 #
-# @see https://github.com/pcit-ce/pcit/blob/master/docs/SUMMARY.md
+# @see https://docs.ci.khs1994.com/usage/
+# @see http://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
 
 language: php
 
+# git 设置
 clone:
   git:
     # image: plugins/git
@@ -16,11 +18,13 @@ clone:
     hosts:
       - "git.t.khs1994.com:192.168.199.100"
 
+# 工作目录
 workspace:
   base: /app
   # path: .
   path: pcit
 
+# 缓存设置
 cache:
   directories:
     - cache
@@ -28,6 +32,7 @@ cache:
     - .php_cs.cache
     - vendor
 
+# 构建步骤
 pipeline:
   before_install:
     commands: ["echo init script"]
@@ -201,7 +206,6 @@ pipeline:
       - "CHANGELOG.md"
       - "ROADMAP.md"
 
-  # This is success after demo
   codecov:
     # image: khs1994/php:7.3.0-composer-alpine
     shell: bash
@@ -216,7 +220,7 @@ pipeline:
 
   after_success:
     command:
-      - echo "after success"
+      - echo "build success"
 
   after_failure:
     image: bash
@@ -225,10 +229,6 @@ pipeline:
     commands:
       - echo "build failure"
 
-  #
-  # This is build status changed demo,example prev success current failure
-  #
-
   after_changed:
     image: bash
     # when:
@@ -236,6 +236,10 @@ pipeline:
     commands:
       - echo "build changed"
 
+  ping:
+    command: ["ping -c 5 git.t.khs1994.com"]
+
+# 配置服务
 services:
   mysql:
 
@@ -263,6 +267,7 @@ services:
   #   image: mongo:${MONGODB_VERSION}
   #   commands: [ --smallfiles ]
 
+# 变量矩阵
 matrix:
   PHP_VERSION:
     - 7.3.0
@@ -290,12 +295,14 @@ matrix:
 #       MYSQL_VERSION: 5.7.24
 #       REDIS_VERSION: 5.0.3
 
+# 分支设置
 branches:
   include: [ master,dev ]
   exclude: test*
   # include: [ master, release/* ]
   # exclude: [ release/1.0.0, release/1.1.* ]
 
+# 通知设置
 notifications:
   email:
     recipients:
