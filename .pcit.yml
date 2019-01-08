@@ -88,21 +88,21 @@ pipeline:
       # ^[0-9.]+      1.2.0-rc
       # ^v([0-9.]+)$  v1.2.3
 
-  when_platform:
+  windows_only:
     image: bash
     when:
       platform: Windows/amd64
     commands:
       - echo "Only run on Windows amd64"
 
-  when_branch:
+  master_branch_only:
     image: bash
     when:
       branch: master
     commands:
       - echo "Only run on master branch"
 
-  when_branch_include:
+  dev_branch_only:
     image: bash
     when:
       branch:
@@ -110,7 +110,7 @@ pipeline:
     commands:
       - echo "Only run on dev branch"
 
-  when_branch_exclude:
+  master_branch_exclude:
     image: bash
     when:
       branch:
@@ -118,7 +118,7 @@ pipeline:
     commands:
       - echo "Don't run on master branch"
 
-  publish_php:
+  docker_build:
     image: pcit/docker
     settings:
       # registry: docker.khs1994.com

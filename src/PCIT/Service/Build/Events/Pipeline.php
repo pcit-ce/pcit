@@ -54,17 +54,20 @@ class Pipeline
 
         $cache = $this->cache;
 
+        $language = $this->client->language ?? 'php';
+
         foreach ($this->pipeline as $setup => $array) {
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
-
-            $language = $this->client->language ?? 'php';
 
             $image = $array->image ?? Image::get($language);
             $commands = $array->commands ?? $array->command ?? Commands::get($language, $setup);
             $env = $array->environment ?? [];
-            $status = $array->when->status ?? CIDefaultStatus::get($setup);
             $shell = $array->shell ?? 'sh';
+            $privileged = $array->privileged ?? false;
+            $pull = $array->pull ?? false;
+            $settings = $array->settings ?? [];
 
+            $status = $array->when->status ?? CIDefaultStatus::get($setup);
             $when_platform = $array->when->platform ?? null;
 
             // tag pull_request
