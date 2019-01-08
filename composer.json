@@ -76,7 +76,7 @@
     }
   },
   "scripts": {
-    "docker:build": "docker build -t khs1994/pcit:alpine --progress=plain .",
+    "docker:build": "docker build -t pcit/pcit:alpine --progress=plain .",
     "docker:push": "docker-compose push",
     "test": "phpunit"
   }

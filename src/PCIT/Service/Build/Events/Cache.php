@@ -108,7 +108,7 @@ class Cache
     private function getContainerConfig(Client $docker_container, $env)
     {
         return $config = $docker_container
-            ->setImage('khs1994/s3')
+            ->setImage('pcit/s3')
             ->setEnv($env)
             ->setWorkingDir($this->workdir)
             ->setLabels([

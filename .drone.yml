@@ -59,7 +59,7 @@ pipeline:
   publish:
     image: plugins/docker
     registry: docker.khs1994.com
-    repo: khs1994/pcit
+    repo: pcit/pcit
     tags: latest
     when:
       event: deployment

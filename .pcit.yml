@@ -119,9 +119,9 @@ pipeline:
 
   # This is a build docker image demo，when tag push
   publish_php:
-    image: khs1994/docker
+    image: pcit/docker
     # registry: docker.khs1994.com
-    repo: khs1994/pcit
+    repo: pcit/pcit
     tags: 7.3.0-swarm-${CI_TAG}
     # target: php
     build_args:
@@ -154,7 +154,7 @@ pipeline:
     #  - sami update .sami.php
 
   pages:
-    image: khs1994/pages
+    image: pcit/pages
     shell: bash
     when:
       status: success
@@ -173,7 +173,7 @@ pipeline:
       # - git_token=git_token
 
   upload_file:
-    image: khs1994/tencent_cloud_cos:v4
+    image: pcit/tencent_cloud_cos:v4
     when:
       status: success
       event: tag
@@ -195,7 +195,7 @@ pipeline:
       # - COS_V4_BUCKET=x
 
   github_releases:
-    image: khs1994/github_releases
+    image: pcit/github_releases
     when:
       status: success
       event: tag

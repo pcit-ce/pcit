@@ -2,36 +2,36 @@ version: "3.7"
 
 services:
   tencent_cos_v4:
-    image: khs1994/tencent_cos:v4
+    image: pcit/tencent_cos:v4
     build: storage/tencent_cos_v4
 
   tencent_cos_v5:
-    image: khs1994/tencent_cos:v5
+    image: pcit/tencent_cos:v5
     build: storage/tencent_cos_v5
 
   s3:
-    image: khs1994/s3
+    image: pcit/s3
     build: storage/s3
 
   email:
-    image: khs1994/email
+    image: pcit/email
     build: notification/email
 
   docker:
-    image: khs1994/docker
+    image: pcit/docker
 
   kubernetes:
-    image: khs1994/helm
+    image: pcit/helm
 
   npm:
-    image: khs1994/npm
+    image: pcit/npm
 
   pypi:
-    image: khs1994/pypi
+    image: pcit/pypi
 
   github_release:
-    image: khs1994/github_release
+    image: pcit/github_release
 
   pages:
-    image: khs1994/pages
+    image: pcit/pages
     build: pages

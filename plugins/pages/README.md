@@ -5,5 +5,5 @@
 ```bash
 $ cd project
 
-$ docker run -it -v ${PWD}:/app --workdir=/app --env-file=/path/to/.env khs1994/pages
+$ docker run -it -v ${PWD}:/app --workdir=/app --env-file=/path/to/.env pcit/pages
 ```

@@ -52,7 +52,7 @@ CMD ["up"]
 # CMD ["gc"]
 
 #
-# $ docker build -t khs1994/pcit --target=php .
+# $ docker build -t pcit/pcit --target=php .
 #
 # @link https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
 #
