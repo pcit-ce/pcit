@@ -375,6 +375,24 @@ EOF;
         DB::update('UPDATE jobs set env_vars=? WHERE id=?', [$env, $job_id]);
     }
 
+    /**
+     * @param int $job_id
+     *
+     * @return array|null
+     *
+     * @throws Exception
+     */
+    public static function getEnv(int $job_id): ?array
+    {
+        $result = DB::select('SELECT env_vars FROM jobs WHERE id=?', [$job_id], true);
+
+        if (null === $result) {
+            return null;
+        }
+
+        return json_decode($result, true);
+    }
+
     public static function getJobIDByBuildKeyIDAndEnv(int $buildId, string $env): int
     {
         $sql = 'SELECT id FROM jobs WHERE build_id=? AND env_vars=?';

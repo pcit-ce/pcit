@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Builds;
 use App\Build;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
+use PCIT\PCIT;
 use PCIT\Support\DB;
 
 class JobController
@@ -46,7 +47,7 @@ class JobController
 
         $this->handleCancel($job_id);
 
-        if (\function_exists(fastcgi_finish_request)) {
+        if (\function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
         }
 
@@ -76,6 +77,12 @@ class JobController
      */
     public function restart($job_id): void
     {
+        $buildId = Job::getBuildKeyId((int) $job_id);
+
+        $build = (new \App\Console\Events\Build())->handle($buildId);
+
+        app(PCIT::class)->build->handle($build, (int) $job_id);
+
         Job::updateBuildStatus((int) $job_id, 'queued');
 
         $this->updateBuildStatus((int) $job_id);

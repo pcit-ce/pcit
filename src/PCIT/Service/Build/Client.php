@@ -43,11 +43,12 @@ class Client
     public $cache;
 
     /**
-     * @param $build
+     * @param BuildData $build
+     * @param int       $job_id 处理 job 重新构建
      *
      * @throws Exception
      */
-    public function handle(BuildData $build): void
+    public function handle(BuildData $build, int $job_id = 0): void
     {
         $this->build = $build;
         $this->buildID = (int) $this->build->build_key_id;
@@ -64,15 +65,17 @@ class Client
         );
 
         // 生成容器配置
-        $this->config();
+        $this->config($job_id);
     }
 
     /**
      * 生成 config.
      *
+     * @param int $job_id
+     *
      * @throws Exception
      */
-    private function config(): void
+    private function config(int $job_id = 0): void
     {
         if (!$this->build->repo_full_name or !$this->build->config) {
             throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
@@ -109,6 +112,14 @@ class Client
         // ci system env
         $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
 
+        if ($job_id) {
+            Log::getMonolog()->emergency('Handle job restart');
+
+            $this->handleJob($job_id, Job::getEnv($job_id));
+
+            return;
+        }
+
         // 解析构建矩阵
         $matrix = Matrix::parseMatrix((array) $matrix);
 
@@ -144,7 +155,7 @@ class Client
      *
      * @throws Exception
      */
-    public function handleJob(int $job_id, ?array $matrix_config): void
+    private function handleJob(int $job_id, ?array $matrix_config): void
     {
         $this->job_id = $job_id = $job_id ?: Job::create($this->build->build_key_id);
 

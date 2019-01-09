@@ -25,7 +25,7 @@ class Build extends BuildData
      * @throws PCITException
      * @throws Exception
      */
-    public function handle()
+    public function handle(int $buildId = 0)
     {
         $sql = <<<'EOF'
 SELECT
@@ -37,14 +37,27 @@ FROM
 
 builds WHERE build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id ASC LIMIT 1;
 EOF;
+        $queryByBuildId = <<<EOF
+SELECT
 
-        $result = DB::select($sql, [
-            'pending',
-            CI::BUILD_EVENT_PUSH,
-            CI::BUILD_EVENT_TAG,
-            CI::BUILD_EVENT_PR,
-        ]);
+id,git_type,rid,commit_id,commit_message,branch,event_type,
+pull_request_number,tag,config
 
+FROM
+
+builds WHERE id=?
+EOF;
+
+        if ($buildId) {
+            $result = DB::select($queryByBuildId, [$buildId]);
+        } else {
+            $result = DB::select($sql, [
+                'pending',
+                CI::BUILD_EVENT_PUSH,
+                CI::BUILD_EVENT_TAG,
+                CI::BUILD_EVENT_PR,
+            ]);
+        }
         $result = $result[0] ?? null;
 
         // 数据库没有结果，跳过构建，也就没有 build_key_id
