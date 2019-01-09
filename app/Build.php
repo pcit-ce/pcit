@@ -20,9 +20,17 @@ class Build extends Model
      */
     public static function getStartAt(int $build_key_id)
     {
-        $sql = 'SELECT started_at FROM jobs WHERE build_id=? ORDER BY id LIMIT 1';
+        $sql = 'SELECT created_at FROM jobs WHERE build_id=? ORDER BY id LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
+    }
+
+    public static function updateStartAt(int $build_key_id, ?int $time): void
+    {
+        $time = null === $time ? time() : $time;
+        $sql = 'UPDATE builds SET created_at=? WHERE id=?';
+
+        DB::update($sql, [$time, $build_key_id]);
     }
 
     /**
@@ -37,6 +45,15 @@ class Build extends Model
         $sql = 'SELECT finished_at FROM jobs WHERE build_id=? ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$build_key_id], true);
+    }
+
+    public static function updateFinishedAt(int $buildId): void
+    {
+        $finished_at = Job::getFinishedAtByBuildId($buildId);
+
+        $sql = 'UPDATE builds set finished_at=? WHERE id=?';
+
+        DB::update($sql, [$finished_at, $buildId]);
     }
 
     /**

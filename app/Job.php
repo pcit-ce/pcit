@@ -229,6 +229,18 @@ EOF;
 
     public static function getFinishedAtByBuildId(int $build_id)
     {
+        $sql = 'SELECT state FROM jobs WHERE build_id=? GROUP BY state';
+
+        $state = DB::select($sql, [$build_id]);
+
+        foreach ($state as $k => $v) {
+            $state = $v['state'];
+
+            if (\in_array($state, ['queued', 'pending', 'in_progress'])) {
+                return null;
+            }
+        }
+
         $sql = 'SELECT max(finished_at) FROM jobs WHERE build_id=?';
 
         return DB::select($sql, [$build_id], true);

@@ -91,17 +91,19 @@ class Agent extends Kernel
             }
         }
 
-        // 运行一个 job 之后更新 build 状态
         $this->updateBuildStatus((int) $build_key_id);
     }
 
     /**
      * TODO.
+     *
+     * 更新 job对应的 build 状态
      */
     public function updateBuildStatus(int $build_key_id): void
     {
         $status = Job::getBuildStatusByBuildKeyId($build_key_id);
 
         Build::updateBuildStatus($build_key_id, $status);
+        Build::updateFinishedAt($build_key_id);
     }
 }

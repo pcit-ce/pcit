@@ -17,9 +17,6 @@ use PCIT\Support\Log;
  */
 class CheckAdmin
 {
-    /**
-     * @var Build
-     */
     public $build;
 
     public function __construct(BuildData $build)

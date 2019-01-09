@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-class Handler extends \PCIT\Foundation\Exceptions\Handler
+abstract class Handler extends \PCIT\Foundation\Exceptions\Handler
 {
 }

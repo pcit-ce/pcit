@@ -23,6 +23,7 @@ class Kernel
         // if ('/index.php' === $_SERVER['REQUEST_URI']) {
         if ('/index.php' === $request->server->get('REQUEST_URI')) {
             Response::redirect('dashboard');
+
             exit;
         }
 
@@ -56,6 +57,9 @@ class Kernel
                 exit;
             }
 
+            method_exists($e, 'report') && $e->report($e);
+            method_exists($e, 'render') && $e->render($request, $e);
+
             return Response::json(array_filter([
                 'code' => 500,
                 'message' => $e->getMessage() ?: 'ERROR',
@@ -87,6 +91,7 @@ class Kernel
             ini_set('session.cookie_secure', 'On');
         } catch (Throwable $e) {
         }
+
         app()->instance('request', $request);
 
         // session_set_cookie_params(1800 , '/', '.'getenv('CI_SESSION_DOMAIN', true));

@@ -114,7 +114,6 @@ class BuildsController
 
         if ($result) {
             $result['jobs'] = Job::allByBuildKeyID((int) $build_id);
-            $result['finished_at'] = JOb::getFinishedAtByBuildId((int) $build_id);
 
             return $result;
         }
@@ -161,9 +160,10 @@ class BuildsController
         JWTController::check($build_id);
 
         Build::updateBuildStatus($build_id, 'pending');
-        // Build::updateStartAt((int) $build_id, 0);
-        // Build::updateStopAt((int) $build_id, 0);
+        Build::updateStartAt((int) $build_id, null);
         $this->updateJobStatus($build_id, 'queued');
+        // 更新 build 状态
+        Build::updateFinishedAt($build_id);
     }
 
     /**

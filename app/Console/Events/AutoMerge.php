@@ -16,9 +16,6 @@ use PCIT\Support\Log;
  */
 class AutoMerge
 {
-    /**
-     * @var Build
-     */
     public $build;
 
     public function __construct(BuildData $build)
@@ -26,11 +23,6 @@ class AutoMerge
         $this->build = $build;
     }
 
-    /**
-     * @param Build $build
-     *
-     * @throws \Exception
-     */
     public function handle(): void
     {
         $build = $this->build;

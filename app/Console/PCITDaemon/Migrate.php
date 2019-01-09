@@ -75,14 +75,9 @@ class Migrate
             }
 
             $spl = new \SplFileInfo(base_path().'framework/sql/'.$k);
-
             $ext = $spl->getExtension();
 
-            if ('sql' !== $ext) {
-                return false;
-            }
-
-            return true;
+            return 'sql' === $ext;
         });
 
         return $array;

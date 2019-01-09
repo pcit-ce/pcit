@@ -19,13 +19,7 @@ use PCIT\Support\Log;
  */
 class Build extends BuildData
 {
-    /**
-     * @return Build
-     *
-     * @throws PCITException
-     * @throws Exception
-     */
-    public function handle(int $buildId = 0)
+    public function getData(int $buildId = 0)
     {
         $sql = <<<'EOF'
 SELECT
@@ -58,6 +52,7 @@ EOF;
                 CI::BUILD_EVENT_PR,
             ]);
         }
+
         $result = $result[0] ?? null;
 
         // 数据库没有结果，跳过构建，也就没有 build_key_id
@@ -65,6 +60,19 @@ EOF;
         if (!$result) {
             throw new PCITException('Build not Found, skip', 01404);
         }
+
+        return $result;
+    }
+
+    /**
+     * @return Build
+     *
+     * @throws PCITException
+     * @throws Exception
+     */
+    public function handle(int $buildId = 0)
+    {
+        $result = $this->getData($buildId);
 
         $result = array_values($result);
 
