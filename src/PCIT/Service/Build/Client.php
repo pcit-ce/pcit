@@ -12,6 +12,7 @@ use PCIT\Service\Build\Events\Matrix;
 use PCIT\Service\Build\Events\Notifications;
 use PCIT\Service\Build\Events\Pipeline;
 use PCIT\Service\Build\Events\Services;
+use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
 use PCIT\Support\Subject;
@@ -31,7 +32,15 @@ class Client
 
     public $job_id;
 
+    public $buildID;
+
     public $language;
+
+    public $git;
+
+    public $services;
+
+    public $cache;
 
     /**
      * @param $build
@@ -41,6 +50,7 @@ class Client
     public function handle(BuildData $build): void
     {
         $this->build = $build;
+        $this->buildID = (int) $this->build->build_key_id;
 
         $this->system_env = array_merge($this->system_env, $this->build->env);
 
@@ -72,11 +82,11 @@ class Client
         $yaml_obj = json_decode($this->build->config);
 
         $this->language = $language = $yaml_obj->language ?? 'php';
-        $git = $yaml_obj->clone->git ?? null;
-        $cache = $yaml_obj->cache ?? null;
+        $this->git = $git = $yaml_obj->clone->git ?? null;
+        $this->cache = $cache = $yaml_obj->cache ?? null;
         $workspace = $yaml_obj->workspace ?? null;
         $pipeline = $yaml_obj->pipeline ?? null;
-        $services = $yaml_obj->services ?? null;
+        $this->services = $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->matrix ?? null;
         $notifications = $yaml_obj->notifications ?? null;
 
@@ -106,23 +116,9 @@ class Client
         if (!$matrix) {
             Log::getMonolog()->emergency('This build is not matrix');
 
-            $this->job_id = Job::create($this->build->build_key_id);
+            $job_id = Job::getJobIDByBuildKeyID($this->buildID)[0] ?? 0;
 
-            Log::getMonolog()->emergency(
-                '=== Handle job Start', ['job_id' => $this->job_id]);
-
-            (new Subject())
-                // git
-                ->register(new Git($git, $this->build, $this))
-                // services
-                ->register(new Services($services, (int) $this->job_id, null))
-                // pipeline
-                ->register(new Pipeline($pipeline, $this->build, $this, null))
-                // cache
-                ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $workdir, $cache))
-                ->handle();
-
-            Log::getMonolog()->emergency('=== Generate Job Success ===', ['job_id' => $this->job_id]);
+            $this->handleJob($job_id, null);
 
             return;
         }
@@ -131,23 +127,43 @@ class Client
 
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
-            $this->job_id = Job::create($this->build->build_key_id);
+            // 用户点击重新构建，必须重新生成 job
+            // 获取已有的 job_id
+            $job_id = Job::getJobIDByBuildKeyIDAndEnv(
+                $this->buildID, json_encode($matrix_config));
 
-            Log::getMonolog()->emergency(
-                '=== Handle job Start ===', ['job_id' => $this->job_id]);
-
-            (new Subject())
-                // git
-                ->register(new Git($git, $this->build, $this))
-                // services
-                ->register(new Services($services, (int) $this->job_id, $matrix_config))
-                // pipeline
-                ->register(new Pipeline($pipeline, $this->build, $this, $matrix_config))
-                // cache
-                ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $workdir, $cache))
-                ->handle();
-
-            Log::getMonolog()->emergency('=== Generate Job Success ===', ['job_id' => $this->job_id]);
+            $this->handleJob($job_id, $matrix_config);
         }
+    }
+
+    /**
+     * 生成 job 缓存.
+     *
+     * @param int        $job_id
+     * @param array|null $matrix_config
+     *
+     * @throws Exception
+     */
+    public function handleJob(int $job_id, ?array $matrix_config): void
+    {
+        $this->job_id = $job_id = $job_id ?: Job::create($this->build->build_key_id);
+
+        Log::getMonolog()->emergency(
+            '=== Handle job Start ===', ['job_id' => $this->job_id]);
+        // 清理缓存
+        CacheKey::flush($job_id);
+
+        (new Subject())
+            // git
+            ->register(new Git($this->git, $this->build, $this))
+            // services
+            ->register(new Services($this->services, (int) $this->job_id, $matrix_config))
+            // pipeline
+            ->register(new Pipeline($this->pipeline, $this->build, $this, $matrix_config))
+            // cache
+            ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $this->workdir, $this->cache))
+            ->handle();
+
+        Log::getMonolog()->emergency('=== Generate Job Success ===', ['job_id' => $this->job_id]);
     }
 }

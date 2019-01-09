@@ -46,7 +46,7 @@ class Job extends Model
      *
      * @throws Exception
      */
-    public static function create(int $build_id)
+    public static function create(int $build_id): int
     {
         $sql = <<<'EOF'
 INSERT INTO jobs(id,allow_failure,state,created_at,build_id)
@@ -90,6 +90,23 @@ EOF;
         $sql = 'SELECT * FROM jobs WHERE build_id=?';
 
         return DB::select($sql, [$build_key_id]);
+    }
+
+    public static function getJobIDByBuildKeyID(int $build_key_id)
+    {
+        $sql = 'SELECT id FROM jobs WHERE build_id=?';
+
+        $result = DB::select($sql, [$build_key_id]);
+
+        $array = [];
+
+        foreach ($result as $key => $value) {
+            foreach ($value as $key => $value) {
+                $array[] = $value;
+            }
+        }
+
+        return $array;
     }
 
     /**
@@ -356,6 +373,13 @@ EOF;
     public static function updateEnv(int $job_id, string $env): void
     {
         DB::update('UPDATE jobs set env_vars=? WHERE id=?', [$env, $job_id]);
+    }
+
+    public static function getJobIDByBuildKeyIDAndEnv(int $buildId, string $env): int
+    {
+        $sql = 'SELECT id FROM jobs WHERE build_id=? AND env_vars=?';
+
+        return (int) DB::select($sql, [$buildId, $env], true);
     }
 
     /**

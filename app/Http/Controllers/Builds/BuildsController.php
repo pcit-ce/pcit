@@ -160,7 +160,7 @@ class BuildsController
         $build_id = (int) $build_id;
         JWTController::check($build_id);
 
-        Build::updateBuildStatus($build_id, 'queued');
+        Build::updateBuildStatus($build_id, 'pending');
         // Build::updateStartAt((int) $build_id, 0);
         // Build::updateStopAt((int) $build_id, 0);
         $this->updateJobStatus($build_id, 'queued');
