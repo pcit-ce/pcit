@@ -54,7 +54,7 @@ class RunContainer
 
         try {
             // 运行一个 job
-            Job::updateStartAt($job_id);
+            Job::updateStartAt($job_id, time());
             self::handleJob($job_id);
         } catch (\Throwable $e) {
             if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
@@ -73,7 +73,7 @@ class RunContainer
             } else {
                 // 其他错误
                 Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
-                Job::updateFinishedAt($job_id);
+                Job::updateFinishedAt($job_id, time());
                 // 清理 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);
 
@@ -216,7 +216,7 @@ class RunContainer
 
         $changed_key = $job_id.'_'.\PCIT\Support\Job::JOB_STATUS_CHANGED;
 
-        Job::updateFinishedAt($job_id);
+        Job::updateFinishedAt($job_id, time());
     }
 
     /**

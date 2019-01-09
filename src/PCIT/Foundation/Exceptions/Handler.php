@@ -16,7 +16,7 @@ abstract class Handler extends \Exception
     /**
      * 负责将给定的异常转换成发送给浏览器的 HTTP 响应.
      */
-    public function render($request, Exception $exception): void
+    public function render($request, Exception $exception)
     {
         return [];
     }

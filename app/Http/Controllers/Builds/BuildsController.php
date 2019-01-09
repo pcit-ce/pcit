@@ -143,6 +143,8 @@ class BuildsController
         Build::updateBuildStatus($build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
 
         $this->updateJobStatus($build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+
+        Build::updateFinishedAt($build_id);
     }
 
     /**
@@ -160,7 +162,7 @@ class BuildsController
         JWTController::check($build_id);
 
         Build::updateBuildStatus($build_id, 'pending');
-        Build::updateStartAt((int) $build_id, null);
+        Build::updateStartAt($build_id, null);
         $this->updateJobStatus($build_id, 'queued');
         // 更新 build 状态
         Build::updateFinishedAt($build_id);
@@ -180,11 +182,17 @@ class BuildsController
         $jobs = Job::getByBuildKeyID($build_id);
 
         foreach ($jobs as $job) {
-            $job_id = $job['id'];
+            $job_id = (int) $job['id'];
 
-            Job::updateBuildStatus((int) $job_id, $status);
+            Job::updateBuildStatus($job_id, $status);
 
-            'cancelled' === $status && (new JobController())->handleCancel((int) $job_id);
+            if ('queued' === $status) {
+                Job::updateCreatedAT($job_id, time());
+                Job::updateStartAt($job_id, null);
+                Job::updateFinishedAt($job_id, null);
+            }
+
+            'cancelled' === $status && (new JobController())->handleCancel($job_id);
         }
         DB::commit();
     }

@@ -97,7 +97,7 @@ class Agent extends Kernel
     /**
      * TODO.
      *
-     * 更新 job对应的 build 状态
+     * 更新 job 对应的 build 状态
      */
     public function updateBuildStatus(int $build_key_id): void
     {

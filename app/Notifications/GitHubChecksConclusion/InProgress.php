@@ -16,7 +16,7 @@ class InProgress extends Kernel
      */
     public function handle(): void
     {
-        Job::updateStartAt($this->job_key_id);
+        Job::updateStartAt($this->job_key_id, time());
 
         // Job::updateBuildStatus($this->job_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS);
 

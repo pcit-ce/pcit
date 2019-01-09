@@ -25,6 +25,12 @@ class Build extends Model
         return DB::select($sql, [$build_key_id], true);
     }
 
+    /**
+     * @param int      $build_key_id
+     * @param int|null $time
+     *
+     * @throws Exception
+     */
     public static function updateStartAt(int $build_key_id, ?int $time): void
     {
         $time = null === $time ? time() : $time;
@@ -47,6 +53,11 @@ class Build extends Model
         return DB::select($sql, [$build_key_id], true);
     }
 
+    /**
+     * @param int $buildId
+     *
+     * @throws Exception
+     */
     public static function updateFinishedAt(int $buildId): void
     {
         $finished_at = Job::getFinishedAtByBuildId($buildId);

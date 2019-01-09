@@ -42,7 +42,7 @@ class Job extends Model
     /**
      * @param int $build_id
      *
-     * @return string
+     * @return int
      *
      * @throws Exception
      */
@@ -92,6 +92,13 @@ EOF;
         return DB::select($sql, [$build_key_id]);
     }
 
+    /**
+     * @param int $build_key_id
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
     public static function getJobIDByBuildKeyID(int $build_key_id)
     {
         $sql = 'SELECT id FROM jobs WHERE build_id=?';
@@ -101,8 +108,8 @@ EOF;
         $array = [];
 
         foreach ($result as $key => $value) {
-            foreach ($value as $key => $value) {
-                $array[] = $value;
+            foreach ($value as $k => $v) {
+                $array[] = $v;
             }
         }
 
@@ -130,60 +137,47 @@ EOF;
     }
 
     /**
-     * @param int  $job_id
-     * @param int  $time
-     * @param bool $started_at
-     * @param bool $finished_at
-     * @param bool $created_at
-     * @param bool $deleted_at
+     * 事件创建时间.
      *
-     * @return int
+     * @param int $job_id
+     * @param int $time
      *
      * @throws Exception
      */
-    private static function updateTime(int $job_id,
-                                       int $time = null,
-                                       bool $started_at = true,
-                                       bool $finished_at = false,
-                                       bool $created_at = false,
-                                       bool $deleted_at = false)
+    public static function updateCreatedAt(int $job_id, ?int $time): void
     {
-        $column = null;
+        $sql = 'UPDATE jobs SET created_at=? WHERE id=?';
 
-        $started_at && $column = 'started_at';
-
-        $finished_at && $column = 'finished_at';
-
-        $created_at && $column = 'created_at';
-
-        $deleted_at && $column = 'deleted_at';
-
-        if (!$column) {
-            throw new Exception('500', 500);
-        }
-
-        $sql = "UPDATE jobs SET $column = ? WHERE id=?";
-
-        $time = $time ?? time();
-
-        if (0 === $time) {
-            $time = null;
-        }
-
-        return DB::update($sql, [$time, $job_id]);
+        DB::update($sql, [$time, $job_id]);
     }
 
     /**
      * @param int $job_id
-     * @param int $time
      *
-     * @return int
+     * @return string
      *
      * @throws Exception
      */
-    public static function updateStartAt(int $job_id, int $time = null)
+    public static function getCreatedAt(int $job_id)
     {
-        return self::updateTime($job_id, $time, true);
+        $sql = 'SELECT created_at FROM jobs WHERE id=? LIMIT 1';
+
+        return DB::select($sql, [$job_id], true);
+    }
+
+    /**
+     * 容器运行开始时间.
+     *
+     * @param int $job_id
+     * @param int $time
+     *
+     * @throws Exception
+     */
+    public static function updateStartAt(int $job_id, ?int $time): void
+    {
+        $sql = 'UPDATE jobs SET started_at=? WHERE id=?';
+
+        DB::update($sql, [$time, $job_id]);
     }
 
     /**
@@ -204,13 +198,13 @@ EOF;
      * @param int      $job_id
      * @param int|null $time
      *
-     * @return int
-     *
      * @throws Exception
      */
-    public static function updateFinishedAt(int $job_id, int $time = null)
+    public static function updateFinishedAt(int $job_id, ?int $time): void
     {
-        return self::updateTime($job_id, $time, false, true);
+        $sql = 'UPDATE jobs SET finished_at=? WHERE id=?';
+
+        DB::update($sql, [$time, $job_id]);
     }
 
     /**
@@ -227,6 +221,13 @@ EOF;
         return DB::select($sql, [$job_id], true);
     }
 
+    /**
+     * @param int $build_id
+     *
+     * @return array|string|null
+     *
+     * @throws Exception
+     */
     public static function getFinishedAtByBuildId(int $build_id)
     {
         $sql = 'SELECT state FROM jobs WHERE build_id=? GROUP BY state';
@@ -405,6 +406,14 @@ EOF;
         return json_decode($result, true);
     }
 
+    /**
+     * @param int    $buildId
+     * @param string $env
+     *
+     * @return int
+     *
+     * @throws Exception
+     */
     public static function getJobIDByBuildKeyIDAndEnv(int $buildId, string $env): int
     {
         $sql = 'SELECT id FROM jobs WHERE build_id=? AND env_vars=?';
