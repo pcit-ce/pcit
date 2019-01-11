@@ -274,7 +274,7 @@ matrix:
   PHP_VERSION:
     - 7.3.0
     # - nightly
-    - 7.2.13
+    - 7.2.14
     # - 7.1.25
   NGINX_VERSION:
     - 1.15.8
@@ -290,7 +290,7 @@ matrix:
 
 # matrix:
 #   include:
-#     - PHP_VERSION: 7.2.13
+#     - PHP_VERSION: 7.2.14
 #       MYSQL_VERSION: 5.7.24
 #       REDIS_VERSION: 5.0.3
 #     - PHP_VERSION: 7.1.25

@@ -4,7 +4,7 @@ workspace:
 
 pipeline:
   sami:
-    image: khs1994/php:7.2.13-fpm-alpine
+    image: khs1994/php:7.2.14-fpm-alpine
     commans:
       - sami
       - update

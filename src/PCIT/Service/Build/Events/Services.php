@@ -38,8 +38,6 @@ class Services
             return;
         }
 
-        Job::updateEnv($this->job_id, json_encode($this->matrix_config));
-
         foreach ($this->service as $service_name => $array) {
             list(
                 'image' => $image,

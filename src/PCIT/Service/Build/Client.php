@@ -164,6 +164,8 @@ class Client
         // 清理缓存
         CacheKey::flush($job_id);
 
+        Job::updateEnv($job_id, json_encode($matrix_config));
+
         (new Subject())
             // git
             ->register(new Git($this->git, $this->build, $this))

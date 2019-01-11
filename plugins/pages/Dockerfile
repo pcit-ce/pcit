@@ -1,4 +1,4 @@
-FROM khs1994/php:7.2.13-composer-alpine
+FROM khs1994/php:7.2.14-composer-alpine
 
 COPY docker-entrypoint.sh /
 
