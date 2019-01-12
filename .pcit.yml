@@ -38,7 +38,7 @@ pipeline:
     commands: ["echo init script"]
 
   install:
-    # image: khs1994/php:7.3.0-composer-alpine
+    # image: khs1994/php:7.3.1-composer-alpine
     # commands or command
     command:
       - pwd
@@ -123,7 +123,7 @@ pipeline:
     settings:
       # registry: docker.khs1994.com
       repo: pcit/pcit
-      tags: 7.3.0-swarm-${CI_TAG}
+      tags: 7.3.1-swarm-${CI_TAG}
       # target: php
       build_args:
         - a=1
@@ -138,16 +138,16 @@ pipeline:
     # - DOCKER_PASSWORD=password
 
   php-cs-fixer:
-    # image: khs1994/php:7.3.0-composer-alpine
+    # image: khs1994/php:7.3.1-composer-alpine
     commands:
       - php-cs-fixer fix
 
   sami:
-    # image: khs1994/php:7.3.0-composer-alpine
+    # image: khs1994/php:7.3.1-composer-alpine
     when:
       status: success
       matrix:
-      - PHP_VERSION: 7.3.0
+      - PHP_VERSION: 7.3.1
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -160,7 +160,7 @@ pipeline:
     when:
       status: success
       matrix:
-      - PHP_VERSION: 7.3.0
+      - PHP_VERSION: 7.3.1
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -181,7 +181,7 @@ pipeline:
       event: tag
       branch: alpha
       matrix:
-      - PHP_VERSION: 7.3.0
+      - PHP_VERSION: 7.3.1
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -209,7 +209,7 @@ pipeline:
       - "ROADMAP.md"
 
   codecov:
-    # image: khs1994/php:7.3.0-composer-alpine
+    # image: khs1994/php:7.3.1-composer-alpine
     shell: bash
     when:
       status: success
@@ -272,10 +272,10 @@ services:
 # 变量矩阵
 matrix:
   PHP_VERSION:
-    - 7.3.0
+    - 7.3.1
     # - nightly
     - 7.2.14
-    # - 7.1.25
+    # - 7.1.26
   NGINX_VERSION:
     - 1.15.8
   REDIS_VERSION:
@@ -293,7 +293,7 @@ matrix:
 #     - PHP_VERSION: 7.2.14
 #       MYSQL_VERSION: 5.7.24
 #       REDIS_VERSION: 5.0.3
-#     - PHP_VERSION: 7.1.25
+#     - PHP_VERSION: 7.1.26
 #       MYSQL_VERSION: 5.7.24
 #       REDIS_VERSION: 5.0.3
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Service\Build\Events;
 
-use App\Job;
 use Docker\Container\Client;
 use Exception;
 use PCIT\PCIT;

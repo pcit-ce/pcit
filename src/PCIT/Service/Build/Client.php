@@ -127,7 +127,7 @@ class Client
         if (!$matrix) {
             Log::getMonolog()->emergency('This build is not matrix');
 
-            $job_id = (int) Job::getJobIDByBuildKeyID($this->buildID)[0] ?? 0;
+            $job_id = (int) (Job::getJobIDByBuildKeyID($this->buildID)[0] ?? 0);
 
             $this->handleJob($job_id, null);
 

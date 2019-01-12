@@ -64,7 +64,6 @@ cache:
 
 pipeline:
 
-  # This is phpunit demo
   script:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
     # pull: true
@@ -101,12 +100,15 @@ pipeline:
 
 services:
   mysql:
-    image: mysql:${MYSQL_VERSION}
-    environment:
-      - MYSQL_DATABASE=test
-      - MYSQL_ROOT_PASSWORD=test
-    # entrypoint: [ "mysqld" ]
-    command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
+  redis:
+
+  # mysql:
+  #   image: mysql:${MYSQL_VERSION}
+  #   environment:
+  #     - MYSQL_DATABASE=test
+  #     - MYSQL_ROOT_PASSWORD=test
+  #   # entrypoint: [ "mysqld" ]
+  #   command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # postgresql:
   #   image: postgres:${POSTGRESQL_VERSION}-alpine
@@ -114,9 +116,9 @@ services:
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_DB=test
 
-  redis:
-    image: redis:${REDIS_VERSION}-alpine
-    command: ["--bind", "0.0.0.0"]
+  # redis:
+  #  image: redis:${REDIS_VERSION}-alpine
+  #  command: ["--bind", "0.0.0.0"]
 
   # mongodb:
   #   image: mongo:${MONGODB_VERSION}
