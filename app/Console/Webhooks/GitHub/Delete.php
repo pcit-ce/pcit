@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Webhooks\GitHub;
 
-use PCIT\Support\DB;
-
 class Delete
 {
     /**
@@ -29,9 +27,7 @@ class Delete
             ->handle();
 
         if ('branch' === $ref_type) {
-            $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
-
-            DB::delete($sql, ['github', $ref, (int) $rid]);
+            \App\Build::deleteByBranch($ref, (int) $rid, 'github');
         }
     }
 }

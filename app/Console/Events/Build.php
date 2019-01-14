@@ -10,7 +10,6 @@ use Exception;
 use PCIT\Builder\BuildData;
 use PCIT\Exception\PCITException;
 use PCIT\Support\CI;
-use PCIT\Support\DB;
 use PCIT\Support\JSON;
 use PCIT\Support\Log;
 
@@ -19,51 +18,6 @@ use PCIT\Support\Log;
  */
 class Build extends BuildData
 {
-    public function getData(int $buildId = 0)
-    {
-        $sql = <<<'EOF'
-SELECT
-
-id,git_type,rid,commit_id,commit_message,branch,event_type,
-pull_request_number,tag,config
-
-FROM
-
-builds WHERE build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id ASC LIMIT 1;
-EOF;
-        $queryByBuildId = <<<EOF
-SELECT
-
-id,git_type,rid,commit_id,commit_message,branch,event_type,
-pull_request_number,tag,config
-
-FROM
-
-builds WHERE id=?
-EOF;
-
-        if ($buildId) {
-            $result = DB::select($queryByBuildId, [$buildId]);
-        } else {
-            $result = DB::select($sql, [
-                'pending',
-                CI::BUILD_EVENT_PUSH,
-                CI::BUILD_EVENT_TAG,
-                CI::BUILD_EVENT_PR,
-            ]);
-        }
-
-        $result = $result[0] ?? null;
-
-        // 数据库没有结果，跳过构建，也就没有 build_key_id
-
-        if (!$result) {
-            throw new PCITException('Build not Found, skip', 01404);
-        }
-
-        return $result;
-    }
-
     /**
      * @return Build
      *
@@ -72,7 +26,7 @@ EOF;
      */
     public function handle(int $buildId = 0)
     {
-        $result = $this->getData($buildId);
+        $result = \App\Build::getData($buildId);
 
         $result = array_values($result);
 

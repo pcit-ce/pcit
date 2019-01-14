@@ -11,6 +11,58 @@ use PCIT\Support\Model;
 
 class Build extends Model
 {
+    public static function getData(int $buildId = 0)
+    {
+        $sql = <<<'EOF'
+SELECT
+
+id,git_type,rid,commit_id,commit_message,branch,event_type,
+pull_request_number,tag,config
+
+FROM
+
+builds WHERE build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id ASC LIMIT 1;
+EOF;
+        $queryByBuildId = <<<EOF
+SELECT
+
+id,git_type,rid,commit_id,commit_message,branch,event_type,
+pull_request_number,tag,config
+
+FROM
+
+builds WHERE id=?
+EOF;
+
+        if ($buildId) {
+            $result = DB::select($queryByBuildId, [$buildId]);
+        } else {
+            $result = DB::select($sql, [
+                'pending',
+                CI::BUILD_EVENT_PUSH,
+                CI::BUILD_EVENT_TAG,
+                CI::BUILD_EVENT_PR,
+            ]);
+        }
+
+        $result = $result[0] ?? null;
+
+        // 数据库没有结果，跳过构建，也就没有 build_key_id
+
+        if (!$result) {
+            throw new PCITException('Build not Found, skip', 01404);
+        }
+
+        return $result;
+    }
+
+    public static function deleteByBranch(string $branch, int $rid, $gitType = 'github'): void
+    {
+        $sql = 'DELETE FROM builds WHERE git_type=? AND branch=? AND rid=?';
+
+        DB::delete($sql, [$gitType, $branch, $rid]);
+    }
+
     /**
      * @param int $build_key_id
      *
