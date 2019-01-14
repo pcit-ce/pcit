@@ -55,8 +55,8 @@ use WeChat\WeChat;
  * @property PHPMailer                                      $mail
  * @property Service\PullRequest\GitHubClient               $pull_request
  * @property Service\Webhooks\GitHubClient                  $webhooks
- * @property Service\Build\Client                           $build
- * @property Service\Build\Agent\RunContainer               $build_agent
+ * @property Builder\Client                                 $build
+ * @property Builder\Agent\RunContainer                     $build_agent
  * @property \TencentAI\TencentAI                           $tencent_ai
  * @property Service\Users\GitHubClient                     $user_basic_info
  * @property Service\Checks\Run                             $check_run

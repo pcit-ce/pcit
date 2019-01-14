@@ -26,6 +26,8 @@ workspace:
 
 # 缓存设置
 cache:
+  # npm:
+  # composer:
   directories:
     - cache
     # - vendor
@@ -73,7 +75,7 @@ pipeline:
       # status: [ failure, success ]
 
       # event: tag
-      # event: [push, pull_request, tag]
+      # event: [push, pull_request, tag, cron]
       event: [push, pull_request, tag]
 
       # branch: master
@@ -123,7 +125,7 @@ pipeline:
     settings:
       # registry: docker.khs1994.com
       repo: pcit/pcit
-      tags: 7.3.1-swarm-${CI_TAG}
+      tags: 7.3.1-swarm-${PCIT_TAG}
       # target: php
       build_args:
         - a=1
@@ -164,18 +166,19 @@ pipeline:
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
-    environment:
-      - provider=gitee
-      - keep_history=true
-      - target_branch=gh-pages
-      - git_url=gitee.com/pcit-ce/pcit
-      - local_dir=build
-      - email=khs1994@khs1994.com
-      - name=khs1994
-      # - git_token=git_token
+    # environment:
+    settings:
+      provider: pages
+      keep_history: true
+      target_branch: gh-pages
+      git_url: gitee.com/pcit-ce/pcit
+      local_dir: build
+      email: ${EMAIL}
+      username: khs1994
+      git_token: ${GITEE_TOKEN}
 
   upload_file:
-    image: pcit/tencent_cloud_cos:v4
+    # image: pcit/tencent_cloud_cos:v4
     when:
       status: success
       event: tag
@@ -185,28 +188,33 @@ pipeline:
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
-    file:
-      README.md: pcit/tencent_cloud_cos_file_name_${PCIT_TAG}
-      Dockerfile: pcit/tencent_cloud_cos_file_name2_${PCIT_TAG}
-      # please set env by pcit env_var feature,don't set secret in .pcit.yml
-      # environment:
-      # - COS_V4_REGION=x
-      # - COS_V4_APP_ID=x
-      # - COS_V4_SECRET_ID=x
-      # - COS_V4_SECRET_KEY=x
-      # - COS_V4_BUCKET=x
+    # environment:
+    settings:
+      provider: 'tencent_cloud_cos_v4'
+      files:
+        - README.md: pcit/tencent_cloud_cos_file_name_${PCIT_TAG}
+        - Dockerfile: pcit/tencent_cloud_cos_file_name2_${PCIT_TAG}
+      region: ${COS_V4_REGION}
+      app_id: ${COS_V4_APP_ID}
+      secret_id: ${COS_V4_SECRET_ID}
+      secret_key: ${COS_V4_SECRET_KEY}
+      bucket: ${COS_V4_BUCKET}
 
   github_releases:
-    image: pcit/github_releases
+    # image: pcit/github_releases
     when:
       status: success
       event: tag
       branch: alpha
       # environment:
       # - GITHUB_TOKEN=x
-    file:
-      - "CHANGELOG.md"
-      - "ROADMAP.md"
+    settings:
+      provider: 'github_release'
+      github_token: ${GITHUB_TOKEN}
+      file:
+        - "CHANGELOG.md"
+        - "ROADMAP.md"
+        - README.md: NEW_FILENAME.md
 
   codecov:
     # image: khs1994/php:7.3.1-composer-alpine
@@ -240,6 +248,11 @@ pipeline:
 
   ping:
     command: ["ping -c 5 git.t.khs1994.com"]
+
+  cron_only:
+    commands: ["echo only run on cron event"]
+    when:
+      event: cron
 
 # 配置服务
 services:

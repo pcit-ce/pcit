@@ -52,11 +52,13 @@
   },
   "autoload": {
     "psr-4": {
+      "App\\": "app/",
       "PCIT\\": "src/PCIT/",
-      "PCIT\\Deployer\\": "src/Deployer/",
-      "PCIT\\Logs\\": "src/Logs/",
-      "PCIT\\Api\\": "src/Api/",
-      "App\\": "app/"
+      "PCIT\\Api\\": "src/Api/src",
+      "PCIT\\Builder\\": "src/Builder/src",
+      "PCIT\\Cache\\": "src/Cache/src",
+      "PCIT\\Deployer\\": "src/Deployer/src",
+      "PCIT\\Logs\\": "src/Logs/src"
     },
     "files": [
       "src/PCIT/Kernel/helpers.php"

@@ -6,7 +6,7 @@ namespace App\Console\Webhooks;
 
 use App\Build;
 use Exception;
-use PCIT\Service\Build\Conditional\Branch;
+use PCIT\Builder\Conditional\Branch;
 use PCIT\Support\Log;
 
 /**

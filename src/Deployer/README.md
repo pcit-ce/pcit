@@ -1,9 +1,15 @@
-# PCIT Deployer
+# PCIT 部署组件
 
 ```php
-$adapter = new GitHubPages();
+$adapter = new GitHubPages([]);
 
 $deployer = new Application($adapter,$config);
 
-$deployer->deploy();
+[$image,$env] = $deployer->deploy();
+
+// 将 $env 传入 Docker 实例。
 ```
+
+## 项目状态
+
+该组件仍内置于 `pcit-ce/pcit` 中，未来将分离为独立组件。

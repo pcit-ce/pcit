@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Providers;
 
-use PCIT\Service\Build\Agent\RunContainer;
-use PCIT\Service\Build\Client;
+use PCIT\Builder\Agent\RunContainer;
+use PCIT\Builder\Client;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

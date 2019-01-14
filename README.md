@@ -207,6 +207,7 @@ $ ./lnmp-docker pcit-up
 * [日志处理组件](https://github.com/pcit-ce/logs)
 * [API 组件](https://github.com/pcit-ce/api)
 * [部署组件 Deployer](https://github.com/pcit-ce/deployer)
+* [构建组件 Builder](https://github.com/pcit-ce/builder)
 
 ### 已拆分
 

@@ -6,8 +6,8 @@ namespace App\Console\Events;
 
 use App\GetAccessToken;
 use App\Repo;
+use PCIT\Builder\BuildData;
 use PCIT\PCIT;
-use PCIT\Service\Build\BuildData;
 use PCIT\Support\CI;
 use PCIT\Support\Log;
 

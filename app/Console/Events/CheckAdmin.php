@@ -6,8 +6,8 @@ namespace App\Console\Events;
 
 use App\Repo;
 use App\User;
+use PCIT\Builder\BuildData;
 use PCIT\Exception\PCITException;
-use PCIT\Service\Build\BuildData;
 use PCIT\Support\CI;
 use PCIT\Support\Env;
 use PCIT\Support\Log;
