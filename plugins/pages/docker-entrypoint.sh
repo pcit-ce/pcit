@@ -10,7 +10,7 @@ if ! [ -d ${PCIT_LOCAL_DIR} ];then exit; fi
 
 rm -rf ${PCIT_LOCAL_DIR}/.git
 
-if [ ${PCIT_KEEP_HISTORY:-true} == 'true' ];then
+if [ ${PCIT_KEEP_HISTORY:-0} == 1 ];then
   git clone --bare -b ${PCIT_TARGET_BRANCH:-gh-pages} https://${PCIT_GIT_URL} ${PCIT_LOCAL_DIR}/.git || echo
 fi
 
@@ -28,7 +28,7 @@ git add .
 
 git config user.name ${PCIT_USERNAME}
 
-git config user.PCIT_EMAIL ${PCIT_EMAIL}
+git config user.email ${PCIT_EMAIL}
 
 git commit -m "Deploy pages by PCIT"
 

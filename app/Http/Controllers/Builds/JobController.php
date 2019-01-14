@@ -77,15 +77,18 @@ class JobController
      */
     public function restart($job_id): void
     {
-        $buildId = Job::getBuildKeyId((int) $job_id);
+        $job_id = (int) $job_id;
+        $buildId = Job::getBuildKeyId($job_id);
 
         $build = (new \App\Console\Events\Build())->handle($buildId);
 
         app(PCIT::class)->build->handle($build, (int) $job_id);
 
-        Job::updateBuildStatus((int) $job_id, 'queued');
+        Job::updateBuildStatus($job_id, 'queued');
 
-        $this->updateBuildStatus((int) $job_id);
+        $this->updateBuildStatus($job_id);
+        Job::updateFinishedAt($job_id, 0);
+        Job::updateStartAt($job_id, 0);
     }
 
     /**

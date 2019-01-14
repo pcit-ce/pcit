@@ -133,6 +133,8 @@ EOF;
             return (int) $rid;
         }
 
+        self::updateBuildStatus($job_id, 'errored');
+
         throw new Exception('', 404);
     }
 
