@@ -71,7 +71,7 @@ class Services
                 ->setCmd($commands)
                 ->setNetworkingConfig([
                     'EndpointsConfig' => [
-                        "$this->job_id" => [
+                        "pcit_$this->job_id" => [
                             'Aliases' => [
                                 $service_name,
                             ],

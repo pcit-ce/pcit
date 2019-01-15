@@ -59,13 +59,13 @@ class Cleanup
 
             // clean volume
 
-            $docker_volume->remove($id);
+            $docker_volume->remove('pcit_'.$id);
 
             Log::connect()->emergency('Build Stopped Delete Volume '.$id);
 
             // clean network
 
-            $docker_network->remove($id);
+            $docker_network->remove('pcit_'.$id);
 
             Log::connect()->emergency('Build Stopped Delete Network '.$id);
         }

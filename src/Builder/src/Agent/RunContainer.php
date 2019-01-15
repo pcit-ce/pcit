@@ -105,7 +105,21 @@ class RunContainer
         // create network
         LogSupport::debug(__FILE__, __LINE__, 'Create Network', [$job_id], LogSupport::EMERGENCY);
 
-        $this->docker_network->create((string) $job_id);
+        $result = $this->docker_network->list(['name' => 'pcit_'.$job_id]);
+
+        if ($result) {
+            foreach (json_decode($result) as $network) {
+                try {
+                    $this->docker_network->remove($network->Id);
+                } catch (\Throwable $e) {
+                    LogSupport::debug(__FILE__, __LINE__,
+                    'Delete docker network error',
+                    [$e->getMessage()], LogSupport::EMERGENCY);
+                }
+            }
+        }
+
+        $this->docker_network->create('pcit_'.$job_id);
 
         $cache = $this->cache;
 

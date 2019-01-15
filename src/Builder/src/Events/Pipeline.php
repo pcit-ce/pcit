@@ -174,7 +174,7 @@ class Pipeline
 
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setBinds(["$jobId:$workdir", 'tmp:/tmp'])
+                ->setBinds(["pcit_$jobId:$workdir", 'tmp:/tmp'])
                 ->setEntrypoint($entrypoint)
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => "$jobId",
@@ -190,7 +190,7 @@ class Pipeline
                 ->setImage($image)
                 ->setNetworkingConfig([
                     'EndpointsConfig' => [
-                        "$jobId" => [
+                        "pcit_$jobId" => [
                             'Aliases' => [
                                 $setup,
                             ],

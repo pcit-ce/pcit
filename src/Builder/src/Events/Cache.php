@@ -127,7 +127,7 @@ class Cache
             ->setLabels([
                 'com.khs1994.ci' => (string) $this->jobId,
             ])
-            ->setBinds(["$this->jobId:$this->workdir"])
+            ->setBinds(["pcit_$this->jobId:$this->workdir"])
             ->setCreateJson(null)
             ->getCreateJson();
     }
