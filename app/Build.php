@@ -730,4 +730,9 @@ EOF;
             $check_suite_id, $rid, $commit_id, $git_type,
         ]);
     }
+
+    public static function deleteLog(int $buildId): void
+    {
+        DB::update('UPDATE jobs SET build_log=null WHERE build_id=?', [$buildId]);
+    }
 }

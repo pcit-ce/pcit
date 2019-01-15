@@ -80,6 +80,7 @@
   "scripts": {
     "docker:build": "docker build -t pcit/pcit:alpine --progress=plain .",
     "docker:push": "docker-compose push",
-    "test": "phpunit"
+    "test": "phpunit",
+    "minio:server": "minio server z:"
   }
 }

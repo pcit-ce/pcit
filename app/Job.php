@@ -13,17 +13,22 @@ class Job extends Model
     public static $table = 'jobs';
 
     /**
-     * @param int $jobs_id
+     * @param int $job_id
      *
      * @return string
      *
      * @throws Exception
      */
-    public static function getLog(int $jobs_id)
+    public static function getLog(int $job_id)
     {
         $sql = 'SELECT build_log FROM jobs WHERE id=? LIMIT 1';
 
-        return DB::select($sql, [$jobs_id], true);
+        return DB::select($sql, [$job_id], true);
+    }
+
+    public static function deleteLog(int $job_id): void
+    {
+        DB::update('UPDATE jobs SET build_log=null WHERE id=?', [$job_id]);
     }
 
     /**

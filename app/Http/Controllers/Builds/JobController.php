@@ -89,6 +89,7 @@ class JobController
         $this->updateBuildStatus($job_id);
         Job::updateFinishedAt($job_id, 0);
         Job::updateStartAt($job_id, 0);
+        Job::deleteLog($job_id);
     }
 
     /**

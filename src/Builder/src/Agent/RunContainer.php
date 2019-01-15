@@ -164,19 +164,40 @@ class RunContainer
     {
         $type = $download ? 'download' : 'upload';
 
-        $container_config = Cache::store()->get(CacheKey::cacheKey($job_id, $type));
+        $containerConfig = Cache::store()->get(CacheKey::cacheKey($job_id, $type));
 
-        if (!$container_config) {
+        if (!$containerConfig) {
             return;
         }
 
         try {
-            $this->runPipeline($job_id, $container_config, $cache_hash_key);
+            $this->runPipeline($job_id, $containerConfig, 'cache_'.$type);
+            'upload' === $type && $this->updateCacheInfo($containerConfig);
         } catch (\Throwable $e) {
-            LogSupport::debug(__FILE__, __LINE__, 'fetch cache error',
+            LogSupport::debug(__FILE__, __LINE__,
+                'upload or download cache error, please check s3(minio) server status',
                 ['message' => $e->getMessage(), 'code' => $e->getCode()],
                 LogSupport::EMERGENCY);
         }
+    }
+
+    /**
+     * 存入数据库.
+     *
+     * TODO
+     */
+    public function updateCacheInfo(string $containerConfig): void
+    {
+        $envs = json_decode($containerConfig)->Env;
+
+        $envArray = preg_grep('/S3_CACHE_PREFIX=*/', $envs);
+
+        $prefix = explode('=', array_values($envArray)[0])[1];
+
+        [$gitType,$rid,$branch] = explode('_', $prefix);
+
+        \App\Cache::insert($gitType, (int) $rid, $branch, $prefix);
+        \App\Cache::update($gitType, (int) $rid, $branch);
     }
 
     /**

@@ -166,6 +166,7 @@ class BuildsController
         $this->updateJobStatus($build_id, 'queued');
         // 更新 build 状态
         Build::updateFinishedAt($build_id);
+        Build::deleteLog($build_id);
     }
 
     /**

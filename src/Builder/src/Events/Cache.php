@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Builder\Events;
 
-use App\Build;
-use Docker\Container\Client;
-use PCIT\PCIT as PCIT;
+use Docker\Container\Client as DockerContainer;
+use PCIT\PCIT;
 use PCIT\Support\CacheKey;
 use PCIT\Support\Env;
 
@@ -14,29 +13,43 @@ class Cache
 {
     public $build_key_id;
 
-    public $job_id;
+    public $jobId;
 
     public $cache;
 
     public $workdir;
 
+    public $gitType;
+
+    public $rid;
+
+    public $branch;
+
     /**
      * Cache constructor.
      *
-     * @param int    $job_id
+     * @param int    $jobId
      * @param int    $build_key_id
      * @param string $workdir
      * @param mixed  $cache
      */
-    public function __construct(int $job_id, int $build_key_id, string $workdir, $cache = null)
+    public function __construct(int $jobId,
+                                int $build_key_id,
+                                string $workdir,
+                                string $gitType,
+                                int $rid,
+                                string $branch,
+                                $cache = null,
+                                $disableUpload = false)
     {
-        $this->job_id = $job_id;
-
+        $this->jobId = $jobId;
         $this->build_key_id = $build_key_id;
-
-        $this->cache = $cache;
-
         $this->workdir = $workdir;
+        $this->gitType = $gitType;
+        $this->rid = $rid;
+        $this->branch = $branch;
+        $this->cache = $cache;
+        $this->disableUpload = $disableUpload;
     }
 
     /**
@@ -44,12 +57,8 @@ class Cache
      */
     public function getPrefix()
     {
-        $git_type = Build::getGitType($this->build_key_id);
-        $rid = Build::getRid($this->build_key_id);
-        $branch = Build::getBranch($this->build_key_id);
-
         // github_rid_branch_folder
-        $prefix = sprintf('%s_%s_%s', $git_type, $rid, $branch);
+        $prefix = sprintf('%s_%s_%s', $this->gitType, $this->rid, $this->branch);
 
         return $prefix;
     }
@@ -69,7 +78,7 @@ class Cache
             return;
         }
 
-        $docker_container = app(PCIT::class)->docker->container;
+        $dockerContainer = app(PCIT::class)->docker->container;
 
         $prefix = $this->getPrefix();
 
@@ -85,36 +94,40 @@ class Cache
         ];
 
         \PCIT\Support\Cache::store()
-            ->set(CacheKey::cacheKey($this->job_id, 'download'),
-                $this->getContainerConfig($docker_container, $env)
+            ->set(CacheKey::cacheKey($this->jobId, 'download'),
+                $this->getContainerConfig($dockerContainer, $env)
             );
 
         array_pop($env);
 
+        if ($this->disableUpload) {
+            return;
+        }
+
         \PCIT\Support\Cache::store()
-            ->set(CacheKey::cacheKey($this->job_id, 'upload'),
-                $this->getContainerConfig($docker_container, $env)
+            ->set(CacheKey::cacheKey($this->jobId, 'upload'),
+                $this->getContainerConfig($dockerContainer, $env)
             );
     }
 
     /**
-     * @param Client $docker_container
-     * @param        $env
+     * @param DockerContainer $dockerContainer
+     * @param                 $env
      *
      * @return mixed
      *
      * @throws \Exception
      */
-    private function getContainerConfig(Client $docker_container, $env)
+    private function getContainerConfig(DockerContainer $dockerContainer, $env)
     {
-        return $config = $docker_container
+        return $config = $dockerContainer
             ->setImage('pcit/s3')
             ->setEnv($env)
             ->setWorkingDir($this->workdir)
             ->setLabels([
-                'com.khs1994.ci' => (string) $this->job_id,
+                'com.khs1994.ci' => (string) $this->jobId,
             ])
-            ->setBinds(["$this->job_id:$this->workdir"])
+            ->setBinds(["$this->jobId:$this->workdir"])
             ->setCreateJson(null)
             ->getCreateJson();
     }

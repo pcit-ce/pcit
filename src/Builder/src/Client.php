@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Builder;
 
+use App\Build;
 use App\Job;
 use Exception;
 use PCIT\Builder\Events\Cache;
@@ -166,6 +167,12 @@ class Client
 
         Job::updateEnv($job_id, json_encode($matrix_config));
 
+        $build_key_id = (int) $this->build->build_key_id;
+
+        $gitType = Build::getGitType($build_key_id);
+        $rid = (int) Build::getRid($build_key_id);
+        $branch = Build::getBranch($build_key_id);
+
         (new Subject())
             // git
             ->register(new Git($this->git, $this->build, $this))
@@ -174,7 +181,11 @@ class Client
             // pipeline
             ->register(new Pipeline($this->pipeline, $this->build, $this, $matrix_config))
             // cache
-            ->register(new Cache((int) $this->job_id, $this->build->build_key_id, $this->workdir, $this->cache))
+            ->register(new Cache((int) $this->job_id, $build_key_id, $this->workdir, $gitType,
+                       $rid, $branch, $this->cache,
+                       // pull_request 事件不上传缓存
+                       'pull_request' === $this->build->event_type
+            ))
             ->handle();
 
         Log::getMonolog()->emergency('=== Generate Job Success ===', ['job_id' => $this->job_id]);
