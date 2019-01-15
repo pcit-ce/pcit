@@ -8,7 +8,6 @@ use App\Build;
 use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
-use PCIT\Builder\Cleanup;
 use PCIT\Builder\Events\Log;
 use PCIT\Exception\PCITException;
 use PCIT\PCIT as PCIT;
