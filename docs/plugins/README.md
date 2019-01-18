@@ -25,5 +25,5 @@
 | [Tencent Cloud COS v4](https://github.com/tencentyun/cos-php-sdk-v4) | @PCIT  |
 | [Tencent Cloud COS v5](https://github.com/tencentyun/cos-php-sdk-v5) | @PCIT  |
 | [Email](https://github.com/PHPMailer/PHPMailer)                      | @PCIT  |
-| [GitHub Pages](https://github.com/pcit-ce/pcit)                  | @PCIT  |
-| [GitHub Release](https://github.com/pcit-ce/pcit)                | @aktau |
+| [GitHub Pages](https://github.com/pcit-ce/pcit)                      | @PCIT  |
+| [GitHub Release](https://github.com/pcit-ce/pcit)                    | @aktau |

@@ -72,9 +72,17 @@ class Pipeline
             }
         }
 
+        $provider = $settings['provider'] ?? null;
+
+        $provider && Log::connect()->emergency('Deployer provider is '.$provider);
+
         $result = ['image' => null, 'env' => []];
-        ($settings['provider'] ?? null) === 'npm' && $result = (new Deployer(new NPM($settings)))->deploy();
-        ($settings['provider'] ?? null) === 'pages' && $result = (new Deployer(new GitHubPages($settings)))->deploy();
+
+        'npm' === $provider && $result = (new Deployer(new NPM($settings)))->deploy();
+        'pages' === $provider && $result = (new Deployer(new GitHubPages($settings)))->deploy();
+
+        $provider && Log::connect()->emergency(
+            'Deployer provider result '.json_encode($result));
 
         return $result;
     }
@@ -114,7 +122,8 @@ class Pipeline
 
                 $preEnv = array_merge($preEnv, $deployEnv);
 
-                $image = $image ?: $preImage;
+                $image = ($settings['provider'] ?? null)
+                  ? $preImage ?: $image : $image;
             }
 
             $status = $array->when->status ?? CIDefaultStatus::get($setup);
