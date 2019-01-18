@@ -64,6 +64,18 @@ class LogHandle
 
         $logs = array_filter($logs);
 
+        // 处理特殊字符
+        foreach ($logs as $k => $v) {
+            try {
+                $result = iconv('utf-8', 'utf-8//IGNORE', $v);
+                $logs[$k] = $result;
+            } catch (\Throwable $e) {
+                Log::debug(__FILE__, __LINE__,
+                'iconv handle error '.$e->getMessage(), ['pipeline' => $k],
+                Log::EMERGENCY);
+            }
+        }
+
         Job::updateLog($this->jobId, $logs = json_encode($logs, JSON_UNESCAPED_UNICODE));
     }
 

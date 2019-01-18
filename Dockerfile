@@ -7,7 +7,7 @@ ARG PHP_VERSION=7.3.1
 ARG NODE_VERSION=11.6.0
 
 # 安装前端构建依赖
-FROM node:${NODE_VERSION}-alpine as frontend
+FROM khs1994/node:git as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
