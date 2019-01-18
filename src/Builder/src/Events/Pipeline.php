@@ -183,7 +183,7 @@ class Pipeline
 
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setBinds(["pcit_$jobId:$workdir", 'tmp:/tmp'])
+                ->setBinds(["pcit_$jobId:$workdir", 'pcit_cache:/tmp/pcit_cache'])
                 ->setEntrypoint($entrypoint)
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => "$jobId",

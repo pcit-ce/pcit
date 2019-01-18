@@ -44,6 +44,8 @@ pipeline:
     # commands or command
     command:
       - pwd
+      - composer config -g cache-dir /tmp/pcit_cache/composer
+      - composer config -g repo.packagist composer https://packagist.laravel-china.org
       - composer install
       # - composer update
 
@@ -121,8 +123,8 @@ pipeline:
       - echo "Don't run on master branch"
 
   docker_build:
-    image: pcit/docker
     settings:
+      provider: docker
       # registry: docker.khs1994.com
       repo: pcit/pcit
       tags: 7.3.1-swarm-${PCIT_TAG}
@@ -156,9 +158,7 @@ pipeline:
     # commands:
     #  - sami update .sami.php
 
-  pages:
-    image: pcit/pages
-    shell: bash
+  gitee_pages:
     when:
       status: success
       matrix:
@@ -166,7 +166,6 @@ pipeline:
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
-    # environment:
     settings:
       provider: pages
       keep_history: true
@@ -176,6 +175,24 @@ pipeline:
       email: ${EMAIL}
       username: khs1994
       git_token: ${GITEE_TOKEN}
+
+  github_pages:
+    when:
+      status: success
+      matrix:
+      - PHP_VERSION: 7.3.1
+        NGINX_VERSION: 1.15.8
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
+    settings:
+      provider: pages
+      keep_history: true
+      # target_branch: gh-pages
+      git_url: github.com/pcit-ce/pcit
+      local_dir: build
+      # email: ${EMAIL}
+      # username: khs1994
+      git_token: ${GITHUB_TOKEN}
 
   upload_file:
     # image: pcit/tencent_cloud_cos:v4

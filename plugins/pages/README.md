@@ -12,7 +12,7 @@ pipeline:
       git_url: gitee.com/pcit-ce/pcit # 必填
       local_dir: build # pages 所在文件夹，默认值 public
       email: ${EMAIL} # 提交者 email，默认值 ci@khs1994.com
-      username: khs1994 # 提交者用户名，默认值 pcit-ce
+      username: khs1994 # 提交者用户名，默认值 pcit
       git_token: ${GITEE_TOKEN} # 必填
     when:
       status: success      
