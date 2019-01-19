@@ -25,6 +25,9 @@
       "url": "./src/Deployer"
     }, {
       "type": "path",
+      "url": "./src/framework"
+    }, {
+      "type": "path",
       "url": "./src/Logs"
     }
   ],

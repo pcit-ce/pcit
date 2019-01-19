@@ -1,5 +1,6 @@
 {
   "name": "pcit/framework",
+  "version": "19.06.0",
   "require": {
     "symfony/console": "^3.0 || ^4.2",
     "symfony/http-foundation": "^4.2",
