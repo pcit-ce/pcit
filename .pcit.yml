@@ -280,7 +280,8 @@ pipeline:
       - echo "build changed"
 
   ping:
-    command: ["ping -c 5 git.t.khs1994.com"]
+    # command: ["ping -c 5 git.t.khs1994.com"]
+    command: ["ping -c 5 127.0.0.1"]
 
   cron_only:
     commands: ["echo only run on cron event"]

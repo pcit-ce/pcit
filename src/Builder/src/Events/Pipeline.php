@@ -9,7 +9,7 @@ use PCIT\Builder\BuildData;
 use PCIT\Builder\CIDefault\Commands;
 use PCIT\Builder\CIDefault\Image;
 use PCIT\Builder\CIDefault\Status as CIDefaultStatus;
-use PCIT\Builder\Client;
+use PCIT\Builder\Client as Builder;
 use PCIT\Builder\Conditional\Branch;
 use PCIT\Builder\Conditional\Event;
 use PCIT\Builder\Conditional\Matrix;
@@ -33,7 +33,19 @@ class Pipeline
 
     private $client;
 
-    public function __construct($pipeline, BuildData $build, Client $client, ?array $matrix_config)
+    private $cache;
+
+    /**
+     * Pipeline constructor.
+     *
+     * @param            $pipeline
+     * @param BuildData  $build
+     * @param Builder    $client
+     * @param array|null $matrix_config
+     *
+     * @throws Exception
+     */
+    public function __construct($pipeline, BuildData $build, Builder $client, ?array $matrix_config)
     {
         $this->pipeline = $pipeline;
         $this->matrix_config = $matrix_config;
@@ -42,6 +54,14 @@ class Pipeline
         $this->cache = Cache::store();
     }
 
+    /**
+     * @param $settings
+     * @param $env
+     *
+     * @return array|mixed
+     *
+     * @throws Exception
+     */
     public function handleDeployer($settings, $env)
     {
         foreach ($settings as $key => $value) {
@@ -92,6 +112,58 @@ class Pipeline
     }
 
     /**
+     * @param $when
+     *
+     * @return bool
+     *
+     * @throws Exception
+     */
+    public function checkWhen($when): bool
+    {
+        if (!$when) {
+            return false;
+        }
+
+        $when_platform = $when->platform ?? null;
+        $when_event = $when->event ?? null; // tag pull_request
+        $when_branch = $when->branch ?? null;
+        $when_tag = $when->tag ?? null;
+        $when_matrix = $when->matrix ?? null;
+
+        if (!(new Platform($when_platform, 'linux/amd64'))->regHandle()) {
+            Log::connect()->emergency('skip by platform check');
+
+            return true;
+        }
+
+        if (!(new Event($when_event, $this->build->event_type))->handle()) {
+            Log::connect()->emergency('skip by event check');
+
+            return true;
+        }
+
+        if (!(new Branch($when_branch, $this->build->branch))->regHandle()) {
+            Log::connect()->emergency('skip by branch check');
+
+            return true;
+        }
+
+        if (!(new Tag($when_tag, $this->build->tag))->regHandle()) {
+            Log::connect()->emergency('skip by tag check');
+
+            return true;
+        }
+
+        if (!(new Matrix($when_matrix, $this->matrix_config))->handle()) {
+            Log::connect()->emergency('skip by matrix check');
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @throws Exception
      */
     public function handle(): void
@@ -99,11 +171,8 @@ class Pipeline
         $docker_container = app(PCIT::class)->docker->container;
 
         $jobId = $this->client->job_id;
-
         $workdir = $this->client->workdir;
-
         $cache = $this->cache;
-
         $language = $this->client->language ?? 'php';
 
         foreach ($this->pipeline as $setup => $array) {
@@ -116,7 +185,6 @@ class Pipeline
             $privileged = $array->privileged ?? false;
             $pull = $array->pull ?? false;
             $settings = $array->settings ?? new \stdClass();
-
             $settings = (array) $settings;
 
             $preEnv = array_merge($env, $this->client->system_env);
@@ -130,45 +198,12 @@ class Pipeline
                   ? $preImage ?: $image : $image;
             }
 
+            if ($this->checkWhen($array->when ?? null)) {
+                continue;
+            }
+
+            // 根据 pipeline 获取默认的构建条件
             $status = $array->when->status ?? CIDefaultStatus::get($setup);
-            $when_platform = $array->when->platform ?? null;
-
-            // tag pull_request
-            $when_event = $array->when->event ?? null;
-
-            $when_branch = $array->when->branch ?? null;
-            $when_tag = $array->when->tag ?? null;
-
-            $when_matrix = $array->when->matrix ?? null;
-
-            $this->client->build->tag;
-            $this->client->build->pull_request_number;
-
-            if (!(new Platform($when_platform, 'linux/amd64'))->regHandle()) {
-                Log::connect()->emergency('skip by platform check');
-                continue;
-            }
-
-            if (!(new Event($when_event, $this->build->event_type))->handle()) {
-                Log::connect()->emergency('skip by event check');
-                continue;
-            }
-
-            if (!(new Branch($when_branch, $this->build->branch))->regHandle()) {
-                Log::connect()->emergency('skip by branch check');
-                continue;
-            }
-
-            if (!(new Tag($when_tag, $this->build->tag))->regHandle()) {
-                Log::connect()->emergency('skip by tag check');
-                continue;
-            }
-
-            if (!(new Matrix($when_matrix, $this->matrix_config))->handle()) {
-                Log::connect()->emergency('skip by matrix check');
-                continue;
-            }
-
             $failure = (new Status())->handle($status, 'failure');
             $success = (new Status())->handle($status, 'success');
             $changed = (new Status())->handle($status, 'changed');
