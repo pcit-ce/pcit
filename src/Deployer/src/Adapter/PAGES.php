@@ -14,6 +14,7 @@ class PAGES extends AbstractAdapter
     public $email = 'ci@khs1994.com';
     public $keep_history = false;
     public $git_token;
+    public $message = 'Deploy Git by PCIT https://ci.khs1994.com';
 
     public function __construct(array $config)
     {
@@ -24,6 +25,7 @@ class PAGES extends AbstractAdapter
         $this->email = $config['email'] ?? 'ci@khs1994.com';
         $this->keep_history = $config['keep_history'] ?? false;
         $this->git_token = $config['git_token'] ?? null;
+        $this->message = $config['message'] ?? 'Deploy Git by PCIT https://ci.khs1994.com';
     }
 
     public function deploy()
@@ -38,6 +40,7 @@ class PAGES extends AbstractAdapter
              'PCIT_EMAIL='.$this->email,
              'PCIT_KEEP_HISTORY='.$this->keep_history,
              'PCIT_GIT_TOKEN='.$this->git_token,
+             'PCIT_MESSAGE='.$this->message,
          ],
      ];
     }

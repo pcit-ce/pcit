@@ -175,6 +175,7 @@ pipeline:
       email: ${EMAIL}
       username: khs1994
       git_token: ${GITEE_TOKEN}
+      message: "commit by pcit"
 
   github_pages:
     when:
@@ -226,7 +227,7 @@ pipeline:
       local_dir: src/Builder
       git_token: ${GITHUB_TOKEN}
 
-  upload_file:
+  tencent_cloud_cos_v4:
     # image: pcit/tencent_cloud_cos:v4
     when:
       status: success
@@ -248,6 +249,29 @@ pipeline:
       secret_id: ${COS_V4_SECRET_ID}
       secret_key: ${COS_V4_SECRET_KEY}
       bucket: ${COS_V4_BUCKET}
+
+  s3:
+    # image: pcit/tencent_cloud_cos:v4
+    when:
+      status: success
+      event: tag
+      branch: alpha
+      matrix:
+      - PHP_VERSION: 7.3.1
+        NGINX_VERSION: 1.15.8
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
+    # environment:
+    settings:
+      provider: s3
+      region: ${S3_REGION}
+      access_key_id: ${S3_ACCESS_KEY_ID}
+      secret_access_key: ${S3_SECRET_ACCESS_KEY}
+      bucket: ${S3_BUCKET}
+      acl: public_read
+      local_dir: public
+      upload_dir: pcit
+      endpoint: https://storage.khs1994.com
 
   github_releases:
     # image: pcit/github_releases
