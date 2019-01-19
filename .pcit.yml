@@ -194,7 +194,7 @@ pipeline:
       # username: khs1994
       git_token: ${GITHUB_TOKEN}
 
-  sync_deploy:
+  sync_git_deployer:
     when:
       status: success
       matrix:

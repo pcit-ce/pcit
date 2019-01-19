@@ -1,3 +1,5 @@
+language: php
+
 workspace:
   base: /app
   path: .
@@ -7,5 +9,4 @@ pipeline:
   php-cs-fixer:
     image: khs1994/php:7.2.14-fpm-alpine
     commands:
-      - php-cs-fixer
-      - fix
+      - php-cs-fixer fix

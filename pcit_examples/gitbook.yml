@@ -2,6 +2,8 @@
 # https://github.com/khs1994-docker/gitbook
 #
 
+language: node_js
+
 workspace:
   base: /srv/gitbook-src
   path: .

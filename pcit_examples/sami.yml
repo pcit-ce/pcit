@@ -1,3 +1,5 @@
+language: php
+
 workspace:
   base: /app
   path: .
@@ -5,7 +7,5 @@ workspace:
 pipeline:
   sami:
     image: khs1994/php:7.2.14-fpm-alpine
-    commans:
-      - sami
-      - update
-      - .sami.php
+    commands:
+      - sami update .sami.php
