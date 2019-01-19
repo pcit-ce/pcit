@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Deployer\Adapter;
 
-class GitHubPages extends AbstractAdapter
+class PAGES extends AbstractAdapter
 {
     const PROVIDER = 'pages_github';
     public $username = 'pcit';

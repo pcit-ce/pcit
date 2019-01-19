@@ -1,4 +1,9 @@
 {
   "name": "pcit/builder",
-  "version": "19.06.0"
+  "version": "19.06.0",
+  "autoload": {
+    "psr-4": {
+      "PCIT\\Builder\\": "src/"
+    }
+  }
 }

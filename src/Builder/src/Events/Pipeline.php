@@ -17,8 +17,6 @@ use PCIT\Builder\Conditional\Platform;
 use PCIT\Builder\Conditional\Status;
 use PCIT\Builder\Conditional\Tag;
 use PCIT\Builder\Parse;
-use PCIT\Deployer\Adapter\GitHubPages;
-use PCIT\Deployer\Adapter\NPM;
 use PCIT\Deployer\Application as Deployer;
 use PCIT\PCIT as PCIT;
 use PCIT\Support\Cache;
@@ -78,8 +76,14 @@ class Pipeline
 
         $result = ['image' => null, 'env' => []];
 
-        'npm' === $provider && $result = (new Deployer(new NPM($settings)))->deploy();
-        'pages' === $provider && $result = (new Deployer(new GitHubPages($settings)))->deploy();
+        $adapter = '\PCIT\Deployer\Adapter\\'.strtoupper($provider);
+
+        try {
+            $result = (new Deployer(new $adapter($settings)))->deploy();
+        } catch (\Throwable $e) {
+            Log::connect()->emergency(
+            'Deployer adapter error '.$e->getMessage());
+        }
 
         $provider && Log::connect()->emergency(
             'Deployer provider result '.json_encode($result));

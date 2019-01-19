@@ -1,7 +1,7 @@
 # PCIT 部署组件
 
 ```php
-$adapter = new GitHubPages([]);
+$adapter = new PAGES([]);
 
 $deployer = new Application($adapter,$config);
 
