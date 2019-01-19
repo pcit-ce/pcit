@@ -1,11 +1,12 @@
-FROM khs1994/php:7.2.13-composer-alpine as composer
+# syntax=docker/dockerfile:experimental
+FROM khs1994/php:7.2.14-composer-alpine as composer
 
 COPY composer.json /srv/pcit/plugin/cosv5/
 
-RUN composer --working-dir=/srv/pcit/plugin/cosv5 install \
-    && rm -rf /tmp/cache
+RUN --mount=type=cache,target=/tmp/cache,id=composer_cache \
+    composer --working-dir=/srv/pcit/plugin/cosv5 install
 
-FROM khs1994/php:7.2.13-fpm-alpine
+FROM khs1994/php:7.2.14-fpm-alpine
 
 COPY --from=composer /srv/pcit/plugin/cosv5/vendor/ /srv/pcit/plugin/cosv5/vendor/
 

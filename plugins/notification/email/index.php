@@ -11,34 +11,34 @@ $mail = new PHPMailer(true);
 try {
     $mail->SMTPDebug = 4;
     $mail->isSMTP();
-    $mail->Host = getenv('CI_EMAIL_HOST');
+    $mail->Host = getenv('PCIT_EMAIL_HOST');
     $mail->SMTPAuth = true;
-    $mail->Username = getenv('CI_EMAIL_USERNAME');
-    $mail->Password = getenv('CI_EMAIL_PASSWORD');
-    $mail->SMTPSecure = getenv('CI_EMAIL_SMTP_SECURE');
-    $mail->Port = getenv('CI_EMAIL_SMTP_PORT');
+    $mail->Username = getenv('PCIT_EMAIL_USERNAME');
+    $mail->Password = getenv('PCIT_EMAIL_PASSWORD');
+    $mail->SMTPSecure = getenv('PCIT_EMAIL_SMTP_SECURE');
+    $mail->Port = getenv('PCIT_EMAIL_SMTP_PORT');
 
-    $mail->setFrom(getenv('CI_EMAIL_FROM'), getenv('CI_EMAIL_FROM_NAME'));
+    $mail->setFrom(getenv('PCIT_EMAIL_FROM'), getenv('PCIT_EMAIL_FROM_NAME'));
 
-    foreach (json_decode(getenv('CI_EMAIL_ADDRESS_JSON')) as $k => $v) {
+    foreach (json_decode(getenv('PCIT_EMAIL_ADDRESS_JSON')) as $k => $v) {
         $mail->addAddress($k, $v);
     }
 
-    if (getenv('CI_EMAIL_CC_JSON')) {
-        foreach (json_decode(getenv('CI_EMAIL_CC_JSON'), true) as $k => $v) {
+    if (getenv('PCIT_EMAIL_CC_JSON')) {
+        foreach (json_decode(getenv('PCIT_EMAIL_CC_JSON'), true) as $k => $v) {
             $mail->addCC($k, $v); // 抄送
         }
     }
 
-    if (getenv('CI_EMAIL_BCC_JSON')) {
-        foreach (json_decode(getenv('CI_EMAIL_BCC_JSON'), true) as $k => $v) {
+    if (getenv('PCIT_EMAIL_BCC_JSON')) {
+        foreach (json_decode(getenv('PCIT_EMAIL_BCC_JSON'), true) as $k => $v) {
             $mail->addBCC($k, $v); // 暗抄送
         }
     }
 
     $mail->isHTML(true);
-    $mail->Subject = getenv('CI_EMAIL_OBJECT');
-    $mail->Body = getenv('CI_EMAIL_BODY');
+    $mail->Subject = getenv('PCIT_EMAIL_OBJECT');
+    $mail->Body = getenv('PCIT_EMAIL_BODY');
 
     $mail->send();
     echo 'Message has been sent';

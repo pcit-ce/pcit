@@ -8,25 +8,29 @@ require __DIR__.'/vendor/autoload.php';
 
 $options = [
     'version' => 'latest',
-    'region' => getenv('S3_REGION'),
-    'endpoint' => getenv('S3_ENDPOINT'),
-    'use_path_style_endpoint' => true,
+    'region' => getenv('PCIT_S3_REGION'),
+    'endpoint' => getenv('PCIT_S3_ENDPOINT'),
+    'use_path_style_endpoint' => 'true' === getenv('PCIT_S3_USE_PATH_STYLE_ENDPOINT'),
     'credentials' => [
-        'key' => getenv('S3_ACCESSKEYID'),
-        'secret' => getenv('S3_SECRETACCESSKEY'),
+        'key' => getenv('PCIT_S3_ACCESS_KEY_ID'),
+        'secret' => getenv('PCIT_S3_SECRET_ACCESS_KEY'),
     ],
     'http' => [
-        'connect_timeout' => 20,
+        'connect_timeout' => getenv('PCIT_S3_CONNECT_TIMEOUT') ?: 20,
     ],
 ];
 
-$flysystem = new League\Flysystem\Filesystem(new AwsS3Adapter(new \Aws\S3\S3Client($options), getenv('S3_BUCKET')));
+$bucket = getenv('S3_BUCKET') ?: 'pcit';
 
-if ($s3_cache = getenv('S3_CACHE')) {
-    $prefix = getenv('S3_CACHE_PREFIX');
+$flysystem = new League\Flysystem\Filesystem(
+    new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));
+
+// handle cache
+if ($s3_cache = getenv('PCIT_S3_CACHE')) {
+    $prefix = getenv('PCIT_S3_CACHE_PREFIX');
     $cache_tar_gz_name = $prefix.'.tar.gz';
 
-    if (getenv('S3_CACHE_DOWNLOAD')) {
+    if (getenv('PCIT_S3_CACHE_DOWNLOAD')) {
         echo "\n\n==> Setting up build cache\n";
 
         try {
@@ -59,9 +63,9 @@ if ($s3_cache = getenv('S3_CACHE')) {
     echo $result ? 'success' : 'failure';
 
     exit;
-}
+} // handle cache end
 
-foreach (json_decode(getenv('S3_FILE')) as $item) {
+foreach (json_decode(getenv('PCIT_S3_FILE')) as $item) {
     foreach ($item as $k => $v) {
         $flysystem->put($v, file_get_contents($k));
     }
