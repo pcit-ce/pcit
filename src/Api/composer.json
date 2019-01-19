@@ -5,5 +5,10 @@
     "psr-4": {
       "PCIT\\Api\\": "src/"
     }
+  },
+  "autoload": {
+    "psr-4": {
+      "PCIT\\Api\\Tests\\": "tests/"
+    }
   }
 }

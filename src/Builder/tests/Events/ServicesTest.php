@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Tests\Service\Build\Events;
+namespace PCIT\Builder\Tests\Events;
 
 use PCIT\Builder\Events\Services;
 use PCIT\Support\Cache;

@@ -36,3 +36,5 @@ framework/storage/private_key/public.key
 /coverage.xml
 
 app/Http/Controllers/Test
+
+tests

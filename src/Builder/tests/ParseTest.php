@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Tests\Service\Build;
+namespace PCIT\Builder\Tests;
 
 use PCIT\Builder\Parse;
 use PCIT\Tests\PCITTestCase;

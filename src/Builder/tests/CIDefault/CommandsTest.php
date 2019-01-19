@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Tests\Service\Build\CIDefault;
+namespace PCIT\Builder\Tests\CIDefault;
 
 use PCIT\Builder\CIDefault\Commands;
 use PCIT\Tests\PCITTestCase;

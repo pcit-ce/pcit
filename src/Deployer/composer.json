@@ -5,5 +5,10 @@
     "psr-4": {
       "PCIT\\Deployer\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PCIT\\Deployer\\Tests": "tests/"
+    }
   }
 }

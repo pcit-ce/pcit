@@ -33,9 +33,11 @@ RUN cd /app/pcit/frontend \
 FROM khs1994/php:7.3.1-composer-alpine as composer
 
 COPY composer.json /app/pcit/
+COPY src /app/pcit/src/
 
 RUN --mount=type=cache,target=/tmp/cache,id=composer_cache cd /app/pcit \
-      && composer install --no-dev
+      && composer install --no-dev \
+      && rm -rf src
 
 # 将 PHP 项目打入 PHP 镜像
 FROM khs1994/php:${PHP_VERSION}-fpm-alpine as php

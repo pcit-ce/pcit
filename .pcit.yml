@@ -210,6 +210,22 @@ pipeline:
       local_dir: src/Deployer
       git_token: ${GITHUB_TOKEN}
 
+  sync_git_builder:
+    when:
+      status: success
+      matrix:
+      - PHP_VERSION: 7.3.1
+        NGINX_VERSION: 1.15.8
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
+    settings:
+      provider: pages
+      keep_history: true
+      target_branch: master
+      git_url: github.com/pcit-ce/builder
+      local_dir: src/Builder
+      git_token: ${GITHUB_TOKEN}
+
   upload_file:
     # image: pcit/tencent_cloud_cos:v4
     when:

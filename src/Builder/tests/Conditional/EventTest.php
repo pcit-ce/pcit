@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Tests\Service\Build\Conditional;
+namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Event;
 use PCIT\Tests\PCITTestCase;
