@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
+use League\Flysystem\Adapter\Local;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Filesystem;
 
 require __DIR__.'/vendor/autoload.php';
+
+echo "\n\n===> use PCIT Plugin s3\n\n";
 
 $options = [
     'version' => 'latest',
@@ -22,7 +26,7 @@ $options = [
 
 $bucket = getenv('S3_BUCKET') ?: 'pcit';
 
-$flysystem = new League\Flysystem\Filesystem(
+$flysystem = new Filesystem(
     new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));
 
 // handle cache
@@ -65,8 +69,48 @@ if ($s3_cache = getenv('PCIT_S3_CACHE')) {
     exit;
 } // handle cache end
 
-foreach (json_decode(getenv('PCIT_S3_FILE')) as $item) {
-    foreach ($item as $k => $v) {
-        $flysystem->put($v, file_get_contents($k));
+if (getenv('PCIT_S3_FILE')) {
+    foreach (json_decode(getenv('PCIT_S3_FILE')) as $item) {
+        foreach ($item as $k => $v) {
+            $flysystem->put($v, file_get_contents($k));
+        }
+    }
+}
+
+// local_dir upload_dir
+$local_dir = getenv('PCIT_S3_LOCAL_DIR');
+$upload_dir = getenv('PCIT_S3_UPLOAD_DIR');
+
+$local_dir = '/' === $local_dir ? '/' : trim($local_dir, '/');
+$upload_dir = '/' === $upload_dir ? '/' : trim($upload_dir, '/');
+
+if (!($local_dir && $upload_dir)) {
+    exit;
+}
+
+if (is_file($local_dir)) {
+    $flysystem->put($upload_dir, file_get_contents($local_dir));
+
+    exit;
+}
+
+$adapter = new Local(getcwd());
+$localFilesystem = new Filesystem($adapter);
+
+$contents = $localFilesystem->listContents($local_dir, true);
+
+$length = '/' === $local_dir ? '-1' : strlen($local_dir);
+
+foreach ($contents as $key => $value) {
+    if ('file' === $value['type']) {
+        $local_file = $value['path'];
+
+        $upload_file = substr($local_file, $length + 1);
+        $upload_file = $upload_dir.'/'.$upload_file;
+        $upload_file = trim($upload_file, '/');
+
+        $flysystem->put($upload_file, file_get_contents($local_file));
+
+        echo "\n===> Upload $local_file => $upload_file \n";
     }
 }
