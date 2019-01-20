@@ -45,7 +45,7 @@ class Pipeline
      *
      * @throws Exception
      */
-    public function __construct($pipeline, BuildData $build, Builder $client, ?array $matrix_config)
+    public function __construct($pipeline, ?BuildData $build, ?Builder $client, ?array $matrix_config)
     {
         $this->pipeline = $pipeline;
         $this->matrix_config = $matrix_config;
@@ -58,37 +58,18 @@ class Pipeline
      * @param $settings
      * @param $env
      *
-     * @return array|mixed
+     * @return array
      *
      * @throws Exception
      */
-    public function handleDeployer($settings, $env)
+    public function handleDeployer($settings, $env): array
     {
-        foreach ($settings as $key => $value) {
-            if (!\is_string($value)) {
-                continue;
-            }
+        $text = json_encode($settings);
 
-            preg_match('/^\$.*$/', $value, $array);
+        // ${} 变量替换
+        $result = Parse::text($text, $env);
 
-            foreach ($array as $prekey) {
-                $varName = trim($prekey, '$');
-                $varName = trim($varName, '{');
-                $varName = trim($varName, '}');
-
-                $fromEnv = preg_grep("/$varName=*/", $env);
-
-                if (!$fromEnv) {
-                    continue;
-                }
-
-                $varValue = explode('=', array_values($fromEnv)[0])[1];
-
-                $result = str_replace($prekey, $varValue, $value);
-
-                $settings[$key] = $result;
-            }
-        }
+        $settings = json_decode($result, true);
 
         $provider = $settings['provider'] ?? null;
 
@@ -102,7 +83,7 @@ class Pipeline
             $result = (new Deployer(new $adapter($settings)))->deploy();
         } catch (\Throwable $e) {
             Log::connect()->emergency(
-            'Deployer adapter error '.$e->getMessage());
+                'Deployer adapter error '.$e->getMessage());
         }
 
         $provider && Log::connect()->emergency(
@@ -164,6 +145,30 @@ class Pipeline
     }
 
     /**
+     * 整合 pipelineEnv systemEnv matrixEnv.
+     *
+     * @param $pipelineEnv
+     *
+     * @return array
+     */
+    public function handleEnv($pipelineEnv)
+    {
+        $preEnv = array_merge($pipelineEnv, $this->client->system_env);
+
+        if (!$this->matrix_config) {
+            return $preEnv;
+        }
+
+        $matrixEnv = [];
+
+        foreach ($this->matrix_config as $k => $v) {
+            $matrixEnv[] = $k.'='.$v;
+        }
+
+        return array_merge($preEnv, $matrixEnv);
+    }
+
+    /**
      * @throws Exception
      */
     public function handle(): void
@@ -187,17 +192,20 @@ class Pipeline
             $settings = $array->settings ?? new \stdClass();
             $settings = (array) $settings;
 
-            $preEnv = array_merge($env, $this->client->system_env);
+            // 预处理 env
+            $preEnv = $this->handleEnv($env);
 
+            // 处理官方插件
             if ($settings) {
-                ['image' => $preImage,'env' => $deployEnv] = $this->handleDeployer($settings, $preEnv);
+                ['image' => $preImage, 'env' => $deployEnv] = $this->handleDeployer($settings, $preEnv);
 
                 $preEnv = array_merge($preEnv, $deployEnv);
 
                 $image = ($settings['provider'] ?? null)
-                  ? $preImage ?: $image : $image;
+                    ? $preImage ?: $image : $image;
             }
 
+            // 处理构建条件
             if ($this->checkWhen($array->when ?? null)) {
                 continue;
             }
@@ -210,7 +218,9 @@ class Pipeline
 
             $no_status = $status ? false : true;
 
-            $image = Parse::image($image, $this->matrix_config);
+            // 处理 image
+            $image = Parse::text($image, $preEnv);
+            // 处理 commands
             $ci_script = Parse::command($setup, $image, $commands);
 
             $env = array_merge(["CI_SCRIPT=$ci_script"], $preEnv);

@@ -50,10 +50,10 @@ pipeline:
       # - composer update
 
   script:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
-    pull: true # default is false
-    privileged: true # default is false
-    environment:
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine # ！支持变量！
+    pull: true # default is false # 不支持变量
+    privileged: true # default is false # 不支持变量
+    environment: # 不支持变量
       - CI_REDIS_HOST=redis
       - CI_REDIS_PORT=6379
       - CI_REDIS_DATABASE=15
@@ -69,7 +69,7 @@ pipeline:
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit --coverage-clover=coverage.xml
-    when:
+    when: # 不支持变量
       # platform: linux/amd64
       # platform: [ linux/*, windows/amd64 ]
 
@@ -161,12 +161,13 @@ pipeline:
   gitee_pages:
     when:
       status: success
+      event: ['push']
       matrix:
       - PHP_VERSION: 7.3.1
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
-    settings:
+    settings: # ！支持变量！
       provider: pages
       keep_history: true
       target_branch: gh-pages
@@ -180,6 +181,7 @@ pipeline:
   github_pages:
     when:
       status: success
+      event: ['push']
       matrix:
       - PHP_VERSION: 7.3.1
         NGINX_VERSION: 1.15.8
@@ -270,6 +272,7 @@ pipeline:
     # image: pcit/tencent_cloud_cos:v4
     when:
       status: success
+      event: ['push']
       matrix:
       - PHP_VERSION: 7.3.1
         NGINX_VERSION: 1.15.8

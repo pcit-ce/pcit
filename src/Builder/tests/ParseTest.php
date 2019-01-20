@@ -12,17 +12,17 @@ class ParseTest extends PCITTestCase
     /**
      * @throws \Exception
      */
-    public function test_image(): void
+    public function test_text(): void
     {
-        $php_version = '7.2.13';
-
-        $image = Parse::image('khs1994/php:${PHP_VERSION}-fpm-alpine',
+        $image = Parse::text('khs1994/php:${PHP_VERSION}-fpm-alpine-${PCIT_TAG}',
             [
-                'PHP_VERSION' => $php_version,
+                'PHP_VERSION=7.2.13',
+                'PCIT_TAG=1.0.0',
             ]
         );
 
-        $this->assertEquals(sprintf('khs1994/php:%s-fpm-alpine', $php_version), $image);
+        $this->assertEquals(sprintf(
+            'khs1994/php:%s-fpm-alpine-%s', '7.2.13', '1.0.0'), $image);
     }
 
     /**
