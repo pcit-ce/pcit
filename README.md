@@ -92,7 +92,7 @@ pipeline:
   install: composer install
 
   script:
-    - vendor/bin/phpunit
+    - composer test
 
   after_success:
     image: bash
