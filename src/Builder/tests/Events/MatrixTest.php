@@ -31,11 +31,11 @@ matrix:
       REDIS_VERSION: 5.0.0
 EOF;
 
-        $array1 = Yaml::parse($yaml);
-        $array2 = Yaml::parse($yaml2);
+        $result1 = Yaml::parse($yaml);
+        $result2 = Yaml::parse($yaml2);
 
-        $result = Matrix::parseMatrix($array1['matrix']);
-        $result2 = Matrix::parseMatrix($array2['matrix']);
+        $result = Matrix::parseMatrix($result1['matrix']);
+        $result2 = Matrix::parseMatrix($result2['matrix']);
 
         $this->assertEquals($result, $result2);
     }

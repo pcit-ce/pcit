@@ -209,13 +209,13 @@ class Controller
 
         //首先保证 Webhooks 已设置
 
-        $array = self::add(self::$gitType, ...$arg);
+        $result = self::add(self::$gitType, ...$arg);
 
         // 更新缓存 + 更新数据库
 
         self::setBuildStatusCache(CI::BUILD_ACTIVATE, ...$arg);
 
-        return $array;
+        return $result;
     }
 
     /**

@@ -21,26 +21,26 @@ class Response extends BaseResponse
     ];
 
     /**
-     * @param array $array
+     * @param array $content
      * @param float $startedAt
      *
      * @return false|string
      */
-    public static function json(array $array)
+    public static function json(array $content)
     {
         if (\defined('PCIT_START')) {
             $time = microtime(true) - PCIT_START;
         }
 
-        $code = $array['code'] ?? 200;
+        $code = $content['code'] ?? 200;
 
         if (\in_array($code, self::HTTP_CODE, true)) {
             http_response_code($code);
 
-            unset($array['code']);
+            unset($content['code']);
         }
 
-        return new JsonResponse($array, $code, ['X-Runtime-rack' => $time]);
+        return new JsonResponse($content, $code, ['X-Runtime-rack' => $time]);
     }
 
     /**

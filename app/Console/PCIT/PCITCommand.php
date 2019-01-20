@@ -98,13 +98,13 @@ class PCITCommand
             throw new Exception('Not Found', 404);
         }
 
-        $array = json_decode(file_get_contents(self::getConfigFileName()), true);
+        $tokenContent = json_decode(file_get_contents(self::getConfigFileName()), true);
 
         $git_type = $input->getOption('git_type');
 
         $endpoints_url = $input->getOption('api-endpoint');
 
-        $token = $array['endpoints'][$endpoints_url][$git_type] ?? null;
+        $token = $tokenContent['endpoints'][$endpoints_url][$git_type] ?? null;
 
         if (!$token) {
             throw new Exception('Please exec login command first');

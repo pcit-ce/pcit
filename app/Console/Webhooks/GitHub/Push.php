@@ -17,12 +17,12 @@ class Push
      */
     public static function handle($json_content): void
     {
-        $array = \PCIT\Support\Webhooks\GitHub\Push::handle($json_content);
+        $result = \PCIT\Support\Webhooks\GitHub\Push::handle($json_content);
 
-        $tag = $array['tag'] ?? null;
+        $tag = $result['tag'] ?? null;
 
         if ($tag) {
-            self::tag($array);
+            self::tag($result);
 
             return;
         }
@@ -40,7 +40,7 @@ class Push
             'event_time' => $event_time,
             'account' => $account,
             'sender' => $sender
-        ] = $array;
+        ] = $result;
 
         // user table not include user info
         $subject = new Subject();
@@ -62,11 +62,11 @@ class Push
     }
 
     /**
-     * @param array $array
+     * @param array $content
      *
      * @throws \Exception
      */
-    public static function tag(array $array): void
+    public static function tag(array $content): void
     {
         [
             'installation_id' => $installation_id,
@@ -81,7 +81,7 @@ class Push
             'event_time' => $event_time,
             'account' => $account,
             'sender' => $sender
-        ] = $array;
+        ] = $content;
 
         $subject = new Subject();
 

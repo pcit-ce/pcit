@@ -69,10 +69,10 @@ class WebhooksGitHubClient
 
         $json = $this->getWebhooks(false, $username, $repo);
 
-        $array = json_decode($json);
+        $result = json_decode($json);
 
-        if ($array) {
-            foreach ($array as $k) {
+        if ($result) {
+            foreach ($result as $k) {
                 if ($url === $k->url) {
                     return 1;
 

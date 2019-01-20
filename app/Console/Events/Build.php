@@ -75,13 +75,13 @@ class Build extends BuildData
      */
     private function getRepoConfig(): void
     {
-        $array = Setting::list($this->rid, $this->git_type);
+        $result = Setting::list($this->rid, $this->git_type);
 
-        $this->build_pushes = $array['build_pushes'] ?? 1;
-        $this->build_pull_requests = $array['build_pull_requests'] ?? 1;
-        $this->maximum_number_of_builds = $array['maximum_number_of_builds'] ?? 1;
-        $this->auto_cancel_branch_builds = $array['auto_cancel_branch_builds'] ?? 1;
-        $this->auto_cancel_pull_request_builds = $array['auto_cancel_pull_request_builds'] ?? 1;
+        $this->build_pushes = $result['build_pushes'] ?? 1;
+        $this->build_pull_requests = $result['build_pull_requests'] ?? 1;
+        $this->maximum_number_of_builds = $result['maximum_number_of_builds'] ?? 1;
+        $this->auto_cancel_branch_builds = $result['auto_cancel_branch_builds'] ?? 1;
+        $this->auto_cancel_pull_request_builds = $result['auto_cancel_pull_request_builds'] ?? 1;
     }
 
     /**

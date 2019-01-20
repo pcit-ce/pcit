@@ -26,18 +26,18 @@ class PullRequest
      */
     public static function handle($json_content)
     {
-        $array = \PCIT\Support\Webhooks\GitHub\PullRequest::handle($json_content);
+        $result = \PCIT\Support\Webhooks\GitHub\PullRequest::handle($json_content);
 
-        $action = $array['action'];
+        $action = $result['action'];
 
         if ('assigned' === $action) {
-            self::assigned($array);
+            self::assigned($result);
 
             return;
         }
 
         if ('labeled' === $action) {
-            self::labeled($array);
+            self::labeled($result);
 
             return;
         }
@@ -57,7 +57,7 @@ class PullRequest
             'internal' => $internal,
             'pull_request_source' => $pull_request_source,
             'account' => $account,
-        ] = $array;
+        ] = $result;
 
         $subject = new Subject();
 
@@ -117,17 +117,17 @@ EOF;
     }
 
     /**
-     * @param $array
+     * @param array $content
      *
      * @throws \Exception
      */
-    public static function assigned($array): void
+    public static function assigned($content): void
     {
         [
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number
-        ] = $array;
+        ] = $content;
         // 创建一条评论
 
         $comment_body = <<<'EOF'
@@ -143,20 +143,18 @@ EOF;
     }
 
     /**
-     * @param $array
+     * @param array $content
      *
      * @throws \Exception
      */
-    public static function labeled($array): void
+    public static function labeled($content): void
     {
         // 创建一条评论
-
         [
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'pull_request_number' => $pull_request_number,
-
-        ] = $array;
+        ] = $content;
 
         $comment_body = <<<'EOF'
 You already add label **merge**, when test is pass, I will merge this Pull_request auto

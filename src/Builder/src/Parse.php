@@ -55,15 +55,15 @@ class Parse
      */
     public static function text(string $text, $env)
     {
-        $pregResult = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $text, $array);
+        $pregResultInt = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $text, $pregResultArray);
 
-        if (!$pregResult) {
+        if (!$pregResultInt) {
             return $text;
         }
 
         $result = &$text;
 
-        foreach ($array[0] as $prekey) {
+        foreach ($pregResultArray[0] as $prekey) {
             $varName = trim($prekey, '$');
             $varName = trim($varName, '{');
             $varName = trim($varName, '}');

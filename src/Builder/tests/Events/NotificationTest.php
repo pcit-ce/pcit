@@ -21,9 +21,9 @@ class NotificationTest extends PCITTestCase
      */
     public function common(): void
     {
-        $array = Yaml::parse($this->yaml);
+        $result = Yaml::parse($this->yaml);
 
-        $json = json_encode($array);
+        $json = json_encode($result);
 
         $notification = new Notifications(1, json_decode($json)->notifications);
 

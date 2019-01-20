@@ -36,11 +36,11 @@ class LogoutCommand extends Command
         ['git_type' => $git_type, 'api-endpoint' => $api_endpoint] = $input->getOptions();
 
         if (is_file($file_name)) {
-            $array = json_decode(file_get_contents($file_name), true);
+            $tokenContent = json_decode(file_get_contents($file_name), true);
 
-            unset($array['endpoints'][$api_endpoint][$git_type]);
+            unset($tokenContent['endpoints'][$api_endpoint][$git_type]);
 
-            file_put_contents($file_name, JSON::beautiful(json_encode($array)));
+            file_put_contents($file_name, JSON::beautiful(json_encode($tokenContent)));
 
             $output->writeln('<info>Successfully logged out!</info>');
         } else {

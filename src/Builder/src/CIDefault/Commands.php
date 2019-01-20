@@ -6,7 +6,7 @@ namespace PCIT\Builder\CIDefault;
 
 class Commands
 {
-    public static $array = [
+    public static $commandList = [
         'php' => [
             'sami' => ['sami update .sami.php'],
             'install' => ['composer install'],
@@ -26,6 +26,6 @@ class Commands
      */
     public static function get(?string $language_type, ?string $pipeline): array
     {
-        return self::$array[$language_type][$pipeline] ?? [];
+        return self::$commandList[$language_type][$pipeline] ?? [];
     }
 }

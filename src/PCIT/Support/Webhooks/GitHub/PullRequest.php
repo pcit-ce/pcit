@@ -31,12 +31,12 @@ class PullRequest
         Log::debug(null, null, 'Receive event', ['pull request' => $action], Log::INFO);
 
         if (!\in_array($action, ['opened', 'synchronize'], true)) {
-            'assigned' === $action && $array = self::assigned($json_content);
-            'labeled' === $action && $array = self::labeled($json_content);
-            'unlabeled' === $action && $array = self::labeled($json_content, true);
+            'assigned' === $action && $result = self::assigned($json_content);
+            'labeled' === $action && $result = self::labeled($json_content);
+            'unlabeled' === $action && $result = self::labeled($json_content, true);
 
-            if (($array ?? null)) {
-                return $array;
+            if (($result ?? null)) {
+                return $result;
             }
 
             throw new \Exception('skip');

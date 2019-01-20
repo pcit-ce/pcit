@@ -54,10 +54,10 @@ class Request extends \Symfony\Component\HttpFoundation\Request
         $return_array = [];
 
         foreach (explode(',', $link) as $k) {
-            if (preg_match('/https.*[0-9]/', trim($k), $array)) {
-                $url = $array[0];
-                preg_match('#rel=".*#', trim($k), $array);
-                $rel = explode('=', $array[0])[1];
+            if (preg_match('/https.*[0-9]/', trim($k), $result)) {
+                $url = $result[0];
+                preg_match('#rel=".*#', trim($k), $result);
+                $rel = explode('=', $result[0])[1];
                 $return_array[str_replace('"', '', $rel)] = $url;
             }
         }

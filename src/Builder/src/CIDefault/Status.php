@@ -6,11 +6,11 @@ namespace PCIT\Builder\CIDefault;
 
 class Status
 {
-    public static $array;
+    public static $statusList;
 
     public static function default(): void
     {
-        self::$array = [
+        self::$statusList = [
             'after_failure' => 'failure',
             'after_success' => 'success',
             'after_changed' => 'changed',
@@ -21,6 +21,6 @@ class Status
     {
         self::default();
 
-        return self::$array[$pipeline] ?? null;
+        return self::$statusList[$pipeline] ?? null;
     }
 }

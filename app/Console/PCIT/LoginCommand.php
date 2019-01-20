@@ -70,11 +70,11 @@ class LoginCommand extends Command
         $file_name = PCITCommand::getConfigFileName();
 
         if (file_exists($file_name)) {
-            $array = json_decode(file_get_contents($file_name), true);
+            $tokenContent = json_decode(file_get_contents($file_name), true);
 
-            $array['endpoints'][$api_endpoint][$git_type] = $token;
+            $tokenContent['endpoints'][$api_endpoint][$git_type] = $token;
 
-            file_put_contents($file_name, JSON::beautiful(json_encode($array)));
+            file_put_contents($file_name, JSON::beautiful(json_encode($tokenContent)));
 
             $output->writeln('<info>Login Success</info>');
 

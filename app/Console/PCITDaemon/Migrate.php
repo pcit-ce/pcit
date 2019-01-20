@@ -67,9 +67,9 @@ class Migrate
      */
     private static function getSqlList()
     {
-        $array = scandir(base_path().'framework/sql');
+        $sqlFileList = scandir(base_path().'framework/sql');
 
-        $array = array_filter($array, function ($k) {
+        $sqlFileList = array_filter($sqlFileList, function ($k) {
             if (\in_array($k, ['.', '..'], true)) {
                 return false;
             }
@@ -80,7 +80,7 @@ class Migrate
             return 'sql' === $ext;
         });
 
-        return $array;
+        return $sqlFileList;
     }
 
     /**

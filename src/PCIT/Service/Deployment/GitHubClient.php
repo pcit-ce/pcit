@@ -90,16 +90,16 @@ class GitHubClient
                            bool $transient_environment = null,
                            bool $production_environment = null): void
     {
-        $array = compact('ref', 'task', 'auto_merge', 'required_contexts', 'payload', 'environment', 'description', 'transient_environment', 'production_environment');
+        $result = compact('ref', 'task', 'auto_merge', 'required_contexts', 'payload', 'environment', 'description', 'transient_environment', 'production_environment');
 
-        $array = array_filter($array);
+        $result = array_filter($result);
 
         $url = implode('/', [
                 $this->api_url, 'repos', $repo_full_name, 'deployments',
             ]
         );
 
-        $this->curl->post($url, json_encode($array));
+        $this->curl->post($url, json_encode($result));
     }
 
     /**

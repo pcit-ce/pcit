@@ -53,7 +53,7 @@ class WeChatClient
         /**
          * 结果：{{code.DATA}} 时间：{{time.DATA}} 类型：{{event_type.DATA}} 仓库：{{repo_name.DATA}} 提交信息：{{commit_message.DATA}} 推送：{{committer.DATA}} 信息：{{info.DATA}}.
          */
-        $array = [
+        $result = [
             'touser' => $openId,
             'template_id' => $this->template_id,
             'url' => $url,
@@ -83,6 +83,6 @@ class WeChatClient
             ],
         ];
 
-        return $this->template_message->send($array);
+        return $this->template_message->send($result);
     }
 }

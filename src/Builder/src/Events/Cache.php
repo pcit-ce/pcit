@@ -72,9 +72,9 @@ class Cache
             return;
         }
 
-        $array = $this->cache->directories ?? [];
+        $cachesDir = $this->cache->directories ?? [];
 
-        if (!\is_array($array)) {
+        if (!\is_array($cachesDir)) {
             return;
         }
 

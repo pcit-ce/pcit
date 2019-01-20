@@ -37,7 +37,7 @@ class Services
             return;
         }
 
-        foreach ($this->service as $service_name => $array) {
+        foreach ($this->service as $service_name => $serviceContent) {
             list(
                 'image' => $image,
                 'env' => $env,
@@ -45,11 +45,11 @@ class Services
                 'commands' => $commands
                 ) = ServiceDefault::handle($service_name);
 
-            if (\is_array($array)) {
-                $image = $array->image ?? $image;
-                $env = $array->environment ?? $env;
-                $entrypoint = $array->entrypoint ?? $entrypoint;
-                $commands = $array->commands ?? $array->command ?? $commands;
+            if (\is_array($serviceContent)) {
+                $image = $serviceContent->image ?? $image;
+                $env = $serviceContent->environment ?? $env;
+                $entrypoint = $serviceContent->entrypoint ?? $entrypoint;
+                $commands = $serviceContent->commands ?? $serviceContent->command ?? $commands;
 
                 $image = Parse::image($image, $this->matrix_config);
             }

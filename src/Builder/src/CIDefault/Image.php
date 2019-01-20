@@ -8,7 +8,7 @@ use PCIT\Exception\PCITException;
 
 class Image
 {
-    public static $array = [
+    public static $imageList = [
         'node_js' => 'node:11.6.0-alpine',
         'php' => 'khs1994/php:7.2.14-composer-alpine',
         'bash' => 'bash',
@@ -28,6 +28,6 @@ class Image
             throw new PCITException('You must define pipeline image,or define language');
         }
 
-        return self::$array[$language_type] ?? 'bash';
+        return self::$imageList[$language_type] ?? 'bash';
     }
 }

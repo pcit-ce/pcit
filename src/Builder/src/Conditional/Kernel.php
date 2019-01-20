@@ -107,9 +107,9 @@ abstract class Kernel
      */
     public function arrayRegHandle()
     {
-        $array = $this->conditional;
+        $result = $this->conditional;
 
-        foreach ($array as $k) {
+        foreach ($result as $k) {
             $this->conditional = $k;
             $result = $this->stringRegHandle();
 
