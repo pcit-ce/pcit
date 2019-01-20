@@ -35,6 +35,8 @@ class Pipeline
 
     private $cache;
 
+    private $language;
+
     /**
      * Pipeline constructor.
      *
@@ -147,11 +149,11 @@ class Pipeline
     /**
      * 整合 pipelineEnv systemEnv matrixEnv.
      *
-     * @param $pipelineEnv
+     * @param array $pipelineEnv
      *
      * @return array
      */
-    public function handleEnv($pipelineEnv)
+    public function handleEnv(array $pipelineEnv): array
     {
         $preEnv = array_merge($pipelineEnv, $this->client->system_env);
 
@@ -168,6 +170,27 @@ class Pipeline
         return array_merge($preEnv, $matrixEnv);
     }
 
+    public function handleCommands($pipeline, $pipelineContent): array
+    {
+        // 内容为字符串
+        if (\is_string($pipelineContent)) {
+            return [$pipelineContent];
+        }
+
+        // 判断内容是否为数组
+        foreach (array_keys((array) $pipelineContent) as $key => $value) {
+            if (\is_int($value)) {
+                return $pipelineContent;
+            }
+        }
+
+        $commands = $pipelineContent->commands
+        ?? $pipelineContent->command
+        ?? Commands::get($this->language, $pipeline);
+
+        return \is_string($commands) ? [$commands] : $commands;
+    }
+
     /**
      * @throws Exception
      */
@@ -180,16 +203,18 @@ class Pipeline
         $cache = $this->cache;
         $language = $this->client->language ?? 'php';
 
-        foreach ($this->pipeline as $setup => $array) {
+        $this->language = $language;
+
+        foreach ($this->pipeline as $setup => $pipelineContent) {
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
 
-            $image = $array->image ?? Image::get($language);
-            $commands = $array->commands ?? $array->command ?? Commands::get($language, $setup);
-            $env = $array->environment ?? [];
-            $shell = $array->shell ?? 'sh';
-            $privileged = $array->privileged ?? false;
-            $pull = $array->pull ?? false;
-            $settings = $array->settings ?? new \stdClass();
+            $image = $pipelineContent->image ?? Image::get($language);
+            $commands = $this->handleCommands($setup, $pipelineContent);
+            $env = $pipelineContent->environment ?? [];
+            $shell = $pipelineContent->shell ?? 'sh';
+            $privileged = $pipelineContent->privileged ?? false;
+            $pull = $pipelineContent->pull ?? false;
+            $settings = $pipelineContent->settings ?? new \stdClass();
             $settings = (array) $settings;
 
             // 预处理 env
@@ -206,12 +231,12 @@ class Pipeline
             }
 
             // 处理构建条件
-            if ($this->checkWhen($array->when ?? null)) {
+            if ($this->checkWhen($pipelineContent->when ?? null)) {
                 continue;
             }
 
             // 根据 pipeline 获取默认的构建条件
-            $status = $array->when->status ?? CIDefaultStatus::get($setup);
+            $status = $pipelineContent->when->status ?? CIDefaultStatus::get($setup);
             $failure = (new Status())->handle($status, 'failure');
             $success = (new Status())->handle($status, 'success');
             $changed = (new Status())->handle($status, 'changed');

@@ -9,10 +9,11 @@ class Commands
     public static $array = [
         'php' => [
             'sami' => ['sami update .sami.php'],
-            'test' => ['./vendor/bin/phpunit'],
             'install' => ['composer install'],
+            'script' => ['composer test'],
         ],
         'node_js' => [
+            'install' => ['npm install'],
             'script' => ['npm test'],
         ],
     ];
@@ -21,10 +22,10 @@ class Commands
      * @param string $language_type example: php
      * @param string $pipeline      example: script
      *
-     * @return array|null
+     * @return array
      */
-    public static function get(?string $language_type, ?string $pipeline)
+    public static function get(?string $language_type, ?string $pipeline): array
     {
-        return self::$array[$language_type][$pipeline] ?? null;
+        return self::$array[$language_type][$pipeline] ?? [];
     }
 }

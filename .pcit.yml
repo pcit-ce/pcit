@@ -36,8 +36,20 @@ cache:
 
 # 构建步骤
 pipeline:
-  before_install:
-    commands: ["echo init script"]
+  # 构建指令最简 字符串
+  before_install: echo init script
+
+  # 构建指令最简多个步骤 数组
+  before_install_2: ["echo init script", "echo init script2"]
+
+  # 构建指令最简多个步骤 数组 另一种写法
+  before_install_3:
+    - echo init script
+    - echo init script2
+
+  # 当构建步骤仅指定 command(s)，可以使用以上三种方式进行简写
+  before_install_4:
+    command: ['echo init script']
 
   install:
     # image: khs1994/php:7.3.1-composer-alpine
@@ -96,8 +108,7 @@ pipeline:
     image: bash
     when:
       platform: Windows/amd64
-    commands:
-      - echo "Only run on Windows amd64"
+    commands: echo "Only run on Windows amd64"
 
   master_branch_only:
     image: bash
@@ -141,10 +152,7 @@ pipeline:
     # - DOCKER_USERNAME=username
     # - DOCKER_PASSWORD=password
 
-  php-cs-fixer:
-    # image: khs1994/php:7.3.1-composer-alpine
-    commands:
-      - php-cs-fixer fix
+  php-cs-fixer: php-cs-fixer fix
 
   sami:
     # image: khs1994/php:7.3.1-composer-alpine
@@ -321,8 +329,7 @@ pipeline:
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
 
   after_success:
-    command:
-      - echo "build success"
+    - echo "build success"
 
   after_failure:
     image: bash
@@ -338,9 +345,7 @@ pipeline:
     commands:
       - echo "build changed"
 
-  ping:
-    # command: ["ping -c 5 git.t.khs1994.com"]
-    command: ["ping -c 5 127.0.0.1"]
+  ping: ["ping -c 5 127.0.0.1"]
 
   cron_only:
     commands: ["echo only run on cron event"]
@@ -427,3 +432,8 @@ networks:
   hosts:
     - "git.khs1994.com:127.0.0.1"
     - "docker.khs1994.com:127.0.0.1"
+
+# 系统设置
+system:
+  # 指定构建步骤的默认镜像
+  image: khs1994/php:7.3.1-composer-fpm

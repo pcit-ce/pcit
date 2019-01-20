@@ -80,22 +80,19 @@ push by you, test and deploy by us.
 
 * 点击 [PCIT-CE GitHub App](https://github.com/apps/pcit-ce) 进行安装
 
-* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/pcit-ce/pcit/tree/master/yml_examples) 来配置 CI 规则
+* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/pcit-ce/pcit/tree/master/pcit_examples) 来配置 CI 规则
 
 ```yaml
 language: php
 
 pipeline:
 
-  install:
-    image: khs1994/php:7.3.0-fpm-alpine
-    commands:
-      - composer install
+  before_install: ['echo exec init script']
+
+  install: composer install
 
   script:
-    image: khs1994/php:7.3.0-fpm-alpine
-    commands:
-      - vendor/bin/phpunit
+    - vendor/bin/phpunit
 
   after_success:
     image: bash
@@ -104,7 +101,7 @@ pipeline:
 
 services:
   redis:
-  mysql:  
+  mysql:
 ```
 
 * 推送 git 仓库到 GitHub，PCIT 开始进行 **构建** **测试** **部署** 等一系列工作。
