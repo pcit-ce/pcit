@@ -18,7 +18,7 @@ class Application implements DeployerInterface
         // $this->setConfig($config);
     }
 
-    public function deploy()
+    public function deploy(): array
     {
         return $this->adapter->deploy();
     }

@@ -31,21 +31,21 @@ class S3 extends AbstractAdapter
         $this->minio = $config['minio'] ?? false;
     }
 
-    public function deploy()
+    public function deploy(): array
     {
         return [
-        'image' => 'pcit/s3',
-        'env' => array_filter([
-           'PCIT_S3_REGION='.$this->region,
-           'PCIT_S3_ACCESS_KEY_ID='.$this->access_key_id,
-           'PCIT_S3_SECRET_ACCESS_KEY='.$this->secret_access_key,
-           'PCIT_S3_BUCKET='.$this->bucket,
-           'PCIT_S3_ACL='.$this->acl,
-           'PCIT_S3_LOCAL_DIR='.$this->local_dir,
-           'PCIT_S3_UPLOAD_DIR='.$this->upload_dir,
-           'PCIT_S3_ENDPOINT='.$this->endpoint,
-           'PCIT_S3_USE_PATH_STYLE_ENDPOINT='.($this->minio ? 'true' : 'false'),
-        ]),
-    ];
+            'image' => 'pcit/s3',
+            'env' => array_filter([
+                'PCIT_S3_REGION='.$this->region,
+                'PCIT_S3_ACCESS_KEY_ID='.$this->access_key_id,
+                'PCIT_S3_SECRET_ACCESS_KEY='.$this->secret_access_key,
+                'PCIT_S3_BUCKET='.$this->bucket,
+                'PCIT_S3_ACL='.$this->acl,
+                'PCIT_S3_LOCAL_DIR='.$this->local_dir,
+                'PCIT_S3_UPLOAD_DIR='.$this->upload_dir,
+                'PCIT_S3_ENDPOINT='.$this->endpoint,
+                'PCIT_S3_USE_PATH_STYLE_ENDPOINT='.($this->minio ? 'true' : 'false'),
+            ]),
+        ];
     }
 }

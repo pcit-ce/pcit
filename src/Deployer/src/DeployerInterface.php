@@ -6,4 +6,5 @@ namespace PCIT\Deployer;
 
 interface DeployerInterface
 {
+    public function deploy(): array;
 }

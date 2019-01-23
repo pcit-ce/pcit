@@ -28,20 +28,20 @@ class PAGES extends AbstractAdapter
         $this->message = $config['message'] ?? 'Deploy Git by PCIT https://ci.khs1994.com';
     }
 
-    public function deploy()
+    public function deploy(): array
     {
         return [
             'image' => 'pcit/pages',
             'env' => [
-             'PCIT_USERNAME='.$this->username,
-             'PCIT_TARGET_BRANCH='.$this->target_branch,
-             'PCIT_GIT_URL='.$this->git_url,
-             'PCIT_LOCAL_DIR='.$this->local_dir,
-             'PCIT_EMAIL='.$this->email,
-             'PCIT_KEEP_HISTORY='.$this->keep_history,
-             'PCIT_GIT_TOKEN='.$this->git_token,
-             'PCIT_MESSAGE='.$this->message,
-         ],
-     ];
+                'PCIT_USERNAME='.$this->username,
+                'PCIT_TARGET_BRANCH='.$this->target_branch,
+                'PCIT_GIT_URL='.$this->git_url,
+                'PCIT_LOCAL_DIR='.$this->local_dir,
+                'PCIT_EMAIL='.$this->email,
+                'PCIT_KEEP_HISTORY='.$this->keep_history,
+                'PCIT_GIT_TOKEN='.$this->git_token,
+                'PCIT_MESSAGE='.$this->message,
+            ],
+        ];
     }
 }

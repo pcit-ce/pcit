@@ -8,8 +8,8 @@ use PCIT\Deployer\AdapterInterface;
 
 class AbstractAdapter implements AdapterInterface
 {
-    public function deploy()
+    public function deploy(): array
     {
-        return [];
+        return ['image' => '', 'env' => []];
     }
 }

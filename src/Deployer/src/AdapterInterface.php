@@ -6,5 +6,5 @@ namespace PCIT\Deployer;
 
 interface AdapterInterface
 {
-    public function deploy();
+    public function deploy(): array;
 }

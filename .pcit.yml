@@ -200,6 +200,7 @@ pipeline:
       # email: ${EMAIL}
       # username: khs1994
       git_token: ${GITHUB_TOKEN}
+      depth: 10
 
   sync_git_deployer:
     when:
@@ -216,6 +217,7 @@ pipeline:
       git_url: github.com/pcit-ce/deployer
       local_dir: src/Deployer
       git_token: ${GITHUB_TOKEN}
+      depth: 10
 
   sync_git_builder:
     when:
@@ -232,6 +234,7 @@ pipeline:
       git_url: github.com/pcit-ce/builder
       local_dir: src/Builder
       git_token: ${GITHUB_TOKEN}
+      depth: 10
 
   sync_git_deployer_s3:
     when:
@@ -248,6 +251,7 @@ pipeline:
       git_url: github.com/pcit-ce/deployer-s3
       local_dir: src/DeployerS3
       git_token: ${GITHUB_TOKEN}
+      depth: 10
 
   tencent_cloud_cos_v4:
     # image: pcit/tencent_cloud_cos:v4

@@ -39,21 +39,21 @@ class NPM extends AbstractAdapter
         $this->access = $config['access'] ?? 'public';
     }
 
-    public function deploy()
+    public function deploy(): array
     {
         return [
-         'image' => 'plugins/npm',
-         'env' => array_filter([
-             $this->username ? 'NPM_USERNAME='.$this->username : null,
-             $this->password ? 'NPM_PASSWORD='.$this->password : null,
-             $this->email ? 'NPM_EMAIL='.$this->email : null,
-             $this->api_key ? 'NPM_TOKEN='.$this->api_key : null,
-             $this->tag ? 'PLUGIN_TAG='.$this->tag : null,
-             $this->registry ? 'NPM_REGISTRY='.$this->registry : null,
-             'PLUGIN_SKIP_VERIFY='.$this->skip_verify,
-             'PLUGIN_FAIL_ON_VERSION_CONFLICT='.$this->fail_on_version_conflict,
-             'PLUGIN_ACCESS='.$this->access,
-         ]),
+            'image' => 'plugins/npm',
+            'env' => array_filter([
+                $this->username ? 'NPM_USERNAME='.$this->username : null,
+                $this->password ? 'NPM_PASSWORD='.$this->password : null,
+                $this->email ? 'NPM_EMAIL='.$this->email : null,
+                $this->api_key ? 'NPM_TOKEN='.$this->api_key : null,
+                $this->tag ? 'PLUGIN_TAG='.$this->tag : null,
+                $this->registry ? 'NPM_REGISTRY='.$this->registry : null,
+                'PLUGIN_SKIP_VERIFY='.$this->skip_verify,
+                'PLUGIN_FAIL_ON_VERSION_CONFLICT='.$this->fail_on_version_conflict,
+                'PLUGIN_ACCESS='.$this->access,
+            ]),
         ];
     }
 }
