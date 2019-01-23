@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Events;
 
+use App\Build as BuildDB;
 use App\Repo;
 use App\Setting;
 use Exception;
@@ -19,10 +20,11 @@ use PCIT\Support\Log;
 class Build extends BuildData
 {
     /**
+     * @param int $buildId
+     *
      * @return Build
      *
      * @throws PCITException
-     * @throws Exception
      */
     public function handle(int $buildId = 0)
     {
@@ -41,7 +43,9 @@ class Build extends BuildData
             $this->tag,
             $this->config) = $result;
 
-        if (!$this->config) {
+        if (!$this->config or !json_decode($this->config)) {
+            BuildDB::updateBuildStatus($buildId, 'misconfigured');
+
             throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
         }
 

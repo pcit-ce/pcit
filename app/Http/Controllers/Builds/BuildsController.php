@@ -161,6 +161,15 @@ class BuildsController
         $build_id = (int) $build_id;
         JWTController::check($build_id);
 
+        if ('misconfigured' === Build::getBuildStatus($build_id)) {
+            throw new Exception('.pcit.yml not found', 500);
+        }
+
+        if (!Build::getConfig($build_id)) {
+            Build::updateBuildStatus($build_id, 'misconfigured');
+            throw new Exception('.pcit.yml not found', 500);
+        }
+
         Build::updateBuildStatus($build_id, 'pending');
         Build::updateStartAt($build_id, null);
         $this->updateJobStatus($build_id, 'queued');

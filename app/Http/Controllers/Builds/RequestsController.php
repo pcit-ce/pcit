@@ -64,7 +64,8 @@ class RequestsController
      * {
      *     "request": {
      *         "message": "Override the commit message: this is an api request",
-     *         "branch": "master"
+     *         "branch": "master",
+     *         "config": ""
      *     }
      * }
      *
@@ -93,7 +94,7 @@ class RequestsController
 
         $body_obj = json_decode($body);
 
-        $config = $body_obj->request->config ?? [];
+        $config = $body_obj->request->config ?? '';
         $branch = $body_obj->request->branch ?? 'master';
 
         $result = $app->repo_branches->get($username, $repo_name, $branch);
@@ -121,8 +122,11 @@ class RequestsController
             $rid, $event_time, $config, 'github', true);
 
         // trigger build 不检测是否跳过
+        // 检查是否有配置文件 .pcit.yml
 
-        Build::updateBuildStatus((int) $last_insert_id, 'pending');
+        $status = '[]' === $config ? 'misconfigured' : 'pending';
+
+        Build::updateBuildStatus((int) $last_insert_id, $status);
 
         return ['build_id' => $last_insert_id];
     }

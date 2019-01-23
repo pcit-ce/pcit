@@ -54,7 +54,7 @@ class Skip
         if (null === $this->config || '[]' === $this->config) {
             Log::debug(__FILE__, __LINE__, $build_key_id.' skip, because config is empty', [], Log::INFO);
 
-            $this->writeSkipToDB();
+            $this->writeSkipToDB(true);
 
             return;
         }
@@ -85,12 +85,18 @@ class Skip
     }
 
     /**
-     * @param int $build_key_id
+     * @param bool $noConfig
      *
      * @throws Exception
      */
-    private function writeSkipToDB(): void
+    private function writeSkipToDB($noConfig = false): void
     {
+        if ($noConfig) {
+            Build::updateBuildStatus($this->build_key_id, 'misconfigured');
+
+            return;
+        }
+
         Build::updateBuildStatus($this->build_key_id, 'skip');
     }
 }

@@ -181,34 +181,11 @@ EOF;
      */
     public static function getBuildStatus(int $build_key_id)
     {
-        $sql = 'SELECT state FROM jobs WHERE build_id=? group by state';
+        $sql = 'SELECT build_status FROM builds WHERE id=?';
 
-        $result = DB::select($sql, [$build_key_id]);
+        $result = DB::select($sql, [$build_key_id], true);
 
-        if (1 === \count($result)) {
-            return $result[0]['state'];
-        }
-
-        foreach ($result as $k) {
-            $state[] = $k['state'];
-        }
-
-        $conclusion = [
-            'cancelled',
-            'errored',
-            'failure',
-            'in_progress',
-            // 'success',
-            'pending',
-        ];
-
-        foreach ($conclusion as $k) {
-            if (\in_array('$k', $result)) {
-                return $k;
-            }
-        }
-
-        return 'errored';
+        return $result;
     }
 
     /**
@@ -321,7 +298,13 @@ EOF;
     {
         $sql = 'SELECT config FROM builds WHERE id=? LIMIT 1';
 
-        return DB::select($sql, [$build_key_id], true);
+        $result = DB::select($sql, [$build_key_id], true);
+
+        if (!$result or !json_decode($result)) {
+            return '';
+        }
+
+        return $result;
     }
 
     /**

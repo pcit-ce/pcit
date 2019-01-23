@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Events;
 
 use PCIT\Builder\Events\Cache;
+use PCIT\Support\CacheKey;
 use PCIT\Support\DB;
 use PCIT\Tests\PCITTestCase;
 use Symfony\Component\Yaml\Yaml;
@@ -28,24 +29,24 @@ class CacheTest extends PCITTestCase
 
         $stub->method('getPrefix')->willReturn('gittype_rid_branch');
 
-        $cache = new Cache(1, '/pcit', json_decode($json)->cache);
+        $cache = new Cache(1,
+            1, '', 'github', 1,
+            'master', json_decode($json)->cache);
 
         $cache->handle();
 
-        $this->cache = \PCIT\Support\Cache::store()->hGet('/pcit/cache', '1');
+        $this->cache = \PCIT\Support\Cache::store()->get(CacheKey::cacheKey(1));
     }
 
     /**
      * @throws \Exception
-     * @group dont-test
      */
-    public function testDirectories(): void
+    public function test_array(): void
     {
         DB::close();
 
         $yaml = <<<'EOF'
 cache:
-  directories:
   - dir
 EOF;
 
@@ -53,8 +54,24 @@ EOF;
 
         $this->common();
 
-        var_dump($this->cache);
+        $this->assertEquals('PCIT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
+    }
 
-        $this->assertObjectHasAttribute('directories', json_decode($this->cache));
+    /**
+     * @throws \Exception
+     */
+    public function test_string(): void
+    {
+        DB::close();
+
+        $yaml = <<<'EOF'
+cache: dir
+EOF;
+
+        $this->yaml = $yaml;
+
+        $this->common();
+
+        $this->assertEquals('PCIT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
     }
 }

@@ -26,13 +26,9 @@ workspace:
 
 # 缓存设置
 cache:
-  # npm:
-  # composer:
-  directories:
-    - cache
-    # - vendor
-    - .php_cs.cache
-    - vendor
+  - cache
+  - .php_cs.cache
+  - vendor
 
 # 构建步骤
 pipeline:

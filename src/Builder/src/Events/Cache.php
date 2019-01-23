@@ -72,7 +72,9 @@ class Cache
             return;
         }
 
-        $cachesDir = $this->cache->directories ?? [];
+        $cacheList = $cachesDir = $this->cache ?? [];
+
+        $cacheList = \is_string($cacheList) ? [$cacheList] : $cacheList;
 
         if (!\is_array($cachesDir)) {
             return;
@@ -89,7 +91,7 @@ class Cache
             'PCIT_S3_BUCKET='.env('', 'pcit'),
             'PCIT_S3_REGION='.env('', 'us-east-1'),
             'PCIT_S3_CACHE_PREFIX='.$prefix,
-            'PCIT_S3_CACHE='.json_encode($this->cache->directories),
+            'PCIT_S3_CACHE='.json_encode($cacheList),
             'PCIT_S3_USE_PATH_STYLE_ENDPOINT='.
             (env('CI_S3_USE_PATH_STYLE_ENDPOINT', true) ? 'true' : 'false'),
             // must latest key
