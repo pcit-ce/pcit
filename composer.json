@@ -49,6 +49,10 @@
     {
       "type": "path",
       "url": "./src/git/Gogs"
+    },
+    {
+      "type": "path",
+      "url": "./src/PCIT"
     }
   ],
   "authors": [
@@ -81,6 +85,7 @@
     "pimple/pimple": "~3.0",
     "vlucas/phpdotenv": "^3.0.0",
     "pcit/framework": "*",
+    "pcit/kernel": "*",
     "pcit/api": "*",
     "pcit/builder": "*",
     "pcit/cache": "*",
@@ -104,12 +109,8 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\": "app/",
-      "PCIT\\": "src/PCIT/"
-    },
-    "files": [
-      "src/PCIT/Kernel/helpers.php"
-    ]
+      "App\\": "app/"
+    }
   },
   "autoload-dev": {
     "psr-4": {

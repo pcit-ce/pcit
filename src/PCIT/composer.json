@@ -1,4 +1,12 @@
 {
   "name": "pcit/kernel",
-  "version": "20.06.0"
+  "version": "19.06.0",
+  "autoload": {
+    "psr-4": {
+      "PCIT\\": "./"
+    },
+    "files": [
+      "Kernel/helpers.php"
+    ]
+  }
 }
