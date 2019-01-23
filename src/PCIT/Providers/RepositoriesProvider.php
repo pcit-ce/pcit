@@ -14,61 +14,61 @@ class RepositoriesProvider implements ServiceProviderInterface
         $namespace = 'PCIT\\Service\\Repositories\\';
 
         $pimple['repo_branches'] = function ($app) use ($namespace) {
-            $class = $namespace.'Branches'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\BranchesClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['repo_collaborators'] = function ($app) use ($namespace) {
-            $class = $namespace.'Collaborators'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\CollaboratorsClient';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };
 
         $pimple['repo_comments'] = function ($app) use ($namespace) {
-            $class = $namespace.'Comments'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\CommentsClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['repo_commits'] = function ($app) use ($namespace) {
-            $class = $namespace.'Commits'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\CommitsClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['repo_community'] = function ($app) use ($namespace) {
-            $class = $namespace.'Community'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\CommunityClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['repo_contents'] = function ($app) use ($namespace) {
-            $class = $namespace.'Contents'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\ContentsClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['repo_status'] = function ($app) use ($namespace) {
-            $class = $namespace.'Status'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\StatusClient';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };
 
         $pimple['repo_webhooks'] = function ($app) use ($namespace) {
-            $class = $namespace.'Webhooks'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\WebhooksClient';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };
 
         $pimple['repo_releases'] = function ($app) use ($namespace) {
-            $class = $namespace.'Releases'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\ReleasesClient';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };
 
         $pimple['repo_merging'] = function ($app) use ($namespace) {
-            $class = $namespace.'Merging'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Repositories\MergingClient';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };

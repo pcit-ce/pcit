@@ -12,7 +12,7 @@ class MiscellaneousProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['miscellaneous'] = function ($app) {
-            $class = 'PCIT\\Service\\Miscellaneous\\'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Miscellaneous\Client';
 
             return new $class($app->curl, $app->config['api_url']);
         };

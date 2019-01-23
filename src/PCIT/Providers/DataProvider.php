@@ -12,7 +12,7 @@ class DataProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['data'] = function ($app) {
-            $class = 'PCIT\\Service\\Data\\'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Data\Client';
 
             return new $class($app->curl, $app->config['api_url']);
         };

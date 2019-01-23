@@ -1,0 +1,10 @@
+{
+  "name": "pcit/git-coding",
+  "version": "19.06.0",
+  "autoload": {
+    "psr-4": {
+      "PCIT\\Service\\Coding\\": "src/",
+      "PCIT\\Support\\Webhooks\\Coding\\": "Support/Webhooks/"
+    }
+  }
+}

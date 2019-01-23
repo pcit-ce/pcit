@@ -8,10 +8,9 @@ use App\User;
 use Error;
 use Exception;
 use PCIT\PCIT;
-use PCIT\Service\OAuth\CodingClient;
-use PCIT\Service\OAuth\GiteeClient;
-use PCIT\Service\OAuth\GitHubClient;
-use PCIT\Support\Env;
+use PCIT\Service\Coding\OAuth\Client as CodingClient;
+use PCIT\Service\Gitee\OAuth\Client as GiteeClient;
+use PCIT\Service\GitHub\OAuth\Client as GitHubClient;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 
@@ -141,6 +140,13 @@ abstract class Kernel
         exit;
     }
 
+    /**
+     * @param int $uid
+     * @param     $refreshToken
+     * @param     $gitType
+     *
+     * @throws Exception
+     */
     public function handleRefreshToken(int $uid, $refreshToken, $gitType): void
     {
         if (!$refreshToken) {

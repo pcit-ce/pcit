@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Service\Checks;
+namespace PCIT\Service\GitHub\Checks;
 
 class RunData
 {

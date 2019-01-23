@@ -12,13 +12,13 @@ class GistProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['gist'] = function ($app) {
-            $class = 'PCIT\\Service\\Gist\\'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Gist\Client';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['gist_comments'] = function ($app) {
-            $class = 'PCIT\\Service\\Gist\\Comments'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Gist\CommentsClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };

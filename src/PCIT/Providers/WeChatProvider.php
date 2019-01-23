@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Providers;
 
-use PCIT\Service\WeChat\Template\WeChatClient;
+use PCIT\Service\Kernel\WeChat\Template\WeChatClient;
 use PCIT\Support\Cache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;

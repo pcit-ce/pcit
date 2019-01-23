@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Service\GitHubApp;
+namespace PCIT\Service\GitHub\GitHubApp;
 
 use Curl\Curl;
 use Exception;

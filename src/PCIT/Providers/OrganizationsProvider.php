@@ -12,7 +12,7 @@ class OrganizationsProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['orgs'] = function ($app) {
-            $class = 'PCIT\\Service\\Organizations\\'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Organizations\Client';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };

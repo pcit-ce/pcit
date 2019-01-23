@@ -11,9 +11,8 @@ use App\Notifications\GitHubChecksConclusion\Queued;
 use App\Repo;
 use Exception;
 use PCIT\PCIT;
-use PCIT\Service\Checks\RunData;
+use PCIT\Service\GitHub\Checks\RunData;
 use PCIT\Support\CI;
-use PCIT\Support\Env;
 use PCIT\Support\JSON;
 use PCIT\Support\Log;
 

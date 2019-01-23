@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Service\OAuth;
+namespace PCIT\Service\GitHub\OAuth;
 
 use Curl\Curl;
 

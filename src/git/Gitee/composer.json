@@ -1,0 +1,10 @@
+{
+  "name": "pcit/git-gitee",
+  "version": "19.06.0",
+  "autoload": {
+    "psr-4": {
+      "PCIT\\Service\\Gitee\\": "src/",
+      "PCIT\\Support\\Webhooks\\Gitee\\": "Support/Webhooks/"
+    }
+  }
+}

@@ -12,7 +12,7 @@ class UserProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['user_basic_info'] = function ($app) {
-            $class = 'PCIT\Service\Users\\'.$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\Users\Client';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };

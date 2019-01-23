@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Providers;
 
-use PCIT\Service\GitHubApp\Client;
+use PCIT\Service\GitHub\GitHubApp\Client;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

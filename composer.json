@@ -9,7 +9,8 @@
   "homepage": "https://github.com/pcit-ce/pcit",
   "type": "project",
   "license": "MIT",
-  "repositories": [{
+  "repositories": [
+    {
       "type": "path",
       "url": "./src/Api"
     },
@@ -20,25 +21,43 @@
     {
       "type": "path",
       "url": "./src/Cache"
-    }, {
+    },
+    {
       "type": "path",
       "url": "./src/Deployer"
-    }, {
+    },
+    {
       "type": "path",
       "url": "./src/framework"
-    }, {
+    },
+    {
       "type": "path",
       "url": "./src/Logs"
-    }, {
+    },
+    {
       "type": "path",
       "url": "./src/DeployerS3"
+    },
+    {
+      "type": "path",
+      "url": "./src/git/Coding"
+    },
+    {
+      "type": "path",
+      "url": "./src/git/Gitee"
+    },
+    {
+      "type": "path",
+      "url": "./src/git/Gogs"
     }
   ],
-  "authors": [{
-    "name": "khs1994",
-    "email": "khs1994@khs1994.com",
-    "homepage": "https://khs1994.com"
-  }],
+  "authors": [
+    {
+      "name": "khs1994",
+      "email": "khs1994@khs1994.com",
+      "homepage": "https://khs1994.com"
+    }
+  ],
   "support": {
     "issues": "https://github.com/pcit-ce/pcit/issues"
   },
@@ -67,7 +86,10 @@
     "pcit/cache": "*",
     "pcit/deployer": "*",
     "pcit/logs": "*",
-    "pcit/plugin-s3":"*"
+    "pcit/plugin-s3": "*",
+    "pcit/git-coding": "*",
+    "pcit/git-gitee": "*",
+    "pcit/git-gogs": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.5"
@@ -106,6 +128,7 @@
     "docker:build": "docker build -t pcit/pcit:alpine --progress=plain .",
     "docker:push": "docker-compose push",
     "test": "phpunit",
+    "test:codecov": "phpunit --coverage-clover=coverage.xml",
     "minio:server": "minio server z:",
     "git:archive": "git archive -o latest.zip HEAD"
   }

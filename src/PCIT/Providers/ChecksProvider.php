@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Providers;
 
-use PCIT\Service\Checks\Run;
-use PCIT\Service\Checks\Suites;
+use PCIT\Service\GitHub\Checks\Run;
+use PCIT\Service\GitHub\Checks\Suites;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

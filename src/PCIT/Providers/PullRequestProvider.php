@@ -12,7 +12,7 @@ class PullRequestProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['pull_request'] = function ($app) {
-            $class = "PCIT\Service\PullRequest\\".$app->class_name;
+            $class = 'PCIT\Service\\'.$app->class_name.'\PullRequest\Client';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };

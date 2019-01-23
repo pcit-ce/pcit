@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Providers;
 
 use Docker\Docker;
-use PCIT\Support\Env;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

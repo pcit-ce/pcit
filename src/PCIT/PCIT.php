@@ -23,49 +23,49 @@ use WeChat\WeChat;
  *
  * $a = $container['a'];
  *
- * @property Service\Activity\EventsGitHubClient            $activity_events
- * @property Service\Activity\FeedsGitHubClient             $activity_feeds
- * @property Service\Activity\NotificationsGitHubClient     $activity_notifications
- * @property Service\Activity\StarringGitHubClient          $activity_starring
- * @property Service\Activity\WatchingGitHubClient          $activity_watching
- * @property Service\Authorizations\GitHubClient            $authorizations
- * @property Service\Data\GitHubClient                      $data
- * @property Service\Deployment\GitHubClient                $deployment
- * @property Service\Gist\GitHubClient                      $gist
- * @property Service\Gist\CommentsGitHubClient              $gist_comments
- * @property Service\GitHubApp\Client                       $github_apps_installations
- * @property Service\OAuth\GitHubClient                     $oauth
- * @property Service\Issue\AssigneesGitHubClient            $issue_assignees
- * @property Service\Issue\CommentsGitHubClient             $issue_comments
- * @property Service\Issue\EventsGitHubClient               $issue_events
- * @property Service\Issue\GitHubClient                     $issue
- * @property Service\Issue\LabelsGitHubClient               $issue_labels
- * @property Service\Issue\MilestonesGitHubClient           $issue_milestones
- * @property Service\Miscellaneous\GitHubClient             $miscellaneous
- * @property Service\Organizations\GitHubClient             $orgs
- * @property Service\Repositories\BranchesGitHubClient      $repo_branches
- * @property Service\Repositories\CollaboratorsGitHubClient $repo_collaborators
- * @property Service\Repositories\CommitsGitHubClient       $repo_commits
- * @property Service\Repositories\CommunityGitHubClient     $repo_community
- * @property Service\Repositories\ContentsGitHubClient      $repo_contents
- * @property Service\Repositories\MergingGitHubClient       $repo_merging
- * @property Service\Repositories\ReleasesGitHubClient      $repo_releases
- * @property Service\Repositories\StatusGitHubClient        $repo_status
- * @property Service\Repositories\WebhooksCodingClient      $repo_webhooks
- * @property PHPMailer                                      $mail
- * @property Service\PullRequest\GitHubClient               $pull_request
- * @property Service\Webhooks\GitHubClient                  $webhooks
- * @property Builder\Client                                 $build
- * @property Builder\Agent\RunContainer                     $build_agent
- * @property \TencentAI\TencentAI                           $tencent_ai
- * @property Service\Users\GitHubClient                     $user_basic_info
- * @property Service\Checks\Run                             $check_run
- * @property Service\Checks\Suites                          $check_suites
- * @property Curl                                           $curl
- * @property Docker                                         $docker
- * @property WeChat                                         $wechat
- * @property Service\Kernel\WeChat\Template\WeChatClient    $wechat_template_message
- * @property Request                                        $request
+ * @property Service\GitHub\Activity\EventsClient            $activity_events
+ * @property Service\GitHub\Activity\FeedsClient             $activity_feeds
+ * @property Service\GitHub\Activity\NotificationsClient     $activity_notifications
+ * @property Service\GitHub\Activity\StarringClient          $activity_starring
+ * @property Service\GitHub\Activity\WatchingClient          $activity_watching
+ * @property Service\GitHub\Authorizations\Client            $authorizations
+ * @property Service\GitHub\Data\Client                      $data
+ * @property Service\GitHub\Deployment\Client                $deployment
+ * @property Service\GitHub\Gist\Client                      $gist
+ * @property Service\GitHub\Gist\CommentsClient              $gist_comments
+ * @property Service\GitHub\GitHubApp\Client                 $github_apps_installations
+ * @property Service\GitHub\OAuth\Client                     $oauth
+ * @property Service\GitHub\Issue\AssigneesClient            $issue_assignees
+ * @property Service\GitHub\Issue\CommentsClient             $issue_comments
+ * @property Service\GitHub\Issue\EventsClient               $issue_events
+ * @property Service\GitHub\Issue\Client                     $issue
+ * @property Service\GitHub\Issue\LabelsClient               $issue_labels
+ * @property Service\GitHub\Issue\MilestonesClient           $issue_milestones
+ * @property Service\GitHub\Miscellaneous\Client             $miscellaneous
+ * @property Service\GitHub\Organizations\Client             $orgs
+ * @property Service\GitHub\Repositories\BranchesClient      $repo_branches
+ * @property Service\GitHub\Repositories\CollaboratorsClient $repo_collaborators
+ * @property Service\GitHub\Repositories\CommitsClient       $repo_commits
+ * @property Service\GitHub\Repositories\CommunityClient     $repo_community
+ * @property Service\GitHub\Repositories\ContentsClient      $repo_contents
+ * @property Service\GitHub\Repositories\MergingClient       $repo_merging
+ * @property Service\GitHub\Repositories\ReleasesClient      $repo_releases
+ * @property Service\GitHub\Repositories\StatusClient        $repo_status
+ * @property Service\GitHub\Repositories\WebhooksClient      $repo_webhooks
+ * @property PHPMailer                                       $mail
+ * @property Service\GitHub\PullRequest\Client               $pull_request
+ * @property Service\GitHub\Webhooks\Client                  $webhooks
+ * @property Builder\Client                                  $build
+ * @property Builder\Agent\RunContainer                      $build_agent
+ * @property \TencentAI\TencentAI                            $tencent_ai
+ * @property Service\GitHub\Users\Client                     $user_basic_info
+ * @property Service\GitHub\Checks\Run                       $check_run
+ * @property Service\GitHub\Checks\Suites                    $check_suites
+ * @property Curl                                            $curl
+ * @property Docker                                          $docker
+ * @property WeChat                                          $wechat
+ * @property Service\Kernel\WeChat\Template\WeChatClient     $wechat_template_message
+ * @property Request                                         $request
  */
 class PCIT extends Container
 {
@@ -123,7 +123,7 @@ class PCIT extends Container
         // 在容器中注入类
         $this['git_type'] = $git_type;
 
-        $this['class_name'] = Git::getClassName($git_type).'Client';
+        $this['class_name'] = Git::getClassName($git_type);
 
         $this['config'] = Config::config($config, $git_type);
 
