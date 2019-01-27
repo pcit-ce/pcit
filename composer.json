@@ -53,6 +53,14 @@
     {
       "type": "path",
       "url": "./src/PCIT"
+    },
+    {
+      "type": "path",
+      "url": "./src/providers/AliyunDockerRegistry"
+    },
+    {
+      "type": "path",
+      "url": "./src/providers/WeChat"
     }
   ],
   "authors": [
@@ -94,7 +102,9 @@
     "pcit/plugin-s3": "*",
     "pcit/git-coding": "*",
     "pcit/git-gitee": "*",
-    "pcit/git-gogs": "*"
+    "pcit/git-gogs": "*",
+    "pcit/provider-aliyunDockerRegistry": "*",
+    "pcit/provider-wechat": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.5"

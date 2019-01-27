@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Webhooks;
+namespace App\Http\Controllers\Webhooks\AliyunDockerRegistry;
 
 use Exception;
 use PCIT\Support\Cache;
 
-class AliyunDockerRegistryController
+class IndexController
 {
     /**
      * @throws Exception
