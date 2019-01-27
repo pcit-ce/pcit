@@ -4,7 +4,11 @@
   "autoload": {
     "psr-4": {
       "PCIT\\Service\\Coding\\": "src/",
-      "PCIT\\Support\\Webhooks\\Coding\\": "Support/Webhooks/"
+      "PCIT\\Support\\Webhooks\\Coding\\": "Support/Webhooks/",
+      "App\\Console\\Webhooks\\Coding\\": "Console/Webhooks/",
+      "App\\Http\\Controllers\\OAuth\\Coding\\": "app/Http/Controllers/OAuth/",
+      "App\\Http\\Controllers\\Profile\\Coding\\": "app/Http/Controllers/Profile/",
+      "App\\Http\\Controllers\\Webhooks\\Coding\\": "app/Http/Controllers/Webhooks/"
     }
   }
 }

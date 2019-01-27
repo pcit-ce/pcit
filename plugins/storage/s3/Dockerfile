@@ -4,7 +4,7 @@ FROM khs1994/php:7.2.14-composer-alpine as composer
 COPY composer.json /srv/pcit/plugin/s3/
 
 RUN --mount=type=cache,target=/tmp/cache,id=composer_cache \
-    composer --working-dir=/srv/pcit/plugin/s3 install
+    composer --working-dir=/srv/pcit/plugin/s3 install --no-dev
 
 FROM khs1994/php:7.2.14-fpm-alpine
 

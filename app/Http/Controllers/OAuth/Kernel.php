@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Users\OAuth;
+namespace App\Http\Controllers\OAuth;
 
 use App\User;
 use Error;

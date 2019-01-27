@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use PCIT\Support\Env;
 use PCIT\Support\Route;
 
 Route::get('test1/{id}', function ($id) {
@@ -50,17 +49,9 @@ Route::get('privacy-policy', 'IndexController@privacy_policy');
 
 Route::get('oauth', 'Users\LoginController@index');
 
-Route::get('oauth/coding/login', 'Users\OAuth\CodingController@getLoginUrl');
+Route::get('oauth/${git_type}/login', 'OAuth\IndexController@getLoginUrl');
 
-Route::get('oauth/coding', 'Users\OAuth\CodingController@getAccessToken');
-
-Route::get('oauth/github/login', 'Users\OAuth\GitHubController@getLoginUrl');
-
-Route::get('oauth/github', 'Users\OAuth\GitHubController@getAccessToken');
-
-Route::get('oauth/gitee/login', 'Users\OAuth\GiteeController@getLoginUrl');
-
-Route::get('oauth/gitee', 'Users\OAuth\GiteeController@getAccessToken');
+Route::get('oauth/${git_type}', 'OAuth\IndexController@getAccessToken');
 
 Route::get('{git_type}/logout', 'Profile\LogOut');
 
@@ -78,13 +69,13 @@ Route::delete('webhooks/{git_type}/{username}/{repo_name}/{id}/deactivate', 'Web
 
 /*Webhooks: receive git webhooks*/
 
-Route::post('webhooks/github', 'Webhooks\GitHubController');
+Route::post('webhooks/${git_type}', 'Webhooks\IndexController');
 
-Route::post('webhooks/gogs', 'Webhooks\GogsController');
+// Route::post('webhooks/gogs', 'Webhooks\GogsController');
 
-Route::post('webhooks/gitee', 'Webhooks\GiteeController');
+// Route::post('webhooks/gitee', 'Webhooks\GiteeController');
 
-Route::post('webhooks/coding', 'Webhooks\CodingController');
+// Route::post('webhooks/coding', 'Webhooks\CodingController');
 
 Route::post('webhooks/'.env('CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS', 'aliyun_docker_registry'),
     'Webhooks\AliyunDockerRegistryController');
@@ -99,11 +90,7 @@ Route::get('seo/baidu/xzh', '');
 
 /*Profile*/
 
-Route::get('profile/coding/{username}', 'Profile\CodingController');
-
-Route::get('profile/gitee/{username}', 'Profile\GiteeController');
-
-Route::get('profile/github/{username}', 'Profile\GitHubController');
+Route::get('profile/${git_type}/{username}', 'Profile\IndexController');
 
 // return information about an individual user.
 

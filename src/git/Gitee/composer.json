@@ -4,7 +4,11 @@
   "autoload": {
     "psr-4": {
       "PCIT\\Service\\Gitee\\": "src/",
-      "PCIT\\Support\\Webhooks\\Gitee\\": "Support/Webhooks/"
+      "PCIT\\Support\\Webhooks\\Gitee\\": "Support/Webhooks/",
+      "App\\Console\\Webhooks\\Gitee\\": "Console/Webhooks/",
+      "App\\Http\\Controllers\\OAuth\\Gitee\\": "app/Http/Controllers/OAuth/",
+      "App\\Http\\Controllers\\Profile\\Gitee\\": "app/Http/Controllers/Profile/",
+      "App\\Http\\Controllers\\Webhooks\\Gitee\\": "app/Http/Controllers/Webhooks/"
     }
   }
 }
