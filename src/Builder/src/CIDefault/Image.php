@@ -9,8 +9,8 @@ use PCIT\Exception\PCITException;
 class Image
 {
     public static $imageList = [
-        'node_js' => 'node:11.6.0-alpine',
-        'php' => 'khs1994/php:7.2.14-composer-alpine',
+        'node_js' => 'node:11.10.0-alpine',
+        'php' => 'khs1994/php:7.2.15-composer-alpine',
         'bash' => 'bash',
         'sh' => 'alpine',
     ];
