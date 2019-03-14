@@ -141,6 +141,8 @@
     "test": "phpunit",
     "test:codecov": "phpunit --coverage-clover=coverage.xml",
     "minio:server": "minio server z:",
-    "git:archive": "git archive -o latest.zip HEAD"
+    "git:archive": "git archive -o latest.zip HEAD",
+    "frpc": "frpc -c ~\\frpc.ini",
+    "php-cs-fixer": "php-cs-fixer fix"
   }
 }

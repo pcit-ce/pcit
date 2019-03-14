@@ -230,7 +230,7 @@ Route::get('api/ci/github_app_installation/{uid}', 'System\SystemController@getG
 Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@getGitHubAppSettingsUrl');
 Route::get('api/ci/about', 'System\SystemController@about');
 Route::get('api/ci/changelog', 'System\SystemController@changelog');
-
+Route::get('api/ci/github_trending/{language}/{since}', 'System\SystemController@gitHubTrending');
 /* Issues */
 
 Route::patch('api/repo/${username}/${repo_name}/issues/translate/${issue_number}',

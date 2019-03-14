@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Users\JWTController;
+use Curl\Curl;
 use Exception;
 use PCIT\Support\Env;
 
@@ -56,6 +57,15 @@ class SystemController
         $url = "https://github.com/apps/{$app_name}/installations/new/permissions?suggested_target_id=".$uid;
 
         return compact('url');
+    }
+
+    public function gitHubTrending($language = 'php', $since = 'taday')
+    {
+        $url = 'https://github-trending-api.now.sh';
+
+        return json_decode((new Curl())->get(
+                $url.'/repositories?language='.$language.'&since='.$since
+            ), true);
     }
 
     public function about()
