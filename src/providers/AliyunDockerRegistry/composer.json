@@ -4,7 +4,7 @@
   "autoload": {
     "psr-4": {
       "App\\Console\\Webhooks\\": "app/Console/Webhooks/",
-      "App\\Http\\Controllers\\Webhooks\\": "app/Http/Controllers/Webhooks/",
+      "App\\Http\\Controllers\\Webhooks\\AliyunDockerRegistry\\": "app/Http/Controllers/Webhooks/",
       "App\\Notifications\\": "app/Notifications"
     }
   }
