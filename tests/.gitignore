@@ -5,3 +5,4 @@
 !webhooks
 !.gitignore
 !Builder
+!Dockerfile

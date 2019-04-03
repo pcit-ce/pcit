@@ -13,3 +13,16 @@ $deployer = new Application($adapter,$config);
 ## 项目状态
 
 该组件仍内置于 `pcit-ce/pcit` 中，未来将分离为独立组件。
+
+## 自定义部署组件
+
+```php
+<?php
+
+namespace PCIT\Deployer\Adapter;
+
+class S3 extends AbstractAdapter {
+  public function __construct(array $config){}
+  public function deploy(): array {}  
+}
+```

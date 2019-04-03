@@ -35,7 +35,7 @@ class S3 extends AbstractAdapter
     {
         return [
             'image' => 'pcit/s3',
-            'env' => array_filter([
+            'env' => [
                 'PCIT_S3_REGION='.$this->region,
                 'PCIT_S3_ACCESS_KEY_ID='.$this->access_key_id,
                 'PCIT_S3_SECRET_ACCESS_KEY='.$this->secret_access_key,
@@ -45,7 +45,7 @@ class S3 extends AbstractAdapter
                 'PCIT_S3_UPLOAD_DIR='.$this->upload_dir,
                 'PCIT_S3_ENDPOINT='.$this->endpoint,
                 'PCIT_S3_USE_PATH_STYLE_ENDPOINT='.($this->minio ? 'true' : 'false'),
-            ]),
+            ],
         ];
     }
 }

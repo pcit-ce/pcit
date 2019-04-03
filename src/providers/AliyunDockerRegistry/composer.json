@@ -1,5 +1,5 @@
 {
-  "name": "pcit/provider-aliyunDockerRegistry",
+  "name": "pcit/provider-aliyun-docker-registry",
   "version": "19.06.0",
   "autoload": {
     "psr-4": {

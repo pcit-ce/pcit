@@ -75,6 +75,8 @@ class Pipeline
 
         $provider = $settings['provider'] ?? null;
 
+        'docker' === $provider && $settings['host'] = env('CI_DOCKER_HOST');
+
         $provider && Log::connect()->emergency('Deployer provider is '.$provider);
 
         $result = ['image' => null, 'env' => []];

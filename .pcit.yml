@@ -138,15 +138,36 @@ pipeline:
       # target: php
       build_args:
         - a=1
-      # dockerfile: Dockerfile
+      context: ./tests
+      dockerfile: tests/Dockerfile
       # dockerfile: path/to/Dockerfile
+      username: ${DOCKER_USERNAME}
+      password: ${DOCKER_PASSWORD}
+      dry_run: false
+      purge: false
     when:
-      event: tag
-      branch: alpha
-    # please set env in settings
-    # environment:
-    # - DOCKER_USERNAME=username
-    # - DOCKER_PASSWORD=password
+      event: push
+      # event: tag
+
+  docker_build_dont_push:
+    settings:
+      provider: docker
+      # registry: docker.khs1994.com
+      repo: pcit/pcit
+      tags: 7.3.3-swarm-${PCIT_TAG}
+      # target: php
+      build_args:
+        - a=1
+      context: ./tests
+      dockerfile: tests/Dockerfile
+      # dockerfile: path/to/Dockerfile
+      username: ${DOCKER_USERNAME}
+      password: ${DOCKER_PASSWORD}
+      dry_run: true
+      purge: false
+    when:
+      event: push
+      # event: tag
 
   php-cs-fixer: php-cs-fixer fix
 
@@ -280,7 +301,6 @@ pipeline:
       bucket: ${COS_V4_BUCKET}
 
   s3:
-    # image: pcit/tencent_cloud_cos:v4
     when:
       status: success
       event: ['push']

@@ -36,7 +36,7 @@ class AliYunRegistry
 
         require __DIR__.'/../../../config/config.php';
 
-        if (array_key_exists($aliyun_docker_registry_name, $aliyun_docker_registry)) {
+        if (\array_key_exists($aliyun_docker_registry_name, $aliyun_docker_registry)) {
             $git_repo_full_name = $aliyun_docker_registry["$aliyun_docker_registry_name"];
 
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;

@@ -41,4 +41,4 @@ set -x
 
 if [ ${new:-false} == 'true' ];then git push origin master:${PCIT_TARGET_BRANCH} ; exit 0; fi
 
-git push origin ${PCIT_TARGET_BRANCH}:${PCIT_TARGET_BRANCH}
+git push origin ${PCIT_TARGET_BRANCH}:${PCIT_TARGET_BRANCH} || true

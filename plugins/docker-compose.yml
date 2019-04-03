@@ -19,9 +19,11 @@ services:
 
   docker:
     image: pcit/docker
+    build: docker
 
-  kubernetes:
-    image: pcit/helm
+  kubectl:
+    image: pcit/kubectl
+    build: kubectl
 
   npm:
     image: pcit/npm
