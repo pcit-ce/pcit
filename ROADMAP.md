@@ -8,6 +8,8 @@
 
 * **协作** 基于 Git 服务商的多人协作
 
+* **模块化** 提供基于 Docker 的插件，同时插件可方便的用于 `GitHub Actions`
+
 * **易部署** 依托于 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) 提供的 LNMP CaaS 解决方案，实现在多种环境中一键部署
 
 * **多渠道通知** 微信、邮件、钉钉

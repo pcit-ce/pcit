@@ -83,6 +83,25 @@ class Pipeline
 
         $adapter = '\PCIT\Deployer\Adapter\\'.strtoupper($provider);
 
+        if (!class_exists($adapter)) {
+            $env = [];
+
+            foreach ($settings as $key => $value) {
+                if ('provider' === $key) {
+                    continue;
+                }
+
+                $value = \is_array($value) ? json_encode($value) : $value;
+                $key = str_replace('-', '_', $key);
+                $env[] = 'PCIT_'.strtoupper($key).'='.$value;
+            }
+
+            return $result = [
+                'image' => $settings['provider'] ?? 'null',
+                'env' => $env,
+            ];
+        }
+
         try {
             $result = (new Deployer(new $adapter($settings)))->deploy();
         } catch (\Throwable $e) {
@@ -187,8 +206,8 @@ class Pipeline
         }
 
         $commands = $pipelineContent->commands
-        ?? $pipelineContent->command
-        ?? Commands::get($this->language, $pipeline);
+            ?? $pipelineContent->command
+            ?? Commands::get($this->language, $pipeline);
 
         return \is_string($commands) ? [$commands] : $commands;
     }

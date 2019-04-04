@@ -11,7 +11,7 @@ if ! [ -d ${PCIT_LOCAL_DIR} ];then exit; fi
 rm -rf ${PCIT_LOCAL_DIR}/.git
 
 if [ ${PCIT_KEEP_HISTORY:-0} == 1 ];then
-  git clone --bare -b ${PCIT_TARGET_BRANCH:-gh-pages} https://${PCIT_GIT_URL} ${PCIT_LOCAL_DIR}/.git || echo
+  git clone --bare -b ${PCIT_TARGET_BRANCH:-gh-pages} https://${PCIT_GIT_URL} ${PCIT_LOCAL_DIR}/.git || true
 fi
 
 set +x; echo "Deploying application"; set -x

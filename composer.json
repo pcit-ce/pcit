@@ -43,6 +43,14 @@
     },
     {
       "type": "path",
+      "url": "./src/DeployerCustom/DeployerNPM"
+    },
+    {
+      "type": "path",
+      "url": "./src/DeployerCustom/DeployerPAGES"
+    },
+    {
+      "type": "path",
       "url": "./src/git/Coding"
     },
     {
@@ -101,7 +109,9 @@
     "pcit/kernel": "*",
     "pcit/logs": "*",
     "pcit/plugin-docker": "*",
-    "pcit/plugin-s3": "^19.06",
+    "pcit/plugin-s3": "*",
+    "pcit/plugin-npm": "*",
+    "pcit/plugin-pages": "*",
     "pcit/provider-aliyun-docker-registry": "*",
     "pcit/provider-wechat": "*",
     "phpmailer/phpmailer": "^6.0",

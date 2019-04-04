@@ -1,6 +1,10 @@
 version: "3.7"
 
 services:
+  demo:
+    image: pcit/demo
+    build: demo
+
   tencent_cos_v4:
     image: pcit/tencent_cos:v4
     build: storage/tencent_cos_v4

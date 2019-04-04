@@ -169,6 +169,14 @@ pipeline:
       event: push
       # event: tag
 
+  plugin-demo:
+    settings:
+      provider: pcit/demo
+      var: 1
+      var_array:
+        - a=1
+        - b=2
+
   php-cs-fixer: php-cs-fixer fix
 
   sami:

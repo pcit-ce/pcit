@@ -49,3 +49,5 @@ miniprogram
 *.zip
 *.tar.gz
 *.tar
+
+.phpunit.result.cache
