@@ -1,5 +1,25 @@
 # CHANGELOG
 
+* [18.12.0-alpha7](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha6...18.12.0-alpha7)
+* [18.12.0-alpha6](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha5...18.12.0-alpha6)
+* [18.12.0-alpha5](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha4...18.12.0-alpha5)
+* [18.12.0-alpha4](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha3...18.12.0-alpha4)
+* [18.12.0-alpha3](https://github.com/pcit-ce/pcit/compare/18.12-alpha2...18.12.0-alpha3)
+* [18.12.0-alpha2](https://github.com/pcit-ce/pcit/compare/18.12-alpha1...18.12-alpha2)
+* [18.12.0-alpha1](https://github.com/pcit-ce/pcit/compare/18.06.0...18.12-alpha1)
+* [18.06.0](https://github.com/pcit-ce/pcit/compare/18.06-rc6...18.06.0)
+* [18.06.0-rc6](https://github.com/pcit-ce/pcit/compare/18.06-rc5...18.06-rc6)
+* [18.06.0-rc5](https://github.com/pcit-ce/pcit/compare/18.06-rc4...18.06-rc5)
+* [18.06.0-rc4](https://github.com/pcit-ce/pcit/compare/18.06-rc3...18.06-rc4)
+* [18.06.0-rc3](https://github.com/pcit-ce/pcit/compare/18.06-rc2...18.06-rc3)
+* [18.06.0-rc2](https://github.com/pcit-ce/pcit/compare/18.06-rc1...18.06-rc2)
+* [18.06.0-rc1](https://github.com/pcit-ce/pcit/compare/0.0.20...18.06-rc1)
+* [0.0.20](https://github.com/pcit-ce/pcit/compare/0.0.15...0.0.20)
+* [0.0.15](https://github.com/pcit-ce/pcit/compare/0.0.10...0.0.15)
+* [0.0.10](https://github.com/pcit-ce/pcit/compare/0.0.5...0.0.10)
+* [0.0.5](https://github.com/pcit-ce/pcit/compare/0.0.1...0.0.5)
+* [0.0.1](https://github.com/pcit-ce/pcit/releases/tag/0.0.1)
+
 ## v18.12
 
 ### 2019/01/20

@@ -34,6 +34,7 @@ FROM khs1994/php:7.3.4-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
+COPY plugins /app/pcit/plugins/
 
 RUN --mount=type=cache,target=/tmp/cache,id=composer_cache cd /app/pcit \
       && composer install --no-dev \

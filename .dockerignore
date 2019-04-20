@@ -30,7 +30,6 @@ framework/storage/private_key/public.key
 /docs
 /examples
 /miniprogram
-/plugins
 /tests
 /yaml_examples
 /coverage.xml
