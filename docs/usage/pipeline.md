@@ -106,6 +106,11 @@ when:
   # branch:
   #   include: [ master, release/* ]
   #   exclude: [ release/1.0.0, release/1.1.* ]
+  
+  # matrix:
+  # - K: v
+  #   K2: v2
+  #   K3: v3
 ```
 
 ## 7. `privileged`

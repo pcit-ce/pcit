@@ -1,4 +1,4 @@
-# networks 指令
+# networks
 
 该指令用来配置网络。
 

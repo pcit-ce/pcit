@@ -1,3 +1,17 @@
+---
+home: true
+actionText: PCIT is CI TOOLKIT Written by PHP
+actionLink: https://ci.khs1994.com
+features:
+- title: 安全
+  details: 除构建日志、项目特征信息外，本系统不存储任何用户数据、仓库代码
+- title: 便捷
+  details: 基于 OAuth2 协议，PCIT 不拥有账号体系，直接基于 Git 服务商账号体系
+- title: 协作
+  details: 基于 GitHub 等的多人协作
+footer: Copyright @2019 khs1994.com
+---
+
 # PCIT Documents
 
 **PCIT** 划分为 **CE** 和 **EE** 两大版本。

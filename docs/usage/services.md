@@ -35,7 +35,7 @@ $pdo = new PDO('mysql:host=mysql;dbname=test;port=3306','root','test');
 
 这里 host 对应着每个服务的名字。
 
-## 服务默认配置
+## 默认配置
 
 ### Redis
 

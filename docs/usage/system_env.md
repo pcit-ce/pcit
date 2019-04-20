@@ -1,4 +1,4 @@
-# PCIT 系统内置变量
+# System Env
 
 `CI=true`  
 `PCIT=true`  

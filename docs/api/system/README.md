@@ -1,4 +1,4 @@
-# 系统信息获取
+# System Info
 
 ## 获取 OAuth 应用的 client_id
 
