@@ -30,7 +30,7 @@ git config user.name ${PCIT_USERNAME}
 
 git config user.email ${PCIT_EMAIL}
 
-git commit -m "${PCIT_MESSAGE:-"Deploy Git by PCIT https://ci.khs1994.com"}"
+git commit -m "${PCIT_MESSAGE:-"Deploy Git by PCIT https://ci.khs1994.com"}" || exit 0
 
 set +e; git remote get-url origin && git remote rm origin; set -e
 
