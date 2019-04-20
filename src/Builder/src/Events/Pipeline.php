@@ -17,8 +17,8 @@ use PCIT\Builder\Conditional\Platform;
 use PCIT\Builder\Conditional\Status;
 use PCIT\Builder\Conditional\Tag;
 use PCIT\Builder\Parse;
-use PCIT\Deployer\Application as Deployer;
 use PCIT\PCIT as PCIT;
+use PCIT\Plugin\Application as Plugin;
 use PCIT\Support\Cache;
 use PCIT\Support\CacheKey;
 use PCIT\Support\Log;
@@ -64,7 +64,7 @@ class Pipeline
      *
      * @throws Exception
      */
-    public function handleDeployer($settings, $env): array
+    public function handlePlugin($settings, $env): array
     {
         $text = json_encode($settings);
 
@@ -77,11 +77,11 @@ class Pipeline
 
         'docker' === $provider && $settings['host'] = env('CI_DOCKER_HOST');
 
-        $provider && Log::connect()->emergency('Deployer provider is '.$provider);
+        $provider && Log::connect()->emergency('Plugin image is '.$provider);
 
         $result = ['image' => null, 'env' => []];
 
-        $adapter = '\PCIT\Deployer\Adapter\\'.strtoupper($provider);
+        $adapter = '\PCIT\Plugin\Adapter\\'.strtoupper($provider);
 
         if (!class_exists($adapter)) {
             $env = [];
@@ -103,14 +103,14 @@ class Pipeline
         }
 
         try {
-            $result = (new Deployer(new $adapter($settings)))->deploy();
+            $result = (new Plugin(new $adapter($settings)))->deploy();
         } catch (\Throwable $e) {
             Log::connect()->emergency(
-                'Deployer adapter error '.$e->getMessage());
+                'Plugin adapter error '.$e->getMessage());
         }
 
         $provider && Log::connect()->emergency(
-            'Deployer provider result '.json_encode($result));
+            'Plugin provider result '.json_encode($result));
 
         return $result;
     }
@@ -243,7 +243,7 @@ class Pipeline
 
             // 处理官方插件
             if ($settings) {
-                ['image' => $preImage, 'env' => $deployEnv] = $this->handleDeployer($settings, $preEnv);
+                ['image' => $preImage, 'env' => $deployEnv] = $this->handlePlugin($settings, $preEnv);
 
                 $preEnv = array_merge($preEnv, $deployEnv);
 

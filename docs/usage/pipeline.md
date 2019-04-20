@@ -106,7 +106,7 @@ when:
   # branch:
   #   include: [ master, release/* ]
   #   exclude: [ release/1.0.0, release/1.1.* ]
-  
+
   # matrix:
   # - K: v
   #   K2: v2
@@ -120,3 +120,13 @@ when:
 ## 8. `settings`
 
 该指令用来配置插件。
+
+```yaml
+pipeline:
+  settings:
+    provider: docker
+    k: v
+    k2: v2
+```
+
+将 `PCIT_K=v PCIT_K2=v2` 作为环境变量传入容器中。

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Deployer\Adapter;
+namespace PCIT\Plugin\Adapter;
 
 class DOCKER extends AbstractAdapter
 {

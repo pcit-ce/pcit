@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Deployer\Tests;
+namespace PCIT\Plugin\Tests;
 
 use PHPUnit\Framework\TestCase;
 

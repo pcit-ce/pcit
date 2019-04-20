@@ -244,8 +244,8 @@ pipeline:
       provider: pages
       keep_history: true
       target_branch: master
-      git_url: github.com/pcit-ce/deployer
-      local_dir: src/Deployer
+      git_url: github.com/pcit-ce/kernel-plugin
+      local_dir: src/Plugin
       git_token: ${GITHUB_TOKEN}
       depth: 10
 
@@ -280,8 +280,8 @@ pipeline:
       provider: pages
       keep_history: true
       target_branch: master
-      git_url: github.com/pcit-ce/deployer-s3
-      local_dir: src/DeployerS3
+      git_url: github.com/pcit-ce/plugin-s3
+      local_dir: plugins/storage/s3
       git_token: ${GITHUB_TOKEN}
       depth: 10
 

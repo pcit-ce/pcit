@@ -48,6 +48,8 @@ class Agent extends Kernel
         try {
             $this->pcit->docker->system->ping(1);
         } catch (\Throwable $e) {
+            Log::debug(__FILE__, __LINE__, $e->getMessage());
+
             return;
         }
 

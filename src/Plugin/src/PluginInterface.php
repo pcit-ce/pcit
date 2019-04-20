@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Deployer;
+namespace PCIT\Plugin;
 
-interface DeployerInterface
+interface PluginInterface
 {
     public function deploy(): array;
 }

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Deployer\Adapter;
+namespace PCIT\Plugin\Adapter;
 
-use PCIT\Deployer\AdapterInterface;
+use PCIT\Plugin\AdapterInterface;
 
 class AbstractAdapter implements AdapterInterface
 {

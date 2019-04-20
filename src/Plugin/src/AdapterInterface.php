@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Deployer;
+namespace PCIT\Plugin;
 
 interface AdapterInterface
 {

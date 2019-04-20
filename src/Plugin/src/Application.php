@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Deployer;
+namespace PCIT\Plugin;
 
-class Application implements DeployerInterface
+class Application implements PluginInterface
 {
     protected $adapter;
 

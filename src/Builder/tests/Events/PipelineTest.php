@@ -13,10 +13,10 @@ class PipelineTest extends TestCase
     /**
      * @throws Exception
      */
-    public function test_handleDeployer(): void
+    public function test_handlePlugin(): void
     {
         $result = (new Pipeline(null, null, null, null))
-            ->handleDeployer(
+            ->handlePlugin(
                 [
                     'provider' => 's3',
                     'upload_dir' => '${PCIT_BUILD_ID}/ui/nightly/${PCIT_COMMIT}',
@@ -37,10 +37,10 @@ class PipelineTest extends TestCase
     /**
      * @throws Exception
      */
-    public function test_handleDeployer_default(): void
+    public function test_handlePlugin_default(): void
     {
         $result = (new Pipeline(null, null, null, null))
-            ->handleDeployer([
+            ->handlePlugin([
                 'provider' => 'test',
                 'a' => 'a',
                 'b' => [

@@ -23,7 +23,7 @@
     },
     {
       "type": "path",
-      "url": "./src/Deployer"
+      "url": "./src/Plugin"
     },
     {
       "type": "path",
@@ -35,19 +35,19 @@
     },
     {
       "type": "path",
-      "url": "./src/DeployerCustom/DeployerS3"
+      "url": "./plugins/storage/s3"
     },
     {
       "type": "path",
-      "url": "./src/DeployerCustom/DeployerDocker"
+      "url": "./plugins/docker"
     },
     {
       "type": "path",
-      "url": "./src/DeployerCustom/DeployerNPM"
+      "url": "./plugins/package/npm"
     },
     {
       "type": "path",
-      "url": "./src/DeployerCustom/DeployerPAGES"
+      "url": "./plugins/pages"
     },
     {
       "type": "path",
@@ -101,17 +101,17 @@
     "pcit/api": "*",
     "pcit/builder": "*",
     "pcit/cache": "*",
-    "pcit/deployer": "*",
     "pcit/framework": "*",
     "pcit/git-coding": "*",
     "pcit/git-gitee": "*",
     "pcit/git-gogs": "*",
     "pcit/kernel": "*",
     "pcit/logs": "*",
-    "pcit/plugin-docker": "*",
-    "pcit/plugin-s3": "*",
+    "pcit/plugin": "*",
+    "pcit/plugin-docker": "^19.06",
     "pcit/plugin-npm": "*",
     "pcit/plugin-pages": "*",
+    "pcit/plugin-s3": "*",
     "pcit/provider-aliyun-docker-registry": "*",
     "pcit/provider-wechat": "*",
     "phpmailer/phpmailer": "^6.0",
@@ -149,7 +149,7 @@
   },
   "scripts": {
     "docker:build": "docker build -t pcit/pcit:alpine --progress=plain .",
-    "docker:push": "docker-compose push",
+    "docker:push": "docker-compose push pcit",
     "test": "phpunit",
     "test:codecov": "phpunit --coverage-clover=coverage.xml",
     "minio:server": "minio server z:",

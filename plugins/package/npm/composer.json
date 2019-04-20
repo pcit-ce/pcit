@@ -1,14 +1,14 @@
 {
-  "name": "pcit/plugin-pages",
+  "name": "pcit/plugin-npm",
   "version": "19.06.0",
   "autoload": {
     "psr-4": {
-      "PCIT\\Deployer\\Adapter\\": "src/"
+      "PCIT\\Plugin\\Adapter\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "PCIT\\Deployer\\Tests": "tests/"
+      "PCIT\\Plugin\\Tests": "tests/"
     }
   }
 }
