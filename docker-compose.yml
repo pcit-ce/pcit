@@ -9,8 +9,8 @@ services:
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.3.3}
-        - NODE_VERSION=${NODE_VERSION:-11.11.0}
+        - PHP_VERSION=${PHP_VERSION:-7.4.0RC1}
+        - NODE_VERSION=${NODE_VERSION:-12.9.0}
         - NODE_REGISTRY=https://registry.npm.taobao.org
 
   all:
