@@ -5,5 +5,10 @@
     "psr-4": {
       "PCIT\\GitHub\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PCIT\\GitHub\\Tests\\": "tests/"
+    }
   }
 }

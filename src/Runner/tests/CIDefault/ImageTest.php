@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\CIDefault;
 
 use PCIT\Builder\CIDefault\Image;
-use PCIT\Tests\PCITTestCase;
+use Tests\PCITTestCase;
 
 class ImageTest extends PCITTestCase
 {

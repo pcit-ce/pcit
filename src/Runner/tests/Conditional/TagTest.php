@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Tag;
-use PCIT\Tests\PCITTestCase;
+use Tests\PCITTestCase;
 
 class TagTest extends PCITTestCase
 {

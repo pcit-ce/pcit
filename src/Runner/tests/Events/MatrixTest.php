@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Events;
 
 use PCIT\Builder\Events\Matrix;
-use PCIT\Tests\PCITTestCase;
 use Symfony\Component\Yaml\Yaml;
+use Tests\PCITTestCase;
 
 class MatrixTest extends PCITTestCase
 {

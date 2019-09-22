@@ -1,8 +1,10 @@
 /*
 !PCIT
 !api
-!Plugins
+!app
 !webhooks
 !.gitignore
-!Builder
+!Mock
 !Dockerfile
+!PCITTest.php
+!PCITTestCase.php

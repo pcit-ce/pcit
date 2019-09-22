@@ -7,8 +7,8 @@ namespace PCIT\Builder\Tests\Events;
 use PCIT\Builder\Events\Notifications;
 use PCIT\Support\Cache;
 use PCIT\Support\CacheKey;
-use PCIT\Tests\PCITTestCase;
 use Symfony\Component\Yaml\Yaml;
+use Tests\PCITTestCase;
 
 class NotificationTest extends PCITTestCase
 {

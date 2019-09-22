@@ -7,8 +7,8 @@ namespace PCIT\Builder\Tests\Events;
 use PCIT\Builder\Events\Cache;
 use PCIT\Support\CacheKey;
 use PCIT\Support\DB;
-use PCIT\Tests\PCITTestCase;
 use Symfony\Component\Yaml\Yaml;
+use Tests\PCITTestCase;
 
 class CacheTest extends PCITTestCase
 {

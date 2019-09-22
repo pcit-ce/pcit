@@ -3,10 +3,15 @@
   "version": "19.06.0",
   "autoload": {
     "psr-4": {
-      "PCIT\\": "./"
+      "PCIT\\": "src/"
     },
     "files": [
-      "Kernel/helpers.php"
+      "src/Kernel/helpers.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PCIT\\Tests\\": "tests/"
+    }
   }
 }

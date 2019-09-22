@@ -141,8 +141,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "PCIT\\Tests\\": "tests/PCIT/",
-      "PCIT\\Tests\\Plugins\\": "tests/Plugins/"
+      "Tests\\": "tests/"
     }
   },
   "minimum-stability": "dev",

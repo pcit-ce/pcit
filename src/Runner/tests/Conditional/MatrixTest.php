@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Matrix;
-use PCIT\Tests\PCITTestCase;
 use Symfony\Component\Yaml\Yaml;
+use Tests\PCITTestCase;
 
 class MatrixTest extends PCITTestCase
 {

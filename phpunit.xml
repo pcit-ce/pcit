@@ -3,8 +3,11 @@
     <testsuites>
         <testsuite name="Feature">
             <directory>tests/PCIT</directory>
+            <directory>src/PCIT/tests</directory>
             <directory>src/Runner/tests</directory>
             <directory>src/Deployer/tests</directory>
+            <directory>src/git/GitHub/tests</directory>
+            <directory>src/Plugin/tests</directory>
             <directory>tests/Plugins</directory>
         </testsuite>
     </testsuites>

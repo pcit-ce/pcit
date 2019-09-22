@@ -5,5 +5,10 @@
     "psr-4": {
       "PCIT\\Plugin\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PCIT\\Plugin\\Tests": "tests/"
+    }
   }
 }
