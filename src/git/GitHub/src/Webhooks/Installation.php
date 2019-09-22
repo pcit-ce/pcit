@@ -26,7 +26,7 @@ class Installation
             'repo' => $repositories,
             'sender' => $sender,
             'account' => $account
-        ] = PCIT\GitHub\WebhooksParse\Installation::handle($json_content);
+        ] = \PCIT\GitHub\WebhooksParse\Installation::handle($json_content);
 
         if ('deleted' === $action) {
             self::delete($installation_id, $account->username);
@@ -94,7 +94,7 @@ class Installation
             'repo' => $repo,
             'sender' => $sender,
             'account' => $account
-        ] = PCIT\GitHub\WebhooksParse\Installation::repositories($json_content);
+        ] = \PCIT\GitHub\WebhooksParse\Installation::repositories($json_content);
 
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
         User::updateUserInfo($account);

@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Console\PCITDaemon;
 
 use App\Build;
+use App\Console\Webhooks\AliYunRegistry;
 use App\Events\Build as BuildEvent;
 use App\Events\CheckAdmin;
-use App\Console\Webhooks\AliYunRegistry;
 use Error;
 use Exception;
 use PCIT\Support\Cache;
 use PCIT\Support\CI;
 use PCIT\Support\DB;
+use PCIT\Support\Git;
 use PCIT\Support\HTTP;
 use PCIT\Support\Log;
 use PCIT\Support\Subject;
@@ -147,8 +148,11 @@ class Server extends Kernel
 
             $this->git_type = $git_type;
 
+            $class = 'PCIT\\'.Git::getClassName($git_type).'\Webhooks\Kernel';
+            $webhooksHandler = new $class();
+
             try {
-                $this->$event_type($json);
+                $webhooksHandler->$event_type($json);
                 Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle success', [], Log::INFO);
             } catch (Error | Exception $e) {
                 Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle error', [$e->__toString()], Log::ERROR);

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\WebhooksParse;
 
-use PCIT\Support\Log;
 use PCIT\GitHub\WebhooksParse\UserBasicInfo\Account;
 use PCIT\GitHub\WebhooksParse\UserBasicInfo\Sender;
+use PCIT\Support\Log;
 
 class Installation
 {

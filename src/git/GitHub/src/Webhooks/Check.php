@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks;
 
 use App\Build;
-use App\Console\Webhooks\Skip;
 use App\Job;
 use App\Notifications\GitHubAppChecks;
 
@@ -33,7 +32,7 @@ class Check
             'action' => $action,
             'account' => $account,
             'check_suite_id' => $check_suite_id
-        ] = PCIT\GitHub\WebhooksParse\Check::suite($json_content);
+        ] = \PCIT\GitHub\WebhooksParse\Check::suite($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
@@ -63,7 +62,7 @@ class Check
             'check_run_id' => $check_run_id,
             'branch' => $branch,
             'account' => $account,
-        ] = PCIT\GitHub\WebhooksParse\Check::run($json_content);
+        ] = \PCIT\GitHub\WebhooksParse\Check::run($json_content);
 
         if (\in_array($action, ['created', 'updated'], true)) {
             return;

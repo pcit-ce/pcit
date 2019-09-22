@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Webhooks;
+namespace App\Http\Controllers\WebhooksServer;
 
 use Exception;
 use PCIT\PCIT;

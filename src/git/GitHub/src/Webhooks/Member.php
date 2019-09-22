@@ -22,7 +22,7 @@ class Member
             'rid' => $rid,
             'repo_full_name' => $repo_full_name,
             'member_uid' => $member_uid
-        ] = PCIT\GitHub\WebhooksParse\Member::handle($json_content);
+        ] = \PCIT\GitHub\WebhooksParse\Member::handle($json_content);
 
         'added' === $action && Repo::updateAdmin((int) $rid, (int) $member_uid);
         'removed' === $action && Repo::deleteAdmin((int) $rid, (int) $member_uid);

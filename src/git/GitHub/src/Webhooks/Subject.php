@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks;
 
-use App\Console\Webhooks\GetConfig;
-
 /**
  * 观察者模式 主题.
  */

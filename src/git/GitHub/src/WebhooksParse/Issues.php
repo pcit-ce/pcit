@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\WebhooksParse;
 
+use PCIT\GitHub\WebhooksParse\UserBasicInfo\Account;
 use PCIT\Support\Date;
 use PCIT\Support\Log;
-use PCIT\GitHub\WebhooksParse\UserBasicInfo\Account;
 
 class Issues
 {

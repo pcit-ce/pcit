@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks;
 
 use App\Build;
-use App\Console\Webhooks\GetConfig;
-use App\Console\Webhooks\Skip;
 
 class Push
 {
@@ -17,7 +15,7 @@ class Push
      */
     public static function handle($json_content): void
     {
-        $result = PCIT\GitHub\WebhooksParse\Push::handle($json_content);
+        $result = \PCIT\GitHub\WebhooksParse\Push::handle($json_content);
 
         $tag = $result['tag'] ?? null;
 

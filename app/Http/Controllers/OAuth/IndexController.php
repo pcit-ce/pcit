@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\OAuth;
 
+use PCIT\Support\Git;
+
 class IndexController
 {
     public function getClass($gitType)
     {
-        switch ($gitType) {
-            case 'github':
-                $class = 'GitHub';
-                break;
-
-            default:
-                $class = ucfirst($gitType);
-                break;
-        }
-
-        $class = 'PCIT\\'.$class.'\OAuth\IndexController';
+        $class = 'PCIT\\'.Git::getClassName($gitType).'\OAuth\IndexController';
 
         return $class;
     }

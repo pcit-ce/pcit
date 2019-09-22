@@ -7,10 +7,10 @@ namespace App\Http\Controllers\OAuth;
 use App\User;
 use Error;
 use Exception;
-use PCIT\PCIT;
 use PCIT\Coding\OAuth\Client as CodingClient;
 use PCIT\Gitee\OAuth\Client as GiteeClient;
 use PCIT\GitHub\OAuth\Client as GitHubClient;
+use PCIT\PCIT;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 

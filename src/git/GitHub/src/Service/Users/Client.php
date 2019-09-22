@@ -51,7 +51,7 @@ class Client
         return [
             'uid' => $obj->id,
             'name' => $obj->login,
-            'email' => $obj->email,
+            'email' => $obj->email ?? null,
             'pic' => $obj->avatar_url,
         ];
     }

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks;
 
 use App\Build;
-use App\Console\Webhooks\GetConfig;
-use App\Console\Webhooks\Skip;
 use App\GetAccessToken;
 use PCIT\PCIT;
 
@@ -26,7 +24,7 @@ class PullRequest
      */
     public static function handle($json_content)
     {
-        $result = PCIT\GitHub\WebhooksParse\PullRequest::handle($json_content);
+        $result = \PCIT\GitHub\WebhooksParse\PullRequest::handle($json_content);
 
         $action = $result['action'];
 

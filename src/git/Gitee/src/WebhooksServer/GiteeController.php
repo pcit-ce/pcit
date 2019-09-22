@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Gitee\WebhooksServer;
 
-use App\Http\Controllers\Webhooks\Kernel;
+use App\Http\Controllers\WebhooksServer\Kernel;
 
 class GiteeController extends Kernel
 {
