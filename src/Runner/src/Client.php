@@ -88,7 +88,7 @@ class Client
         $this->language = $language = $yaml_obj->language ?? 'php';
         $this->git = $git = $yaml_obj->clone->git ?? null;
         $this->cache = $cache = $yaml_obj->cache ?? null;
-        $workspace = $yaml_obj->workspace ?? null;
+        $workspace = $yaml_obj->workdir ?? $yaml_obj->workspace ?? null;
         $pipeline = $yaml_obj->steps ?? $yaml_obj->pipeline ?? null;
         $this->services = $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->matrix ?? null;

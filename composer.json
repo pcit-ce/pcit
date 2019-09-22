@@ -148,7 +148,7 @@
     }
   },
   "scripts": {
-    "docker:build": "docker build -t pcit/pcit:alpine --progress=plain .",
+    "docker:build": "docker buildx build -t pcit/pcit:alpine --progress=plain .",
     "docker:push": "docker-compose push pcit",
     "test": "phpunit",
     "test:codecov": "phpunit --coverage-clover=coverage.xml",

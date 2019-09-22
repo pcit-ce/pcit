@@ -207,6 +207,7 @@ class Pipeline
 
         $commands = $pipelineContent->commands
             ?? $pipelineContent->command
+            ?? $pipelineContent->run
             ?? Commands::get($this->language, $pipeline);
 
         return \is_string($commands) ? [$commands] : $commands;
@@ -231,12 +232,13 @@ class Pipeline
 
             $image = $pipelineContent->image ?? Image::get($language);
             $commands = $this->handleCommands($setup, $pipelineContent);
-            $env = $pipelineContent->environment ?? [];
+            $env = $pipelineContent->env ?? $pipelineContent->environment ?? [];
             $shell = $pipelineContent->shell ?? 'sh';
             $privileged = $pipelineContent->privileged ?? false;
             $pull = $pipelineContent->pull ?? false;
-            $settings = $pipelineContent->with ?? $pipelineContent->settings ?? new \stdClass();
+            $settings = $pipelineContent->with ?? $pipelineContent->setting ?? $pipelineContent->settings ?? new \stdClass();
             $settings = (array) $settings;
+            $when = $pipelineContent->if ?? $pipelineContent->when ?? null;
 
             // 预处理 env
             $preEnv = $this->handleEnv($env);
@@ -252,12 +254,12 @@ class Pipeline
             }
 
             // 处理构建条件
-            if ($this->checkWhen($pipelineContent->if ?? $pipelineContent->when ?? null)) {
+            if ($this->checkWhen($when)) {
                 continue;
             }
 
             // 根据 pipeline 获取默认的构建条件
-            $status = $pipelineContent->when->status ?? CIDefaultStatus::get($setup);
+            $status = $when->status ?? CIDefaultStatus::get($setup);
             $failure = (new Status())->handle($status, 'failure');
             $success = (new Status())->handle($status, 'success');
             $changed = (new Status())->handle($status, 'changed');
