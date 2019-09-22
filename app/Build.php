@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use Exception;
+use PCIT\Exception\PCITException;
 use PCIT\Support\CI;
 use PCIT\Support\DB;
 use PCIT\Support\Model;

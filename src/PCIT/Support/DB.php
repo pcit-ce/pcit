@@ -55,7 +55,7 @@ class DB
                     }
                 }
 
-                if(2002 === $e->getCode()){
+                if (2002 === $e->getCode()) {
                     die('DB_Error: Can\'t connect DB Server');
                 }
 
