@@ -4,20 +4,10 @@ declare(strict_types=1);
 
 namespace PCIT\Builder\CIDefault;
 
+use Symfony\Component\Yaml\Yaml;
+
 class Commands
 {
-    public static $commandList = [
-        'php' => [
-            'sami' => ['sami update .sami.php'],
-            'install' => ['composer install'],
-            'script' => ['composer test'],
-        ],
-        'node_js' => [
-            'install' => ['npm install'],
-            'script' => ['npm test'],
-        ],
-    ];
-
     /**
      * @param string $language_type example: php
      * @param string $pipeline      example: script
@@ -26,6 +16,8 @@ class Commands
      */
     public static function get(?string $language_type, ?string $pipeline): array
     {
-        return self::$commandList[$language_type][$pipeline] ?? [];
+        $commandList = Yaml::parse(file_get_contents(__DIR__.'/manifest.yaml'))['run'];
+
+        return $commandList[$language_type][$pipeline] ?? [];
     }
 }
