@@ -84,7 +84,7 @@ class SystemController
 
 language: php
 
-pipeline:
+steps:
 
   install:
     command:

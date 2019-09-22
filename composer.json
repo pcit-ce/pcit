@@ -15,7 +15,7 @@
     },
     {
       "type": "path",
-      "url": "./src/Builder"
+      "url": "./src/Runner"
     },
     {
       "type": "path",
@@ -99,7 +99,7 @@
     "monolog/monolog": "^1.23",
     "nunomaduro/collision": "^3.0",
     "pcit/api": "*",
-    "pcit/builder": "*",
+    "pcit/runner": "*",
     "pcit/cache": "*",
     "pcit/framework": "*",
     "pcit/git-coding": "*",

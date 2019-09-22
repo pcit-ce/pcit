@@ -16,10 +16,10 @@ class Migrate
      */
     public static function migrate(string $sql_file): void
     {
-        if (\in_array($sql_file, self::getSqlList(), true)) {
-            self::execFromFile(base_path().'framework/sql/'.$sql_file);
+        if (\in_array($sql_file, self::getSqlFileList(), true)) {
+            self::migrateSqlFile(base_path().'framework/sql/'.$sql_file);
         } else {
-            var_dump(self::getSqlList());
+            var_dump(self::getSqlFileList());
         }
 
         return;
@@ -30,10 +30,10 @@ class Migrate
      */
     public static function all(): void
     {
-        foreach (self::getSqlList() as $file) {
+        foreach (self::getSqlFileList() as $file) {
             echo "\n\n===> Migrate $file ...\n\n";
 
-            self::execFromFile(base_path().'framework/sql/'.$file);
+            self::migrateSqlFile(base_path().'framework/sql/'.$file);
         }
 
         return;
@@ -44,7 +44,7 @@ class Migrate
      *
      * @param string $file
      */
-    private static function execFromFile(string $file): void
+    private static function migrateSqlFile(string $file): void
     {
         $content = file_get_contents($file);
 
@@ -55,7 +55,8 @@ class Migrate
                 }
                 DB::statement($k);
             } catch (\Throwable $e) {
-                echo $e->getMessage().$e->getCode();
+                // 数据库执行出错则退出
+                echo 'DB_Error: '.$e->getMessage();
             }
         }
     }
@@ -65,7 +66,7 @@ class Migrate
      *
      * @return array
      */
-    private static function getSqlList()
+    private static function getSqlFileList()
     {
         $sqlFileList = scandir(base_path().'framework/sql');
 

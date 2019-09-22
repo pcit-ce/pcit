@@ -1,5 +1,5 @@
 {
-  "name": "pcit/builder",
+  "name": "pcit/runner",
   "version": "19.06.0",
   "autoload": {
     "psr-4": {

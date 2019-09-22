@@ -235,7 +235,7 @@ class Pipeline
             $shell = $pipelineContent->shell ?? 'sh';
             $privileged = $pipelineContent->privileged ?? false;
             $pull = $pipelineContent->pull ?? false;
-            $settings = $pipelineContent->settings ?? new \stdClass();
+            $settings = $pipelineContent->with ?? $pipelineContent->settings ?? new \stdClass();
             $settings = (array) $settings;
 
             // 预处理 env
@@ -252,7 +252,7 @@ class Pipeline
             }
 
             // 处理构建条件
-            if ($this->checkWhen($pipelineContent->when ?? null)) {
+            if ($this->checkWhen($pipelineContent->if ?? $pipelineContent->when ?? null)) {
                 continue;
             }
 

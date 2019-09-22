@@ -31,7 +31,7 @@ cache:
   - vendor
 
 # 构建步骤
-pipeline:
+steps: # pipeline
   # 构建指令最简 字符串
   before_install: echo init script
 
@@ -45,11 +45,11 @@ pipeline:
 
   # 当构建步骤仅指定 command(s)，可以使用以上三种方式进行简写
   before_install_4:
-    command: ['echo init script']
+    run: ['echo init script']
 
   install:
     # image: khs1994/php:7.3.0-composer-alpine
-    # commands or command
+    # commands or command or run
     command:
       - pwd
       - composer config -g cache-dir /tmp/pcit_cache/composer
@@ -77,7 +77,7 @@ pipeline:
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit --coverage-clover=coverage.xml
-    when: # 不支持变量
+    when: # 不支持变量 or if
       # platform: linux/amd64
       # platform: [ linux/*, windows/amd64 ]
 
@@ -102,7 +102,7 @@ pipeline:
 
   windows_only:
     image: bash
-    when:
+    if:
       platform: Windows/amd64
     commands: echo "Only run on Windows amd64"
 
@@ -130,7 +130,7 @@ pipeline:
       - echo "Don't run on master branch"
 
   docker_build:
-    settings:
+    settings: # or with
       provider: docker
       # registry: docker.khs1994.com
       repo: pcit/pcit
@@ -200,7 +200,7 @@ pipeline:
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
-    settings: # ！支持变量！
+    with: # ！支持变量！
       provider: pages
       keep_history: true
       target_branch: gh-pages
@@ -249,7 +249,7 @@ pipeline:
       git_token: ${GITHUB_TOKEN}
       depth: 10
 
-  sync_git_builder:
+  sync_git_runner:
     when:
       event: ['tag']
       status: success
@@ -262,8 +262,8 @@ pipeline:
       provider: pages
       keep_history: true
       target_branch: master
-      git_url: github.com/pcit-ce/builder
-      local_dir: src/Builder
+      git_url: github.com/pcit-ce/runner
+      local_dir: src/Runner
       git_token: ${GITHUB_TOKEN}
       depth: 10
 
@@ -464,7 +464,5 @@ networks:
     - "git.khs1994.com:127.0.0.1"
     - "docker.khs1994.com:127.0.0.1"
 
-# 系统设置
-system:
-  # 指定构建步骤的默认镜像
-  image: khs1994/php:7.3.4-composer-fpm
+# 指定构建步骤的默认镜像
+image: khs1994/php:7.3.4-composer-fpm
