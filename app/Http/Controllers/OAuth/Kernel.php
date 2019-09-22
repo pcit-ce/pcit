@@ -8,9 +8,9 @@ use App\User;
 use Error;
 use Exception;
 use PCIT\PCIT;
-use PCIT\Service\Coding\OAuth\Client as CodingClient;
-use PCIT\Service\Gitee\OAuth\Client as GiteeClient;
-use PCIT\Service\GitHub\OAuth\Client as GitHubClient;
+use PCIT\Coding\OAuth\Client as CodingClient;
+use PCIT\Gitee\OAuth\Client as GiteeClient;
+use PCIT\GitHub\OAuth\Client as GitHubClient;
 use PCIT\Support\Response;
 use PCIT\Support\Session;
 

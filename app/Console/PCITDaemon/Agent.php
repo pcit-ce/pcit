@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console\PCITDaemon;
 
 use App\Build;
-use App\Console\Events\LogHandle;
-use App\Console\Events\UpdateBuildStatus;
+use App\Events\LogHandle;
+use App\Events\UpdateBuildStatus;
 use App\Job;
 use PCIT\Support\CI;
 use PCIT\Support\Log;

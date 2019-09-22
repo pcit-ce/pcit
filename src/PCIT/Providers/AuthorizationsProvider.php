@@ -12,7 +12,7 @@ class AuthorizationsProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['authorizations'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Authorizations\Client';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Authorizations\Client';
 
             return new $class($app);
         };

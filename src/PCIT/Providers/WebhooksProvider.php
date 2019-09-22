@@ -12,7 +12,7 @@ class WebhooksProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['webhooks'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Webhooks\Client';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Webhooks\Client';
 
             return new $class($app);
         };

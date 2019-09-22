@@ -11,31 +11,31 @@ class ActivityProvider extends \PCIT\Support\ServiceProvider
     public function register(Container $pimple): void
     {
         $pimple['activity_events'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Activity\EventsClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Activity\EventsClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['activity_feeds'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Activity\FeedsClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Activity\FeedsClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['activity_notifications'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Activity\NotificationsClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Activity\NotificationsClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['activity_starring'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Activity\StarringClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Activity\StarringClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };
 
         $pimple['activity_watching'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Activity\\WatchingClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Activity\\WatchingClient';
 
             return new $class($app->curl, $app->config['api_url']);
         };

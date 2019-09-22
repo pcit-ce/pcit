@@ -12,37 +12,37 @@ class IssueProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['issue'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Issue\Client';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Issue\Client';
 
             return new $class($app['curl'], $app['config']['api_url'], $app['tencent_ai']);
         };
 
         $pimple['issue_assignees'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Issue\AssigneesClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Issue\AssigneesClient';
 
             return new $class($app['curl'], $app['config']['api_url']);
         };
 
         $pimple['issue_comments'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Issue\CommentsClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Issue\CommentsClient';
 
             return new $class($app['curl'], $app['config']['api_url'], $app['tencent_ai']);
         };
 
         $pimple['issue_events'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Issue\EventsClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Issue\EventsClient';
 
             return new $class();
         };
 
         $pimple['issue_labels'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Issue\LabelsClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Issue\LabelsClient';
 
             return new $class();
         };
 
         $pimple['issue_milestones'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Issue\MilestonesClient';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Issue\MilestonesClient';
 
             return new $class();
         };

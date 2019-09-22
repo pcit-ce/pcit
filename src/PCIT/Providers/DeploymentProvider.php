@@ -12,7 +12,7 @@ class DeploymentProvider implements ServiceProviderInterface
     public function register(Container $pimple): void
     {
         $pimple['deployment'] = function ($app) {
-            $class = 'PCIT\Service\\'.$app->class_name.'\Deployment\Client';
+            $class = 'PCIT\\'.$app->class_name.'\Service\Deployment\Client';
 
             return new $class($app->curl, $app->config['api_url']);
         };

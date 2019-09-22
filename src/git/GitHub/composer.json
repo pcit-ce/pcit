@@ -1,0 +1,9 @@
+{
+  "name": "pcit/git-github",
+  "version": "19.06.0",
+  "autoload": {
+    "psr-4": {
+      "PCIT\\GitHub\\": "src/"
+    }
+  }
+}

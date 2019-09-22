@@ -3,12 +3,7 @@
   "version": "19.06.0",
   "autoload": {
     "psr-4": {
-      "PCIT\\Service\\Gogs\\": "src/",
-      "PCIT\\Support\\Webhooks\\": "Support/Webhooks/",
-      "App\\Console\\Webhooks\\Gogs\\": "Console/Webhooks/Gogs",
-      "App\\Http\\Controllers\\OAuth\\Gogs\\": "app/Http/Controllers/OAuth/",
-      "App\\Http\\Controllers\\Profile\\Gogs\\": "app/Http/Controllers/Profile/",
-      "App\\Http\\Controllers\\Webhooks\\Gogs\\": "app/Http/Controllers/Webhooks/"
+      "PCIT\\Gogs\\": "src/"
     }
   }
 }

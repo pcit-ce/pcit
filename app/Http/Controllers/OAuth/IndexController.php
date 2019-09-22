@@ -18,7 +18,7 @@ class IndexController
                 break;
         }
 
-        $class = __NAMESPACE__.'\\'.$class.'\IndexController';
+        $class = 'PCIT\\'.$class.'\OAuth\IndexController';
 
         return $class;
     }

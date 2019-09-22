@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Service\Coding\Webhooks;
+namespace PCIT\Coding\Service\Webhooks;
 
 class Client
 {

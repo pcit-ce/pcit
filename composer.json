@@ -63,6 +63,10 @@
     },
     {
       "type": "path",
+      "url": "./src/git/GitHub"
+    },
+    {
+      "type": "path",
       "url": "./src/PCIT"
     },
     {
@@ -105,6 +109,7 @@
     "pcit/git-coding": "*",
     "pcit/git-gitee": "*",
     "pcit/git-gogs": "*",
+    "pcit/git-github": "*",
     "pcit/kernel": "*",
     "pcit/logs": "*",
     "pcit/plugin": "*",
