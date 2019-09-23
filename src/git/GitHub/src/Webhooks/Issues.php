@@ -6,9 +6,9 @@ namespace PCIT\GitHub\Webhooks;
 
 use App\GetAccessToken;
 use App\Issue;
+use PCIT\Framework\Support\Cache;
+use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
-use PCIT\Support\Cache;
-use PCIT\Support\Log;
 
 class Issues
 {

@@ -10,9 +10,9 @@ use App\Setting;
 use Exception;
 use PCIT\Builder\BuildData;
 use PCIT\Exception\PCITException;
+use PCIT\Framework\Support\Log;
 use PCIT\Support\CI;
 use PCIT\Support\JSON;
-use PCIT\Support\Log;
 
 /**
  * 获取 build 数据.

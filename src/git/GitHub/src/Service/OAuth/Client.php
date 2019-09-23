@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Log;
 
 class Client implements OAuthInterface
 {

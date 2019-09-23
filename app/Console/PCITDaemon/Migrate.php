@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\PCITDaemon;
 
 use Exception;
-use PCIT\Support\DB;
+use PCIT\Framework\Support\DB;
 
 class Migrate
 {

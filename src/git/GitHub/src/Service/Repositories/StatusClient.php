@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Service\Repositories;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Log;
 
 /**
  * The status API allows external services to mark commits with an

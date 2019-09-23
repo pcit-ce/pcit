@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Events;
 
 use App\Job;
-use PCIT\Support\Cache;
-use PCIT\Support\CacheKey;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Cache;
+use PCIT\Framework\Support\CacheKey;
+use PCIT\Framework\Support\Log;
 
 /**
  * 处理日志.

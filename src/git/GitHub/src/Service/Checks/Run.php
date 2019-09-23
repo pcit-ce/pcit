@@ -6,8 +6,8 @@ namespace PCIT\GitHub\Service\Checks;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Support\Date;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Date;
+use PCIT\Framework\Support\Log;
 
 /**
  * Class Run.

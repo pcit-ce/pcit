@@ -37,7 +37,7 @@ class Notifications
             return;
         }
 
-        \PCIT\Support\Cache::store()
+        \PCIT\Framework\Support\Cache::store()
             ->hSet(
                 CacheKey::notificationsHashKey($this->build_key_id),
                 'email',

@@ -7,9 +7,9 @@ namespace App\Events;
 use App\GetAccessToken;
 use App\Repo;
 use PCIT\Builder\BuildData;
+use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 use PCIT\Support\CI;
-use PCIT\Support\Log;
 
 /**
  * CI 测试通过，自动合并.

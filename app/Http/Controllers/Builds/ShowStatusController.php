@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Builds;
 use App\Build;
 use App\Repo;
 use Exception;
+use PCIT\Framework\Support\Response;
 use PCIT\Support\Env;
-use PCIT\Support\Response;
 
 class ShowStatusController
 {

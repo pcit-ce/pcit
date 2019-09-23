@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Builder\Conditional;
 
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Log;
 
 abstract class Kernel
 {

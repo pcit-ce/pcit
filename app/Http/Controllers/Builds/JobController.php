@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Builds;
 use App\Build;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
+use PCIT\Framework\Support\DB;
 use PCIT\PCIT;
-use PCIT\Support\DB;
 
 class JobController
 {

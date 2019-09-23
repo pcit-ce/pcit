@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Tests\Service\Webhooks;
 
+use PCIT\Framework\Http\Request;
 use PCIT\PCIT as PCIT;
-use PCIT\Support\Request;
 use Tests\PCITTestCase;
 
 class ClientTest extends PCITTestCase
@@ -46,7 +46,7 @@ class ClientTest extends PCITTestCase
 
         $request->overrideGlobals();
 
-        $this->pcit->request = $request;
+        $this->app->singleton('request', $request);
 
         $result = $this->pcit->webhooks->server();
 

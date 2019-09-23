@@ -6,10 +6,10 @@ namespace PCIT\GitHub\Service\GitHubApp;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Support\Cache;
-use PCIT\Support\Env;
-use PCIT\Support\JWT;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Cache;
+use PCIT\Framework\Support\Env;
+use PCIT\Framework\Support\JWT;
+use PCIT\Framework\Support\Log;
 
 /**
  * Class Installations.

@@ -6,8 +6,8 @@ namespace App\Console\PCITDaemon\Commands;
 
 use App\Console\PCITDaemon\Migrate;
 use Exception;
+use PCIT\Framework\Support\Log;
 use PCIT\Support\Env;
-use PCIT\Support\Log;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,7 +45,7 @@ abstract class Kernel extends Command
                 Migrate::all();
             }
 
-            \PCIT\Support\DB::close();
+            \PCIT\Framework\Support\DB::close();
         }
 
         Log::debug(__FILE__, __LINE__, 'Start Memory is '.memory_get_usage(), [], Log::INFO);

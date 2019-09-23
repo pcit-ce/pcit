@@ -7,10 +7,10 @@ namespace App\Notifications;
 use App\Build;
 use App\Repo;
 use Exception;
+use PCIT\Framework\Support\Date;
+use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
-use PCIT\Support\Date;
 use PCIT\Support\Git;
-use PCIT\Support\Log;
 
 class WeChatTemplate
 {

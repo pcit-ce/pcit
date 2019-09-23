@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use PCIT\Framework\Support\Response;
 use PCIT\Support\Env;
-use PCIT\Support\Response;
 
 class IndexController
 {

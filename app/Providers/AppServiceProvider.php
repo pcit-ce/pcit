@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use PCIT\Framework\Support\ServiceProvider;
 use PCIT\PCIT;
-use PCIT\Support\ServiceProvider;
 use Pimple\Container;
 
 class AppServiceProvider extends ServiceProvider

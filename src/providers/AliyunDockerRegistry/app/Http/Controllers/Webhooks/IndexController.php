@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks\AliyunDockerRegistry;
 
 use Exception;
-use PCIT\Support\Cache;
+use PCIT\Framework\Support\Cache;
 
 class IndexController
 {

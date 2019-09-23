@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Builder\Events;
 
-use PCIT\Support\DB;
+use PCIT\Framework\Support\DB;
 
 /**
  * 获取服务的默认配置.

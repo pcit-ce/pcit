@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Dotenv\Dotenv;
 use Exception;
-use PCIT\Foundation\Testing\TestCase as BaseTestCase;
+use PCIT\Framework\Foundation\Testing\TestCase as BaseTestCase;
 use PCIT\PCIT;
 
 abstract class PCITTestCase extends BaseTestCase
@@ -39,10 +38,6 @@ abstract class PCITTestCase extends BaseTestCase
      */
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
-        if (file_exists(base_path().'.env.testing')) {
-            (Dotenv::create(base_path(), '.env.testing'))->load();
-        }
-
         parent::__construct($name, $data, $dataName);
     }
 }

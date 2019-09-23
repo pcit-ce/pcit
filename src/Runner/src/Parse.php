@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Builder;
 
 use Exception;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Log;
 
 class Parse
 {

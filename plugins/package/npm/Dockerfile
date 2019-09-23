@@ -1,5 +1,5 @@
-FROM npm:alpine
+FROM plugin/npm
 
-# PCIT_EMAIL
-#
-#
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+ENTRYPOINT ['sh','/docker-entryponit.sh']

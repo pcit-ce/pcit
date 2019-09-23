@@ -6,9 +6,9 @@ namespace App;
 
 use Exception;
 use PCIT\Exception\PCITException;
+use PCIT\Framework\Support\DB;
+use PCIT\Framework\Support\Model;
 use PCIT\Support\CI;
-use PCIT\Support\DB;
-use PCIT\Support\Model;
 
 class Build extends Model
 {

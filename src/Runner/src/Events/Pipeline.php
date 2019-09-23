@@ -17,11 +17,10 @@ use PCIT\Builder\Conditional\Platform;
 use PCIT\Builder\Conditional\Status;
 use PCIT\Builder\Conditional\Tag;
 use PCIT\Builder\Parse;
+use PCIT\Framework\Support\Cache;
+use PCIT\Framework\Support\Log;
 use PCIT\PCIT as PCIT;
-use PCIT\Plugin\Application as Plugin;
-use PCIT\Support\Cache;
 use PCIT\Support\CacheKey;
-use PCIT\Support\Log;
 
 class Pipeline
 {
@@ -54,65 +53,7 @@ class Pipeline
         $this->build = $build;
         $this->client = $client;
         $this->cache = Cache::store();
-    }
-
-    /**
-     * @param $settings
-     * @param $env
-     *
-     * @return array
-     *
-     * @throws Exception
-     */
-    public function handlePlugin($settings, $env): array
-    {
-        $text = json_encode($settings);
-
-        // ${} 变量替换
-        $result = Parse::text($text, $env);
-
-        $settings = json_decode($result, true);
-
-        $provider = $settings['provider'] ?? null;
-
-        'docker' === $provider && $settings['host'] = env('CI_DOCKER_HOST');
-
-        $provider && Log::connect()->emergency('Plugin image is '.$provider);
-
-        $result = ['image' => null, 'env' => []];
-
-        $adapter = '\PCIT\Plugin\Adapter\\'.strtoupper($provider);
-
-        if (!class_exists($adapter)) {
-            $env = [];
-
-            foreach ($settings as $key => $value) {
-                if ('provider' === $key) {
-                    continue;
-                }
-
-                $value = \is_array($value) ? json_encode($value) : $value;
-                $key = str_replace('-', '_', $key);
-                $env[] = 'PCIT_'.strtoupper($key).'='.$value;
-            }
-
-            return $result = [
-                'image' => $settings['provider'] ?? 'null',
-                'env' => $env,
-            ];
-        }
-
-        try {
-            $result = (new Plugin(new $adapter($settings)))->deploy();
-        } catch (\Throwable $e) {
-            Log::connect()->emergency(
-                'Plugin adapter error '.$e->getMessage());
-        }
-
-        $provider && Log::connect()->emergency(
-            'Plugin provider result '.json_encode($result));
-
-        return $result;
+        $this->pluginHandler = new PluginHandler();
     }
 
     /**
@@ -230,7 +171,7 @@ class Pipeline
         foreach ($this->pipeline as $setup => $pipelineContent) {
             Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
 
-            $image = $pipelineContent->image ?? Image::get($language);
+            $image = $pipelineContent->uses ?? $pipelineContent->image ?? Image::get($language);
             $commands = $this->handleCommands($setup, $pipelineContent);
             $env = $pipelineContent->env ?? $pipelineContent->environment ?? [];
             $shell = $pipelineContent->shell ?? 'sh';
@@ -245,12 +186,7 @@ class Pipeline
 
             // 处理官方插件
             if ($settings) {
-                ['image' => $preImage, 'env' => $deployEnv] = $this->handlePlugin($settings, $preEnv);
-
-                $preEnv = array_merge($preEnv, $deployEnv);
-
-                $image = ($settings['provider'] ?? null)
-                    ? $preImage ?: $image : $image;
+                $preEnv = array_merge($preEnv, $this->pluginHandler->handle($settings, $preEnv));
             }
 
             // 处理构建条件

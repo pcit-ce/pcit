@@ -48,6 +48,7 @@ steps: # pipeline
     run: ['echo init script']
 
   before_install_5:
+    # image: or uses
     # environment: or env
     env:
       - k=v
@@ -138,8 +139,8 @@ steps: # pipeline
       - echo "Don't run on master branch"
 
   docker_build:
+    image: docker
     settings:
-      provider: docker
       # registry: docker.khs1994.com
       repo: pcit/pcit
       tags: 7.3.9-swarm-${PCIT_TAG}
@@ -159,8 +160,8 @@ steps: # pipeline
       # event: tag
 
   docker_build_dont_push:
+    image: docker
     settings:
-      provider: docker
       # registry: docker.khs1994.com
       repo: pcit/pcit
       tags: 7.3.9-swarm-${PCIT_TAG}
@@ -180,10 +181,10 @@ steps: # pipeline
       branch: alpha
 
   plugin-demo:
+    image: pcit/demo
     if:
       branch: alpha
     settings:
-      provider: pcit/demo
       var: 1
       var_array:
         - a=1
@@ -204,6 +205,7 @@ steps: # pipeline
     #  - sami update .sami.php
 
   gitee_pages:
+    image: pcit/pages
     if:
       status: success
       event: ['push']
@@ -213,7 +215,6 @@ steps: # pipeline
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     with: # ！支持变量！
-      provider: pages
       keep_history: true
       target_branch: gh-pages
       git_url: gitee.com/pcit-ce/pcit
@@ -224,6 +225,7 @@ steps: # pipeline
       message: "commit by pcit"
 
   github_pages:
+    image: pcit/pages
     when:
       status: success
       event: ['push']
@@ -233,7 +235,6 @@ steps: # pipeline
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     settings:
-      provider: pages
       keep_history: true
       # target_branch: gh-pages
       git_url: github.com/pcit-ce/pcit
@@ -244,6 +245,7 @@ steps: # pipeline
       depth: 10
 
   sync_git_deployer:
+    image: pcit/pages
     when:
       event: ['tag']
       status: success
@@ -253,7 +255,6 @@ steps: # pipeline
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     settings:
-      provider: pages
       keep_history: true
       target_branch: master
       git_url: github.com/pcit-ce/kernel-plugin
@@ -262,6 +263,7 @@ steps: # pipeline
       depth: 10
 
   sync_git_runner:
+    image: pcit/pages
     when:
       event: ['tag']
       status: success
@@ -271,7 +273,6 @@ steps: # pipeline
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     settings:
-      provider: pages
       keep_history: true
       target_branch: master
       git_url: github.com/pcit-ce/runner
@@ -280,6 +281,7 @@ steps: # pipeline
       depth: 10
 
   sync_git_deployer_s3:
+    image: pcit/pages
     when:
       event: ['tag']
       status: success
@@ -289,7 +291,6 @@ steps: # pipeline
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
     settings:
-      provider: pages
       keep_history: true
       target_branch: master
       git_url: github.com/pcit-ce/plugin-s3
@@ -298,7 +299,7 @@ steps: # pipeline
       depth: 10
 
   tencent_cloud_cos_v4:
-    # image: pcit/tencent_cloud_cos:v4
+    image: pcit/tencent_cloud_cos:v4
     when:
       status: success
       event: tag
@@ -310,7 +311,6 @@ steps: # pipeline
         MYSQL_VERSION: 5.7.24
     # environment:
     settings:
-      provider: 'tencent_cloud_cos_v4'
       files:
         - README.md: pcit/tencent_cloud_cos_file_name_${PCIT_TAG}
         - Dockerfile: pcit/tencent_cloud_cos_file_name2_${PCIT_TAG}
@@ -321,6 +321,7 @@ steps: # pipeline
       bucket: ${COS_V4_BUCKET}
 
   s3:
+    image: pcit/s3
     when:
       status: success
       event: ['push']
@@ -331,7 +332,6 @@ steps: # pipeline
         MYSQL_VERSION: 5.7.24
     # environment:
     settings:
-      provider: s3
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
@@ -344,7 +344,7 @@ steps: # pipeline
       minio: true
 
   github_releases:
-    # image: pcit/github_releases
+    image: pcit/github_releases
     when:
       status: success
       event: tag
@@ -352,7 +352,6 @@ steps: # pipeline
       # environment:
       # - GITHUB_TOKEN=x
     settings:
-      provider: 'github_release'
       github_token: ${GITHUB_TOKEN}
       file:
         - "CHANGELOG.md"

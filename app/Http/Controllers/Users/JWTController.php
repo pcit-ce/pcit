@@ -8,9 +8,8 @@ use App\Build;
 use App\Repo;
 use Curl\Curl;
 use Exception;
+use PCIT\Framework\Support\JWT;
 use PCIT\Support\Git;
-use PCIT\Support\JWT;
-use PCIT\Support\Request;
 
 class JWTController
 {
@@ -23,7 +22,7 @@ class JWTController
      */
     private static function getToken()
     {
-        $token = Request::getHeader('Authorization');
+        $token = \Request::getHeader('Authorization');
 
         if (!$token || 'token undefined' === $token) {
             throw new Exception('Requires authentication', 401);

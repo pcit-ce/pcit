@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Webhooks;
 
 use Exception;
-use PCIT\PCIT as PCIT;
-use PCIT\Support\Cache;
-use PCIT\Support\Env;
-use PCIT\Support\Request;
+use PCIT\Framework\Support\Cache;
+use PCIT\Framework\Support\Env;
 
 /**
  * @see https://developer.github.com/webhooks/#events
@@ -25,14 +23,8 @@ class Client
      */
     public $cache_key = 'webhooks';
 
-    /**
-     * @var PCIT
-     */
-    public $app;
-
-    public function __construct(PCIT $app)
+    public function __construct()
     {
-        $this->app = $app;
     }
 
     /**
@@ -42,10 +34,10 @@ class Client
      */
     public function server()
     {
-        $type = Request::getHeader('X-Github-Event') ?? 'undefined';
+        $type = \Request::getHeader('X-Github-Event') ?? 'undefined';
         // $content = file_get_contents('php://input');
 
-        $content = $this->app->request->getContent();
+        $content = \Request::getContent();
 
         $this->secret($content);
 
@@ -69,7 +61,7 @@ class Client
 
         $secret = env('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
 
-        $signature = Request::getHeader('X-Hub-Signature');
+        $signature = \Request::getHeader('X-Hub-Signature');
 
         list($algo, $github_hash) = explode('=', $signature, 2);
 

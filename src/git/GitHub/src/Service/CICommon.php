@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service;
 
 use Curl\Curl;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Log;
 
 trait CICommon
 {

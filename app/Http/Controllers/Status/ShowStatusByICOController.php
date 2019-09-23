@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Status;
 
 use Error;
 use Exception;
-use PCIT\Support\Response;
+use PCIT\Framework\Support\Response;
 
 /**
  * 获取状态小图标.

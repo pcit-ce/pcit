@@ -6,7 +6,7 @@ define('PCIT_START', microtime(true));
 
 require __DIR__.'/../vendor/autoload.php';
 
-use Symfony\Component\HttpFoundation\Request;
+use PCIT\Framework\Http\Request;
 
 // ob_start();
 

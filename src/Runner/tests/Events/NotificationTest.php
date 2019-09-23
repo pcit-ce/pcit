@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Events;
 
 use PCIT\Builder\Events\Notifications;
-use PCIT\Support\Cache;
+use PCIT\Framework\Support\Cache;
 use PCIT\Support\CacheKey;
 use Symfony\Component\Yaml\Yaml;
 use Tests\PCITTestCase;

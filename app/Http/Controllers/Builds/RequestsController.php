@@ -77,8 +77,6 @@ class RequestsController
      */
     public function create(...$args)
     {
-        $request = app('request');
-
         list($username, $repo_name) = $args;
 
         list($rid) = JWTController::checkByRepo($username, $repo_name);
@@ -90,7 +88,7 @@ class RequestsController
 
         // $body = file_get_contents('php://input');
 
-        $body = $request->getContent();
+        $body = \Request::getContent();
 
         $body_obj = json_decode($body);
 

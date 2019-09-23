@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Service\Issue;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Log;
 use TencentAI\TencentAI;
 
 class Client

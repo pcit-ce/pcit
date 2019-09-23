@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\WebhooksParse;
 
+use PCIT\Framework\Support\Log;
 use PCIT\GitHub\WebhooksParse\UserBasicInfo\Account;
-use PCIT\Support\Log;
 
 class Member
 {

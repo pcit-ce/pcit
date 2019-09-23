@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use PCIT\Support\Route;
-
 Route::get('test1/{id}', function ($id) {
     return $id;
 });

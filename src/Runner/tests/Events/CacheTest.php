@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Events;
 
 use PCIT\Builder\Events\Cache;
+use PCIT\Framework\Support\DB;
 use PCIT\Support\CacheKey;
-use PCIT\Support\DB;
 use Symfony\Component\Yaml\Yaml;
 use Tests\PCITTestCase;
 
@@ -35,7 +35,7 @@ class CacheTest extends PCITTestCase
 
         $cache->handle();
 
-        $this->cache = \PCIT\Support\Cache::store()->get(CacheKey::cacheKey(1));
+        $this->cache = \PCIT\Framework\Support\Cache::store()->get(CacheKey::cacheKey(1));
     }
 
     /**

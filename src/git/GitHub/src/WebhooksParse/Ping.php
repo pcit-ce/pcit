@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\WebhooksParse;
 
-use PCIT\Support\Log;
+use PCIT\Framework\Support\Log;
 
 class Ping
 {

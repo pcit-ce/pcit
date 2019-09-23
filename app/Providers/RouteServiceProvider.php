@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use PCIT\Support\ServiceProvider;
+use PCIT\Framework\Support\ServiceProvider;
 use Pimple\Container;
 
 class RouteServiceProvider extends ServiceProvider

@@ -9,8 +9,8 @@ use App\Http\Controllers\Users\JWTController;
 use App\Job;
 use App\Repo;
 use Exception;
+use PCIT\Framework\Support\DB;
 use PCIT\Support\CI;
-use PCIT\Support\DB;
 
 class BuildsController
 {

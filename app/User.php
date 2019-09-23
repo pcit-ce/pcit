@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App;
 
 use Exception;
+use PCIT\Framework\Support\DB;
+use PCIT\Framework\Support\Model;
 use PCIT\GitHub\WebhooksParse\UserBasicInfo\Account;
-use PCIT\Support\DB;
-use PCIT\Support\Model;
 
 class User extends Model
 {

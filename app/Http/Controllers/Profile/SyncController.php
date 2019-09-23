@@ -9,8 +9,8 @@ use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use App\User;
 use Exception;
+use PCIT\Framework\Support\DB;
 use PCIT\PCIT;
-use PCIT\Support\DB;
 
 /**
  * 同步用户数据.

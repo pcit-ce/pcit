@@ -8,9 +8,9 @@ use App\Repo;
 use App\User;
 use PCIT\Builder\BuildData;
 use PCIT\Exception\PCITException;
+use PCIT\Framework\Support\Log;
 use PCIT\Support\CI;
 use PCIT\Support\Env;
-use PCIT\Support\Log;
 
 /**
  * 检查仓库是否位于管理员名下.

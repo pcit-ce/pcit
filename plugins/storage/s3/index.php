@@ -12,15 +12,15 @@ echo "\n\n===> use PCIT Plugin s3\n\n";
 
 $options = [
     'version' => 'latest',
-    'region' => getenv('PCIT_S3_REGION'),
-    'endpoint' => getenv('PCIT_S3_ENDPOINT'),
-    'use_path_style_endpoint' => 'true' === getenv('PCIT_S3_USE_PATH_STYLE_ENDPOINT'),
+    'region' => getenv('INPUT_S3_REGION'),
+    'endpoint' => getenv('INPUT_S3_ENDPOINT'),
+    'use_path_style_endpoint' => 'true' === getenv('INPUT_S3_USE_PATH_STYLE_ENDPOINT'),
     'credentials' => [
-        'key' => getenv('PCIT_S3_ACCESS_KEY_ID'),
-        'secret' => getenv('PCIT_S3_SECRET_ACCESS_KEY'),
+        'key' => getenv('INPUT_S3_ACCESS_KEY_ID'),
+        'secret' => getenv('INPUT_S3_SECRET_ACCESS_KEY'),
     ],
     'http' => [
-        'connect_timeout' => getenv('PCIT_S3_CONNECT_TIMEOUT') ?: 20,
+        'connect_timeout' => getenv('INPUT_S3_CONNECT_TIMEOUT') ?: 20,
     ],
 ];
 
@@ -30,11 +30,11 @@ $flysystem = new Filesystem(
     new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));
 
 // handle cache
-if ($s3_cache = getenv('PCIT_S3_CACHE')) {
-    $prefix = getenv('PCIT_S3_CACHE_PREFIX');
+if ($s3_cache = getenv('INPUT_S3_CACHE')) {
+    $prefix = getenv('INPUT_S3_CACHE_PREFIX');
     $cache_tar_gz_name = $prefix.'.tar.gz';
 
-    if (getenv('PCIT_S3_CACHE_DOWNLOAD')) {
+    if (getenv('INPUT_S3_CACHE_DOWNLOAD')) {
         echo "\n\n==> Setting up build cache\n";
 
         try {
@@ -69,8 +69,8 @@ if ($s3_cache = getenv('PCIT_S3_CACHE')) {
     exit;
 } // handle cache end
 
-if (getenv('PCIT_S3_FILE')) {
-    foreach (json_decode(getenv('PCIT_S3_FILE')) as $item) {
+if (getenv('INPUT_S3_FILE')) {
+    foreach (json_decode(getenv('INPUT_S3_FILE')) as $item) {
         foreach ($item as $k => $v) {
             $flysystem->put($v, file_get_contents($k));
         }
@@ -78,8 +78,8 @@ if (getenv('PCIT_S3_FILE')) {
 }
 
 // local_dir upload_dir
-$local_dir = getenv('PCIT_S3_LOCAL_DIR');
-$upload_dir = getenv('PCIT_S3_UPLOAD_DIR');
+$local_dir = getenv('INPUT_S3_LOCAL_DIR');
+$upload_dir = getenv('INPUT_S3_UPLOAD_DIR');
 
 $local_dir = '/' === $local_dir ? '/' : trim($local_dir, '/');
 $upload_dir = '/' === $upload_dir ? '/' : trim($upload_dir, '/');

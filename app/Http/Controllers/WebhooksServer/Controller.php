@@ -7,12 +7,11 @@ namespace App\Http\Controllers\WebhooksServer;
 use App\Repo;
 use Error;
 use Exception;
+use PCIT\Framework\Support\Cache;
+use PCIT\Framework\Support\Env;
+use PCIT\Framework\Support\Session;
 use PCIT\PCIT;
-use PCIT\Support\Cache;
 use PCIT\Support\CI;
-use PCIT\Support\Env;
-use PCIT\Support\Request;
-use PCIT\Support\Session;
 
 class Controller
 {
@@ -43,7 +42,7 @@ class Controller
      */
     private static function checkAccessToken()
     {
-        $header = Request::getHeader('Authorization') ?? '';
+        $header = \Request::getHeader('Authorization') ?? '';
 
         $access_token = (explode(' ', $header))[1]
             ?? Session::get(self::$gitType.'.access_token')

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Mail;
 
 use Exception;
+use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
-use PCIT\Support\Log;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class Mail

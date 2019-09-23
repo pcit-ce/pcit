@@ -6,9 +6,9 @@ namespace PCIT\GitHub\Webhooks;
 
 use App\Repo;
 use Exception;
+use PCIT\Framework\Support\HTTP;
+use PCIT\Framework\Support\Log;
 use PCIT\Support\Git;
-use PCIT\Support\HTTP;
-use PCIT\Support\Log;
 use Symfony\Component\Yaml\Yaml;
 
 /**

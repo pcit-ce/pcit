@@ -1,0 +1,14 @@
+{
+  "name": "pcit/kernel",
+  "version": "19.06.0",
+  "autoload": {
+    "psr-4": {
+      "PCIT\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PCIT\\Tests\\": "tests/"
+    }
+  }
+}

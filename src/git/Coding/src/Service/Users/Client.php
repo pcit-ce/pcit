@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Coding\Service\Users;
 
 use Exception;
+use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Service\CICommon;
 use PCIT\GitHub\Service\Users\Client as GitHubClient;
-use PCIT\Support\Log;
 
 class Client extends GitHubClient
 {

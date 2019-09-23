@@ -8,4 +8,13 @@ return [
     'providers' => [
         'App\Providers\AppServiceProvider',
     ],
+    'alias' => [
+        'Route' => PCIT\Framework\Support\Facades\Route::class,
+        'Request' => PCIT\Framework\Support\Facades\Request::class,
+    ],
+    'providers' => [
+        PCIT\Framework\Routing\RoutingServiceProvider::class,
+
+        App\Providers\AppServiceProvider::class,
+    ],
 ];

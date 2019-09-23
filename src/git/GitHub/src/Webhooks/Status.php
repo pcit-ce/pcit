@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks;
 
-use PCIT\Support\DB;
+use PCIT\Framework\Support\DB;
 
 class Status
 {

@@ -25,6 +25,7 @@ return PhpCsFixer\Config::create()
       'declare_strict_types' => true, // @PHP70Migration:risky, @PHP71Migration:risky
       'ternary_to_null_coalescing' => true, // @PHP70Migration, @PHP71Migration
       'void_return' => true, // @PHP71Migration:risky
+      'visibility_required'=> true,
     ])
     ->setCacheFile(__DIR__.'/.php_cs.cache')
     ->setFinder($finder)
