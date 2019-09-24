@@ -6,8 +6,8 @@ namespace App\Events;
 
 use App\Job;
 use PCIT\Framework\Support\Cache;
-use PCIT\Framework\Support\CacheKey;
 use PCIT\Framework\Support\Log;
+use PCIT\Support\CacheKey;
 
 /**
  * 处理日志.

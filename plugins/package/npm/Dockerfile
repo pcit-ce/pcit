@@ -1,4 +1,4 @@
-FROM plugin/npm
+FROM plugins/npm
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 

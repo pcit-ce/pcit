@@ -9,7 +9,12 @@ use App\Console\PCITDaemon\Commands\UpCommand;
 use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
+
 $app = require __DIR__.'/../../framework/bootstrap/app.php';
+
+if ('cli' === \PHP_SAPI) {
+    (new NunoMaduro\Collision\Provider())->register();
+}
 
 try {
     /**

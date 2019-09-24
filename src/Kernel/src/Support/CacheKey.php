@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Support;
 
+use PCIT\Framework\Support\Cache;
+
 class CacheKey
 {
     /*

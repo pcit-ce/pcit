@@ -8,8 +8,8 @@ use App\Build;
 use App\Job;
 use App\Notifications\GitHubAppChecks;
 use Exception;
+use PCIT\Framework\Support\JSON;
 use PCIT\Support\CI;
-use PCIT\Support\JSON;
 
 abstract class Kernel
 {

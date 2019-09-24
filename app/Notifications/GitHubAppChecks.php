@@ -10,11 +10,11 @@ use App\Job;
 use App\Notifications\GitHubChecksConclusion\Queued;
 use App\Repo;
 use Exception;
+use PCIT\Framework\Support\JSON;
 use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Service\Checks\RunData;
 use PCIT\PCIT;
 use PCIT\Support\CI;
-use PCIT\Support\JSON;
 
 class GitHubAppChecks
 {

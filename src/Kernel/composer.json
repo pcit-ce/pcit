@@ -4,7 +4,10 @@
   "autoload": {
     "psr-4": {
       "PCIT\\": "src/"
-    }
+    },
+    "files": [
+      "src/Support/helpers.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
