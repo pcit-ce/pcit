@@ -57,19 +57,20 @@ steps: # pipeline
     # setting: or settings or with
     # when: or if
 
-  python:
+  python_shell:
     image: python:3.6-alpine
     shell: python
     commands: |
       import os
       print(os.environ['PATH'])
 
-  pwsh:
+  pwsh_shell:
     uses: mcr.microsoft.com/powershell:alpine-3.8
     shell: pwsh
     run: |
       write-host 1
       write-host 2
+
   alpine:
     image: alpine
     run: |

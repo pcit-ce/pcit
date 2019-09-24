@@ -60,6 +60,7 @@ class Log
         $docker_container = app(PCIT::class)->docker->container;
 
         while (1) {
+            // 循环遍历日志
             $i = $i + 1;
 
             $image_status_obj = json_decode($docker_container->inspect($this->container_id))->State;
@@ -67,6 +68,7 @@ class Log
             $startedAt = Date::parse($image_status_obj->StartedAt);
 
             if ('running' === $status) {
+                // 处于运行状态
                 if (0 === $i) {
                     $since_time = $startedAt;
                     $until_time = $startedAt;
@@ -86,9 +88,14 @@ class Log
 
                 continue;
             } else {
+                // 容器停止，获取日志
                 $image_log = $docker_container->logs(
                     $this->container_id, false, true, true, 0, 0, true
                 );
+
+                if (!$image_log) {
+                    $image_log = 'log not found!';
+                }
 
                 $cache->hset(
                     CacheKey::logHashKey($this->job_id), $this->pipeline, $image_log);

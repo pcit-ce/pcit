@@ -26,7 +26,7 @@ class CommandHandler
         if ('sh' === $shell or 'bash' === $shell) {
             $content = '\n';
 
-            $content .= 'echo;echo\n\necho "==>" Pipeline '.$setup.' Run On "=>" '.$image;
+            $content .= 'echo;echo\n\necho "==>" Pipeline ['.$setup.'] Run On "=>" ['.$image.']';
 
             $content .= '\n\nsleep 0.1;echo;echo\n\nset -x\n\n';
 

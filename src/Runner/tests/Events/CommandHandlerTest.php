@@ -12,11 +12,29 @@ class CommandHandlerTest extends TestCase
 {
     public function test_parse(): void
     {
-        $result = CommandHandler::parse('sh', 'sh', 'image', ['echo 1', 'echo 2']);
+        $result = CommandHandler::parse('sh', 'step', 'image', ['echo 1', 'echo 2']);
 
         // var_dump($result);
 
-        $this->assertEquals($result, 'CmVjaG87ZWNobwoKZWNobyAiPT0+IiBQaXBlbGluZSBzaCBSdW4gT24gIj0+IiBpbWFnZQoKc2xlZXAgMC4xO2VjaG87ZWNobwoKc2V0IC14CgplY2hvIDEKCmVjaG8gMgoK');
+        $this->assertEquals($result, 'CmVjaG87ZWNobwoKZWNobyAiPT0+IiBQaXBlbGluZSBbc3RlcF0gUnVuIE9uICI9PiIgW2ltYWdlXQoKc2xlZXAgMC4xO2VjaG87ZWNobwoKc2V0IC14CgplY2hvIDEKCmVjaG8gMgoK');
+    }
+
+    public function test_parse_inline_sh(): void
+    {
+        $yaml = <<<EOF
+alpine:
+  run: |
+    echo 1
+    echo 2
+EOF;
+
+        $commands = Yaml::parse($yaml)['alpine']['run'];
+
+        $result = CommandHandler::parse('sh', 'step', 'image', [$commands]);
+
+        // var_dump($result);
+
+        $this->assertEquals($result, 'CmVjaG87ZWNobwoKZWNobyAiPT0+IiBQaXBlbGluZSBbc3RlcF0gUnVuIE9uICI9PiIgW2ltYWdlXQoKc2xlZXAgMC4xO2VjaG87ZWNobwoKc2V0IC14CgplY2hvIDEKZWNobyAyCgo=');
     }
 
     public function test_parse_not_sh(): void
@@ -30,7 +48,7 @@ EOF;
 
         $commands = Yaml::parse($yaml)['python']['run'];
 
-        $result = CommandHandler::parse('python', 'python', 'image', [$commands]);
+        $result = CommandHandler::parse('python', 'step', 'image', [$commands]);
 
         // var_dump($result);
 
@@ -42,12 +60,12 @@ EOF;
      */
     public function test_command(): void
     {
-        $command = CommandHandler::parse('sh', 'mock', 'khs1994/mock', [
+        $command = CommandHandler::parse('sh', 'step', 'image', [
           'pwd',
           'composer install',
           'vendor/bin/phpunit',
       ]);
 
-        $this->assertEquals(180, \strlen($command));
+        $this->assertEquals(176, \strlen($command));
     }
 }
