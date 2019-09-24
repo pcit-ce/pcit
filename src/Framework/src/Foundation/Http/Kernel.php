@@ -29,7 +29,7 @@ class Kernel
 
         // 引入路由文件
         try {
-            require_once base_path().'framework/routes/web.php';
+            require base_path().'framework/routes/web.php';
         } catch (Throwable $e) {
             if ('Finish' === $e->getMessage()) {
                 $output = Route::getOutput();

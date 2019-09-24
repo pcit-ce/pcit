@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Mock;
 
 use PCIT\Builder\Events\Log;
-use PCIT\Tests\TestCase;
+use Tests\TestCase;
 
 class MockTest extends TestCase
 {

@@ -21,8 +21,15 @@ class RequestTest extends TestCase
 
     public function test(): void
     {
-        $response = $this->request('/test');
+        $response = $this->request('/testing');
 
         $this->assertEquals(1, $response);
+    }
+
+    public function test2(): void
+    {
+        $response = $this->request('/testing/100');
+
+        $this->assertEquals(100, $response);
     }
 }

@@ -250,7 +250,11 @@ Route::get('dashboard', function () {
 /* Test */
 
 if (\PCIT\Support\CI::environment('testing')) {
-    Route::get('test', function () {
+    Route::get('testing', function () {
         return 1;
+    });
+
+    Route::get('testing/{id}', function ($id) {
+        return $id;
     });
 }
