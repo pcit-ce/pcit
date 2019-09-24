@@ -184,7 +184,7 @@ class Pipeline
             // 预处理 env
             $preEnv = $this->handleEnv($env);
 
-            // 处理官方插件
+            // 处理插件
             if ($settings) {
                 $preEnv = array_merge($preEnv, $this->pluginHandler->handle($settings, $preEnv));
             }
@@ -205,14 +205,27 @@ class Pipeline
             // 处理 image
             $image = Parse::text($image, $preEnv);
             // 处理 commands
-            $ci_script = Parse::command($setup, $image, $commands);
+            $ci_script = CommandHandler::parse($shell, $setup, $image, $commands);
 
             $env = array_merge(["CI_SCRIPT=$ci_script"], $preEnv);
 
             Log::debug(__FILE__, __LINE__, json_encode($env), [], Log::INFO);
 
-            $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'] : null;
-            $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
+            if ('bash' === $shell || 'sh' === $shell) {
+                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'] : null;
+                // 有 commands 指令则改为 ['/bin/sh', '-c'], 否则为默认值
+                $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
+            }
+
+            if ('python' === $shell) {
+                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | python'] : null;
+                $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
+            }
+
+            if ('pwsh' === $shell) {
+                $cmd = $commands ? ['$CI_SCRIPT | base64 -d | pwsh -Command -'] : null;
+                $entrypoint = $commands ? ['pwsh', '-Command'] : null;
+            }
 
             $container_config = $docker_container
                 ->setEnv($env)

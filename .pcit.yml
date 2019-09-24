@@ -57,6 +57,25 @@ steps: # pipeline
     # setting: or settings or with
     # when: or if
 
+  python:
+    image: python:3.6-alpine
+    shell: python
+    commands: |
+      import os
+      print(os.environ['PATH'])
+
+  pwsh:
+    uses: mcr.microsoft.com/powershell:alpine-3.8
+    shell: pwsh
+    run: |
+      write-host 1
+      write-host 2
+  alpine:
+    image: alpine
+    run: |
+      echo 1
+      echo 2
+
   install:
     # image: khs1994/php:7.3.0-composer-alpine
     command:
@@ -182,8 +201,6 @@ steps: # pipeline
 
   plugin-demo:
     image: pcit/demo
-    if:
-      branch: alpha
     settings:
       var: 1
       var_array:
