@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Event;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class EventTest extends PCITTestCase
+class EventTest extends TestCase
 {
     /**
      * @throws \Exception

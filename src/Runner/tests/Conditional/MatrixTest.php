@@ -6,9 +6,9 @@ namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Matrix;
 use Symfony\Component\Yaml\Yaml;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class MatrixTest extends PCITTestCase
+class MatrixTest extends TestCase
 {
     public function test(): void
     {

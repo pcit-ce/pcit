@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Tag;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class TagTest extends PCITTestCase
+class TagTest extends TestCase
 {
     /**
      * @throws \Exception

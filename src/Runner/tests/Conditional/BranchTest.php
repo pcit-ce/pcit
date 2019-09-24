@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Branch;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class BranchTest extends PCITTestCase
+class BranchTest extends TestCase
 {
     /**
      * @throws \Exception

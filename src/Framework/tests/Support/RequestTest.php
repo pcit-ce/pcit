@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Tests\Support;
+namespace PCIT\Framework\Tests\Support;
 
 use PCIT\Framework\Http\Request;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class RequestTest extends PCITTestCase
+class RequestTest extends TestCase
 {
     public function testParseLink(): void
     {
@@ -15,8 +15,6 @@ class RequestTest extends PCITTestCase
                        <https://api.github.com/resource?page=5>; rel="last"';
 
         $this->app->singleton('request', Request::createfromGlobals());
-
-        // var_dump($this->app->make('request')->parseLink($link));
 
         $this->assertArrayHasKey('next', \Request::parseLink($link));
     }

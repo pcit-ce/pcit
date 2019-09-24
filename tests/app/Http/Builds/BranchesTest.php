@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class BranchesTest extends PCITTestCase
+class BranchesTest extends TestCase
 {
     public function test(): void
     {

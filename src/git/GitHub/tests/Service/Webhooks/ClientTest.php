@@ -6,9 +6,9 @@ namespace PCIT\GitHub\Tests\Service\Webhooks;
 
 use PCIT\Framework\Http\Request;
 use PCIT\PCIT as PCIT;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class ClientTest extends PCITTestCase
+class ClientTest extends TestCase
 {
     /**
      * @var PCIT
@@ -21,6 +21,7 @@ class ClientTest extends PCITTestCase
     public function setUp(): void
     {
         $this->pcit = $this->getTest();
+        parent::setUp();
     }
 
     /**

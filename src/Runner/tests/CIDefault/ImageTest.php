@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\CIDefault;
 
 use PCIT\Builder\CIDefault\Image;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class ImageTest extends PCITTestCase
+class ImageTest extends TestCase
 {
     public function test(): void
     {

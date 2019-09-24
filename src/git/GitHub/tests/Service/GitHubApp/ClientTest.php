@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Tests\Service\GitHubApp;
 
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class ClientTest extends PCITTestCase
+class ClientTest extends TestCase
 {
     /**
      * @group dont-test

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\Conditional;
 
 use PCIT\Builder\Conditional\Platform;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class PlatformTest extends PCITTestCase
+class PlatformTest extends TestCase
 {
     /**
      * @throws \Exception

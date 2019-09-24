@@ -8,8 +8,10 @@ use Exception;
 use PCIT\Framework\Foundation\Testing\TestCase as BaseTestCase;
 use PCIT\PCIT;
 
-abstract class PCITTestCase extends BaseTestCase
+abstract class TestCase extends BaseTestCase
 {
+    use CreatesApplication;
+
     private static $test;
 
     /**
@@ -27,17 +29,5 @@ abstract class PCITTestCase extends BaseTestCase
         }
 
         return self::$test;
-    }
-
-    /**
-     * @param string|null $name
-     * @param array       $data
-     * @param string      $dataName
-     *
-     * @throws Exception
-     */
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
     }
 }

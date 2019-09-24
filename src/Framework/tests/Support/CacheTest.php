@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Tests\Support;
+namespace PCIT\Framework\Tests\Support;
 
 use PCIT\Framework\Support\Cache;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class CacheTest extends PCITTestCase
+class CacheTest extends TestCase
 {
     public function test(): void
     {

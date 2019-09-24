@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests;
 
 use PCIT\Builder\Parse;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class ParseTest extends PCITTestCase
+class ParseTest extends TestCase
 {
     /**
      * @throws \Exception

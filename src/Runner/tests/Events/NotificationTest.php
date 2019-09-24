@@ -8,9 +8,9 @@ use PCIT\Builder\Events\Notifications;
 use PCIT\Framework\Support\Cache;
 use PCIT\Support\CacheKey;
 use Symfony\Component\Yaml\Yaml;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class NotificationTest extends PCITTestCase
+class NotificationTest extends TestCase
 {
     public $yaml;
 

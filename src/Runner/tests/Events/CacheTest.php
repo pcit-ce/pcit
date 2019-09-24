@@ -8,9 +8,9 @@ use PCIT\Builder\Events\Cache;
 use PCIT\Framework\Support\DB;
 use PCIT\Support\CacheKey;
 use Symfony\Component\Yaml\Yaml;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class CacheTest extends PCITTestCase
+class CacheTest extends TestCase
 {
     public $yaml;
 
@@ -54,7 +54,7 @@ EOF;
 
         $this->common();
 
-        $this->assertEquals('PCIT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
+        $this->assertEquals('INPUT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
     }
 
     /**
@@ -72,6 +72,6 @@ EOF;
 
         $this->common();
 
-        $this->assertEquals('PCIT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
+        $this->assertEquals('INPUT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
     }
 }

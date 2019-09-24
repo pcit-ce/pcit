@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Mock;
 
 use PCIT\Builder\Events\Log;
-use PCIT\Tests\PCITTestCase;
+use PCIT\Tests\TestCase;
 
-class MockTest extends PCITTestCase
+class MockTest extends TestCase
 {
     /**
      * 请注意，final、private 和 static 方法无法对其进行上桩(stub)或模仿(mock).

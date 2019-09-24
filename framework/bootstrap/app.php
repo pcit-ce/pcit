@@ -2,32 +2,28 @@
 
 declare(strict_types=1);
 
-use Dotenv\Dotenv;
+use PCIT\Framework\Dotenv\Dotenv;
+use PCIT\Framework\Foundation\AliasLoader;
 use PCIT\Support\CI;
 use PCIT\Support\Env;
 
+// cli error handler
 if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
 
 // class alias
-foreach (config('app.alias') as $key => $value) {
-    if (!class_exists($value) or class_exists($key)) {
-        continue;
-    }
-    class_alias($value, $key);
-}
+AliasLoader::load(config('app.alias'));
 
+// load env file
 $app_env = CI::environment();
 
-$env_file = $app_env ? '.env.'.$app_env : '.env';
+$env_file = Dotenv::load($app_env);
 
-$env_file = file_exists(base_path().$env_file) ? $env_file : '.env';
-
-Dotenv::create(base_path(), $env_file)->load();
-
+// set timezone
 date_default_timezone_set(env('CI_TZ', 'PRC'));
 
+// set web error handler
 $debug = config('app.debug');
 
 if ($debug) {
@@ -38,12 +34,15 @@ if ($debug) {
     CI::enableDebug();
 }
 
+// get app
 $app = new \PCIT\Framework\Foundation\Application([]);
-$app->environmentFile = $env_file;
-$app->environmentPath = base_path().$env_file;
 
+// 绑定单例
 $app->singleton(\App\Http\Kernel::class, function ($app) {
     return new \App\Http\Kernel();
 });
+
+$app->environmentFile = $env_file;
+$env_file && $app->environmentPath = base_path().$env_file;
 
 return $app;

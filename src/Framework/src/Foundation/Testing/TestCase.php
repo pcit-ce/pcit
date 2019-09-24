@@ -11,19 +11,11 @@ class TestCase extends BaseTestCase
 {
     public $app;
 
-    /**
-     * @param string|null $name
-     * @param array       $data
-     * @param string      $dataName
-     *
-     * @throws Exception
-     */
-    public function __construct(?string $name = null, array $data = [], string $dataName = '')
+    public function setUp(): void
     {
-        putenv('APP_ENV=testing');
-        $this->app = require base_path().'framework/bootstrap/app.php';
-        // $this->app->singleton('request',Request::createFromGlobals())
-        parent::__construct();
+        if (!$this->app) {
+            $this->app = $this->createApplication();
+        }
     }
 
     /**

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Builder\Tests\CIDefault;
 
 use PCIT\Builder\CIDefault\Commands;
-use Tests\PCITTestCase;
+use Tests\TestCase;
 
-class CommandsTest extends PCITTestCase
+class CommandsTest extends TestCase
 {
     public function test(): void
     {
