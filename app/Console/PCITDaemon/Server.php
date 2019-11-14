@@ -20,7 +20,10 @@ use PCIT\Support\Git;
 use TencentAI\TencentAI;
 
 /**
- * Run Server node without docker.
+ * Run Server node, not need docker.
+ *
+ * 1. 处理 webhooks 数据，存入数据库
+ * 2. 从数据库中取出数据，生成 jobs
  */
 class Server extends Kernel
 {
@@ -148,7 +151,7 @@ class Server extends Kernel
 
             $this->git_type = $git_type;
 
-            $class = 'PCIT\\'.Git::getClassName($git_type).'\Webhooks\Kernel';
+            $class = 'PCIT\\'.Git::getClassName($git_type).'\Webhooks\Handler\Kernel';
             $webhooksHandler = new $class();
 
             try {
@@ -162,8 +165,6 @@ class Server extends Kernel
     }
 
     /**
-     * @param string $json_content
-     *
      * @throws Exception
      */
     private function aliyunDockerRegistry(string $json_content): void

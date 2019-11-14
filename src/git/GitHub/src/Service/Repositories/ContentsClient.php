@@ -13,9 +13,6 @@ class ContentsClient
     /**
      * Get the README.
      *
-     * @param string $repo_full_name
-     * @param string $ref
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -30,10 +27,6 @@ class ContentsClient
     /**
      * Get contents.
      *
-     * @param string $repo_full_name
-     * @param string $path
-     * @param string $ref
-     *
      * @return $this
      *
      * @throws \Exception
@@ -46,10 +39,6 @@ class ContentsClient
     /**
      * Create a file.
      *
-     * @param string $repo_full_name
-     * @param string $path
-     * @param string $commit_message
-     * @param string $content
      * @param string $branch
      * @param string $committer_name
      * @param string $committer_email
@@ -89,11 +78,6 @@ class ContentsClient
     /**
      * Update a file.
      *
-     * @param string $repo_full_name
-     * @param string $path
-     * @param string $commit_message
-     * @param string $content
-     * @param string $sha
      * @param string $branch
      * @param string $committer_name
      * @param string $committer_email
@@ -135,13 +119,7 @@ class ContentsClient
     /**
      * Delete a file.
      *
-     * @param string $repo_full_name
-     * @param string $path
-     * @param string $commit_message
-     * @param string $sha
      * @param string $branch
-     * @param string $committer_name
-     * @param string $committer_email
      *
      * @return mixed
      *
@@ -178,9 +156,7 @@ class ContentsClient
     /**
      * Get archive link.
      *
-     * @param string $repo_full_name
      * @param string $archive_format tarball or zipball
-     * @param string $ref
      *
      * @return mixed
      *

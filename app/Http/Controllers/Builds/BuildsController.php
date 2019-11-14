@@ -181,9 +181,6 @@ class BuildsController
     /**
      * 更新 build 的状态同时更新 job 的状态
      *
-     * @param int    $build_id
-     * @param string $status
-     *
      * @throws Exception
      */
     private function updateJobStatus(int $build_id, string $status): void

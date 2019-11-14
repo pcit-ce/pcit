@@ -14,8 +14,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     * @param string $username
-     * @param string $repo
      *
      * @return string
      *
@@ -32,8 +30,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     * @param string $username
-     * @param string $repo
      *
      * @return string
      *
@@ -50,7 +46,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     * @param int    $rid
      *
      * @return string
      *
@@ -64,7 +59,6 @@ class Repo extends Model
     }
 
     /**
-     * @param string $repo_full_name
      * @param string $git_type
      *
      * @return string
@@ -81,7 +75,6 @@ class Repo extends Model
     }
 
     /**
-     * @param int    $rid
      * @param string $git_type
      *
      * @return string
@@ -97,8 +90,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     * @param int    $rid
-     * @param bool   $collaborators
      *
      * @return string
      *
@@ -117,9 +108,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     * @param int    $rid
-     * @param int    $uid
-     * @param bool   $collaborators
      *
      * @return array
      *
@@ -138,9 +126,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     * @param int    $rid
-     * @param int    $uid
-     * @param bool   $collaborators
      *
      * @throws Exception
      */
@@ -171,9 +156,6 @@ EOF;
 
     /**
      * @param string $git_type
-     * @param int    $rid
-     * @param int    $uid
-     * @param bool   $collaborators
      *
      * @throws Exception
      */
@@ -197,8 +179,6 @@ EOF;
 
     /**
      * @param string $git_type
-     * @param int    $uid
-     * @param bool   $collaborators
      *
      * @return array
      *
@@ -219,7 +199,6 @@ EOF;
 
     /**
      * @param string $git_type
-     * @param string $username
      *
      * @return array
      *
@@ -275,8 +254,6 @@ EOF;
 
     /**
      * @param string $git_type
-     * @param string $username
-     * @param string $repo_name
      *
      * @return array
      *
@@ -290,8 +267,6 @@ EOF;
     }
 
     /**
-     * @param int    $uid
-     * @param bool   $collaborators
      * @param string $git_type
      *
      * @return array
@@ -313,7 +288,6 @@ EOF;
 
     /**
      * @param string $git_type
-     * @param int    $rid
      *
      * @return string
      *
@@ -327,12 +301,7 @@ EOF;
     }
 
     /**
-     * @param int      $rid
-     * @param string   $repo_full_name
-     * @param int|null $insert_admin
-     * @param int|null $insert_collaborators
-     * @param string   $default_branch
-     * @param string   $git_type
+     * @param string $git_type
      *
      * @throws Exception
      */
@@ -386,8 +355,7 @@ EOF;
      *
      * 将 repo 表中 user_full_name 与 user 表 installation_id 匹配的记录删除
      *
-     * @param string $git_type
-     * @param        $installation_id
+     * @param $installation_id
      *
      * @return int
      *
@@ -404,7 +372,6 @@ EOF;
     }
 
     /**
-     * @param int    $rid
      * @param string $git_type
      *
      * @return int
@@ -419,10 +386,6 @@ EOF;
     }
 
     /**
-     * @param int    $build_active
-     * @param string $git_type
-     * @param string $repo_full_name
-     *
      * @return int
      *
      * @throws Exception
@@ -435,10 +398,6 @@ EOF;
     }
 
     /**
-     * @param int    $webhooks_status
-     * @param string $git_type
-     * @param string $repo_full_name
-     *
      * @return int
      *
      * @throws Exception
@@ -451,9 +410,6 @@ EOF;
     }
 
     /**
-     * @param string $repo_full_name
-     * @param string $git_type
-     *
      * @throws Exception
      */
     public static function active(string $repo_full_name, string $git_type = 'gitee'): void
@@ -465,9 +421,6 @@ EOF;
     }
 
     /**
-     * @param string $repo_full_name
-     * @param string $git_type
-     *
      * @throws Exception
      */
     public static function deactive(string $repo_full_name, string $git_type = 'gitee'): void
@@ -479,9 +432,6 @@ EOF;
     }
 
     /**
-     * @param string $repo_full_name
-     * @param string $git_type
-     *
      * @return bool
      *
      * @throws Exception

@@ -18,6 +18,7 @@ use PCIT\Support\CI;
  * 与数据库交互的操作全部移到 Server 节点，Agent 节点严禁与数据库直接交互
  *
  * Agent run job, need docker.
+ * 1. 取出一个 job,包括 job config, build key id
  */
 class Agent extends Kernel
 {
@@ -28,14 +29,6 @@ class Agent extends Kernel
         $this->subject = new Subject();
 
         parent::__construct();
-    }
-
-    /**
-     * TODO 从服务端获取待执行 job.
-     */
-    public function getJob()
-    {
-        return Job::getQueuedJob()[0] ?? null;
     }
 
     /**
@@ -94,6 +87,14 @@ class Agent extends Kernel
         }
 
         $this->updateBuildStatus((int) $build_key_id);
+    }
+
+    /**
+     * TODO 从服务端获取待执行 job.
+     */
+    public function getJob()
+    {
+        return Job::getQueuedJob()[0] ?? null;
     }
 
     /**

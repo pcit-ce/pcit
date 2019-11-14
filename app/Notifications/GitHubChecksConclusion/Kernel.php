@@ -45,12 +45,9 @@ EOF;
     /**
      * Passed constructor.
      *
-     * @param int         $job_key_id
-     * @param string      $config
-     * @param string|null $build_log
-     * @param string      $language
-     * @param string|null $os
-     * @param string      $git_type
+     * @param string $config
+     * @param string $language
+     * @param string $git_type
      *
      * @throws Exception
      */

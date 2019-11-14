@@ -24,9 +24,6 @@ class Suites
 
     /**
      * Suites constructor.
-     *
-     * @param Curl   $curl
-     * @param string $api_url
      */
     public function __construct(Curl $curl, string $api_url)
     {
@@ -37,9 +34,6 @@ class Suites
 
     /**
      * Get a single check suite.
-     *
-     * @param string $repo_full_name
-     * @param int    $check_suite_id
      *
      * @return mixed
      *
@@ -55,8 +49,7 @@ class Suites
     /**
      * List check suites for a specific ref.
      *
-     * @param string $repo_full_name
-     * @param string $ref            Required. The ref can be a SHA, branch name, or a tag name.
+     * @param string $ref        Required. The ref can be a SHA, branch name, or a tag name.
      * @param int    $app_id
      * @param string $check_name
      *
@@ -83,9 +76,6 @@ class Suites
 
     /**
      * Set preferences for check suites on a repository.
-     *
-     * @param string $repo_full_name
-     * @param array  $auto_trigger_checks
      *
      * @return mixed
      *
@@ -118,10 +108,6 @@ class Suites
     /**
      * By default, check suites are automatically created when you create a check run.
      *
-     * @param string $repo_full_name
-     * @param string $head_branch
-     * @param string $head_sha
-     *
      * @return mixed
      *
      * @throws Exception
@@ -142,9 +128,6 @@ class Suites
      * Rerequest check suite.
      *
      * Triggers GitHub to create a new check suite, without pushing new code to a repository.
-     *
-     * @param string $repo_full_name
-     * @param int    $check_suite_id
      *
      * @return mixed
      *

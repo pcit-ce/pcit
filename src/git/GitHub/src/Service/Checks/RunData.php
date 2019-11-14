@@ -129,10 +129,6 @@ class RunData
     }
 
     /**
-     * @param string $label
-     * @param string $identifier
-     * @param string $description
-     *
      * @return array
      *
      * @see https://developer.github.com/changes/2018-05-23-request-actions-on-checks/

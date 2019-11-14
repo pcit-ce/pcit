@@ -37,12 +37,6 @@ class GitHubController
     }
 
     /**
-     * @param string $repo_full_name
-     * @param string $commit_sha
-     * @param string $state
-     * @param string $target_url
-     * @param string $description
-     * @param string $context
      * @param string $accessToken
      *
      * @return mixed

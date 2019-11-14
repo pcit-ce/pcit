@@ -14,8 +14,6 @@ class WatchingClient
     /**
      * List watchers.
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -27,8 +25,6 @@ class WatchingClient
 
     /**
      * List repositories being watched.
-     *
-     * @param string|null $username
      *
      * @return mixed
      *
@@ -48,8 +44,6 @@ class WatchingClient
      *
      * 检查是否 watching repo
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -61,10 +55,6 @@ class WatchingClient
 
     /**
      * Set a Repository Subscription.
-     *
-     * @param string $repo_full_name
-     * @param bool   $subscribed
-     * @param bool   $ignored
      *
      * @return mixed
      *
@@ -84,8 +74,6 @@ class WatchingClient
      * Delete a Repository Subscription.
      *
      * 204
-     *
-     * @param string $repo_full_name
      *
      * @throws Exception
      */

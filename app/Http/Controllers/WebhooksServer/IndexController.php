@@ -10,7 +10,7 @@ class IndexController
 {
     public function getClass(string $gitType)
     {
-        $class = 'PCIT\\'.Git::getClassName($gitType).'\WebhooksServer\IndexController';
+        $class = 'PCIT\\'.Git::getClassName($gitType).'\Webhooks\Server\IndexController';
 
         return $class;
     }

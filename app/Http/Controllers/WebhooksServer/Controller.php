@@ -175,7 +175,6 @@ class Controller
     /**
      * 设置 Webhooks 状态缓存.
      *
-     * @param int   $status
      * @param mixed ...$arg
      *
      * @throws Exception

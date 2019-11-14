@@ -59,8 +59,7 @@ class DB
                     die('DB_Error: Can\'t connect DB Server');
                 }
 
-                throw new Exception(
-                    'Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
+                throw new Exception('Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
             }
         }
 
@@ -75,9 +74,7 @@ class DB
     /**
      * 执行原生 SELECT 语句.
      *
-     * @param string $sql
-     * @param array  $data
-     * @param bool   $single
+     * @param array $data
      *
      * @return array|string
      *
@@ -114,9 +111,6 @@ class DB
     /**
      * 执行原生 INSERT 语句.
      *
-     * @param string $sql
-     * @param array  $data
-     *
      * @return int
      *
      * @throws Exception
@@ -140,9 +134,6 @@ class DB
     /**
      * 执行原生 UPDATE 语句.
      *
-     * @param string $sql
-     * @param array  $data
-     *
      * @return int 返回受影响的记录条数
      *
      * @throws Exception
@@ -155,9 +146,6 @@ class DB
     /**
      * 执行原生 DELETE 语句.
      *
-     * @param string $sql
-     * @param array  $data
-     *
      * @return int
      *
      * @throws Exception
@@ -168,9 +156,6 @@ class DB
     }
 
     /**
-     * @param string $sql
-     * @param array  $data
-     *
      * @return int
      *
      * @throws Exception
@@ -194,8 +179,6 @@ class DB
     /**
      * 执行普通语句.
      *
-     * @param string $sql
-     *
      * @return int
      *
      * @throws Exception
@@ -218,8 +201,6 @@ class DB
     }
 
     /**
-     * @param Closure $callback
-     *
      * @throws Exception
      */
     public static function transaction(Closure $callback): void

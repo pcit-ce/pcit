@@ -28,10 +28,7 @@ class Cache
     /**
      * Cache constructor.
      *
-     * @param int    $jobId
-     * @param int    $build_key_id
-     * @param string $workdir
-     * @param mixed  $cache
+     * @param mixed $cache
      */
     public function __construct(int $jobId,
                                 int $build_key_id,
@@ -116,8 +113,7 @@ class Cache
     }
 
     /**
-     * @param DockerContainer $dockerContainer
-     * @param                 $env
+     * @param $env
      *
      * @return mixed
      *

@@ -11,9 +11,6 @@ class JWT
     /**
      * GitHub App 由 JWT expire 10m 获取 Token expire 60m.
      *
-     * @param string $private_key_path
-     * @param int    $iss
-     *
      * @return string
      *
      * @see https://developer.github.com/apps/building-github-apps/authentication-options-for-github-apps/#authenticating-as-a-github-app
@@ -36,11 +33,7 @@ class JWT
     /**
      * PCIT 加密 token.
      *
-     * @param string $privateKey
-     * @param string $git_type
-     * @param string $username
-     * @param int    $uid
-     * @param int    $exp
+     * @param int $exp
      *
      * @return string
      */
@@ -65,9 +58,6 @@ class JWT
 
     /**
      * 解密 token.
-     *
-     * @param string $jwt
-     * @param string $publicKey
      *
      * @return object
      */

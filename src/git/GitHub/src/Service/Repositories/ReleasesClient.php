@@ -17,8 +17,6 @@ class ReleasesClient
     use CICommon;
 
     /**
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -33,7 +31,6 @@ class ReleasesClient
     /**
      * Get a single release.
      *
-     * @param string $repo_full_name
      * @param int    $release_id
      * @param string $tag_name
      *
@@ -55,8 +52,6 @@ class ReleasesClient
     /**
      * Get the latest release.
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -70,9 +65,6 @@ class ReleasesClient
 
     /**
      * Get a release by tag name.
-     *
-     * @param string $repo_full_name
-     * @param string $tag_name
      *
      * @return mixed
      *
@@ -88,15 +80,9 @@ class ReleasesClient
     /**
      * 201.
      *
-     * @param string $repo_full_name
-     * @param string $tag_name
      * @param string $target_commitish Specifies the commitish value that determines where the Git tag is created from.
      *                                 Can be any branch or commit SHA. Unused if the Git tag already exists. Default:
      *                                 the repository's default branch (usually master)
-     * @param string $name
-     * @param string $body
-     * @param bool   $draft
-     * @param bool   $prerelease
      * @param string $method
      *
      * @throws Exception
@@ -129,13 +115,6 @@ class ReleasesClient
     /**
      * Edit a release.
      *
-     * @param string $repo_full_name
-     * @param string $tag_name
-     * @param string $target_commitish
-     * @param string $name
-     * @param string $body
-     * @param bool   $draft
-     * @param bool   $prerelease
      * @param string $method
      *
      * @throws Exception
@@ -155,7 +134,6 @@ class ReleasesClient
     /**
      * Delete a release.
      *
-     * @param string $repo_full_name
      * @param int    $release_id
      * @param string $tag_name
      *
@@ -175,7 +153,6 @@ class ReleasesClient
     /**
      * List assets for a release.
      *
-     * @param string $repo_full_name
      * @param int    $release_id
      * @param string $tag_name
      *
@@ -199,14 +176,9 @@ class ReleasesClient
      *
      * 201
      *
-     * @param string      $repo_full_name
-     * @param             $file_content
-     * @param int         $release_id
-     * @param string      $tag_name
-     * @param string      $name
-     * @param string|null $label
-     * @param string      $content_type
-     * @param bool        $replace
+     * @param        $file_content
+     * @param int    $release_id
+     * @param string $tag_name
      *
      * @return mixed
      *
@@ -250,9 +222,6 @@ class ReleasesClient
     /**
      * Get a single release asset.
      *
-     * @param string $repo_full_name
-     * @param int    $asset_id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -266,11 +235,6 @@ class ReleasesClient
 
     /**
      * Edit a release asset.
-     *
-     * @param string $repo_full_name
-     * @param string $name
-     * @param string $label
-     * @param int    $asset_id
      *
      * @throws Exception
      */
@@ -290,9 +254,6 @@ class ReleasesClient
      * Delete a release asset.
      *
      * 204
-     *
-     * @param string $repo_full_name
-     * @param int    $asset_id
      *
      * @throws Exception
      */

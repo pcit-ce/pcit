@@ -15,7 +15,6 @@ class Notifications
     /**
      * Notification constructor.
      *
-     * @param int   $build_key_id
      * @param mixed $notifications
      */
     public function __construct(int $build_key_id, $notifications = null)

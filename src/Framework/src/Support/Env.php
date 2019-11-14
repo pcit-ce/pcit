@@ -7,7 +7,6 @@ namespace PCIT\Framework\Support;
 class Env
 {
     /**
-     * @param string     $key
      * @param string|int $default
      *
      * @return array|false|string

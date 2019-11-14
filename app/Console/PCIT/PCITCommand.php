@@ -85,9 +85,6 @@ class PCITCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param bool           $header
-     *
      * @return mixed
      *
      * @throws Exception
@@ -131,11 +128,7 @@ class PCITCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param string         $entrypoint
-     * @param string         $data
-     * @param bool           $auth
-     * @param int            $target_code
+     * @param string $data
      *
      * @return mixed
      *
@@ -165,12 +158,7 @@ class PCITCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param string         $entrypoint
-     * @param string         $data
-     * @param bool           $auth
-     * @param bool           $json
-     * @param int            $target_code
+     * @param string $data
      *
      * @return mixed
      *
@@ -200,11 +188,7 @@ class PCITCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param string         $entrypoint
-     * @param string         $data
-     * @param bool           $auth
-     * @param int            $target_code
+     * @param string $data
      *
      * @return mixed
      *
@@ -232,12 +216,7 @@ class PCITCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param string         $entrypoint
-     * @param string         $data
-     * @param bool           $auth
-     * @param bool           $json
-     * @param int            $target_code
+     * @param string $data
      *
      * @return mixed
      *
@@ -300,8 +279,6 @@ class PCITCommand
     }
 
     /**
-     * @param InputInterface $input
-     *
      * @return mixed
      *
      * @throws Exception
@@ -314,9 +291,6 @@ class PCITCommand
             return $repo;
         }
 
-        throw new Exception(
-            'Please specify the repo name via the -r option (e.g. pcit <command> -r <owner>/<repo>)',
-            500
-        );
+        throw new Exception('Please specify the repo name via the -r option (e.g. pcit <command> -r <owner>/<repo>)', 500);
     }
 }

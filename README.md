@@ -85,7 +85,7 @@ push by you, test and deploy by us.
 ```yaml
 language: php
 
-pipeline:
+steps:
 
   before_install: ['echo exec init script']
 
@@ -199,12 +199,11 @@ $ ./lnmp-docker pcit-up
 
 ### 待拆分
 
-* [YML 转化为 PCIT 配置](https://github.com/pcit-ce/yml)
-* [缓存后端驱动](https://github.com/pcit-ce/cache)
-* [日志处理组件](https://github.com/pcit-ce/logs)
 * [API 组件](https://github.com/pcit-ce/api)
-* [部署组件 Deployer](https://github.com/pcit-ce/deployer)
-* [构建组件 Builder](https://github.com/pcit-ce/builder)
+* [缓存后端驱动](https://github.com/pcit-ce/cache)
+* [YML 转化为 PCIT 脚本](https://github.com/pcit-ce/yml)
+* [日志处理组件](https://github.com/pcit-ce/logs)
+* [任务执行组件 Runner](https://github.com/pcit-ce/runner)
 
 ### 已拆分
 

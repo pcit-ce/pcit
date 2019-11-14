@@ -13,9 +13,6 @@ class Client
     /**
      * Get a blob.
      *
-     * @param string $repo_full_name
-     * @param string $file_sha
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -47,9 +44,6 @@ class Client
     /**
      * Get a commit.
      *
-     * @param string $repo_full_name
-     * @param string $sha
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -63,15 +57,6 @@ class Client
      * Create a commit.
      *
      * 201
-     *
-     * @param string $repo_full_name
-     * @param string $commit_message
-     * @param string $tree
-     * @param array  $parents
-     * @param string $committer_name
-     * @param string $committer_email
-     * @param string $date
-     * @param string $signature
      *
      * @return mixed
      *
@@ -109,9 +94,6 @@ class Client
     /**
      * Commit signature verification.
      *
-     * @param string $repo_full_name
-     * @param string $sha
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -139,9 +121,6 @@ class Client
     /**
      * Get all references.
      *
-     * @param string $repo_full_name
-     * @param bool   $tags
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -162,7 +141,6 @@ class Client
      *
      * @param string $repo_full_name repo full name
      * @param string $ref            heads/master
-     * @param string $sha
      *
      * @return mixed
      *
@@ -180,11 +158,6 @@ class Client
 
     /**
      * Update a reference.
-     *
-     * @param string $repo_full_name
-     * @param string $ref
-     * @param string $sha
-     * @param bool   $force
      *
      * @return mixed
      *
@@ -222,8 +195,7 @@ class Client
     /**
      * Get a tag.
      *
-     * @param string $repo_full_name
-     * @param        $tag_sha
+     * @param $tag_sha
      *
      * @return mixed
      *
@@ -238,15 +210,6 @@ class Client
      * Create a tag object.
      *
      * 201
-     *
-     * @param string      $repo_full_name
-     * @param string      $tag_name
-     * @param string      $tag_message
-     * @param string      $object
-     * @param string      $type
-     * @param string|null $committer_name
-     * @param string|null $committer_email
-     * @param string|null $date
      *
      * @throws \Exception
      */
@@ -282,9 +245,6 @@ class Client
     /**
      * Tag signature verification.
      *
-     * @param string $repo_full_name
-     * @param string $tag_sha
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -296,10 +256,6 @@ class Client
 
     /**
      * Get a tree.
-     *
-     * @param string $repo_full_name
-     * @param string $tree_sha
-     * @param bool   $recursively
      *
      * @return mixed
      *

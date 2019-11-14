@@ -26,8 +26,6 @@ class ServiceDefault
     }
 
     /**
-     * @param string $type
-     *
      * @return string|array|null
      *
      * @throws \Exception

@@ -39,10 +39,9 @@ class Pipeline
     /**
      * Pipeline constructor.
      *
-     * @param            $pipeline
-     * @param BuildData  $build
-     * @param Builder    $client
-     * @param array|null $matrix_config
+     * @param           $pipeline
+     * @param BuildData $build
+     * @param Builder   $client
      *
      * @throws Exception
      */
@@ -58,8 +57,6 @@ class Pipeline
 
     /**
      * @param $when
-     *
-     * @return bool
      *
      * @throws Exception
      */
@@ -110,10 +107,6 @@ class Pipeline
 
     /**
      * 整合 pipelineEnv systemEnv matrixEnv.
-     *
-     * @param array $pipelineEnv
-     *
-     * @return array
      */
     public function handleEnv(array $pipelineEnv): array
     {

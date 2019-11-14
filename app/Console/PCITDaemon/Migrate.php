@@ -41,8 +41,6 @@ class Migrate
 
     /**
      * exec sql file.
-     *
-     * @param string $file
      */
     private static function migrateSqlFile(string $file): void
     {

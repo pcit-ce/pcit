@@ -12,10 +12,6 @@ class WebhooksClient
     use CICommon;
 
     /**
-     * @param bool   $raw
-     * @param string $username
-     * @param string $project
-     *
      * @return mixed
      *
      * @throws Exception
@@ -42,10 +38,7 @@ class WebhooksClient
     }
 
     /**
-     * @param        $data
-     * @param string $username
-     * @param string $repo
-     * @param string $id
+     * @param $data
      *
      * @return mixed
      *
@@ -59,10 +52,6 @@ class WebhooksClient
     }
 
     /**
-     * @param string $username
-     * @param string $repo
-     * @param string $id
-     *
      * @return mixed
      *
      * @throws Exception

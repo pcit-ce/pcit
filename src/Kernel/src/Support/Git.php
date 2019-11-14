@@ -39,10 +39,6 @@ class Git
     }
 
     /**
-     * @param string $type
-     * @param string $repo_full_name
-     * @param bool   $ssh
-     *
      * @return string
      *
      * @throws Exception
@@ -94,10 +90,6 @@ class Git
     }
 
     /**
-     * @param string $type
-     * @param string $repo_full_name
-     * @param int    $pull_id
-     *
      * @return string
      *
      * @throws Exception
@@ -122,10 +114,6 @@ class Git
     }
 
     /**
-     * @param string $type
-     * @param string $repo_full_name
-     * @param string $issue_id
-     *
      * @return string
      *
      * @throws Exception
@@ -150,10 +138,6 @@ class Git
     }
 
     /**
-     * @param string $type
-     * @param string $repo_full_name
-     * @param string $commit_id
-     *
      * @return string
      *
      * @throws Exception
@@ -173,10 +157,8 @@ class Git
     }
 
     /**
-     * @param string $type
      * @param string $repo_full_name username/reponame
      * @param string $commit_id      branch_name commit_id
-     * @param string $file_name
      *
      * @return string
      *
@@ -202,8 +184,6 @@ class Git
     }
 
     /**
-     * @param string $git_type
-     *
      * @return string
      *
      * @throws Exception
@@ -241,8 +221,6 @@ class Git
     }
 
     /**
-     * @param string $git_type
-     *
      * @return string
      *
      * @throws Exception

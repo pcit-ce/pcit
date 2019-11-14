@@ -44,8 +44,7 @@ class Client
     public $cache;
 
     /**
-     * @param BuildData $build
-     * @param int       $job_id 处理 job 重新构建
+     * @param int $job_id 处理 job 重新构建
      *
      * @throws Exception
      */
@@ -71,8 +70,6 @@ class Client
 
     /**
      * 生成 config.
-     *
-     * @param int $job_id
      *
      * @throws Exception
      */
@@ -150,9 +147,6 @@ class Client
 
     /**
      * 生成 job 缓存.
-     *
-     * @param int        $job_id
-     * @param array|null $matrix_config
      *
      * @throws Exception
      */

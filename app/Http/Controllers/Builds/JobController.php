@@ -55,8 +55,6 @@ class JobController
     }
 
     /**
-     * @param int $job_id
-     *
      * @throws \Exception
      */
     public function handleCancel(int $job_id): void
@@ -94,8 +92,6 @@ class JobController
 
     /**
      * 更新 job 的状态，同时更新 build 的状态
-     *
-     * @param int $job_id
      *
      * @throws \Exception
      */

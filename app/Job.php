@@ -13,8 +13,6 @@ class Job extends Model
     public static $table = 'jobs';
 
     /**
-     * @param int $job_id
-     *
      * @return string
      *
      * @throws Exception
@@ -32,9 +30,6 @@ class Job extends Model
     }
 
     /**
-     * @param int    $job_id
-     * @param string $build_log
-     *
      * @throws Exception
      */
     public static function updateLog(int $job_id, string $build_log): void
@@ -45,10 +40,6 @@ class Job extends Model
     }
 
     /**
-     * @param int $build_id
-     *
-     * @return int
-     *
      * @throws Exception
      */
     public static function create(int $build_id): int
@@ -63,9 +54,6 @@ EOF;
     }
 
     /**
-     * @param int  $build_key_id
-     * @param bool $queued
-     *
      * @return array
      *
      * @throws Exception
@@ -84,8 +72,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return array|string
      *
      * @throws Exception
@@ -98,8 +84,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return array
      *
      * @throws Exception
@@ -122,8 +106,6 @@ EOF;
     }
 
     /**
-     * @param int $job_id
-     *
      * @return int
      *
      * @throws Exception
@@ -146,7 +128,6 @@ EOF;
     /**
      * 事件创建时间.
      *
-     * @param int $job_id
      * @param int $time
      *
      * @throws Exception
@@ -159,8 +140,6 @@ EOF;
     }
 
     /**
-     * @param int $job_id
-     *
      * @return string
      *
      * @throws Exception
@@ -175,7 +154,6 @@ EOF;
     /**
      * 容器运行开始时间.
      *
-     * @param int $job_id
      * @param int $time
      *
      * @throws Exception
@@ -188,8 +166,6 @@ EOF;
     }
 
     /**
-     * @param int $job_id
-     *
      * @return string
      *
      * @throws Exception
@@ -202,9 +178,6 @@ EOF;
     }
 
     /**
-     * @param int      $job_id
-     * @param int|null $time
-     *
      * @throws Exception
      */
     public static function updateFinishedAt(int $job_id, ?int $time): void
@@ -215,8 +188,6 @@ EOF;
     }
 
     /**
-     * @param int $job_id
-     *
      * @return int
      *
      * @throws Exception
@@ -229,8 +200,6 @@ EOF;
     }
 
     /**
-     * @param int $build_id
-     *
      * @return array|string|null
      *
      * @throws Exception
@@ -255,7 +224,6 @@ EOF;
     }
 
     /**
-     * @param int    $job_key_id
      * @param string $status
      *
      * @return int
@@ -270,8 +238,6 @@ EOF;
     }
 
     /**
-     * @param int $job_key_id
-     *
      * @return array|string
      *
      * @throws Exception
@@ -284,8 +250,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return int
      *
      * @throws Exception
@@ -301,7 +265,6 @@ EOF;
 
     /**
      * @param int $check_run_id
-     * @param int $build_key_id
      *
      * @throws Exception
      */
@@ -313,8 +276,6 @@ EOF;
     }
 
     /**
-     * @param int $job_key_id
-     *
      * @return string
      *
      * @throws Exception
@@ -327,8 +288,6 @@ EOF;
     }
 
     /**
-     * @param int $job_key_id
-     *
      * @return int
      *
      * @throws Exception
@@ -342,8 +301,6 @@ EOF;
 
     /**
      * 从 build 的所有 job 得出 build 的状态
-     *
-     * @param int $build_key_id
      *
      * @return string
      *
@@ -385,9 +342,6 @@ EOF;
     }
 
     /**
-     * @param int    $job_id
-     * @param string $env
-     *
      * @throws Exception
      */
     public static function updateEnv(int $job_id, string $env): void
@@ -396,10 +350,6 @@ EOF;
     }
 
     /**
-     * @param int $job_id
-     *
-     * @return array|null
-     *
      * @throws Exception
      */
     public static function getEnv(int $job_id): ?array
@@ -414,11 +364,6 @@ EOF;
     }
 
     /**
-     * @param int    $buildId
-     * @param string $env
-     *
-     * @return int
-     *
      * @throws Exception
      */
     public static function getJobIDByBuildKeyIDAndEnv(int $buildId, string $env): int

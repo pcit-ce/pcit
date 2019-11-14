@@ -24,17 +24,6 @@ class WeChatClient
     }
 
     /**
-     * @param string      $code
-     * @param string      $time
-     * @param string      $event_type
-     * @param string      $repo_name
-     * @param string      $branch
-     * @param string      $commit_message
-     * @param string      $committer_username
-     * @param string      $info
-     * @param string      $url
-     * @param string|null $openId
-     *
      * @return mixed
      */
     public function sendTemplateMessage(string $code,

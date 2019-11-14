@@ -22,9 +22,6 @@ class StatusClient
 
     /**
      * Status constructor.
-     *
-     * @param Curl   $curl
-     * @param string $api_url
      */
     public function __construct(Curl $curl, string $api_url)
     {
@@ -34,10 +31,6 @@ class StatusClient
     }
 
     /**
-     * @param string $username
-     * @param string $repo
-     * @param string $ref
-     *
      * @return mixed
      *
      * @throws Exception
@@ -53,14 +46,6 @@ class StatusClient
     }
 
     /**
-     * @param string $username
-     * @param string $repo
-     * @param string $commit_sha
-     * @param string $state
-     * @param string $target_url
-     * @param string $context
-     * @param string $description
-     *
      * @return mixed
      *
      * @throws Exception

@@ -25,8 +25,6 @@ class EventsClient
     /**
      * List repository events.
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -39,8 +37,6 @@ class EventsClient
     /**
      * List issue events for a repository.
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -52,8 +48,6 @@ class EventsClient
 
     /**
      * List public events for a network of repositories.
-     *
-     * @param string $repo_full_name
      *
      * @return mixed
      *
@@ -81,9 +75,6 @@ class EventsClient
     /**
      * List events for an organization.
      *
-     * @param string $username
-     * @param string $org_name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -95,8 +86,6 @@ class EventsClient
 
     /**
      * List events that a user has received.
-     *
-     * @param string $username
      *
      * @return mixed
      *
@@ -110,8 +99,6 @@ class EventsClient
     /**
      * List public events that a user has received.
      *
-     * @param string $username
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -124,8 +111,6 @@ class EventsClient
     /**
      * List events performed by a user.
      *
-     * @param string $username
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -137,8 +122,6 @@ class EventsClient
 
     /**
      * List public events performed by a user.
-     *
-     * @param string $username
      *
      * @return mixed
      *

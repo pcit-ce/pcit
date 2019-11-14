@@ -29,9 +29,6 @@ class RepositoriesController
      *
      * /{git_type}/{username}/repos
      *
-     * @param string $git_type
-     * @param string $username
-     *
      * @return array|string
      *
      * @throws Exception
@@ -45,10 +42,6 @@ class RepositoriesController
      * This returns an individual repository.
      *
      * /repo/{git_type}/{username}/{repo.name}
-     *
-     * @param string $git_type
-     * @param string $username
-     * @param string $repo_name
      *
      * @return array|string
      *

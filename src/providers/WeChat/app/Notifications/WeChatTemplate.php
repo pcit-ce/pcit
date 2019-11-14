@@ -15,9 +15,6 @@ use PCIT\Support\Git;
 class WeChatTemplate
 {
     /**
-     * @param int    $build_key_id
-     * @param string $info
-     *
      * @throws Exception
      */
     public static function send(int $build_key_id, string $info): void

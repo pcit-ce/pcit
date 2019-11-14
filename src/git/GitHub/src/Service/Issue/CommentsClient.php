@@ -36,10 +36,6 @@ class CommentsClient
      *
      * 201
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     * @param string $body
-     *
      * @return mixed
      *
      * @throws Exception
@@ -71,9 +67,6 @@ class CommentsClient
     /**
      * List comments on an issue.
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     *
      * @return mixed
      *
      * @throws Exception
@@ -87,8 +80,6 @@ class CommentsClient
 
     /**
      * List comments in a repository.
-     *
-     * @param string $repo_full_name
      *
      * @return mixed
      *
@@ -104,9 +95,6 @@ class CommentsClient
     /**
      * Get a single comment.
      *
-     * @param string $repo_full_name
-     * @param int    $comment_id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -120,10 +108,6 @@ class CommentsClient
 
     /**
      * Edit a comment.
-     *
-     * @param string $repo_full_name
-     * @param int    $comment_id
-     * @param string $body
      *
      * @throws Exception
      */
@@ -146,9 +130,6 @@ class CommentsClient
      * Delete a comment.
      *
      * 204.
-     *
-     * @param string $repo_full_name
-     * @param int    $comment_id
      *
      * @throws Exception
      */

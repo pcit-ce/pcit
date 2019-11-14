@@ -20,8 +20,6 @@ use PCIT\Support\CI;
 class Build extends BuildData
 {
     /**
-     * @param int $buildId
-     *
      * @return Build
      *
      * @throws PCITException

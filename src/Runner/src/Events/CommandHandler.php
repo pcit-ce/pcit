@@ -9,10 +9,6 @@ use PCIT\Framework\Support\Log;
 class CommandHandler
 {
     /**
-     * @param string     $setup
-     * @param string     $image
-     * @param array|null $commands
-     *
      * @return string
      *
      * @throws Exception

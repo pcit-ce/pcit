@@ -19,13 +19,12 @@ class Client
     /**
      * List deployments.
      *
-     * @param string $repo_full_name
-     * @param string $sha            The SHA that was recorded at creation time. Default: <code>none<code>
-     * @param string $ref            The name of the ref. This can be a branch, tag, or SHA. Default: <code>none<code>
-     * @param string $task           The name of the task for the deployment (e.g., <code>deploy<code> or
-     *                               <code>deploy:migrations<code>). Default: <code>none<code>
-     * @param string $environment    The name of the environment that was deployed to (e.g., <code>staging<code> or
-     *                               <code>production<code>). Default: <code>none<code>
+     * @param string $sha         The SHA that was recorded at creation time. Default: <code>none<code>
+     * @param string $ref         The name of the ref. This can be a branch, tag, or SHA. Default: <code>none<code>
+     * @param string $task        The name of the task for the deployment (e.g., <code>deploy<code> or
+     *                            <code>deploy:migrations<code>). Default: <code>none<code>
+     * @param string $environment The name of the environment that was deployed to (e.g., <code>staging<code> or
+     *                            <code>production<code>). Default: <code>none<code>
      *
      * @return mixed
      *
@@ -46,9 +45,6 @@ class Client
     /**
      * Get a single deployment.
      *
-     * @param string $repo_full_name
-     * @param string $id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -65,17 +61,6 @@ class Client
 
     /**
      * Create a deployment.
-     *
-     * @param string      $repo_full_name
-     * @param string      $ref
-     * @param string      $task
-     * @param bool        $auto_merge
-     * @param array|null  $required_contexts
-     * @param string|null $payload
-     * @param string      $environment
-     * @param string|null $description
-     * @param bool|null   $transient_environment
-     * @param bool|null   $production_environment
      *
      * @throws Exception
      */
@@ -105,9 +90,6 @@ class Client
     /**
      * List deployment statuses.
      *
-     * @param string $repo_full_name
-     * @param string $id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -124,10 +106,6 @@ class Client
 
     /**
      * Get a single deployment status.
-     *
-     * @param string $repo_full_name
-     * @param string $id
-     * @param string $statusId
      *
      * @return mixed
      *
@@ -148,14 +126,8 @@ class Client
      *
      * 201
      *
-     * @param string      $repo_full_name  repo full name
-     * @param string      $id
-     * @param string      $state           error, failure,inactive,in_progress,queued,pending, or success
-     * @param string|null $log_url
-     * @param string|null $description
-     * @param string      $environment
-     * @param string|null $environment_url
-     * @param bool        $auto_inactive
+     * @param string $repo_full_name repo full name
+     * @param string $state          error, failure,inactive,in_progress,queued,pending, or success
      *
      * @return mixed
      *

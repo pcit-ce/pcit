@@ -37,8 +37,7 @@ class CacheKey
     }
 
     /**
-     * @param int    $jobId
-     * @param string $type  pipeline | success | failure | changed
+     * @param string $type pipeline | success | failure | changed
      *
      * @return string
      */
@@ -90,7 +89,6 @@ class CacheKey
     }
 
     /**
-     * @param int $jobId
      * @param string type download | upload
      *
      * @return string
@@ -102,8 +100,6 @@ class CacheKey
 
     /**
      * 删除某个 job 所用到的缓存.
-     *
-     * @param int $jobId
      *
      * @throws \Exception
      */

@@ -13,11 +13,6 @@ class NotificationsClient
     /**
      * List your notifications.
      *
-     * @param bool   $all
-     * @param bool   $participating
-     * @param string $since
-     * @param string $before
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -36,12 +31,6 @@ class NotificationsClient
 
     /**
      * List your notifications in a repository.
-     *
-     * @param string $repo_full_name
-     * @param bool   $all
-     * @param bool   $participating
-     * @param string $since
-     * @param string $before
      *
      * @return mixed
      *
@@ -78,8 +67,7 @@ class NotificationsClient
     /**
      * Mark notifications as read in a repository.
      *
-     * @param string $repo_full_name
-     * @param string $last_read_at   ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
+     * @param string $last_read_at ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
      *
      * @return mixed
      *
@@ -92,8 +80,6 @@ class NotificationsClient
 
     /**
      * View a single thread.
-     *
-     * @param int $thread_id
      *
      * @return mixed
      *
@@ -109,8 +95,6 @@ class NotificationsClient
      *
      * 205
      *
-     * @param int $thread_id
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -123,8 +107,6 @@ class NotificationsClient
     /**
      * Get a thread subscription.
      *
-     * @param int $thread_id
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -136,9 +118,6 @@ class NotificationsClient
 
     /**
      * Set a thread subscription.
-     *
-     * @param int  $thread_id
-     * @param bool $ignored
      *
      * @return mixed
      *
@@ -153,8 +132,6 @@ class NotificationsClient
      * Delete a thread subscription.
      *
      * 204
-     *
-     * @param int $thread_id
      *
      * @return mixed
      *

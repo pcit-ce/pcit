@@ -18,9 +18,6 @@ class EventsClient
     /**
      * List events for an issue.
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -33,8 +30,6 @@ class EventsClient
     /**
      * List events for a repository.
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -46,9 +41,6 @@ class EventsClient
 
     /**
      * Get a single event.
-     *
-     * @param string $repo_full_name
-     * @param int    $event_id
      *
      * @return mixed
      *

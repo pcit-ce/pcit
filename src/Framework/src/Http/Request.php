@@ -37,8 +37,6 @@ class Request extends RequestBase
     }
 
     /**
-     * @param string|null $link
-     *
      * @return array
      */
     public function parseLink(string $link = null)

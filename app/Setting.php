@@ -18,9 +18,6 @@ class Setting extends Model
     /**
      * 返回某仓库的设置列表.
      *
-     * @param string $git_type
-     * @param int    $rid
-     *
      * @return array
      *
      * @throws Exception
@@ -43,10 +40,6 @@ EOF;
     /**
      * 返回某个设置的值
      *
-     * @param string $git_type
-     * @param int    $rid
-     * @param string $setting_name
-     *
      * @return string
      *
      * @throws Exception
@@ -63,11 +56,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     * @param int    $rid
-     * @param string $setting_name
-     * @param string $setting_value
-     *
      * @return int
      *
      * @throws Exception

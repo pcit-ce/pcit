@@ -23,9 +23,6 @@ class Client
     }
 
     /**
-     * @param string $username
-     * @param string $password
-     *
      * @return mixed
      *
      * @throws Exception

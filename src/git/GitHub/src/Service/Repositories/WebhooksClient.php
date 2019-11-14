@@ -24,10 +24,6 @@ class WebhooksClient
     }
 
     /**
-     * @param bool   $raw
-     * @param string $username
-     * @param string $repo
-     *
      * @return mixed
      *
      * @throws Exception
@@ -52,10 +48,6 @@ class WebhooksClient
     }
 
     /**
-     * @param string $url
-     * @param string $username
-     * @param string $repo
-     *
      * @return int
      *
      * @throws Exception
@@ -85,10 +77,7 @@ class WebhooksClient
     }
 
     /**
-     * @param             $data
-     * @param string      $username
-     * @param string      $repo
-     * @param string|null $id
+     * @param $data
      *
      * @return mixed
      *
@@ -118,10 +107,6 @@ class WebhooksClient
     }
 
     /**
-     * @param string $username
-     * @param string $repo
-     * @param string $id
-     *
      * @return mixed
      *
      * @throws Exception

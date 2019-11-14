@@ -41,9 +41,6 @@ class SettingsCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return int|mixed|null
      *
      * @throws Exception

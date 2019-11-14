@@ -25,8 +25,6 @@ class Client
     ];
 
     /**
-     * @param string $username
-     * @param string $repo_name
      * @param string $state     Either open, closed, or all to filter by state. Default: open
      * @param string $head
      * @param string $base
@@ -63,10 +61,6 @@ class Client
     /**
      * Get a single pull request.
      *
-     * @param string $username
-     * @param string $repo_name
-     * @param int    $pr_num
-     *
      * @return mixed
      *
      * @throws Exception
@@ -79,14 +73,7 @@ class Client
     }
 
     /**
-     * @param string $username
-     * @param string $repo_name
-     * @param int    $from_issue
-     * @param string $title
-     * @param string $head
-     * @param string $base
      * @param string $body
-     * @param bool   $maintainer_can_modify
      *
      * @return mixed
      *
@@ -126,15 +113,6 @@ class Client
     }
 
     /**
-     * @param string      $username
-     * @param string      $repo_name
-     * @param int         $from_issue
-     * @param string      $title
-     * @param string      $head
-     * @param string      $base
-     * @param string|null $body
-     * @param bool        $maintainer_can_modify
-     *
      * @return mixed
      *
      * @throws Exception
@@ -156,10 +134,6 @@ class Client
     }
 
     /**
-     * @param string $username
-     * @param string $repo_name
-     * @param int    $pr_num
-     *
      * @return mixed
      *
      * @throws Exception
@@ -173,10 +147,6 @@ class Client
 
     /**
      * List pull requests files.
-     *
-     * @param string $username
-     * @param string $repo_name
-     * @param int    $pr_num
      *
      * @return mixed
      *
@@ -192,9 +162,7 @@ class Client
     /**
      * Get if a pull request has been merged.
      *
-     * @param string $username
-     * @param string $repo_name
-     * @param        $pr_num
+     * @param $pr_num
      *
      * @return bool
      *
@@ -218,13 +186,7 @@ class Client
     }
 
     /**
-     * @param string $username
-     * @param string $repo_name
-     * @param int    $pr_num
-     * @param string $commit_title
      * @param string $commit_message
-     * @param string $sha
-     * @param int    $merge_method
      *
      * @return bool|mixed
      *
@@ -284,9 +246,6 @@ class Client
     /**
      * List reviews on a pull request.
      *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     *
      * @return mixed
      *
      * @throws Exception
@@ -298,10 +257,6 @@ class Client
 
     /**
      * Get a single review.
-     *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param int    $review_id
      *
      * @return mixed
      *
@@ -315,10 +270,6 @@ class Client
     /**
      * Delete a pending review.
      *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param int    $review_id
-     *
      * @throws Exception
      */
     public function deletePendingReview(string $repo_full_name, int $pull_number, int $review_id): void
@@ -328,10 +279,6 @@ class Client
 
     /**
      * Get comments for a single review.
-     *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param int    $review_id
      *
      * @return mixed
      *
@@ -345,12 +292,7 @@ class Client
     /**
      * Create a pull request review.
      *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param string $commit_id
-     * @param string $body
-     * @param string $event
-     * @param array  $comments       [ 'path'=>$path,'position'=>$position,'body'=>$comments_body ]
+     * @param array $comments [ 'path'=>$path,'position'=>$position,'body'=>$comments_body ]
      *
      * @throws Exception
      */
@@ -369,12 +311,6 @@ class Client
     /**
      * Submit a pull request review.
      *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param int    $review_id
-     * @param string $body
-     * @param string $event
-     *
      * @throws Exception
      */
     public function submitReview(string $repo_full_name, int $pull_number, int $review_id, string $body, string $event): void
@@ -389,11 +325,6 @@ class Client
 
     /**
      * Dismiss a pull request review.
-     *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param int    $review_id
-     * @param string $message
      *
      * @throws Exception
      */
@@ -410,7 +341,6 @@ class Client
      * List comments on a pull request.
      *
      * @param string $repo_full_name repo full name
-     * @param int    $pull_number
      * @param string $sort           created or updated
      * @param string $direction      asc or desc
      * @param string $since
@@ -436,7 +366,6 @@ class Client
      * @param string $repo_full_name repo full name
      * @param string $sort           created or updated
      * @param string $direction      asc or desc
-     * @param string $since
      *
      * @return mixed
      *
@@ -456,9 +385,6 @@ class Client
     /**
      * Get a single comment.
      *
-     * @param string $repo_full_name
-     * @param int    $comment_id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -470,14 +396,6 @@ class Client
 
     /**
      * Create a comment.
-     *
-     * @param string   $repo_full_name
-     * @param int      $pull_number
-     * @param string   $body
-     * @param string   $commit_id
-     * @param string   $path
-     * @param string   $position
-     * @param int|null $in_reply_to
      *
      * @throws Exception
      */
@@ -503,10 +421,6 @@ class Client
     /**
      * Edit a comment.
      *
-     * @param string $repo_full_name
-     * @param int    $comment_id
-     * @param string $body
-     *
      * @throws Exception
      */
     public function editComment(string $repo_full_name, int $comment_id, string $body): void
@@ -522,9 +436,6 @@ class Client
      *
      * 204
      *
-     * @param string $repo_full_name
-     * @param int    $comment_id
-     *
      * @throws Exception
      */
     public function deleteComment(string $repo_full_name, int $comment_id): void
@@ -535,9 +446,6 @@ class Client
     /**
      * List review requests.
      *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     *
      * @throws Exception
      */
     public function listReviewRequests(string $repo_full_name, int $pull_number): void
@@ -547,11 +455,6 @@ class Client
 
     /**
      * Create a review request.
-     *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param array  $reviewers
-     * @param array  $team_reviewers
      *
      * @throws Exception
      */
@@ -567,11 +470,6 @@ class Client
 
     /**
      * Delete a review request.
-     *
-     * @param string $repo_full_name
-     * @param int    $pull_number
-     * @param array  $reviewers
-     * @param array  $team_reviewers
      *
      * @throws Exception
      */

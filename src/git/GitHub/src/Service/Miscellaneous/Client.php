@@ -25,8 +25,6 @@ class Client
     /**
      * Get an individual code of conduct.
      *
-     * @param string $key
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -37,8 +35,6 @@ class Client
     }
 
     /**
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -50,8 +46,6 @@ class Client
 
     /**
      * Get the contents of a repository's code of conduct.
-     *
-     * @param string $repo_full_name
      *
      * @return mixed
      *
@@ -93,8 +87,6 @@ class Client
     /**
      * Get a single template.
      *
-     * @param string $name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -119,8 +111,6 @@ class Client
     /**
      * Get an individual license.
      *
-     * @param string $name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -132,8 +122,6 @@ class Client
 
     /**
      * Get the contents of a repository's license.
-     *
-     * @param string $repo_full_name
      *
      * @return mixed
      *
@@ -147,7 +135,6 @@ class Client
     /**
      * Render an arbitrary Markdown document.
      *
-     * @param string $text
      * @param string $mode    markdown or gfm
      * @param string $context gfm only
      *
@@ -168,9 +155,6 @@ class Client
 
     /**
      * Render a Markdown document in raw mode.
-     *
-     * @param string $content
-     * @param string $content_type
      *
      * @return mixed
      *

@@ -21,7 +21,6 @@ class Response extends BaseResponse
     ];
 
     /**
-     * @param array $content
      * @param float $startedAt
      *
      * @return false|string
@@ -43,9 +42,6 @@ class Response extends BaseResponse
         return new JsonResponse($content, $code, ['X-Runtime-rack' => $time]);
     }
 
-    /**
-     * @param string $url
-     */
     public static function redirect(string $url): void
     {
         header('Location: '.$url);

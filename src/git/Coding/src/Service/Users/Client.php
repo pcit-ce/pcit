@@ -14,7 +14,6 @@ class Client extends GitHubClient
     use CICommon;
 
     /**
-     * @param bool   $raw
      * @param string $username
      *
      * @return array|string
@@ -52,10 +51,6 @@ class Client extends GitHubClient
     }
 
     /**
-     * @param int         $page
-     * @param bool        $raw
-     * @param string|null $username
-     *
      * @return mixed
      *
      * @throws Exception

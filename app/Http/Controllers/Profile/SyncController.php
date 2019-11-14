@@ -146,8 +146,6 @@ class SyncController
     /**
      * Sync orgs repos.
      *
-     * @param string $org_name
-     *
      * @throws Exception
      */
     private function getOrgsRepo(string $org_name): void
@@ -167,8 +165,6 @@ class SyncController
 
     /**
      * parse repo json output.
-     *
-     * @param string $json
      *
      * @throws Exception
      */

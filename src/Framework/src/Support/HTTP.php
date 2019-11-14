@@ -22,10 +22,6 @@ class HTTP
     }
 
     /**
-     * @param string      $url
-     * @param string|null $data
-     * @param array       $header
-     *
      * @return mixed
      *
      * @throws Exception
@@ -55,10 +51,7 @@ class HTTP
     }
 
     /**
-     * @param string      $url
-     * @param string|null $data
-     * @param array       $header
-     * @param int         $timeout
+     * @param int $timeout
      *
      * @return mixed
      *
@@ -77,9 +70,6 @@ class HTTP
     }
 
     /**
-     * @param string $url
-     * @param array  $header
-     *
      * @return mixed
      *
      * @throws Exception

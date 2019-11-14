@@ -65,8 +65,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return string
      *
      * @throws Exception
@@ -79,9 +77,6 @@ EOF;
     }
 
     /**
-     * @param int      $build_key_id
-     * @param int|null $time
-     *
      * @throws Exception
      */
     public static function updateStartAt(int $build_key_id, ?int $time): void
@@ -93,8 +88,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return string
      *
      * @throws Exception
@@ -107,8 +100,6 @@ EOF;
     }
 
     /**
-     * @param int $buildId
-     *
      * @throws Exception
      */
     public static function updateFinishedAt(int $buildId): void
@@ -121,8 +112,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return string
      *
      * @throws Exception
@@ -135,8 +124,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return int
      *
      * @throws Exception
@@ -155,7 +142,6 @@ EOF;
     }
 
     /**
-     * @param int    $build_key_id
      * @param string $status
      *
      * @return int
@@ -174,8 +160,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return array|string
      *
      * @throws Exception
@@ -190,11 +174,7 @@ EOF;
     }
 
     /**
-     * @param string $build_status
      * @param string $git_type
-     * @param int    $rid
-     * @param string $branch
-     * @param string $commit_id
      *
      * @return int
      *
@@ -212,9 +192,6 @@ EOF;
     }
 
     /**
-     * @param int    $rid
-     * @param string $branch
-     *
      * @return string
      *
      * @throws Exception
@@ -227,9 +204,6 @@ EOF;
     }
 
     /**
-     * @param int    $rid
-     * @param string $branch
-     *
      * @return bool
      *
      * @throws Exception
@@ -249,7 +223,6 @@ EOF;
 
     /**
      * @param string $git_type
-     * @param int    $rid
      *
      * @return array
      *
@@ -266,7 +239,6 @@ EOF;
      * 某仓库最新的一次构建 ID PR 除外.
      *
      * @param string $git_type
-     * @param int    $rid
      *
      * @return string
      *
@@ -289,8 +261,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return string
      *
      * @throws Exception
@@ -309,8 +279,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return string
      *
      * @throws Exception
@@ -339,11 +307,7 @@ EOF;
     /**
      * 某分支的构建列表.
      *
-     * @param string   $git_type
-     * @param int      $rid
-     * @param string   $branch_name
-     * @param int|null $before
-     * @param int|null $limit
+     * @param string $git_type
      *
      * @return array
      *
@@ -379,12 +343,8 @@ EOF;
     /**
      * 某仓库的构建列表.
      *
-     * @param int      $rid
-     * @param int|null $before
-     * @param int|null $limit
-     * @param bool     $pr
-     * @param string   $git_type
-     * @param bool     $all
+     * @param string $git_type
+     * @param bool   $all
      *
      * @return array
      *
@@ -432,10 +392,7 @@ EOF;
     /**
      * 某用户的构建列表.
      *
-     * @param string   $git_type
-     * @param int      $uid
-     * @param int|null $before
-     * @param int|null $limit
+     * @param string $git_type
      *
      * @return array
      *
@@ -465,8 +422,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return array
      *
      * @throws Exception
@@ -479,8 +434,6 @@ EOF;
     }
 
     /**
-     * @param int $build_key_id
-     *
      * @return array
      *
      * @throws Exception
@@ -644,7 +597,6 @@ EOF;
      * @param        $action
      * @param        $commit_id
      * @param        $commit_message
-     * @param int    $committer_uid
      * @param        $committer_username
      * @param        $pull_request_number
      * @param        $branch
@@ -696,11 +648,6 @@ EOF;
     }
 
     /**
-     * @param int    $rid
-     * @param string $commit_id
-     * @param int    $check_suite_id
-     * @param string $git_type
-     *
      * @throws Exception
      */
     public static function updateCheckSuiteId(int $rid,

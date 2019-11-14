@@ -10,8 +10,6 @@ use PCIT\Framework\Support\DB;
 class GetAccessToken
 {
     /**
-     * @param int $rid
-     *
      * @return string
      *
      * @throws Exception
@@ -22,9 +20,6 @@ class GetAccessToken
     }
 
     /**
-     * @param string|null $repo_full_name
-     * @param int|null    $rid
-     *
      * @return string
      *
      * @throws Exception
@@ -60,8 +55,7 @@ class GetAccessToken
     }
 
     /**
-     * @param             $rid
-     * @param string|null $repo_full_name
+     * @param $rid
      *
      * @return mixed
      *
@@ -87,7 +81,6 @@ class GetAccessToken
 
     /**
      * @param string $git_type
-     * @param int    $uid
      *
      * @return string
      *

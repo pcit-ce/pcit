@@ -92,8 +92,6 @@ abstract class Kernel
     }
 
     /**
-     * @param string|null $state
-     *
      * @throws Exception
      */
     public function getAccessTokenCommon(?string $state): void
@@ -141,9 +139,8 @@ abstract class Kernel
     }
 
     /**
-     * @param int $uid
-     * @param     $refreshToken
-     * @param     $gitType
+     * @param $refreshToken
+     * @param $gitType
      *
      * @throws Exception
      */

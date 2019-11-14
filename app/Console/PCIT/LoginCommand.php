@@ -32,9 +32,6 @@ class LoginCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return mixed
      *
      * @throws Exception

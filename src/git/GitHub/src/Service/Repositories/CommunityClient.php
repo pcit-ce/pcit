@@ -11,8 +11,6 @@ class CommunityClient
     use CICommon;
 
     /**
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws \Exception

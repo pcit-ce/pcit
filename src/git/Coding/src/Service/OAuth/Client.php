@@ -30,8 +30,7 @@ class Client implements OAuthInterface
     /**
      * Coding constructor.
      *
-     * @param      $config
-     * @param Curl $curl
+     * @param $config
      */
     public function __construct($config, Curl $curl)
     {
@@ -56,11 +55,6 @@ class Client implements OAuthInterface
         $this->curl = $curl;
     }
 
-    /**
-     * @param string|null $state
-     *
-     * @return string
-     */
     public function getLoginUrl(?string $state): string
     {
         $url = $this::URL.http_build_query([
@@ -74,12 +68,6 @@ class Client implements OAuthInterface
     }
 
     /**
-     * @param string      $code
-     * @param string|null $state
-     * @param bool        $raw
-     *
-     * @return array
-     *
      * @throws Exception
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false): array
@@ -106,8 +94,6 @@ class Client implements OAuthInterface
 
     /**
      * 解析服务器返回的结果.
-     *
-     * @return array
      */
     public function parseTokenResult($json): array
     {

@@ -15,7 +15,6 @@ class Cleanup
      * Remove all Docker Resource.
      *
      * @param string $id           services => only cleanup services
-     * @param bool   $last
      * @param bool   $service_only only cleanup service container
      *
      * @throws Exception
@@ -72,9 +71,6 @@ class Cleanup
     }
 
     /**
-     * @param Container $container
-     * @param string    $label
-     *
      * @throws Exception
      */
     private static function deleteContainerByLabel(Container $container, string $label): void

@@ -46,9 +46,6 @@ class Client extends GitHubClient implements OAuthInterface
         return $url;
     }
 
-    /**
-     * @return array
-     */
     public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {
         $url = static::POST_URL.http_build_query([
@@ -72,9 +69,6 @@ class Client extends GitHubClient implements OAuthInterface
         return $result = $this->parseTokenResult($json);
     }
 
-    /**
-     * @return array
-     */
     public function getTokenByRefreshToken($refreshToken): array
     {
         // grant_type=refresh_token&refresh_token={refresh_token}
@@ -92,8 +86,6 @@ class Client extends GitHubClient implements OAuthInterface
 
     /**
      * 解析服务器返回的结果.
-     *
-     * @return array
      */
     public function parseTokenResult($json): array
     {

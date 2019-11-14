@@ -15,7 +15,6 @@ abstract class TestCase extends BaseTestCase
     private static $test;
 
     /**
-     * @param array  $config
      * @param string $git_type
      *
      * @return PCIT

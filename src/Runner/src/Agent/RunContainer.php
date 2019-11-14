@@ -42,8 +42,6 @@ class RunContainer
     }
 
     /**
-     * @param int $job_id
-     *
      * @throws PCITException
      * @throws \Exception
      */
@@ -90,8 +88,6 @@ class RunContainer
 
     /**
      * 判断 job 类型.
-     *
-     * @param int $job_id
      *
      * @throws \Exception
      */
@@ -168,8 +164,7 @@ class RunContainer
     }
 
     /**
-     * @param      $job_id
-     * @param bool $download
+     * @param $job_id
      *
      * @throws \Exception
      */
@@ -216,9 +211,6 @@ class RunContainer
     /**
      * 启动容器.
      *
-     * @param int    $job_id
-     * @param string $container_config
-     *
      * @throws \Exception
      */
     public function runPipeline(int $job_id, string $container_config, string $pipeline = null): void
@@ -239,8 +231,6 @@ class RunContainer
     }
 
     /**
-     * @param int $job_id
-     *
      * @throws \Exception
      */
     private function changed(int $job_id): void
@@ -256,8 +246,7 @@ class RunContainer
     /**
      * 运行 成功或失败之后的任务
      *
-     * @param int $job_id
-     * @param     $status
+     * @param $status
      *
      * @throws \Exception
      */
@@ -302,8 +291,6 @@ class RunContainer
 
     /**
      * 运行依赖的外部服务
-     *
-     * @param int $job_id
      *
      * @throws \Exception
      */

@@ -15,9 +15,6 @@ class CollaboratorsClient
 
     /**
      * Collaborators constructor.
-     *
-     * @param Curl   $curl
-     * @param string $api_url
      */
     public function __construct(Curl $curl, string $api_url)
     {
@@ -28,8 +25,6 @@ class CollaboratorsClient
 
     /**
      * List collaborators.
-     *
-     * @param string $repo_full_name
      *
      * @return mixed
      *
@@ -44,9 +39,6 @@ class CollaboratorsClient
 
     /**
      * Check if a user is a collaborator.
-     *
-     * @param string $repo_full_name
-     * @param string $user
      *
      * @return bool
      *
@@ -75,7 +67,6 @@ class CollaboratorsClient
      * Review a user's permission level.
      *
      * @param string $repo_full_name Repository name
-     * @param string $user
      * @param string $level          admin write read none
      *
      * @return bool

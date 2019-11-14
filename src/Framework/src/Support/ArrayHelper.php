@@ -9,8 +9,6 @@ class ArrayHelper
     /**
      * 实现二维数组的组合.
      *
-     * @param array $options
-     *
      * @return array
      *
      * @see https://www.zhihu.com/question/35599231

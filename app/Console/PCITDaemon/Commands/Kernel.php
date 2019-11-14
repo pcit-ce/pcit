@@ -27,9 +27,6 @@ abstract class Kernel extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): void

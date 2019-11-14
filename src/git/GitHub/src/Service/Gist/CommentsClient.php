@@ -13,8 +13,6 @@ class CommentsClient
     /**
      * List comments on a gist.
      *
-     * @param string $gist_id
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -28,9 +26,6 @@ class CommentsClient
 
     /**
      * Get a single comment.
-     *
-     * @param string $gist_id
-     * @param int    $comment_id
      *
      * @return mixed
      *
@@ -46,10 +41,6 @@ class CommentsClient
      *
      * 201
      *
-     * @param string $gist_id
-     * @param string $body
-     * @param string $method
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -61,9 +52,6 @@ class CommentsClient
 
     /**
      * Edit a comment.
-     *
-     * @param string $gist_id
-     * @param string $body
      *
      * @return mixed
      *
@@ -78,9 +66,6 @@ class CommentsClient
      * Delete a comment.
      *
      * 204
-     *
-     * @param string $gist_id
-     * @param int    $comment_id
      *
      * @return mixed
      *

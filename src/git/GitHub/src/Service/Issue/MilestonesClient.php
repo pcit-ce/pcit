@@ -13,8 +13,6 @@ class MilestonesClient
     /**
      * List milestones for a repository.
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -26,9 +24,6 @@ class MilestonesClient
 
     /**
      * Get a single milestone.
-     *
-     * @param string $repo_full_name
-     * @param string $milestone_number
      *
      * @return mixed
      *
@@ -45,7 +40,6 @@ class MilestonesClient
      * 201
      *
      * @param string $repo_full_name repo full name
-     * @param string $title
      * @param string $state          open or closed
      * @param string $description
      * @param string $due_on
@@ -62,13 +56,6 @@ class MilestonesClient
     /**
      * Update a milestone.
      *
-     * @param string      $repo_full_name
-     * @param int         $milestone_number
-     * @param string      $title
-     * @param string|null $description
-     * @param string|null $due_on
-     * @param string      $state
-     *
      * @throws \Exception
      */
     public function update(string $repo_full_name, int $milestone_number, string $title, ?string $description, ?string $due_on, string $state = 'open'): void
@@ -84,9 +71,6 @@ class MilestonesClient
      * Delete a milestone.
      *
      * 204
-     *
-     * @param string $repo_full_name
-     * @param int    $milestone_number
      *
      * @throws \Exception
      */

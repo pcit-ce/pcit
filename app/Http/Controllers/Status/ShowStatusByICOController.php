@@ -20,9 +20,6 @@ use PCIT\Framework\Support\Response;
 class ShowStatusByICOController
 {
     /**
-     * @param string $k
-     * @param array  $v
-     *
      * @throws Exception
      */
     public function __call(string $k, array $v)

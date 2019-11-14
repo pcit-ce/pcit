@@ -56,8 +56,6 @@ class Client
 
     /**
      * List issues for a repository.
-     *
-     * @param string $repo_full_name
      */
     public function listRepositoryIssues(string $repo_full_name): void
     {
@@ -67,9 +65,6 @@ class Client
      * Get a single issue.
      *
      * 201
-     *
-     * @param string $repo_full_name
-     * @param int    $issue_number
      *
      * @return mixed
      *
@@ -85,12 +80,8 @@ class Client
     /**
      * Create an issue.
      *
-     * @param string $repo_full_name
-     * @param string $title
-     * @param string $body
-     * @param int    $milestone
-     * @param array  $labels
-     * @param array  $assignees
+     * @param array $labels
+     * @param array $assignees
      *
      * @throws Exception
      */
@@ -120,7 +111,6 @@ class Client
      * Edit an issue.
      *
      * @param string $repo_full_name repo full name
-     * @param int    $issue_number
      * @param string $title          issue title
      * @param string $body
      * @param string $state          State of the issue. Either open or closed.
@@ -161,10 +151,8 @@ class Client
      *
      * 204.
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     * @param string $lock_reason    The reason for locking the issue or pull request conversation. Lock will fail if
-     *                               you don't use one of these reasons: off-topic too heated resolved spam
+     * @param string $lock_reason The reason for locking the issue or pull request conversation. Lock will fail if
+     *                            you don't use one of these reasons: off-topic too heated resolved spam
      *
      * @throws Exception
      */
@@ -200,9 +188,6 @@ class Client
     /**
      * Unlock an issue.
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     *
      * @throws Exception
      */
     public function unlock(string $repo_full_name, int $issue_number): void
@@ -221,9 +206,6 @@ class Client
     }
 
     /**
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     *
      * @return mixed
      *
      * @throws Exception

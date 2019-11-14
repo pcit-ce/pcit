@@ -2,7 +2,7 @@
 
 echo;echo
 
-if [ -n ${PCIT} ];then
+if [ -n "$PCIT" ];then
   PCIT_USERNAME=$INPUT_USERNAME
   PCIT_TARGET_BRANCH=$INPUT_TARGET_BRANCH
   PCIT_GIT_URL=$INPUT_GIT_URL

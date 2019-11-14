@@ -14,8 +14,6 @@ class Client
     /**
      * 获取组织的基本信息.
      *
-     * @param string $org_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -29,8 +27,6 @@ class Client
 
     /**
      * Edit an organization.
-     *
-     * @param string $org_name
      *
      * @return mixed
      *
@@ -51,8 +47,6 @@ class Client
     /**
      * 获取组织的仓库列表.
      *
-     * @param string $org_name
-     * @param int    $page
      * @param string $type
      * @param int    $per_page
      * @param string $sort
@@ -70,8 +64,6 @@ class Client
 
     /**
      * List blocked users.
-     *
-     * @param string $org_name
      */
     public function listBlockedUsers(string $org_name): void
     {
@@ -80,9 +72,6 @@ class Client
 
     /**
      * Check whether a user is blocked from an organization.
-     *
-     * @param string $org_name
-     * @param string $username
      *
      * @return bool
      *
@@ -112,9 +101,6 @@ class Client
      *
      * 204
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @return mixed
      *
      * @throws Exception
@@ -131,9 +117,6 @@ class Client
      *
      * 204
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @return mixed
      *
      * @throws Exception
@@ -146,8 +129,6 @@ class Client
     }
 
     /**
-     * @param string $org_name
-     *
      * @return bool
      *
      * @throws Exception

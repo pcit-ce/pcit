@@ -15,9 +15,6 @@ trait CICommon
 
     /**
      * CICommon constructor.
-     *
-     * @param Curl   $curl
-     * @param string $api_url
      */
     public function __construct(Curl $curl, string $api_url)
     {
@@ -27,9 +24,7 @@ trait CICommon
     }
 
     /**
-     * @param string $file
-     * @param        $line
-     * @param int    $http_code
+     * @param $line
      *
      * @throws \Exception
      */

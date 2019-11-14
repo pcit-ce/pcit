@@ -27,9 +27,6 @@ class AssigneesClient
 
     /**
      * Assignees constructor.
-     *
-     * @param Curl   $curl
-     * @param string $api_url
      */
     public function __construct(Curl $curl, string $api_url)
     {
@@ -40,8 +37,6 @@ class AssigneesClient
 
     /**
      * List assignees.
-     *
-     * @param string $repo_full_name
      *
      * @return mixed
      *
@@ -58,9 +53,6 @@ class AssigneesClient
      * Check assignee.
      *
      * 204 404.
-     *
-     * @param string $repo_full_name
-     * @param string $assignees
      *
      * @return bool
      *
@@ -84,10 +76,6 @@ class AssigneesClient
      *
      * 201
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     * @param array  $assignees
-     *
      * @throws Exception
      */
     public function add(string $repo_full_name, int $issue_number, array $assignees): void
@@ -107,10 +95,6 @@ class AssigneesClient
 
     /**
      * Remove assignees from an issue.
-     *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     * @param array  $assignees
      *
      * @throws Exception
      */

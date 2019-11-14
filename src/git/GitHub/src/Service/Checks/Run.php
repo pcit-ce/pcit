@@ -37,8 +37,6 @@ class Run
     }
 
     /**
-     * @param RunData $run_data
-     *
      * @return mixed
      *
      * @throws Exception
@@ -80,8 +78,6 @@ class Run
     }
 
     /**
-     * @param RunData $run_data
-     *
      * @return mixed
      *
      * @throws Exception
@@ -124,13 +120,12 @@ class Run
     /**
      * List check runs for a specific ref.
      *
-     * @param string $repo_full_name
-     * @param string $ref            Required. Can be a SHA, branch name, or tag name.
-     * @param string $check_name     returns check runs with the specified name
-     * @param string $status         Returns check runs with the specified status. Can be one of queued, in_progress, or
-     *                               completed.
-     * @param string $filter         Filters check runs by their completed_at timestamp. Can be one of latest (returning
-     *                               the most recent check runs) or all. Default: latest
+     * @param string $ref        Required. Can be a SHA, branch name, or tag name.
+     * @param string $check_name returns check runs with the specified name
+     * @param string $status     Returns check runs with the specified status. Can be one of queued, in_progress, or
+     *                           completed.
+     * @param string $filter     Filters check runs by their completed_at timestamp. Can be one of latest (returning
+     *                           the most recent check runs) or all. Default: latest
      *
      * @return mixed
      *
@@ -158,13 +153,11 @@ class Run
     /**
      * List check runs in a check suite.
      *
-     * @param string $repo_full_name
-     * @param int    $id
-     * @param string $check_name     returns check runs with the specified name
-     * @param string $status         Returns check runs with the specified status. Can be one of queued, in_progress, or
-     *                               completed.
-     * @param string $filter         Filters check runs by their completed_at timestamp. Can be one of latest (returning
-     *                               the most recent check runs) or all. Default: latest
+     * @param string $check_name returns check runs with the specified name
+     * @param string $status     Returns check runs with the specified status. Can be one of queued, in_progress, or
+     *                           completed.
+     * @param string $filter     Filters check runs by their completed_at timestamp. Can be one of latest (returning
+     *                           the most recent check runs) or all. Default: latest
      *
      * @return mixed
      *
@@ -192,9 +185,6 @@ class Run
     /**
      * Get a single check run.
      *
-     * @param string $repo_full_name
-     * @param int    $check_run_id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -208,9 +198,6 @@ class Run
 
     /**
      * List annotations for a check run.
-     *
-     * @param string $repo_full_name
-     * @param int    $check_run_id
      *
      * @return mixed
      *

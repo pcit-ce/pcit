@@ -11,12 +11,6 @@ use PCIT\Framework\Support\Model;
 class Issue extends Model
 {
     /**
-     * @param string $git_type
-     * @param int    $issue_id
-     * @param int    $comment_id
-     * @param int    $updated_at
-     * @param string $body
-     *
      * @return int
      *
      * @throws Exception
@@ -39,11 +33,6 @@ class Issue extends Model
     }
 
     /**
-     * @param string $git_type
-     * @param int    $issue_id
-     * @param int    $comment_id
-     * @param int    $deleted_at
-     *
      * @return int
      *
      * @throws Exception
@@ -64,10 +53,6 @@ class Issue extends Model
     }
 
     /**
-     * @param array  $labels
-     * @param string $git_type
-     * @param int    $issue_id
-     *
      * @throws Exception
      */
     public static function updateLabels(array $labels,
@@ -85,10 +70,6 @@ class Issue extends Model
     }
 
     /**
-     * @param array  $assignees
-     * @param string $git_type
-     * @param int    $issue_id
-     *
      * @throws Exception
      */
     public static function updateAssignees(array $assignees,

@@ -38,8 +38,6 @@ class JWTController
     }
 
     /**
-     * @param bool $returnGitTypeFirst
-     *
      * @return array
      *
      * @throws Exception
@@ -66,8 +64,6 @@ class JWTController
 
     /**
      * 检查 token 是否有某构建的权限.
-     *
-     * @param int $build_key_id
      *
      * @return array
      *
@@ -101,9 +97,6 @@ class JWTController
      *
      * Token 的 uid 是否在给定仓库的管理员列表中
      *
-     * @param string $username
-     * @param string $repo_name
-     *
      * @return array
      *
      * @throws Exception
@@ -128,9 +121,8 @@ class JWTController
     /**
      * 生成 API Token.
      *
-     * @param string|null $git_type
-     * @param string      $username
-     * @param int         $uid
+     * @param string $username
+     * @param int    $uid
      *
      * @return string
      *

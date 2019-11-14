@@ -7,16 +7,15 @@ namespace App;
 use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
-use PCIT\GitHub\WebhooksParse\UserBasicInfo\Account;
+use PCIT\GitHub\Webhooks\Parse\UserBasicInfo\Account;
 
 class User extends Model
 {
     protected static $table = 'user';
 
     /**
-     * @param string      $git_type
-     * @param string|null $username
-     * @param int         $uid
+     * @param string $git_type
+     * @param int    $uid
      *
      * @return array
      *
@@ -37,10 +36,6 @@ class User extends Model
      * @param int |Account $uid
      * @param string       $name
      * @param string       $username
-     * @param string|null  $email
-     * @param string|null  $pic
-     * @param bool         $org
-     * @param string       $git_type
      *
      * @throws Exception
      */
@@ -96,10 +91,6 @@ class User extends Model
     }
 
     /**
-     * @param string $git_type
-     * @param int    $uid
-     * @param string $access_token
-     *
      * @throws Exception
      */
     public static function updateAccessToken(int $uid, string $access_token, string $git_type = 'github'): void
@@ -110,10 +101,6 @@ class User extends Model
     }
 
     /**
-     * @param string $git_type
-     * @param int    $uid
-     * @param string $refresh_token
-     *
      * @throws Exception
      */
     public static function updateRefreshToken(int $uid, string $refresh_token, string $git_type = 'github'): void
@@ -124,9 +111,7 @@ class User extends Model
     }
 
     /**
-     * @param string $git_type
-     * @param int    $org_id
-     * @param        $admin_uid
+     * @param $admin_uid
      *
      * @throws Exception
      */
@@ -151,9 +136,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     * @param int    $admin_uid
-     *
      * @return array
      *
      * @throws Exception
@@ -166,9 +148,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     * @param string $username
-     *
      * @return int
      *
      * @throws Exception
@@ -183,9 +162,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     * @param string $org_name
-     *
      * @return int
      *
      * @throws Exception
@@ -198,9 +174,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     * @param string $username
-     *
      * @return string
      *
      * @throws Exception
@@ -213,9 +186,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     * @param int    $uid
-     *
      * @return string
      *
      * @throws Exception
@@ -228,10 +198,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     * @param int    $installation_id
-     * @param string $username
-     *
      * @throws Exception
      */
     public static function updateInstallationId(int $installation_id, string $username, string $git_type = 'github'): void
@@ -246,9 +212,7 @@ EOF;
     }
 
     /**
-     * @param string   $username
-     * @param int|null $uid
-     * @param string   $git_type
+     * @param string $username
      *
      * @return array|string
      *

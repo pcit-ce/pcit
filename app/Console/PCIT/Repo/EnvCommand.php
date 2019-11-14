@@ -51,9 +51,6 @@ pcit env get   VAR_ID
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return int|void|null
      *
      * @throws Exception

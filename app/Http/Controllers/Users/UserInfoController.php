@@ -28,9 +28,6 @@ class UserInfoController
      *
      * /user/{git_type}/{username}
      *
-     * @param string $git_type
-     * @param string $username
-     *
      * @return array|string
      *
      * @throws Exception

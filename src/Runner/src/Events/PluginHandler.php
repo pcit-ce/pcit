@@ -12,8 +12,6 @@ class PluginHandler
      * @param $settings
      * @param $env      SystemEnv
      *
-     * @return array
-     *
      * @throws Exception
      */
     public function handle($settings, $env): array

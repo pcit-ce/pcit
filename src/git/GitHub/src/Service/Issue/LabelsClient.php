@@ -19,8 +19,6 @@ class LabelsClient
     /**
      * List all labels for this repository.
      *
-     * @param string $repo_full_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -34,9 +32,6 @@ class LabelsClient
 
     /**
      * Get a single label.
-     *
-     * @param string $repo_full_name
-     * @param string $label_name
      *
      * @return mixed
      *
@@ -54,10 +49,7 @@ class LabelsClient
      *
      * post 201
      *
-     * @param string $repo_full_name
-     * @param string $name           label name
-     * @param string $color
-     * @param string $description
+     * @param string $name label name
      *
      * @return mixed
      *
@@ -75,11 +67,7 @@ class LabelsClient
      *
      * patch
      *
-     * @param string $repo_full_name
-     * @param string $label_current_name
-     * @param string $label_name         label name
-     * @param string $color
-     * @param string $description
+     * @param string $label_name label name
      *
      * @return mixed
      *
@@ -101,9 +89,6 @@ class LabelsClient
      *
      * 204
      *
-     * @param string $repo_full_name
-     * @param string $label_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -117,9 +102,6 @@ class LabelsClient
 
     /**
      * List labels on an issue.
-     *
-     * @param string $repo_full_name
-     * @param int    $issue_number
      *
      * @return mixed
      *
@@ -135,10 +117,6 @@ class LabelsClient
     /**
      * Add labels to an issue.
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     * @param array  $label
-     *
      * @return mixed
      *
      * @throws Exception
@@ -153,10 +131,6 @@ class LabelsClient
     /**
      * Remove a label from an issue.
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     * @param string $label_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -170,10 +144,6 @@ class LabelsClient
 
     /**
      * Replace all labels for an issue.
-     *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     * @param array  $labels
      *
      * @return mixed
      *
@@ -191,9 +161,6 @@ class LabelsClient
      *
      * 204
      *
-     * @param string $repo_full_name
-     * @param int    $issue_number
-     *
      * @return mixed
      *
      * @throws Exception
@@ -207,9 +174,6 @@ class LabelsClient
 
     /**
      * Get labels for every issue in a milestone.
-     *
-     * @param string $repo_full_name
-     * @param int    $milestones_number
      *
      * @return mixed
      *

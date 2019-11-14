@@ -29,12 +29,9 @@ class Mail
     }
 
     /**
-     * @param array  $address address and name
-     * @param string $subject
-     * @param string $body
-     * @param bool   $html
-     * @param array  $cc      address and name
-     * @param array  $bcc     address and name
+     * @param array $address address and name
+     * @param array $cc      address and name
+     * @param array $bcc     address and name
      *
      * @throws Exception
      */

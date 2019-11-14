@@ -49,8 +49,6 @@ class Client
     }
 
     /**
-     * @param string $content
-     *
      * @throws Exception
      */
     private function secret(string $content): void
@@ -77,8 +75,7 @@ class Client
     /**
      * 仅接收收据,除有效性验证外不做任何处理.
      *
-     * @param string $type
-     * @param        $content
+     * @param $content
      *
      * @return bool|int
      *
@@ -104,8 +101,6 @@ class Client
     /**
      * 回滚.
      *
-     * @param string $content
-     *
      * @return bool|int
      *
      * @throws Exception
@@ -117,8 +112,6 @@ class Client
 
     /**
      * 处理成功，存入成功队列.
-     *
-     * @param string $content
      *
      * @return bool|int
      *
@@ -139,8 +132,6 @@ class Client
 
     /**
      * 处理失败，插入失败队列.
-     *
-     * @param string $content
      *
      * @return bool|int
      *

@@ -32,9 +32,6 @@ class MembersClient
     /**
      * Check membership.
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @return bool
      *
      * @throws \Exception
@@ -57,9 +54,6 @@ class MembersClient
      *
      * 204
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @throws \Exception
      */
     public function remove(string $org_name, string $username): void
@@ -69,8 +63,6 @@ class MembersClient
 
     /**
      * Public members list.
-     *
-     * @param string $org_name
      *
      * @throws \Exception
      */
@@ -83,9 +75,6 @@ class MembersClient
      * Check public membership.
      *
      * 204
-     *
-     * @param string $org_name
-     * @param string $username
      *
      * @return bool
      *
@@ -109,9 +98,6 @@ class MembersClient
      *
      * 204
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @throws \Exception
      */
     public function publicizeUserMembership(string $org_name, string $username): void
@@ -122,9 +108,6 @@ class MembersClient
     /**
      * Conceal a user's membership.
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @throws \Exception
      */
     public function concealUserMembership(string $org_name, string $username): void
@@ -134,9 +117,6 @@ class MembersClient
 
     /**
      * Get organization membership.
-     *
-     * @param string $org_name
-     * @param string $username
      *
      * @return mixed
      *
@@ -150,7 +130,6 @@ class MembersClient
     /**
      * Add or update organization membership.
      *
-     * @param string $org_name
      * @param string $username username
      * @param string $role     admin or member
      *
@@ -168,9 +147,6 @@ class MembersClient
      *
      * 204
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @throws \Exception
      */
     public function removeMembership(string $org_name, string $username): void
@@ -180,9 +156,6 @@ class MembersClient
 
     /**
      * List organization invitation teams.
-     *
-     * @param string $org_name
-     * @param string $invitation_id
      *
      * @return mixed
      *
@@ -195,8 +168,6 @@ class MembersClient
 
     /**
      * List pending organization invitations.
-     *
-     * @param string $org_name
      *
      * @return mixed
      *
@@ -212,7 +183,6 @@ class MembersClient
      *
      * 201
      *
-     * @param string   $org_name
      * @param int|null $invitee_id GotHub user id
      * @param string   $email
      * @param string   $role       admin or direct_member billing_manager
@@ -256,8 +226,6 @@ class MembersClient
     /**
      * Get your organization membership.
      *
-     * @param string $org_name
-     *
      * @throws \Exception
      */
     public function getYourMembership(string $org_name): void
@@ -267,8 +235,6 @@ class MembersClient
 
     /**
      * Edit your organization membership.
-     *
-     * @param string $org_name
      *
      * @throws \Exception
      */
@@ -300,9 +266,6 @@ class MembersClient
      *
      * 204
      *
-     * @param string $org_name
-     * @param string $username
-     *
      * @throws \Exception
      */
     public function removeOutsideCollaborators(string $org_name, string $username): void
@@ -314,9 +277,6 @@ class MembersClient
      * Convert member to outside collaborator.
      *
      * 204
-     *
-     * @param string $org_name
-     * @param string $username
      *
      * @throws \Exception
      *

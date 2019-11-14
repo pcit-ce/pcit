@@ -14,8 +14,7 @@ class Client
     /**
      * List a user's gists.
      *
-     * @param string|null $username
-     * @param string      $since    YYYY-MM-DDTHH:MM:SSZ
+     * @param string $since YYYY-MM-DDTHH:MM:SSZ
      *
      * @return mixed
      *
@@ -45,8 +44,6 @@ class Client
     /**
      * List starred gists.
      *
-     * @param string|null $since
-     *
      * @return mixed
      *
      * @throws Exception
@@ -59,8 +56,6 @@ class Client
     /**
      * Get a single gist.
      *
-     * @param string $gist_id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -72,9 +67,6 @@ class Client
 
     /**
      * Get a specific revision of a gist.
-     *
-     * @param string $gist_id
-     * @param string $sha
      *
      * @return mixed
      *
@@ -90,9 +82,7 @@ class Client
      *
      * 201
      *
-     * @param array  $files       [ $file_name => ['content' => $file_content ] ]
-     * @param string $description
-     * @param bool   $public
+     * @param array $files [ $file_name => ['content' => $file_content ] ]
      *
      * @throws Exception
      */
@@ -112,10 +102,6 @@ class Client
     /**
      * Edit a gist.
      *
-     * @param array  $files
-     * @param string $description
-     * @param string $gist_id
-     *
      * @throws Exception
      */
     public function edit(array $files, string $description, string $gist_id): void
@@ -131,8 +117,6 @@ class Client
     /**
      * List gist commits.
      *
-     * @param string $gist_id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -145,8 +129,6 @@ class Client
     /**
      * Star a gist.
      *
-     * @param string $gist_id
-     *
      * @throws Exception
      */
     public function star(string $gist_id): void
@@ -156,8 +138,6 @@ class Client
 
     /**
      * Unstar a gist.
-     *
-     * @param string $gist_id
      *
      * @throws Exception
      */
@@ -170,8 +150,6 @@ class Client
      * Check if a gist is starred.
      *
      * 204
-     *
-     * @param string $gist_id
      *
      * @return bool
      *
@@ -199,8 +177,6 @@ class Client
      *
      * 201
      *
-     * @param string $gist_id
-     *
      * @throws Exception
      */
     public function fork(string $gist_id): void
@@ -210,8 +186,6 @@ class Client
 
     /**
      * List gist forks.
-     *
-     * @param string $gist_id
      *
      * @return mixed
      *
@@ -226,8 +200,6 @@ class Client
      * Delete a gist.
      *
      * 204
-     *
-     * @param string $gist_id
      *
      * @throws Exception
      */

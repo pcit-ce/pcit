@@ -27,9 +27,6 @@ class OrganizationsController
      *
      * /org/{git_type}/{organization_name}
      *
-     * @param string $git_type
-     * @param string $org_name
-     *
      * @return mixed
      *
      * @throws Exception

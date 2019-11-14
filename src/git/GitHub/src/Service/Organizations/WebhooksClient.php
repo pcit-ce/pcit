@@ -13,8 +13,6 @@ class WebhooksClient
     /**
      * List hooks.
      *
-     * @param string $org_name
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -26,9 +24,6 @@ class WebhooksClient
 
     /**
      * Get single hook.
-     *
-     * @param string $org_name
-     * @param int    $hook_id
      *
      * @return mixed
      *
@@ -44,14 +39,7 @@ class WebhooksClient
      *
      * 201
      *
-     * @param string $org_name
-     * @param string $hook_name
-     * @param array  $events
-     * @param string $url
-     * @param string $secret
      * @param string $content_type json or form
-     * @param string $insecure_ssl
-     * @param bool   $active
      *
      * @throws \Exception
      */
@@ -81,15 +69,6 @@ class WebhooksClient
 
     /**
      * Edit a hook.
-     *
-     * @param string $org_name
-     * @param int    $hook_id
-     * @param array  $events
-     * @param string $url
-     * @param string $secret
-     * @param string $content_type
-     * @param string $insecure_ssl
-     * @param bool   $active
      *
      * @throws \Exception
      */
@@ -121,9 +100,6 @@ class WebhooksClient
      *
      * 204
      *
-     * @param string $org_name
-     * @param int    $hook_id
-     *
      * @throws \Exception
      */
     public function ping(string $org_name, int $hook_id): void
@@ -133,9 +109,6 @@ class WebhooksClient
 
     /**
      * Delete a hook.
-     *
-     * @param string $org_name
-     * @param string $hook_id
      *
      * @throws \Exception
      */

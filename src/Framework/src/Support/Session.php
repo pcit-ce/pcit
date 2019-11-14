@@ -7,8 +7,7 @@ namespace PCIT\Framework\Support;
 class Session
 {
     /**
-     * @param string $name
-     * @param        $value
+     * @param $value
      */
     public static function put(string $name, $value): void
     {
@@ -17,9 +16,6 @@ class Session
         session_write_close();
     }
 
-    /**
-     * @param string $name
-     */
     public static function forget(string $name): void
     {
         session_start();
@@ -28,8 +24,6 @@ class Session
     }
 
     /**
-     * @param string $name
-     *
      * @return string|null
      */
     public static function get(string $name)
@@ -42,8 +36,6 @@ class Session
     }
 
     /**
-     * @param string $name
-     *
      * @return bool
      */
     public static function has(string $name)
@@ -79,8 +71,6 @@ class Session
 
     /**
      * 取出之后删除原数据.
-     *
-     * @param string $name
      *
      * @return bool|null
      */

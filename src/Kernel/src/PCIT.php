@@ -106,10 +106,6 @@ class PCIT extends Container
     /**
      * PCIT constructor.
      *
-     * @param array  $config
-     * @param string $git_type
-     * @param string $accessToken
-     *
      * @throws Exception
      */
     public function __construct(array $config = [],

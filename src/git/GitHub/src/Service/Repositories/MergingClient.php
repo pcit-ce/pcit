@@ -15,11 +15,6 @@ class MergingClient
      *
      * 201
      *
-     * @param string $repo_full_name
-     * @param string $base
-     * @param string $head
-     * @param string $commit_message
-     *
      * @return mixed
      *
      * @throws \Exception

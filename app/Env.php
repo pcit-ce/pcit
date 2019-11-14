@@ -14,7 +14,6 @@ class Env extends Model
 
     /**
      * @param string $git_type
-     * @param int    $rid
      *
      * @return array
      *
@@ -29,10 +28,6 @@ class Env extends Model
 
     /**
      * @param string $git_type
-     * @param int    $rid
-     * @param string $name
-     * @param string $value
-     * @param bool   $public
      *
      * @return int
      *
@@ -46,11 +41,7 @@ class Env extends Model
     }
 
     /**
-     * @param int    $id
      * @param string $git_type
-     * @param int    $rid
-     * @param string $value
-     * @param bool   $public
      *
      * @return int
      *
@@ -64,9 +55,7 @@ class Env extends Model
     }
 
     /**
-     * @param int    $id
      * @param string $git_type
-     * @param int    $rid
      *
      * @return int
      *
@@ -80,10 +69,7 @@ class Env extends Model
     }
 
     /**
-     * @param int    $id
      * @param string $git_type
-     * @param int    $rid
-     * @param bool   $show
      *
      * @return string
      *

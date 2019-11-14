@@ -79,9 +79,6 @@ class Log
     const EMERGENCY = 'emergency';
 
     /**
-     * @param string      $name
-     * @param string|null $log_path
-     *
      * @return Logger
      *
      * @throws Exception
@@ -107,7 +104,6 @@ class Log
      * @param string $file
      * @param int    $line
      * @param string $debug_info
-     * @param array  $context
      * @param string $level
      *
      * @throws Exception

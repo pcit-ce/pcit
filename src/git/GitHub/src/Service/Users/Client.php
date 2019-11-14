@@ -25,9 +25,6 @@ class Client
     /**
      * 获取当前登录用户或指定用户的基本信息.
      *
-     * @param bool        $raw
-     * @param string|null $username
-     *
      * @return array|mixed
      *
      * @throws Exception
@@ -58,10 +55,6 @@ class Client
 
     /**
      * 获取当前用户或指定用户名下所有的仓库列表（包括组织中的列表）.
-     *
-     * @param int         $page
-     * @param bool        $raw
-     * @param string|null $username
      *
      * @return mixed
      *

@@ -24,9 +24,6 @@ class Client
 
     /**
      * Installations constructor.
-     *
-     * @param Curl   $curl
-     * @param string $api_url
      */
     public function __construct(Curl $curl, string $api_url)
     {
@@ -52,8 +49,6 @@ class Client
     /**
      * List repositories that are accessible to the authenticated user for an installation.
      *
-     * @param int $installation_id
-     *
      * @return mixed
      *
      * @throws Exception
@@ -69,10 +64,6 @@ class Client
      * Add a single repository to an installation.
      *
      * 204
-     *
-     * @param int    $installation_id
-     * @param int    $repository_id
-     * @param string $method
      *
      * @return mixed
      *
@@ -98,9 +89,6 @@ class Client
      *
      * 204
      *
-     * @param int $installation_id
-     * @param int $repository_id
-     *
      * @throws Exception
      */
     public function remove(int $installation_id, int $repository_id): void
@@ -109,8 +97,6 @@ class Client
     }
 
     /**
-     * @param string $jwt
-     *
      * @return mixed
      *
      * @throws Exception
@@ -127,7 +113,6 @@ class Client
     }
 
     /**
-     * @param int    $installation_id
      * @param string $private_key_path
      *
      * @return mixed
@@ -180,8 +165,6 @@ class Client
     }
 
     /**
-     * @param string $private_key_path
-     *
      * @return string
      *
      * @throws Exception
@@ -204,8 +187,6 @@ class Client
     /**
      * Find organization installation.
      *
-     * @param string $org_name
-     *
      * @return mixed
      *
      * @throws Exception
@@ -219,9 +200,6 @@ class Client
 
     /**
      * Find repository installation.
-     *
-     * @param string $username
-     * @param string $repo
      *
      * @return mixed
      *
@@ -237,8 +215,6 @@ class Client
     /**
      * Find user installation.
      *
-     * @param string $username
-     *
      * @return mixed
      *
      * @throws Exception
@@ -253,8 +229,6 @@ class Client
     /**
      * 某用户或组织的 GitHub App 安装请求地址，即用户在此 URL 安装 GitHub App.
      *
-     * @param int $rid
-     *
      * @return string
      */
     public function getInstallUrl(int $rid)
@@ -264,8 +238,6 @@ class Client
     }
 
     /**
-     * @param int $installation_id
-     *
      * @return string
      */
     public function getSettingsUrlByUser(int $installation_id)
@@ -274,9 +246,6 @@ class Client
     }
 
     /**
-     * @param string $org_name
-     * @param int    $installation_id
-     *
      * @return string
      */
     public function getSettingsUrlByOrg(string $org_name, int $installation_id)

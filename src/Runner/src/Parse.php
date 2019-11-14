@@ -7,8 +7,7 @@ namespace PCIT\Builder;
 class Parse
 {
     /**
-     * @param string $text
-     * @param        $env  <pre> ['K=V','K2=V2'] <pre>
+     * @param $env <pre> ['K=V','K2=V2'] <pre>
      *
      * @return string
      */

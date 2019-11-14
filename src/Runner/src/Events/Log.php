@@ -94,7 +94,7 @@ class Log
                 );
 
                 if (!$image_log) {
-                    $image_log = 'log not found!';
+                    $image_log = '12345678 log not found!';
                 }
 
                 $cache->hset(

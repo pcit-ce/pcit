@@ -13,13 +13,6 @@ class CommitsClient
     /**
      * List commits on a repository.
      *
-     * @param string $repo_full_name
-     * @param string $sha
-     * @param string $path
-     * @param string $author
-     * @param string $since
-     * @param string $until
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -47,9 +40,6 @@ class CommitsClient
     /**
      * Get a single commit.
      *
-     * @param string $repo_full_name
-     * @param string $sha
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -63,9 +53,6 @@ class CommitsClient
 
     /**
      * Get the SHA-1 of a commit reference.
-     *
-     * @param string $repo_full_name
-     * @param string $ref
      *
      * @return mixed
      *
@@ -81,10 +68,6 @@ class CommitsClient
     /**
      * Compare two commits.
      *
-     * @param string $repo_full_name
-     * @param string $base
-     * @param string $head
-     *
      * @return mixed
      *
      * @throws \Exception
@@ -98,9 +81,6 @@ class CommitsClient
 
     /**
      * Commit signature verification.
-     *
-     * @param string $repo_full_name
-     * @param string $sha
      *
      * @return mixed
      *

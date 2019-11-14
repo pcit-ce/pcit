@@ -11,8 +11,6 @@ class Commands
     /**
      * @param string $language_type example: php
      * @param string $pipeline      example: script
-     *
-     * @return array
      */
     public static function get(?string $language_type, ?string $pipeline): array
     {

@@ -15,10 +15,6 @@ class BranchesClient
     }
 
     /**
-     * @param string $username
-     * @param string $repo_name
-     * @param string $branch
-     *
      * @see https://developer.github.com/v3/repos/branches/#get-branch
      *
      * @return mixed
