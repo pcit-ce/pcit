@@ -163,7 +163,7 @@ steps: # pipeline
     settings:
       # registry: docker.khs1994.com
       repo: pcit/pcit
-      tags: 7.3.9-swarm-${PCIT_TAG}
+      tags: 7.3.11-swarm-${PCIT_TAG}
       # target: php
       build_args:
         - a=1
@@ -184,7 +184,7 @@ steps: # pipeline
     settings:
       # registry: docker.khs1994.com
       repo: pcit/pcit
-      tags: 7.3.9-swarm-${PCIT_TAG}
+      tags: 7.3.11-swarm-${PCIT_TAG}
       # target: php
       build_args:
         - a=1
@@ -208,19 +208,21 @@ steps: # pipeline
         - a=1
         - b=2
 
-  php-cs-fixer: php-cs-fixer fix
+  php-cs-fixer:
+    uses: khs1994/php-cs-fixer
+    run: php-cs-fixer fix
 
   sami:
-    # image: khs1994/php:7.3.9-composer-alpine
+    image: khs1994/sami
     when:
       status: success
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
-    # commands:
-    #  - sami update .sami.php
+    commands:
+    - sami update .sami.php
 
   gitee_pages:
     image: pcit/pages
@@ -228,7 +230,7 @@ steps: # pipeline
       status: success
       event: ['push']
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -248,7 +250,7 @@ steps: # pipeline
       status: success
       event: ['push']
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -268,7 +270,7 @@ steps: # pipeline
       event: ['tag']
       status: success
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -286,7 +288,7 @@ steps: # pipeline
       event: ['tag']
       status: success
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -304,7 +306,7 @@ steps: # pipeline
       event: ['tag']
       status: success
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -323,7 +325,7 @@ steps: # pipeline
       event: tag
       branch: alpha
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -344,7 +346,7 @@ steps: # pipeline
       status: success
       event: ['push']
       matrix:
-      - PHP_VERSION: 7.3.9
+      - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -377,7 +379,7 @@ steps: # pipeline
         - README.md: NEW_FILENAME.md
 
   codecov:
-    # image: khs1994/php:7.3.9-composer-alpine
+    # image: khs1994/php:7.3.11-composer-alpine
     shell: bash
     when:
       status: success
@@ -443,9 +445,9 @@ services:
 # 变量矩阵
 matrix:
   PHP_VERSION:
-    - 7.3.9
+    - 7.3.11
     # - nightly
-    - 7.2.15
+    - 7.2.24
     # - 7.1.26
   NGINX_VERSION:
     - 1.15.8
@@ -461,7 +463,7 @@ matrix:
 
 # matrix:
 #   include:
-#     - PHP_VERSION: 7.2.15
+#     - PHP_VERSION: 7.2.24
 #       MYSQL_VERSION: 5.7.24
 #       REDIS_VERSION: 5.0.3
 #     - PHP_VERSION: 7.1.26
@@ -494,4 +496,4 @@ networks:
     - "docker.khs1994.com:127.0.0.1"
 
 # 指定构建步骤的默认镜像
-image: khs1994/php:7.3.9-composer-fpm
+image: khs1994/php:7.3.11-composer-fpm

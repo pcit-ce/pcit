@@ -78,7 +78,7 @@ class JobController
         $job_id = (int) $job_id;
         $buildId = Job::getBuildKeyId($job_id);
 
-        $build = (new \App\Console\Events\Build())->handle($buildId);
+        $build = (new \App\Events\Build())->handle($buildId);
 
         app(PCIT::class)->build->handle($build, (int) $job_id);
 

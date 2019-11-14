@@ -42,7 +42,7 @@ pipeline:
       branch: master
       event: [push,pull_request,tag,deployment]
       # matrix:
-      #   - PHP_VERSION: 7.2.15
+      #   - PHP_VERSION: 7.2.24
       #     REDIS_VERSION: 5.0.0
 
   codecov:
@@ -88,7 +88,7 @@ branches: master
 
 matrix:
   PHP_VERSION:
-    - 7.2.15
+    - 7.2.24
     - 7.1.23
   MYSQL_VERSION:
     - 5.7.23
@@ -97,7 +97,7 @@ matrix:
 
 # matrix:
 #   include:
-#     - PHP_VERSION: 7.2.15
+#     - PHP_VERSION: 7.2.24
 #       MYSQL_VERSION: 5.7.23
 #       REDIS_VERSION: 5.0.0
 #     - PHP_VERSION: 7.1.23

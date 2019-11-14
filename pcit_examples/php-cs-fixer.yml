@@ -7,6 +7,6 @@ workspace:
 pipeline:
 
   php-cs-fixer:
-    image: khs1994/php:7.2.15-fpm-alpine
+    image: khs1994/php:7.2.24-fpm-alpine
     commands:
       - php-cs-fixer fix

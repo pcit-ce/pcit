@@ -13,6 +13,6 @@ class ImageTest extends TestCase
     {
         $result = Image::get('php');
 
-        $this->assertEquals('khs1994/php:7.3.9-composer-alpine', $result);
+        $this->assertEquals('khs1994/php:7.3.11-composer-alpine', $result);
     }
 }
