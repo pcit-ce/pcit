@@ -102,7 +102,7 @@ steps: # pipeline
       - CI_WEBHOOKS_TOKEN=pcit
     commands:
       - pwd
-      - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+      - echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit --coverage-clover=coverage.xml

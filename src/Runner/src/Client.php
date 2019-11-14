@@ -79,7 +79,7 @@ class Client
             throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
         }
 
-        // 解析 .pcit.yml.
+        // 解析 .pcit.y(a)ml.
         $yaml_obj = json_decode($this->build->config);
 
         $this->language = $language = $yaml_obj->language ?? 'php';

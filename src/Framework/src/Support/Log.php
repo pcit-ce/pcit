@@ -120,6 +120,10 @@ class Log
             return;
         }
 
+        if (0 === strpos($file, APP_ROOT)) {
+            $file = substr($file, \strlen(APP_ROOT) + 1);
+        }
+
         $debug_info = json_encode(array_filter([
             'file' => $file,
             'line' => $line,
