@@ -12,6 +12,9 @@ if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
 
+// get app
+$app = new \PCIT\Framework\Foundation\Application(['base_path' => dirname(dirname(__DIR__))]);
+
 // class alias
 AliasLoader::load(config('app.alias'));
 
@@ -33,9 +36,6 @@ if ($debug) {
 
     CI::enableDebug();
 }
-
-// get app
-$app = new \PCIT\Framework\Foundation\Application([]);
 
 // 绑定单例
 $app->singleton(\App\Http\Kernel::class, function ($app) {

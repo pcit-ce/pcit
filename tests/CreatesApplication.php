@@ -10,7 +10,7 @@ trait CreatesApplication
     {
         putenv('APP_ENV=testing');
 
-        $app = require base_path().'framework/bootstrap/app.php';
+        $app = require __DIR__.'/../framework/bootstrap/app.php';
 
         return $app;
     }

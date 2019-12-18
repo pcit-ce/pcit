@@ -20,16 +20,14 @@ class Application extends Container
 
     public function __construct(array $values = [])
     {
+        parent::__construct($values);
+
         // 设置单例
         static::$instance = $this;
 
         $this['app'] = $this;
 
         $this->registerProviders();
-
-        $this->basePath = base_path();
-
-        parent::__construct($values);
     }
 
     public function registerProviders(): void
