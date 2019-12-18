@@ -36,4 +36,5 @@ if ($fh) {
     }
 }
 
+$cli->setCatchExceptions(false);
 $cli->run();

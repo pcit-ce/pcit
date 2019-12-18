@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder;
+namespace PCIT\Runner;
 
 class Parse
 {

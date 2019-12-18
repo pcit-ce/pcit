@@ -6,9 +6,9 @@ namespace App\Events;
 
 use App\GetAccessToken;
 use App\Repo;
-use PCIT\Builder\BuildData;
 use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
+use PCIT\Runner\BuildData;
 use PCIT\Support\CI;
 
 /**

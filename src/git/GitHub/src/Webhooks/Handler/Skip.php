@@ -6,8 +6,8 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Build;
 use Exception;
-use PCIT\Builder\Conditional\Branch;
 use PCIT\Framework\Support\Log;
+use PCIT\Runner\Conditional\Branch;
 
 /**
  * 是否跳过构建.

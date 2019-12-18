@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Tests;
+namespace PCIT\Runner\Tests;
 
-use PCIT\Builder\Parse;
+use PCIT\Runner\Parse;
 use Tests\TestCase;
 
 class ParseTest extends TestCase

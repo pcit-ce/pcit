@@ -93,7 +93,7 @@
     "pcit/logs": "*",
     "pcit/provider-aliyun-docker-registry": "*",
     "pcit/provider-wechat": "*",
-    "pcit/runner": "*",
+    "pcit/runner": "^19.06",
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
     "vlucas/phpdotenv": "^3.0.0"

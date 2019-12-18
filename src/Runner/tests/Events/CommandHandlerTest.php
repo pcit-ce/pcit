@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Tests\Events;
+namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Builder\Events\CommandHandler;
+use PCIT\Runner\Events\CommandHandler;
 use Symfony\Component\Yaml\Yaml;
 use Tests\TestCase;
 

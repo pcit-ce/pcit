@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Tests\Conditional;
+namespace PCIT\Runner\Tests\Conditional;
 
-use PCIT\Builder\Conditional\Matrix;
+use PCIT\Runner\Conditional\Matrix;
 use Symfony\Component\Yaml\Yaml;
 use Tests\TestCase;
 
@@ -37,7 +37,7 @@ EOF;
 
         $current = Yaml::parse($current_yaml);
         $current = $current['matrix'];
-        $current = \PCIT\Builder\Events\Matrix::parseMatrix($current);
+        $current = \PCIT\Runner\Events\Matrix::parseMatrix($current);
 
         $result = (new Matrix($conditional, $current[0]))->handle();
 

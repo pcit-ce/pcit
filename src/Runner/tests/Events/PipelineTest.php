@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Tests\Events;
+namespace PCIT\Runner\Tests\Events;
 
 use PHPUnit\Framework\TestCase;
 

@@ -120,8 +120,8 @@ class Log
             return;
         }
 
-        if (0 === strpos($file, APP_ROOT)) {
-            $file = substr($file, \strlen(APP_ROOT) + 1);
+        if (0 === strpos($file, base_path())) {
+            $file = substr($file, \strlen(base_path()));
         }
 
         $debug_info = json_encode(array_filter([

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Events;
+namespace PCIT\Runner\Events;
 
 use PCIT\Framework\Support\DB;
 

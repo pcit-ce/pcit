@@ -3,12 +3,12 @@
   "version": "19.06.0",
   "autoload": {
     "psr-4": {
-      "PCIT\\Builder\\": "src/"
+      "PCIT\\Runner\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "PCIT\\Builder\\Tests\\": "tests/"
+      "PCIT\\Runner\\Tests\\": "tests/"
     }
   }
 }

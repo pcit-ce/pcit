@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Tests\CIDefault;
+namespace PCIT\Runner\Tests\CIDefault;
 
-use PCIT\Builder\CIDefault\Image;
+use PCIT\Runner\CIDefault\Image;
 use Tests\TestCase;
 
 class ImageTest extends TestCase

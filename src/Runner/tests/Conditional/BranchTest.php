@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Tests\Conditional;
+namespace PCIT\Runner\Tests\Conditional;
 
-use PCIT\Builder\Conditional\Branch;
+use PCIT\Runner\Conditional\Branch;
 use Tests\TestCase;
 
 class BranchTest extends TestCase

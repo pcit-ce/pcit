@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Events;
+namespace PCIT\Runner\Events;
 
 use Docker\Container\Client as DockerContainer;
 use PCIT\Framework\Support\Env;

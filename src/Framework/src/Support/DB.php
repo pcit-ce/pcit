@@ -56,7 +56,7 @@ class DB
                 }
 
                 if (2002 === $e->getCode()) {
-                    die('DB_Error: Can\'t connect DB Server');
+                    die('DB_Error: Can\'t connect DB Server'.PHP_EOL);
                 }
 
                 throw new Exception('Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);

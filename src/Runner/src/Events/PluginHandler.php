@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Events;
+namespace PCIT\Runner\Events;
 
-use PCIT\Builder\Parse;
+use PCIT\Runner\Parse;
 
 class PluginHandler
 {

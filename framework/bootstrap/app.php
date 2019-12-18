@@ -12,8 +12,6 @@ if ('cli' === \PHP_SAPI) {
     (new NunoMaduro\Collision\Provider())->register();
 }
 
-define('APP_ROOT', realpath(__DIR__.DIRECTORY_SEPARATOR.'../..'));
-
 // class alias
 AliasLoader::load(config('app.alias'));
 

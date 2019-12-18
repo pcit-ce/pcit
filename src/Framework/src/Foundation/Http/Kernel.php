@@ -103,6 +103,7 @@ class Kernel
         }
 
         app()->instance('request', $request);
+        app()->instance(\PCIT\Framework\Http\Request::class, $request);
 
         // session_set_cookie_params(1800 , '/', '.'getenv('CI_SESSION_DOMAIN', true));
 

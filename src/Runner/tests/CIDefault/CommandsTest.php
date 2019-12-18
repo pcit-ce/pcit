@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Builder\Tests\CIDefault;
+namespace PCIT\Runner\Tests\CIDefault;
 
-use PCIT\Builder\CIDefault\Commands;
+use PCIT\Runner\CIDefault\Commands;
 use Tests\TestCase;
 
 class CommandsTest extends TestCase

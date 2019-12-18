@@ -6,9 +6,9 @@ namespace App\Events;
 
 use App\Repo;
 use App\User;
-use PCIT\Builder\BuildData;
 use PCIT\Exception\PCITException;
 use PCIT\Framework\Support\Log;
+use PCIT\Runner\BuildData;
 use PCIT\Support\CI;
 use PCIT\Support\Env;
 

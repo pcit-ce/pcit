@@ -8,10 +8,10 @@ use App\Build as BuildDB;
 use App\Repo;
 use App\Setting;
 use Exception;
-use PCIT\Builder\BuildData;
 use PCIT\Exception\PCITException;
 use PCIT\Framework\Support\JSON;
 use PCIT\Framework\Support\Log;
+use PCIT\Runner\BuildData;
 use PCIT\Support\CI;
 
 /**
