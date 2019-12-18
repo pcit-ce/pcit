@@ -48,3 +48,7 @@ services:
   git:
     image: pcit/git
     build: git
+
+  dpl:
+    image: pcit/dpl
+    build: dpl

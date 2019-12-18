@@ -37,9 +37,9 @@ git init
 
 git add .
 
-git config user.name ${PCIT_USERNAME}
+git config user.name ${PCIT_USERNAME:-pcit-ce}
 
-git config user.email ${PCIT_EMAIL}
+git config user.email ${PCIT_EMAIL:-ci@khs1994.com}
 
 git commit -m "${PCIT_MESSAGE:-"Deploy Git by PCIT https://ci.khs1994.com"}" || exit 0
 

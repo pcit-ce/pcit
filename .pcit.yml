@@ -407,6 +407,20 @@ steps: # pipeline
     commands:
       - echo "build changed"
 
+  compile_phar:
+    when:
+      status: success
+    run:
+    - echo "[Phar]" >> /usr/local/etc/php/conf.d/phar.ini
+    - echo "phar.readonly = Off" >> /usr/local/etc/php/conf.d/phar.ini
+    - rm -rf vendor/pcit/*
+    - composer compile:dump
+    - composer compile:pcit
+    - composer compile:pcitd
+    - ls -la *.phar
+    - php pcit.phar
+    - php pcitd.phar
+
   ping: ["ping -c 5 127.0.0.1"]
 
   cron_only:

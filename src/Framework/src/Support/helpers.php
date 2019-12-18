@@ -51,7 +51,13 @@ if (!function_exists('config')) {
 if (!function_exists('base_path')) {
     function base_path()
     {
-        return realpath(__DIR__.'/../../../../').DIRECTORY_SEPARATOR;
+        $base_path = realpath(__DIR__.'/../../../../').DIRECTORY_SEPARATOR;
+
+        if(is_dir($base_path.DIRECTORY_SEPARATOR.'framework/config')){
+            return $base_path;
+        }
+
+        return realpath(__DIR__.'/../../../../../').DIRECTORY_SEPARATOR;
     }
 }
 
