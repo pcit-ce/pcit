@@ -28,6 +28,8 @@ class Client implements OAuthInterface
 
     private $curl;
 
+    public $state = true;
+
     public function __construct($config, Curl $curl)
     {
         $this->clientId = $config['client_id'];
