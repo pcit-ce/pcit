@@ -5,6 +5,8 @@
 # @link https://blog.khs1994.com/categories/CI/Travis-CI/
 #
 
+version: ~> 1.0
+
 language: php
 
 cache:

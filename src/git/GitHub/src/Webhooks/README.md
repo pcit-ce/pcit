@@ -1,4 +1,4 @@
-# WebHooks Handler
+# WebHooks
 
 ## Handler
 

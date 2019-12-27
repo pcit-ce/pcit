@@ -1,35 +1,26 @@
-clone:
-  git:
-    # image: plugins/git
-    depth: 10
-    # recursive: true
-    # submodule_override:
-    #   test/resource: http://192.168.199.100/khs1994/image.git
+name: CI
+kind: pipeline
+type: docker
 
-# /drone/src/github.com/username/repo
-workspace:
-  base: /pcit
-  path: .
-
-pipeline:
-  install:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
-  commands:
+steps:
+  - name: install
+    image: khs1994/php:7.4.0-composer-alpine
+    commands:
     - pwd
     - composer install
     # - composer update
 
-  script:
-    pull: true
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+  - name: script
+    pull: always
+    image: khs1994/php:7.4.0-fpm-alpine
     environment:
-      - CI_REDIS_HOST=redis
-      - CI_REDIS_PORT=6379
-      - CI_MYSQL_HOST=mysql
-      - CI_MYSQL_PORT=3306
-      - CI_MYSQL_USERNAME=root
-      - CI_MYSQL_PASSWORD=test
-      - CI_MYSQL_DATABASE=test
+      CI_REDIS_HOST: redis
+      CI_REDIS_PORT: 6379
+      CI_MYSQL_HOST: mysql
+      CI_MYSQL_PORT: 3306
+      CI_MYSQL_USERNAME: root
+      CI_MYSQL_PASSWORD: test
+      CI_MYSQL_DATABASE: test
     commands:
       - pwd
       - mv $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
@@ -40,66 +31,44 @@ pipeline:
     # privileged: true
     when:
       branch: master
-      event: [push,pull_request,tag,deployment]
-      # matrix:
-      #   - PHP_VERSION: 7.2.24
-      #     REDIS_VERSION: 5.0.0
+      event: [push,pull_request,tag]
 
-  codecov:
-    image: plugins/codecov
-    # token: your-codecov-token
-    files:
-      - "*.xml"
-    paths:
-      - tests/output/coverage
-    secrets: [ codecov_token ]
-    when:
-      status: success
+   - name: codecov
+     image: plugins/codecov
+     settings:
+       # token: your-codecov-token
+       files:
+       - "*.xml"
+       paths:
+       - tests/output/coverage
+     when:
+       status: success
+     environment:
+       CODECOV_TOKEN:
+         from_secret: codecov_token
 
-  publish:
-    image: plugins/docker
-    registry: docker.khs1994.com
-    repo: pcit/pcit
-    tags: latest
-    when:
-      event: deployment
-      environment: staging
-    secrets: [docker_username,docker_password]
-
-#  notify:
-#    image: plugins/slack
-#    channel: developers
-#    username: username
-#    when:
-#      status: [success,failure]
+    - name: docker build
+      image: plugins/docker
+      settings:
+        registry: docker.khs1994.com
+        repo: pcit/pcit
+        tags: latest
+      when:
+        status: success
+        event: push
+      environemnt:
+        DOCKER_USERNAME:
+          from_secret: docker_username
+        DOCKER_PASSWORD:
+          from_secret: docker_password
 
 services:
-  mysql:
-    image: mysql:${MYSQL_VERSION}
+  - name: mysql
+    image: mysql:5.7.24
     environment:
-      - MYSQL_DATABASE=test
-      - MYSQL_ROOT_PASSWORD=test
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: test
 
-  redis:
-    image: redis:${REDIS_VERSION}-alpine
+  - name: redis
+    image: redis:5.0.7-alpine
     commands: ["--bind","0.0.0.0"]
-
-branches: master
-
-matrix:
-  PHP_VERSION:
-    - 7.2.24
-    - 7.1.23
-  MYSQL_VERSION:
-    - 5.7.23
-  REDIS_VERSION:
-    - 5.0.0
-
-# matrix:
-#   include:
-#     - PHP_VERSION: 7.2.24
-#       MYSQL_VERSION: 5.7.23
-#       REDIS_VERSION: 5.0.0
-#     - PHP_VERSION: 7.1.23
-#       MYSQL_VERSION: 5.7.23
-#       REDIS_VERSION: 5.0.0

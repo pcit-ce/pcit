@@ -27,6 +27,8 @@ class Application extends Container
 
         $this['app'] = $this;
 
+        $this->basePath = $this['base_path'];
+
         $this->registerProviders();
     }
 

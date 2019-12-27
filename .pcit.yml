@@ -318,6 +318,20 @@ steps: # pipeline
       git_token: ${GITHUB_TOKEN}
       depth: 10
 
+  compile_phar:
+    when:
+      status: success
+    run:
+    - echo "[Phar]" >> /usr/local/etc/php/conf.d/phar.ini
+    - echo "phar.readonly = Off" >> /usr/local/etc/php/conf.d/phar.ini
+    - rm -rf vendor/pcit/*
+    - composer compile:dump
+    - composer compile:pcit
+    - composer compile:pcitd
+    - ls -lah *.phar
+    - php pcit.phar
+    - php pcitd.phar
+
   tencent_cloud_cos_v4:
     image: pcit/tencent_cloud_cos:v4
     when:
@@ -332,8 +346,8 @@ steps: # pipeline
     # environment:
     settings:
       files:
-        - README.md: pcit/tencent_cloud_cos_file_name_${PCIT_TAG}
-        - Dockerfile: pcit/tencent_cloud_cos_file_name2_${PCIT_TAG}
+        - pcit.phar: pcit/${PCIT_TAG}/pcit.phar
+        - pcitd.phar: pcit/${PCIT_TAG}/pcitd.phar
       region: ${COS_V4_REGION}
       app_id: ${COS_V4_APP_ID}
       secret_id: ${COS_V4_SECRET_ID}
@@ -374,8 +388,8 @@ steps: # pipeline
     settings:
       github_token: ${GITHUB_TOKEN}
       file:
-        - "CHANGELOG.md"
-        - "ROADMAP.md"
+        - pcit.phar
+        - pcitd.phar
         - README.md: NEW_FILENAME.md
 
   codecov:
@@ -406,20 +420,6 @@ steps: # pipeline
     #   status: changed
     commands:
       - echo "build changed"
-
-  compile_phar:
-    when:
-      status: success
-    run:
-    - echo "[Phar]" >> /usr/local/etc/php/conf.d/phar.ini
-    - echo "phar.readonly = Off" >> /usr/local/etc/php/conf.d/phar.ini
-    - rm -rf vendor/pcit/*
-    - composer compile:dump
-    - composer compile:pcit
-    - composer compile:pcitd
-    - ls -la *.phar
-    - php pcit.phar
-    - php pcitd.phar
 
   ping: ["ping -c 5 127.0.0.1"]
 
