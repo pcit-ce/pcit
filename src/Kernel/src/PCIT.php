@@ -98,8 +98,8 @@ class PCIT extends Container
     private function registerProviders(): void
     {
         // 取得服务提供器数组.
-        foreach ($this->providers as $k) {
-            $this->register(new $k());
+        foreach ($this->providers as $provider) {
+            $this->register(new $provider());
         }
     }
 

@@ -120,7 +120,7 @@ class Log
             return;
         }
 
-        if (0 === strpos($file, base_path())) {
+        if ($file && 0 === strpos($file, base_path())) {
             $file = substr($file, \strlen(base_path()));
         }
 

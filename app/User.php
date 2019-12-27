@@ -7,7 +7,7 @@ namespace App;
 use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
-use PCIT\GitHub\Webhooks\Parse\UserBasicInfo\Account;
+use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class User extends Model
 {

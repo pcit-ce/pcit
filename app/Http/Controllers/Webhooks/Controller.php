@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\WebhooksServer;
+namespace App\Http\Controllers\Webhooks;
 
 use App\Repo;
 use Error;

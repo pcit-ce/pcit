@@ -67,7 +67,7 @@ Route::delete('webhooks/{git_type}/{username}/{repo_name}/{id}/deactivate', 'Web
 
 /*Webhooks: receive git webhooks*/
 
-Route::post('webhooks/${git_type}', 'WebhooksServer\IndexController');
+Route::post('webhooks/${git_type}', 'Webhooks\Server\IndexController');
 
 // Route::post('webhooks/gogs', 'Webhooks\GogsController');
 
