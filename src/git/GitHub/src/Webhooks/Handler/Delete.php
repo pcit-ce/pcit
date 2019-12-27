@@ -20,7 +20,7 @@ class Delete
             'ref_type' => $ref_type,
             'account' => $account,
             'ref' => $ref,
-        ] = \PCIT\GitHub\Webhooks\Parse\Delete::handle($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Delete::handle($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))

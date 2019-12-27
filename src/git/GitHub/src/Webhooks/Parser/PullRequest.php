@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Parse;
+namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
 use PCIT\Framework\Support\Log;
-use PCIT\GitHub\Webhooks\Parse\UserBasicInfo\Account;
+use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class PullRequest
 {

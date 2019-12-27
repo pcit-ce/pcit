@@ -46,7 +46,7 @@ class Issues
             'assignees' => $assignees,
             'labels' => $labels,
             'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parse\Issues::handle($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Issues::handle($json_content);
 
         $assignees && Issue::updateAssignees($assignees, 'github', $issue_id);
 
@@ -149,7 +149,7 @@ class Issues
             'body' => $body,
             'created_at' => $created_at,
             'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parse\Issues::comment($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Issues::comment($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))

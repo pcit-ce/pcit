@@ -16,7 +16,7 @@ class Content
             'content_reference_id' => $content_reference_id,
             'content_reference_reference' => $content_reference_reference,
             'installation_id' => $installation_id,
-    ] = \PCIT\GitHub\Webhooks\Parse\Content::handle($json_content);
+    ] = \PCIT\GitHub\Webhooks\Parser\Content::handle($json_content);
 
         $access_token = $access_token = GetAccessToken::getGitHubAppAccessToken(null, null, (int) $installation_id);
         $app = new PCIT(['github_access_token' => $access_token]);

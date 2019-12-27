@@ -24,7 +24,7 @@ class PullRequest
      */
     public static function handle($json_content)
     {
-        $result = \PCIT\GitHub\Webhooks\Parse\PullRequest::handle($json_content);
+        $result = \PCIT\GitHub\Webhooks\Parser\PullRequest::handle($json_content);
 
         $action = $result['action'];
 

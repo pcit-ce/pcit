@@ -15,7 +15,7 @@ class Push
      */
     public static function handle($json_content): void
     {
-        $result = \PCIT\GitHub\Webhooks\Parse\Push::handle($json_content);
+        $result = \PCIT\GitHub\Webhooks\Parser\Push::handle($json_content);
 
         $tag = $result['tag'] ?? null;
 

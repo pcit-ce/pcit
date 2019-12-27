@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Parse;
+namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
 use PCIT\Framework\Support\Log;
-use PCIT\GitHub\Webhooks\Parse\UserBasicInfo\Account;
-use PCIT\GitHub\Webhooks\Parse\UserBasicInfo\Author;
-use PCIT\GitHub\Webhooks\Parse\UserBasicInfo\Committer;
-use PCIT\GitHub\Webhooks\Parse\UserBasicInfo\Sender;
+use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Author;
+use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Committer;
+use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Sender;
 
 class Push
 {

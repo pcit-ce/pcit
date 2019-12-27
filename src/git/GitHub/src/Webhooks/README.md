@@ -11,7 +11,7 @@ $webhooksHandler = new \PCIT\GitHub\Webhooks\Handler\Kernel();
 $webhooksHandler->ping($json_content);
 ```
 
-## Parse
+## Parser
 
 解析 Webhooks 数据
 

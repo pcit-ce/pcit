@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Parse\UserBasicInfo;
+namespace PCIT\GitHub\Webhooks\Parser\UserBasicInfo;
 
 class Sender
 {

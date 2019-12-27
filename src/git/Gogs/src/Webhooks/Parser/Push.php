@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Gitee\Webhooks\Parse;
+namespace PCIT\Gogs\Webhooks\Parser;
 
 class Push
 {

@@ -21,7 +21,7 @@ class Create
             'repo_full_name' => $repo_full_name,
             'ref_type' => $ref_type,
             'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parse\Create::handle($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Create::handle($json_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))

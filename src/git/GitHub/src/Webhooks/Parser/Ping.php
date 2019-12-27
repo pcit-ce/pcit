@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Parse;
+namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Log;
 
