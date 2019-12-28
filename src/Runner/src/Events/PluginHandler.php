@@ -26,6 +26,11 @@ class PluginHandler
         foreach ($settings as $key => $value) {
             $value = \is_array($value) ? json_encode($value) : $value;
             $key = str_replace('-', '_', $key);
+
+            if (\is_bool($value)) {
+                $value = true === $value ? 'true' : 'false';
+            }
+
             $env[] = 'INPUT_'.strtoupper($key).'='.$value;
         }
 

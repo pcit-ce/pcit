@@ -16,11 +16,15 @@ class PluginHandlerTest extends TestCase
             'upload_dir' => '${PCIT_BUILD_ID}/ui/nightly/${PCIT_COMMIT}',
             'local_dir' => '${PCIT_COMMIT}',
             'bucket' => '$PCIT_COMMIT',
+            'bool_true' => true,
+            'bool_false' => false,
         ], [
             'PCIT_COMMIT=fa65eed5098221166a6507d64ab792fc2ae69b13',
             'PCIT_BUILD_ID=100',
         ]
     );
+
+        // var_dump($result);
 
         $this->assertEquals(
         'INPUT_LOCAL_DIR=fa65eed5098221166a6507d64ab792fc2ae69b13',
