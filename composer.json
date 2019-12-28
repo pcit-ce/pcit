@@ -9,17 +9,10 @@
   "homepage": "https://github.com/pcit-ce/pcit",
   "type": "project",
   "license": "MIT",
-  "repositories": [{
-      "type": "path",
-      "url": "./src/Api"
-    },
+  "repositories": [
     {
       "type": "path",
       "url": "./src/Runner"
-    },
-    {
-      "type": "path",
-      "url": "./src/Cache"
     },
     {
       "type": "path",
@@ -82,8 +75,6 @@
     "khs1994/wechat": "dev-master",
     "monolog/monolog": "^1.23",
     "nunomaduro/collision": "^3.0",
-    "pcit/api": "*",
-    "pcit/cache": "*",
     "pcit/framework": "^19.06",
     "pcit/git-coding": "*",
     "pcit/git-gitee": "*",
@@ -138,8 +129,6 @@
     "frpc": "frpc -c ~\\frpc.ini",
     "fmt": "php-cs-fixer fix",
     "compile:dump": [
-      "cp -r -f src/Api/ vendor/pcit/api",
-      "cp -r -f src/Cache/ vendor/pcit/cache",
       "cp -r -f src/Framework/ vendor/pcit/framework",
       "cp -r -f src/Kernel/ vendor/pcit/kernel",
       "cp -r -f src/Logs/ vendor/pcit/logs",
