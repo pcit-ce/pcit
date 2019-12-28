@@ -382,6 +382,22 @@ steps: # pipeline
       endpoint: ${S3_ENTRYPOINT}
       use_path_style_endpoint: true
 
+  # create_tag:
+  #   when:
+  #     status: success
+  #     event: push
+  #     matrix:
+  #     - PHP_VERSION: 7.3.11
+  #       NGINX_VERSION: 1.15.8
+  #       REDIS_VERSION: 5.0.3
+  #       MYSQL_VERSION: 5.7.24
+  #   command:
+  #   - set +x
+  #   - git remote add github https://pcit-ce:${GITHUB_TOKEN}@github.com/${PCIT_REPO_SLUG}
+  #   - set -x
+  #   - git tag nightly -f
+  #   - git push github nightly -f
+
   github_releases:
     image: pcit/github_release
     when:
@@ -398,11 +414,11 @@ steps: # pipeline
       files:
         - pcit.phar
         - pcitd.phar
-      # repo:
+      repo: pcit-ce/pcit-release
       overwrite: true
       draft: true
       prerelease: true
-      # target_commitish:
+      target_commitish: 508c7456a3c9f778c378b94e95bd0f61056f1fe1
       note: nightly
       title: nightly
 
