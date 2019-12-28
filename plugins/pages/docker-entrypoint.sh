@@ -46,10 +46,10 @@ git commit -m "${PCIT_MESSAGE:-"Deploy Git by PCIT https://ci.khs1994.com"}" || 
 set +e; git remote get-url origin && git remote rm origin; set -e
 
 set +x
-echo "git remote add origin https://${PCIT_USERNAME}:PCIT_GIT_TOKEN@${PCIT_GIT_URL}.git"
-git remote add origin https://${PCIT_USERNAME}:${PCIT_GIT_TOKEN}@${PCIT_GIT_URL}.git
+echo "git remote add origin https://${PCIT_USERNAME:-pcit-ce}:PCIT_GIT_TOKEN@${PCIT_GIT_URL}.git"
+git remote add origin https://${PCIT_USERNAME:-pcit-ce}:${PCIT_GIT_TOKEN}@${PCIT_GIT_URL}.git
 set -x
 
-if [ ${new:-false} == 'true' ];then git push origin master:${PCIT_TARGET_BRANCH} ; exit 0; fi
+if [ ${new:-false} == 'true' ];then git push origin master:${PCIT_TARGET_BRANCH:-gh-pages} ; exit 0; fi
 
-git push origin ${PCIT_TARGET_BRANCH}:${PCIT_TARGET_BRANCH} || true
+git push origin ${PCIT_TARGET_BRANCH:-gh-pages}:${PCIT_TARGET_BRANCH:-gh-pages} || true

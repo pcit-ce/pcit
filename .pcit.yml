@@ -331,6 +331,8 @@ steps: # pipeline
     - ls -lah *.phar
     - php pcit.phar
     - php pcitd.phar
+    - mkdir phar_dist
+    - cp -a *.phar phar_dist
 
   tencent_cloud_cos_v4:
     image: pcit/tencent_cloud_cos:v4
@@ -371,7 +373,7 @@ steps: # pipeline
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
       bucket: ${S3_BUCKET}
       acl: public_read
-      local_dir: public
+      local_dir: phar_dist
       upload_dir: pcit-nightly
       # endpoint: https://storage.khs1994.com
       endpoint: ${S3_ENTRYPOINT}
