@@ -7,8 +7,17 @@ pipeline:
     when:
       status: success
       event: tag
-    # environment:
-      # - GITHUB_TOKEN=x      
-    file:
-      - "file_name"
+    settings:
+      token: ${GITHUB_TOKEN}
+      # username:
+      # password:
+      # repo: pcit-ce/pcit
+      files:
+      - file_name
+      # overwrite: true
+      # draft: true
+      # prerelease: true
+      # target_commitish:
+      # note: note
+      # title: title
 ```

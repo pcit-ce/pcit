@@ -377,22 +377,31 @@ steps: # pipeline
       upload_dir: pcit-nightly
       # endpoint: https://storage.khs1994.com
       endpoint: ${S3_ENTRYPOINT}
-      minio: true
+      use_path_style_endpoint: true
 
   github_releases:
-    image: pcit/github_releases
+    image: pcit/github_release
     when:
       status: success
-      event: tag
-      branch: alpha
-      # environment:
-      # - GITHUB_TOKEN=x
+      event: push
+      matrix:
+      - PHP_VERSION: 7.3.11
+        NGINX_VERSION: 1.15.8
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
+      # event: tag
     settings:
-      github_token: ${GITHUB_TOKEN}
-      file:
+      token: ${GITHUB_TOKEN}
+      files:
         - pcit.phar
         - pcitd.phar
-        - README.md: NEW_FILENAME.md
+      # repo:
+      overwrite: true
+      draft: true
+      prerelease: true
+      # target_commitish:
+      note: nightly
+      title: nightly
 
   codecov:
     # image: khs1994/php:7.3.11-composer-alpine
