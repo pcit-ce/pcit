@@ -28,7 +28,7 @@ workspace: # or workdir
 cache:
   - cache
   - .php_cs.cache
-  - vendor
+  # - vendor
 
 # 构建步骤
 steps: # pipeline
