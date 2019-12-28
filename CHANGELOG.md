@@ -1,6 +1,6 @@
 # CHANGELOG
 
-* [18.12.0-beta1](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha7...master)
+* [18.12.0-beta1](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha7...18.12.0-beta1)
 * [18.12.0-alpha7](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha6...18.12.0-alpha7)
 * [18.12.0-alpha6](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha5...18.12.0-alpha6)
 * [18.12.0-alpha5](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha4...18.12.0-alpha5)
