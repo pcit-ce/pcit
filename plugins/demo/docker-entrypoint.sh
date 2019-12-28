@@ -3,3 +3,5 @@
 echo ${INPUT_VAR:-''}
 
 echo ${INPUT_VAR_ARRAY:-'{"k":"v"}'}
+
+echo ${INPUT_VAR_OBJ}

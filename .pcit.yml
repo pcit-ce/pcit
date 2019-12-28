@@ -207,6 +207,9 @@ steps: # pipeline
       var_array:
         - a=1
         - b=2
+      var_obj:
+        k1: v1
+        k2: v2
 
   php-cs-fixer:
     uses: khs1994/php-cs-fixer

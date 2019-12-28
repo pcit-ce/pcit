@@ -1,3 +1,5 @@
+export DRONE_BUILD_EVENT=tag
+
 export INPUT_REPO=${INPUT_REPO:-${PCIT_REPO_SLUG}}
 export DRONE_REPO_OWNER=$(echo $INPUT_REPO | cut -d "/" -f 1)
 export DRONE_REPO_NAME=$(echo $INPUT_REPO | cut -d "/" -f 2)

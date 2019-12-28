@@ -21,7 +21,7 @@ if ! [ -d ${PCIT_LOCAL_DIR} ];then exit; fi
 
 rm -rf ${PCIT_LOCAL_DIR}/.git
 
-if [ ${PCIT_KEEP_HISTORY:-0} = 'true' ];then
+if [ ${PCIT_KEEP_HISTORY:-'false'} = 'true' ];then
   git clone --bare -b ${PCIT_TARGET_BRANCH:-gh-pages} https://${PCIT_GIT_URL} ${PCIT_LOCAL_DIR}/.git || true
 fi
 
