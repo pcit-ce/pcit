@@ -54,7 +54,7 @@ EOF;
 
         $this->common();
 
-        $this->assertEquals('INPUT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
+        $this->assertEquals('INPUT_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
     }
 
     /**
@@ -72,6 +72,6 @@ EOF;
 
         $this->common();
 
-        $this->assertEquals('INPUT_S3_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
+        $this->assertEquals('INPUT_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
     }
 }

@@ -6,17 +6,17 @@ require __DIR__.'/vendor/autoload.php';
 
 try {
     $cosClient = new Qcloud\Cos\Client([
-        'region' => getenv('INPUT_COS_V5_REGION'),
+        'region' => getenv('INPUT_REGION'),
         'credentials' => [
-            'appId' => getenv('INPUT_COS_V5_APP_ID'),
-            'secretId' => getenv('INPUT_COS_V5_KEY'),
-            'secretKey' => getenv('INPUT_COS_V5_SECRET'),
+            'appId' => getenv('INPUT_APP_ID'),
+            'secretId' => getenv('INPUT_KEY'),
+            'secretKey' => getenv('INPUT_SECRET'),
         ],
     ]);
 
-    foreach (json_decode(getenv('INPUT_COS_V5_FILE'), true) as $file => $label) {
+    foreach (json_decode(getenv('INPUT_FILE'), true) as $file => $label) {
         $result = $cosClient->putObject([
-            'Bucket' => getenv('INPUT_COS_V5_BUCKET'),
+            'Bucket' => getenv('INPUT_BUCKET'),
             'Key' => $label,
             'Body' => fopen($file, 'r'),
         ]);

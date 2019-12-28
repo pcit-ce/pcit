@@ -82,17 +82,17 @@ class Cache
         $prefix = $this->getPrefix();
 
         $env = [
-            'INPUT_S3_ENDPOINT='.env('CI_S3_ENDPOINT'),
-            'INPUT_S3_ACCESS_KEY_ID='.env('CI_S3_ACCESS_KEY_ID'),
-            'INPUT_S3_SECRET_ACCESS_KEY='.env('CI_S3_SECRET_ACCESS_KEY'),
-            'INPUT_S3_BUCKET='.env('', 'pcit'),
-            'INPUT_S3_REGION='.env('', 'us-east-1'),
-            'INPUT_S3_CACHE_PREFIX='.$prefix,
-            'INPUT_S3_CACHE='.json_encode($cacheList),
-            'INPUT_S3_USE_PATH_STYLE_ENDPOINT='.
+            'INPUT_ENDPOINT='.env('CI_S3_ENDPOINT'),
+            'INPUT_ACCESS_KEY_ID='.env('CI_S3_ACCESS_KEY_ID'),
+            'INPUT_SECRET_ACCESS_KEY='.env('CI_S3_SECRET_ACCESS_KEY'),
+            'INPUT_BUCKET='.env('', 'pcit'),
+            'INPUT_REGION='.env('', 'us-east-1'),
+            'INPUT_CACHE_PREFIX='.$prefix,
+            'INPUT_CACHE='.json_encode($cacheList),
+            'INPUT_USE_PATH_STYLE_ENDPOINT='.
             (env('CI_S3_USE_PATH_STYLE_ENDPOINT', true) ? 'true' : 'false'),
             // must latest key
-            'INPUT_S3_CACHE_DOWNLOAD=true',
+            'INPUT_CACHE_DOWNLOAD=true',
         ];
 
         \PCIT\Framework\Support\Cache::store()
