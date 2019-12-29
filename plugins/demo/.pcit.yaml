@@ -1,0 +1,11 @@
+steps:
+  plugin:
+    image: pcit/demo
+    settings:
+      var: 'var'
+      var_array:
+      - a
+      - b
+      var_obj:
+        k1: v1
+        k2: v2

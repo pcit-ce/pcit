@@ -103,11 +103,13 @@ jobs:
     - name: sync-plugin-demo
       uses: docker://pcit/pages
       env:
-        PCIT_EMAIL: khs1994@khs1994.com
-        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-ce/plugin-demo
-        PCIT_KEEP_HISTORY: "true"
-        PCIT_LOCAL_DIR: plugins/demo
-        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
-        PCIT_TARGET_BRANCH: master
-        PCIT_USERNAME: khs1994
+        PCIT: true
+      with:
+        email: khs1994@khs1994.com
+        git_token: ${{ secrets.PCIT_GIT_TOKEN }}
+        git_url: github.com/pcit-ce/plugin-demo
+        keep_history: "true"
+        local_dir: plugins/demo
+        message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        target_branch: master
+        username: khs1994
