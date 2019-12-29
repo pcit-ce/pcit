@@ -411,10 +411,10 @@ steps: # pipeline
       # event: tag
     settings:
       token: ${GITHUB_TOKEN}
-      files: pcit.phar
-      # files:
-      #   - pcit.phar
-      #   - pcitd.phar
+      # files: pcit.phar
+      files:
+        - pcit.phar
+        - pcitd.phar
       repo: pcit-ce/pcit-release
       overwrite: true
       draft: true
