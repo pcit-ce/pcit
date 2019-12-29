@@ -6,6 +6,8 @@ name: Sync Git
 jobs:
   sync-git:
     runs-on: ubuntu-latest
+    if: |
+      contains( github.event.head_commit.message, '[sync git]')
     steps:
     - uses: actions/checkout@master
       with:
@@ -81,9 +83,31 @@ jobs:
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-plugins/github-release
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-github-release
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: plugins/releases/github
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-npm
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-npm
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/package/npm
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-demo
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/plugin-demo
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/demo
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
