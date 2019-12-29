@@ -1,14 +1,14 @@
 # NPM Plugin
 
-可以使用 `npm` 插件发布 `npm` 包。
+> 发布 `npm` 包。
 
 **该插件底层由 https://github.com/drone-plugins/drone-npm 支持**
 
 ```yaml
 pipeline:
   deploy:
+    image: pcit/npm
     settings:
-      provider: npm # 必填
       # username: yourusername # 必填（与 api_key 二选一）
       # password: yourpassword # 必填（与 api_key 二选一）
       email: khs1994@khs1994.com # 必填
@@ -23,4 +23,4 @@ pipeline:
       status: success
       matrix:
         - NODE_VERSION: 11
-```      
+```

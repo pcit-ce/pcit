@@ -1,0 +1,23 @@
+name: 'pcit-plugin-demo'
+description: 'pcit plugin demo'
+inputs:
+  var:  # id of input
+    description: 'var'
+    required: true
+    default: 'var'
+  var_array:
+    description: 'var array'
+    required: true
+    default: a,b,c
+  var_obj:
+    description: 'var obj'
+    required: true
+    default: '{"k1":"v1","k2":"v2"}'
+# outputs:
+#   time: # id of output
+#     description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  # args:
+  #   - ${{ inputs.who-to-greet }

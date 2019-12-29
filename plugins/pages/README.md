@@ -1,12 +1,12 @@
 # PCIT Git Pages plugin
 
-使用 `Pages` 插件发布 `Pages`。
+> 发布 `Pages`。
 
 ```yaml
 pipeline:
   pages:
+    image: pcit/pages
     settings:
-      provider: pages # 必填
       keep_history: true # 保留提交历史，默认值 false
       target_branch: gh-pages # pages 分支，默认值 gh-pages
       git_url: gitee.com/pcit-ce/pcit # 必填

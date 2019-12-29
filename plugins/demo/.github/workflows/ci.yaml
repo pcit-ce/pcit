@@ -1,0 +1,22 @@
+on: push
+
+name: ci
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    - uses: ./
+      with:
+        var: 'var'
+        var_array: a,b
+        var_obj: '{"k1":"v1","k2":"v2"}'
+    - uses: ./
+    - uses: docker://pcit/demo
+      with:
+        var: 'var'
+        var_array: a,b
+        var_obj: '{"k1":"v1","k2":"v2"}'
