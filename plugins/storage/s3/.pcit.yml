@@ -1,31 +1,65 @@
 language: php
 
 pipeline:
+  mkdir:
+  - mkdir test
+  - echo 1 > test/1.txt
+  - echo 2 > test/2.txt
 
   s3:
+    image: pcit/s3
     settings:
-      provider: s3
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
-      bucket: pcit-deployer-s3
+      bucket: pcit-plugin-s3
       acl: public_read
-      local_dir: src
-      upload_dir: nightly
+      local_dir: test
+      upload_dir: test_dist
       # endpoint: https://storage.khs1994.com
       endpoint: ${S3_ENTRYPOINT}
-      minio: true
+      use_path_style_endpoint: true
 
   s3_2:
+    image: pcit/s3
     settings:
-      provider: s3
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
       bucket: ${S3_BUCKET}
       acl: public_read
-      local_dir: src
+      local_dir: test
       # upload_dir: pcit-nightly
       # endpoint: https://storage.khs1994.com
       endpoint: ${S3_ENTRYPOINT}
-      minio: true
+      use_path_style_endpoint: true
+
+  s3_3:
+    image: pcit/s3
+    settings:
+      region: ${S3_REGION}
+      access_key_id: ${S3_ACCESS_KEY_ID}
+      secret_access_key: ${S3_SECRET_ACCESS_KEY}
+      bucket: ${S3_BUCKET}
+      acl: public_read
+      files:
+        - .pcit.yml
+        - Dockerfile
+      # endpoint: https://storage.khs1994.com
+      endpoint: ${S3_ENTRYPOINT}
+      use_path_style_endpoint: true
+
+  s3_4:
+    image: pcit/s3
+    settings:
+      region: ${S3_REGION}
+      access_key_id: ${S3_ACCESS_KEY_ID}
+      secret_access_key: ${S3_SECRET_ACCESS_KEY}
+      bucket: ${S3_BUCKET}
+      acl: public_read
+      files:
+        .pcit.yml: .pcit.yml.dist
+        Dockerfile: Dockerfile.dist
+      # endpoint: https://storage.khs1994.com
+      endpoint: ${S3_ENTRYPOINT}
+      use_path_style_endpoint: true

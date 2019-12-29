@@ -24,16 +24,38 @@ class PluginHandler
         $settings = json_decode($result, true);
 
         foreach ($settings as $key => $value) {
-            $value = \is_array($value) ? json_encode($value) : $value;
-            $key = str_replace('-', '_', $key);
+            $new_value = null;
+
+            if (\is_array($value)) {
+                foreach ($value as $k => $v) {
+                    if ($k) {
+                        // is obj
+                        $value = json_encode($value);
+                        break;
+                    } else {
+                        // is array
+                        $value = $this->arrayHandler($value);
+                        break;
+                    }
+                }
+            }
+
+            $value = $new_value ?? $value;
 
             if (\is_bool($value)) {
                 $value = true === $value ? 'true' : 'false';
             }
 
+            $key = str_replace('-', '_', $key);
+
             $env[] = 'INPUT_'.strtoupper($key).'='.$value;
         }
 
         return $env;
+    }
+
+    public function arrayHandler($value)
+    {
+        return (new EnvHandler())->arrayHandler($value);
     }
 }

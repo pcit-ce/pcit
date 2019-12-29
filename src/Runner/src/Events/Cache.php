@@ -73,7 +73,7 @@ class Cache
 
         $cacheList = \is_string($cacheList) ? [$cacheList] : $cacheList;
 
-        if (!\is_array($cachesDir)) {
+        if (!\is_array($cacheList)) {
             return;
         }
 
@@ -88,7 +88,7 @@ class Cache
             'INPUT_BUCKET='.env('', 'pcit'),
             'INPUT_REGION='.env('', 'us-east-1'),
             'INPUT_CACHE_PREFIX='.$prefix,
-            'INPUT_CACHE='.json_encode($cacheList),
+            'INPUT_CACHE='.(new EnvHandler())->arrayHandler($cacheList),
             'INPUT_USE_PATH_STYLE_ENDPOINT='.
             (env('CI_S3_USE_PATH_STYLE_ENDPOINT', true) ? 'true' : 'false'),
             // must latest key

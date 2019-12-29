@@ -52,9 +52,7 @@ if ($s3_cache = getenv('INPUT_CACHE')) {
 
     echo "\n\n==> Store build cache\n";
 
-    foreach ((array) json_decode($s3_cache) as $item) {
-        $file_list .= ' '.$item;
-    }
+    $file_list = str_replace(',', ' ', $s3_cache);
 
     $file_list = trim($file_list, ' ');
 
@@ -69,10 +67,21 @@ if ($s3_cache = getenv('INPUT_CACHE')) {
     exit;
 } // handle cache end
 
-if (getenv('INPUT_FILE')) {
-    foreach (json_decode(getenv('INPUT_FILE')) as $item) {
-        foreach ($item as $k => $v) {
-            $flysystem->put($v, file_get_contents($k));
+if (getenv('INPUT_FILES')) {
+    $input_files = getenv('INPUT_FILES');
+
+    if (is_object(json_decode($input_files))) {
+        foreach (json_decode($input_files, true) as $file => $s3_file) {
+            $flysystem->put($s3_file, file_get_contents($file));
+
+            echo "\n===> Upload $file TO $s3_file \n";
+        }
+    } else {
+        $files = explode(',', $input_files);
+        foreach ($files as $file) {
+            $flysystem->put($file, file_get_contents($file));
+
+            echo "\n===> Upload $file TO $file \n";
         }
     }
 }
@@ -81,12 +90,15 @@ if (getenv('INPUT_FILE')) {
 $local_dir = getenv('INPUT_LOCAL_DIR');
 $upload_dir = getenv('INPUT_UPLOAD_DIR');
 
-$local_dir = '/' === $local_dir ? '/' : trim($local_dir, '/');
-$upload_dir = '/' === $upload_dir ? '/' : trim($upload_dir, '/');
+// upload_dir 为空
+$upload_dir = $upload_dir ? $upload_dir : $local_dir;
 
 if (!($local_dir && $upload_dir)) {
     exit;
 }
+
+$local_dir = '/' === $local_dir ? '/' : trim($local_dir, '/');
+$upload_dir = '/' === $upload_dir ? '/' : trim($upload_dir, '/');
 
 if (is_file($local_dir)) {
     $flysystem->put($upload_dir, file_get_contents($local_dir));
@@ -111,6 +123,6 @@ foreach ($contents as $key => $value) {
 
         $flysystem->put($upload_file, file_get_contents($local_file));
 
-        echo "\n===> Upload $local_file => $upload_file \n";
+        echo "\n===> Upload $local_file TO $upload_file \n";
     }
 }

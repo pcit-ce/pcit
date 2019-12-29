@@ -24,12 +24,26 @@ try {
     $adapter = new COSV4Adapter($config, $bucket, $prefix);
     $filesystem = new Filesystem($adapter);
 
-    foreach (json_decode(getenv('INPUT_FILE'), true) as $file => $label) {
-        $result = $flysystem->write($label, file_get_contents($file));
+    $input_files = getenv('INPUT_FILES');
 
-        echo "===> Upload $file to $label result";
-        var_dump($result);
-        echo "\n";
+    if (is_object(json_decode($input_files))) {
+        foreach (json_decode(getenv('INPUT_FILES'), true) as $file => $label) {
+            $result = $flysystem->write($label, file_get_contents($file));
+
+            echo "===> Upload $file TO $label result";
+            var_dump($result);
+            echo "\n";
+        }
+    } else {
+        $files = explode(',', $input_files);
+
+        foreach ($files as $file) {
+            $result = $flysystem->write($file, file_get_contents($file));
+
+            echo "===> Upload $file TO $file result";
+            var_dump($result);
+            echo "\n";
+        }
     }
 } catch (Throwable $e) {
     echo $e->__toString();

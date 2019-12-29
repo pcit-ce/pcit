@@ -12,6 +12,4 @@ export PLUGIN_PRERELEASE=${INPUT_PRERELEASE:-true}
 export PLUGIN_NOTE=${INPUT_NOTE:-''}
 export PLUGIN_TITLE=${INPUT_TITLE:-''}
 
-export PLUGIN_FILES=$(echo ${PLUGIN_FILES} | sed 's/^\[/\{/g' | sed 's/]$/\}/g')
-
 exec /bin/drone-github-release

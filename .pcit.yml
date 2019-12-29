@@ -351,8 +351,8 @@ steps: # pipeline
     # environment:
     settings:
       files:
-        - pcit.phar: pcit/${PCIT_TAG}/pcit.phar
-        - pcitd.phar: pcit/${PCIT_TAG}/pcitd.phar
+        pcit.phar: pcit/${PCIT_TAG}/pcit.phar
+        pcitd.phar: pcit/${PCIT_TAG}/pcitd.phar
       region: ${COS_V4_REGION}
       app_id: ${COS_V4_APP_ID}
       secret_id: ${COS_V4_SECRET_ID}
@@ -411,9 +411,10 @@ steps: # pipeline
       # event: tag
     settings:
       token: ${GITHUB_TOKEN}
-      files:
-        - pcit.phar
-        - pcitd.phar
+      files: pcit.phar
+      # files:
+      #   - pcit.phar
+      #   - pcitd.phar
       repo: pcit-ce/pcit-release
       overwrite: true
       draft: true

@@ -41,7 +41,7 @@ class CacheTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function test_array(): void
+    public function test_single_array(): void
     {
         DB::close();
 
@@ -54,7 +54,27 @@ EOF;
 
         $this->common();
 
-        $this->assertEquals('INPUT_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
+        $this->assertEquals('INPUT_CACHE=dir', json_decode($this->cache)->Env[6]);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function test_array(): void
+    {
+        DB::close();
+
+        $yaml = <<<'EOF'
+cache:
+  - dir
+  - dir2
+EOF;
+
+        $this->yaml = $yaml;
+
+        $this->common();
+
+        $this->assertEquals('INPUT_CACHE=dir,dir2', json_decode($this->cache)->Env[6]);
     }
 
     /**
@@ -72,6 +92,6 @@ EOF;
 
         $this->common();
 
-        $this->assertEquals('INPUT_CACHE=["dir"]', json_decode($this->cache)->Env[6]);
+        $this->assertEquals('INPUT_CACHE=dir', json_decode($this->cache)->Env[6]);
     }
 }
