@@ -1,1 +1,1 @@
-# PCIT Kubernetes plugin
+# PCIT plugin -- Kubernetes

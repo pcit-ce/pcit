@@ -1,4 +1,4 @@
-# PCIT Git Pages plugin
+# PCIT plugin -- Git Pages
 
 > 发布 `Pages`。
 

@@ -115,3 +115,16 @@ jobs:
         message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
         target_branch: master
         username: khs1994
+    - name: sync-plugin-gitee-release
+      uses: docker://pcit/pages
+      env:
+        PCIT: true
+      with:
+        email: khs1994@khs1994.com
+        git_token: ${{ secrets.PCIT_GIT_TOKEN }}
+        git_url: github.com/pcit-plugins/pcit-gitee-release
+        keep_history: "true"
+        local_dir: plugins/releases/gitee
+        message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        target_branch: master
+        username: khs1994

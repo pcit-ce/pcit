@@ -1,1 +1,1 @@
-# PCIT Docker plugin
+# PCIT plugin -- Docker

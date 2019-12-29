@@ -41,6 +41,10 @@ services:
     image: pcit/github_release
     build: releases/github
 
+  gitee_release:
+    image: pcit/gitee_release
+    build: releases/gitee
+
   pages:
     image: pcit/pages
     build: pages

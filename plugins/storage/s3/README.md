@@ -1,4 +1,4 @@
-# PCIT AWS S3 (Minio) Plugin
+# PCIT Plugin -- AWS S3 (Minio)
 
 ## Test
 

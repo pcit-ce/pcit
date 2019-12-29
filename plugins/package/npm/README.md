@@ -1,4 +1,4 @@
-# NPM Plugin
+# PCIT Plugin -- NPM
 
 > 发布 `npm` 包。
 

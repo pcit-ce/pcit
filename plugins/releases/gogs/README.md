@@ -1,1 +1,1 @@
-# PCIT Gogs release plugin
+# PCIT plugin -- Gogs release

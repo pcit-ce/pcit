@@ -1,0 +1,15 @@
+steps:
+  gitee_release:
+    image: pcit/gitee_release
+    settings:
+      token: ${GITEE_TOKEN}
+      # repo: pcit-ce/release
+      files:
+        - Dockerfile
+        - docker-entrypoint.sh
+      overwrite: true
+      draft: true
+      prerelease: true
+      note: nightly
+      title: nightly
+      target_commitish: refs/tags/nightly

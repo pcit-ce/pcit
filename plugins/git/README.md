@@ -1,1 +1,1 @@
-# PCIT Git Plugin
+# PCIT Plugin -- Git
