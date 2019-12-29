@@ -1,8 +1,5 @@
 on:
   push:
-    paths:
-      - '/plugins/*'
-      - '/plugins/*/*'
 
 name: Sync Git
 
@@ -76,6 +73,17 @@ jobs:
         PCIT_GIT_URL: github.com/pcit-ce/plugin-docker
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: plugins/docker
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-github-release
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-plugins/github-release
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/releases/github
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994

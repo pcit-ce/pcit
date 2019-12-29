@@ -1,0 +1,15 @@
+steps:
+  github_release:
+    image: pcit/github_release
+    settings:
+      token: ${GITHUB_TOKEN}
+      # repo: pcit-ce/release
+      files:
+        - Dockerfile
+        - docker-entrypoint.sh
+      overwrite: true
+      draft: true
+      prerelease: true
+      note: nightly
+      title: nightly
+      target_commitish: refs/tags/nightly
