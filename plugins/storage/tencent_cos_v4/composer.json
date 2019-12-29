@@ -1,6 +1,0 @@
-{
-  "require": {
-    "khs1994/flysystem-tencentcloud-cos-v4": "dev-master"
-  },
-  "minimum-stability": "dev"
-}

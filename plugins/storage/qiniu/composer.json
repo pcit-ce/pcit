@@ -1,0 +1,6 @@
+{
+  "require": {
+    "overtrue/flysystem-qiniu": "*"
+  },
+  "minimum-stability": "dev"
+}

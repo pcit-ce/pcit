@@ -5,9 +5,9 @@ services:
     image: pcit/demo
     build: demo
 
-  tencent_cos_v4:
-    image: pcit/tencent_cos:v4
-    build: storage/tencent_cos_v4
+  qiniu:
+    image: pcit/qiniu
+    build: storage/qiniu
 
   tencent_cos_v5:
     image: pcit/tencent_cos:v5

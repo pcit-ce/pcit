@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 require __DIR__.'/vendor/autoload.php';
 
-use League\Flysystem\COSV4\COSV4Adapter;
-use League\Flysystem\COSV4\COSV4Client;
 use League\Flysystem\Filesystem;
+use Overtrue\Flysystem\Qiniu\QiniuAdapter;
 
 $config = [
     'app_id' => getenv('INPUT_APP_ID'),
@@ -17,11 +16,13 @@ $config = [
 ];
 
 $bucket = getenv('INPUT_BUCKET');
-$prefix = getenv('INPUT_PREFIX');
+$endpoint = getenv('INPUT_ENDPOINT');
+$accessKey = getenv('INPUT_ACCESS_KEY');
+$secretKey = getenv('INPUT_SECRET_KEY');
 
 try {
-    $client = new COSV4Client($config);
-    $adapter = new COSV4Adapter($client, $bucket, $prefix);
+    $adapter = new QiniuAdapter($accessKey, $secretKey, $bucket, $endpoint);
+
     $flysystem = new Filesystem($adapter);
 
     $input_files = getenv('INPUT_FILES');
