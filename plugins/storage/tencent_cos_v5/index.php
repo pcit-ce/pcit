@@ -9,22 +9,22 @@ try {
         'region' => getenv('INPUT_REGION'),
         'credentials' => [
             'appId' => getenv('INPUT_APP_ID'),
-            'secretId' => getenv('INPUT_KEY'),
-            'secretKey' => getenv('INPUT_SECRET'),
+            'secretId' => getenv('INPUT_SECRET_ID'),
+            'secretKey' => getenv('INPUT_SECRET_KEY'),
         ],
     ]);
 
     $input_files = getenv('INPUT_FILES');
 
     if (is_object(json_decode($input_files))) {
-        foreach (json_decode(getenv('INPUT_FILES'), true) as $file => $label) {
+        foreach (json_decode($input_files, true) as $file => $label) {
             $result = $cosClient->putObject([
             'Bucket' => getenv('INPUT_BUCKET'),
             'Key' => $label,
             'Body' => fopen($file, 'r'),
         ]);
 
-            echo "===> Upload $file TO $label result";
+            echo "===> Upload $file TO $label result\n";
 
             var_dump($result);
         }
@@ -38,7 +38,7 @@ try {
             'Body' => fopen($file, 'r'),
         ]);
 
-            echo "===> Upload $file TO $file result";
+            echo "===> Upload $file TO $file result\n";
 
             var_dump($result);
         }

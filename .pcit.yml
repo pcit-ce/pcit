@@ -267,24 +267,6 @@ steps: # pipeline
       git_token: ${GITHUB_TOKEN}
       depth: 10
 
-  sync_git_deployer:
-    image: pcit/pages
-    when:
-      event: ['tag']
-      status: success
-      matrix:
-      - PHP_VERSION: 7.3.11
-        NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
-    settings:
-      keep_history: true
-      target_branch: master
-      git_url: github.com/pcit-ce/kernel-plugin
-      local_dir: src/Plugin
-      git_token: ${GITHUB_TOKEN}
-      depth: 10
-
   sync_git_runner:
     image: pcit/pages
     when:
@@ -303,7 +285,7 @@ steps: # pipeline
       git_token: ${GITHUB_TOKEN}
       depth: 10
 
-  sync_git_deployer_s3:
+  sync_git_plugin_s3:
     image: pcit/pages
     when:
       event: ['tag']
@@ -337,28 +319,6 @@ steps: # pipeline
     - mkdir phar_dist
     - cp -a *.phar phar_dist
 
-  tencent_cloud_cos_v4:
-    image: pcit/tencent_cloud_cos:v4
-    when:
-      status: success
-      event: tag
-      branch: alpha
-      matrix:
-      - PHP_VERSION: 7.3.11
-        NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
-    # environment:
-    settings:
-      files:
-        pcit.phar: pcit/${PCIT_TAG}/pcit.phar
-        pcitd.phar: pcit/${PCIT_TAG}/pcitd.phar
-      region: ${COS_V4_REGION}
-      app_id: ${COS_V4_APP_ID}
-      secret_id: ${COS_V4_SECRET_ID}
-      secret_key: ${COS_V4_SECRET_KEY}
-      bucket: ${COS_V4_BUCKET}
-
   s3:
     image: pcit/s3
     when:
@@ -381,22 +341,6 @@ steps: # pipeline
       # endpoint: https://storage.khs1994.com
       endpoint: ${S3_ENTRYPOINT}
       use_path_style_endpoint: true
-
-  # create_tag:
-  #   when:
-  #     status: success
-  #     event: push
-  #     matrix:
-  #     - PHP_VERSION: 7.3.11
-  #       NGINX_VERSION: 1.15.8
-  #       REDIS_VERSION: 5.0.3
-  #       MYSQL_VERSION: 5.7.24
-  #   command:
-  #   - set +x
-  #   - git remote add github https://pcit-ce:${GITHUB_TOKEN}@github.com/${PCIT_REPO_SLUG}
-  #   - set -x
-  #   - git tag nightly -f
-  #   - git push github nightly -f
 
   github_releases:
     image: pcit/github_release

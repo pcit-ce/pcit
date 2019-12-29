@@ -23,17 +23,6 @@ jobs:
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
-    - name: sync-plugin-storage-tencent-cos-v4
-      uses: docker://pcit/pages
-      env:
-        PCIT_EMAIL: khs1994@khs1994.com
-        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-ce/plugin-tencent-cos-v4
-        PCIT_KEEP_HISTORY: "true"
-        PCIT_LOCAL_DIR: plugins/storage/tencent_cos_v4
-        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
-        PCIT_TARGET_BRANCH: master
-        PCIT_USERNAME: khs1994
     - name: sync-plugin-storage-s3
       uses: docker://pcit/pages
       env:

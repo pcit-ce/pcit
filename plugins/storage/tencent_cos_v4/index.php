@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 require __DIR__.'/vendor/autoload.php';
 
+use League\Flysystem\COSV4\COSV4Adapter;
 use League\Flysystem\COSV4\COSV4Client;
 use League\Flysystem\Filesystem;
-use League\Flysysyem\COSv4\COSV4Adapter;
 
 $config = [
     'app_id' => getenv('INPUT_APP_ID'),
@@ -21,16 +21,16 @@ $prefix = getenv('INPUT_PREFIX');
 
 try {
     $client = new COSV4Client($config);
-    $adapter = new COSV4Adapter($config, $bucket, $prefix);
-    $filesystem = new Filesystem($adapter);
+    $adapter = new COSV4Adapter($client, $bucket, $prefix);
+    $flysystem = new Filesystem($adapter);
 
     $input_files = getenv('INPUT_FILES');
 
     if (is_object(json_decode($input_files))) {
-        foreach (json_decode(getenv('INPUT_FILES'), true) as $file => $label) {
+        foreach (json_decode($input_files, true) as $file => $label) {
             $result = $flysystem->write($label, file_get_contents($file));
 
-            echo "===> Upload $file TO $label result";
+            echo "===> Upload $file TO $label result\n";
             var_dump($result);
             echo "\n";
         }
@@ -40,7 +40,7 @@ try {
         foreach ($files as $file) {
             $result = $flysystem->write($file, file_get_contents($file));
 
-            echo "===> Upload $file TO $file result";
+            echo "===> Upload $file TO $file result\n";
             var_dump($result);
             echo "\n";
         }
