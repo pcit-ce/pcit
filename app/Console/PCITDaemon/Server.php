@@ -86,7 +86,7 @@ class Server extends Kernel
 
         try {
             // 处理 build
-            $this->pcit->build->handle($buildData);
+            $this->pcit->runner->handle($buildData);
         } catch (\Throwable $e) {
             Log::debug(__FILE__, __LINE__, $e->__toString(), [
                 'message' => $e->getMessage(), 'code' => $e->getCode(), ], Log::EMERGENCY);

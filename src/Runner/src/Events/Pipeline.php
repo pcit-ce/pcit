@@ -6,13 +6,14 @@ namespace PCIT\Runner\Events;
 
 use Exception;
 use PCIT\Framework\Support\Cache;
+use PCIT\Framework\Support\HTTP;
 use PCIT\Framework\Support\Log;
 use PCIT\PCIT as PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\CIDefault\Commands;
 use PCIT\Runner\CIDefault\Image;
 use PCIT\Runner\CIDefault\Status as CIDefaultStatus;
-use PCIT\Runner\Client as Builder;
+use PCIT\Runner\Client as Runner;
 use PCIT\Runner\Conditional\Branch;
 use PCIT\Runner\Conditional\Event;
 use PCIT\Runner\Conditional\Matrix;
@@ -21,6 +22,7 @@ use PCIT\Runner\Conditional\Status;
 use PCIT\Runner\Conditional\Tag;
 use PCIT\Runner\Parse;
 use PCIT\Support\CacheKey;
+use Symfony\Component\Yaml\Yaml;
 
 class Pipeline
 {
@@ -41,11 +43,11 @@ class Pipeline
      *
      * @param           $pipeline
      * @param BuildData $build
-     * @param Builder   $client
+     * @param Runner    $client
      *
      * @throws Exception
      */
-    public function __construct($pipeline, ?BuildData $build, ?Builder $client, ?array $matrix_config)
+    public function __construct($pipeline, ?BuildData $build, ?Runner $client, ?array $matrix_config)
     {
         $this->pipeline = $pipeline;
         $this->matrix_config = $matrix_config;
@@ -156,16 +158,15 @@ class Pipeline
 
         $jobId = $this->client->job_id;
         $workdir = $this->client->workdir;
-        $cache = $this->cache;
         $language = $this->client->language ?? 'php';
 
         $this->language = $language;
 
-        foreach ($this->pipeline as $setup => $pipelineContent) {
-            Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $setup], Log::EMERGENCY);
+        foreach ($this->pipeline as $step => $pipelineContent) {
+            Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $step], Log::EMERGENCY);
 
             $image = $pipelineContent->uses ?? $pipelineContent->image ?? Image::get($language);
-            $commands = $this->handleCommands($setup, $pipelineContent);
+            $commands = $this->handleCommands($step, $pipelineContent);
             $env = $pipelineContent->env ?? $pipelineContent->environment ?? [];
             $shell = $pipelineContent->shell ?? 'sh';
             $privileged = $pipelineContent->privileged ?? false;
@@ -188,7 +189,7 @@ class Pipeline
             }
 
             // 根据 pipeline 获取默认的构建条件
-            $status = $when->status ?? CIDefaultStatus::get($setup);
+            $status = $when->status ?? CIDefaultStatus::get($step);
             $failure = (new Status())->handle($status, 'failure');
             $success = (new Status())->handle($status, 'success');
             $changed = (new Status())->handle($status, 'changed');
@@ -197,8 +198,27 @@ class Pipeline
 
             // 处理 image
             $image = Parse::text($image, $preEnv);
+
+            if ('github://' === substr($image, 0, 9)) {
+                try {
+                    $commands = $this->actionsHandler($step, $image);
+                    // 由于获取 action.yml 文件可能超时，捕获该错误
+                } catch (\Throwable $e) {
+                    Log::debug(__FILE__, __LINE__,
+                    'handle pipeline use actions error'.$e->getMessage(),
+                    [], Log::EMERGENCY
+                );
+
+                    continue;
+                }
+
+                $image = 'khs1994/node:git';
+
+                $preEnv = array_merge($preEnv, $this->actionsEnvHandler($step, $workdir));
+            }
+
             // 处理 commands
-            $ci_script = CommandHandler::parse($shell, $setup, $image, $commands);
+            $ci_script = CommandHandler::parse($shell, $step, $image, $commands);
 
             $env = array_merge(["CI_SCRIPT=$ci_script"], $preEnv);
 
@@ -222,11 +242,15 @@ class Pipeline
 
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setBinds(["pcit_$jobId:$workdir", 'pcit_cache:/tmp/pcit_cache'])
+                ->setBinds([
+                    "pcit_$jobId:$workdir",
+                    'pcit_cache:/tmp/pcit_cache',
+                    'pcit_actions_'.$jobId.':'.'/var/run/actions',
+                ])
                 ->setEntrypoint($entrypoint)
                 ->setLabels([
                     'com.khs1994.ci.pipeline' => "$jobId",
-                    'com.khs1994.ci.pipeline.name' => $setup,
+                    'com.khs1994.ci.pipeline.name' => $step,
                     'com.khs1994.ci.pipeline.status.no_status' => (string) $no_status,
                     'com.khs1994.ci.pipeline.status.failure' => (string) $failure,
                     'com.khs1994.ci.pipeline.status.success' => (string) $success,
@@ -240,7 +264,7 @@ class Pipeline
                     'EndpointsConfig' => [
                         "pcit_$jobId" => [
                             'Aliases' => [
-                                $setup,
+                                $step,
                             ],
                         ],
                     ],
@@ -248,32 +272,132 @@ class Pipeline
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            $is_status = false;
-
-            if ($failure) {
-                $is_status = true;
-                $cache->lpush(CacheKey::pipelineListKey($jobId, 'failure'), $setup);
-                $cache->hset(CacheKey::pipelineHashKey($jobId, 'failure'), $setup, $container_config);
-            }
-
-            if ($success) {
-                $is_status = true;
-                $cache->lpush(CacheKey::pipelineListKey($jobId, 'success'), $setup);
-                $cache->hset(CacheKey::pipelineHashKey($jobId, 'success'), $setup, $container_config);
-            }
-
-            if ($changed) {
-                $is_status = true;
-                $cache->lpush(CacheKey::pipelineListKey($jobId, 'changed'), $setup);
-                $cache->hset(CacheKey::pipelineHashKey($jobId, 'changed'), $setup, $container_config);
-            }
-
-            if (true === $is_status) {
-                continue;
-            }
-
-            $cache->lpush(CacheKey::pipelineListKey($jobId), $setup);
-            $cache->hset(CacheKey::pipelineHashKey($jobId), $setup, $container_config);
+            $this->storeCache($jobId, $step, $container_config, $failure, $success, $changed);
         }
+    }
+
+    public function generateDocker(): void
+    {
+    }
+
+    public function storeCache($jobId,
+    $step,
+    $container_config,
+    $failure = false,
+    $success = false,
+    $changed = false): void
+    {
+        $cache = $this->cache;
+
+        $is_status = false;
+
+        if ($failure) {
+            $is_status = true;
+            $cache->lpush(CacheKey::pipelineListKey($jobId, 'failure'), $step);
+            $cache->hset(CacheKey::pipelineHashKey($jobId, 'failure'), $step, $container_config);
+        }
+
+        if ($success) {
+            $is_status = true;
+            $cache->lpush(CacheKey::pipelineListKey($jobId, 'success'), $step);
+            $cache->hset(CacheKey::pipelineHashKey($jobId, 'success'), $step, $container_config);
+        }
+
+        if ($changed) {
+            $is_status = true;
+            $cache->lpush(CacheKey::pipelineListKey($jobId, 'changed'), $step);
+            $cache->hset(CacheKey::pipelineHashKey($jobId, 'changed'), $step, $container_config);
+        }
+
+        if (true === $is_status) {
+            return;
+        }
+
+        $cache->lpush(CacheKey::pipelineListKey($jobId), $step);
+        $cache->hset(CacheKey::pipelineHashKey($jobId), $step, $container_config);
+    }
+
+    public function actionsHandler(string $step, string $image)
+    {
+        $actions = substr($image, 9);
+
+        [$repo,$ref] = explode('@', $actions);
+
+        Log::debug(__FILE__, __LINE__, 'this pipeline use actions', [
+          'repo' => $repo,
+          'ref' => $ref,
+        ], Log::INFO);
+
+        // git clone
+        $workdir = '/var/run/actions/'.$repo;
+        $this->actionsGitHandler($step, $repo, $ref);
+
+        // action.yml
+        $action_yml = HTTP::get(
+            'https://raw.githubusercontent.com/'.$repo.'/'.$ref.'/action.yml',
+            null,
+            [],
+            20
+        );
+
+        $action_yml = Yaml::parse($action_yml);
+
+        $using = $action_yml['runs']['using'];
+        $main = $action_yml['runs']['main'] ?? 'index.js';
+        $main = $workdir.'/'.$main;
+
+        if ('node' === substr($using, 0, 4)) {
+            $using = 'node';
+        }
+
+        return [
+          "$using $main",
+      ];
+    }
+
+    public function actionsGitHandler($step, $repo, $ref): void
+    {
+        $step .= '_actions_downloader';
+        $workdir = '/var/run/actions/'.$repo;
+        $jobId = $this->client->job_id;
+        $env = [
+            'INPUT_REPO='.$repo,
+            'INPUT_REF='.$ref,
+        ];
+
+        $config = (new Git(null, null, null))->generateDocker(
+            $env,
+            'pcit/actions_downloader',
+            [],
+            $jobId,
+            $workdir,
+            [
+                'pcit_actions_'.$jobId.':'.'/var/run/actions',
+            ]
+        );
+
+        $this->storeCache($jobId, $step, $config);
+    }
+
+    public function actionsEnvHandler($step, $workdir)
+    {
+        return [
+        'GITHUB_WORKSPACE='.$workdir,
+        'RUNNER_WORKSPACE'.$workdir,
+        'GITHUB_REF=',
+        'GITHUB_SHA='.$this->build->commit_id,
+        'RUNNER_OS=Linux',
+        'RUNNER_USER=',
+        'RUNNER_TEMP=/home/runner/work/_temp',
+        'GITHUB_REPOSITORY='.$this->build->repo_full_name,
+        'GITHUB_EVENT_NAME='.$this->build->event_type,
+        'GITHUB_WORKFLOW='.$step,
+        'GITHUB_ACTIONS=true',
+        'GITHUB_HEAD_REF=',
+        'GITHUB_BASE_REF=',
+        'GITHUB_ACTOR=',
+        'GITHUB_ACTION=run9',
+        'GITHUB_EVENT_PATH=/home/runner/work/_temp/_github_workflow/event.json',
+      ];
     }
 }

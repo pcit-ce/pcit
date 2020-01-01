@@ -59,6 +59,7 @@ class Cleanup
             // clean volume
 
             $docker_volume->remove('pcit_'.$id);
+            $docker_volume->remove('pcit_actions_'.$id);
 
             Log::connect()->emergency('Build Stopped Delete Volume '.$id);
 

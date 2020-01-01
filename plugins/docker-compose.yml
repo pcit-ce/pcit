@@ -56,3 +56,7 @@ services:
   dpl:
     image: pcit/dpl
     build: dpl
+
+  actions_downloader:
+    image: pcit/actions_downloader
+    build: actions_downloader

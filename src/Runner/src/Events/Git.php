@@ -21,7 +21,7 @@ class Git
 
     private $client;
 
-    public function __construct($git, BuildData $build, Client $client)
+    public function __construct($git, ?BuildData $build, ?Client $client)
     {
         $this->git = $git;
         $this->build = $build;
@@ -118,18 +118,32 @@ class Git
                 break;
         }
 
-        $config = $docker_container
-            ->setEnv($git_env)
-            ->setLabels([
-                'com.khs1994.ci.git' => (string) $client->job_id,
-                'com.khs1994.ci' => (string) $client->job_id,
-            ])
-            ->setBinds(["pcit_$client->job_id:$client->workdir"])
-            ->setExtraHosts($hosts)
-            ->setImage($git_image)
-            ->setCreateJson(null)
-            ->getCreateJson();
+        $config = $this->generateDocker($git_env, $git_image, $hosts, $client->job_id, $client->workdir);
 
         Cache::store()->set(CacheKey::cloneKey($client->job_id), $config);
+    }
+
+    public function generateDocker($git_env, $git_image, $hosts, $job_id, $workdir, $binds = [])
+    {
+        $docker_container = app(PCIT::class)->docker->container;
+
+        if (!$binds) {
+            $binds = ["pcit_$job_id:$workdir"];
+        }
+
+        $config = $docker_container
+        ->setEnv($git_env)
+        ->setLabels([
+            'com.khs1994.ci.git' => (string) $job_id,
+            'com.khs1994.ci' => (string) $job_id,
+        ])
+        ->setBinds($binds)
+        ->setExtraHosts($hosts)
+        ->setImage($git_image)
+        ->setWorkingDir($workdir)
+        ->setCreateJson(null)
+        ->getCreateJson();
+
+        return $config;
     }
 }

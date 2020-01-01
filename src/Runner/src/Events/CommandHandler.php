@@ -13,7 +13,7 @@ class CommandHandler
      *
      * @throws Exception
      */
-    public static function parse(string $shell = 'sh', string $setup, string $image, ?array $commands)
+    public static function parse(string $shell = 'sh', string $step, string $image, ?array $commands)
     {
         if (null === $commands) {
             return null;
@@ -22,7 +22,7 @@ class CommandHandler
         if ('sh' === $shell or 'bash' === $shell) {
             $content = '\n';
 
-            $content .= 'echo;echo\n\necho "==>" Pipeline ['.$setup.'] Run On "=>" ['.$image.']';
+            $content .= 'echo;echo\n\necho "==>" Pipeline ['.$step.'] Run On "=>" ['.$image.']';
 
             $content .= '\n\nsleep 0.1;echo;echo\n\nset -x\n\n';
 

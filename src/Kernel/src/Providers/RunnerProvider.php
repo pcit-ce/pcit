@@ -9,15 +9,15 @@ use PCIT\Runner\Client;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class BuildProvider implements ServiceProviderInterface
+class RunnerProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple): void
     {
-        $pimple['build'] = function ($app) {
+        $pimple['runner'] = function ($app) {
             return new Client();
         };
 
-        $pimple['build_agent'] = function ($app) {
+        $pimple['runner_agent'] = function ($app) {
             return new RunContainer();
         };
     }

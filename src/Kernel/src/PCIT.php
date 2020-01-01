@@ -54,8 +54,8 @@ use WeChat\WeChat;
  * @property PHPMailer                                       $mail
  * @property GitHub\Service\PullRequest\Client               $pull_request
  * @property GitHub\Service\Webhooks\Client                  $webhooks
- * @property Builder\Client                                  $build
- * @property Builder\Agent\RunContainer                      $build_agent
+ * @property \PCIT\Runner\Client                             $runner
+ * @property \PCIT\Runner\Agent\RunContainer                 $runner_agent
  * @property \TencentAI\TencentAI                            $tencent_ai
  * @property GitHub\Service\Users\Client                     $user_basic_info
  * @property GitHub\Service\Checks\Run                       $check_run
@@ -71,7 +71,6 @@ class PCIT extends Container
     protected $providers = [
         Providers\ActivityProvider::class,
         Providers\AuthorizationsProvider::class,
-        Providers\BuildProvider::class,
         Providers\ChecksProvider::class,
         Providers\CurlProvider::class,
         Providers\DataProvider::class,
@@ -86,6 +85,7 @@ class PCIT extends Container
         Providers\PHPMailerProvider::class,
         Providers\PullRequestProvider::class,
         Providers\RepositoriesProvider::class,
+        Providers\RunnerProvider::class,
         Providers\TencentAIProvider::class,
         Providers\UserProvider::class,
         Providers\WebhooksProvider::class,

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-class Repositiry
+class Repository
 {
     public function handle($json): void
     {
