@@ -13,6 +13,8 @@
 * [PHP Docs](https://pcit-ce.github.io/pcit/)
 * [Donate](https://zan.khs1994.com)
 * [PCIT EE](https://github.com/pcit-ce/pcit/tree/master/docs#about-pcit-ce-and-ee)
+* [openAPI](https://openapi-pcit.doc.coding.io)
+* [openAPI](https://app.swaggerhub.com/apis-docs/pcit/pcit-api/1.0.0)
 
 ## 项目状态
 

@@ -229,6 +229,17 @@ Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@get
 Route::get('api/ci/about', 'System\SystemController@about');
 Route::get('api/ci/changelog', 'System\SystemController@changelog');
 Route::get('api/ci/github_trending/{language}/{since}', 'System\SystemController@gitHubTrending');
+
+Route::get('api/metrics', 'System\Metrics');
+
+Route::get('api/healthz', 'System\Healthz');
+
+Route::get('api/readyz', 'System\Healthz');
+
+Route::get('api/livez', 'System\Healthz');
+
+Route::get('api/openapi', 'System\OpenAPI');
+Route::get('api/openapi/v3', 'System\OpenAPI');
 /* Issues */
 
 Route::patch('api/repo/${username}/${repo_name}/issues/translate/${issue_number}',

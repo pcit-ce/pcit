@@ -140,8 +140,8 @@
       "cp -r -f src/providers/AliyunDockerRegistry/ vendor/pcit/provider-aliyun-docker-registry",
       "cp -r -f src/providers/WeChat/ vendor/pcit/provider-wechat"
     ],
-    "compile:pcit": "phar-builder package --name=pcit.phar --output-dir=./ --entry-point=bin/src/pcit.php --bzip2 --include framework --include src --include bin",
-    "compile:pcitd": "phar-builder package --name=pcitd.phar --output-dir=./ --entry-point=bin/src/pcitd.php --bzip2 --include framework --include src --include bin"
+    "compile:pcit": "phar-builder package --name=pcit.phar --output-dir=./ --entry-point=bin/src/pcit.php --bzip2 --include framework --include src --include bin --include openapi/openapi.json",
+    "compile:pcitd": "phar-builder package --name=pcitd.phar --output-dir=./ --entry-point=bin/src/pcitd.php --bzip2 --include framework --include src --include bin --include openapi/openapi.json"
   },
   "bin": [
      "bin/src/pcit",

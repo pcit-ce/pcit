@@ -431,6 +431,19 @@ steps: # pipeline
       path: test_git
       token: ${GITHUB_TOKEN}
 
+  coding_openapi:
+    image: ecoding/apidoc-publisher:20200102.1
+    environment:
+    # - ACCESS_TOKEN=${CODING_OPENAPI_TOKEN}
+    - APIDOC_TEAM=pcit
+    - APIDOC_PROJECT=coding-demo
+    - APIDOC_ID=2
+    - APIDOC_RELEASE_TYPE=file
+    - PCIT_URL=https://ci2.khs1994.com:10000
+    run:
+    - curl -fsSL ${PCIT_URL}/api/openapi?coding=true -o /opt/data.txt
+    - sh /my_shell/api_doc_release.sh
+
 # 配置服务
 services:
   mysql:

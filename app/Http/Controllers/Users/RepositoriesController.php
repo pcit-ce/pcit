@@ -49,6 +49,6 @@ class RepositoriesController
      */
     public function find(string $git_type, string $username, string $repo_name)
     {
-        return Repo::findByRepoFullName($username, $repo_name, $git_type);
+        return Repo::findByRepoFullName($username, $repo_name, $git_type)[0] ?? [];
     }
 }

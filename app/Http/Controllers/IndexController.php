@@ -97,6 +97,12 @@ class IndexController
             ],
             'system' => [
                 'oauth_client_id' => $ci_host.'/ci/oauth_client_id',
+                'metrics' => $ci_host.'/metrics',
+                'healthz' => $ci_host.'/healthz',
+                'readyz' => $ci_host.'/readyz',
+                'livez' => $ci_host.'/livez',
+                'openapi' => $ci_host.'/openapi',
+                'openapi_v3' => $ci_host.'/openapi/v3',
             ],
         ];
 

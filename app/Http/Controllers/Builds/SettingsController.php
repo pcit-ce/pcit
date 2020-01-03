@@ -25,11 +25,7 @@ class SettingsController
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        $result = Setting::list($rid, $git_type);
-
-        if ($result) {
-            $result = $result[0];
-        }
+        $result = Setting::list($rid, $git_type)[0] ?? [];
 
         return $result;
     }

@@ -6,6 +6,7 @@ namespace PCIT\Framework\Foundation\Http;
 
 use PCIT\Framework\Support\Response;
 use Route;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Throwable;
 
 class Kernel
@@ -34,7 +35,7 @@ class Kernel
             if ('Finish' === $e->getMessage()) {
                 $output = Route::getOutput();
 
-                if ($output instanceof Response) {
+                if ($output instanceof HttpFoundationResponse) {
                     return $output;
                 }
 
@@ -43,7 +44,7 @@ class Kernel
                         return Response::json(
                             array_merge(
                                 $output, ['code' => $e->getCode()]
-                            ), PCIT_START);
+                            ));
 
                         break;
                     case 'integer':
@@ -77,7 +78,7 @@ class Kernel
                 'file' => $debug ? $e->getFile() : null,
                 'line' => $debug ? $e->getLine() : null,
                 'details' => $debug ? (array) $e->getPrevious() : null,
-            ]), PCIT_START);
+            ]));
         }
 
         // 路由控制器填写错误
@@ -88,7 +89,7 @@ class Kernel
             'obj' => $debug ? Route::getObj() ?? null : null,
             'method' => $debug ? Route::getMethod() ?? null : null,
             'details' => $debug ? '路由控制器填写错误' : null,
-        ]), PCIT_START);
+        ]));
     }
 
     public function handle($request)

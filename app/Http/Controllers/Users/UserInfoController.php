@@ -20,7 +20,7 @@ class UserInfoController
     {
         list($uid, $git_type) = JWTController::getUser(false);
 
-        return User::getUserInfo(null, (int) $uid, $git_type);
+        return User::getUserInfo(null, (int) $uid, $git_type)[0] ?? [];
     }
 
     /**
@@ -40,7 +40,7 @@ class UserInfoController
             return User::getUserBasicInfo($username, null, $git_type);
         }
 
-        $result = User::getUserInfo($username, null, $git_type);
+        $result = User::getUserInfo($username, null, $git_type)[0] ?? [];
 
         if ($result) {
             return $result;
