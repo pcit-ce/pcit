@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\System;
 
-use PCIT\Framework\Support\Response;
-
 class Metrics
 {
     public function __invoke()
@@ -28,7 +26,7 @@ user_number 1
 active_repositories 100
 ';
 
-        return new Response($content, 200, [
+        return \Response::make($content, 200, [
             'Content-Type' => 'text/plain; version=0.0.4; charset=utf-8',
         ]);
     }

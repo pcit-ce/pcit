@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Users\JWTController;
 use App\User;
-use PCIT\Framework\Support\Response;
 use PCIT\Framework\Support\Session;
 use PCIT\Support\Env;
 
@@ -39,13 +38,13 @@ class IndexController
         $email = Session::get($git_type.'.email');
 
         if (null === $username or null === $access_token) {
-            Response::redirect(env('CI_HOST').'/login');
+            \Response::redirect(env('CI_HOST').'/login');
 
             exit;
         }
 
         if ($username_from_web !== $username) {
-            Response::redirect('/profile/'.$git_type.'/'.$username);
+            \Response::redirect('/profile/'.$git_type.'/'.$username);
 
             exit;
         }

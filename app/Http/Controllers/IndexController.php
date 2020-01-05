@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use PCIT\Framework\Support\Response;
 use PCIT\Support\Env;
 
 class IndexController
@@ -19,7 +18,7 @@ class IndexController
 
     public function blog(): void
     {
-        Response::redirect('https://khs1994.github.io/categories/CI/PCIT/');
+        \Response::redirect('https://khs1994.github.io/categories/CI/PCIT/');
     }
 
     public function api()
@@ -115,12 +114,12 @@ class IndexController
 
     public function docs(): void
     {
-        Response::redirect('https://github.com/pcit-ce/pcit/tree/master/docs');
+        \Response::redirect('https://github.com/pcit-ce/pcit/tree/master/docs');
     }
 
     public function plugins(): void
     {
-        Response::redirect('https://docs.ci.khs1994.com/plugins/');
+        \Response::redirect('https://docs.ci.khs1994.com/plugins/');
     }
 
     public function sitemap()
@@ -234,28 +233,28 @@ class IndexController
 
     public function status(): void
     {
-        Response::redirect('https://status.khs1994.com');
+        \Response::redirect('https://status.khs1994.com');
     }
 
     public function team(): void
     {
-        Response::redirect('https://github.com/pcit-ce/pcit/graphs/contributors');
+        \Response::redirect('https://github.com/pcit-ce/pcit/graphs/contributors');
     }
 
     public function wechat(): void
     {
-        Response::redirect(
+        \Response::redirect(
             'https://user-images.githubusercontent.com/16733187/49062650-de41ea00-f24f-11e8-9f22-99b5cd3d0195.jpg');
     }
 
     public function changelog(): void
     {
-        Response::redirect('https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md');
+        \Response::redirect('https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md');
     }
 
     public function donate(): void
     {
-        Response::redirect('https://zan.khs1994.com');
+        \Response::redirect('https://zan.khs1994.com');
     }
 
     public function issues(): void
@@ -270,26 +269,26 @@ class IndexController
 
     public function ce(): void
     {
-        Response::redirect('https://docs.ci.khs1994.com/install/ce.html');
+        \Response::redirect('https://docs.ci.khs1994.com/install/ce.html');
     }
 
     public function ee(): void
     {
-        Response::redirect('https://docs.ci.khs1994.com/install/ee.html');
+        \Response::redirect('https://docs.ci.khs1994.com/install/ee.html');
     }
 
     public function why(): void
     {
-        Response::redirect('https://docs.ci.khs1994.com/why.html');
+        \Response::redirect('https://docs.ci.khs1994.com/why.html');
     }
 
     public function privacy_policy(): void
     {
-        Response::redirect('https://docs.ci.khs1994.com/privacy-policy.html');
+        \Response::redirect('https://docs.ci.khs1994.com/privacy-policy.html');
     }
 
     public function terms_of_service(): void
     {
-        Response::redirect('https://docs.ci.khs1994.com/terms-of-service.html');
+        \Response::redirect('https://docs.ci.khs1994.com/terms-of-service.html');
     }
 }

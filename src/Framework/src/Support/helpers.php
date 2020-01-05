@@ -63,3 +63,11 @@ if (!function_exists('view')) {
         exit;
     }
 }
+
+class Response extends \PCIT\Framework\Support\Facades\Response
+{
+}
+
+class Request extends \PCIT\Framework\Support\Facades\Request
+{
+}

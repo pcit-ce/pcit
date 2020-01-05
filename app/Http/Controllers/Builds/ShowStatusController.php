@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Builds;
 use App\Build;
 use App\Repo;
 use Exception;
-use PCIT\Framework\Support\Response;
 use PCIT\Support\Env;
 
 class ShowStatusController
@@ -44,7 +43,7 @@ class ShowStatusController
 
         header_remove('x-powered-by');
 
-        return new Response($svg, 200, [
+        return  \Response::make($svg, 200, [
             'Expires' => $ts,
             'Content-Type' => 'image/svg+xml;charset=utf-8',
             'Cache-Control' => 'max-age=300,public',

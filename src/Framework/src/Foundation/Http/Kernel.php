@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Foundation\Http;
 
-use PCIT\Framework\Support\Response;
 use Route;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Throwable;
@@ -23,7 +22,7 @@ class Kernel
 
         // if ('/index.php' === $_SERVER['REQUEST_URI']) {
         if ('/index.php' === $request->server->get('REQUEST_URI')) {
-            Response::redirect('dashboard');
+            \Response::redirect('dashboard');
 
             exit;
         }
@@ -41,7 +40,7 @@ class Kernel
 
                 switch (\gettype($output)) {
                     case 'array':
-                        return Response::json(
+                        return \Response::json(
                             array_merge(
                                 $output, ['code' => $e->getCode()]
                             ));
@@ -52,7 +51,7 @@ class Kernel
                            return $output;
                        }
 
-                        return new Response($output);
+                        return \Response::make($output);
 
                         break;
                     case 'string':
@@ -60,18 +59,18 @@ class Kernel
                             return $output;
                         }
 
-                        return new Response($output);
+                        return \Response::make($output);
 
                         break;
                 }
 
-                return new Response();
+                return \Response::make();
             }
 
             method_exists($e, 'report') && $e->report($e);
             method_exists($e, 'render') && $e->render($request, $e);
 
-            return Response::json(array_filter([
+            return \Response::json(array_filter([
                 'code' => 500,
                 'message' => $e->getMessage() ?: 'ERROR',
                 'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
@@ -82,7 +81,7 @@ class Kernel
         }
 
         // 路由控制器填写错误
-        return Response::json(array_filter([
+        return \Response::json(array_filter([
             'code' => 404,
             'message' => 'Not Found',
             'api_url' => getenv('CI_HOST').'/api',

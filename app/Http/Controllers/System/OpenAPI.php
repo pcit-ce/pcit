@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\System;
 
 use PCIT\Framework\Http\Request;
-use PCIT\Framework\Support\Response;
 
 class OpenAPI
 {
@@ -24,6 +23,6 @@ class OpenAPI
           ];
         }
 
-        return Response::json($json, $is_json ?? true);
+        return \Response::json($json, $is_json ?? true);
     }
 }

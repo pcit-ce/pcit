@@ -8,7 +8,6 @@ use App\User;
 use Error;
 use Exception;
 use PCIT\Coding\OAuth\Client as CodingClient;
-use PCIT\Framework\Support\Response;
 use PCIT\Framework\Support\Session;
 use PCIT\Gitee\OAuth\Client as GiteeClient;
 use PCIT\GitHub\OAuth\Client as GitHubClient;
@@ -60,7 +59,7 @@ class IndexController
             $username_from_session = Session::get($git_type.'.username');
 
             // 重定向到个人主页
-            Response::redirect(implode('/', ['/profile', $git_type, $username_from_session]));
+            \Response::redirect(implode('/', ['/profile', $git_type, $username_from_session]));
         }
 
         $state = session_create_id();
@@ -72,7 +71,7 @@ class IndexController
         $url = static::$oauth->getLoginUrl($state);
 
         // 重定向到登录 url
-        Response::redirect($url);
+        \Response::redirect($url);
 
         exit;
     }
@@ -138,7 +137,7 @@ class IndexController
         $remember_day = env('CI_REMEMBER_DAY', 10);
         Session::put($git_type.'.expire', time() + $remember_day * 24 * 60 * 60);
 
-        Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
+        \Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
 
         exit;
     }

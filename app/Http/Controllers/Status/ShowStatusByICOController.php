@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Status;
 
 use Error;
 use Exception;
-use PCIT\Framework\Support\Response;
 
 /**
  * 获取状态小图标.
@@ -34,7 +33,7 @@ class ShowStatusByICOController
             $svg = file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg');
         }
 
-        return new Response($svg, 200, [
+        return \Response::make($svg, 200, [
             'content-type' => 'image/svg+xml;charset=utf-8',
             'Cache-Control' => 'max-age=300',
             // header('Cache-Control: max-age=100');
