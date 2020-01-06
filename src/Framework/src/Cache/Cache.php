@@ -19,7 +19,7 @@ class Cache
      *
      * @throws Exception
      */
-    public static function store()
+    public function store()
     {
         if (!(self::$cache instanceof Redis)) {
             $redis = new Redis();
@@ -38,7 +38,7 @@ class Cache
         return self::$cache;
     }
 
-    public static function close(): void
+    public function close(): void
     {
         if (self::$cache instanceof Redis) {
             self::$cache->close();

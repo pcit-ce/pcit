@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Framework\Support;
+namespace PCIT\Framework\Session;
 
 class Session
 {
     /**
      * @param $value
      */
-    public static function put(string $name, $value): void
+    public function put(string $name, $value): void
     {
         session_start();
         $_SESSION[$name] = $value;
         session_write_close();
     }
 
-    public static function forget(string $name): void
+    public function forget(string $name): void
     {
         session_start();
         unset($_SESSION[$name]);
@@ -26,7 +26,7 @@ class Session
     /**
      * @return string|null
      */
-    public static function get(string $name)
+    public function get(string $name)
     {
         session_start();
         $value = $_SESSION[$name] ?? null;
@@ -38,7 +38,7 @@ class Session
     /**
      * @return bool
      */
-    public static function has(string $name)
+    public function has(string $name)
     {
         session_start();
         $result = $_SESSION[$name] ?? false;
@@ -50,7 +50,7 @@ class Session
     /**
      * @return mixed
      */
-    public static function all()
+    public function all()
     {
         session_start();
         $value = $_SESSION;
@@ -62,7 +62,7 @@ class Session
     /**
      * 清空 Session.
      */
-    public static function flush(): void
+    public function flush(): void
     {
         session_start();
         $_SESSION = [];
@@ -74,7 +74,7 @@ class Session
      *
      * @return bool|null
      */
-    public static function pull(string $name)
+    public function pull(string $name)
     {
         $result = self::has($name);
 

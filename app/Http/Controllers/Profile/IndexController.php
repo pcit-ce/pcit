@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Users\JWTController;
 use App\User;
-use PCIT\Framework\Support\Session;
 use PCIT\Support\Env;
 
 /**
@@ -31,11 +30,11 @@ class IndexController
     public function __invoke(string $git_type, string $username): void
     {
         $username_from_web = $username;
-        $access_token = Session::get($git_type.'.access_token');
-        $username = Session::get($git_type.'.username');
-        $uid = Session::get($git_type.'.uid');
-        $pic = Session::get($git_type.'.pic');
-        $email = Session::get($git_type.'.email');
+        $access_token = \Session::get($git_type.'.access_token');
+        $username = \Session::get($git_type.'.username');
+        $uid = \Session::get($git_type.'.uid');
+        $pic = \Session::get($git_type.'.pic');
+        $email = \Session::get($git_type.'.email');
 
         if (null === $username or null === $access_token) {
             \Response::redirect(env('CI_HOST').'/login');

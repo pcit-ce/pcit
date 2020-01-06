@@ -75,3 +75,11 @@ class Request extends \PCIT\Framework\Support\Facades\Request
 class Cache extends \PCIT\Framework\Support\Facades\Cache
 {
 }
+
+class Session extends \PCIT\Framework\Support\Facades\Session
+{
+}
+
+class Route extends \PCIT\Framework\Support\Facades\Route
+{
+}

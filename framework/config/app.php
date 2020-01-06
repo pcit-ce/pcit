@@ -10,11 +10,13 @@ return [
         'Request' => PCIT\Framework\Support\Facades\Request::class,
         'Response' => PCIT\Framework\Support\Facades\Response::class,
         'Cache' => PCIT\Framework\Support\Facades\Cache::class,
+        'Session' => PCIT\Framework\Support\Facades\Session::class,
     ],
     'providers' => [
         PCIT\Framework\Routing\RoutingServiceProvider::class,
         PCIT\Framework\Http\HttpServiceProvider::class,
         PCIT\Framework\Cache\CacheServiceProvider::class,
+        PCIT\Framework\Session\SessionServiceProvider::class,
 
         App\Providers\AppServiceProvider::class,
     ],

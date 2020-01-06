@@ -8,7 +8,6 @@ use App\Repo;
 use Error;
 use Exception;
 use PCIT\Framework\Support\Env;
-use PCIT\Framework\Support\Session;
 use PCIT\PCIT;
 use PCIT\Support\CI;
 
@@ -44,7 +43,7 @@ class Controller
         $header = \Request::getHeader('Authorization') ?? '';
 
         $access_token = (explode(' ', $header))[1]
-            ?? Session::get(self::$gitType.'.access_token')
+            ?? \Session::get(self::$gitType.'.access_token')
             ?? false;
 
         if (false === $access_token) {
@@ -182,7 +181,7 @@ class Controller
     {
         $gitType = self::$gitType;
 
-        $uid = Session::get($gitType.'.uid');
+        $uid = \Session::get($gitType.'.uid');
 
         $repoFullName = $arg[0].'/'.$arg[1];
 

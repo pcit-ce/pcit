@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-use PCIT\Framework\Support\Session;
 use PCIT\Support\Env;
 
 /**
@@ -16,7 +15,7 @@ class LogOut
     {
         list($git_type) = $args;
 
-        Session::pull($git_type.'.access_token');
+        \Session::pull($git_type.'.access_token');
 
         setcookie(
             $git_type.'_api_token',

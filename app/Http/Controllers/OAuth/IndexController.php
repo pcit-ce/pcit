@@ -8,7 +8,6 @@ use App\User;
 use Error;
 use Exception;
 use PCIT\Coding\OAuth\Client as CodingClient;
-use PCIT\Framework\Support\Session;
 use PCIT\Gitee\OAuth\Client as GiteeClient;
 use PCIT\GitHub\OAuth\Client as GitHubClient;
 use PCIT\PCIT;
@@ -55,8 +54,8 @@ class IndexController
          *
          * OAuth login -> get access_token and expire from Session | expire one day
          */
-        if (Session::get($git_type.'.access_token') and Session::get($git_type.'.expire') > time()) {
-            $username_from_session = Session::get($git_type.'.username');
+        if (\Session::get($git_type.'.access_token') and \Session::get($git_type.'.expire') > time()) {
+            $username_from_session = \Session::get($git_type.'.username');
 
             // 重定向到个人主页
             \Response::redirect(implode('/', ['/profile', $git_type, $username_from_session]));
@@ -64,7 +63,7 @@ class IndexController
 
         $state = session_create_id();
 
-        Session::put($git_type.'.state', $state);
+        \Session::put($git_type.'.state', $state);
 
         $this->bootstrap($git_type);
 
@@ -86,7 +85,7 @@ class IndexController
         $this->bootstrap($git_type);
 
         if ($this->state ?? false) {
-            $state = Session::pull(static::$git_type.'.state');
+            $state = \Session::pull(static::$git_type.'.state');
             $this->getAccessTokenCommon($state);
 
             return;
@@ -114,7 +113,7 @@ class IndexController
         try {
             list($accessToken, $refreshToken) = static::$oauth->getAccessToken((string) $code, $state);
 
-            $accessToken && Session::put($git_type.'.access_token', $accessToken);
+            $accessToken && \Session::put($git_type.'.access_token', $accessToken);
 
             $pcit = new PCIT([$git_type.'_access_token' => $accessToken], $git_type);
 
@@ -130,12 +129,12 @@ class IndexController
 
         $this->handleRefreshToken((int) $uid, $refreshToken, $git_type);
 
-        Session::put($git_type.'.uid', $uid);
-        Session::put($git_type.'.username', $name);
-        Session::put($git_type.'.pic', $pic);
-        Session::put($git_type.'.email', $email);
+        \Session::put($git_type.'.uid', $uid);
+        \Session::put($git_type.'.username', $name);
+        \Session::put($git_type.'.pic', $pic);
+        \Session::put($git_type.'.email', $email);
         $remember_day = env('CI_REMEMBER_DAY', 10);
-        Session::put($git_type.'.expire', time() + $remember_day * 24 * 60 * 60);
+        \Session::put($git_type.'.expire', time() + $remember_day * 24 * 60 * 60);
 
         \Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
 
