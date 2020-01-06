@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner;
 
-use PCIT\Framework\Support\Log;
-
 class SystemEnv
 {
     public $build;
@@ -52,7 +50,7 @@ class SystemEnv
 
         $system_env = array_merge($system_env, $this->client->system_env);
 
-        Log::debug(__FILE__, __LINE__, json_encode($system_env), [], Log::EMERGENCY);
+        \Log::emergency(json_encode($system_env), []);
 
         $this->env = $system_env;
 

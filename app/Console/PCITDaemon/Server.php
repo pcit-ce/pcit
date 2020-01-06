@@ -12,7 +12,6 @@ use Error;
 use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\HTTP;
-use PCIT\Framework\Support\Log;
 use PCIT\Framework\Support\Subject;
 use PCIT\Support\CI;
 use PCIT\Support\Git;
@@ -50,10 +49,10 @@ class Server extends Kernel
             try {
                 $this->build();
             } catch (\Throwable $e) {
-                Log::debug(__FILE__, __LINE__, $e->__toString(), []);
+                \Log::debug($e->__toString(), []);
             }
         } catch (\Throwable $e) {
-            Log::debug(__FILE__, __LINE__, $e->__toString(), [], LOG::ERROR);
+            \Log::error($e->__toString(), []);
         } finally {
             $this->closeResource();
         }
@@ -87,8 +86,7 @@ class Server extends Kernel
             // 处理 build
             $this->pcit->runner->handle($buildData);
         } catch (\Throwable $e) {
-            Log::debug(__FILE__, __LINE__, $e->__toString(), [
-                'message' => $e->getMessage(), 'code' => $e->getCode(), ], Log::EMERGENCY);
+            \Log::emergency($e->__toString(), ['message' => $e->getMessage(), 'code' => $e->getCode()]);
         }
     }
 
@@ -100,7 +98,7 @@ class Server extends Kernel
         DB::close();
         \Cache::close();
         HTTP::close();
-        Log::close();
+        \Log::close();
         TencentAI::close();
     }
 
@@ -121,19 +119,19 @@ class Server extends Kernel
      */
     private function webhooks(): void
     {
-        Log::debug(__FILE__, __LINE__, 'start handle webhooks');
+        \Log::debug('start handle webhooks');
 
         $webhooks = $this->pcit->webhooks;
 
         while (true) {
-            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list ...');
+            \Log::debug('pop webhooks redis list ...');
 
             $json_raw = $webhooks->getCache();
 
-            Log::debug(__FILE__, __LINE__, 'pop webhooks redis list success');
+            \Log::debug('pop webhooks redis list success');
 
             if (!$json_raw) {
-                Log::debug(__FILE__, __LINE__, 'Redis list empty, quit');
+                \Log::debug('Redis list empty, quit');
 
                 return;
             }
@@ -143,7 +141,7 @@ class Server extends Kernel
             if ('aliyun_docker_registry' === $git_type) {
                 $this->aliyunDockerRegistry($json);
 
-                Log::debug(__FILE__, __LINE__, 'Aliyun Docker Registry handle success', [], Log::INFO);
+                \Log::info('Aliyun Docker Registry handle success', []);
 
                 return;
             }
@@ -155,9 +153,9 @@ class Server extends Kernel
 
             try {
                 $webhooksHandler->$event_type($json);
-                Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle success', [], Log::INFO);
+                \Log::info($event_type.' webhooks handle success', []);
             } catch (Error | Exception $e) {
-                Log::debug(__FILE__, __LINE__, $event_type.' webhooks handle error', [$e->__toString()], Log::ERROR);
+                \Log::error($event_type.' webhooks handle error', [$e->__toString()]);
                 $webhooks->pushErrorCache($json_raw);
             }
         }

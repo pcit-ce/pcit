@@ -7,7 +7,6 @@ namespace PCIT\GitHub\Webhooks\Handler;
 use App\Repo;
 use Exception;
 use PCIT\Framework\Support\HTTP;
-use PCIT\Framework\Support\Log;
 use PCIT\Support\Git;
 use Symfony\Component\Yaml\Yaml;
 
@@ -47,7 +46,7 @@ class GetConfig
                 return $yaml_file_content;
             }
 
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id not include ".$file_name, [], Log::INFO);
+            \Log::info("$repo_full_name $commit_id not include ".$file_name, []);
         }
 
         return [];
@@ -65,9 +64,8 @@ class GetConfig
         $git_type = $this->git_type;
         $repo_full_name = $this->repo_full_name;
 
-        Log::debug(__FILE__, __LINE__, 'Parse repo id', [
-            'git_type' => $git_type, 'rid' => $rid, 'repo_full_name' => $repo_full_name, ],
-            Log::INFO);
+        \Log::info('Parse repo id', [
+            'git_type' => $git_type, 'rid' => $rid, 'repo_full_name' => $repo_full_name, ]);
 
         $yaml_file_content = $this->downloadConfig([
                 '.pcit.yml',
@@ -82,7 +80,7 @@ class GetConfig
         $config = Yaml::parse($yaml_file_content);
 
         if (!$config) {
-            Log::debug(__FILE__, __LINE__, "$repo_full_name $commit_id .pcit.yml parse error", [], Log::INFO);
+            \Log::info("$repo_full_name $commit_id .pcit.yml parse error", []);
 
             return [];
         }

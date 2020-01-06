@@ -6,7 +6,6 @@ namespace App\Console\PCITDaemon\Commands;
 
 use App\Console\PCITDaemon\Migrate;
 use Exception;
-use PCIT\Framework\Support\Log;
 use PCIT\Support\Env;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,7 +44,7 @@ abstract class Kernel extends Command
             \PCIT\Framework\Support\DB::close();
         }
 
-        Log::debug(__FILE__, __LINE__, 'Start Memory is '.memory_get_usage(), [], Log::INFO);
+        \Log::info('Start Memory is '.memory_get_usage(), []);
 
         set_time_limit(0);
 
@@ -69,7 +68,7 @@ abstract class Kernel extends Command
             unset($up);
 
             if (env('CI_DEBUG_MEMORY', false)) {
-                Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
+                \Log::debug('Now Memory is '.memory_get_usage());
             }
 
             sleep(3);
@@ -88,7 +87,7 @@ abstract class Kernel extends Command
             $this->handler->handle();
 
             if (env('CI_DEBUG_MEMORY', false)) {
-                Log::debug(__FILE__, __LINE__, 'Now Memory is '.memory_get_usage());
+                \Log::debug('Now Memory is '.memory_get_usage());
             }
 
             exit;

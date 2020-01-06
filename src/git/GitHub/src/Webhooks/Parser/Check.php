@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class Check
@@ -28,7 +27,7 @@ class Check
 
         $action = $obj->action;
 
-        Log::debug(null, null, 'Receive event', ['Check Suite' => $action], Log::INFO);
+        \Log::info('Receive event', ['Check Suite' => $action]);
 
         // 仓库所属用户或组织的信息
         $repository_owner = $repository->owner;
@@ -65,7 +64,7 @@ class Check
 
         $action = $obj->action;
 
-        Log::debug(null, null, 'Receive event', ['Check Run' => $action], Log::INFO);
+        \Log::info('Receive event', ['Check Run' => $action]);
 
         $installation_id = $obj->installation->id ?? null;
         $repository = $obj->repository;

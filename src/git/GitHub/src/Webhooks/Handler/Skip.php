@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Build;
 use Exception;
-use PCIT\Framework\Support\Log;
 use PCIT\Runner\Conditional\Branch;
 
 /**
@@ -47,7 +46,7 @@ class Skip
 
         // check config
         if (null === $this->config || '[]' === $this->config) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' skip, because config is empty', [], Log::INFO);
+            \Log::info($build_key_id.' skip, because config is empty', []);
 
             $this->writeSkipToDB(true);
 
@@ -58,7 +57,7 @@ class Skip
         if (preg_match(
             '#(\[skip ci\])|(\[ci skip\])|(\[pcit skip\])|(\[skip pcit\])#i',
             $this->commit_message)) {
-            Log::debug(__FILE__, __LINE__, $build_key_id.' is skip by commit message', [], Log::INFO);
+            \Log::info($build_key_id.' is skip by commit message', []);
 
             $this->writeSkipToDB();
 

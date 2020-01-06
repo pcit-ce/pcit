@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Service\Issue;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\Log;
 
 class CommentsClient
 {
@@ -55,7 +54,7 @@ class CommentsClient
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
+            \Log::debug('Http Return Code is not 201 '.$http_return_code);
         }
 
         if ($enable_tencent_ai) {
@@ -120,7 +119,7 @@ class CommentsClient
         $http_return_code = $this->curl->getCode();
 
         if (200 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_code);
+            \Log::debug('Http Return Code is not 200 '.$http_return_code);
 
             throw new Exception('Edit Issue comment Error', $http_return_code);
         }
@@ -142,7 +141,7 @@ class CommentsClient
         $http_return_code = $this->curl->getCode();
 
         if (204 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code Is Not 204 '.$http_return_code);
+            \Log::debug('Http Return Code Is Not 204 '.$http_return_code);
 
             throw new Exception('Delete Issue comment Error', $http_return_code);
         }

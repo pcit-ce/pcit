@@ -9,7 +9,6 @@ use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
 use PCIT\Exception\PCITException;
-use PCIT\Framework\Support\Log as LogSupport;
 use PCIT\PCIT as PCIT;
 use PCIT\Runner\Events\Log;
 use PCIT\Support\CacheKey;
@@ -46,7 +45,7 @@ class RunContainer
      */
     public function handle(int $job_id): void
     {
-        LogSupport::debug(__FILE__, __LINE__, 'Handle job start...', ['job_id' => $job_id], LogSupport::EMERGENCY);
+        \Log::emergency('Handle job start...', ['job_id' => $job_id]);
 
         try {
             // 运行一个 job
@@ -94,10 +93,10 @@ class RunContainer
     {
         Log::drop($job_id);
 
-        LogSupport::debug(__FILE__, __LINE__, 'Handle job', ['job_id' => $job_id], LogSupport::EMERGENCY);
+        \Log::emergency('Handle job', ['job_id' => $job_id]);
 
         // create network
-        LogSupport::debug(__FILE__, __LINE__, 'Create Network', [$job_id], LogSupport::EMERGENCY);
+        \Log::emergency('Create Network', [$job_id]);
 
         $result = $this->docker_network->list(['name' => 'pcit_'.$job_id]);
 
@@ -106,9 +105,7 @@ class RunContainer
                 try {
                     $this->docker_network->remove($network->Id);
                 } catch (\Throwable $e) {
-                    LogSupport::debug(__FILE__, __LINE__,
-                    'Delete docker network error',
-                    [$e->getMessage()], LogSupport::EMERGENCY);
+                    \Log::emergency('Delete docker network error', [$e->getMessage()]);
                 }
             }
         }
@@ -118,14 +115,14 @@ class RunContainer
         $cache = $this->cache;
 
         // git container
-        LogSupport::debug(__FILE__, __LINE__, 'Run git clone container', [], LogSupport::EMERGENCY);
+        \Log::emergency('Run git clone container', []);
 
         $git_container_config = $cache->get(CacheKey::cloneKey($job_id));
 
         $this->runPipeline($job_id, $git_container_config, 'clone');
 
         // download cache
-        LogSupport::debug(__FILE__, __LINE__, '', [], LogSupport::EMERGENCY);
+        \Log::emergency('', []);
         $this->runCacheContainer($job_id);
 
         $this->runService($job_id);
@@ -143,7 +140,7 @@ class RunContainer
             $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id), $pipeline);
 
             if (!\is_string($container_config)) {
-                LogSupport::debug(__FILE__, __LINE__, 'Container config empty', [], LogSupport::EMERGENCY);
+                \Log::emergency('Container config empty', []);
             }
 
             try {
@@ -153,7 +150,7 @@ class RunContainer
                     throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }
 
-                LogSupport::getMonolog()->emergency($e->getMessage());
+                \Log::emergency($e->getMessage());
 
                 throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
             }
@@ -181,10 +178,9 @@ class RunContainer
             $this->runPipeline($job_id, $containerConfig, 'cache_'.$type);
             'upload' === $type && $this->updateCacheInfo($containerConfig);
         } catch (\Throwable $e) {
-            LogSupport::debug(__FILE__, __LINE__,
+            \Log::emergency(
                 'upload or download cache error, please check s3(minio) server status',
-                ['message' => $e->getMessage(), 'code' => $e->getCode()],
-                LogSupport::EMERGENCY);
+                ['message' => $e->getMessage(), 'code' => $e->getCode()]);
         }
     }
 
@@ -214,9 +210,8 @@ class RunContainer
      */
     public function runPipeline(int $job_id, string $container_config, string $pipeline = null): void
     {
-        LogSupport::debug(__FILE__, __LINE__,
-            'Run job container', ['job_id' => $job_id,
-                'container_config' => $container_config, ], LogSupport::EMERGENCY);
+        \Log::emergency('Run job container', ['job_id' => $job_id,
+                'container_config' => $container_config, ]);
 
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
@@ -225,8 +220,8 @@ class RunContainer
 
         (new Log($job_id, $container_id, $pipeline))->handle();
 
-        LogSupport::debug(__FILE__, __LINE__, 'Run job container success', [
-            'job_id' => $job_id, ], LogSupport::EMERGENCY);
+        \Log::emergency('Run job container success', [
+            'job_id' => $job_id, ], );
     }
 
     /**
@@ -251,8 +246,7 @@ class RunContainer
      */
     private function after(int $job_id, $status): void
     {
-        LogSupport::debug(__FILE__, __LINE__,
-            'Run job after', ['job_id' => $job_id, 'status' => $status], LogSupport::EMERGENCY);
+        \Log::emergency('Run job after', ['job_id' => $job_id, 'status' => $status]);
 
         // TODO 获取上一次 build 的状况
         if ('changed' === $status && !Build::buildStatusIsChanged(Job::getRid($job_id), 'master')) {
@@ -277,7 +271,7 @@ class RunContainer
             try {
                 $this->runPipeline($job_id, $container_config, $pipeline);
             } catch (\Throwable $e) {
-                LogSupport::debug(__FILE__, __LINE__, $e->__toString(), [], LogSupport::EMERGENCY);
+                \Log::emergency($e->__toString(), []);
             }
         }
 
@@ -285,7 +279,7 @@ class RunContainer
             $this->after($job_id, 'changed');
         }
 
-        LogSupport::debug(__FILE__, __LINE__, 'Run job after finished', ['status' => $status], LogSupport::EMERGENCY);
+        \Log::emergency('Run job after finished', ['status' => $status]);
     }
 
     /**
@@ -295,7 +289,7 @@ class RunContainer
      */
     private function runService(int $job_id): void
     {
-        LogSupport::debug(__FILE__, __LINE__, 'Run job services', ['job_id' => $job_id], LogSupport::EMERGENCY);
+        \Log::emergency('Run job services', ['job_id' => $job_id]);
 
         $container_configs = \Cache::store()->hgetall(CacheKey::serviceHashKey($job_id));
 
@@ -305,8 +299,8 @@ class RunContainer
                 ->create(false)
                 ->start(null);
 
-            LogSupport::debug(__FILE__, __LINE__, 'Run Services success', [
-                'job_id' => $job_id, 'container_id' => $container_id, ], LogSupport::EMERGENCY);
+            \Log::emergency('Run Services success', [
+                'job_id' => $job_id, 'container_id' => $container_id, ]);
         }
     }
 }

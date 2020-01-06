@@ -7,7 +7,6 @@ namespace PCIT\Runner;
 use App\Build;
 use App\Job;
 use Exception;
-use PCIT\Framework\Support\Log;
 use PCIT\Framework\Support\Subject;
 use PCIT\Runner\Events\Cache;
 use PCIT\Runner\Events\Git;
@@ -55,13 +54,13 @@ class Client
 
         $this->system_env = array_merge($this->system_env, $this->build->env);
 
-        Log::debug(__FILE__, __LINE__, 'This build property', [
+        \Log::emergency('This build property', [
             'build_key_id' => $this->build->build_key_id,
             'event_type' => $this->build->event_type,
             'commit_id' => $this->build->commit_id,
             'pull_request_id' => $this->build->pull_request_number,
             'tag' => $this->build->tag,
-            'git_type' => $this->build->git_type, ], Log::EMERGENCY
+            'git_type' => $this->build->git_type, ]
         );
 
         // 生成容器配置
@@ -111,7 +110,7 @@ class Client
         $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
 
         if ($job_id) {
-            Log::getMonolog()->emergency('Handle job restart');
+            \Log::emergency('Handle job restart');
 
             $this->handleJob($job_id, Job::getEnv($job_id));
 
@@ -123,7 +122,7 @@ class Client
 
         // 不存在构建矩阵
         if (!$matrix) {
-            Log::getMonolog()->emergency('This build is not matrix');
+            \Log::emergency('This build is not matrix');
 
             $job_id = (int) (Job::getJobIDByBuildKeyID($this->buildID)[0] ?? 0);
 
@@ -132,7 +131,7 @@ class Client
             return;
         }
 
-        Log::getMonolog()->emergency('This build include matrix');
+        \Log::emergency('This build include matrix');
 
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
@@ -154,7 +153,7 @@ class Client
     {
         $this->job_id = $job_id = $job_id ?: Job::create($this->build->build_key_id);
 
-        Log::getMonolog()->emergency(
+        \Log::emergency(
             '=== Handle job Start ===', ['job_id' => $this->job_id]);
         // 清理缓存
         CacheKey::flush($job_id);
@@ -182,6 +181,6 @@ class Client
             ))
             ->handle();
 
-        Log::getMonolog()->emergency('=== Generate Job Success ===', ['job_id' => $this->job_id]);
+        \Log::emergency('=== Generate Job Success ===', ['job_id' => $this->job_id]);
     }
 }

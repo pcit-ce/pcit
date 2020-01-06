@@ -6,7 +6,6 @@ namespace PCIT\Runner\Events;
 
 use Exception;
 use PCIT\Framework\Support\HTTP;
-use PCIT\Framework\Support\Log;
 use PCIT\PCIT as PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\CIDefault\Commands;
@@ -74,31 +73,31 @@ class Pipeline
         $when_matrix = $when->matrix ?? null;
 
         if (!(new Platform($when_platform, 'linux/amd64'))->regHandle()) {
-            Log::connect()->emergency('skip by platform check');
+            \Log::emergency('skip by platform check');
 
             return true;
         }
 
         if (!(new Event($when_event, $this->build->event_type))->handle()) {
-            Log::connect()->emergency('skip by event check');
+            \Log::emergency('skip by event check');
 
             return true;
         }
 
         if (!(new Branch($when_branch, $this->build->branch))->regHandle()) {
-            Log::connect()->emergency('skip by branch check');
+            \Log::emergency('skip by branch check');
 
             return true;
         }
 
         if (!(new Tag($when_tag, $this->build->tag))->regHandle()) {
-            Log::connect()->emergency('skip by tag check');
+            \Log::emergency('skip by tag check');
 
             return true;
         }
 
         if (!(new Matrix($when_matrix, $this->matrix_config))->handle()) {
-            Log::connect()->emergency('skip by matrix check');
+            \Log::emergency('skip by matrix check');
 
             return true;
         }
@@ -162,7 +161,7 @@ class Pipeline
         $this->language = $language;
 
         foreach ($this->pipeline as $step => $pipelineContent) {
-            Log::debug(__FILE__, __LINE__, 'Handle pipeline', ['pipeline' => $step], Log::EMERGENCY);
+            \Log::emergency('Handle pipeline', ['pipeline' => $step]);
 
             $image = $pipelineContent->uses ?? $pipelineContent->image ?? Image::get($language);
             $commands = $this->handleCommands($step, $pipelineContent);
@@ -203,10 +202,7 @@ class Pipeline
                     $commands = $this->actionsHandler($step, $image);
                     // 由于获取 action.yml 文件可能超时，捕获该错误
                 } catch (\Throwable $e) {
-                    Log::debug(__FILE__, __LINE__,
-                    'handle pipeline use actions error'.$e->getMessage(),
-                    [], Log::EMERGENCY
-                );
+                    \Log::emergency('handle pipeline use actions error'.$e->getMessage(), []);
 
                     continue;
                 }
@@ -221,7 +217,7 @@ class Pipeline
 
             $env = array_merge(["CI_SCRIPT=$ci_script"], $preEnv);
 
-            Log::debug(__FILE__, __LINE__, json_encode($env), [], Log::INFO);
+            \Log::info(json_encode($env), []);
 
             if ('bash' === $shell || 'sh' === $shell) {
                 $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'] : null;
@@ -322,10 +318,10 @@ class Pipeline
 
         [$repo,$ref] = explode('@', $actions);
 
-        Log::debug(__FILE__, __LINE__, 'this pipeline use actions', [
+        \Log::info('this pipeline use actions', [
           'repo' => $repo,
           'ref' => $ref,
-        ], Log::INFO);
+        ]);
 
         // git clone
         $workdir = '/var/run/actions/'.$repo;

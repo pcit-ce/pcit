@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events;
 
-use PCIT\Framework\Support\Log;
-
 class CommandHandler
 {
     /**
@@ -41,7 +39,7 @@ class CommandHandler
 
         $ci_script = base64_encode(stripcslashes($content));
 
-        Log::debug(__FILE__, __LINE__, 'Command base64encode is '.$ci_script, [], Log::EMERGENCY);
+        \Log::emergency('Command base64encode is '.$ci_script, []);
 
         return $ci_script;
     }

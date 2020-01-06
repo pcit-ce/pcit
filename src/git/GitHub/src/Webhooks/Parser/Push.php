@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Author;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Committer;
@@ -22,7 +21,7 @@ class Push
      */
     public static function handle($json_content)
     {
-        Log::debug(__FILE__, __LINE__, 'Receive event', ['push'], Log::INFO);
+        \Log::info('Receive event', ['push']);
 
         $obj = json_decode($json_content);
 
@@ -83,7 +82,7 @@ class Push
      */
     public static function tag($tag, $json_content)
     {
-        Log::debug(__FILE__, __LINE__, 'Receive event', ['push' => 'tag'], Log::INFO);
+        \Log::info('Receive event', ['push' => 'tag']);
 
         $obj = json_decode($json_content);
 

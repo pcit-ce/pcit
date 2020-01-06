@@ -11,7 +11,6 @@ use App\Notifications\GitHubChecksConclusion\Queued;
 use App\Repo;
 use Exception;
 use PCIT\Framework\Support\JSON;
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Service\Checks\RunData;
 use PCIT\PCIT;
 use PCIT\Support\CI;
@@ -48,8 +47,7 @@ class GitHubAppChecks
                                 array $actions = null,
                                 bool $force_create = false): void
     {
-        Log::debug(__FILE__, __LINE__, 'Create GitHub App Check Run', [
-            'job_key_id' => $job_key_id, ], Log::INFO);
+        \Log::info('Create GitHub App Check Run', ['job_key_id' => $job_key_id]);
 
         $rid = Job::getRid((int) $job_key_id);
 
@@ -130,11 +128,11 @@ class GitHubAppChecks
             $result = $check_run_id;
         }
 
-        Log::debug(__FILE__, __LINE__, $log_message, [
+        \Log::info($log_message, [
             'job_key_id' => $job_key_id,
             'build_key_id' => $build_key_id,
             'result' => $result,
-        ], Log::INFO);
+        ]);
     }
 
     /**

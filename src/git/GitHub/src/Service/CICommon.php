@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service;
 
 use Curl\Curl;
-use PCIT\Framework\Support\Log;
 
 trait CICommon
 {
@@ -28,12 +27,12 @@ trait CICommon
      *
      * @throws \Exception
      */
-    private function successOrFailure(string $file, $line, int $http_code): void
+    private function successOrFailure(int $http_code): void
     {
         $http_return_code = $this->curl->getCode();
 
         if ($http_code !== $http_return_code) {
-            Log::debug($file, $line, 'Http Return Code Is Not '.$http_code.' '.$http_return_code);
+            \Log::debug('Http Return Code Is Not '.$http_code.' '.$http_return_code);
         }
     }
 }

@@ -83,3 +83,7 @@ class Session extends \PCIT\Framework\Support\Facades\Session
 class Route extends \PCIT\Framework\Support\Facades\Route
 {
 }
+
+class Log extends \PCIT\Framework\Support\Facades\Log
+{
+}

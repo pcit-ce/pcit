@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Service\Repositories;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\Log;
 
 /**
  * The status API allows external services to mark commits with an
@@ -75,7 +74,7 @@ class StatusClient
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
+            \Log::debug('Http Return code is not 201 '.$http_return_code);
         }
 
         return $output;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class Issues
@@ -27,7 +26,7 @@ class Issues
 
         $action = $obj->action;
 
-        Log::debug(null, null, 'Receive event', ['issue' => $action], Log::INFO);
+        \Log::info('Receive event', ['issue' => $action]);
 
         $issue = $obj->issue;
 
@@ -93,7 +92,7 @@ class Issues
      */
     public static function comment($json_content)
     {
-        Log::debug(__FILE__, __LINE__, 'Receive issue comment event', [], Log::INFO);
+        \Log::info('Receive issue comment event', []);
 
         $obj = json_decode($json_content);
 
@@ -104,7 +103,7 @@ class Issues
         $sender_username = $sender->login;
 
         if (strpos($sender_username, '[bot]') or \in_array($sender_username, self::$skip_list, true)) {
-            Log::debug(__FILE__, __LINE__, 'Bot issue comment SKIP', [], Log::INFO);
+            \Log::info('Bot issue comment SKIP', []);
 
             throw new \Exception('skip', 200);
         }

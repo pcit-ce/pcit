@@ -7,10 +7,8 @@ namespace App\Events;
 use App\Repo;
 use App\User;
 use PCIT\Exception\PCITException;
-use PCIT\Framework\Support\Log;
 use PCIT\Runner\BuildData;
 use PCIT\Support\CI;
-use PCIT\Support\Env;
 
 /**
  * 检查仓库是否位于管理员名下.
@@ -35,12 +33,12 @@ class CheckAdmin
         $ci_root = env('CI_ROOT');
 
         while ($ci_root) {
-            Log::debug(__FILE__, __LINE__, 'PCIT already set ci root', [], Log::INFO);
+            \Log::info('PCIT already set ci root', []);
 
             $admin = Repo::getAdmin((int) $build->rid, false, $build->git_type);
 
             if (!$admin) {
-                Log::debug(__FILE__, __LINE__, 'repo admin not found', [], LOG::WARNING);
+                \Log::warning('repo admin not found', []);
 
                 goto a;
             }
@@ -54,13 +52,13 @@ class CheckAdmin
                 $uid = User::getUid($k, $build->git_type);
 
                 if (\in_array($uid, $admin_array, true)) {
-                    Log::debug(__FILE__, __LINE__, 'This repo is ci root\'s repo, continue...', [], Log::INFO);
+                    \Log::info('This repo is ci root\'s repo, continue...', []);
 
                     return;
                 }
             }
 
-            Log::debug(__FILE__, __LINE__, 'This repo is not ci root\'s repo, skip', [], Log::WARNING);
+            \Log::warning('This repo is not ci root\'s repo, skip', []);
 
             a:
 

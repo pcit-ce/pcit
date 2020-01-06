@@ -6,7 +6,6 @@ namespace PCIT\Coding\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Service\OAuth\OAuthInterface;
 
 class Client implements OAuthInterface
@@ -81,7 +80,7 @@ class Client implements OAuthInterface
             )
         );
 
-        Log::connect()->debug('Coding AccessToken Raw '.$json);
+        \Log::debug('Coding AccessToken Raw '.$json);
 
         if (true === $raw) {
             return $json;

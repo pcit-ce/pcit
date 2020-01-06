@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class Member
@@ -22,7 +21,7 @@ class Member
 
         $action = $obj->action;
 
-        Log::debug(__FILE__, __LINE__, 'Receive member event is '.$action, [], Log::INFO);
+        \Log::info('Receive member event is '.$action, []);
 
         $member = $obj->member;
         $member_username = $member->login;
@@ -39,7 +38,7 @@ class Member
 
         $installation_id = $obj->installation->id ?? null;
 
-        Log::debug(null, null, "$action $rid $member_uid", [], Log::INFO);
+        \Log::info("$action $rid $member_uid", []);
 
         $org = ($obj->organization ?? false) ? true : false;
 

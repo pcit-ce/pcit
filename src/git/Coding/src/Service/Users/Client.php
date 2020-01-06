@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Coding\Service\Users;
 
 use Exception;
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Service\CICommon;
 use PCIT\GitHub\Service\Users\Client as GitHubClient;
 
@@ -68,7 +67,7 @@ class Client extends GitHubClient
         $json_obj = json_decode($json);
 
         if (0 !== $json_obj->code) {
-            Log::debug(__FILE__, __LINE__, 'Coding user repo not found');
+            \Log::debug('Coding user repo not found');
 
             throw new Exception('Not Found', 404);
         }

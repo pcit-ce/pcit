@@ -10,7 +10,6 @@ use App\Setting;
 use Exception;
 use PCIT\Exception\PCITException;
 use PCIT\Framework\Support\JSON;
-use PCIT\Framework\Support\Log;
 use PCIT\Runner\BuildData;
 use PCIT\Support\CI;
 
@@ -61,7 +60,7 @@ class Build extends BuildData
 
         $this->config = JSON::beautiful($this->config);
 
-        Log::connect()->emergency('====== Get Build '.$this->build_key_id.' Data Start ======');
+        \Log::emergency('====== Get Build '.$this->build_key_id.' Data Start ======');
 
         $this->getRepoConfig();
 

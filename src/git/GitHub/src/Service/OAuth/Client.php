@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\Log;
 
 class Client implements OAuthInterface
 {
@@ -101,7 +100,7 @@ class Client implements OAuthInterface
 
         $accessToken = $this->curl->post($url);
 
-        Log::connect()->debug('GitHub AccessToken Raw '.$accessToken);
+        \Log::debug('GitHub AccessToken Raw '.$accessToken);
 
         // {"access_token":"47bb","token_type":"bearer","scope":"admin:gpg_key,admin:org"}
 

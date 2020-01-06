@@ -8,7 +8,6 @@ use App\Build;
 use App\Repo;
 use Exception;
 use PCIT\Framework\Support\Date;
-use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 use PCIT\Support\Git;
 
@@ -49,6 +48,6 @@ class WeChatTemplate
             Git::getCommitUrl($git_type, $repo_full_name, $commit_id)
         );
 
-        Log::debug(__FILE__, __LINE__, $result);
+        \Log::debug($result);
     }
 }

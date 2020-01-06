@@ -7,7 +7,6 @@ namespace PCIT\GitHub\Service\Checks;
 use Curl\Curl;
 use Exception;
 use PCIT\Framework\Support\Date;
-use PCIT\Framework\Support\Log;
 
 /**
  * Class Run.
@@ -71,7 +70,7 @@ class Run
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return code is not 201 '.$http_return_code);
+            \Log::debug('Http Return code is not 201 '.$http_return_code);
         }
 
         return $output;
@@ -111,7 +110,7 @@ class Run
         $http_return_header = $this->curl->getCode();
 
         if (200 !== $http_return_header) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_header);
+            \Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_header);
         }
 
         return $output;

@@ -8,7 +8,6 @@ use App\Build;
 use App\Notifications\GitHubAppChecks;
 use App\Repo;
 use PCIT\Framework\Support\JSON;
-use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 use PCIT\Support\CI;
 
@@ -24,7 +23,7 @@ class AliYunRegistry
      */
     public static function handle($json_content): void
     {
-        Log::debug(__FILE__, __LINE__, 'Receive Aliyun Docker Registry Webhooks', [], Log::INFO);
+        \Log::info('Receive Aliyun Docker Registry Webhooks', []);
 
         $obj = json_decode($json_content);
 
@@ -41,7 +40,7 @@ class AliYunRegistry
 
             $name = 'Aliyun Docker Registry Push '.$aliyun_docker_registry_name.':'.$aliyun_docker_registry_tagname;
 
-            Log::debug(__FILE__, __LINE__, $name, [], Log::INFO);
+            \Log::info($name, []);
 
             GitHubAppChecks::send(
                 (int) Build::getCurrentBuildKeyId(

@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Service\Issue;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\Log;
 use TencentAI\TencentAI;
 
 class Client
@@ -101,7 +100,7 @@ class Client
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code Is Not 201 '.$http_return_code);
+            \Log::debug('Http Return Code Is Not 201 '.$http_return_code);
 
             throw new Exception('Create Issue Error', $http_return_code);
         }
@@ -140,7 +139,7 @@ class Client
         $http_return_code = $this->curl->getCode();
 
         if (200 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code Is Not 200 '.$http_return_code);
+            \Log::debug('Http Return Code Is Not 200 '.$http_return_code);
 
             throw new Exception('Edit Issue Error '.$http_return_code);
         }
@@ -179,7 +178,7 @@ class Client
         $http_return_code = $this->curl->getCode();
 
         if (204 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code Is Not 204 '.$http_return_code);
+            \Log::debug('Http Return Code Is Not 204 '.$http_return_code);
 
             throw new Exception('Lock Issue Error', $http_return_code);
         }
@@ -199,7 +198,7 @@ class Client
         $http_return_code = $this->curl->getCode();
 
         if (204 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code Is Not 204 '.$http_return_code);
+            \Log::debug('Http Return Code Is Not 204 '.$http_return_code);
 
             throw new Exception('Unlock Issue Error', $http_return_code);
         }

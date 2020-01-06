@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\Framework\Support\Log;
-
 class Ping
 {
     /**
@@ -17,7 +15,7 @@ class Ping
      */
     public static function handle($json_content)
     {
-        Log::debug(__FILE__, __LINE__, 'receive ping event', [], Log::INFO);
+        \Log::info('receive ping event', []);
 
         $obj = json_decode($json_content);
 

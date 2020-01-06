@@ -6,7 +6,6 @@ namespace PCIT\Runner\Events;
 
 use Exception;
 use PCIT\Framework\Support\Date;
-use PCIT\Framework\Support\Log as LogSupport;
 use PCIT\PCIT;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
@@ -36,7 +35,7 @@ class Log
      */
     public static function drop(int $job_id): void
     {
-        LogSupport::debug(__FILE__, __LINE__, 'Drop prev logs '.$job_id, [], LogSupport::EMERGENCY);
+        \Log::emergency('Drop prev logs '.$job_id, []);
 
         \Cache::store()->del(CacheKey::logHashKey($job_id));
     }
@@ -109,7 +108,7 @@ class Log
                 $exitCode = $image_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
-                    LogSupport::debug(__FILE__, __LINE__, "Container $this->container_id ExitCode is $exitCode, not 0", [], LogSupport::ERROR);
+                    \Log::error("Container $this->container_id ExitCode is $exitCode, not 0", []);
 
                     throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 }

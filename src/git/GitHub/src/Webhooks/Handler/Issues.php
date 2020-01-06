@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\GetAccessToken;
 use App\Issue;
-use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 
 class Issues
@@ -72,7 +71,7 @@ class Issues
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
             ->handle();
 
-        Log::debug(__FILE__, __LINE__, $issue_number.' opened', [], Log::INFO);
+        \Log::info(__FILE__, __LINE__, $issue_number.' opened', []);
 
         return;
     }
@@ -155,7 +154,7 @@ class Issues
             ->handle();
 
         if ('edited' === $action) {
-            Log::debug(__FILE__, __LINE__, 'Edit Issue Comment SKIP', [], Log::INFO);
+            \Log::info('Edit Issue Comment SKIP', []);
 
             return;
         }
@@ -166,7 +165,7 @@ class Issues
             if (1 === $result) {
                 $debug_info = 'Delete Issue Comment SUCCESS';
 
-                Log::debug(__FILE__, __LINE__, $debug_info, [], Log::INFO);
+                \Log::info($debug_info, []);
             }
 
             return;
@@ -178,7 +177,7 @@ class Issues
 
         // self::createComment($rid, $repo_full_name, $issue_number, $body);
 
-        // Log::debug(__FILE__, __LINE__, 'Create AI Bot Issue Comment', [], Log::INFO);
+        // \Log::info('Create AI Bot Issue Comment', []);
     }
 
     /**

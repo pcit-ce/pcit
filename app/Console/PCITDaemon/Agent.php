@@ -8,7 +8,6 @@ use App\Build;
 use App\Events\LogHandle;
 use App\Events\UpdateBuildStatus;
 use App\Job;
-use PCIT\Framework\Support\Log;
 use PCIT\Framework\Support\Subject;
 use PCIT\Support\CI;
 
@@ -36,17 +35,17 @@ class Agent extends Kernel
      */
     public function handle(): void
     {
-        Log::debug(__FILE__, __LINE__, 'Docker connect ...');
+        \Log::debug('Docker connect ...');
 
         try {
             $this->pcit->docker->system->ping(1);
         } catch (\Throwable $e) {
-            Log::debug(__FILE__, __LINE__, $e->getMessage());
+            \Log::debug($e->getMessage());
 
             return;
         }
 
-        Log::debug(__FILE__, __LINE__, 'Docker build Start ...');
+        \Log::debug('Docker build Start ...');
 
         // 取出一个 job,包括 job config, build key id
         $job_data = $this->getJob();
@@ -57,8 +56,7 @@ class Agent extends Kernel
 
         ['id' => $job_id, 'build_id' => $build_key_id] = $job_data;
 
-        Log::debug(__FILE__, __LINE__, 'Handle build jobs',
-            ['job_id' => $job_id], Log::EMERGENCY);
+        \Log::emergency('Handle build jobs', ['job_id' => $job_id]);
 
         $this->subject
             // TODO update build status in progress
@@ -69,7 +67,7 @@ class Agent extends Kernel
         try {
             $this->pcit->runner_agent->handle((int) $job_id);
         } catch (\Throwable $e) {
-            Log::debug(__FILE__, __LINE__, 'Handle job success', ['job_id' => $job_id, 'message' => $e->getMessage()], Log::EMERGENCY);
+            \Log::emergency('Handle job success', ['job_id' => $job_id, 'message' => $e->getMessage()]);
 
             Job::updateFinishedAt((int) $job_id, time());
 
@@ -81,8 +79,7 @@ class Agent extends Kernel
                     ->handle();
             } catch (\Throwable $e) {
                 // catch curl error (timeout,etc)
-                Log::debug(__FILE__, __LINE__,
-                    $e->getMessage(), [], LOG::EMERGENCY);
+                \Log::emergency($e->getMessage(), []);
             }
         }
 

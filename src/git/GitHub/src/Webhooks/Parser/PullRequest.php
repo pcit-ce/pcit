@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class PullRequest
@@ -28,7 +27,7 @@ class PullRequest
 
         $action = $obj->action;
 
-        Log::debug(null, null, 'Receive event', ['pull request' => $action], Log::INFO);
+        \Log::info('Receive event', ['pull request' => $action]);
 
         if (!\in_array($action, ['opened', 'synchronize'], true)) {
             'assigned' === $action && $result = self::assigned($json_content);
@@ -105,7 +104,7 @@ class PullRequest
      */
     public static function labeled($json_content, bool $unlabeled = false)
     {
-        Log::debug(__FILE__, __LINE__, 'Receive pull request labeled event', [], Log::INFO);
+        \Log::info('Receive pull request labeled event', []);
 
         $obj = json_decode($json_content);
 
@@ -136,7 +135,7 @@ class PullRequest
         $org = ($obj->organization ?? false) ? true : false;
 
         if ($unlabeled) {
-            Log::debug(null, null, 'Receive event', ['pull_request' => 'unlabeled'], Log::INFO);
+            \Log::info('Receive event', ['pull_request' => 'unlabeled']);
 
             return [
                 'installation_id' => $installation_id,
@@ -148,7 +147,7 @@ class PullRequest
             ];
         }
 
-        Log::debug(null, null, 'Receive event', ['pull_request' => 'labeled'], Log::INFO);
+        \Log::info('Receive event', ['pull_request' => 'labeled']);
 
         return [
             'installation_id' => $installation_id,
@@ -170,7 +169,7 @@ class PullRequest
      */
     public static function assigned($json_content)
     {
-        Log::debug(null, null, 'Receive event', ['pull request' => 'assigned'], Log::INFO);
+        \Log::info('Receive event', ['pull request' => 'assigned']);
 
         $obj = json_decode($json_content);
 

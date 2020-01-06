@@ -6,7 +6,6 @@ namespace PCIT\Runner\Agent;
 
 use Docker\Container\Client as Container;
 use Exception;
-use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 
 class Cleanup
@@ -61,13 +60,13 @@ class Cleanup
             $docker_volume->remove('pcit_'.$id);
             $docker_volume->remove('pcit_actions_'.$id);
 
-            Log::connect()->emergency('Build Stopped Delete Volume '.$id);
+            \Log::emergency('Build Stopped Delete Volume '.$id);
 
             // clean network
 
             $docker_network->remove('pcit_'.$id);
 
-            Log::connect()->emergency('Build Stopped Delete Network '.$id);
+            \Log::emergency('Build Stopped Delete Network '.$id);
         }
     }
 
@@ -85,7 +84,7 @@ class Cleanup
                 continue;
             }
 
-            Log::connect()->emergency('Delete Container '.$id);
+            \Log::emergency('Delete Container '.$id);
 
             $container->remove($id, true, true);
         }

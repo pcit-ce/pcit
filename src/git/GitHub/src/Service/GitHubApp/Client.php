@@ -8,7 +8,6 @@ use Curl\Curl;
 use Exception;
 use PCIT\Framework\Support\Env;
 use PCIT\Framework\Support\JWT;
-use PCIT\Framework\Support\Log;
 
 /**
  * Class Installations.
@@ -77,7 +76,7 @@ class Client
         $http_return_code = $this->curl->getCode();
 
         if (204 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 204 '.$http_return_code);
+            \Log::debug('Http Return Code is not 204 '.$http_return_code);
 
             throw new Exception('GitHub App Add or remove repo to installation_id error', $http_return_code);
         }
@@ -123,14 +122,14 @@ class Client
         $private_key_path = $private_key_path ??
             base_path().'framework/storage/private_key/private.key';
 
-        Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token ...');
+        \Log::debug('Get GitHub app Access Token ...');
 
         $redis = \Cache::store();
 
         $access_token = $redis->get("github_app_{$installation_id}_access_token");
 
         if ($access_token) {
-            Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token from cache success');
+            \Log::debug('Get GitHub app Access Token from cache success');
 
             return $access_token;
         }
@@ -147,7 +146,7 @@ class Client
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
-            Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
+            \Log::debug('Http Return Code is not 201 '.$http_return_code);
 
             \Cache::store()->delete('pcit/github_app_jwt');
 
@@ -158,7 +157,7 @@ class Client
 
         $redis->set("github_app_{$installation_id}_access_token", $access_token, 58 * 60);
 
-        Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token from github success');
+        \Log::debug('Get GitHub app Access Token from github success');
 
         return $access_token;
     }

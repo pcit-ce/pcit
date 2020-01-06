@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class Delete
@@ -18,7 +17,7 @@ class Delete
      */
     public static function handle($json_content)
     {
-        Log::debug(null, null, 'Receive event', ['delete'], Log::INFO);
+        \Log::info('Receive event', ['delete']);
 
         $obj = json_decode($json_content);
 

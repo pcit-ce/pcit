@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Gitee\Service\OAuth;
 
 use Curl\Curl;
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Service\OAuth\Client as GitHubClient;
 use PCIT\GitHub\Service\OAuth\OAuthInterface;
 
@@ -58,7 +57,7 @@ class Client extends GitHubClient implements OAuthInterface
 
         $json = $this->curl->post($url);
 
-        Log::connect()->debug('Gitee AccessToken Raw '.$json);
+        \Log::debug('Gitee AccessToken Raw '.$json);
 
         // {"access_token":"52b","token_type":"bearer","expires_in":86400,"refresh_token":"c31e9","scope":"user_info projects pull_requests issues notes keys hook groups gists","created_at":1523757514}
 
@@ -79,7 +78,7 @@ class Client extends GitHubClient implements OAuthInterface
 
         $json = $this->curl->post($url);
 
-        Log::connect()->debug('Gitee RefreshAccessToken Raw '.$json);
+        \Log::debug('Gitee RefreshAccessToken Raw '.$json);
 
         return $this->parseTokenResult($json);
     }

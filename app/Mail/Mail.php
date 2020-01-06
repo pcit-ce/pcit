@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Mail;
 
 use Exception;
-use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -54,13 +53,9 @@ class Mail
             self::$mail->Body = $body;
 
             self::$mail->send();
-            Log::debug(__FILE__, __LINE__, 'Message has been sent');
+            \Log::debug('Message has been sent');
         } catch (Exception $e) {
-            Log::debug(
-                __FILE__,
-                __LINE__,
-                'Message could not be sent. Mailer Error: ', self::$mail->ErrorInfo
-            );
+            \Log::debug('Message could not be sent. Mailer Error: ', self::$mail->ErrorInfo);
         } finally {
             self::$mail = null;
         }

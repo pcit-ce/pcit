@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\Framework\Support\Log;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Sender;
 
@@ -23,7 +22,7 @@ class Installation
 
         $action = $obj->action;
 
-        Log::debug(null, null, 'Receive event', ['installation' => $action], Log::INFO);
+        \Log::info('Receive event', ['installation' => $action]);
 
         $installation = $obj->installation;
 
@@ -58,7 +57,7 @@ class Installation
 
         $action = $obj->action;
 
-        Log::debug(null, null, 'Receive event', ['installation_repositories' => $action], Log::INFO);
+        \Log::info('Receive event', ['installation_repositories' => $action]);
 
         $installation = $obj->installation;
 

@@ -6,7 +6,6 @@ namespace App\Events;
 
 use App\GetAccessToken;
 use App\Repo;
-use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Support\CI;
@@ -27,7 +26,7 @@ class AutoMerge
     {
         $build = $this->build;
 
-        Log::debug(__FILE__, __LINE__, 'check auto merge', [], Log::INFO);
+        \Log::info('check auto merge', []);
 
         $build_status = $build->build_status;
 
@@ -42,17 +41,13 @@ class AutoMerge
         $auto_merge_method = '';
 
         if ((CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $build_status) && $auto_merge_label) {
-            Log::debug(__FILE__, __LINE__, 'already set auto merge', [], Log::INFO);
+            \Log::info('already set auto merge', []);
 
             $repo_array = explode('/', Repo::getRepoFullName($build->rid, $build->git_type));
 
             try {
                 if ($pcit->pull_request->isMerged($repo_array[0], $repo_array[1], $build->pull_request_number)) {
-                    Log::debug(
-                        __FILE__,
-                        __LINE__,
-                        'already merged, skip', [], Log::WARNING
-                    );
+                    \Log::warning('already merged, skip', []);
 
                     return;
                 }
@@ -69,9 +64,9 @@ class AutoMerge
                         $build->commit_id,
                         (int) $auto_merge_method
                     );
-                Log::debug(__FILE__, __LINE__, 'auto merge success, method is '.$auto_merge_method, [], Log::INFO);
+                \Log::info('auto merge success, method is '.$auto_merge_method, []);
             } catch (\Throwable $e) {
-                Log::debug(__FILE__, __LINE__, $e->__toString());
+                \Log::debug($e->__toString());
             }
         }
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Events;
 
 use App\Job;
-use PCIT\Framework\Support\Log;
 use PCIT\Support\CacheKey;
 
 /**
@@ -69,9 +68,7 @@ class LogHandle
                 $result = iconv('utf-8', 'utf-8//IGNORE', $v);
                 $logs[$k] = $result;
             } catch (\Throwable $e) {
-                Log::debug(__FILE__, __LINE__,
-                'iconv handle error '.$e->getMessage(), ['pipeline' => $k],
-                Log::EMERGENCY);
+                \Log::emergency('iconv handle error '.$e->getMessage(), ['pipeline' => $k]);
             }
         }
 
@@ -85,15 +82,12 @@ class LogHandle
         $result = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
         if (!$result) {
-            Log::debug(__FILE__, __LINE__,
-                'job Log empty, skip', ['jobId' => $this->jobId], Log::WARNING);
+            \Log::warning('job Log empty, skip', ['jobId' => $this->jobId]);
 
             return;
         }
 
-        Log::debug(__FILE__, __LINE__,
-            'Handle job log', ['jobId' => $this->jobId, 'pipeline' => $pipeline],
-            Log::EMERGENCY);
+        \Log::emergency('Handle job log', ['jobId' => $this->jobId, 'pipeline' => $pipeline]);
 
         $folder_name = sys_get_temp_dir().'/.pcit';
 
