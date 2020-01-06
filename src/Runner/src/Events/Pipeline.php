@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\HTTP;
 use PCIT\Framework\Support\Log;
 use PCIT\PCIT as PCIT;
@@ -53,7 +52,7 @@ class Pipeline
         $this->matrix_config = $matrix_config;
         $this->build = $build;
         $this->client = $client;
-        $this->cache = Cache::store();
+        $this->cache = \Cache::store();
         $this->pluginHandler = new PluginHandler();
     }
 

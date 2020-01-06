@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Providers;
 
-use PCIT\Framework\Support\Cache;
 use PCIT\Service\Kernel\WeChat\Template\WeChatClient;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -19,7 +18,7 @@ class WeChatProvider implements ServiceProviderInterface
                 $app['config']['wechat']['app_id'],
                 $app['config']['wechat']['app_secret'],
                 $app['config']['wechat']['token'],
-                Cache::store(),
+                \Cache::store(),
                 $app['config']['tencent_ai']['app_id'],
                 $app['config']['tencent_ai']['app_key']
             );

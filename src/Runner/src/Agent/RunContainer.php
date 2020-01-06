@@ -9,7 +9,6 @@ use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
 use PCIT\Exception\PCITException;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\Log as LogSupport;
 use PCIT\PCIT as PCIT;
 use PCIT\Runner\Events\Log;
@@ -38,7 +37,7 @@ class RunContainer
         $docker = app(PCIT::class)->docker;
         $this->docker_container = $docker->container;
         $this->docker_network = $docker->network;
-        $this->cache = Cache::store();
+        $this->cache = \Cache::store();
     }
 
     /**
@@ -172,7 +171,7 @@ class RunContainer
     {
         $type = $download ? 'download' : 'upload';
 
-        $containerConfig = Cache::store()->get(CacheKey::cacheKey($job_id, $type));
+        $containerConfig = \Cache::store()->get(CacheKey::cacheKey($job_id, $type));
 
         if (!$containerConfig) {
             return;
@@ -298,7 +297,7 @@ class RunContainer
     {
         LogSupport::debug(__FILE__, __LINE__, 'Run job services', ['job_id' => $job_id], LogSupport::EMERGENCY);
 
-        $container_configs = Cache::store()->hgetall(CacheKey::serviceHashKey($job_id));
+        $container_configs = \Cache::store()->hgetall(CacheKey::serviceHashKey($job_id));
 
         foreach ($container_configs as $service => $container_config) {
             $container_id = $this->docker_container

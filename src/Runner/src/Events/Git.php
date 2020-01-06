@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\Client;
@@ -120,7 +119,7 @@ class Git
 
         $config = $this->generateDocker($git_env, $git_image, $hosts, $client->job_id, $client->workdir);
 
-        Cache::store()->set(CacheKey::cloneKey($client->job_id), $config);
+        \Cache::store()->set(CacheKey::cloneKey($client->job_id), $config);
     }
 
     public function generateDocker($git_env, $git_image, $hosts, $job_id, $workdir, $binds = [])

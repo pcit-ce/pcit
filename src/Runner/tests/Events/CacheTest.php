@@ -35,7 +35,7 @@ class CacheTest extends TestCase
 
         $cache->handle();
 
-        $this->cache = \PCIT\Framework\Support\Cache::store()->get(CacheKey::cacheKey(1));
+        $this->cache = \Cache::store()->get(CacheKey::cacheKey(1));
     }
 
     /**

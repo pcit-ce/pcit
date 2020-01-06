@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\GetAccessToken;
 use App\Issue;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\Log;
 use PCIT\PCIT;
 
@@ -175,7 +174,7 @@ class Issues
 
         $last_insert_id = Issue::insertComment($rid, $issue_id, $comment_id, $issue_number, $body, $sender_uid, $created_at);
 
-        Cache::store()->lPush(self::$cache_key_github_issue, $last_insert_id);
+        \Cache::store()->lPush(self::$cache_key_github_issue, $last_insert_id);
 
         // self::createComment($rid, $repo_full_name, $issue_number, $body);
 

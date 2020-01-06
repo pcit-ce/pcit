@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Framework\Support;
+namespace PCIT\Framework\Cache;
 
 use Exception;
 use Redis;

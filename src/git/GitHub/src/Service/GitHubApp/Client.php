@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Service\GitHubApp;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\Env;
 use PCIT\Framework\Support\JWT;
 use PCIT\Framework\Support\Log;
@@ -126,7 +125,7 @@ class Client
 
         Log::debug(__FILE__, __LINE__, 'Get GitHub app Access Token ...');
 
-        $redis = Cache::store();
+        $redis = \Cache::store();
 
         $access_token = $redis->get("github_app_{$installation_id}_access_token");
 
@@ -150,7 +149,7 @@ class Client
         if (201 !== $http_return_code) {
             Log::debug(__FILE__, __LINE__, 'Http Return Code is not 201 '.$http_return_code);
 
-            Cache::store()->delete('pcit/github_app_jwt');
+            \Cache::store()->delete('pcit/github_app_jwt');
 
             throw new Exception('Get GitHub App AccessToken Error '.$access_token_json, $http_return_code);
         }
@@ -171,7 +170,7 @@ class Client
      */
     private function getJWT(string $private_key_path)
     {
-        $jwt = Cache::store()->get('pcit/github_app_jwt');
+        $jwt = \Cache::store()->get('pcit/github_app_jwt');
 
         if ($jwt) {
             return $jwt;
@@ -179,7 +178,7 @@ class Client
 
         $jwt = JWT::getJWT($private_key_path, (int) env('CI_GITHUB_APP_ID'));
 
-        Cache::store()->set('pcit/github_app_jwt', $jwt, 8 * 60);
+        \Cache::store()->set('pcit/github_app_jwt', $jwt, 8 * 60);
 
         return $jwt;
     }

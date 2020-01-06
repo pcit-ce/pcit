@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Events;
 
 use App\Job;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\Log;
 use PCIT\Support\CacheKey;
 
@@ -19,7 +18,7 @@ class LogHandle
     public function __construct(int $jobId)
     {
         $this->jobId = $jobId;
-        $this->cache = Cache::store();
+        $this->cache = \Cache::store();
     }
 
     /**

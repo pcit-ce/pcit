@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Webhooks;
 
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\Env;
 
 /**
@@ -83,7 +82,7 @@ class Client
      */
     private function pushCache(string $type, $content)
     {
-        return Cache::store()->lpush($this->cache_key, json_encode([$this->git_type, $type, $content]));
+        return \Cache::store()->lpush($this->cache_key, json_encode([$this->git_type, $type, $content]));
     }
 
     /**
@@ -95,7 +94,7 @@ class Client
      */
     public function getCache()
     {
-        return Cache::store()->rPop($this->cache_key);
+        return \Cache::store()->rPop($this->cache_key);
     }
 
     /**
@@ -107,7 +106,7 @@ class Client
      */
     public function rollback(string $content)
     {
-        return Cache::store()->lPush($this->cache_key, $content);
+        return \Cache::store()->lPush($this->cache_key, $content);
     }
 
     /**
@@ -119,7 +118,7 @@ class Client
      */
     public function pushSuccessCache(string $content)
     {
-        return Cache::store()->lPush($this->cache_key.'_success', $content);
+        return \Cache::store()->lPush($this->cache_key.'_success', $content);
     }
 
     /**
@@ -139,7 +138,7 @@ class Client
      */
     public function pushErrorCache(string $content)
     {
-        return Cache::store()->lPush($this->cache_key.'_error', $content);
+        return \Cache::store()->lPush($this->cache_key.'_error', $content);
     }
 
     /**

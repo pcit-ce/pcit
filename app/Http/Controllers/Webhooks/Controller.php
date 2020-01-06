@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Webhooks;
 use App\Repo;
 use Error;
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\Env;
 use PCIT\Framework\Support\Session;
 use PCIT\PCIT;
@@ -189,7 +188,7 @@ class Controller
 
         Repo::updateBuildActive($status, $gitType, $repoFullName);
 
-        Cache::store()->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
+        \Cache::store()->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
     }
 
     /**

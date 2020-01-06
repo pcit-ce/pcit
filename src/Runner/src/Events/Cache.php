@@ -95,7 +95,7 @@ class Cache
             'INPUT_CACHE_DOWNLOAD=true',
         ];
 
-        \PCIT\Framework\Support\Cache::store()
+        \Cache::store()
             ->set(CacheKey::cacheKey($this->jobId, 'download'),
                 $this->getContainerConfig($dockerContainer, $env)
             );
@@ -106,7 +106,7 @@ class Cache
             return;
         }
 
-        \PCIT\Framework\Support\Cache::store()
+        \Cache::store()
             ->set(CacheKey::cacheKey($this->jobId, 'upload'),
                 $this->getContainerConfig($dockerContainer, $env)
             );

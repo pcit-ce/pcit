@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Framework\Support\Cache;
 use PCIT\Runner\Events\Notifications;
 use PCIT\Support\CacheKey;
 use Symfony\Component\Yaml\Yaml;
@@ -29,7 +28,7 @@ class NotificationTest extends TestCase
 
         $notification->handle();
 
-        $this->notifications = Cache::store()->hGet(CacheKey::notificationsHashKey(1), 'email');
+        $this->notifications = \Cache::store()->hGet(CacheKey::notificationsHashKey(1), 'email');
     }
 
     /**

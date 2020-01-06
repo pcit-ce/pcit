@@ -6,7 +6,6 @@ namespace PCIT\Runner\Events;
 
 use Docker\Container\Client;
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\PCIT;
 use PCIT\Runner\Parse;
 use PCIT\Support\CacheKey;
@@ -81,7 +80,7 @@ class Services
                 ->setCreateJson(null)
                 ->getCreateJson();
 
-            Cache::store()->hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
+            \Cache::store()->hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
         }
     }
 }

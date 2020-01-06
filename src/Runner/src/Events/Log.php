@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\Date;
 use PCIT\Framework\Support\Log as LogSupport;
 use PCIT\PCIT;
@@ -27,7 +26,7 @@ class Log
         $this->job_id = $job_id;
         $this->container_id = $container_id;
         $this->pipeline = $pipeline;
-        $this->cache = Cache::store();
+        $this->cache = \Cache::store();
     }
 
     /**
@@ -39,7 +38,7 @@ class Log
     {
         LogSupport::debug(__FILE__, __LINE__, 'Drop prev logs '.$job_id, [], LogSupport::EMERGENCY);
 
-        Cache::store()->del(CacheKey::logHashKey($job_id));
+        \Cache::store()->del(CacheKey::logHashKey($job_id));
     }
 
     /**

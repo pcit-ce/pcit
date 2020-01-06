@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Support;
 
-use PCIT\Framework\Support\Cache;
-
 class CacheKey
 {
     /*
@@ -53,7 +51,7 @@ class CacheKey
 
     public static function pipelineDumpListKey(int $jobId, string $type = 'pipeline')
     {
-        $cache = Cache::store();
+        $cache = \Cache::store();
         $sourceKey = 'pcit/'.$type.'/list/'.$jobId;
 
         return $cache->dump($sourceKey);
@@ -61,7 +59,7 @@ class CacheKey
 
     public static function pipelineListCopyKey(int $jobId, string $type = 'pipeline')
     {
-        $cache = Cache::store();
+        $cache = \Cache::store();
 
         $copyKey = 'pcit/'.$type.'/list_copy/'.$jobId;
         $cache->del($copyKey);
@@ -105,7 +103,7 @@ class CacheKey
      */
     public static function flush(int $jobId): void
     {
-        $cache = Cache::store();
+        $cache = \Cache::store();
 
         $result = $cache->keys('pcit/*/'.$jobId);
 

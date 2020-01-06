@@ -71,3 +71,7 @@ class Response extends \PCIT\Framework\Support\Facades\Response
 class Request extends \PCIT\Framework\Support\Facades\Request
 {
 }
+
+class Cache extends \PCIT\Framework\Support\Facades\Cache
+{
+}

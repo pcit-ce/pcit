@@ -10,7 +10,6 @@ use App\Events\Build as BuildEvent;
 use App\Events\CheckAdmin;
 use Error;
 use Exception;
-use PCIT\Framework\Support\Cache;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\HTTP;
 use PCIT\Framework\Support\Log;
@@ -99,7 +98,7 @@ class Server extends Kernel
     public function closeResource(): void
     {
         DB::close();
-        Cache::close();
+        \Cache::close();
         HTTP::close();
         Log::close();
         TencentAI::close();
