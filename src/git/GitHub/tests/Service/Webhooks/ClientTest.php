@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Tests\Service\Webhooks;
 
 use PCIT\Framework\Http\Request;
-use PCIT\PCIT as PCIT;
+use PCIT\PCIT;
 use Tests\TestCase;
 
 class ClientTest extends TestCase

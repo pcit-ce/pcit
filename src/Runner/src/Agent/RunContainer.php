@@ -9,7 +9,7 @@ use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
 use PCIT\Exception\PCITException;
-use PCIT\PCIT as PCIT;
+use PCIT\PCIT;
 use PCIT\Runner\Events\Log;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;

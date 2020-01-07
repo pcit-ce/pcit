@@ -87,10 +87,10 @@ steps: # pipeline
       # - composer update
 
   script:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine # ！支持变量！
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine # 支持变量
     pull: true # default is false # 不支持变量
     privileged: true # default is false # 不支持变量
-    environment: # 不支持变量
+    environment:
       - CI_REDIS_HOST=redis
       - CI_REDIS_PORT=6379
       - CI_REDIS_DATABASE=15
@@ -237,7 +237,7 @@ steps: # pipeline
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
-    with: # ！支持变量！
+    with: # 支持变量
       keep_history: true
       target_branch: gh-pages
       git_url: gitee.com/pcit-ce/pcit
@@ -432,17 +432,18 @@ steps: # pipeline
       token: ${GITHUB_TOKEN}
 
   coding_openapi:
-    image: ecoding/apidoc-publisher:20200102.1
+    image: ecoding/apidoc-publisher
     environment:
-    # - ACCESS_TOKEN=${CODING_OPENAPI_TOKEN}
+    - ACCESS_TOKEN=${CODING_OPENAPI_TOKEN}
     - APIDOC_TEAM=pcit
     - APIDOC_PROJECT=coding-demo
     - APIDOC_ID=2
     - APIDOC_RELEASE_TYPE=file
     - PCIT_URL=https://ci2.khs1994.com:10000
     run:
-    - curl -fsSL ${PCIT_URL}/api/openapi?coding=true -o /opt/data.txt
-    - sh /my_shell/api_doc_release.sh
+      # - curl -fsSL ${PCIT_URL}/api/openapi?coding=true -o /opt/data.txt
+      - cp openapi/openapi.json /opt/data.txt
+      - sh /my_shell/api_doc_release.sh
 
 # 配置服务
 services:

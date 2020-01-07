@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use Exception;
-use PCIT\Framework\Support\HTTP;
-use PCIT\PCIT as PCIT;
+use PCIT\Framework\Support\HttpClient;
+use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\CIDefault\Commands;
 use PCIT\Runner\CIDefault\Image;
@@ -107,9 +107,22 @@ class Pipeline
 
     /**
      * 整合 pipelineEnv systemEnv matrixEnv.
+     *
+     * @param array $pipelineEnv ['k=v']
+     *
+     * @return array ['k=v']
      */
     public function handleEnv(array $pipelineEnv): array
     {
+        $pre_env = [];
+
+        foreach ($pipelineEnv as $env) {
+            [$key,$value] = explode('=', $env);
+            $pre_env[$key] = $value;
+        }
+
+        $pipelineEnv = (new EnvHandler())->handle($pre_env, $this->build->env);
+
         $preEnv = array_merge($pipelineEnv, $this->client->system_env);
 
         if (!$this->matrix_config) {
@@ -178,7 +191,7 @@ class Pipeline
 
             // 处理插件
             if ($settings) {
-                $preEnv = array_merge($preEnv, $this->pluginHandler->handle($settings, $preEnv));
+                $preEnv = array_merge($preEnv, $this->pluginHandler->handleSettings($settings, $preEnv));
             }
 
             // 处理构建条件
@@ -328,7 +341,7 @@ class Pipeline
         $this->actionsGitHandler($step, $repo, $ref);
 
         // action.yml
-        $action_yml = HTTP::get(
+        $action_yml = HttpClient::get(
             'https://raw.githubusercontent.com/'.$repo.'/'.$ref.'/action.yml',
             null,
             [],

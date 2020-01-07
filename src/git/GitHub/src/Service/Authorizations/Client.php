@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Authorizations;
 
 use Exception;
-use PCIT\PCIT as PCIT;
+use PCIT\PCIT;
 
 /**
  * @see https://developer.github.com/v3/oauth_authorizations/

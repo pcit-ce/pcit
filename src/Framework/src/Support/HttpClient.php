@@ -7,7 +7,7 @@ namespace PCIT\Framework\Support;
 use Curl\Curl;
 use Exception;
 
-class HTTP
+class HttpClient
 {
     private static $curl;
 

@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Repo;
 use Exception;
-use PCIT\Framework\Support\HTTP;
+use PCIT\Framework\Support\HttpClient;
 use PCIT\Support\Git;
 use Symfony\Component\Yaml\Yaml;
 
@@ -40,9 +40,9 @@ class GetConfig
         foreach ($configName as $file_name) {
             $url = Git::getRawUrl($git_type, $repo_full_name, $commit_id, $file_name);
 
-            $yaml_file_content = HTTP::get($url, null, [], 20);
+            $yaml_file_content = HttpClient::get($url, null, [], 20);
 
-            if (404 !== Http::getCode()) {
+            if (404 !== HttpClient::getCode()) {
                 return $yaml_file_content;
             }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Kernel\WeChat\Template;
 
-use PCIT\PCIT as PCIT;
+use PCIT\PCIT;
 
 class WeChatClient
 {

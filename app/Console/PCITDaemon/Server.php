@@ -11,7 +11,7 @@ use App\Events\CheckAdmin;
 use Error;
 use Exception;
 use PCIT\Framework\Support\DB;
-use PCIT\Framework\Support\HTTP;
+use PCIT\Framework\Support\HttpClient;
 use PCIT\Framework\Support\Subject;
 use PCIT\Support\CI;
 use PCIT\Support\Git;
@@ -97,7 +97,7 @@ class Server extends Kernel
     {
         DB::close();
         \Cache::close();
-        HTTP::close();
+        HttpClient::close();
         \Log::close();
         TencentAI::close();
     }

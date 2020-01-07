@@ -9,9 +9,9 @@ use PHPUnit\Framework\TestCase;
 
 class PluginHandlerTest extends TestCase
 {
-    public function testHandle(): void
+    public function test_handleSettings(): void
     {
-        $result = (new PluginHandler())->handle(
+        $result = (new PluginHandler())->handleSettings(
         [
             'upload_dir' => '${PCIT_BUILD_ID}/ui/nightly/${PCIT_COMMIT}',
             'local_dir' => '${PCIT_COMMIT}',
