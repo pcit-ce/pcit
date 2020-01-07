@@ -22,4 +22,8 @@ return [
 
         App\Providers\AppServiceProvider::class,
     ],
+    'cache' => [
+        'driver' => 'redis',
+        // 'driver' => 'file',
+    ],
 ];

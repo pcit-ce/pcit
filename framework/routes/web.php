@@ -233,10 +233,16 @@ Route::get('api/ci/github_trending/{language}/{since}', 'System\SystemController
 Route::get('api/metrics', 'System\Metrics');
 
 Route::get('api/healthz', 'System\Healthz');
+Route::get('api/healthz/cache', 'System\Healthz@cache');
+Route::get('api/healthz/database', 'System\Healthz@database');
 
 Route::get('api/readyz', 'System\Healthz');
+Route::get('api/readyz/cache', 'System\Healthz@cache');
+Route::get('api/readyz/database', 'System\Healthz@database');
 
 Route::get('api/livez', 'System\Healthz');
+Route::get('api/livez/cache', 'System\Healthz@cache');
+Route::get('api/livez/database', 'System\Healthz@database');
 
 Route::get('api/openapi', 'System\OpenAPI');
 Route::get('api/openapi/v3', 'System\OpenAPI');
