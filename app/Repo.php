@@ -206,6 +206,11 @@ EOF;
      */
     public static function allByUsername(string $username, $git_type = 'github')
     {
+        $uid = User::getUid($username, $git_type);
+        if ('coding' === $git_type) {
+            return self::allByAdmin((int) $uid, false, $git_type);
+        }
+
         $sql = "SELECT rid FROM repo WHERE git_type=? AND repo_full_name LIKE \"$username/%\"";
 
         $result = DB::select($sql, [$git_type]);
@@ -226,9 +231,9 @@ select repo.rid,
        builds.build_status,
        builds.commit_id
 from repo
-       left join builds on repo.default_branch = builds.branch 
-       and repo.rid = builds.rid and builds.event_type='push' 
-                             and repo.repo_full_name LIKE "$username/%" 
+       left join builds on repo.default_branch = builds.branch
+       and repo.rid = builds.rid and builds.event_type='push'
+                             and repo.repo_full_name LIKE "$username/%"
 where repo.git_type = "$git_type"
     and repo.rid = $rid order by build_id DESC limit 1;
 

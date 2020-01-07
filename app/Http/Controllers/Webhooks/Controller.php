@@ -246,13 +246,11 @@ class Controller
   "token": "$token",
   "type_push": true,
   "type_mr_pr": true,
-  "type_topic": true,
-  "type_member": true,
-  "type_comment": true,
+  "type_agile": true,
   "type_document": true,
-  "type_watch": true,
-  "type_star": true,
-  "type_task": true
+  "type_member": true,
+  "type_artifact": true,
+  "type_ci": true
 }
 EOF;
     }

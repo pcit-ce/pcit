@@ -139,7 +139,7 @@ class PCIT extends Container
             $this['curl_config'] = [
                 null, false,
                 [
-                    'Authorization' => 'access_token '.$this['config']['coding']['access_token'],
+                    'x-coding-token' => 'access_token '.$this['config']['coding']['access_token'],
                 ],
             ];
         } else {

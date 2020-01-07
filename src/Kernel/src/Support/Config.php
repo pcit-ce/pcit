@@ -25,6 +25,7 @@ class Config
                 'client_secret' => getenv('CI_CODING_CLIENT_SECRET'),
                 'callback_url' => getenv('CI_CODING_CALLBACK_URL'),
                 'access_token' => $config['coding_access_token'] ?? null,
+                'team' => getenv('CI_CODING_TEAM'),
             ],
             'gitee' => [
                 'client_id' => getenv('CI_GITEE_CLIENT_ID'),

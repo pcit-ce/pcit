@@ -12,6 +12,11 @@ class Client extends GitHubClient
 {
     use CICommon;
 
+    public function getAccessToken()
+    {
+        return '?access_token='.explode(' ', $this->curl->headers['x-coding-token'])[1];
+    }
+
     /**
      * @param string $username
      *
@@ -27,7 +32,7 @@ class Client extends GitHubClient
             $url = $this->api_url.'/account/key'.$username;
         }
 
-        $json = $this->curl->get($url);
+        $json = $this->curl->get($url.$this->getAccessToken());
 
         if ($raw) {
             return $json;
@@ -43,7 +48,7 @@ class Client extends GitHubClient
 
         return [
             'uid' => $obj->id,
-            'name' => $obj->global_key,
+            'name' => $obj->name,
             'email' => $obj->email ?? 'null',
             'pic' => $obj->avatar,
         ];
@@ -62,7 +67,7 @@ class Client extends GitHubClient
             $url = $this->api_url.'/api/user/'.$username.'/projects/public';
         }
 
-        $json = $this->curl->get($url);
+        $json = $this->curl->get($url.$this->getAccessToken());
 
         $json_obj = json_decode($json);
 

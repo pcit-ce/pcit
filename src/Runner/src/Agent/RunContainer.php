@@ -221,7 +221,7 @@ class RunContainer
         (new Log($job_id, $container_id, $pipeline))->handle();
 
         \Log::emergency('Run job container success', [
-            'job_id' => $job_id, ], );
+            'job_id' => $job_id, ]);
     }
 
     /**

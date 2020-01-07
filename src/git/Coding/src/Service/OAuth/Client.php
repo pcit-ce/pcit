@@ -10,12 +10,6 @@ use PCIT\GitHub\Service\OAuth\OAuthInterface;
 
 class Client implements OAuthInterface
 {
-    const API_URL = 'https://coding.net/api';
-
-    const URL = 'https://coding.net/oauth_authorize.html?';
-
-    const POST_URL = 'https://coding.net/api/oauth/access_token?';
-
     private $curl;
 
     private $clientId;
@@ -25,6 +19,14 @@ class Client implements OAuthInterface
     private $callbackUrl;
 
     private $scope;
+
+    private $baseurl;
+
+    private $url;
+
+    private $api_url;
+
+    private $post_url;
 
     /**
      * Coding constructor.
@@ -36,6 +38,18 @@ class Client implements OAuthInterface
         $this->clientId = $config['client_id'];
         $this->clientSecret = $config['client_secret'];
         $this->callbackUrl = $config['callback_url'];
+
+        $team = $config['team'];
+
+        if (!$team) {
+            throw new \Exception('please set env CI_CODING_TEAM');
+        }
+
+        $this->baseurl = 'https://'.$team.'.coding.net/';
+        $this->url = $this->baseurl.'oauth_authorize.html?';
+        $this->post_url = $this->baseurl.'api/oauth/access_token?';
+        $this->api_url = $this->baseurl.'api';
+
         $all_scope = [
             'user',
             'user:email',
@@ -56,7 +70,7 @@ class Client implements OAuthInterface
 
     public function getLoginUrl(?string $state): string
     {
-        $url = $this::URL.http_build_query([
+        $url = $this->url.http_build_query([
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->callbackUrl,
                 'response_type' => 'code',
@@ -71,7 +85,7 @@ class Client implements OAuthInterface
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {
-        $json = $this->curl->post($this::POST_URL.http_build_query([
+        $json = $this->curl->post($this->post_url.http_build_query([
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,
                     'grant_type' => 'authorization_code',

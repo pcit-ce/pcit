@@ -27,7 +27,7 @@ class RepositoriesController
     /**
      * This returns a list of repositories an owner has access to.
      *
-     * /{git_type}/{username}/repos
+     * /repos/{git_type}/{username}
      *
      * @return array|string
      *
