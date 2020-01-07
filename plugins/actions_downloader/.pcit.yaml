@@ -1,0 +1,27 @@
+steps:
+  actions_branch:
+    image: github://actions/checkout@master
+    with:
+      fetch-depth: 1
+      path: test_git
+      token: ${GITHUB_TOKEN}
+
+  cleanup_branch:
+  - rm -rf /var/run/actions/actions/checkout
+
+  actions_tag:
+    image: github://actions/checkout@v2.0.0
+    with:
+      fetch-depth: 1
+      path: test_git
+      token: ${GITHUB_TOKEN}
+
+  cleanup_tag:
+  - rm -rf /var/run/actions/actions/checkout
+
+  actions_sha:
+    image: github://actions/checkout@c85684db76ba6ef08713c10cf4befe3318887415
+    with:
+      fetch-depth: 1
+      path: test_git
+      token: ${GITHUB_TOKEN}

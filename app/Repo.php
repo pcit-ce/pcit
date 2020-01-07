@@ -206,8 +206,9 @@ EOF;
      */
     public static function allByUsername(string $username, $git_type = 'github')
     {
-        $uid = User::getUid($username, $git_type);
         if ('coding' === $git_type) {
+            $uid = User::getUid($username, $git_type);
+
             return self::allByAdmin((int) $uid, false, $git_type);
         }
 

@@ -128,3 +128,16 @@ jobs:
         message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
         target_branch: master
         username: khs1994
+    - name: sync-plugin-actions-downloader
+      uses: docker://pcit/pages
+      env:
+        PCIT: true
+      with:
+        email: khs1994@khs1994.com
+        git_token: ${{ secrets.PCIT_GIT_TOKEN }}
+        git_url: github.com/pcit-plugins/pcit-actions_downloader
+        keep_history: "true"
+        local_dir: plugins/actions_downloader
+        message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        target_branch: master
+        username: khs1994
