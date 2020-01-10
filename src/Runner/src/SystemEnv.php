@@ -36,6 +36,8 @@ class SystemEnv
             'PCIT_EVENT_TYPE='.$this->build->event_type,
             'PCIT_PULL_REQUEST=false',
             'PCIT_REPO_SLUG='.$this->build->repo_full_name,
+
+            // 'PCIT_REF'
         ];
 
         if ($this->build->pull_request_number) {

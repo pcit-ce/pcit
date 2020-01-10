@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Runner\Agent;
+namespace PCIT\Runner\Agent\Docker;
 
 use App\Build;
 use App\Job;
@@ -10,11 +10,12 @@ use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
 use PCIT\Exception\PCITException;
 use PCIT\PCIT;
-use PCIT\Runner\Events\Log;
+use PCIT\Runner\Agent\Docker\Log as ContainerLog;
+use PCIT\Runner\Agent\Interfaces\RunnerHandlerInterface;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 
-class RunContainer
+class DockerHandler implements RunnerHandlerInterface
 {
     /**
      * @var Container
@@ -25,6 +26,8 @@ class RunContainer
      * @var Network
      */
     private $docker_network;
+
+    private $job_id;
 
     /**
      * RunContainer constructor.
@@ -91,14 +94,47 @@ class RunContainer
      */
     private function handleJob(int $job_id): void
     {
-        Log::drop($job_id);
+        $this->job_id = $job_id;
+        $cache = $this->cache;
+
+        // drop prev log
+        $this->dropLog();
 
         \Log::emergency('Handle job', ['job_id' => $job_id]);
 
         // create network
         \Log::emergency('Create Network', [$job_id]);
 
-        $result = $this->docker_network->list(['name' => 'pcit_'.$job_id]);
+        $this->createNetwork();
+
+        // git clone container
+        \Log::emergency('Run git clone container', []);
+
+        $this->gitClone();
+
+        // download cache
+        \Log::emergency('', []);
+        $this->runCacheContainer($job_id);
+
+        // run service
+        $this->runService($job_id);
+
+        $this->handleSteps();
+
+        throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+    }
+
+    /**
+     * Drop prev log.
+     */
+    public function dropLog(): void
+    {
+        ContainerLog::drop($this->job_id);
+    }
+
+    public function createNetwork(): void
+    {
+        $result = $this->docker_network->list(['name' => 'pcit_'.$this->job_id]);
 
         if ($result) {
             foreach (json_decode($result) as $network) {
@@ -110,41 +146,38 @@ class RunContainer
             }
         }
 
-        $this->docker_network->create('pcit_'.$job_id);
+        $this->docker_network->create('pcit_'.$this->job_id);
+    }
 
+    public function gitClone(): void
+    {
+        $git_container_config = $this->cache->get(CacheKey::cloneKey($this->job_id));
+
+        $this->runPipeline($this->job_id, $git_container_config, 'clone');
+    }
+
+    public function handleSteps(): void
+    {
+        $job_id = $this->job_id;
         $cache = $this->cache;
-
-        // git container
-        \Log::emergency('Run git clone container', []);
-
-        $git_container_config = $cache->get(CacheKey::cloneKey($job_id));
-
-        $this->runPipeline($job_id, $git_container_config, 'clone');
-
-        // download cache
-        \Log::emergency('', []);
-        $this->runCacheContainer($job_id);
-
-        $this->runService($job_id);
-
         // 复制原始 key
         $copyKey = CacheKey::pipelineListCopyKey($job_id);
 
         while (1) {
-            $pipeline = $cache->rpop($copyKey);
+            $step = $cache->rpop($copyKey);
 
-            if (!$pipeline) {
+            if (!$step) {
                 break;
             }
 
-            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id), $pipeline);
+            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id), $step);
 
             if (!\is_string($container_config)) {
                 \Log::emergency('Container config empty', []);
             }
 
             try {
-                $this->runPipeline($job_id, $container_config, $pipeline);
+                $this->runStep($job_id, $container_config, $step);
             } catch (\Throwable $e) {
                 if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
                     throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
@@ -155,8 +188,27 @@ class RunContainer
                 throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
             }
         }
+    }
 
-        throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+    /**
+     * 执行 step.
+     *
+     * @throws \Exception
+     */
+    public function runStep(int $job_id, string $container_config, string $step = null): void
+    {
+        \Log::emergency('Run job container', ['job_id' => $job_id,
+                'container_config' => $container_config, ]);
+
+        $container_id = $this->docker_container
+            ->setCreateJson($container_config)
+            ->create(false)
+            ->start(null);
+
+        (new ContainerLog($job_id, $container_id, $step))->handle();
+
+        \Log::emergency('Run job container success', [
+            'job_id' => $job_id, ]);
     }
 
     /**
@@ -185,7 +237,7 @@ class RunContainer
     }
 
     /**
-     * 存入数据库.
+     * 更新缓存信息，存入数据库.
      *
      * TODO
      */
@@ -201,27 +253,6 @@ class RunContainer
 
         \App\Cache::insert($gitType, (int) $rid, $branch, $prefix);
         \App\Cache::update($gitType, (int) $rid, $branch);
-    }
-
-    /**
-     * 启动容器.
-     *
-     * @throws \Exception
-     */
-    public function runPipeline(int $job_id, string $container_config, string $pipeline = null): void
-    {
-        \Log::emergency('Run job container', ['job_id' => $job_id,
-                'container_config' => $container_config, ]);
-
-        $container_id = $this->docker_container
-            ->setCreateJson($container_config)
-            ->create(false)
-            ->start(null);
-
-        (new Log($job_id, $container_id, $pipeline))->handle();
-
-        \Log::emergency('Run job container success', [
-            'job_id' => $job_id, ]);
     }
 
     /**
@@ -260,16 +291,16 @@ class RunContainer
         $copyKey = CacheKey::pipelineListCopyKey($job_id, $status);
 
         while (1) {
-            $pipeline = $cache->rpop($copyKey);
+            $step = $cache->rpop($copyKey);
 
-            if (!$pipeline) {
+            if (!$step) {
                 break;
             }
 
-            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id, $status), $pipeline);
+            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id, $status), $step);
 
             try {
-                $this->runPipeline($job_id, $container_config, $pipeline);
+                $this->runPipeline($job_id, $container_config, $step);
             } catch (\Throwable $e) {
                 \Log::emergency($e->__toString(), []);
             }

@@ -55,7 +55,7 @@ use WeChat\WeChat;
  * @property GitHub\Service\PullRequest\Client               $pull_request
  * @property GitHub\Service\Webhooks\Client                  $webhooks
  * @property \PCIT\Runner\Client                             $runner
- * @property \PCIT\Runner\Agent\RunContainer                 $runner_agent
+ * @property \PCIT\Runner\Agent\Docker\DockerHandler         $runner_agent_docker
  * @property \TencentAI\TencentAI                            $tencent_ai
  * @property GitHub\Service\Users\Client                     $user_basic_info
  * @property GitHub\Service\Checks\Run                       $check_run

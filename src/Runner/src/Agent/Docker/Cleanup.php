@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Runner\Agent;
+namespace PCIT\Runner\Agent\Docker;
 
 use Docker\Container\Client as Container;
 use Exception;

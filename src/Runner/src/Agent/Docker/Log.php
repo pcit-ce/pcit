@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Runner\Events;
+namespace PCIT\Runner\Agent\Docker;
 
 use Exception;
 use PCIT\Framework\Support\Date;
@@ -16,15 +16,15 @@ class Log
 
     private $job_id;
 
-    private $pipeline;
+    private $step;
 
     private $cache;
 
-    public function __construct(int $job_id, string $container_id, string $pipeline = null)
+    public function __construct(int $job_id, string $container_id, string $step = null)
     {
         $this->job_id = $job_id;
         $this->container_id = $container_id;
-        $this->pipeline = $pipeline;
+        $this->step = $step;
         $this->cache = \Cache::store();
     }
 
@@ -96,7 +96,7 @@ class Log
                 }
 
                 $cache->hset(
-                    CacheKey::logHashKey($this->job_id), $this->pipeline, $image_log);
+                    CacheKey::logHashKey($this->job_id), $this->step, $image_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z

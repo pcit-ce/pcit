@@ -65,7 +65,7 @@ class Agent extends Kernel
             ->handle();
 
         try {
-            $this->pcit->runner_agent->handle((int) $job_id);
+            $this->pcit->runner_agent_docker->handle((int) $job_id);
         } catch (\Throwable $e) {
             \Log::emergency('Handle job success', ['job_id' => $job_id, 'message' => $e->getMessage()]);
 

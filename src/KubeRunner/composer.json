@@ -1,0 +1,8 @@
+{
+    "name": "pcit/kube-runner",
+    "autoload": {
+        "psr-4": {
+            "PCIT\\Runner\\Agent\\Kube\\" : "src"
+        }
+    }
+}
