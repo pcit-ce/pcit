@@ -79,30 +79,6 @@ class CI
 
     const CI_PULL_REQUEST_MERGE_METHOD_REBASE = 3;
 
-    /**
-     * 返回当前 ENV.
-     *
-     * 传入 env, 判断是否与当前环境匹配
-     *
-     * @param string|array|null $env
-     *
-     * @return false|string
-     */
-    public static function environment($env = null)
-    {
-        $current_env = env('APP_ENV');
-
-        if (null === $env) {
-            return $current_env;
-        }
-
-        if (\is_array($env)) {
-            return \in_array($current_env, $env, true);
-        }
-
-        return $env === $current_env;
-    }
-
     public static function enableDebug(): void
     {
         ini_set('display_errors', 'on');

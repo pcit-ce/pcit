@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     'name' => env('CI_NAME', 'PCIT'),
     'debug' => env('CI_DEBUG', false),
+    'env' => env('APP_ENV', 'production'),
     'alias' => [
         'Route' => PCIT\Framework\Support\Facades\Route::class,
         'Request' => PCIT\Framework\Support\Facades\Request::class,
@@ -12,6 +13,7 @@ return [
         'Cache' => PCIT\Framework\Support\Facades\Cache::class,
         'Session' => PCIT\Framework\Support\Facades\Session::class,
         'Log' => PCIT\Framework\Support\Facades\Log::class,
+        'App' => PCIT\Framework\Support\Facades\App::class,
     ],
     'providers' => [
         PCIT\Framework\Routing\RoutingServiceProvider::class,

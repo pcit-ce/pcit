@@ -87,3 +87,7 @@ class Route extends \PCIT\Framework\Support\Facades\Route
 class Log extends \PCIT\Framework\Support\Facades\Log
 {
 }
+
+class App extends \PCIT\Framework\Support\Facades\App
+{
+}

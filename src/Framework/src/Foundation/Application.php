@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Foundation;
 
+use PCIT\Framework\Dotenv\Dotenv;
+use PCIT\Framework\Support\Env;
 use Pimple\Container;
 
 class Application extends Container
@@ -14,9 +16,46 @@ class Application extends Container
 
     public $serviceProviders;
 
+    public $environment;
+
     public $environmentPath;
 
     public $environmentFile;
+
+    /**
+     * 返回当前 ENV.
+     *
+     * 传入 env, 判断是否与当前环境匹配
+     *
+     * @param string|array|null $env
+     *
+     * @return false|string
+     */
+    public function environment($env = null)
+    {
+        $current_env = $this->environment ?: Env::get('APP_ENV');
+
+        if (null === $env) {
+            return $current_env;
+        }
+
+        if (\is_array($env)) {
+            return \in_array($current_env, $env, true);
+        }
+
+        return $env === $current_env;
+    }
+
+    private function resolveEnv(): void
+    {
+        $app_env = $this->environment();
+
+        $env_file = Dotenv::load($app_env);
+
+        $this->environmentFile = $env_file;
+        $this->environmentPath = $this->basePath.\DIRECTORY_SEPARATOR.$this->environmentFile;
+        $this->environment = config('app.env');
+    }
 
     public function __construct(array $values = [])
     {
@@ -28,6 +67,8 @@ class Application extends Container
         $this['app'] = $this;
 
         $this->basePath = $this['base_path'];
+
+        $this->resolveEnv();
 
         $this->registerProviders();
     }

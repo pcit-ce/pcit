@@ -266,7 +266,7 @@ Route::get('dashboard', function () {
 
 /* Test */
 
-if (\PCIT\Support\CI::environment('testing')) {
+if (\App::environment('testing')) {
     Route::get('testing', function () {
         return 1;
     });

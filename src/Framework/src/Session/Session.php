@@ -76,11 +76,11 @@ class Session
      */
     public function pull(string $name)
     {
-        $result = self::has($name);
+        $result = $this->has($name);
 
         if ($result) {
-            $result = self::get($name);
-            self::forget($name);
+            $result = $this->get($name);
+            $this->forget($name);
 
             return $result;
         }

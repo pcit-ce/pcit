@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-use PCIT\Framework\Dotenv\Dotenv;
 use PCIT\Framework\Foundation\AliasLoader;
 use PCIT\Support\CI;
-use PCIT\Support\Env;
 
 // cli error handler
 if ('cli' === \PHP_SAPI) {
@@ -17,11 +15,6 @@ $app = new \PCIT\Framework\Foundation\Application(['base_path' => dirname(dirnam
 
 // class alias
 AliasLoader::load(config('app.alias'));
-
-// load env file
-$app_env = CI::environment();
-
-$env_file = Dotenv::load($app_env);
 
 // set timezone
 date_default_timezone_set(env('CI_TZ', 'PRC'));
@@ -41,8 +34,5 @@ if ($debug) {
 $app->singleton(\App\Http\Kernel::class, function ($app) {
     return new \App\Http\Kernel();
 });
-
-$app->environmentFile = $env_file;
-$env_file && $app->environmentPath = base_path().$env_file;
 
 return $app;

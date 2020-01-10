@@ -6,7 +6,6 @@ namespace App\Console\PCIT;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Support\Env;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 

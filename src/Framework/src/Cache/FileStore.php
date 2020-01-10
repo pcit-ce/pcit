@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Cache;
 
-class FileStore
+use PCIT\Framework\Contracts\Cache\Store;
+
+class FileStore implements Store
 {
     public function __call($method, $arguments): void
     {

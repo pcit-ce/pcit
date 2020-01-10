@@ -109,7 +109,7 @@ class ReleasesClient
 
         $this->curl->$method($url, json_encode($data));
 
-        $this->successOrFailure(__FILE__, __LINE__, 201);
+        $this->successOrFailure(201);
     }
 
     /**

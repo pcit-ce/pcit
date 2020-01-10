@@ -121,6 +121,18 @@ class PCIT extends Container
 
         $this['config'] = Config::config($config, $git_type);
 
+        $this->setAccessToken();
+
+        set_time_limit(0);
+
+        $this['curl_timeout'] = 100;
+
+        // 注册服务提供器
+        $this->registerProviders();
+    }
+
+    public function setAccessToken(): void
+    {
         if ($this['config']['github']['access_token'] ?? false) {
             $this['curl_config'] = [null, false,
                 [
@@ -145,13 +157,6 @@ class PCIT extends Container
         } else {
             $this['curl_config'] = [];
         }
-
-        set_time_limit(0);
-
-        $this['curl_timeout'] = 100;
-
-        // 注册服务提供器
-        $this->registerProviders();
     }
 
     /**
