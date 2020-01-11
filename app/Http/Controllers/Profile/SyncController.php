@@ -37,9 +37,8 @@ class SyncController
 
         $this->access_token = GetAccessToken::getAccessTokenByUid((int) $this->uid, $this->git_type);
 
-        $this->pcit = new PCIT(
-            [$this->git_type.'_access_token' => $this->access_token], $this->git_type
-        );
+        $this->pcit = app(PCIT::class)->setGitType($this->git_type)
+        ->setAccessToken($this->access_token);
 
         if ('github' === $this->git_type) {
             // github 只获取用户组织，不获取用户仓库

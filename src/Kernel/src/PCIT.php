@@ -110,18 +110,15 @@ class PCIT extends Container
      */
     public function __construct(array $config = [],
                                 string $git_type = 'github',
-                                string $accessToken = 'null')
+                                string $accessToken = null)
     {
         parent::__construct($config);
 
-        // 在容器中注入类
-        $this['git_type'] = $git_type;
+        $this->setGitType($git_type);
 
-        $this['class_name'] = Git::getClassName($git_type);
+        $this->setConfig($config, $git_type);
 
-        $this['config'] = Config::config($config, $git_type);
-
-        $this->setAccessToken();
+        $this->setAccessToken($accessToken);
 
         set_time_limit(0);
 
@@ -131,8 +128,27 @@ class PCIT extends Container
         $this->registerProviders();
     }
 
-    public function setAccessToken(): void
+    public function setConfig($config, $git_type): void
     {
+        $this['config'] = Config::config($config, $git_type);
+    }
+
+    public function setGitType($git_type = 'github')
+    {
+        $this['git_type'] = $git_type;
+
+        $this['class_name'] = Git::getClassName($git_type);
+
+        return $this;
+    }
+
+    public function setAccessToken(?string $accessToken = null)
+    {
+        if ($accessToken) {
+            $this->setConfig(
+            [$this['git_type'].'_access_token' => $accessToken], $this['git_type']);
+        }
+
         if ($this['config']['github']['access_token'] ?? false) {
             $this['curl_config'] = [null, false,
                 [
@@ -157,6 +173,8 @@ class PCIT extends Container
         } else {
             $this['curl_config'] = [];
         }
+
+        return $this;
     }
 
     /**

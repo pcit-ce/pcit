@@ -2,19 +2,16 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Runner\Tests;
+namespace PCIT\Runner\Tests\Parser;
 
-use PCIT\Runner\Parse;
+use PCIT\Runner\Parser\TextHandler;
 use Tests\TestCase;
 
-class ParseTest extends TestCase
+class TextHandlerTest extends TestCase
 {
-    /**
-     * @throws \Exception
-     */
     public function test_text(): void
     {
-        $image = Parse::text('khs1994/php:${PHP_VERSION}-fpm-alpine-${PCIT_TAG}',
+        $image = (new TextHandler())->handle('khs1994/php:${PHP_VERSION}-fpm-alpine-${PCIT_TAG}',
             [
                 'PHP_VERSION=7.2.16',
                 'PCIT_TAG=1.0.0',

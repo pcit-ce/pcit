@@ -57,7 +57,7 @@ class GitHubAppChecks
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
-        $pcit = new PCIT(['github_access_token' => $access_token], 'github');
+        $pcit = app(PCIT::class)->setGitType('github')->setAccessToken($access_token);
 
         $output_array = Build::find((int) $build_key_id);
 
@@ -145,7 +145,7 @@ class GitHubAppChecks
             time(), time(),
             CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, null,
             null,
-            (new PCIT())
+            app('pcit')
                 ->check_md
                 ->success(
                     'PHP',

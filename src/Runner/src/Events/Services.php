@@ -7,7 +7,7 @@ namespace PCIT\Runner\Events;
 use Docker\Container\Client;
 use Exception;
 use PCIT\PCIT;
-use PCIT\Runner\Parse;
+use PCIT\Runner\Parser\TextHandler as TextParser;
 use PCIT\Support\CacheKey;
 
 class Services
@@ -50,7 +50,7 @@ class Services
                 $entrypoint = $serviceContent->entrypoint ?? $entrypoint;
                 $commands = $serviceContent->commands ?? $serviceContent->command ?? $commands;
 
-                $image = Parse::image($image, $this->matrix_config);
+                $image = (new TextParser())->handle($image, $this->matrix_config);
             }
 
             /**

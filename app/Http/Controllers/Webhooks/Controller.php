@@ -70,7 +70,8 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $pcit = new PCIT([self::$gitType.'_access_token' => $access_token], static::$gitType);
+        $pcit = app(PCIT::class)->setGitType(static::$gitType)
+        ->setAccessToken($access_token);
 
         $json = $pcit->repo_webhooks->getWebhooks($raw, ...$arg);
 
@@ -110,7 +111,8 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $pcit = new PCIT([self::$gitType.'_access_token' => $access_token], static::$gitType);
+        $pcit = app(PCIT::class)->setGitType(self::$gitType)
+        ->setAccessToken($access_token);
 
         $getWebhooksStatus = $pcit->repo_webhooks->getStatus($webhooksUrl, ...$arg);
 
@@ -159,7 +161,8 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $pcit = new PCIT([self::$gitType.'_access_token' => $access_token], static::$gitType);
+        $pcit = app('pcit')->setGitType(self::$gitType)
+        ->setAccessToken($access_token);
 
         $repo_full_name = $username.'/'.$repo;
 

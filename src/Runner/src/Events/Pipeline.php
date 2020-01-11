@@ -18,7 +18,7 @@ use PCIT\Runner\Conditional\Matrix;
 use PCIT\Runner\Conditional\Platform;
 use PCIT\Runner\Conditional\Status;
 use PCIT\Runner\Conditional\Tag;
-use PCIT\Runner\Parse;
+use PCIT\Runner\Parser\TextHandler as TextParser;
 use PCIT\Support\CacheKey;
 use Symfony\Component\Yaml\Yaml;
 
@@ -208,7 +208,7 @@ class Pipeline
             $no_status = $status ? false : true;
 
             // 处理 image
-            $image = Parse::text($image, $preEnv);
+            $image = (new TextParser())->handle($image, $preEnv);
 
             if ('github://' === substr($image, 0, 9)) {
                 try {

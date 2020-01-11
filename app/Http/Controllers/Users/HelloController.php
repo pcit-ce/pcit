@@ -13,11 +13,11 @@ class HelloController
 {
     public function registry(): void
     {
-        (new PCIT())->tencent_ai->face()->add();
+        app(PCIT::class)->tencent_ai->face()->add();
     }
 
     public function verify(): void
     {
-        (new PCIT())->tencent_ai->face()->add();
+        app(PCIT::class)->tencent_ai->face()->add();
     }
 }

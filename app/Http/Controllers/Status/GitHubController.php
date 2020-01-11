@@ -19,7 +19,7 @@ class GitHubController
      */
     public function __construct()
     {
-        $pcit = new PCIT();
+        $pcit = app(PCIT::class);
 
         self::$status = $pcit->repo_status;
     }
@@ -57,7 +57,7 @@ class GitHubController
 
         list($username, $repo) = explode('/', $repo_full_name);
 
-        $pcit = new PCIT(['github_access_token' => $accessToken]);
+        $pcit = app(PCIT::class)->setAccessToken($accessToken);
 
         return $pcit->repo_status->create(
             $username,

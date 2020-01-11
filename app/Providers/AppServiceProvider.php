@@ -12,6 +12,10 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(Container $pimple): void
     {
-        $pimple[PCIT::class] = new PCIT();
+        $pimple['pcit'] = function ($app) {
+            return new PCIT();
+        };
+
+        $pimple[PCIT::class] = $pimple['pcit'];
     }
 }

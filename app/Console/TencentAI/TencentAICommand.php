@@ -15,6 +15,6 @@ class TencentAICommand
      */
     public static function get()
     {
-        return (new PCIT())->tencent_ai;
+        return (app(PCIT::class))->tencent_ai;
     }
 }

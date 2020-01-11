@@ -41,7 +41,7 @@ class Mail
                                 array $cc = [],
                                 array $bcc = []): void
     {
-        self::$mail = (new PCIT())->mail;
+        self::$mail = app(PCIT::class)->mail;
 
         try {
             $address && self::parseAddress($address);

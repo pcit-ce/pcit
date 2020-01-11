@@ -36,7 +36,7 @@ class IndexController
      */
     public function bootstrap($git_type): void
     {
-        $pcit = new PCIT([], $git_type);
+        $pcit = app(PCIT::class)->setGitType($git_type);
 
         static::$oauth = $pcit->oauth;
         static::$git_type = $git_type;
@@ -115,7 +115,7 @@ class IndexController
 
             $accessToken && \Session::put($git_type.'.access_token', $accessToken);
 
-            $pcit = new PCIT([$git_type.'_access_token' => $accessToken], $git_type);
+            $pcit = app(PCIT::class)->setGitType($git_type)->setAccessToken($accessToken);
 
             $userInfoArray = $pcit->user_basic_info->getUserInfo();
         } catch (Error $e) {

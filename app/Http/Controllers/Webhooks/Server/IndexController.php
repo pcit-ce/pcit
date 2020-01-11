@@ -10,7 +10,7 @@ class IndexController
 {
     public function __invoke($gitType)
     {
-        $pcit = new PCIT([], $gitType);
+        $pcit = app(PCIT::class)->setGitType($gitType);
 
         $result = $pcit->webhooks->server();
 

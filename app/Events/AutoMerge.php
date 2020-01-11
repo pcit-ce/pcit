@@ -30,9 +30,8 @@ class AutoMerge
 
         $build_status = $build->build_status;
 
-        $pcit = new PCIT([
-            $build->git_type.'_access_token' => GetAccessToken::getGitHubAppAccessToken($build->rid),
-        ]);
+        $pcit = app(PCIT::class)->setGitType($build->git_type)
+        ->setAccessToken(GetAccessToken::getGitHubAppAccessToken($build->rid));
 
         $auto_merge_label = $pcit
             ->issue_labels

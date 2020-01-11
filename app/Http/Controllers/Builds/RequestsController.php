@@ -84,7 +84,7 @@ class RequestsController
         $token = GetAccessToken::getGitHubAppAccessToken(
             null, $username.'/'.$repo_name);
 
-        $app = new PCIT(['github_access_token' => $token], 'github');
+        $app = app(PCIT::class)->setGitType()->setAccessToken($token);
 
         // $body = file_get_contents('php://input');
 

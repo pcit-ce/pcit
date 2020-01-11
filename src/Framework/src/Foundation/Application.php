@@ -22,6 +22,10 @@ class Application extends Container
 
     public $environmentFile;
 
+    public $resolve = [];
+
+    public $resolves = [];
+
     /**
      * 返回当前 ENV.
      *
@@ -127,6 +131,10 @@ class Application extends Container
     // 绑定实例
     public function instance($abstract, $instance): void
     {
+        if (\is_string($instance)) {
+            $instance = new $instance();
+        }
+
         $this[$abstract] = $instance;
     }
 
@@ -140,7 +148,29 @@ class Application extends Container
         return static::$instance;
     }
 
-    public function resolving(): void
+    public function resolving($object, $closure = null): void
     {
+        if (\is_callable($object)) {
+            $this->resolve[] = $object;
+
+            return;
+        }
+
+        $this->resolves[$object] = $closure;
+    }
+
+    public function offsetGet($id)
+    {
+        if ($this->resolve) {
+            foreach ($this->resolve as $resolve) {
+                $resolve($id, $this);
+            }
+        }
+
+        if ($resolve = $this->resolves[$id] ?? false) {
+            $resolve($id, $this);
+        }
+
+        return parent::offsetGet($id);
     }
 }

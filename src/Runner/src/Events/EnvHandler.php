@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events;
 
-use PCIT\Runner\Parse;
+use PCIT\Runner\Parser\TextHandler as TextParser;
 
 class EnvHandler
 {
@@ -26,7 +26,7 @@ class EnvHandler
         $text = json_encode($pre_env);
 
         // ${} 变量替换
-        $result = Parse::text($text, $env);
+        $result = (new TextParser())->handle($text, $env);
 
         $pre_env = json_decode($result, true);
 

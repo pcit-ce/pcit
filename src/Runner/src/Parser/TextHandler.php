@@ -2,16 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Runner;
+namespace PCIT\Runner\Parser;
 
-class Parse
+class TextHandler
 {
-    /**
-     * @param $env <pre> ['K=V','K2=V2'] <pre>
-     *
-     * @return string
-     */
-    public static function text(string $text, $env)
+    public function handle(string $text, $env)
     {
         $pregResultInt = preg_match_all('/\${[0-9a-zA-Z_-]*\}/', $text, $pregResultArray);
 
