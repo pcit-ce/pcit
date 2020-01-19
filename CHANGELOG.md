@@ -24,6 +24,10 @@
 
 ## v18.12
 
+### 2020/01/19
+
+* [*] Builds 列表不包含 `misconfigured` 类型的 build
+
 ### 2020/01/01
 
 * [ ] 支持使用 actions

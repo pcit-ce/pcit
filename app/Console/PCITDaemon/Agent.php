@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\PCITDaemon;
 
 use App\Build;
-use App\Events\LogHandle;
+use App\Events\LogHandler;
 use App\Events\UpdateBuildStatus;
 use App\Job;
 use PCIT\Framework\Support\Subject;
@@ -74,7 +74,7 @@ class Agent extends Kernel
             try {
                 // TODO
                 $this->subject
-                    ->register(new LogHandle((int) $job_id))
+                    ->register(new LogHandler((int) $job_id))
                     ->register(new UpdateBuildStatus((int) $job_id, (int) $build_key_id, $e->getMessage()))
                     ->handle();
             } catch (\Throwable $e) {

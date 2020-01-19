@@ -70,11 +70,18 @@ push by you, test and deploy by us.
 
 * **Webhooks Server** 接收 Git 事件
 
-* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 事件生成一个 build 并将其分解为多个 job (Server 节点)，之后在 Docker 单机或集群（Swarm、Kubernetes）中执行构建、测试、容器化部署的自动化过程（Agent 节点）。
+* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 事件生成一个 build 并将其分解为多个 job (Server 节点)，之后在 Docker 单机或集群（Swarm、Kubernetes）中执行构建、测试、容器化部署的自动化过程（Runner）。
 
 * **CLI** 提供各种实用的功能，例如命令行查看构建状态，命令行操作 GitHub，命令行调用 Tencent AI 开放能力
 
 * **开放平台** 包含用于功能扩展的 **插件** 和 **RESTFul API**，与开发者一道构建 PCIT 生态系统
+
+### 开放(合作共赢)
+
+* GitProvider
+* Runner
+* Plugins
+* OpenAPI
 
 ## 使用方法（使用之前需要私有部署 PCIT EE）
 

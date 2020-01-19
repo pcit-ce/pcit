@@ -7,6 +7,7 @@ namespace App;
 use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
+use PCIT\Support\CI;
 
 class Job extends Model
 {
@@ -80,7 +81,20 @@ EOF;
     {
         $sql = 'SELECT * FROM jobs WHERE build_id=?';
 
-        return DB::select($sql, [$build_key_id]);
+        $jobs = DB::select($sql, [$build_key_id]);
+
+        for ($i = 0; $i < \count($jobs); ++$i) {
+            $job_id = $jobs[$i]['id'];
+
+            // 获取状态
+            $state = $jobs[$i]['state'];
+
+            if (\in_array($state, [CI::GITHUB_CHECK_SUITE_STATUS_QUEUED])) {
+                $jobs[$i]['build_log'] = '{"running":"running"}';
+            }
+        }
+
+        return $jobs;
     }
 
     /**

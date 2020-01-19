@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
+use App\Events\LogHandler;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
 use PCIT\Framework\Support\DB;
 use PCIT\PCIT;
+use PCIT\Support\CI;
 
 class JobController
 {
@@ -33,7 +35,22 @@ class JobController
      */
     public function find($job_id)
     {
-        return Job::find((int) $job_id);
+        $job = Job::find((int) $job_id);
+
+        // 获取状态
+        $state = $job['state'];
+        if (\in_array($state, [CI::GITHUB_CHECK_SUITE_STATUS_QUEUED])) {
+            $build_log = [];
+            $logHandler = new LogHandler((int) $job_id);
+            $steps = $logHandler->getSteps();
+            foreach ($steps as $step) {
+                $build_log[$step] = $logHandler->handlePipeline($step);
+            }
+
+            $job['build_log'] = json_encode($build_log);
+        }
+
+        return $job;
     }
 
     /**
@@ -80,7 +97,7 @@ class JobController
 
         $build = (new \App\Events\Build())->handle($buildId);
 
-        app(PCIT::class)->build->handle($build, (int) $job_id);
+        app(PCIT::class)->runner->handle($build, (int) $job_id);
 
         Job::updateBuildStatus($job_id, 'queued');
 

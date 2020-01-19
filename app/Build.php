@@ -247,7 +247,7 @@ EOF;
     public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
         $sql = <<<'EOF'
-SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?) AND event_type NOT IN (?)
+SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) AND event_type NOT IN (?)
 ORDER BY id DESC LIMIT 1
 EOF;
 
@@ -256,6 +256,7 @@ EOF;
             // 'pending',
             'skip',
             'inactive',
+            'misconfigured',
             CI::BUILD_EVENT_PR,
         ], true);
     }
@@ -368,12 +369,13 @@ EOF;
         $limit = $limit <= 25 ? $limit : 25;
 
         $exclude = $all ? 'null' : 'skip';
+        $misconfigured = $all ? 'null' : 'misconfigured';
 
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag,commit_message,compare,
 committer_name,committer_username,build_status,event_type,pull_request_number,created_at,finished_at
 FROM builds WHERE
-id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?) AND build_status NOT IN('$exclude')
+id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?) AND build_status NOT IN('$exclude','$misconfigured')
 ORDER BY id DESC LIMIT $limit
 EOF;
         if ($all) {

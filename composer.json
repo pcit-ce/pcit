@@ -124,7 +124,7 @@
     "docker:push": "docker-compose push pcit",
     "test": "phpunit",
     "test:codecov": "phpunit --coverage-clover=coverage.xml",
-    "minio:server": "minio server z:",
+    "minio:server": "minio server Z",
     "git:archive": "git archive -o latest.zip HEAD",
     "frpc": "frpc -c ~\\frpc.ini",
     "fmt": "php-cs-fixer fix",

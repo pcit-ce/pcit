@@ -61,9 +61,9 @@ class Log
             // 循环遍历日志
             $i = $i + 1;
 
-            $image_status_obj = json_decode($docker_container->inspect($this->container_id))->State;
-            $status = $image_status_obj->Status;
-            $startedAt = Date::parse($image_status_obj->StartedAt);
+            $container_status_obj = json_decode($docker_container->inspect($this->container_id))->State;
+            $status = $container_status_obj->Status;
+            $startedAt = Date::parse($container_status_obj->StartedAt);
 
             if ('running' === $status) {
                 // 处于运行状态
@@ -75,37 +75,37 @@ class Log
                     $until_time = $until_time + 1;
                 }
 
-                $image_log = $docker_container->logs(
+                $container_log = $docker_container->logs(
                     $this->container_id, false, true, true,
                     $since_time, $until_time, true
                 );
 
-                // echo $image_log;
+                // echo $container_log;
 
                 sleep(2);
 
                 continue;
             } else {
                 // 容器停止，获取日志
-                $image_log = $docker_container->logs(
+                $container_log = $docker_container->logs(
                     $this->container_id, false, true, true, 0, 0, true
                 );
 
-                if (!$image_log) {
-                    $image_log = '12345678 log not found!';
+                if (!$container_log) {
+                    $container_log = '12345678 log not found!';
                 }
 
                 $cache->hset(
-                    CacheKey::logHashKey($this->job_id), $this->step, $image_log);
+                    CacheKey::logHashKey($this->job_id), $this->step, $container_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
                  * 0001-01-01T00:00:00Z.
                  */
-                $startedAt = $image_status_obj->StartedAt;
-                $finishedAt = $image_status_obj->FinishedAt;
+                $startedAt = $container_status_obj->StartedAt;
+                $finishedAt = $container_status_obj->FinishedAt;
 
-                $exitCode = $image_status_obj->ExitCode;
+                $exitCode = $container_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
                     \Log::error("Container $this->container_id ExitCode is $exitCode, not 0", []);

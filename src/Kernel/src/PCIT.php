@@ -72,7 +72,7 @@ class PCIT extends Container
         Providers\ActivityProvider::class,
         Providers\AuthorizationsProvider::class,
         Providers\ChecksProvider::class,
-        Providers\CurlProvider::class,
+        // Providers\CurlProvider::class,
         Providers\DataProvider::class,
         Providers\DeploymentProvider::class,
         Providers\DockerProvider::class,
@@ -114,15 +114,15 @@ class PCIT extends Container
     {
         parent::__construct($config);
 
+        set_time_limit(0);
+
+        $this['curl_timeout'] = 100;
+
         $this->setGitType($git_type);
 
         $this->setConfig($config, $git_type);
 
         $this->setAccessToken($accessToken);
-
-        set_time_limit(0);
-
-        $this['curl_timeout'] = 100;
 
         // 注册服务提供器
         $this->registerProviders();
@@ -173,6 +173,11 @@ class PCIT extends Container
         } else {
             $this['curl_config'] = [];
         }
+
+        $curl = new Curl(...$this['curl_config']);
+        $curl->setTimeout($this['curl_timeout']);
+
+        $this['curl'] = $curl;
 
         return $this;
     }

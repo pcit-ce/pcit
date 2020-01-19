@@ -153,7 +153,7 @@ class DockerHandler implements RunnerHandlerInterface
     {
         $git_container_config = $this->cache->get(CacheKey::cloneKey($this->job_id));
 
-        $this->runPipeline($this->job_id, $git_container_config, 'clone');
+        $this->runStep($this->job_id, $git_container_config, 'clone');
     }
 
     public function handleSteps(): void
@@ -227,7 +227,7 @@ class DockerHandler implements RunnerHandlerInterface
         }
 
         try {
-            $this->runPipeline($job_id, $containerConfig, 'cache_'.$type);
+            $this->runStep($job_id, $containerConfig, 'cache_'.$type);
             'upload' === $type && $this->updateCacheInfo($containerConfig);
         } catch (\Throwable $e) {
             \Log::emergency(
@@ -300,7 +300,7 @@ class DockerHandler implements RunnerHandlerInterface
             $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id, $status), $step);
 
             try {
-                $this->runPipeline($job_id, $container_config, $step);
+                $this->runStep($job_id, $container_config, $step);
             } catch (\Throwable $e) {
                 \Log::emergency($e->__toString(), []);
             }

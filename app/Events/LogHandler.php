@@ -10,7 +10,7 @@ use PCIT\Support\CacheKey;
 /**
  * 处理日志.
  */
-class LogHandle
+class LogHandler
 {
     private $jobId;
 
@@ -26,68 +26,65 @@ class LogHandle
     public function handle(): void
     {
         $logs = [];
-        $pipelines = [];
+        $steps = [];
         $cache = $this->cache;
         $jobId = $this->jobId;
 
-        $types = [
-          'pipeline',
-          'failure',
-          'success',
-          'changed',
-        ];
+        $steps = $this->getSteps();
 
-        foreach ($types as $type) {
-            $copyKey = CacheKey::pipelineListCopyKey($jobId, $type);
+        foreach ($steps as $step) {
+            $log = $this->handlePipeline($step);
 
-            while (1) {
-                $pipeline = $cache->rpop($copyKey);
-
-                if (!$pipeline) {
-                    break;
-                }
-
-                $pipelines[] = $pipeline;
-            }
-        }
-
-        array_unshift($pipelines, 'clone', 'cache_download');
-        array_push($pipelines, 'cache_upload');
-
-        foreach ($pipelines as $pipeline) {
-            $log = $this->handlePipeline($pipeline);
-
-            $logs[$pipeline] = $log;
+            $logs[$step] = $log;
         }
 
         $logs = array_filter($logs);
 
-        // 处理特殊字符
-        foreach ($logs as $k => $v) {
-            try {
-                $result = iconv('utf-8', 'utf-8//IGNORE', $v);
-                $logs[$k] = $result;
-            } catch (\Throwable $e) {
-                \Log::emergency('iconv handle error '.$e->getMessage(), ['pipeline' => $k]);
-            }
-        }
-
         Job::updateLog($this->jobId, $logs = json_encode($logs, JSON_UNESCAPED_UNICODE));
     }
 
-    private function handlePipeline($pipeline)
+    public function getSteps()
+    {
+        $types = [
+            'pipeline',
+            'failure',
+            'success',
+            'changed',
+          ];
+
+        foreach ($types as $type) {
+            $copyKey = CacheKey::pipelineListCopyKey($this->jobId, $type);
+
+            while (1) {
+                $step = $this->cache->rpop($copyKey);
+
+                if (!$step) {
+                    break;
+                }
+
+                $steps[] = $step;
+            }
+        }
+
+        array_unshift($steps, 'clone', 'cache_download');
+        array_push($steps, 'cache_upload');
+
+        return $steps;
+    }
+
+    public function handlePipeline($pipeline)
     {
         $cache = $this->cache;
         // 日志美化
         $result = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
         if (!$result) {
-            \Log::warning('job Log empty, skip', ['jobId' => $this->jobId]);
+            \Log::warning('Step Log empty, skip', ['jobId' => $this->jobId, 'step' => $pipeline]);
 
             return;
         }
 
-        \Log::emergency('Handle job log', ['jobId' => $this->jobId, 'pipeline' => $pipeline]);
+        \Log::emergency('Handle step log', ['jobId' => $this->jobId, 'step' => $pipeline]);
 
         $folder_name = sys_get_temp_dir().'/.pcit';
 
@@ -115,6 +112,12 @@ class LogHandle
 
         // cleanup
         $this->gc($folder_name, $redis_key);
+
+        try {
+            $log_content = iconv('utf-8', 'utf-8//IGNORE', $log_content);
+        } catch (\Throwable $e) {
+            \Log::emergency('iconv handle error '.$e->getMessage(), ['pipeline' => $k]);
+        }
 
         return $log_content;
     }
