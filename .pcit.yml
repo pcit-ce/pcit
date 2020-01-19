@@ -219,7 +219,7 @@ steps: # pipeline
     image: khs1994/sami
     when:
       status: success
-      matrix:
+      jobs:
       - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
@@ -232,7 +232,7 @@ steps: # pipeline
     if:
       status: success
       event: ['push']
-      matrix:
+      jobs:
       - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
@@ -252,7 +252,7 @@ steps: # pipeline
     when:
       status: success
       event: ['push']
-      matrix:
+      jobs:
       - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
@@ -272,7 +272,7 @@ steps: # pipeline
     when:
       event: ['tag']
       status: success
-      matrix:
+      jobs:
       - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
@@ -290,7 +290,7 @@ steps: # pipeline
     when:
       event: ['tag']
       status: success
-      matrix:
+      jobs:
       - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
@@ -324,7 +324,7 @@ steps: # pipeline
     when:
       status: success
       event: ['push']
-      matrix:
+      jobs:
       - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
@@ -347,7 +347,7 @@ steps: # pipeline
     when:
       status: success
       event: push
-      matrix:
+      jobs:
       - PHP_VERSION: 7.3.11
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
@@ -449,7 +449,7 @@ services:
   #   commands: [ --smallfiles ]
 
 # 变量矩阵
-matrix:
+jobs:
   PHP_VERSION:
     - 7.3.11
     # - nightly
@@ -467,7 +467,7 @@ matrix:
   # POSTGRESQL_VERSION:
     # - 10.5
 
-# matrix:
+# jobs:
 #   include:
 #     - PHP_VERSION: 7.2.24
 #       MYSQL_VERSION: 5.7.24

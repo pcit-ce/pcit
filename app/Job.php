@@ -90,7 +90,7 @@ EOF;
             $state = $jobs[$i]['state'];
 
             if (\in_array($state, [CI::GITHUB_CHECK_SUITE_STATUS_QUEUED])) {
-                $jobs[$i]['build_log'] = '{"running":"running"}';
+                // $jobs[$i]['build_log'] = '{"running":"running"}';
             }
         }
 

@@ -26,7 +26,9 @@
 
 ### 2020/01/19
 
-* [*] Builds 列表不包含 `misconfigured` 类型的 build
+* [x] Builds 列表不包含 `misconfigured` 类型的 build
+* [x] .pcit.yml `matrix` is an alias for `jobs`
+* [x] 一个 git 事件，触发一个 `build`，一个 build 包含 `jobs`, 一个 job 包含 `steps`
 
 ### 2020/01/01
 
@@ -34,7 +36,7 @@
 
 ### 2019/11/14
 
-* [ ] 实现 Webhooks Client 
+* [ ] 实现 Webhooks Client
 
 ### 2019/09/24
 
@@ -42,11 +44,11 @@
 
 ### 2019/01/20
 
-* [ ] 新增 `system` 指令，包括 `image` 子指令，用来配置构建步骤的默认镜像。
+* [ ] 新增 `system` 指令，包括 `image` 子指令，用来配置构建步骤的默认镜像
 
 ### 2019/01/15
 
-* [x] **安全** Pull_request 事件不上传缓存。
+* [x] **安全** Pull_request 事件不上传缓存
 
 ### 2019/01/14
 
@@ -59,7 +61,7 @@
 ### 2019/01/07
 
 * [ ] 拉取仓库支持 `zip` 格式
-* [ ] 支持全局 `hosts`，通过新的 `networks` 指令进行设置。
+* [ ] 支持全局 `hosts`，通过新的 `networks` 指令进行设置
 * [x] 支持简化的 `services` 指令
 * [x] 使用 `BuildKit` 构建 Docker 镜像
 
@@ -68,7 +70,7 @@
 ### 2018/12/13
 
 * [x] 支持 [`content-attachments-api`](https://developer.github.com/changes/2018-12-10-content-attachments-api/) 响应用户 issue、pr 中的 url
-* [x] 底层 framework：使用 `反射` 注入参数。
+* [x] 底层 framework：使用 `反射` 注入参数
 * [x] 底层 framework：调用 `废弃(@deprecated)` 方法，返回 500
 
 ### 2018/12/08
@@ -94,13 +96,13 @@
 
 ### 2018/11/06
 
-* [ ] Docker for Windows bug : 容器中无法 ping 通局域网地址，重启解决。
-* [x] Docker for Windows bug : post 数据过长，无响应。通过启动另一个 socket 转 IP 容器解决。
+* [ ] Docker for Windows bug : 容器中无法 ping 通局域网地址，重启解决
+* [x] Docker for Windows bug : post 数据过长，无响应。通过启动另一个 socket 转 IP 容器解决
 * [x] 增加支持 `[skip pcit]` `[pcit skip]` 指令跳过构建（不区分大小写）
 
 ### 2018/11/04
 
-* [ ] `.pcit.yml` 根据 `language` 指令自动,生成默认的 `image` `commands` `environment` 指令。
+* [ ] `.pcit.yml` 根据 `language` 指令自动,生成默认的 `image` `commands` `environment` 指令
 
 ### 2018/10/27
 
@@ -159,7 +161,7 @@
 
 ### 2018/06/07
 
-* [x] 需要新建两个应用 OAuth App 用于网站登录和获取用户基本信息，GitHub App 用于构建。
+* [x] 需要新建两个应用 OAuth App 用于网站登录和获取用户基本信息，GitHub App 用于构建
 
 ### 2018/06/06
 
@@ -183,7 +185,7 @@
 
 ### 2018/05/30
 
-* [x] 支持设置 `CI_ROOT`, 仅构建 `CI_ROOT` 名下的仓库。
+* [x] 支持设置 `CI_ROOT`, 仅构建 `CI_ROOT` 名下的仓库
 
 ### 2018/05/30
 
@@ -191,7 +193,7 @@
 
 ### 2018/05/30
 
-* [x] 支持自定义阿里云 Docker 镜像构建的 Webhooks 地址 `CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS`，原因缺乏认证手段。
+* [x] 支持自定义阿里云 Docker 镜像构建的 Webhooks 地址 `CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS`，原因缺乏认证手段
 
 ### 2018/05/29
 
@@ -203,15 +205,15 @@
 
 ### 2018/05/29
 
-* [x] 原生支持微信公众平台，填写 **相关密钥** 即可一键开启模板消息推送（微信公众平台测试号 100 人限制，正式号有各种限制）。
+* [x] 原生支持微信公众平台，填写 **相关密钥** 即可一键开启模板消息推送（微信公众平台测试号 100 人限制，正式号有各种限制）
 
 ### 2018/05/29
 
-* [ ] 支持邮件通知仓库管理员。
+* [ ] 支持邮件通知仓库管理员
 
 ### 2018/05/28
 
-* [x] 插件通过 Docker 镜像实现。通过设置必要的环境变量实现功能。
+* [x] 插件通过 Docker 镜像实现。通过设置必要的环境变量实现功能
 
 ### 2018/05/28
 
@@ -223,9 +225,9 @@
 
 ### 2018/05/28
 
-* [x] PCIT 虽然同时支持多个 Git 服务商，但各个 Git 服务商之间保持绝对独立，不支持跨 Git 服务商管理，即 GitHub 的账号不能管理 Gitee。
+* [x] PCIT 虽然同时支持多个 Git 服务商，但各个 Git 服务商之间保持绝对独立，不支持跨 Git 服务商管理，即 GitHub 的账号不能管理 Gitee
 
-* [x] 不支持账号整合，关联。故 api 的 url 涉及到需要认证的，无需包含 git_type。
+* [x] 不支持账号整合，关联。故 api 的 url 涉及到需要认证的，无需包含 git_type
 
 ### 2018/05/28
 
@@ -233,7 +235,7 @@
 
 ### 2018/05/27
 
-* [x] GitHub App 提供的 OAuth 获取不到用户名下的组织列表，所以网站登录使用 OAuth App。
+* [x] GitHub App 提供的 OAuth 获取不到用户名下的组织列表，所以网站登录使用 OAuth App
 
 ### 2018/05/26
 
@@ -265,7 +267,7 @@
 
 ### 2018/05/16
 
-* [x] 区分内外 PR，即 PR 是从内部仓库发起，还是从他人仓库发起，这影响着后续 Secret 的功能。
+* [x] 区分内外 PR，即 PR 是从内部仓库发起，还是从他人仓库发起，这影响着后续 Secret 的功能
 
 ### 2018/05/15
 
@@ -304,7 +306,7 @@
 
 ### 2018/05/03
 
-* [x] 强制将 `pcit_cache` 数据卷挂载到 `/tmp/pcit_cache` 目录，故安装时可以设置该目录为缓存目录。
+* [x] 强制将 `pcit_cache` 数据卷挂载到 `/tmp/pcit_cache` 目录，故安装时可以设置该目录为缓存目录
 
 ### 2018/04/29
 

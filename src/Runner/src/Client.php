@@ -87,7 +87,7 @@ class Client
         $workspace = $yaml_obj->workdir ?? $yaml_obj->workspace ?? null;
         $pipeline = $yaml_obj->steps ?? $yaml_obj->pipeline ?? null;
         $this->services = $services = $yaml_obj->services ?? null;
-        $matrix = $yaml_obj->matrix ?? null;
+        $matrix = $yaml_obj->jobs ?? $yaml_obj->matrix ?? null;
         $notifications = $yaml_obj->notifications ?? null;
 
         $this->pipeline = $pipeline;

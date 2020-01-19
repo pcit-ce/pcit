@@ -70,7 +70,7 @@ class Pipeline
         $when_event = $when->event ?? null; // tag pull_request
         $when_branch = $when->branch ?? null;
         $when_tag = $when->tag ?? null;
-        $when_matrix = $when->matrix ?? null;
+        $when_matrix = $when->jobs ?? $when->matrix ?? null;
 
         if (!(new Platform($when_platform, 'linux/amd64'))->regHandle()) {
             \Log::emergency('skip by platform check');
