@@ -19,7 +19,8 @@ matrix:
     - 7.1.27
   REDIS_VERSION:
     - 5.0.3
-
+  MYSQL_VERSION:
+    - 8.0.19
 EOF;
 
         $yaml2 = <<<EOF
@@ -27,8 +28,10 @@ matrix:
   include:
     - PHP_VERSION: 7.2.16
       REDIS_VERSION: 5.0.3
+      MYSQL_VERSION: 8.0.19
     - PHP_VERSION: 7.1.27
       REDIS_VERSION: 5.0.3
+      MYSQL_VERSION: 8.0.19
 EOF;
 
         $result1 = Yaml::parse($yaml);

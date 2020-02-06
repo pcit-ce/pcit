@@ -43,11 +43,11 @@ class Server extends Kernel
     {
         try {
             // 从 Webhooks 缓存中拿出数据，存入数据库
-            $this->webhooks();
+            $this->handleWebhooks();
 
             // 从数据库中取出数据，生成 jobs
             try {
-                $this->build();
+                $this->handleBuild();
             } catch (\Throwable $e) {
                 \Log::debug($e->__toString(), []);
             }
@@ -61,7 +61,7 @@ class Server extends Kernel
     /**
      * @throws Exception
      */
-    public function build(): void
+    public function handleBuild(): void
     {
         // get build info
         $buildData = (new BuildEvent())->handle();
@@ -117,7 +117,7 @@ class Server extends Kernel
      *
      * @throws Exception
      */
-    private function webhooks(): void
+    private function handleWebhooks(): void
     {
         \Log::debug('start handle webhooks');
 

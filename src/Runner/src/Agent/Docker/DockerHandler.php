@@ -161,7 +161,7 @@ class DockerHandler implements RunnerHandlerInterface
         $job_id = $this->job_id;
         $cache = $this->cache;
         // 复制原始 key
-        $copyKey = CacheKey::pipelineListCopyKey($job_id);
+        $copyKey = CacheKey::pipelineListCopyKey($job_id, 'pipeline', 'runner');
 
         while (1) {
             $step = $cache->rpop($copyKey);
@@ -188,6 +188,8 @@ class DockerHandler implements RunnerHandlerInterface
                 throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
             }
         }
+
+        $cache->del($copyKey);
     }
 
     /**
@@ -288,7 +290,7 @@ class DockerHandler implements RunnerHandlerInterface
 
         // 复制 key
 
-        $copyKey = CacheKey::pipelineListCopyKey($job_id, $status);
+        $copyKey = CacheKey::pipelineListCopyKey($job_id, $status, 'runner');
 
         while (1) {
             $step = $cache->rpop($copyKey);
@@ -309,6 +311,8 @@ class DockerHandler implements RunnerHandlerInterface
         if ('changed' !== $status) {
             $this->after($job_id, 'changed');
         }
+
+        $cache->del($copyKey);
 
         \Log::emergency('Run job after finished', ['status' => $status]);
     }

@@ -57,11 +57,11 @@ class CacheKey
         return $cache->dump($sourceKey);
     }
 
-    public static function pipelineListCopyKey(int $jobId, string $type = 'pipeline')
+    public static function pipelineListCopyKey(int $jobId, string $type = 'pipeline', string $prefix = null)
     {
         $cache = \Cache::store();
 
-        $copyKey = 'pcit/'.$type.'/list_copy/'.$jobId;
+        $copyKey = 'pcit/'.$type.'/list_copy_'.$prefix.'/'.$jobId;
         $cache->del($copyKey);
 
         $dump = self::pipelineDumpListKey($jobId, $type);

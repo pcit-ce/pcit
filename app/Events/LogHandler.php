@@ -53,7 +53,7 @@ class LogHandler
           ];
 
         foreach ($types as $type) {
-            $copyKey = CacheKey::pipelineListCopyKey($this->jobId, $type);
+            $copyKey = CacheKey::pipelineListCopyKey($this->jobId, $type, 'loghandler');
 
             while (1) {
                 $step = $this->cache->rpop($copyKey);
@@ -64,6 +64,8 @@ class LogHandler
 
                 $steps[] = $step;
             }
+
+            $this->cache->del($copyKey);
         }
 
         array_unshift($steps, 'clone', 'cache_download');
@@ -74,7 +76,10 @@ class LogHandler
 
     public function handlePipeline($pipeline)
     {
+        \Log::emergency('Handle step log', ['jobId' => $this->jobId, 'step' => $pipeline]);
+
         $cache = $this->cache;
+
         // 日志美化
         $result = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
@@ -84,47 +89,16 @@ class LogHandler
             return;
         }
 
-        \Log::emergency('Handle step log', ['jobId' => $this->jobId, 'step' => $pipeline]);
+        $result_array = explode("\n", $result);
 
-        $folder_name = sys_get_temp_dir().'/.pcit';
+        $log = null;
 
-        !is_dir($folder_name) && mkdir($folder_name);
+        foreach ($result_array as $line) {
+            $line = substr($line, 8);
 
-        file_put_contents($folder_name.'/'.$this->jobId, $result);
-
-        $fh = fopen($folder_name.'/'.$this->jobId, 'r');
-
-        $redis_key = (string) $this->jobId.'_log';
-
-        $cache->del($redis_key);
-
-        while (!feof($fh)) {
-            $one_line_content = fgets($fh);
-
-            $one_line_content = substr("$one_line_content", 8);
-
-            $cache->append($redis_key, $one_line_content);
+            $log .= $line."\n";
         }
 
-        fclose($fh);
-
-        $log_content = $cache->get($redis_key);
-
-        // cleanup
-        $this->gc($folder_name, $redis_key);
-
-        try {
-            $log_content = iconv('utf-8', 'utf-8//IGNORE', $log_content);
-        } catch (\Throwable $e) {
-            \Log::emergency('iconv handle error '.$e->getMessage(), ['pipeline' => $k]);
-        }
-
-        return $log_content;
-    }
-
-    private function gc(string $folder_name, string $redis_key): void
-    {
-        unlink($folder_name.'/'.$this->jobId);
-        $this->cache->del($redis_key);
+        return trim($log);
     }
 }

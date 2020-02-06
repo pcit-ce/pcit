@@ -36,19 +36,63 @@ class JobController
     public function find($job_id)
     {
         $job = Job::find((int) $job_id);
+        $sse = \Request::get('sse');
+
+        if ($sse) {
+            $logHandler = new LogHandler((int) $job_id);
+            $steps = $logHandler->getSteps();
+
+            header('X-Accel-Buffering: no');
+            header('Content-Type: text/event-stream');
+            header('Cache-Control: no-cache');
+
+            while (1) {
+                $build_log = [];
+                $id = 1;
+
+                foreach ($steps as $step) {
+                    $build_log[$step] = $logHandler->handlePipeline($step);
+                }
+
+                $job['build_log'] = json_encode($build_log);
+
+                $job_json = json_encode($job);
+
+                // 获取状态
+                if (!\in_array(Job::getBuildStatus((int) $job_id), [CI::GITHUB_CHECK_SUITE_STATUS_QUEUED])) {
+                    // 已完成，从数据库获取 job 数据
+                    $job = Job::find((int) $job_id);
+                    $job_json = json_encode($job);
+                    echo "id: $id\nevent: close\nretry: 1000\ndata: $job_json \n\n";
+                    flush();
+
+                    return;
+                }
+
+                echo "id: $id\nretry: 1000\ndata: $job_json \n\n";
+
+                flush();
+
+                sleep(5);
+            }
+
+            return;
+        }
 
         // 获取状态
         $state = $job['state'];
-        if (\in_array($state, [CI::GITHUB_CHECK_SUITE_STATUS_QUEUED])) {
-            $build_log = [];
-            $logHandler = new LogHandler((int) $job_id);
-            $steps = $logHandler->getSteps();
-            foreach ($steps as $step) {
-                $build_log[$step] = $logHandler->handlePipeline($step);
-            }
-
-            $job['build_log'] = json_encode($build_log);
+        if (!\in_array($state, [CI::GITHUB_CHECK_SUITE_STATUS_QUEUED])) {
+            return $job;
         }
+
+        $build_log = [];
+        $logHandler = new LogHandler((int) $job_id);
+        $steps = $logHandler->getSteps();
+        foreach ($steps as $step) {
+            $build_log[$step] = $logHandler->handlePipeline($step);
+        }
+
+        $job['build_log'] = json_encode($build_log);
 
         return $job;
     }

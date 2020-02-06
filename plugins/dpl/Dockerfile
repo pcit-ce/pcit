@@ -1,4 +1,4 @@
-FROM khs1994/php:7.3.11-composer-alpine
+FROM khs1994/php:7.4.2-composer-alpine
 
 RUN git clone --depth=1 https://github.com/travis-ci/dpl /dpl
 

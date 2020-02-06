@@ -220,7 +220,7 @@ steps: # pipeline
     when:
       status: success
       jobs:
-      - PHP_VERSION: 7.3.11
+      - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -233,7 +233,7 @@ steps: # pipeline
       status: success
       event: ['push']
       jobs:
-      - PHP_VERSION: 7.3.11
+      - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -253,7 +253,7 @@ steps: # pipeline
       status: success
       event: ['push']
       jobs:
-      - PHP_VERSION: 7.3.11
+      - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -273,7 +273,7 @@ steps: # pipeline
       event: ['tag']
       status: success
       jobs:
-      - PHP_VERSION: 7.3.11
+      - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -291,7 +291,7 @@ steps: # pipeline
       event: ['tag']
       status: success
       jobs:
-      - PHP_VERSION: 7.3.11
+      - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -325,7 +325,7 @@ steps: # pipeline
       status: success
       event: ['push']
       jobs:
-      - PHP_VERSION: 7.3.11
+      - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -348,7 +348,7 @@ steps: # pipeline
       status: success
       event: push
       jobs:
-      - PHP_VERSION: 7.3.11
+      - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
         REDIS_VERSION: 5.0.3
         MYSQL_VERSION: 5.7.24
@@ -451,6 +451,7 @@ services:
 # 变量矩阵
 jobs:
   PHP_VERSION:
+    - 7.4.2
     - 7.3.11
     # - nightly
     - 7.2.24
@@ -502,4 +503,4 @@ networks:
     - "docker.khs1994.com:127.0.0.1"
 
 # 指定构建步骤的默认镜像
-image: khs1994/php:7.3.11-composer-fpm
+image: khs1994/php:7.4.2-composer-fpm

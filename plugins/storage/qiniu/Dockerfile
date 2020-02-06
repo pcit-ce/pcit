@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM khs1994/php:7.3.11-composer-alpine as composer
+FROM khs1994/php:7.4.2-composer-alpine as composer
 
 COPY composer.json /srv/pcit/plugin/qiniu/
 
