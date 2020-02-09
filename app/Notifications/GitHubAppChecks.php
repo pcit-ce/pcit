@@ -134,25 +134,4 @@ class GitHubAppChecks
             'result' => $result,
         ]);
     }
-
-    /**
-     * @throws Exception
-     */
-    public static function notIncludeYaml(int $job_key_id): void
-    {
-        self::send($job_key_id,
-            null, CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED,
-            time(), time(),
-            CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS, null,
-            null,
-            app('pcit')
-                ->check_md
-                ->success(
-                    'PHP',
-                    PHP_OS,
-                    null,
-                    'This repo not include .pcit.yml file, please see https://docs.ci.khs1994.com/usage/'
-                )
-        );
-    }
 }

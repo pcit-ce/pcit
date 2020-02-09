@@ -1,0 +1,8 @@
+{
+    "name": "pcit/exec-runner",
+    "autoload": {
+        "psr-4": {
+            "PCIT\\Runner\\Agent\\Exec\\" : "src/"
+        }
+    }
+}

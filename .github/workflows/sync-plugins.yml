@@ -1,0 +1,144 @@
+on:
+  push:
+
+name: Sync Plugins
+
+jobs:
+  sync-plugins:
+    runs-on: ubuntu-latest
+    if: |
+      contains( github.event.head_commit.message, '[sync git]')
+      || contains( github.ref, 'refs/tags/')
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    - name: sync-plugin-storage-tencent-cos-v5
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/plugin-tencent-cos-v5
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/storage/tencent_cos_v5
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-storage-s3
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/plugin-s3
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/storage/s3
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-pages
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/plugin-pages
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/pages
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-git
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/plugin-git
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/git
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-docker
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/plugin-docker
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/docker
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-github-release
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-github-release
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/releases/github
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-npm
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-npm
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: plugins/package/npm
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-plugin-demo
+      uses: docker://pcit/pages
+      env:
+        PCIT: true
+      with:
+        email: khs1994@khs1994.com
+        git_token: ${{ secrets.PCIT_GIT_TOKEN }}
+        git_url: github.com/pcit-ce/plugin-demo
+        keep_history: "true"
+        local_dir: plugins/demo
+        message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        target_branch: master
+        username: khs1994
+    - name: sync-plugin-qiniu
+      uses: docker://pcit/pages
+      env:
+        PCIT: true
+      with:
+        email: khs1994@khs1994.com
+        git_token: ${{ secrets.PCIT_GIT_TOKEN }}
+        git_url: github.com/pcit-plugins/pcit-qiniu
+        keep_history: "true"
+        local_dir: plugins/storage/qiniu
+        message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        target_branch: master
+        username: khs1994
+    - name: sync-plugin-gitee-release
+      uses: docker://pcit/pages
+      env:
+        PCIT: true
+      with:
+        email: khs1994@khs1994.com
+        git_token: ${{ secrets.PCIT_GIT_TOKEN }}
+        git_url: github.com/pcit-plugins/pcit-gitee-release
+        keep_history: "true"
+        local_dir: plugins/releases/gitee
+        message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        target_branch: master
+        username: khs1994
+    - name: sync-plugin-actions-downloader
+      uses: docker://pcit/pages
+      env:
+        PCIT: true
+      with:
+        email: khs1994@khs1994.com
+        git_token: ${{ secrets.PCIT_GIT_TOKEN }}
+        git_url: github.com/pcit-plugins/pcit-actions_downloader
+        keep_history: "true"
+        local_dir: plugins/actions_downloader
+        message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        target_branch: master
+        username: khs1994

@@ -78,9 +78,11 @@ push by you, test and deploy by us.
 
 ### 开放(合作共赢)
 
-* GitProvider
-* Runner
+* GitProviders
+* Providers
+* Runners
 * Plugins
+* notifications
 * OpenAPI
 
 ## 使用方法（使用之前需要私有部署 PCIT EE）

@@ -1,0 +1,9 @@
+{
+  "name": "pcit/provider-aliyun-docker-registry",
+  "version": "18.12.0",
+  "autoload": {
+    "psr-4": {
+      "PCIT\\Provider\\AliyunDockerRegistry\\": "src/"
+    }
+  }
+}

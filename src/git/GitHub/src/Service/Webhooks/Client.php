@@ -20,7 +20,7 @@ class Client
     /**
      * @var string
      */
-    public $cache_key = 'webhooks';
+    public $cache_key = '/pcit/webhooks';
 
     public function __construct()
     {

@@ -1,6 +1,6 @@
 {
   "name": "pcit/kernel",
-  "version": "19.06.0",
+  "version": "18.12.0",
   "autoload": {
     "psr-4": {
       "PCIT\\": "src/"

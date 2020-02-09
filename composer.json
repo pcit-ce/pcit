@@ -16,11 +16,19 @@
     },
     {
       "type": "path",
+      "url": "./src/Runners/kubeRunner"
+    },
+    {
+      "type": "path",
+      "url": "./src/Runners/exec-runner"
+    },
+    {
+      "type": "path",
       "url": "./src/Framework"
     },
     {
       "type": "path",
-      "url": "./src/Logs"
+      "url": "./src/Log"
     },
     {
       "type": "path",
@@ -44,11 +52,19 @@
     },
     {
       "type": "path",
-      "url": "./src/providers/AliyunDockerRegistry"
+      "url": "./src/provider"
     },
     {
       "type": "path",
-      "url": "./src/providers/WeChat"
+      "url": "./src/providers/provider-aliyun_docker_registry"
+    },
+    {
+      "type": "path",
+      "url": "./src/notification"
+    },
+    {
+      "type": "path",
+      "url": "./src/notifications/notification-wechat"
     }
   ],
   "authors": [{
@@ -75,16 +91,18 @@
     "khs1994/wechat": "dev-master",
     "monolog/monolog": "^1.23",
     "nunomaduro/collision": "^3.0",
-    "pcit/framework": "^19.06",
-    "pcit/git-coding": "*",
-    "pcit/git-gitee": "*",
-    "pcit/git-github": "*",
-    "pcit/git-gogs": "*",
-    "pcit/kernel": "*",
-    "pcit/logs": "*",
-    "pcit/provider-aliyun-docker-registry": "*",
-    "pcit/provider-wechat": "*",
-    "pcit/runner": "^19.06",
+    "pcit/framework": "^18.12",
+    "pcit/git-coding": "^18.12",
+    "pcit/git-gitee": "^18.12",
+    "pcit/git-github": "^18.12",
+    "pcit/git-gogs": "^18.12",
+    "pcit/kernel": "^18.12",
+    "pcit/log": "^18.12",
+    "pcit/notification": "^18.12",
+    "pcit/notification-wechat": "^18.12",
+    "pcit/provider": "^18.12",
+    "pcit/provider-aliyun-docker-registry": "^18.12",
+    "pcit/runner": "^18.12",
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
     "vlucas/phpdotenv": "^3.0.0"
@@ -131,14 +149,16 @@
     "compile:dump": [
       "cp -r -f src/Framework/ vendor/pcit/framework",
       "cp -r -f src/Kernel/ vendor/pcit/kernel",
-      "cp -r -f src/Logs/ vendor/pcit/logs",
+      "cp -r -f src/Log/ vendor/pcit/log",
       "cp -r -f src/Runner/ vendor/pcit/runner",
       "cp -r -f src/git/Coding/ vendor/pcit/git-coding",
       "cp -r -f src/git/Gitee/ vendor/pcit/git-gitee",
       "cp -r -f src/git/GitHub/ vendor/pcit/git-github",
       "cp -r -f src/git/Gogs/ vendor/pcit/git-gogs",
-      "cp -r -f src/providers/AliyunDockerRegistry/ vendor/pcit/provider-aliyun-docker-registry",
-      "cp -r -f src/providers/WeChat/ vendor/pcit/provider-wechat"
+      "cp -r -f src/provider/ vendor/pcit/provider",
+      "cp -r -f src/providers/provider-aliyun-docker-registry/ vendor/pcit/provider-aliyun-docker-registry",
+      "cp -r -f src/notification/ vendor/pcit/notification",
+      "cp -r -f src/notifications/notification-wechat/ vendor/pcit/notification-wechat"
     ],
     "compile:pcit": "phar-builder package --name=pcit.phar --output-dir=./ --entry-point=bin/src/pcit.php --bzip2 --include framework --include src --include bin --include openapi/openapi.json",
     "compile:pcitd": "phar-builder package --name=pcitd.phar --output-dir=./ --entry-point=bin/src/pcitd.php --bzip2 --include framework --include src --include bin --include openapi/openapi.json"

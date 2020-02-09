@@ -1,6 +1,6 @@
 {
   "name": "pcit/framework",
-  "version": "19.06.0",
+  "version": "18.12.0",
   "type": "library",
   "require": {
     "symfony/console": "^4.4 || ^5.0",

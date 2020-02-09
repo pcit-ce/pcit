@@ -185,7 +185,7 @@ class IndexController
                 'coding' => $host.'/webhooks/coding',
                 'gitee' => $host.'/webhooks/gitee',
                 'github' => $host.'/webhooks/github',
-                'aliyun_docker_registry' => $host.'/webhooks/aliyun_docker_registry',
+                'custom_provider' => $host.'/webhooks/custom_provider',
             ],
             'repo' => [
                 'main' => $host.'/{git_type}/{username}/{repo}',

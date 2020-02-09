@@ -1,0 +1,9 @@
+{
+    "name": "pcit/notification",
+    "version": "18.12.0",
+    "autoload": {
+        "psr-4": {
+            "PCIT\\Notification\\": "src/"
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "name": "pcit/provider",
+    "version": "18.12.0",
+    "autoload": {
+        "psr-4": {
+            "PCIT\\Provider\\": "src/"
+        }
+    }
+}

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Console\PCITDaemon;
 
 use App\Build;
-use App\Console\Webhooks\AliYunRegistry;
 use App\Events\Build as BuildEvent;
 use App\Events\CheckAdmin;
 use Error;
 use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\HttpClient;
+use PCIT\Framework\Support\StringSupport;
 use PCIT\Framework\Support\Subject;
 use PCIT\Support\CI;
 use PCIT\Support\Git;
@@ -138,10 +138,13 @@ class Server extends Kernel
 
             list($git_type, $event_type, $json) = json_decode($json_raw, true);
 
-            if ('aliyun_docker_registry' === $git_type) {
-                $this->aliyunDockerRegistry($json);
+            $provider = StringSupport::camelize($git_type);
+            $class = 'PCIT\Provider\\'.ucfirst($provider).'\\WebhooksHandler';
 
-                \Log::info('Aliyun Docker Registry handle success', []);
+            if (class_exists($class)) {
+                (new $class())->handle($json);
+
+                \Log::info("$provider handle success", []);
 
                 return;
             }
@@ -159,14 +162,6 @@ class Server extends Kernel
                 $webhooks->pushErrorCache($json_raw);
             }
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function aliyunDockerRegistry(string $json_content): void
-    {
-        AliYunRegistry::handle($json_content);
     }
 
     /**

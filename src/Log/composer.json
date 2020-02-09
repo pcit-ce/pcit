@@ -1,14 +1,14 @@
 {
-  "name": "pcit/git-gitee",
+  "name": "pcit/log",
   "version": "18.12.0",
   "autoload": {
     "psr-4": {
-      "PCIT\\Gitee\\": "src/"
+      "PCIT\\Log\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "PCIT\\Gitee\\Tests": "tests/"
+      "PCIT\\Log\\Tests": "tests/"
     }
   }
 }
