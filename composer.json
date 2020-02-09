@@ -155,7 +155,7 @@
       "cp -r -f src/git/GitHub/ vendor/pcit/git-github",
       "cp -r -f src/git/Gogs/ vendor/pcit/git-gogs",
       "cp -r -f src/provider/ vendor/pcit/provider",
-      "cp -r -f src/providers/provider-aliyun-docker-registry/ vendor/pcit/provider-aliyun-docker-registry",
+      "cp -r -f src/providers/provider-aliyun_docker_registry/ vendor/pcit/provider-aliyun-docker-registry",
       "cp -r -f src/notification/ vendor/pcit/notification",
       "cp -r -f src/notifications/notification-wechat/ vendor/pcit/notification-wechat"
     ],

@@ -260,7 +260,7 @@ EOF;
     {
         $sql = 'SELECT state FROM jobs WHERE id=?';
 
-        return DB::select($sql, [$job_key_id]);
+        return DB::select($sql, [$job_key_id])[0]['state'] ?? '';
     }
 
     /**

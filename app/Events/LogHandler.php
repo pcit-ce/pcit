@@ -27,8 +27,6 @@ class LogHandler
     {
         $logs = [];
         $steps = [];
-        $cache = $this->cache;
-        $jobId = $this->jobId;
 
         $steps = $this->getSteps();
 
