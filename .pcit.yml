@@ -311,6 +311,8 @@ steps: # pipeline
     - echo "phar.readonly = Off" >> /usr/local/etc/php/conf.d/phar.ini
     - rm -rf vendor/pcit/*
     - composer compile:dump
+    - composer global require macfja/phar-builder
+    - ln -sf /tmp/vendor/bin/* /usr/local/bin
     - composer compile:pcit
     - composer compile:pcitd
     - ls -lah *.phar
@@ -454,7 +456,7 @@ jobs:
     - 7.4.2
     - 7.3.11
     # - nightly
-    - 7.2.24
+    # - 7.2.24
     # - 7.1.26
   NGINX_VERSION:
     - 1.15.8

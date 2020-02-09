@@ -15,7 +15,7 @@ class MatrixTest extends TestCase
         $yaml = <<<EOF
 matrix:
   PHP_VERSION:
-    - 7.2.16
+    - 7.4.2
     - 7.1.27
   REDIS_VERSION:
     - 5.0.3
@@ -26,7 +26,7 @@ EOF;
         $yaml2 = <<<EOF
 matrix:
   include:
-    - PHP_VERSION: 7.2.16
+    - PHP_VERSION: 7.4.2
       REDIS_VERSION: 5.0.3
       MYSQL_VERSION: 8.0.19
     - PHP_VERSION: 7.1.27

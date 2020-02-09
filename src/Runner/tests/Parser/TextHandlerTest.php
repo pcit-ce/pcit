@@ -13,12 +13,12 @@ class TextHandlerTest extends TestCase
     {
         $image = (new TextHandler())->handle('khs1994/php:${PHP_VERSION}-fpm-alpine-${PCIT_TAG}',
             [
-                'PHP_VERSION=7.2.16',
+                'PHP_VERSION=7.4.2',
                 'PCIT_TAG=1.0.0',
             ]
         );
 
         $this->assertEquals(sprintf(
-            'khs1994/php:%s-fpm-alpine-%s', '7.2.16', '1.0.0'), $image);
+            'khs1994/php:%s-fpm-alpine-%s', '7.4.2', '1.0.0'), $image);
     }
 }

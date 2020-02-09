@@ -2,7 +2,7 @@
 
 `matrix` 用来设置构建矩阵。常见的场景就是项目需要在不同的软件版本中进行测试。
 
-例如我们需要在 PHP 7.2 和 7.1 版本中进行测试。
+例如我们需要在 PHP 7.4 和 7.3 版本中进行测试。
 
 ```yaml
 pipeline:
@@ -12,8 +12,8 @@ pipeline:
 
 matrix:
   PHP_TAG:
-    - 7.2.6-alpine3.7
-    - 7.1.18-alpine    
+    - 7.4.2-alpine
+    - 7.3.11-alpine    
 ```
 
 我们在 `image` 指令中设置变量 `${PHP_TAG}`
@@ -25,11 +25,11 @@ matrix:
 ```yaml
 pipeline:
   php:
-    image: khs1994/php-fpm:7.2.6-alpine3.7
+    image: khs1994/php-fpm:7.4.2-alpine
     ...
 
   php2:
-    image: khs1994/php-fpn:7.1.18-alpine
+    image: khs1994/php-fpn:7.3.11-alpine
     ...
 ```
 

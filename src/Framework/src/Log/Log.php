@@ -28,85 +28,85 @@ class Log extends Logger
         $this->pushHandler(new StreamHandler($log_path, $log_level));
     }
 
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::log($level, $message, $context);
+        parent::log($level, $message, $context);
     }
 
-    public function emergency($message, array $context = [])
+    public function emergency($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::emergency($message, $context);
+        parent::emergency($message, $context);
     }
 
-    public function alert($message, array $context = [])
+    public function alert($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::alert($message, $context);
+        parent::alert($message, $context);
     }
 
-    public function critical($message, array $context = [])
+    public function critical($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::critical($message, $context);
+        parent::critical($message, $context);
     }
 
-    public function error($message, array $context = [])
+    public function error($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::error($message, $context);
+        parent::error($message, $context);
     }
 
-    public function warning($message, array $context = [])
+    public function warning($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::warning($message, $context);
+        parent::warning($message, $context);
     }
 
-    public function notice($message, array $context = [])
+    public function notice($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::notice($message, $context);
+        parent::notice($message, $context);
     }
 
-    public function info($message, array $context = [])
+    public function info($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::info($message, $context);
+        parent::info($message, $context);
     }
 
-    public function debug($message, array $context = [])
+    public function debug($message, array $context = []): void
     {
         $debug = debug_backtrace();
 
         $context = $this->getContext($debug, $context);
 
-        return parent::debug($message, $context);
+        parent::debug($message, $context);
     }
 
     public function getContext($debug, array $context = [])

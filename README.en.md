@@ -58,12 +58,12 @@ Cloud native computing uses an open source software stack to be:
 pipeline:
 
   install:
-    image: khs1994/php:7.2.10-fpm-alpine
+    image: khs1994/php:7.4.2-fpm-alpine
     commands:
       - composer install  
 
   script:
-    image: khs1994/php:7.2.10-fpm-alpine
+    image: khs1994/php:7.4.2-fpm-alpine
     commands:
       - vendor/bin/phpunit
 

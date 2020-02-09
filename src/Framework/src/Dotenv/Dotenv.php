@@ -19,7 +19,7 @@ class Dotenv
             $env_file = null;
         }
 
-        $env_file && \Dotenv\Dotenv::create(base_path(), $env_file)->load();
+        $env_file && \Dotenv\Dotenv::createImmutable(base_path(), $env_file)->load();
 
         return $env_file;
     }
