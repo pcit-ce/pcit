@@ -10,7 +10,7 @@ use Symfony\Component\Console\Application;
 require __DIR__.'/../../vendor/autoload.php';
 require __DIR__.'/../../framework/bootstrap/app.php';
 
-$cli = new Application('Tencent AI CLI', 'v18.06');
+$cli = new Application('Tencent AI CLI', 'v19.12');
 
 $cli->add(new TranslateCommand());
 

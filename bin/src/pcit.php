@@ -8,7 +8,7 @@ require __DIR__.'/../../vendor/autoload.php';
 
 $app = require __DIR__.'/../../framework/bootstrap/app.php';
 
-$cli = new Application('PCIT CLI', 'v18.06');
+$cli = new Application('PCIT CLI', 'v19.12');
 
 $fh = opendir(base_path().'app/Console/PCIT/Repo');
 

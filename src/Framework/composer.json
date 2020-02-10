@@ -1,6 +1,6 @@
 {
   "name": "pcit/framework",
-  "version": "18.12-dev",
+  "version": "19.12-dev",
   "type": "library",
   "require": {
     "symfony/console": "^5.0",
@@ -22,7 +22,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "18.12-dev"
+      "dev-master": "19.12-dev"
     }
   }
 }

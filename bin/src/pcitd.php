@@ -20,7 +20,7 @@ if ('cli' === \PHP_SAPI) {
      * @see https://juejin.im/entry/5a3795a051882572ed55af00
      * @see https://segmentfault.com/a/1190000005084734
      */
-    $cli = new Application('PCIT Daemon CLI', 'v18.06');
+    $cli = new Application('PCIT Daemon CLI', 'v19.12');
 
     $cli->setCatchExceptions(false);
 

@@ -1,7 +1,7 @@
 # CHANGELOG
 
-* [18.12.0](https://github.com/pcit-ce/pcit/compare/18.12.0-beta2...18.12.0)
-* [18.12.0-beta2](https://github.com/pcit-ce/pcit/compare/18.12.0-beta1...18.12.0-beta2)
+* [19.12.0-alpha1](https://github.com/pcit-ce/pcit/compare/18.12.0...master)
+* [18.12.0](https://github.com/pcit-ce/pcit/compare/18.12.0-beta1...18.12.0)
 * [18.12.0-beta1](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha7...18.12.0-beta1)
 * [18.12.0-alpha7](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha6...18.12.0-alpha7)
 * [18.12.0-alpha6](https://github.com/pcit-ce/pcit/compare/18.12.0-alpha5...18.12.0-alpha6)
@@ -22,6 +22,8 @@
 * [0.0.10](https://github.com/pcit-ce/pcit/compare/0.0.5...0.0.10)
 * [0.0.5](https://github.com/pcit-ce/pcit/compare/0.0.1...0.0.5)
 * [0.0.1](https://github.com/pcit-ce/pcit/releases/tag/0.0.1)
+
+## v19.12
 
 ## v18.12
 

@@ -91,18 +91,18 @@
     "khs1994/wechat": "dev-master",
     "monolog/monolog": "^2.0.2",
     "nunomaduro/collision": "^4.1",
-    "pcit/framework": "18.12-dev",
-    "pcit/git-coding": "18.12-dev",
-    "pcit/git-gitee": "18.12-dev",
-    "pcit/git-github": "18.12-dev",
-    "pcit/git-gogs": "18.12-dev",
-    "pcit/kernel": "18.12-dev",
-    "pcit/log": "18.12-dev",
-    "pcit/notification": "18.12-dev",
-    "pcit/notification-wechat": "18.12-dev",
-    "pcit/provider": "18.12-dev",
-    "pcit/provider-aliyun-docker-registry": "18.12-dev",
-    "pcit/runner": "18.12-dev",
+    "pcit/framework": "19.12-dev",
+    "pcit/git-coding": "19.12-dev",
+    "pcit/git-gitee": "19.12-dev",
+    "pcit/git-github": "19.12-dev",
+    "pcit/git-gogs": "19.12-dev",
+    "pcit/kernel": "19.12-dev",
+    "pcit/log": "19.12-dev",
+    "pcit/notification": "19.12-dev",
+    "pcit/notification-wechat": "19.12-dev",
+    "pcit/provider": "19.12-dev",
+    "pcit/provider-aliyun-docker-registry": "19.12-dev",
+    "pcit/runner": "19.12-dev",
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
     "vlucas/phpdotenv": "^4.1.0"
@@ -134,7 +134,7 @@
   "prefer-stable": true,
   "extra": {
     "branch-alias": {
-      "dev-master": "18.12-dev"
+      "dev-master": "19.12-dev"
     }
   },
   "scripts": {
