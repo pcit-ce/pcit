@@ -37,8 +37,9 @@ class LogHandler
         }
 
         $logs = array_filter($logs);
+        $logs = json_encode($logs, JSON_THROW_ON_ERROR + JSON_UNESCAPED_UNICODE);
 
-        Job::updateLog($this->jobId, $logs = json_encode($logs, JSON_UNESCAPED_UNICODE));
+        Job::updateLog($this->jobId, $logs);
     }
 
     public function getSteps()
@@ -50,20 +51,14 @@ class LogHandler
             'changed',
           ];
 
+        $steps = [];
+
         foreach ($types as $type) {
-            $copyKey = CacheKey::pipelineListCopyKey($this->jobId, $type, 'loghandler');
+            $cacheKey = CacheKey::pipelineListKey($this->jobId, $type, 'loghandler');
 
-            while (1) {
-                $step = $this->cache->rpop($copyKey);
+            $step = array_reverse($this->cache->lrange($cacheKey, 0, -1));
 
-                if (!$step) {
-                    break;
-                }
-
-                $steps[] = $step;
-            }
-
-            $this->cache->del($copyKey);
+            $steps = [...$steps, ...$step];
         }
 
         array_unshift($steps, 'clone', 'cache_download');
@@ -97,6 +92,6 @@ class LogHandler
             $log .= $line."\n";
         }
 
-        return trim($log);
+        return iconv('utf-8', 'utf-8//IGNORE', trim($log));
     }
 }

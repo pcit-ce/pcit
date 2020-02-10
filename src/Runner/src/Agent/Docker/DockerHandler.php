@@ -58,7 +58,6 @@ class DockerHandler implements RunnerHandlerInterface
             if (CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE === $e->getMessage()) {
                 // job 失败
                 $this->after($job_id, 'failure');
-                Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
 
                 // 清理 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);
@@ -67,10 +66,8 @@ class DockerHandler implements RunnerHandlerInterface
             } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                 // job success
                 $this->after($job_id, 'success');
-                Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
             } else {
                 // 其他错误
-                Job::updateBuildStatus($job_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
                 Job::updateFinishedAt($job_id, time());
                 // 清理 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);

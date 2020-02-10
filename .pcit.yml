@@ -311,9 +311,6 @@ steps: # pipeline
     - echo "phar.readonly = Off" >> /usr/local/etc/php/conf.d/phar.ini
     - rm -rf vendor/pcit/*
     - composer compile:dump
-    - rm -rf /tmp/vendor
-    - composer global require macfja/phar-builder
-    - ln -sf /tmp/vendor/bin/* /usr/local/bin
     - composer compile:pcit
     - composer compile:pcitd
     - ls -lah *.phar

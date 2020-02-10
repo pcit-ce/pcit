@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Events;
 
 use App\Build;
+use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
 use App\Notifications\GitHubChecksConclusion\Failed;
 use App\Notifications\GitHubChecksConclusion\InProgress;
@@ -60,16 +61,19 @@ class UpdateBuildStatus
                 break;
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE;
+                Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 (new Failed($job_key_id, $config, $build_log))->handle();
 
                 break;
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS;
+                Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
                 (new Passed($job_key_id, $config, $build_log))->handle();
 
                 break;
             default:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED;
+                Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
                 (new Cancelled($job_key_id, $config, $build_log))->handle();
         }
     }
