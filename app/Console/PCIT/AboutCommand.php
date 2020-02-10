@@ -16,7 +16,7 @@ class AboutCommand extends Command
         $this->setDescription('Shows the short information about PCIT');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $output->write('<info>PCIT - Test, Build & Deploy Code</info>
 
@@ -24,5 +24,7 @@ class AboutCommand extends Command
 
 See <info>https://ci.khs1994.com</info> for more information.</comment>
         ');
+
+        return 0;
     }
 }

@@ -25,6 +25,8 @@ class InitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        return $output->write('Please exec <info>pcitinit</info> command');
+        $output->write('Please exec <info>pcitinit</info> command');
+
+        return 0;
     }
 }

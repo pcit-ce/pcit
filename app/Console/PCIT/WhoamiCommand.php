@@ -25,12 +25,14 @@ class WhoamiCommand extends Command
     }
 
     /**
-     * @return int|void|null
+     * @return int
      *
      * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->write(PCITCommand::HttpGet($input, 'user', null, true));
+
+        return 0;
     }
 }

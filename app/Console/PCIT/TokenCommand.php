@@ -23,7 +23,7 @@ class TokenCommand extends Command
     }
 
     /**
-     * @return int|void|null
+     * @return int
      *
      * @throws Exception
      */
@@ -36,5 +36,7 @@ class TokenCommand extends Command
         } catch (\Throwable $e) {
             throw new Exception('Please exec login first', 404);
         }
+
+        return 0;
     }
 }

@@ -46,3 +46,49 @@ jobs:
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
+    - name: sync-kernel-provider
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/kernel-provider
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: src/provider
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-kernel-provider-aliyun_docker_registry
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/provider-aliyun_docker_registry
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: src/providers/provider-aliyun_docker_registry
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-kernel-notification
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        #
+        PCIT_GIT_URL: github.com/pcit-ce/kernel-notification
+        PCIT_KEEP_HISTORY: "true"
+        #
+        PCIT_LOCAL_DIR: src/notification
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-kernel-notification-wechat
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/pcit-ce/notification-wechat
+        PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: src/notifications/notification-wechat
+        PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994

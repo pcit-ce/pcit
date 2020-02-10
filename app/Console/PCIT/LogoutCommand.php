@@ -26,7 +26,7 @@ class LogoutCommand extends Command
     /**
      * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $file_name = PCITCommand::getConfigFileName();
 
@@ -43,5 +43,7 @@ class LogoutCommand extends Command
         } else {
             $output->write('<error>This User Not Found</error>>');
         }
+
+        return 0;
     }
 }

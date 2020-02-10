@@ -22,7 +22,7 @@ class MigrateCommand extends Command
     }
 
     /**
-     * @return int|void|null
+     * @return int
      *
      * @throws \Exception
      */
@@ -33,11 +33,13 @@ class MigrateCommand extends Command
         if ($sql_file) {
             Migrate::migrate($sql_file);
 
-            return;
+            return 0;
         }
 
         if ($input->getOption('all')) {
             Migrate::all();
         }
+
+        return 0;
     }
 }

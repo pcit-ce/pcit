@@ -28,7 +28,7 @@ EOF
     }
 
     /**
-     * @return int|void|null
+     * @return int
      *
      * @throws Exception
      */
@@ -39,5 +39,7 @@ EOF
         $output_array = TencentAICommand::get()->translate()->aILabText($source_language);
 
         $output->writeln(JSON::beautiful(json_encode($output_array, JSON_UNESCAPED_UNICODE)));
+
+        return 0;
     }
 }

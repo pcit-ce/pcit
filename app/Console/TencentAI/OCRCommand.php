@@ -22,7 +22,7 @@ class OCRCommand extends Command
     }
 
     /**
-     * @return int|void|null
+     * @return int
      *
      * @throws \Exception
      */
@@ -37,7 +37,7 @@ class OCRCommand extends Command
                 )
             );
 
-            return;
+            return 0;
         }
 
         $list = TencentAICommand::get()->ocr()->general(getcwd().'/'.$input->getArgument('image'))['data']['item_list'];
@@ -49,5 +49,7 @@ class OCRCommand extends Command
         }
 
         $output->writeln($string);
+
+        return 0;
     }
 }

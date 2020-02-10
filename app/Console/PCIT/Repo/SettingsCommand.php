@@ -41,7 +41,7 @@ class SettingsCommand extends Command
     }
 
     /**
-     * @return int|mixed|null
+     * @return int
      *
      * @throws Exception
      */
@@ -75,8 +75,10 @@ class SettingsCommand extends Command
             'setting.'.$key => $set_value,
         ]);
 
-        return $output->write(
+        $output->write(
             PCITCommand::HttpPatch($input, 'repo/'.$repo.'/setting/'.$key, $data, true, true)
         );
+
+        return 0;
     }
 }

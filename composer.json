@@ -108,7 +108,7 @@
     "vlucas/phpdotenv": "^4.1.0"
   },
   "require-dev": {
-    "khs1994/phar-builder": "^20.02.0",
+    "khs1994/phar-builder": "^20.02.11",
     "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^5.0"
   },
@@ -160,8 +160,8 @@
       "cp -r -f src/notification/ vendor/pcit/notification",
       "cp -r -f src/notifications/notification-wechat/ vendor/pcit/notification-wechat"
     ],
-    "compile:pcit": "phar-builder package --name=pcit.phar --output-dir=./ --entry-point=bin/src/pcit.php --bzip2 --include framework --include src --include bin",
-    "compile:pcitd": "phar-builder package --name=pcitd.phar --output-dir=./ --entry-point=bin/src/pcitd.php --bzip2 --include framework --include src --include bin"
+    "compile:pcit": "phar-builder.php package --name=pcit --output=./ --entry-point=bin/src/pcit.php --bz2 --included framework,src,bin",
+    "compile:pcitd": "phar-builder.php package --name=pcitd --output=./ --entry-point=bin/src/pcitd.php --bz2 --included framework,src,bin"
   },
   "bin": [
      "bin/src/pcit",

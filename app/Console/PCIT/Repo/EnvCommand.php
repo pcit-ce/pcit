@@ -51,7 +51,7 @@ pcit env get   VAR_ID
     }
 
     /**
-     * @return int|void|null
+     * @return int
      *
      * @throws Exception
      */
@@ -119,13 +119,13 @@ pcit env get   VAR_ID
         if ('list' !== $input->getArgument('type')) {
             $output->write('<info>Success</info>');
 
-            return;
+            return 0;
         }
 
         if ($input->getOption('raw')) {
             $output->write($return);
 
-            return;
+            return 0;
         }
 
         $table = new Table($output);
@@ -139,11 +139,13 @@ pcit env get   VAR_ID
         if (!($row ?? null)) {
             $output->write('<info>env not set</info>');
 
-            return;
+            return 0;
         }
 
         $table->setRows($row);
 
         $table->render();
+
+        return 0;
     }
 }

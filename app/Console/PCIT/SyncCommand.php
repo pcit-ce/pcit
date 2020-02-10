@@ -22,7 +22,7 @@ class SyncCommand extends Command
     }
 
     /**
-     * @return int|void|null
+     * @return int
      *
      * @throws \Exception
      */
@@ -31,5 +31,7 @@ class SyncCommand extends Command
         PCITCommand::HttpPost($input, 'user/sync', null, true);
 
         $output->writeln('Sync User info Success');
+
+        return 0;
     }
 }

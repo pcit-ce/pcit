@@ -36,7 +36,7 @@ class LoginCommand extends Command
      *
      * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         list(
             'username' => $username,
@@ -91,5 +91,7 @@ class LoginCommand extends Command
         ));
 
         $output->writeln('<info>Login Success</info>');
+
+        return 0;
     }
 }

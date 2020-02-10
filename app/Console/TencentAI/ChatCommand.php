@@ -30,7 +30,7 @@ EOF
     /**
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $args = array_values($input->getArguments());
 
@@ -39,5 +39,7 @@ EOF
         $output_array = TencentAICommand::get()->nlp()->chat(...$args);
 
         $output->writeln(JSON::beautiful(json_encode($output_array, JSON_UNESCAPED_UNICODE)));
+
+        return 0;
     }
 }
