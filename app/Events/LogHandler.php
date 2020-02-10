@@ -58,7 +58,8 @@ class LogHandler
 
             $step = array_reverse($this->cache->lrange($cacheKey, 0, -1));
 
-            $steps = [...$steps, ...$step];
+            // $steps = [...$steps, ...$step];
+            $steps = array_merge($steps, $step);
         }
 
         array_unshift($steps, 'clone', 'cache_download');

@@ -160,8 +160,8 @@
       "cp -r -f src/notification/ vendor/pcit/notification",
       "cp -r -f src/notifications/notification-wechat/ vendor/pcit/notification-wechat"
     ],
-    "compile:pcit": "phar-builder package --name=pcit.phar --output-dir=./ --entry-point=bin/src/pcit.php --bzip2 --include framework --include src --include bin --include openapi/openapi.json",
-    "compile:pcitd": "phar-builder package --name=pcitd.phar --output-dir=./ --entry-point=bin/src/pcitd.php --bzip2 --include framework --include src --include bin --include openapi/openapi.json"
+    "compile:pcit": "phar-builder package --name=pcit.phar --output-dir=./ --entry-point=bin/src/pcit.php --bzip2 --include framework --include src --include bin",
+    "compile:pcitd": "phar-builder package --name=pcitd.phar --output-dir=./ --entry-point=bin/src/pcitd.php --bzip2 --include framework --include src --include bin"
   },
   "bin": [
      "bin/src/pcit",

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace PCIT\Provider\AliyunDockerRegistry;
 
 use Exception;
+use PCIT\Provider\Interfaces\WebhooksServerInterface;
 
 /**
  * 接收 Webhooks.
  */
-class WebhooksServer
+class WebhooksServer implements WebhooksServerInterface
 {
     /**
      * @throws Exception
