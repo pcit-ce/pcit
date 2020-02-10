@@ -1,6 +1,6 @@
 {
   "name": "pcit/framework",
-  "version": "18.12.0",
+  "version": "18.12-dev",
   "type": "library",
   "require": {
     "symfony/console": "^5.0",
@@ -18,6 +18,11 @@
   "autoload-dev": {
     "psr-4": {
       "PCIT\\Framework\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "18.12-dev"
     }
   }
 }
