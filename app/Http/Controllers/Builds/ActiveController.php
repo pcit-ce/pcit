@@ -23,20 +23,22 @@ class ActiveController
      *
      * POST
      *
-     * /repo/{repository.id}/activate
+     * /repo/{repository.slug}/activate
      */
-    public function activate(): void
+    public function activate(...$args): void
     {
+        list($username, $repo) = $args;
     }
 
     /**
-     * This will deactivate a repository, preventing any tests from running on Travis CI.
+     * This will deactivate a repository, preventing any tests.
      *
      * POST
      *
      * /repo/{repository.slug}/deactivate
      */
-    public function deactivate(): void
+    public function deactivate(...$args): void
     {
+        list($username, $repo) = $args;
     }
 }

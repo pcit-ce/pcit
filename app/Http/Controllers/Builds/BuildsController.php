@@ -80,6 +80,10 @@ class BuildsController
     }
 
     /**
+     * GET.
+     *
+     * /repo/{git_type}/{username}/{repo.name}/build/current
+     *
      * @param mixed ...$args
      *
      * @return array|int

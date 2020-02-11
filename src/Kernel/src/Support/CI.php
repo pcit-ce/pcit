@@ -33,9 +33,18 @@ class CI
     const GITHUB_CHECK_SUITE_CONCLUSION_ACTION_REQUIRED = 'action_required';
 
     // status
+    // 1. 将 webhooks 转化为 build，build 状态变为 pending
+    // 2. 轮询 pending build，生成 job，
+    // build 状态变为 queued，异常则变为 cancelled
+    // job 状态变为 queued
+
+    // 1. agent 轮询 queued job
+    // 2. job 状态变为 in_progress
+    // 3. 根据运行结果，变更 job 状态
+    // 4. 根据 job 状态，同步 build 状态
     const GITHUB_CHECK_SUITE_STATUS_QUEUED = 'queued'; // pending web-created web-started
 
-    const GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS = 'in_progress'; // pending
+    const GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS = 'in_progress';
 
     const GITHUB_CHECK_SUITE_STATUS_COMPLETED = 'completed';
 

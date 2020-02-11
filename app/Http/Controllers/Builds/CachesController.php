@@ -11,7 +11,7 @@ class CachesController
     /**
      * Returns all the caches for a repository.
      *
-     * /repo/{repository.id}/caches
+     * /repo/{repository.slug}/caches
      *
      * @param array $args
      *
@@ -31,7 +31,7 @@ class CachesController
      *
      * delete
      *
-     * /repo/{repository.id}/caches
+     * /repo/{repository.slug}/caches
      *
      * @param array $args
      *

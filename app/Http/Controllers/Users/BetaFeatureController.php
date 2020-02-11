@@ -10,7 +10,9 @@ namespace App\Http\Controllers\Users;
 class BetaFeatureController
 {
     /**
-     * /user/beta_features.
+     * GET.
+     *
+     * /user/beta_features
      *
      * Return a list of beta features available to a user.
      *

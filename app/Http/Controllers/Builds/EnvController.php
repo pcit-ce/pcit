@@ -13,7 +13,7 @@ class EnvController
     /**
      * Returns a list of environment variables for an individual repository.
      *
-     * /repo/{repository.id}/env_vars
+     * /repo/{repository.slug}/env_vars
      *
      * @param array $args
      *
@@ -66,7 +66,7 @@ class EnvController
     /**
      * Returns a single environment variable.
      *
-     * /repo/{repository.id}/env_var/{env_var.id}
+     * /repo/{repository.slug}/env_var/{env_var.id}
      *
      * @param array $args
      *
@@ -92,7 +92,7 @@ class EnvController
      * { "env_var.value": "bar", "env_var.public": false }
      * </pre>
      *
-     * /repo/{repository.id}/env_var/{env_var.id}
+     * /repo/{repository.slug}/env_var/{env_var.id}
      *
      * @param array $args
      *
@@ -119,7 +119,7 @@ class EnvController
      *
      * delete
      *
-     * /repo/{repository.id}/env_var/{env_var.id}
+     * /repo/{repository.slug}/env_var/{env_var.id}
      *
      * @param array $args
      *

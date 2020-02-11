@@ -13,7 +13,7 @@ class SettingsController
     /**
      * Returns a list of the settings for that repository.
      *
-     * /repo/{repository.id}/settings
+     * /repo/{repository.slug}/settings
      *
      * @param array $args
      *
@@ -33,7 +33,7 @@ class SettingsController
     /**
      * Returns a single setting.
      *
-     * /repo/{repository.id}/setting/{setting.name}
+     * /repo/{repository.slug}/setting/{setting.name}
      *
      * @param array $args
      *
@@ -55,7 +55,7 @@ class SettingsController
      *
      * patch
      *
-     * /repo/{repository.id}/setting/{setting.name}
+     * /repo/{repository.slug}/setting/{setting.name}
      *
      * <pre>
      * ['setting.value'=>true]

@@ -35,7 +35,7 @@ class LogController
     /**
      * Removes the contents of a log. It gets replace with the message: Log removed at 2017-02-13 16:00:00 UTC.
      *
-     * delete
+     * Delete
      *
      * /job/{job_id}/log
      *

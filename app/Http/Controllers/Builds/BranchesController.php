@@ -15,7 +15,7 @@ class BranchesController
      *
      * Return a list of branches a repository has on Git.
      *
-     * /repo/{repository.id}/branches
+     * /repo/{git_type}/{repository.slug}/branches
      *
      * @param mixed ...$args
      *
@@ -43,7 +43,7 @@ class BranchesController
     /**
      *  Return information about an individual branch.
      *
-     * /repo/{repository.id}/branch/{branch.name}
+     * /repo/{repository.slug}/branch/{branch.name}
      *
      * @param array $args
      *

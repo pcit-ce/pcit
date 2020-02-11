@@ -27,6 +27,10 @@ class JobController
     }
 
     /**
+     * GET.
+     *
+     * /job/{job.id}
+     *
      * @param $job_id
      *
      * @return array|int
@@ -98,6 +102,10 @@ class JobController
     }
 
     /**
+     * POST.
+     *
+     * /job/{job.id}/cancel
+     *
      * @param $job_id
      *
      * @throws \Exception
@@ -130,6 +138,10 @@ class JobController
     }
 
     /**
+     * POST.
+     *
+     * /job/{job.id}/restart
+     *
      * @param $job_id
      *
      * @throws \Exception

@@ -11,7 +11,7 @@ class CronController
     /**
      * Returns a list of crons for an individual repository.
      *
-     * /repo/{repository.id}/crons
+     * /repo/{repository.slug}/crons
      *
      * @param array $args
      *
@@ -51,7 +51,7 @@ class CronController
     /**
      * Returns the cron set for the specified branch for the specified repository.
      *
-     * /repo/{repository.id}/branch/{branch.name}/cron
+     * /repo/{repository.slug}/branch/{branch.name}/cron
      *
      * @param array $args
      *
@@ -69,7 +69,7 @@ class CronController
      *
      * post
      *
-     * /repo/{repository.id}/branch/{branch.name}/cron
+     * /repo/{repository.slug}/branch/{branch.name}/cron
      *
      * @param array $args
      *

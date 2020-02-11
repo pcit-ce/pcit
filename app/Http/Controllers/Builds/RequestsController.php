@@ -19,7 +19,7 @@ class RequestsController
     /**
      * Return a list of requests belonging to a repository.
      *
-     * /repo/{repository.id}/requests
+     * /repo/{repository.slug}/requests
      *
      * @param array $args
      *
@@ -57,7 +57,7 @@ class RequestsController
      *
      * post
      *
-     * /repo/{repository.id}/requests
+     * /repo/{repository.slug}/requests
      *
      * <pre>
      *
@@ -132,7 +132,7 @@ class RequestsController
     /**
      * Get single request details.
      *
-     * /repo/{repository.id}/request/{request.id}
+     * /repo/{repository.slug}/request/{request.id}
      *
      * @param array $args
      *

@@ -16,7 +16,7 @@ class StarController
      *
      * post
      *
-     * /repo/{repository.id}/star
+     * /repo/{repository.slug}/star
      *
      * @param array $args
      *

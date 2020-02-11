@@ -12,6 +12,10 @@ use App\Http\Controllers\Users\JWTController;
 class Issues
 {
     /**
+     * PATCH.
+     *
+     * /repo/{username}/{repo.name}/issues/translate/{issue.number}
+     *
      * @param mixed ...$args
      *
      * @throws \Exception
@@ -22,7 +26,7 @@ class Issues
 
         JWTController::checkByRepo($username, $repo);
 
-        \App\Console\Webhooks\GitHub\Issues::translateTitle(
+        \PCIT\GitHub\Webhooks\Handler\Issues::translateTitle(
             $username.'/'.$repo, (int) $issue_number, null, null);
     }
 }

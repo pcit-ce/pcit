@@ -67,16 +67,22 @@ class Kernel
                 return \Response::make();
             }
 
+            // 出现错误
             method_exists($e, 'report') && $e->report($e);
             method_exists($e, 'render') && $e->render($request, $e);
 
+            $previousErr = $e->getPrevious();
+            // var_dump($previousErr);
+
+            $errDetails['trace'] = $previousErr->getTrace();
+
             return \Response::json(array_filter([
-                'code' => 500,
+                'code' => $e->getCode(),
                 'message' => $e->getMessage() ?: 'ERROR',
                 'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
-                'file' => $debug ? $e->getFile() : null,
-                'line' => $debug ? $e->getLine() : null,
-                'details' => $debug ? (array) $e->getPrevious() : null,
+                'file' => $debug ? $previousErr->getFile() : null,
+                'line' => $debug ? $previousErr->getLine() : null,
+                'details' => $debug ? $errDetails : null,
             ]));
         }
 
