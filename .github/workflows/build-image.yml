@@ -20,12 +20,20 @@ jobs:
         name: Clone frontend
       - run: |
           TAG=`echo $GITHUB_REF | cut -d '/' -f 3`
-          docker buildx build -t pcit/pcit -t pcit/pcit:${TAG} --target=php --push .
+          docker buildx build -t pcit/pcit -t pcit/pcit:${TAG} --target=pcit --push .
+          docker buildx build -t pcit/pcit:frontend -t pcit/pcit:${TAG}-frontend --target=frontend --push .
         env:
           GITHUB_REF: ${{github.ref}}
         name: Build image
-      - run: docker run -i --rm --entrypoint=sh pcit/pcit -c "ls /app/pcit"
+      - run: docker run -i --rm --entrypoint=sh pcit/pcit -c "ls -la /app/pcit"
         name: List files
       - name: Test image
         run: |
-          docker run -i --rm pcit/pcit list
+          echo docker run -i --rm pcit/pcit list > /dev/null
+
+          set -x
+
+          docker run -i --rm --entrypoint=/app/pcit/bin/pcit pcit/pcit list
+
+          docker run -i --rm -v $PWD/dist:/var/www/pcit/public pcit/pcit:frontend
+          ls -la dist

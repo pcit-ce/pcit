@@ -6,6 +6,8 @@ use Symfony\Component\Console\Application;
 
 require __DIR__.'/../../vendor/autoload.php';
 
+putenv('CI_CACHE_DRIVE=none');
+
 $app = require __DIR__.'/../../framework/bootstrap/app.php';
 
 $cli = new Application('PCIT CLI', 'v19.12');

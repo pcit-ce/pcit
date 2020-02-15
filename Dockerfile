@@ -6,8 +6,8 @@
 ARG PHP_VERSION=7.4.2
 ARG NODE_VERSION=13.8.0
 
-# 安装前端构建依赖
-FROM khs1994/node:git as frontend
+# 前端构建
+FROM khs1994/node:git as frontend-builder
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -38,21 +38,41 @@ RUN --mount=type=cache,target=/tmp/cache,id=composer_cache cd /app/pcit \
       && composer install --no-dev \
       && rm -rf src
 
-# 将 PHP 项目打入 PHP 镜像
-FROM khs1994/php:${PHP_VERSION}-fpm-alpine as php
+# 整合项目
+FROM alpine as dump
 
 COPY --from=composer /app/pcit/vendor /app/pcit/vendor
 COPY . /app/pcit
-COPY --from=frontend /app/pcit/public/ /app/pcit/public/
+COPY --from=frontend-builder /app/pcit/public/ /app/pcit/public/
+
+RUN rm -rf /app/pcit/Dockerfile \
+    && rm -rf /app/pcit/frontend
+
+# pcit
+FROM khs1994/php:${PHP_VERSION}-fpm-alpine as pcit
+
+COPY --from=dump /app/pcit/ /app/pcit/
 
 ENTRYPOINT ["/app/pcit/bin/pcitd"]
+# ENTRYPOINT ["/app/pcit/bin/pcit"]
 
 CMD ["up"]
 # CMD ["server"]
 # CMD ["agent"]
 
+# 前端资源
+FROM alpine as frontend
+
+COPY --from=dump /app/pcit/public/ /app/pcit/public/
+
+VOLUME /var/www/pcit/public
+
+CMD ["cp","-r","/app/pcit/public/","/var/www/pcit/"]
+
 #
-# $ docker buildx build -t pcit/pcit --target=php .
+# $ docker buildx build -t pcit/pcit --target=pcit .
+#
+# $ docker buildx build -t pcit/pcit --target=frontend .
 #
 # @link https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
 #

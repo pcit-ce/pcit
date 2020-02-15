@@ -25,6 +25,8 @@ class CacheManager implements Factory
 
         if ('file' === $name) {
             $store = new FileStore();
+        } elseif ('none' === $name) {
+            $store = new NoneStore();
         } else {
             $store = new RedisStore(new Redis());
         }

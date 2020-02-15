@@ -40,5 +40,13 @@ framework/storage/private_key/public.key
 /docker-compose.yml
 /phpunit.xml
 /renovate.json
+/.drone.yml
+/.gitattributes
+/.gitignore
+/.php_cs
+/.sami.php
+/.styleci.yml
+/.travis.yml
+/.dockerignore
 
 app/Http/Controllers/Test

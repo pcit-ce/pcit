@@ -4,7 +4,6 @@
 /docs                export-ignore
 /examples            export-ignore
 /tests               export-ignore
-/pcit_examples       export-ignore
 /plugins             export-ignore
 /.dockerignore       export-ignore
 /.editorconfig       export-ignore
@@ -22,10 +21,8 @@
 /codecov.yml         export-ignore
 .scrutinizer.yml     export-ignore
 /docker-compose.yml  export-ignore
-/docker-stack.yml    export-ignore
 /Dockerfile          export-ignore
 /phpunit.xml         export-ignore
-/test.Dockerfile     export-ignore
 /renovate.json       export-ignore
 /ROADMAP.md          export-ignore
 /src/**/tests        export-ignore

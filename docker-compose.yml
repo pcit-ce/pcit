@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: php
+      target: pcit
       args:
         - PHP_VERSION=${PHP_VERSION:-7.4.2}
         - NODE_VERSION=${NODE_VERSION:-13.8.0}
