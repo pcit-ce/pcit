@@ -26,7 +26,6 @@ COPY ./frontend/css /app/pcit/frontend/css
 COPY ./frontend/src /app/pcit/frontend/src
 
 RUN cd /app/pcit/frontend \
-      # && set PATH=./node_modules/.bin:$PATH \
       && npm run build
 
 # 安装 composer 依赖
@@ -34,7 +33,6 @@ FROM khs1994/php:7.4.2-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
-COPY plugins /app/pcit/plugins/
 
 RUN --mount=type=cache,target=/tmp/cache,id=composer_cache cd /app/pcit \
       && composer install --no-dev \

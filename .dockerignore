@@ -1,4 +1,5 @@
 .git
+.github
 .idea
 
 vendor
@@ -6,7 +7,6 @@ composer.lock
 
 frontend/node_modules
 frontend/package-lock.json
-frontend/assets/js
 
 /public/*
 !/public/demo
@@ -16,7 +16,8 @@ frontend/assets/js
 
 .env.*
 .env
-.env.example
+
+!.env.example
 
 framework/storage/private_key/private.key
 framework/storage/private_key/public.key
@@ -26,14 +27,18 @@ framework/storage/private_key/public.key
 /build
 /cache
 
-/.github
 /docs
 /examples
 /miniprogram
+/openapi
+/plugins
 /tests
-/yaml_examples
 /coverage.xml
+/.editorconfig
+/*.md
+/codecov.yml
+/docker-compose.yml
+/phpunit.xml
+/renovate.json
 
 app/Http/Controllers/Test
-
-tests

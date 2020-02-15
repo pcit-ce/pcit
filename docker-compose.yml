@@ -3,19 +3,19 @@ version: "3.7"
 services:
 
   pcit:
-    image: pcit/pcit:alpine
+    image: pcit/pcit
     build:
       context: .
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.4.0}
-        - NODE_VERSION=${NODE_VERSION:-12.9.0}
+        - PHP_VERSION=${PHP_VERSION:-7.4.2}
+        - NODE_VERSION=${NODE_VERSION:-13.8.0}
         - NODE_REGISTRY=https://registry.npm.taobao.org
 
   all:
     &all
-    image: pcit/pcit:alpine
+    image: pcit/pcit
     command: up
 
   server:
@@ -25,7 +25,3 @@ services:
   agent:
     << : *all
     command: agent
-
-  gc:
-    << : *all
-    command: gc
