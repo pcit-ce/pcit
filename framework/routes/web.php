@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+// test
 Route::get('test1/{id}', function ($id) {
     return $id;
 });
@@ -12,7 +13,17 @@ Route::get('test4', 'Test\TestController@notExistsMethod');
 
 Route::get('test5', 'Test\TestController@test5');
 
-/*Test end*/
+if (\App::environment('testing')) {
+    Route::get('testing', function () {
+        return '1';
+    });
+
+    Route::get('testing/{id}', function ($id) {
+        return $id;
+    });
+}
+
+// test end
 
 /* Dashboard */
 Route::get('{git_type}/dashboard', function () {
@@ -44,7 +55,6 @@ Route::get('terms-of-service', 'IndexController@terms_of_service');
 Route::get('privacy-policy', 'IndexController@privacy_policy');
 
 /* OAuth login*/
-
 Route::get('oauth', 'Users\LoginController@index');
 
 Route::get('oauth/${git_type}/login', 'OAuth\IndexController@getLoginUrl');
@@ -54,7 +64,6 @@ Route::get('oauth/${git_type}', 'OAuth\IndexController@getAccessToken');
 Route::get('{git_type}/logout', 'Profile\LogOut');
 
 /*Admin webhooks: list create delete*/
-
 Route::post('webhooks/{git_type}/{username}/{repo_name}/{id}', 'Webhooks\Controller@add');
 
 Route::get('webhooks/{git_type}/{username}/{repo_name}', 'Webhooks\Controller@list');
@@ -65,37 +74,16 @@ Route::post('webhooks/{git_type}/{username}/{repo_name}/{id}/activate', 'Webhook
 
 Route::delete('webhooks/{git_type}/{username}/{repo_name}/{id}/deactivate', 'Webhooks\Controller@deactivate');
 
-/*Webhooks: receive git webhooks*/
-
+/*Webhooks server: receive git webhooks*/
 Route::post('webhooks/${git_type}', 'Webhooks\Server\IndexController');
 
-// Route::post('webhooks/gogs', 'Webhooks\GogsController');
-
-// Route::post('webhooks/gitee', 'Webhooks\GiteeController');
-
-// Route::post('webhooks/coding', 'Webhooks\CodingController');
-
-Route::post('webhooks/'.env('CI_ALIYUN_REGISTRY_WEBHOOKS_ADDRESS', 'aliyun_docker_registry'),
-    'Webhooks\AliyunDockerRegistryController');
-
-// 获取所有接收到的 webhooks -> requests
-
-/*SEO*/
-
-Route::get('seo/baidu/xzh', '');
-
-/*IM*/
-
 /*Profile*/
-
 Route::get('profile/${git_type}/{username}', 'Profile\IndexController');
 
 // return information about an individual user.
-
 Route::get('api/user/{git_type}/{username}', 'Users\UserInfoController@find');
 
 // return information about the current user.
-
 Route::get('api/user', 'Users\UserInfoController');
 
 Route::get('api/user/beta_features', 'Users\BetaFeatureController');
@@ -103,17 +91,15 @@ Route::patch('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureContro
 Route::delete('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@delete');
 
 /*Sync User info*/
-
 Route::post('api/user/sync', 'Profile\SyncController');
 
 /*Status*/
-
 Route::get('status/github/{username}/{repo_name}/{ref}', 'Status\GithubController@list');
 Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
     'Status\GitHubController@listcombinedStatus');
 
 /**Repos**/
-
+// repo list
 Route::get('{git_type}/{username}', 'Builds\IndexController');
 
 Route::get('api/repos', 'Users\RepositoriesController');
@@ -125,13 +111,12 @@ Route::get('api/repo/{git_type}/{username}/{repo_name}', 'Users\RepositoriesCont
 Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
 
 /* orgs */
-
 Route::get('api/orgs', 'Users\OrganizationsController');
 
 Route::get('api/org/{git_type}/{org_name}', 'Users\OrganizationsController@find');
 
 /* Builds */
-
+// repo
 Route::get('{git_type}/{username}/{repo_name}', 'Builds\IndexController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/build/current', 'Builds\BuildsController@repoCurrent');
 
@@ -148,14 +133,22 @@ Route::get('api/build/{build_id}', 'Builds\BuildsController@find');
 Route::post('api/build/{build_id}/cancel', 'Builds\BuildsController@cancel');
 Route::post('api/build/{build_id}/restart', 'Builds\BuildsController@restart');
 
+// job
+Route::get('{git_type}/{username}/{repo_name}/jobs/{build_id}', 'Builds\IndexController');
+
+Route::get('api/jobs', 'Builds\JobController@list');
+Route::get('api/job/{job_id}', 'Builds\JobController@find');
+Route::post('api/job/{job_id}/cancel', 'Builds\JobController@cancel');
+Route::post('api/job/{job_id}/restart', 'Builds\JobController@restart');
+
+Route::get('{git_type}/{username}/{repo_name}/pull_requests', 'Builds\IndexController');
+Route::get('api/repo/{git_type}/{username}/{repo_name}/pull_requests', 'Builds\PullRequestsController@post');
+
 Route::get('api/repo/{username}/{repo_name}/env_vars', 'Builds\EnvController');
 Route::post('api/repo/{username}/{repo_name}/env_vars', 'Builds\EnvController@create');
 Route::get('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@find');
 Route::patch('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@update');
 Route::delete('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@delete');
-
-Route::get('{git_type}/{username}/{repo_name}/pull_requests', 'Builds\IndexController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/pull_requests', 'Builds\PullRequestsController@post');
 
 Route::get('{git_type}/{username}/{repo_name}/settings', 'Builds\IndexController');
 Route::get('api/repo/{username}/{repo_name}/settings', 'Builds\SettingsController');
@@ -188,24 +181,10 @@ Route::post('api/repo/{username}/{repo_name}/star', 'Repos\StarController');
 Route::post('api/repo/{username}/{repo_name}/unstar', 'Repos\StarController@unstar');
 
 /* Log */
-
 Route::get('api/job/{job_id}/log', 'Builds\LogController');
-
 Route::delete('api/job/{job_id}/log', 'Builds\LogController@delete');
 
-/* Job */
-Route::get('{git_type}/{username}/{repo_name}/jobs/{build_id}', 'Builds\IndexController');
-
-Route::get('api/jobs', 'Builds\JobController@list');
-
-Route::get('api/job/{job_id}', 'Builds\JobController@find');
-
-Route::post('api/job/{job_id}/cancel', 'Builds\JobController@cancel');
-
-Route::post('api/job/{job_id}/restart', 'Builds\JobController@restart');
-
 /* ICO */
-
 Route::get('ico/canceled', 'Status\ShowStatusByICOController@canceled');
 Route::get('ico/errored', 'Status\ShowStatusByICOController@errored');
 Route::get('ico/failed', 'Status\ShowStatusByICOController@failed');
@@ -214,15 +193,14 @@ Route::get('ico/missconfig', 'Status\ShowStatusByICOController@missconfig');
 Route::get('ico/passed', 'Status\ShowStatusByICOController@passed');
 Route::get('ico/pending', 'Status\ShowStatusByICOController@pending');
 Route::get('ico/unknown', 'Status\ShowStatusByICOController@unknown');
-/* API Token */
 
+/* API Token */
 Route::post('api/user/token', 'Users\JWTController@generate');
 
+// wechat
 Route::match(['get', 'post'], 'wechat', 'WeChat\MessageServer');
-// Route::post('wechat', 'WeChat\MessageServer');
 
 /* System */
-
 Route::get('api/ci/oauth_client_id', 'System\SystemController@getOAuthClientId');
 Route::get('api/ci/github_app_installation/{uid}', 'System\SystemController@getGitHubAppInstallationUrl');
 Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@getGitHubAppSettingsUrl');
@@ -246,8 +224,8 @@ Route::get('api/livez/database', 'System\Healthz@database');
 
 Route::get('api/openapi', 'System\OpenAPI');
 Route::get('api/openapi/v3', 'System\OpenAPI');
-/* Issues */
 
+/* Issues */
 Route::patch('api/repo/${username}/${repo_name}/issues/translate/${issue_number}',
     'Repos\Issues@translate');
 
@@ -256,22 +234,3 @@ Route::get('websocket/server', 'Demo\WebSocket\WebSocketController');
 Route::get('sse/server', 'Demo\SSE\SSEController');
 Route::get('websocket/client', 'Demo\WebSocket\WebSocketController@client');
 Route::get('sse/client', 'Demo\SSE\SSEController@client');
-
-/* Dashboard */
-Route::get('dashboard', function () {
-    $message = 'coming soon';
-
-    return compact('message');
-});
-
-/* Test */
-
-if (\App::environment('testing')) {
-    Route::get('testing', function () {
-        return 1;
-    });
-
-    Route::get('testing/{id}', function ($id) {
-        return $id;
-    });
-}

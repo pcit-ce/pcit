@@ -3,8 +3,8 @@
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 
-ARG PHP_VERSION=7.4.0
-ARG NODE_VERSION=12.9.0
+ARG PHP_VERSION=7.4.2
+ARG NODE_VERSION=13.8.0
 
 # 安装前端构建依赖
 FROM khs1994/node:git as frontend
@@ -30,7 +30,7 @@ RUN cd /app/pcit/frontend \
       && npm run build
 
 # 安装 composer 依赖
-FROM khs1994/php:7.4.0-composer-alpine as composer
+FROM khs1994/php:7.4.2-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
@@ -52,10 +52,9 @@ ENTRYPOINT ["/app/pcit/bin/pcitd"]
 CMD ["up"]
 # CMD ["server"]
 # CMD ["agent"]
-# CMD ["gc"]
 
 #
-# $ docker build -t pcit/pcit --target=php .
+# $ docker buildx build -t pcit/pcit --target=php .
 #
 # @link https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
 #
