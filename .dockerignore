@@ -30,7 +30,6 @@ framework/storage/private_key/public.key
 /docs
 /examples
 /miniprogram
-/openapi
 /plugins
 /tests
 /coverage.xml

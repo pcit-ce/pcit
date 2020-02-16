@@ -10,19 +10,36 @@ class OpenAPI
 {
     public function __invoke(Request $request)
     {
-        $json = file_get_contents(base_path().'/openapi/openapi.json');
+        $yaml = file_get_contents(base_path().'/openapi/openapi.yaml');
 
         $is_coding = $request->get('coding');
 
+        $ci_host = env('CI_HOST').'/api';
+
         if ('true' === $is_coding) {
-            $is_json = false;
-            $json = json_decode($json, true);
-            $json['servers'][1] = [
-              'url' => 'https://pcit-url/api',
-              'description' => 'PCIT EE API',
-          ];
+            $yaml .= <<<EOF
+servers:
+- url: 'https://ci.khs1994.com/api'
+  description: PCIT-CE API
+- url: $ci_host
+  description: PCIT-EE API
+EOF;
+        } else {
+            $yaml .= <<<EOF
+servers:
+- url: 'https://ci.khs1994.com/api'
+  description: PCIT-CE API
+- url: 'https://{pcit-url}/api'
+  description: PCIT-EE API
+  variables:
+  pcit-url:
+  description: your pcit ee url
+  default: ci.khs1994.com
+EOF;
         }
 
-        return \Response::json($json, $is_json ?? true);
+        return \Response::make($yaml, 200, [
+            'application/yaml',
+        ]);
     }
 }

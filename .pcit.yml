@@ -422,11 +422,15 @@ steps: # pipeline
     - APIDOC_RELEASE_TYPE=file
     - PCIT_URL=https://ci2.khs1994.com:10000
     run:
-      # - curl -fsSL ${PCIT_URL}/api/openapi?coding=true -o /opt/data.txt
-      - cp openapi/openapi.json /opt/data.txt
+      - curl -fsSL ${PCIT_URL}/api/openapi?coding=true -o /opt/data.txt
+      # - cp openapi/openapi.yaml /opt/data.txt
       - sh /my_shell/api_doc_release.sh
     when:
-      branch: alpha
+      jobs:
+      - PHP_VERSION: 7.4.2
+        NGINX_VERSION: 1.15.8
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
 
 # 配置服务
 services:
