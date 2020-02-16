@@ -5,6 +5,9 @@ on: push
 jobs:
   build_image:
     runs-on: ubuntu-latest
+    if: |
+      contains( github.event.head_commit.message, '[build image]')
+      || contains( github.ref, 'refs/tags/')
     steps:
       - uses: azure/docker-login@v1
         with:

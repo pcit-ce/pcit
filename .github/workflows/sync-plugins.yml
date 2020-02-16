@@ -136,9 +136,9 @@ jobs:
       with:
         email: khs1994@khs1994.com
         git_token: ${{ secrets.PCIT_GIT_TOKEN }}
-        git_url: github.com/pcit-plugins/pcit-actions_downloader
+        git_url: github.com/pcit-plugins/pcit-actions-downloader
         keep_history: "true"
-        local_dir: plugins/actions_downloader
+        local_dir: plugins/actions-downloader
         message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
         target_branch: master
         username: khs1994
