@@ -121,9 +121,15 @@ class Pipeline
             $pre_env[$key] = $value;
         }
 
-        $pipelineEnv = (new EnvHandler())->handle($pre_env, $this->build->env);
+        $pipelineEnv = (new EnvHandler())->handle($pre_env, array_merge(
+            $this->client->system_env, $this->client->system_job_env
+            )
+        );
 
-        $preEnv = array_merge($pipelineEnv, $this->client->system_env);
+        $preEnv = array_merge($this->client->system_env,
+            $this->client->system_job_env,
+            $pipelineEnv
+        );
 
         if (!$this->matrix_config) {
             return $preEnv;
@@ -176,7 +182,10 @@ class Pipeline
         foreach ($this->pipeline as $step => $pipelineContent) {
             \Log::emergency('Handle pipeline', ['pipeline' => $step]);
 
-            $image = $pipelineContent->uses ?? $pipelineContent->image ?? Image::get($language);
+            $image = $pipelineContent->uses
+                ?? $pipelineContent->image
+                ?? $this->client->image
+                ?? Image::get($language);
             $commands = $this->handleCommands($step, $pipelineContent);
             $env = $pipelineContent->env ?? $pipelineContent->environment ?? [];
             $shell = $pipelineContent->shell ?? 'sh';

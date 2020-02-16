@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner;
 
-use App\Build;
 use App\Job;
 use Exception;
 use PCIT\Framework\Support\Subject;
@@ -26,6 +25,8 @@ class Client
 
     public $system_env = [];
 
+    public $system_job_env = [];
+
     public $pipeline;
 
     public $workdir;
@@ -41,6 +42,10 @@ class Client
     public $services;
 
     public $cache;
+
+    public $image;
+
+    public $networks;
 
     /**
      * @param int $job_id 处理 job 重新构建
@@ -89,6 +94,8 @@ class Client
         $this->services = $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->jobs ?? $yaml_obj->matrix ?? null;
         $notifications = $yaml_obj->notifications ?? null;
+        $this->image = $yaml_obj->image ?? null;
+        $this->networks = $yaml_obj->networks ?? null;
 
         $this->pipeline = $pipeline;
 
@@ -162,9 +169,17 @@ class Client
 
         $build_key_id = (int) $this->build->build_key_id;
 
-        $gitType = Build::getGitType($build_key_id);
-        $rid = (int) Build::getRid($build_key_id);
-        $branch = Build::getBranch($build_key_id);
+        $gitType = $this->build->git_type;
+        $rid = (int) $this->build->rid;
+        $branch = $this->build->branch;
+
+        // 注入 job id 等相关 ENV
+        $ci_host = env('CI_HOST');
+        $repo_full_name = $this->build->repo_full_name;
+        $job_id = $this->job_id;
+        $this->system_job_env = [];
+        $this->system_job_env[] = "PCIT_JOB_ID=$job_id";
+        $this->system_job_env[] = "PCIT_JOB_WEB_URL=${ci_host}/$gitType/$repo_full_name/jobs/$job_id";
 
         (new Subject())
             // git

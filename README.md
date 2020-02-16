@@ -221,6 +221,12 @@ $ ./lnmp-docker pcit-up
 * [前端 UI](https://github.com/pcit-ce/ui)
 * [微信小程序](https://github.com/pcit-ce/miniprogram)
 
+## Docker Image
+
+* pcit/pcit
+
+* pcit/frontend
+
 ## 致谢
 
 * [PHP](https://www.php.net)

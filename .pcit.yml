@@ -370,7 +370,6 @@ steps: # pipeline
       title: nightly
 
   codecov:
-    # image: khs1994/php:7.3.11-composer-alpine
     shell: bash
     when:
       status: success
@@ -378,8 +377,16 @@ steps: # pipeline
     environment:
       # - CODECOV_TOKEN=XXX
       - PCIT_OS_NAME=linux
+      - VCS_COMMIT_ID=${PCIT_COMMIT}
+      - VCS_BRANCH_NAME=${PCIT_BRANCH}
+      - VCS_PULL_REQUEST=${PCIT_PULL_REQUEST}
+      - VCS_SLUG=${PCIT_REPO_SLUG}
+      - VCS_TAG=${PCIT_TAG}
+      - CI_BUILD_URL=${PCIT_JOB_WEB_URL}
+      - CI_BUILD_ID=${PCIT_BUILD_ID}
+      - CI_JOB_ID=${PCIT_JOB_ID}
     commands:
-      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME
+      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID} -K
 
   after_success:
     - echo "build success"
@@ -504,4 +511,4 @@ networks:
     - "docker.khs1994.com:127.0.0.1"
 
 # 指定构建步骤的默认镜像
-image: khs1994/php:7.4.2-composer-fpm
+image: khs1994/php:7.4.2-composer-alpine

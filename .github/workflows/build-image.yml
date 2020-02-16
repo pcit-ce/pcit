@@ -19,9 +19,20 @@ jobs:
       - run: git clone --depth=1 https://github.com/pcit-ce/ui frontend
         name: Clone frontend
       - run: |
+          set -x
+
           TAG=`echo $GITHUB_REF | cut -d '/' -f 3`
-          docker buildx build -t pcit/pcit -t pcit/pcit:${TAG} --target=pcit --push .
-          docker buildx build -t pcit/pcit:frontend -t pcit/pcit:${TAG}-frontend --target=frontend --push .
+          docker buildx build \
+            -t pcit/pcit \
+            -t pcit/pcit:${TAG} \
+            --target=pcit --push .
+
+          docker buildx build \
+            -t pcit/pcit:frontend \
+            -t pcit/pcit:${TAG}-frontend \
+            -t pcit/frontend \
+            -t pcit/frontend:${TAG} \
+            --target=frontend --push .
         env:
           GITHUB_REF: ${{github.ref}}
         name: Build image
