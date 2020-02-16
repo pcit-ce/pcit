@@ -48,7 +48,7 @@ class DockerHandler implements RunnerHandlerInterface
      */
     public function handle(int $job_id): void
     {
-        \Log::emergency('Handle job start...', ['job_id' => $job_id]);
+        \Log::emergency("Handle job $job_id start...", ['job_id' => $job_id]);
 
         try {
             // 运行一个 job
@@ -97,10 +97,10 @@ class DockerHandler implements RunnerHandlerInterface
         // drop prev log
         $this->dropLog();
 
-        \Log::emergency('Handle job', ['job_id' => $job_id]);
+        \Log::emergency('Handle job '.$job_id, ['job_id' => $job_id]);
 
         // create network
-        \Log::emergency('Create Network', [$job_id]);
+        \Log::emergency('Create Network '.$job_id, [$job_id]);
 
         $this->createNetwork();
 
@@ -110,7 +110,7 @@ class DockerHandler implements RunnerHandlerInterface
         $this->gitClone();
 
         // download cache
-        \Log::emergency('', []);
+        \Log::emergency('Run cache downloader container', []);
         $this->runCacheContainer($job_id);
 
         // run service
@@ -276,7 +276,7 @@ class DockerHandler implements RunnerHandlerInterface
      */
     private function after(int $job_id, $status): void
     {
-        \Log::emergency('Run job after', ['job_id' => $job_id, 'status' => $status]);
+        \Log::emergency('Run job after container', ['job_id' => $job_id, 'status' => $status]);
 
         // TODO 获取上一次 build 的状况
         if ('changed' === $status && !Build::buildStatusIsChanged(Job::getRid($job_id), 'master')) {
@@ -321,7 +321,7 @@ class DockerHandler implements RunnerHandlerInterface
      */
     private function runService(int $job_id): void
     {
-        \Log::emergency('Run job services', ['job_id' => $job_id]);
+        \Log::emergency('Run job services container', ['job_id' => $job_id]);
 
         $container_configs = \Cache::store()->hgetall(CacheKey::serviceHashKey($job_id));
 

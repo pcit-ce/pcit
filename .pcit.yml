@@ -218,7 +218,7 @@ steps: # pipeline
     settings:
       keep_history: true
       # target_branch: gh-pages
-      git_url: github.com/pcit-ce/pcit
+      git_url: github.com/pcit-ce/sami-docs
       local_dir: build
       # email: ${EMAIL}
       # username: khs1994

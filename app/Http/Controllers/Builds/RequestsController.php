@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
-use App\Console\Webhooks\GetConfig;
-use App\Console\Webhooks\GitHub\Subject;
 use App\GetAccessToken;
 use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
+use PCIT\GitHub\Webhooks\Handler\GetConfig;
+use PCIT\GitHub\Webhooks\Handler\Subject;
 use PCIT\PCIT;
 use Symfony\Component\Yaml\Yaml;
 

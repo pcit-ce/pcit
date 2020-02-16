@@ -2,7 +2,7 @@
 
 * [Overview](README.md)
 * [Getting Help](getting-help.md)
-* [API](https://api.ci.khs1994.com)
+* [API](https://docs.ci.khs1994.com/api)
 * [Why PCIT](why.md)
 
 ## Install

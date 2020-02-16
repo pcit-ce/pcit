@@ -1,0 +1,25 @@
+steps:
+  build-docs:
+    image: pcit/vuepress
+    with:
+      dir: .
+
+  upload-docs:
+    image: pcit/pages
+    when:
+      status: success
+      event: ['push']
+      jobs:
+      - PHP_VERSION: 7.4.2
+        NGINX_VERSION: 1.15.8
+        REDIS_VERSION: 5.0.3
+        MYSQL_VERSION: 5.7.24
+    settings:
+      keep_history: true
+      # target_branch: gh-pages
+      git_url: github.com/pcit-ce/docs
+      local_dir: docs/.vuepress/dist
+      # email: ${EMAIL}
+      # username: khs1994
+      git_token: ${GITHUB_TOKEN}
+      depth: 10

@@ -8,7 +8,7 @@
 * [Changelog](https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md)
 * [Feedback](https://github.com/pcit-ce/pcit/issues)
 * [API](https://ci.khs1994.com/api)
-* [API Docs](https://api.ci.khs1994.com)
+* [API Docs](https://docs.ci.khs1994.com/api)
 * [Plugins](https://github.com/pcit-ce/pcit/tree/master/plugins)
 * [PHP Docs](https://pcit-ce.github.io/pcit/)
 * [Donate](https://zan.khs1994.com)

@@ -35,7 +35,7 @@ class Log
      */
     public static function drop(int $job_id): void
     {
-        \Log::emergency('Drop prev logs '.$job_id, []);
+        \Log::emergency('Drop prev jon '.$job_id.' logs', []);
 
         \Cache::store()->del(CacheKey::logHashKey($job_id));
     }

@@ -161,7 +161,7 @@ class Client
         $this->job_id = $job_id = $job_id ?: Job::create($this->build->build_key_id);
 
         \Log::emergency(
-            '=== Handle job Start ===', ['job_id' => $this->job_id]);
+            '===== Handle job Start =====', ['job_id' => $this->job_id]);
         // 清理缓存
         CacheKey::flush($job_id);
 
@@ -196,6 +196,6 @@ class Client
             ))
             ->handle();
 
-        \Log::emergency('=== Generate Job Success ===', ['job_id' => $this->job_id]);
+        \Log::emergency('===== Generate Job Success =====', ['job_id' => $this->job_id]);
     }
 }
