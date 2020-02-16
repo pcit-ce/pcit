@@ -51,7 +51,7 @@ class Kernel
                            return $output;
                        }
 
-                        return \Response::make($output);
+                        return \Response::make((string) $output);
 
                         break;
                     case 'string':

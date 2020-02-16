@@ -11,7 +11,7 @@ set +x
 echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin "${INPUT_REGISTRY}"
 set -x
 
-docker buildx create --name mybuilder --driver docker-container --use
+docker buildx create --name pcit-builder --driver docker-container --use
 
 INPUT_IMAGE=${INPUT_REPO}:${INPUT_TAGS:-latest}
 
@@ -56,4 +56,4 @@ $(test "${INPUT_NO_CACHE}" = "true" && echo " --no-cache ") \
 ${OPTIONS} \
 ${INPUT_CONTEXT:-.}
 
-# docker buildx rm mybuilder
+docker buildx rm pcit-builder
