@@ -263,6 +263,7 @@ class Pipeline
                     "pcit_$jobId:$workdir",
                     'pcit_cache:/tmp/pcit_cache',
                     'pcit_actions_'.$jobId.':'.'/var/run/actions',
+                    '/var/run/docker.sock:/var/run/docker.sock',
                 ])
                 ->setEntrypoint($entrypoint)
                 ->setLabels([

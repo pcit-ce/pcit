@@ -158,48 +158,6 @@ steps: # pipeline
     commands:
       - echo "Don't run on master branch"
 
-  docker_build:
-    image: docker
-    settings:
-      # registry: docker.khs1994.com
-      repo: pcit/pcit
-      tags: 7.3.11-swarm-${PCIT_TAG}
-      # target: php
-      build_args:
-        - a=1
-      context: ./tests
-      dockerfile: tests/Dockerfile
-      # dockerfile: path/to/Dockerfile
-      username: ${DOCKER_USERNAME}
-      password: ${DOCKER_PASSWORD}
-      dry_run: false
-      purge: false
-    when:
-      event: push
-      branch: alpha
-      # event: tag
-
-  docker_build_dont_push:
-    image: docker
-    settings:
-      # registry: docker.khs1994.com
-      repo: pcit/pcit
-      tags: 7.3.11-swarm-${PCIT_TAG}
-      # target: php
-      build_args:
-        - a=1
-      context: ./tests
-      dockerfile: tests/Dockerfile
-      # dockerfile: path/to/Dockerfile
-      username: ${DOCKER_USERNAME}
-      password: ${DOCKER_PASSWORD}
-      dry_run: true
-      purge: false
-    when:
-      event: push
-      # event: tag
-      branch: alpha
-
   plugin-demo:
     image: pcit/demo
     settings:
@@ -264,42 +222,6 @@ steps: # pipeline
       local_dir: build
       # email: ${EMAIL}
       # username: khs1994
-      git_token: ${GITHUB_TOKEN}
-      depth: 10
-
-  sync_git_runner:
-    image: pcit/pages
-    when:
-      event: ['tag']
-      status: success
-      jobs:
-      - PHP_VERSION: 7.4.2
-        NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
-    settings:
-      keep_history: true
-      target_branch: master
-      git_url: github.com/pcit-ce/runner
-      local_dir: src/Runner
-      git_token: ${GITHUB_TOKEN}
-      depth: 10
-
-  sync_git_plugin_s3:
-    image: pcit/pages
-    when:
-      event: ['tag']
-      status: success
-      jobs:
-      - PHP_VERSION: 7.4.2
-        NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
-    settings:
-      keep_history: true
-      target_branch: master
-      git_url: github.com/pcit-ce/plugin-s3
-      local_dir: plugins/storage/s3
       git_token: ${GITHUB_TOKEN}
       depth: 10
 
@@ -426,6 +348,9 @@ steps: # pipeline
       # - cp openapi/openapi.yaml /opt/data.txt
       - sh /my_shell/api_doc_release.sh
     when:
+      status: success
+      event: push
+      branch: master
       jobs:
       - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8

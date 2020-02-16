@@ -1,0 +1,62 @@
+steps:
+  docker_build:
+    image: pcit/docker
+    settings:
+      # registry: docker.khs1994.com
+      repo: pcit/alpine
+      tags: latest
+      # target: php
+      build_args:
+        - a=1
+        - b=2
+      context: ./tests
+      dockerfile: tests/Dockerfile
+      # dockerfile: path/to/Dockerfile
+      username: ${DOCKER_USERNAME}
+      password: ${DOCKER_PASSWORD}
+      dry_run: false
+      pull: false
+      purge: false
+      platform:
+        - linux/arm
+        # - linux/arm64
+        # - linux/amd64
+      labels:
+        - ci.khs1994.com=true
+        - plugin.ci.khs1994.com=true
+      no_cache: false
+    when:
+      event: push
+      branch: master
+      # event: tag
+
+  docker_build_dont_push:
+    image: pcit/docker
+    settings:
+      # registry: docker.khs1994.com
+      repo: pcit/alpine
+      # target: php
+      build_args:
+        - a=1
+        - b=2
+      context: ./tests
+      dockerfile: tests/Dockerfile
+      # dockerfile: path/to/Dockerfile
+      username: ${DOCKER_USERNAME}
+      password: ${DOCKER_PASSWORD}
+      dry_run: true
+      purge: false
+    when:
+      event: push
+      # event: tag
+      branch: master
+
+  exec_command:
+    image: pcit/docker
+    run: |
+      docker buildx create --name mybuilder --driver docker-container --use
+
+      docker buildx build -f tests/Dockerfile tests
+      docker buildx build -t test -f tests/Dockerfile tests
+
+      docker buildx rm mybuilder
