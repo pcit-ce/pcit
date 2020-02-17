@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Providers;
 
-use PCIT\Runner\Agent\Docker\Dockerhandler;
+use PCIT\Runner\Agent\Docker\DockerHandler;
 use PCIT\Runner\Agent\Exec\ExecHandler;
 use PCIT\Runner\Client;
 use Pimple\Container;
@@ -19,7 +19,7 @@ class RunnerProvider implements ServiceProviderInterface
         };
 
         $pimple['runner_agent_docker'] = function ($app) {
-            return new Dockerhandler();
+            return new DockerHandler();
         };
 
         $pimple['runner_agent_exec'] = function ($app) {

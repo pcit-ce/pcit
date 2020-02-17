@@ -57,7 +57,7 @@ class Agent extends Kernel
 
         ['id' => $job_id, 'build_id' => $build_key_id] = $job_data;
 
-        \Log::emergency('====== Handle job '.$job_id.'======', ['job_id' => $job_id]);
+        \Log::emergency('====== Handle job '.$job_id.' ======', ['job_id' => $job_id]);
 
         $this->subject
             // TODO update build status in progress
