@@ -6,7 +6,6 @@ export DOCKER_USERNAME=${INPUT_USERNAME}
 export DOCKER_PASSWORD=${INPUT_PASSWORD}
 
 # login
-
 set +x
 echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin "${INPUT_REGISTRY}"
 set -x
@@ -19,7 +18,6 @@ INPUT_IMAGE=${INPUT_REPO}:${INPUT_TAGS:-latest}
 [ -n "${INPUT_REGISTRY}" ] && INPUT_IMAGE="${INPUT_REGISTRY}/${INPUT_IMAGE}"
 
 split(){
-
   CMD_ARG=$1
 
   OLD_IFS="$IFS"
@@ -41,8 +39,8 @@ split(){
 }
 
 # build_args
-# labels
 split build-arg ${INPUT_BUILD_ARGS}
+# labels
 split label ${INPUT_LABELS}
 
 docker buildx build \

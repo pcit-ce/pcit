@@ -46,7 +46,8 @@ COPY . /app/pcit
 COPY --from=frontend-builder /app/pcit/public/ /app/pcit/public/
 
 RUN rm -rf /app/pcit/Dockerfile \
-    && rm -rf /app/pcit/frontend
+    && rm -rf /app/pcit/frontend \
+    && rm -rf /app/pcit/.docker
 
 # pcit
 FROM khs1994/php:${PHP_VERSION}-fpm-alpine as pcit
@@ -59,6 +60,23 @@ ENTRYPOINT ["/app/pcit/bin/pcitd"]
 CMD ["up"]
 # CMD ["server"]
 # CMD ["agent"]
+
+# nginx unit
+
+FROM khs1994/php:7.4.2-unit-alpine as unit
+
+COPY --from=dump /app/pcit/ /app/pcit/
+
+COPY .docker/unit/docker-entrypoint.sh /
+
+COPY .docker/unit/config.json /etc/nginx-unit/
+
+EXPOSE 80
+
+ENTRYPOINT [ "sh","/docker-entrypoint.sh" ]
+
+CMD ["up"]
+# CMD ["server"]
 
 # 前端资源
 FROM alpine as frontend

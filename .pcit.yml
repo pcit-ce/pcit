@@ -198,7 +198,7 @@ steps: # pipeline
     with: # 支持变量
       keep_history: true
       target_branch: gh-pages
-      git_url: gitee.com/pcit-ce/pcit
+      git_url: gitee.com/pcit-ce/docs
       local_dir: build
       email: ${EMAIL}
       username: khs1994

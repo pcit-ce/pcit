@@ -19,8 +19,8 @@ steps:
       purge: false
       platform:
         - linux/arm
-        # - linux/arm64
-        # - linux/amd64
+        - linux/arm64
+        - linux/amd64
       labels:
         - ci.khs1994.com=true
         - plugin.ci.khs1994.com=true

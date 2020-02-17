@@ -1,0 +1,39 @@
+{
+    "listeners": {
+        "*:80": {
+            "pass": "routes"
+        }
+    },
+    "applications": {
+        "pcit": {
+            "type": "php",
+            "root": "/app/pcit/public",
+            "index": "index.php",
+            "script": "index.php",
+            "user": "root",
+            "group": "root"
+        }
+    },
+    "routes": [
+        {
+            "match": {
+                "uri": [
+                    "*.css",
+                    "*.js",
+                    "*.png",
+                    "*.jpg",
+                    "*.html"
+                ]
+            },
+            "action": {
+                "share": "/app/pcit/public/"
+            }
+        },
+        {
+            "action": {
+                "pass": "applications/pcit"
+            }
+        }
+    ],
+    "access_log": "/var/log/nginx-unit/access.log"
+}
