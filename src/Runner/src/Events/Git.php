@@ -80,6 +80,8 @@ class Git
 
         if ($git) {
             list($git_config, $git_image, $hosts) = self::parseGit();
+        } else {
+            $git_config[] = 'PLUGIN_DEPTH=25';
         }
 
         if (env('CI_GITHUB_HOST')) {

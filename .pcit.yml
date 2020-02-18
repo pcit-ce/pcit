@@ -65,7 +65,8 @@ steps: # pipeline
       print(os.environ['PATH'])
 
   pwsh_shell:
-    uses: mcr.microsoft.com/powershell:alpine-3.8
+    # uses: mcr.microsoft.com/powershell:alpine-3.8
+    uses: mcr.azk8s.cn/powershell:alpine-3.8
     shell: pwsh
     run: |
       write-host 1
