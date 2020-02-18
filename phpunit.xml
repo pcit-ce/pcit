@@ -6,7 +6,6 @@
             <directory>src/Framework/tests</directory>
             <directory>src/Kernel/tests</directory>
             <directory>src/Runner/tests</directory>
-            <directory>src/Deployer/tests</directory>
             <directory>src/git/GitHub/tests</directory>
         </testsuite>
     </testsuites>

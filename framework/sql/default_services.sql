@@ -14,14 +14,14 @@ CREATE TABLE `default_services`
 
 INSERT INTO `default_services`
 VALUES ('mysql',
-        'mysql:5.7.24',
+        'mysql:5.7.29',
         JSON_ARRAY('MYSQL_DATABASE=test', 'MYSQL_ROOT_PASSWORD=test'),
         JSON_ARRAY(),
         JSON_ARRAY('--character-set-server=utf8mb4', '--default-authentication-plugin=mysql_native_password'));
 
 INSERT INTO `default_services`
 VALUES ('redis',
-        'redis:5.0.3-alpine',
+        'redis:5.0.7-alpine',
         JSON_ARRAY(),
         JSON_ARRAY(),
         JSON_ARRAY('--bind', '0.0.0.0'));

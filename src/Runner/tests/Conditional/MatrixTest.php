@@ -17,7 +17,7 @@ when:
   matrix:
     - PHP_VERSION: 7.4.2
       NGINX_VERSION: 1.15.9
-      REDIS_VERSION: 5.0.3
+      REDIS_VERSION: 5.0.7
       MYSQL_VERSION: 5.7.23
 EOF;
 
@@ -28,7 +28,7 @@ matrix:
   NGINX_VERSION:
     - 1.15.9
   REDIS_VERSION:
-    - 5.0.3
+    - 5.0.7
   MYSQL_VERSION:
     - 5.7.23
 EOF;

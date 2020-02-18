@@ -14,6 +14,8 @@
 
 * GitHub
 * Gitee
+* Gogs
+* Coding.net
 
 ### PCITD Command
 

@@ -50,7 +50,7 @@ RUN rm -rf /app/pcit/Dockerfile \
     && rm -rf /app/pcit/.docker
 
 # pcit
-FROM khs1994/php:${PHP_VERSION}-fpm-alpine as pcit
+FROM khs1994/php:${PHP_VERSION}-cli-alpine as pcit
 
 COPY --from=dump /app/pcit/ /app/pcit/
 

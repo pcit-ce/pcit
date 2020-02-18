@@ -180,8 +180,8 @@ steps: # pipeline
       jobs:
       - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
+        REDIS_VERSION: 5.0.7
+        MYSQL_VERSION: 5.7.29
     commands:
     - sami update .sami.php
 
@@ -193,8 +193,8 @@ steps: # pipeline
       jobs:
       - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
+        REDIS_VERSION: 5.0.7
+        MYSQL_VERSION: 5.7.29
     with: # 支持变量
       keep_history: true
       target_branch: gh-pages
@@ -213,8 +213,8 @@ steps: # pipeline
       jobs:
       - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
+        REDIS_VERSION: 5.0.7
+        MYSQL_VERSION: 5.7.29
     settings:
       keep_history: true
       # target_branch: gh-pages
@@ -250,8 +250,8 @@ steps: # pipeline
       jobs:
       - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
+        REDIS_VERSION: 5.0.7
+        MYSQL_VERSION: 5.7.29
     # environment:
     settings:
       region: ${S3_REGION}
@@ -273,8 +273,8 @@ steps: # pipeline
       jobs:
       - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
+        REDIS_VERSION: 5.0.7
+        MYSQL_VERSION: 5.7.29
       # event: tag
     settings:
       token: ${GITHUB_TOKEN}
@@ -354,8 +354,8 @@ steps: # pipeline
       jobs:
       - PHP_VERSION: 7.4.2
         NGINX_VERSION: 1.15.8
-        REDIS_VERSION: 5.0.3
-        MYSQL_VERSION: 5.7.24
+        REDIS_VERSION: 5.0.7
+        MYSQL_VERSION: 5.7.29
 
 # 配置服务
 services:
@@ -396,9 +396,9 @@ jobs:
   NGINX_VERSION:
     - 1.15.8
   REDIS_VERSION:
-    - 5.0.3
+    - 5.0.7
   MYSQL_VERSION:
-    - 5.7.24
+    - 5.7.29
     # - 8.0.15
   # MONGODB_VERSION:
     # - 4.1.4
@@ -408,11 +408,11 @@ jobs:
 # jobs:
 #   include:
 #     - PHP_VERSION: 7.2.24
-#       MYSQL_VERSION: 5.7.24
-#       REDIS_VERSION: 5.0.3
+#       MYSQL_VERSION: 5.7.29
+#       REDIS_VERSION: 5.0.7
 #     - PHP_VERSION: 7.1.26
-#       MYSQL_VERSION: 5.7.24
-#       REDIS_VERSION: 5.0.3
+#       MYSQL_VERSION: 5.7.29
+#       REDIS_VERSION: 5.0.7
 
 # 分支设置
 branches:
