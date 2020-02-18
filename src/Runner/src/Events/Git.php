@@ -39,6 +39,7 @@ class Git
         $tags = $git->tags ?? false;
         $submodule_override = $git->submodule_override ?? null;
         $hosts = $git->hosts ?? [];
+        $hosts = array_merge($hosts, $this->client->networks->hosts ?? []);
         // 防止用户传入 false
         if ($depth) {
             array_push($git_config, "PLUGIN_DEPTH=$depth");
@@ -68,7 +69,6 @@ class Git
      */
     public function handle(): void
     {
-        $docker_container = app(PCIT::class)->docker->container;
         $git = $this->git;
         $client = $this->client;
         $build = $this->build;
@@ -80,6 +80,12 @@ class Git
 
         if ($git) {
             list($git_config, $git_image, $hosts) = self::parseGit();
+        }
+
+        if (env('CI_GITHUB_HOST')) {
+            $hosts = array_merge($hosts,
+            ['github.com:'.env('CI_GITHUB_HOST')]
+        );
         }
 
         $git_url = GitSupport::getUrl($build->git_type, $build->repo_full_name);

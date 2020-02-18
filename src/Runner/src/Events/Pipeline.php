@@ -176,6 +176,13 @@ class Pipeline
         $jobId = $this->client->job_id;
         $workdir = $this->client->workdir;
         $language = $this->client->language ?? 'php';
+        $hosts = $this->client->networks->hosts ?? [];
+
+        if (env('CI_GITHUB_HOST')) {
+            $hosts = array_merge($hosts,
+            ['github.com:'.env('CI_GITHUB_HOST')]
+           );
+        }
 
         $this->language = $language;
 
@@ -278,6 +285,7 @@ class Pipeline
                 ->setWorkingDir($workdir)
                 ->setCmd($cmd)
                 ->setImage($image)
+                ->setExtraHosts($hosts)
                 ->setNetworkingConfig([
                     'EndpointsConfig' => [
                         "pcit_$jobId" => [

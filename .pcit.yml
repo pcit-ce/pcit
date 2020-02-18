@@ -327,7 +327,7 @@ steps: # pipeline
     commands:
       - echo "build changed"
 
-  ping: ["ping -c 5 127.0.0.1"]
+  ping: ["ping -c 5 git.khs1994.io"]
 
   cron_only:
     commands: ["echo only run on cron event"]
@@ -438,6 +438,7 @@ networks:
   hosts:
     - "git.khs1994.com:127.0.0.1"
     - "docker.khs1994.com:127.0.0.1"
+    - "git.khs1994.io:127.0.0.1"
 
 # 指定构建步骤的默认镜像
 image: khs1994/php:7.4.2-composer-alpine
