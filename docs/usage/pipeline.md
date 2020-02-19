@@ -69,6 +69,8 @@ pipeline:
     shell: bash
 ```
 
+全部支持的 `shell` 包括 `sh` `bash` `python` `pwsh` `node`
+
 ## 6. `when` 构建条件
 
 可以通过 `when` 指令设置构建条件。

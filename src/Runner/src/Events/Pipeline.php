@@ -178,6 +178,7 @@ class Pipeline
         $language = $this->client->language ?? 'php';
         $hosts = $this->client->networks->hosts ?? [];
 
+        // custome github.com hosts
         if (env('CI_GITHUB_HOST')) {
             $hosts = array_merge($hosts,
             ['github.com:'.env('CI_GITHUB_HOST')]
@@ -266,6 +267,11 @@ class Pipeline
                 $entrypoint = $commands ? ['pwsh', '-Command'] : null;
             }
 
+            if ('node' === $shell) {
+                $cmd = $commands ? ['$CI_SCRIPT | base64 -d | timeout '.$timeout.' node -'] : null;
+                $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
+            }
+
             $container_config = $docker_container
                 ->setEnv($env)
                 ->setBinds([
@@ -284,6 +290,7 @@ class Pipeline
                     'com.khs1994.ci.pipeline.status.changed' => (string) $changed,
                     'com.khs1994.ci' => (string) $jobId,
                 ])
+                ->setPrivileged($privileged)
                 ->setWorkingDir($workdir)
                 ->setCmd($cmd)
                 ->setImage($image)

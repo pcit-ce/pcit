@@ -116,7 +116,7 @@ class PCIT extends Container
 
         set_time_limit(0);
 
-        $this['curl_timeout'] = 100;
+        $this['curl_timeout'] = 60 * 5;
 
         $this->setGitType($git_type);
 
