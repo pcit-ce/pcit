@@ -37,12 +37,12 @@ services:
     image: pcit/pypi
     build: package/pypi
 
-  github_release:
-    image: pcit/github_release
+  github-release:
+    image: pcit/github-release
     build: releases/github
 
-  gitee_release:
-    image: pcit/gitee_release
+  gitee-release:
+    image: pcit/gitee-release
     build: releases/gitee
 
   pages:
@@ -57,6 +57,6 @@ services:
     image: pcit/dpl
     build: dpl
 
-  actions_downloader:
-    image: pcit/actions_downloader
-    build: actions_downloader
+  actions-downloader:
+    image: pcit/actions-downloader
+    build: actions-downloader

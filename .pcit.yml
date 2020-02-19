@@ -274,8 +274,8 @@ steps: # pipeline
       endpoint: ${S3_ENTRYPOINT}
       use_path_style_endpoint: true
 
-  github_releases:
-    image: pcit/github_release
+  github-releases:
+    image: pcit/github-release
     when:
       status: success
       event: push

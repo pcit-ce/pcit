@@ -419,7 +419,7 @@ class Pipeline
 
         $config = (new Git(null, null, null))->generateDocker(
             $env,
-            'pcit/actions_downloader',
+            'pcit/actions-downloader',
             [],
             $jobId,
             $workdir,
