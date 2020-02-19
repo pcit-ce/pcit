@@ -25,3 +25,6 @@ steps:
       fetch-depth: 1
       path: test_git
       token: ${GITHUB_TOKEN}
+
+  actions_with_path:
+    image: github://pcit-plugins/pcit-actions-downloader/.github/actions/demo@master

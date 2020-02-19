@@ -354,10 +354,29 @@ class Pipeline
     {
         $actions = substr($image, 9);
 
-        [$repo,$ref] = explode('@', $actions);
+        // user/repo@ref
+        // user/repo/path@ref
+        $explode_array = explode('@', $actions);
+        [$repo,] = $explode_array;
+
+        $ref = 'master';
+        if ($explode_array[1] ?? false) {
+            $ref = $explode_array[1];
+        }
+
+        $explode_array = explode('/', $repo, 3);
+
+        [$user,$repo] = $explode_array;
+        $repo = $user.'/'.$repo;
+
+        $path = null;
+        if ($explode_array[2] ?? false) {
+            $path = '/'.$explode_array[2];
+        }
 
         \Log::info('this pipeline use actions', [
           'repo' => $repo,
+          'path' => $path,
           'ref' => $ref,
         ]);
 
@@ -367,7 +386,7 @@ class Pipeline
 
         // action.yml
         $action_yml = HttpClient::get(
-            'https://raw.githubusercontent.com/'.$repo.'/'.$ref.'/action.yml',
+            'https://raw.githubusercontent.com/'.$repo.'/'.$ref.$path.'/action.yml',
             null,
             [],
             20
@@ -377,7 +396,7 @@ class Pipeline
 
         $using = $action_yml['runs']['using'];
         $main = $action_yml['runs']['main'] ?? 'index.js';
-        $main = $workdir.'/'.$main;
+        $main = $workdir.$path.'/'.$main;
 
         if ('node' === substr($using, 0, 4)) {
             $using = 'node';
