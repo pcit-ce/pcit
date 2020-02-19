@@ -31,7 +31,7 @@ class Kernel
         try {
             require base_path().'framework/routes/web.php';
         } catch (Throwable $e) {
-            if ('Finish' === $e->getMessage()) {
+            if ($e instanceof SuccessException) {
                 $output = Route::getOutput();
 
                 if ($output instanceof HttpFoundationResponse) {

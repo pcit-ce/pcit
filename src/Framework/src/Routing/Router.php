@@ -6,6 +6,7 @@ namespace PCIT\Framework\Routing;
 
 use Closure;
 use Exception;
+use PCIT\Framework\Foundation\Http\SuccessException;
 use PCIT\Support\Git;
 use Throwable;
 
@@ -37,7 +38,7 @@ class Router
             $arg = $this->getParameters(null, $action, $arg);
             $this->output = \call_user_func($action, ...$arg);
 
-            throw new Exception('Finish', 200);
+            throw new SuccessException();
         }
 
         $array = explode('@', $action);
@@ -80,7 +81,7 @@ class Router
         }
 
         // 处理完毕，退出
-        throw new Exception('Finish', 200);
+        throw new SuccessException();
     }
 
     /**

@@ -248,19 +248,21 @@ class Pipeline
 
             \Log::info(json_encode($env), []);
 
+            $timeout = env('CI_STEP_TIMEOUT', 21600);
+
             if ('bash' === $shell || 'sh' === $shell) {
-                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | '.$shell.' -e'] : null;
+                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' '.$shell.' -e'] : null;
                 // 有 commands 指令则改为 ['/bin/sh', '-c'], 否则为默认值
                 $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
             }
 
             if ('python' === $shell) {
-                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | python'] : null;
+                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' python'] : null;
                 $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
             }
 
             if ('pwsh' === $shell) {
-                $cmd = $commands ? ['$CI_SCRIPT | base64 -d | pwsh -Command -'] : null;
+                $cmd = $commands ? ['$CI_SCRIPT | base64 -d | timeout '.$timeout.' pwsh -Command -'] : null;
                 $entrypoint = $commands ? ['pwsh', '-Command'] : null;
             }
 
