@@ -69,6 +69,7 @@ steps: # pipeline
     uses: mcr.azk8s.cn/powershell:preview-alpine-3.10
     shell: pwsh
     run: |
+      pwd
       write-host 1
       write-host 2
 

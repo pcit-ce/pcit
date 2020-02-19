@@ -253,24 +253,22 @@ class Pipeline
 
             if ('bash' === $shell || 'sh' === $shell) {
                 $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' '.$shell.' -e'] : null;
-                // 有 commands 指令则改为 ['/bin/sh', '-c'], 否则为默认值
-                $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
             }
 
             if ('python' === $shell) {
                 $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' python'] : null;
-                $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
             }
 
             if ('pwsh' === $shell) {
-                $cmd = $commands ? ['$CI_SCRIPT | base64 -d | timeout '.$timeout.' pwsh -Command -'] : null;
-                $entrypoint = $commands ? ['pwsh', '-Command'] : null;
+                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' pwsh -Command -'] : null;
             }
 
             if ('node' === $shell) {
-                $cmd = $commands ? ['$CI_SCRIPT | base64 -d | timeout '.$timeout.' node -'] : null;
-                $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
+                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' node -'] : null;
             }
+
+            // 有 commands 指令则改为 ['/bin/sh', '-c'], 否则为默认值
+            $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
 
             $container_config = $docker_container
                 ->setEnv($env)
