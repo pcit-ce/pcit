@@ -20,7 +20,7 @@ class DockerProvider implements ServiceProviderInterface
                     null,
                     null,
                     null,
-                    (int) env('CI_DOCKER_TIMEOUT', 100)
+                    (int) env('CI_DOCKER_TIMEOUT', 60 * 5)
                 ));
             }
 
@@ -30,7 +30,7 @@ class DockerProvider implements ServiceProviderInterface
                 null,
                 null,
                 null,
-                (int) env('CI_DOCKER_TIMEOUT', 100)
+                (int) env('CI_DOCKER_TIMEOUT', 60 * 5)
             ));
         };
     }

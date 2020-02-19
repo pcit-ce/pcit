@@ -10,7 +10,7 @@ tar -zxvf archive.tar.gz -C archive
 
 dir=`ls archive`
 
-cp -a archive/$dir/* .
+cp -a archive/$dir/. .
 
 pwd
 
