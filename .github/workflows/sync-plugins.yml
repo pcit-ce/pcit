@@ -20,7 +20,7 @@ jobs:
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-ce/plugin-tencent-cos-v5
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-tencent-cos-v5
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: plugins/storage/tencent_cos_v5
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
@@ -31,7 +31,7 @@ jobs:
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-ce/plugin-s3
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-s3
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: plugins/storage/s3
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
@@ -42,7 +42,7 @@ jobs:
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-ce/plugin-pages
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-pages
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: plugins/pages
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
@@ -53,7 +53,7 @@ jobs:
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-ce/plugin-git
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-git
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: plugins/git
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
@@ -64,7 +64,7 @@ jobs:
       env:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/pcit-ce/plugin-docker
+        PCIT_GIT_URL: github.com/pcit-plugins/pcit-docker
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: plugins/docker
         PCIT_MESSAGE: Sync from pcit-ce/pcit@${{github.sha}} by PCIT
@@ -99,7 +99,7 @@ jobs:
       with:
         email: khs1994@khs1994.com
         git_token: ${{ secrets.PCIT_GIT_TOKEN }}
-        git_url: github.com/pcit-ce/plugin-demo
+        git_url: github.com/pcit-plugins/pcit-demo
         keep_history: "true"
         local_dir: plugins/demo
         message: Sync from pcit-ce/pcit@${{github.sha}} by PCIT

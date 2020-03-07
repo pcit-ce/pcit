@@ -11,6 +11,7 @@ use PCIT\Support\Config;
 use PCIT\Support\Git;
 use PHPMailer\PHPMailer\PHPMailer;
 use Pimple\Container;
+use Pimple\Exception\UnknownIdentifierException;
 use WeChat\WeChat;
 
 /**
@@ -116,7 +117,7 @@ class PCIT extends Container
 
         set_time_limit(0);
 
-        $this['curl_timeout'] = 60 * 5;
+        $this['curl_timeout'] = $this->curl_timeout = 60 * 5;
 
         $this->setGitType($git_type);
 
@@ -135,9 +136,9 @@ class PCIT extends Container
 
     public function setGitType($git_type = 'github')
     {
-        $this['git_type'] = $git_type;
+        $this['git_type'] = $this->git_type = $git_type;
 
-        $this['class_name'] = Git::getClassName($git_type);
+        $this['class_name'] = $this->class_name = Git::getClassName($git_type);
 
         return $this;
     }
@@ -198,7 +199,7 @@ class PCIT extends Container
             return $this[$name];
         }
 
-        throw new Exception('Not found');
+        throw new UnknownIdentifierException($name);
     }
 
     /**
@@ -217,6 +218,6 @@ class PCIT extends Container
             return $this[$name];
         }
 
-        throw new Exception('Not found');
+        throw new UnknownIdentifierException($name);
     }
 }

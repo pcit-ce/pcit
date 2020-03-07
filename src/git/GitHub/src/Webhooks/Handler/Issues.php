@@ -14,8 +14,9 @@ class Issues
 
     /**
      *  "assigned", "unassigned",
-     *  "labeled",  "unlabeled",
-     *  "opened",   "edited", "closed" or "reopened"
+     *  "labeled", "unlabeled",
+     *  "opened", "closed" or "reopened"
+     *  "edited"
      *  "milestoned", "demilestoned".
      *
      * @param $json_content

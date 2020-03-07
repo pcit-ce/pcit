@@ -352,6 +352,7 @@ class Pipeline
 
     public function actionsHandler(string $step, string $image)
     {
+        // github://
         $actions = substr($image, 9);
 
         // user/repo@ref

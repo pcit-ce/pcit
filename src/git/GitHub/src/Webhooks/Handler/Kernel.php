@@ -228,4 +228,9 @@ class Kernel
     {
         Repository::handle($json_content);
     }
+
+    public function __call($name, $args): void
+    {
+        throw new \Exception("$name event handler not implements");
+    }
 }

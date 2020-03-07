@@ -52,11 +52,12 @@ module.exports = {
         'notifications',
         'networks',
         'system',
+        'platform',
         'skip',
         'system_env',
       ],
       '/plugins/': [
-        'dev'
+
       ],
       '/examples/': [
         'php',

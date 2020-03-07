@@ -86,6 +86,8 @@ steps: # pipeline
       echo 1
       echo 2
 
+  platform: uname -a
+
   install:
     # image: khs1994/php:7.3.0-composer-alpine
     command:
@@ -120,7 +122,7 @@ steps: # pipeline
       # platform: [ linux/*, windows/amd64 ]
 
       # status: changed
-      # status: [ failure, success ]
+      # status: [ failure, success, changed ]
 
       # event: tag
       # event: [push, pull_request, tag, cron]
@@ -422,6 +424,15 @@ jobs:
 #     - PHP_VERSION: 7.1.26
 #       MYSQL_VERSION: 5.7.29
 #       REDIS_VERSION: 5.0.7
+
+platform:
+  - linux/amd64
+  - linux/arm64
+  # - linux/ppc64le
+  # - linux/s390x
+  # - linux/386
+  # - linux/arm/v7
+  # - linux/arm/v6
 
 # 分支设置
 branches:
