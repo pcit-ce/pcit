@@ -62,19 +62,32 @@ class UpdateBuildStatus
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
+                $this->updateBuildStatus();
                 (new Failed($job_key_id, $config, $build_log))->handle();
 
                 break;
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+                $this->updateBuildStatus();
                 (new Passed($job_key_id, $config, $build_log))->handle();
 
                 break;
             default:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+                $this->updateBuildStatus();
                 (new Cancelled($job_key_id, $config, $build_log))->handle();
         }
+    }
+
+    public function updateBuildStatus(): void
+    {
+        $build_key_id = Job::getBuildKeyId($this->job_key_id);
+
+        $status = Job::getBuildStatusByBuildKeyId($build_key_id);
+
+        Build::updateBuildStatus($build_key_id, $status);
+        Build::updateFinishedAt($build_key_id);
     }
 }

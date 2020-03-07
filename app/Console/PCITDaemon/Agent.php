@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\PCITDaemon;
 
-use App\Build;
 use App\Events\LogHandler;
 use App\Events\UpdateBuildStatus;
 use App\Job;
@@ -83,8 +82,6 @@ class Agent extends Kernel
                 \Log::emergency($e->getMessage(), []);
             }
         }
-
-        $this->updateBuildStatus((int) $build_key_id);
     }
 
     /**
@@ -93,18 +90,5 @@ class Agent extends Kernel
     public function getJob()
     {
         return Job::getQueuedJob()[0] ?? null;
-    }
-
-    /**
-     * TODO.
-     *
-     * 更新 job 对应的 build 状态
-     */
-    public function updateBuildStatus(int $build_key_id): void
-    {
-        $status = Job::getBuildStatusByBuildKeyId($build_key_id);
-
-        Build::updateBuildStatus($build_key_id, $status);
-        Build::updateFinishedAt($build_key_id);
     }
 }

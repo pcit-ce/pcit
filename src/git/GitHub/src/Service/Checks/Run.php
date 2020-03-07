@@ -48,7 +48,7 @@ class Run
             'name' => $run_data->name,
             'head_sha' => $run_data->commit_id,
             'details_url' => $run_data->details_url,
-            'external_id' => $run_data->external_id,
+            'external_id' => (string) $run_data->external_id,
             'status' => $run_data->status,
             'started_at' => Date::Int2ISO($run_data->started_at),
             'completed_at' => Date::Int2ISO($run_data->completed_at),
@@ -70,7 +70,7 @@ class Run
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
-            \Log::debug('Http Return code is not 201 '.$http_return_code);
+            \Log::info('Http Return code is not 201, get '.$http_return_code);
         }
 
         return $output;
@@ -110,7 +110,7 @@ class Run
         $http_return_header = $this->curl->getCode();
 
         if (200 !== $http_return_header) {
-            \Log::debug(__FILE__, __LINE__, 'Http Return Code is not 200 '.$http_return_header);
+            \Log::info('Http Return Code is not 200, get '.$http_return_header);
         }
 
         return $output;

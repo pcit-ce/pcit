@@ -76,10 +76,10 @@ class GitHubAppChecks
             $status_use_in_title = 'in Progress';
         }
 
-        $name = $name ?? 'PCIT - '.ucfirst($event_type).' #'.$build_key_id.'-'.$job_key_id;
+        $name = $name ?? 'PCIT / '.ucfirst($event_type).' #'.$build_key_id.'-'.$job_key_id;
 
         $title = $title ??
-            ucfirst($event_type).' - '.ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
+            ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
 
         $summary = $summary ??
             'This Repository Build Powered By [PCIT](https://github.com/pcit-ce/pcit)';
@@ -132,6 +132,47 @@ class GitHubAppChecks
             'job_key_id' => $job_key_id,
             'build_key_id' => $build_key_id,
             'result' => $result,
+            'status' => $status,
+            'conclusion' => $conclusion,
         ]);
+
+        // 更新 PCIT / EVENT_TYPE 状态
+        // eg: PCIT / Push
+        // 获取 build 状态
+
+        $build_status = Build::getBuildStatusByBuildKeyId($build_key_id);
+        $conclusion = self::buildStatus2conclusion($build_status);
+
+        $run_data->name = 'PCIT / '.ucfirst($event_type);
+        $run_data->details_url = env('CI_HOST').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
+        $run_data->external_id = $build_key_id;
+        $conclusion = $run_data->conclusion = $conclusion;
+        $run_data->started_at = (int) Build::getStartAt($build_key_id);
+        $run_data->completed_at = $conclusion ? (int) Build::getStopAt($build_key_id) : null;
+        $status = $run_data->status = \in_array($build_status, [
+            'pending', 'queued',
+        ])
+        ? CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS :
+        CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED;
+        $run_data->title = 'Build #'.$build_key_id;
+        $run_data->summary = $summary;
+        $run_data->text = 'This is summary check run';
+
+        $result = $pcit->check_run->create($run_data);
+        // var_dump($result);
+        $check_run_id = json_decode($result)->id ?? null;
+
+        \Log::info('Create GitHub App Check Run, build status', compact(
+            'build_key_id', 'build_status', 'conclusion', 'status', 'check_run_id'
+        ));
+    }
+
+    public static function buildStatus2conclusion($status)
+    {
+        if (\in_array($status, ['queued', 'skip', 'misconfigured'])) {
+            return null;
+        }
+
+        return $status;
     }
 }

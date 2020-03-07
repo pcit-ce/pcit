@@ -9,7 +9,7 @@ class SendMail
     public static function build(): void
     {
         if (!env('CI_EMAIL_PASSWORD', false)) {
-            \Log::info(__FILE__, __LINE__, 'mail settings not found, send Mail skip', []);
+            \Log::info('mail settings not found, send Mail skip', []);
 
             return;
         }
