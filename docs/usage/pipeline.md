@@ -9,7 +9,7 @@
 ```yaml
 pipeline:
   php:
-    image: khs1994/php-fpm:7.4.2-alpine
+    image: khs1994/php-fpm:7.4.3-alpine
     commands:
       - composer install -q
       - vendor/bin/phpunit
@@ -36,7 +36,7 @@ pipeline:
 ```yaml
 pipeline:
   php:
-    image: khs1994/php-fpm:7.4.2-alpine
+    image: khs1994/php-fpm:7.4.3-alpine
     environment:
       - key=value
     commands:
@@ -51,7 +51,7 @@ pipeline:
 ```yaml
 pipeline:
   php:
-    image: khs1994/php-fpm:7.4.2-alpine
+    image: khs1994/php-fpm:7.4.3-alpine
     pull: true
     commands:
       - composer install -q
@@ -65,7 +65,7 @@ pipeline:
 ```yaml
 pipeline:
   php:
-    image: khs1994/php-fpm:7.4.2-alpine
+    image: khs1994/php-fpm:7.4.3-alpine
     shell: bash
 ```
 
@@ -78,7 +78,7 @@ pipeline:
 ```yaml
 pipeline:
   php:
-    image: khs1994/php-fpm:7.4.2-alpine
+    image: khs1994/php-fpm:7.4.3-alpine
     commands:
       - composer install -q
       - vendor/bin/phpunit
