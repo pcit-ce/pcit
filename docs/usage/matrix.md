@@ -12,7 +12,7 @@ pipeline:
 
 matrix:
   PHP_TAG:
-    - 7.4.2-alpine
+    - 7.4.3-alpine
     - 7.3.11-alpine    
 ```
 
@@ -25,7 +25,7 @@ matrix:
 ```yaml
 pipeline:
   php:
-    image: khs1994/php-fpm:7.4.2-alpine
+    image: khs1994/php-fpm:7.4.3-alpine
     ...
 
   php2:

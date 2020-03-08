@@ -1,5 +1,5 @@
 image:
-  php: khs1994/php:7.4.2-composer-alpine
+  php: khs1994/php:7.4.3-composer-alpine
   node_js: node:12.16.1-alpine
   js: node:12.16.1-alpine
   node: node:12.16.1-alpine

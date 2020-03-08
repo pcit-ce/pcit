@@ -82,7 +82,7 @@ class GitHubAppChecks
             ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
 
         $summary = $summary ??
-            'This Repository Build Powered By [PCIT](https://github.com/pcit-ce/pcit)';
+            'This Repository CI/CD Powered By [PCIT](https://github.com/pcit-ce/pcit)';
 
         $text = $text ??
             (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
