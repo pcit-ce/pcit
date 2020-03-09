@@ -184,7 +184,7 @@ steps: # pipeline
     uses: khs1994/php-cs-fixer
     run: php-cs-fixer fix
 
-  psalm: composer run psalm
+  psalm: composer run psalm || true
 
   sami:
     image: khs1994/sami

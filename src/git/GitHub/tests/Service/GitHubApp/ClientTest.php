@@ -15,7 +15,7 @@ class ClientTest extends TestCase
      */
     public function test_getAccessToken(): void
     {
-        $result = $this->getTest()->github_apps_installations->getAccessToken(
+        $result = app('pcit')->github_apps_installations->getAccessToken(
             255451);
 
         $this->assertStringStartsWith('v', $result);

@@ -67,7 +67,9 @@ use WeChat\WeChat;
  */
 class PCIT extends Container
 {
-    // 服务提供器数组.
+    /**
+     * 服务提供器数组.
+     */
     protected $providers = [
         Providers\ActivityProvider::class,
         Providers\AuthorizationsProvider::class,

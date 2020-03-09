@@ -7,9 +7,17 @@ namespace PCIT\Framework\Support;
 class Env
 {
     /**
-     * @param string|int $default
+     * @param string $default
      *
-     * @return false|string
+     * false bool
+     * true  bool
+     * 'true' bool
+     * 'false' bool
+     * K= null
+     * '' null
+     * null null
+     *
+     * @return bool|string|null
      */
     public static function get(string $key, $default = null)
     {

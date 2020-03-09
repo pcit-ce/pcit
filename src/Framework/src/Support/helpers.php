@@ -63,31 +63,3 @@ if (!function_exists('view')) {
         exit;
     }
 }
-
-class Response extends \PCIT\Framework\Support\Facades\Response
-{
-}
-
-class Request extends \PCIT\Framework\Support\Facades\Request
-{
-}
-
-class Cache extends \PCIT\Framework\Support\Facades\Cache
-{
-}
-
-class Session extends \PCIT\Framework\Support\Facades\Session
-{
-}
-
-class Route extends \PCIT\Framework\Support\Facades\Route
-{
-}
-
-class Log extends \PCIT\Framework\Support\Facades\Log
-{
-}
-
-class App extends \PCIT\Framework\Support\Facades\App
-{
-}

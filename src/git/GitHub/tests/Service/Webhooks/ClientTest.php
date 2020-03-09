@@ -20,7 +20,7 @@ class ClientTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->pcit = $this->getTest();
+        $this->pcit = app('pcit');
         parent::setUp();
     }
 

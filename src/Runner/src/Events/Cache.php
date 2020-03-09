@@ -25,10 +25,12 @@ class Cache
 
     public $branch;
 
+    public $disableUpload;
+
     /**
      * Cache constructor.
      *
-     * @param mixed $cache
+     * @param string|array $cache
      */
     public function __construct(int $jobId,
                                 int $build_key_id,
@@ -37,7 +39,7 @@ class Cache
                                 int $rid,
                                 string $branch,
                                 $cache = null,
-                                $disableUpload = false)
+                                bool $disableUpload = false)
     {
         $this->jobId = $jobId;
         $this->build_key_id = $build_key_id;
@@ -52,7 +54,7 @@ class Cache
     /**
      * @throws \Exception
      */
-    public function getPrefix()
+    public function getPrefix(): string
     {
         // github_rid_branch_folder
         $prefix = sprintf('%s_%s_%s', $this->gitType, $this->rid, $this->branch);

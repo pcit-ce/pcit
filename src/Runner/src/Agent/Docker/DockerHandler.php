@@ -29,6 +29,8 @@ class DockerHandler implements RunnerHandlerInterface
 
     private $job_id;
 
+    private $cache;
+
     /**
      * RunContainer constructor.
      *

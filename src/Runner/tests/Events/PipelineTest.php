@@ -15,7 +15,7 @@ class PipelineTest extends TestCase
         $pipeline = null;
         $client = new Client();
         $client->job_id = 1;
-        $result = (new Pipeline($pipeline, null, $client, null, null))->actionsHandler(
+        $result = (new Pipeline($pipeline, null, $client, null))->actionsHandler(
             'actions', 'github://actions/checkout@master'
         );
 
