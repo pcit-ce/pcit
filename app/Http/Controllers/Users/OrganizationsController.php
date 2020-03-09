@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Users;
 
 use App\User;
-use Exception;
 
 class OrganizationsController
 {
@@ -14,7 +13,7 @@ class OrganizationsController
      *
      * /orgs
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke()
     {
@@ -28,7 +27,7 @@ class OrganizationsController
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(string $git_type, string $org_name)
     {

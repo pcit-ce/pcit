@@ -25,9 +25,9 @@ abstract class Kernel extends Command
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // 数据库迁移 server only
         if (\in_array($this->getName(), ['server', 'up'], true)) {
@@ -64,7 +64,7 @@ abstract class Kernel extends Command
 
         while (1) {
             $this->handler->handle();
-            unset($up);
+            // unset($up);
 
             if (env('CI_DEBUG_MEMORY', false)) {
                 \Log::debug('Now Memory is '.memory_get_usage());
@@ -72,10 +72,12 @@ abstract class Kernel extends Command
 
             sleep(3);
         }
+
+        return 0;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     protected function process_execute(): void
     {

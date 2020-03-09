@@ -7,7 +7,6 @@ namespace App\Notifications\GitHubChecksConclusion;
 use App\Build;
 use App\Job;
 use App\Notifications\GitHubAppChecks;
-use Exception;
 use PCIT\Framework\Support\JSON;
 use PCIT\Support\CI;
 
@@ -49,7 +48,7 @@ EOF;
      * @param string $language
      * @param string $git_type
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct(int $job_key_id,
                                 string $config = null,
@@ -76,7 +75,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle(): void
     {

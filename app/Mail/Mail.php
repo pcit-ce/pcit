@@ -32,7 +32,7 @@ class Mail
      * @param array $cc      address and name
      * @param array $bcc     address and name
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function send(array $address,
                                 string $subject,

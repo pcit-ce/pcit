@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events;
 
-use Exception;
 use PCIT\Framework\Support\HttpClient;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
@@ -43,7 +42,7 @@ class Pipeline
      * @param BuildData $build
      * @param Runner    $client
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct($pipeline, ?BuildData $build, ?Runner $client, ?array $matrix_config)
     {
@@ -58,7 +57,7 @@ class Pipeline
     /**
      * @param $when
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function checkWhen($when): bool
     {
@@ -167,7 +166,7 @@ class Pipeline
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle(): void
     {

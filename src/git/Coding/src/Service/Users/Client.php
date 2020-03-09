@@ -22,7 +22,7 @@ class Client extends GitHubClient
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getUserInfo(bool $raw = false, string $username = null)
     {
@@ -57,7 +57,7 @@ class Client extends GitHubClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getRepos(int $page = 1, bool $raw = false, string $username = null)
     {

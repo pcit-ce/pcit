@@ -26,7 +26,7 @@ class Issues
 
         $action = $obj->action;
 
-        \Log::info('Receive event', ['issue' => $action]);
+        \Log::info('Receive event', ['type' => 'issue', 'action' => $action]);
 
         $issue = $obj->issue;
 

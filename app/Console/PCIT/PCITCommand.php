@@ -86,7 +86,7 @@ class PCITCommand
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getToken(InputInterface $input, bool $header = true)
     {
@@ -131,7 +131,7 @@ class PCITCommand
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function HttpGet(InputInterface $input,
                                    string $entrypoint,
@@ -161,7 +161,7 @@ class PCITCommand
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function HttpPost(InputInterface $input,
                                     string $entrypoint,
@@ -191,7 +191,7 @@ class PCITCommand
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function HttpDelete(InputInterface $input,
                                       string $entrypoint,
@@ -219,7 +219,7 @@ class PCITCommand
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function HttpPatch(InputInterface $input,
                                      string $entrypoint,
@@ -280,7 +280,7 @@ class PCITCommand
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function existsRepoOption(InputInterface $input)
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Coding\Service\OAuth;
 
 use Curl\Curl;
-use Exception;
 use PCIT\GitHub\Service\OAuth\OAuthInterface;
 
 class Client implements OAuthInterface
@@ -81,7 +80,7 @@ class Client implements OAuthInterface
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {

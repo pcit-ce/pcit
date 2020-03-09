@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Status;
 
 use App\GetAccessToken;
-use Exception;
 use PCIT\PCIT;
 
 class GitHubController
@@ -15,7 +14,7 @@ class GitHubController
     /**
      * GitHubController constructor.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -29,7 +28,7 @@ class GitHubController
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(...$arg)
     {
@@ -41,7 +40,7 @@ class GitHubController
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $repo_full_name,
                            string $commit_sha,
@@ -75,7 +74,7 @@ class GitHubController
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listCombinedStatus(...$arg)
     {

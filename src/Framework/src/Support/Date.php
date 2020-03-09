@@ -13,7 +13,7 @@ class Date
      *
      * @return array|false|int|null PRC timestamp
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function parse(?string $timestamp, bool $returnArray = false)
     {

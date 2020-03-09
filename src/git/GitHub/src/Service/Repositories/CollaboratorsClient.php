@@ -28,7 +28,7 @@ class CollaboratorsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $repo_full_name)
     {
@@ -42,7 +42,7 @@ class CollaboratorsClient
      *
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function exists(string $repo_full_name, string $user)
     {
@@ -71,7 +71,7 @@ class CollaboratorsClient
      *
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function reviewPermissionLevel(string $repo_full_name, string $user, string $level)
     {

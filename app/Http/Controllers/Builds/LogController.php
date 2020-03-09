@@ -19,7 +19,7 @@ class LogController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke($job_id)
     {
@@ -41,7 +41,7 @@ class LogController
      *
      * @param $job_id
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete($job_id): void
     {

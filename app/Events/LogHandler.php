@@ -14,6 +14,8 @@ class LogHandler
 {
     private $jobId;
 
+    public $cache;
+
     public function __construct(int $jobId)
     {
         $this->jobId = $jobId;

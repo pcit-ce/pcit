@@ -9,7 +9,6 @@ use App\GetAccessToken;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Queued;
 use App\Repo;
-use Exception;
 use PCIT\Framework\Support\JSON;
 use PCIT\GitHub\Service\Checks\RunData;
 use PCIT\PCIT;
@@ -31,7 +30,7 @@ class GitHubAppChecks
      *                                 若设为 true 则新建一个 check_run ,适用于第三方服务完成状态展示
      *                                 或是没有过程，直接完成的构建
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function send(int $job_key_id,
                                 string $name = null,
@@ -134,6 +133,7 @@ class GitHubAppChecks
             'result' => $result,
             'status' => $status,
             'conclusion' => $conclusion,
+            'commit_id' => $commit_id,
         ]);
 
         // 更新 PCIT / EVENT_TYPE 状态
@@ -163,7 +163,7 @@ class GitHubAppChecks
         $check_run_id = json_decode($result)->id ?? null;
 
         \Log::info('Create GitHub App Check Run, build status', compact(
-            'build_key_id', 'build_status', 'conclusion', 'status', 'check_run_id'
+            'build_key_id', 'build_status', 'conclusion', 'status', 'check_run_id', 'commit_id'
         ));
     }
 

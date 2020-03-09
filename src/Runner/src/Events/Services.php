@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use Docker\Container\Client;
-use Exception;
 use PCIT\PCIT;
 use PCIT\Runner\Parser\TextHandler as TextParser;
 use PCIT\Support\CacheKey;
@@ -28,7 +27,7 @@ class Services
     /**
      * 运行服务.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle(): void
     {

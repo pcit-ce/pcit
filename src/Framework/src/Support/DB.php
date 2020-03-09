@@ -21,7 +21,7 @@ class DB
     /**
      * @return PDO
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function connection()
     {
@@ -78,7 +78,7 @@ class DB
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function select(string $sql, ?array $data, bool $single = false)
     {
@@ -113,7 +113,7 @@ class DB
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function insert(string $sql, array $data = [])
     {
@@ -136,7 +136,7 @@ class DB
      *
      * @return int 返回受影响的记录条数
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function update(string $sql, array $data = [])
     {
@@ -148,7 +148,7 @@ class DB
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function delete(string $sql, array $data = [])
     {
@@ -158,7 +158,7 @@ class DB
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private static function common(string $sql, array $data = [])
     {
@@ -181,7 +181,7 @@ class DB
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function statement(string $sql)
     {
@@ -189,7 +189,7 @@ class DB
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function beginTransaction(): void
     {
@@ -201,7 +201,7 @@ class DB
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function transaction(Closure $callback): void
     {
@@ -211,7 +211,7 @@ class DB
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function commit(): void
     {
@@ -223,7 +223,7 @@ class DB
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function rollback(): void
     {
@@ -253,7 +253,7 @@ class DB
     /**
      * @return PDO
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getPdo()
     {

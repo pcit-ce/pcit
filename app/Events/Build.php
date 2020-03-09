@@ -7,7 +7,6 @@ namespace App\Events;
 use App\Build as BuildDB;
 use App\Repo;
 use App\Setting;
-use Exception;
 use PCIT\Exception\PCITException;
 use PCIT\Framework\Support\JSON;
 use PCIT\Runner\BuildData;
@@ -72,7 +71,7 @@ class Build extends BuildData
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function getRepoConfig(): void
     {
@@ -88,7 +87,7 @@ class Build extends BuildData
     /**
      * get user set build env.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getEnv(): void
     {

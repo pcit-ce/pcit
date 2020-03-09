@@ -35,7 +35,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $username,
                          string $repo_name,
@@ -63,7 +63,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function get(string $username, string $repo_name, int $pr_num)
     {
@@ -77,7 +77,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $username,
                            string $repo_name,
@@ -115,7 +115,7 @@ class Client
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function update(string $username,
                            string $repo_name,
@@ -136,7 +136,7 @@ class Client
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listCommits(string $username, string $repo_name, int $pr_num)
     {
@@ -150,7 +150,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listFiles(string $username, string $repo_name, int $pr_num)
     {
@@ -166,7 +166,7 @@ class Client
      *
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function isMerged(string $username, string $repo_name, $pr_num)
     {
@@ -190,7 +190,7 @@ class Client
      *
      * @return bool|mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function merge(string $username,
                           string $repo_name,
@@ -248,7 +248,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listReviews(string $repo_full_name, int $pull_number)
     {
@@ -260,7 +260,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getReview(string $repo_full_name, int $pull_number, int $review_id)
     {
@@ -270,7 +270,7 @@ class Client
     /**
      * Delete a pending review.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deletePendingReview(string $repo_full_name, int $pull_number, int $review_id): void
     {
@@ -282,7 +282,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getCommentsForReview(string $repo_full_name, int $pull_number, int $review_id)
     {
@@ -294,7 +294,7 @@ class Client
      *
      * @param array $comments [ 'path'=>$path,'position'=>$position,'body'=>$comments_body ]
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function createReview(string $repo_full_name, int $pull_number, string $commit_id, string $body, string $event, array $comments): void
     {
@@ -311,7 +311,7 @@ class Client
     /**
      * Submit a pull request review.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function submitReview(string $repo_full_name, int $pull_number, int $review_id, string $body, string $event): void
     {
@@ -326,7 +326,7 @@ class Client
     /**
      * Dismiss a pull request review.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function dismissReview(string $repo_full_name, int $pull_number, int $review_id, string $message): void
     {
@@ -347,7 +347,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listComments(string $repo_full_name, int $pull_number, string $sort = 'created', ?string $direction, ?string $since)
     {
@@ -369,7 +369,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function ListCommentsInRepository(string $repo_full_name, string $sort, string $direction, string $since)
     {
@@ -387,7 +387,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getComment(string $repo_full_name, int $comment_id)
     {
@@ -397,7 +397,7 @@ class Client
     /**
      * Create a comment.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function createComment(string $repo_full_name,
                                   int $pull_number,
@@ -421,7 +421,7 @@ class Client
     /**
      * Edit a comment.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function editComment(string $repo_full_name, int $comment_id, string $body): void
     {
@@ -436,7 +436,7 @@ class Client
      *
      * 204
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deleteComment(string $repo_full_name, int $comment_id): void
     {
@@ -446,7 +446,7 @@ class Client
     /**
      * List review requests.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listReviewRequests(string $repo_full_name, int $pull_number): void
     {
@@ -456,7 +456,7 @@ class Client
     /**
      * Create a review request.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function createReviewRequest(string $repo_full_name, int $pull_number, array $reviewers, array $team_reviewers): void
     {
@@ -471,7 +471,7 @@ class Client
     /**
      * Delete a review request.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deleteReviewRequest(string $repo_full_name, int $pull_number, array $reviewers, array $team_reviewers): void
     {

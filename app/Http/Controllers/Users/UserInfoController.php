@@ -14,7 +14,7 @@ class UserInfoController
      *
      * /user
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke()
     {
@@ -30,7 +30,7 @@ class UserInfoController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(string $git_type, string $username)
     {

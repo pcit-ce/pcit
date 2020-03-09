@@ -6,13 +6,12 @@ namespace App\Notifications\GitHubChecksConclusion;
 
 use App\Job;
 use App\Notifications\GitHubAppChecks;
-use Exception;
 use PCIT\Support\CI;
 
 class Cancelled extends Kernel
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle(): void
     {

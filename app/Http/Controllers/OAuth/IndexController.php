@@ -32,7 +32,7 @@ class IndexController
     protected $state = false;
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function bootstrap($git_type): void
     {
@@ -78,7 +78,7 @@ class IndexController
     /**
      * 服务器重定向页面.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAccessToken(string $git_type): void
     {
@@ -95,7 +95,7 @@ class IndexController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAccessTokenCommon(?string $state): void
     {
@@ -145,7 +145,7 @@ class IndexController
      * @param $refreshToken
      * @param $gitType
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handleRefreshToken(int $uid, $refreshToken, $gitType): void
     {

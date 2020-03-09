@@ -25,7 +25,7 @@ class TokenCommand extends Command
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

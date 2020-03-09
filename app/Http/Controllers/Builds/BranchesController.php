@@ -21,7 +21,7 @@ class BranchesController
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke(...$args)
     {
@@ -49,7 +49,7 @@ class BranchesController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(...$args)
     {

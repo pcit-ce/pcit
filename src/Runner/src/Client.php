@@ -50,7 +50,7 @@ class Client
     /**
      * @param int $job_id 处理 job 重新构建
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle(BuildData $build, int $job_id = 0): void
     {
@@ -75,7 +75,7 @@ class Client
     /**
      * 生成 config.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function config(int $job_id = 0): void
     {
@@ -154,7 +154,7 @@ class Client
     /**
      * 生成 job 缓存.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function handleJob(int $job_id, ?array $matrix_config): void
     {

@@ -110,7 +110,8 @@
   "require-dev": {
     "khs1994/phar-builder": "^20.02.11",
     "phpunit/phpunit": "^9.0",
-    "symfony/var-dumper": "^5.0"
+    "symfony/var-dumper": "^5.0",
+    "vimeo/psalm": "^3.9"
   },
   "config": {
     "optimize-autoloader": true,
@@ -144,6 +145,7 @@
     "git:archive": "git archive -o latest.zip HEAD",
     "frpc": "echo frpc -c ~\\frpc.ini",
     "fmt": "php-cs-fixer fix",
+    "psalm": "psalm",
     "compile:dump": [
       "cp -r -f src/Framework/ vendor/pcit/framework",
       "cp -r -f src/Kernel/ vendor/pcit/kernel",

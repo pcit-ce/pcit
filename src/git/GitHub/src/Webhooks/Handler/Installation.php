@@ -28,6 +28,12 @@ class Installation
             'account' => $account
         ] = \PCIT\GitHub\Webhooks\Parser\Installation::handle($json_content);
 
+        if ('new_permissions_accepted' === $action) {
+            \Log::info('receive event [ installation ] action [ new_permissions_accepted ]');
+
+            return;
+        }
+
         if ('deleted' === $action) {
             self::delete($installation_id, $account->username);
 

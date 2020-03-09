@@ -27,7 +27,7 @@ class PullRequest
 
         $action = $obj->action;
 
-        \Log::info('Receive event', ['pull request' => $action]);
+        \Log::info('Receive event', ['type' => 'pull request', 'action' => $action]);
 
         if (!\in_array($action, ['opened', 'synchronize'], true)) {
             'assigned' === $action && $result = self::assigned($json_content);
@@ -135,7 +135,7 @@ class PullRequest
         $org = ($obj->organization ?? false) ? true : false;
 
         if ($unlabeled) {
-            \Log::info('Receive event', ['pull_request' => 'unlabeled']);
+            \Log::info('Receive event', ['type' => 'pull_request', 'action' => 'unlabeled']);
 
             return [
                 'installation_id' => $installation_id,
@@ -147,7 +147,7 @@ class PullRequest
             ];
         }
 
-        \Log::info('Receive event', ['pull_request' => 'labeled']);
+        \Log::info('Receive event', ['type' => 'pull_request', 'action' => 'labeled']);
 
         return [
             'installation_id' => $installation_id,
@@ -169,7 +169,7 @@ class PullRequest
      */
     public static function assigned($json_content)
     {
-        \Log::info('Receive event', ['pull request' => 'assigned']);
+        \Log::info('Receive event', ['type' => 'pull request', 'action' => 'assigned']);
 
         $obj = json_decode($json_content);
 

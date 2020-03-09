@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\WeChat;
 
-use Exception;
 use PCIT\PCIT;
 
 class MessageServer
@@ -12,7 +11,7 @@ class MessageServer
     /**
      * @return array|string|null
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke(PCIT $pcit)
     {

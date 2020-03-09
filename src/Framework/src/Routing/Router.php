@@ -30,7 +30,7 @@ class Router
      * @param string|Closure $action
      * @param mixed          ...$arg
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function make($action, ...$arg): void
     {
@@ -150,7 +150,7 @@ class Router
      * @param $targetUrl route 定义的 URL
      * @param $action
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function handle($targetUrl, $action): void
     {
@@ -217,7 +217,7 @@ class Router
      * @param $name
      * @param $arg
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __call($name, $arg): void
     {

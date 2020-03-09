@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Activity;
 
-use Exception;
 use PCIT\GitHub\Service\CICommon;
 
 class WatchingClient
@@ -16,7 +15,7 @@ class WatchingClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $repo_full_name)
     {
@@ -28,7 +27,7 @@ class WatchingClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listRepositoryBeingWatched(string $username = null)
     {
@@ -46,7 +45,7 @@ class WatchingClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getRepositorySubscription(string $repo_full_name)
     {
@@ -58,7 +57,7 @@ class WatchingClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function setRepositorySubscription(string $repo_full_name, bool $subscribed, bool $ignored)
     {
@@ -75,7 +74,7 @@ class WatchingClient
      *
      * 204
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deleteRepositorySubscription(string $repo_full_name): void
     {

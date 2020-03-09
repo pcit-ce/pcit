@@ -18,11 +18,9 @@ class PullRequest
      *
      * @param $json_content
      *
-     * @return array|void
-     *
      * @throws \Exception
      */
-    public static function handle($json_content)
+    public static function handle($json_content): void
     {
         $result = \PCIT\GitHub\Webhooks\Parser\PullRequest::handle($json_content);
 
@@ -110,7 +108,7 @@ EOF;
     {
         (new PCIT(['github_access_token' => GetAccessToken::getGitHubAppAccessToken($rid)]))
             ->issue_comments
-            ->create($repo_full_name, $pull_request_number, $comment_body, false);
+            ->create($repo_full_name, $pull_request_number, $comment_body);
     }
 
     /**

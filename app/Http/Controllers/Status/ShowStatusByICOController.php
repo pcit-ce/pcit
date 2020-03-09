@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Status;
 
 use Error;
-use Exception;
 
 /**
  * 获取状态小图标.
@@ -19,7 +18,7 @@ use Exception;
 class ShowStatusByICOController
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function __call(string $k, array $v)
     {

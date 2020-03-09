@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Users;
 
 use App\Repo;
 use App\User;
-use Exception;
 
 class RepositoriesController
 {
@@ -15,7 +14,7 @@ class RepositoriesController
      *
      * /repos
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke()
     {
@@ -31,7 +30,7 @@ class RepositoriesController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $git_type, string $username)
     {
@@ -45,7 +44,7 @@ class RepositoriesController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(string $git_type, string $username, string $repo_name)
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Checks;
 
 use Curl\Curl;
-use Exception;
 use PCIT\Framework\Support\Date;
 
 /**
@@ -38,7 +37,7 @@ class Run
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(RunData $run_data)
     {
@@ -79,7 +78,7 @@ class Run
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function update(RunData $run_data)
     {
@@ -128,7 +127,7 @@ class Run
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listSpecificRef(string $repo_full_name,
                                     string $ref,
@@ -160,7 +159,7 @@ class Run
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listCheckSuite(string $repo_full_name,
                                    int $id,
@@ -186,7 +185,7 @@ class Run
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSingle(string $repo_full_name, int $check_run_id)
     {
@@ -200,7 +199,7 @@ class Run
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listAnnotations(string $repo_full_name, int $check_run_id)
     {

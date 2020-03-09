@@ -16,7 +16,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getBasicInfo(string $org_name)
     {
@@ -30,7 +30,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function edit(string $org_name)
     {
@@ -53,7 +53,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listRepo(string $org_name, int $page = 1, string $type = null, int $per_page = null, string $sort = null)
     {
@@ -75,7 +75,7 @@ class Client
      *
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function isBlockedUser(string $org_name, string $username)
     {
@@ -103,7 +103,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function blockUser(string $org_name, string $username)
     {
@@ -119,7 +119,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function unblockUser(string $org_name, string $username)
     {
@@ -131,7 +131,7 @@ class Client
     /**
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function exists(string $org_name)
     {

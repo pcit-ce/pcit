@@ -16,7 +16,7 @@ class EnvHandler
      *
      * @return array ['k=v']
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle($pre_env, $env, string $prefix = '', bool $replace = false): array
     {

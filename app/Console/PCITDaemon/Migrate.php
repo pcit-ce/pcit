@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\PCITDaemon;
 
-use Exception;
 use PCIT\Framework\Support\DB;
 
 class Migrate
@@ -12,7 +11,7 @@ class Migrate
     /**
      * @param $sql_file
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function migrate(string $sql_file): void
     {
@@ -26,7 +25,7 @@ class Migrate
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function all(): void
     {
@@ -83,7 +82,7 @@ class Migrate
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function cleanup()
     {

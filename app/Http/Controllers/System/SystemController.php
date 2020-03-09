@@ -6,7 +6,6 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Users\JWTController;
 use Curl\Curl;
-use Exception;
 use PCIT\Support\Env;
 
 /**
@@ -17,7 +16,7 @@ class SystemController
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getOAuthClientId()
     {

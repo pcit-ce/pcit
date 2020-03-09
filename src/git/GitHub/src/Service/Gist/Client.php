@@ -18,7 +18,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @see https://developer.github.com/v3/gists/#list-a-users-gists
      */
@@ -46,7 +46,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function ListStarred(string $since = null)
     {
@@ -58,7 +58,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(string $gist_id)
     {
@@ -70,7 +70,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSpecificRevision(string $gist_id, string $sha)
     {
@@ -84,7 +84,7 @@ class Client
      *
      * @param array $files [ $file_name => ['content' => $file_content ] ]
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(array $files,
                            string $description,
@@ -102,7 +102,7 @@ class Client
     /**
      * Edit a gist.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function edit(array $files, string $description, string $gist_id): void
     {
@@ -119,7 +119,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listCommits(string $gist_id)
     {
@@ -129,7 +129,7 @@ class Client
     /**
      * Star a gist.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function star(string $gist_id): void
     {
@@ -139,7 +139,7 @@ class Client
     /**
      * Unstar a gist.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function unstar(string $gist_id): void
     {
@@ -153,7 +153,7 @@ class Client
      *
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function isStarred(string $gist_id)
     {
@@ -177,7 +177,7 @@ class Client
      *
      * 201
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function fork(string $gist_id): void
     {
@@ -189,7 +189,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listFork(string $gist_id)
     {
@@ -201,7 +201,7 @@ class Client
      *
      * 204
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete(string $gist_id): void
     {

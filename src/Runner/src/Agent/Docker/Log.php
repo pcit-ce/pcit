@@ -31,7 +31,7 @@ class Log
     /**
      * @param $job_id
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function drop(int $job_id): void
     {
@@ -43,7 +43,7 @@ class Log
     /**
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle()
     {

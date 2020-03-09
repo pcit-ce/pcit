@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Checks;
 
 use Curl\Curl;
-use Exception;
 
 class Suites
 {
@@ -37,7 +36,7 @@ class Suites
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSingle(string $repo_full_name, int $check_suite_id)
     {
@@ -55,7 +54,7 @@ class Suites
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listSpecificRef(string $repo_full_name,
                                     string $ref,
@@ -79,7 +78,7 @@ class Suites
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @example
      * <pre>
@@ -110,7 +109,7 @@ class Suites
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $repo_full_name, string $head_branch, string $head_sha)
     {
@@ -131,7 +130,7 @@ class Suites
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function request(string $repo_full_name, int $check_suite_id)
     {

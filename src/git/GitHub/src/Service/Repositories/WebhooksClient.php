@@ -26,7 +26,7 @@ class WebhooksClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getWebhooks(bool $raw = false, string $username, string $repo)
     {
@@ -50,7 +50,7 @@ class WebhooksClient
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getStatus(string $url, string $username, string $repo)
     {
@@ -81,7 +81,7 @@ class WebhooksClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function setWebhooks($data, string $username, string $repo, ?string $id)
     {
@@ -109,7 +109,7 @@ class WebhooksClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function unsetWebhooks(string $username, string $repo, string $id)
     {

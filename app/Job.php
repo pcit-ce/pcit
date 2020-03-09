@@ -16,7 +16,7 @@ class Job extends Model
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getLog(int $job_id)
     {
@@ -31,7 +31,7 @@ class Job extends Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateLog(int $job_id, string $build_log): void
     {
@@ -41,7 +41,7 @@ class Job extends Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function create(int $build_id): int
     {
@@ -57,7 +57,7 @@ EOF;
     /**
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getByBuildKeyID(int $build_key_id, bool $queued = false)
     {
@@ -75,7 +75,7 @@ EOF;
     /**
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function allByBuildKeyID(int $build_key_id)
     {
@@ -100,7 +100,7 @@ EOF;
     /**
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getJobIDByBuildKeyID(int $build_key_id)
     {
@@ -122,7 +122,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getRid(int $job_id)
     {
@@ -144,7 +144,7 @@ EOF;
      *
      * @param int $time
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateCreatedAt(int $job_id, ?int $time): void
     {
@@ -156,7 +156,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCreatedAt(int $job_id)
     {
@@ -170,7 +170,7 @@ EOF;
      *
      * @param int $time
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateStartAt(int $job_id, ?int $time): void
     {
@@ -182,7 +182,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getStartAt(int $job_id)
     {
@@ -192,7 +192,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateFinishedAt(int $job_id, ?int $time): void
     {
@@ -204,7 +204,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getFinishedAt(int $job_id)
     {
@@ -216,7 +216,7 @@ EOF;
     /**
      * @return array|string|null
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getFinishedAtByBuildId(int $build_id)
     {
@@ -242,7 +242,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateBuildStatus(int $job_key_id, ?string $status)
     {
@@ -254,7 +254,7 @@ EOF;
     /**
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBuildStatus(int $job_key_id)
     {
@@ -266,7 +266,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCheckRunId(int $build_key_id)
     {
@@ -280,7 +280,7 @@ EOF;
     /**
      * @param int $check_run_id
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateCheckRunId(?int $check_run_id, int $build_key_id): void
     {
@@ -292,7 +292,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getGitType(int $job_key_id)
     {
@@ -304,7 +304,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBuildKeyId(int $job_key_id)
     {
@@ -318,7 +318,7 @@ EOF;
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBuildStatusByBuildKeyId(int $build_key_id)
     {
@@ -356,7 +356,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateEnv(int $job_id, string $env): void
     {
@@ -364,7 +364,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getEnv(int $job_id): ?array
     {
@@ -378,7 +378,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getJobIDByBuildKeyIDAndEnv(int $buildId, string $env): int
     {
@@ -390,7 +390,7 @@ EOF;
     /**
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getQueuedJob()
     {

@@ -35,7 +35,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listRepositories()
     {
@@ -49,7 +49,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listRepositoriesAccessible(int $installation_id)
     {
@@ -65,7 +65,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function add(int $installation_id, int $repository_id, string $method = 'put'): void
     {
@@ -87,7 +87,7 @@ class Client
      *
      * 204
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function remove(int $installation_id, int $repository_id): void
     {
@@ -97,7 +97,7 @@ class Client
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAppInfo(string $jwt)
     {
@@ -115,7 +115,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAccessToken(int $installation_id, string $private_key_path = null)
     {
@@ -165,7 +165,7 @@ class Client
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getJWT(string $private_key_path)
     {
@@ -187,7 +187,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function findOrganizationInstallation(string $org_name)
     {
@@ -201,7 +201,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function findRepositoryInstallation(string $username, string $repo)
     {
@@ -215,7 +215,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function findUserInstallation(string $username)
     {

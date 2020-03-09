@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\PCIT;
 
-use Exception;
 use PCIT\Framework\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +23,7 @@ class LogoutCommand extends Command
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

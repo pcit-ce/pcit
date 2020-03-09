@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Authorizations;
 
-use Exception;
 use PCIT\PCIT;
 
 /**
@@ -25,7 +24,7 @@ class Client
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @see https://github.com/settings/tokens
      * @see https://developer.github.com/v3/oauth_authorizations/#list-your-authorizations

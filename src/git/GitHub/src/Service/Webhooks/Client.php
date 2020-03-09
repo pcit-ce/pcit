@@ -29,7 +29,7 @@ class Client
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function server()
     {
@@ -48,7 +48,7 @@ class Client
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function secret(string $content): void
     {
@@ -78,7 +78,7 @@ class Client
      *
      * @return bool|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function pushCache(string $type, $content)
     {
@@ -90,7 +90,7 @@ class Client
      *
      * @return string|false
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getCache()
     {
@@ -102,7 +102,7 @@ class Client
      *
      * @return bool|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function rollback(string $content)
     {
@@ -114,7 +114,7 @@ class Client
      *
      * @return bool|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function pushSuccessCache(string $content)
     {
@@ -134,7 +134,7 @@ class Client
      *
      * @return bool|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function pushErrorCache(string $content)
     {

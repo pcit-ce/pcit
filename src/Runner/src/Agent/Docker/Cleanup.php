@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Runner\Agent\Docker;
 
 use Docker\Container\Client as Container;
-use Exception;
 use PCIT\PCIT;
 
 class Cleanup
@@ -16,7 +15,7 @@ class Cleanup
      * @param string $id           services => only cleanup services
      * @param bool   $service_only only cleanup service container
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function systemDelete(?string $id, bool $last = false, bool $service_only = false): void
     {
@@ -71,7 +70,7 @@ class Cleanup
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private static function deleteContainerByLabel(Container $container, string $label): void
     {

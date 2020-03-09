@@ -17,7 +17,7 @@ class Env extends Model
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function list(int $rid, $git_type = 'github')
     {
@@ -31,7 +31,7 @@ class Env extends Model
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function create(int $rid, string $name, string $value, bool $public, $git_type = 'github')
     {
@@ -45,7 +45,7 @@ class Env extends Model
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function update(int $id, int $rid, string $value, bool $public, $git_type = 'github')
     {
@@ -59,7 +59,7 @@ class Env extends Model
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function delete(int $id, int $rid, $git_type = 'github')
     {
@@ -73,7 +73,7 @@ class Env extends Model
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function get(int $id, int $rid, bool $show = false, $git_type = 'github')
     {

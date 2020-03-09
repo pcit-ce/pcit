@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\TencentAI;
 
-use Exception;
 use PCIT\Framework\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,7 +29,7 @@ EOF
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

@@ -81,7 +81,7 @@ class Client implements OAuthInterface
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAccessToken(string $code, ?string $state, bool $json = true): array
     {

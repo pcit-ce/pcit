@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
@@ -19,7 +18,7 @@ class User extends Model
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUserInfo(?string $username, ?int $uid, $git_type = 'github')
     {
@@ -37,7 +36,7 @@ class User extends Model
      * @param string       $name
      * @param string       $username
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateUserInfo($uid,
                                           ?string $name = null,
@@ -91,7 +90,7 @@ class User extends Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateAccessToken(int $uid, string $access_token, string $git_type = 'github'): void
     {
@@ -101,7 +100,7 @@ class User extends Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateRefreshToken(int $uid, string $refresh_token, string $git_type = 'github'): void
     {
@@ -113,7 +112,7 @@ class User extends Model
     /**
      * @param $admin_uid
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function setOrgAdmin(int $org_id, int $admin_uid, string $git_type = 'github'): void
     {
@@ -138,7 +137,7 @@ EOF;
     /**
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getOrgByAdmin(int $admin_uid, string $git_type = 'github')
     {
@@ -150,7 +149,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function exists(string $username, string $git_type = 'github')
     {
@@ -164,7 +163,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function delete(string $org_name, string $git_type = 'github')
     {
@@ -176,7 +175,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUid(string $username, string $git_type = 'github')
     {
@@ -188,7 +187,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUsername(int $uid, string $git_type)
     {
@@ -198,7 +197,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateInstallationId(int $installation_id, string $username, string $git_type = 'github'): void
     {
@@ -216,7 +215,7 @@ EOF;
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUserBasicInfo(?string $username, ?int $uid, string $git_type = 'github')
     {

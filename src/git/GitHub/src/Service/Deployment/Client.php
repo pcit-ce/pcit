@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Deployment;
 
-use Exception;
 use PCIT\GitHub\Service\CICommon;
 
 /**
@@ -28,7 +27,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $repo_full_name, string $sha, string $ref, string $task, string $environment)
     {
@@ -47,7 +46,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSingleInfo(string $repo_full_name, string $id)
     {
@@ -62,7 +61,7 @@ class Client
     /**
      * Create a deployment.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $repo_full_name,
                            string $ref,
@@ -92,7 +91,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getStatus(string $repo_full_name, string $id)
     {
@@ -109,7 +108,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSingleStatus(string $repo_full_name, string $id, string $statusId)
     {
@@ -131,7 +130,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function createStatus(string $repo_full_name,
                                  string $id,

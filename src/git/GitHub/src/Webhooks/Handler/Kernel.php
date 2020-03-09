@@ -7,7 +7,7 @@ namespace PCIT\GitHub\Webhooks\Handler;
 class Kernel
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function ping(string $content): void
     {
@@ -19,7 +19,7 @@ class Kernel
      *
      * 1. 首次推送到新分支，head_commit 为空
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function push(string $json_content): void
     {
@@ -37,7 +37,7 @@ class Kernel
      *  "opened",   "edited", "closed" or "reopened"
      *  "milestoned", "demilestoned".
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function issues(string $json_content): void
     {
@@ -47,7 +47,7 @@ class Kernel
     /**
      * "created", "edited", or "deleted".
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function issue_comment(string $json_content): void
     {
@@ -62,7 +62,7 @@ class Kernel
      *
      * @return array|void
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function pull_request(string $json_content)
     {
@@ -98,7 +98,7 @@ class Kernel
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $content)
     {
@@ -108,7 +108,7 @@ class Kernel
     /**
      * Delete tag or branch.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete(string $json_content): void
     {
@@ -118,7 +118,7 @@ class Kernel
     /**
      * action `added` `deleted` `edited` `removed`.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function member(string $content): void
     {
@@ -147,7 +147,7 @@ class Kernel
      *
      * @see
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function installation(string $json_content): void
     {
@@ -163,7 +163,7 @@ class Kernel
      *
      * removed 移除仓库
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function installation_repositories(string $json_content): void
     {
@@ -195,7 +195,7 @@ class Kernel
      *
      * @see https://developer.github.com/v3/activity/events/types/#checksuiteevent
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function check_suite(string $json_content): void
     {
@@ -209,7 +209,7 @@ class Kernel
      *
      * @see https://developer.github.com/v3/activity/events/types/#checkrunevent
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function check_run(string $json_content): void
     {

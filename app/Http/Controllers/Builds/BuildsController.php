@@ -21,7 +21,7 @@ class BuildsController
      *
      * /builds
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke()
     {
@@ -48,7 +48,7 @@ class BuildsController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listByRepo(...$args)
     {
@@ -88,7 +88,7 @@ class BuildsController
      *
      * @return array|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function repoCurrent(...$args)
     {
@@ -109,7 +109,7 @@ class BuildsController
      *
      * @return array|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find($build_id)
     {
@@ -132,7 +132,7 @@ class BuildsController
      *
      * @param $build_id
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function cancel($build_id): void
     {
@@ -158,7 +158,7 @@ class BuildsController
      *
      * @param $build_id
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function restart($build_id): void
     {
@@ -185,7 +185,7 @@ class BuildsController
     /**
      * 更新 build 的状态同时更新 job 的状态
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function updateJobStatus(int $build_id, string $status): void
     {

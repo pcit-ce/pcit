@@ -37,7 +37,7 @@ class CommentsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $repo_full_name,
                            int $issue_number,
@@ -68,7 +68,7 @@ class CommentsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $repo_full_name, int $issue_number)
     {
@@ -82,7 +82,7 @@ class CommentsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listInRepository(string $repo_full_name)
     {
@@ -96,7 +96,7 @@ class CommentsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSingle(string $repo_full_name, int $comment_id)
     {
@@ -108,7 +108,7 @@ class CommentsClient
     /**
      * Edit a comment.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function edit(string $repo_full_name, int $comment_id, string $body): void
     {
@@ -130,7 +130,7 @@ class CommentsClient
      *
      * 204.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete(string $repo_full_name, int $comment_id): void
     {

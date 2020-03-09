@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Repositories;
 
-use Exception;
 use PCIT\GitHub\Service\CICommon;
 
 /**
@@ -19,7 +18,7 @@ class ReleasesClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $repo_full_name)
     {
@@ -36,7 +35,7 @@ class ReleasesClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function get(string $repo_full_name, ?int $release_id, ?string $tag_name)
     {
@@ -54,7 +53,7 @@ class ReleasesClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function latest(string $repo_full_name)
     {
@@ -68,7 +67,7 @@ class ReleasesClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getByTag(string $repo_full_name, string $tag_name)
     {
@@ -85,7 +84,7 @@ class ReleasesClient
      *                                 the repository's default branch (usually master)
      * @param string $method
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $repo_full_name,
                            string $tag_name,
@@ -117,7 +116,7 @@ class ReleasesClient
      *
      * @param string $method
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function edit(string $repo_full_name,
                          string $tag_name,
@@ -137,7 +136,7 @@ class ReleasesClient
      * @param int    $release_id
      * @param string $tag_name
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete(string $repo_full_name, ?int $release_id, ?string $tag_name): void
     {
@@ -158,7 +157,7 @@ class ReleasesClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listAssets(string $repo_full_name, ?int $release_id, ?string $tag_name)
     {
@@ -182,7 +181,7 @@ class ReleasesClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function uploadAsset(string $repo_full_name,
                                 $file_content,
@@ -224,7 +223,7 @@ class ReleasesClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAsset(string $repo_full_name, int $asset_id)
     {
@@ -236,7 +235,7 @@ class ReleasesClient
     /**
      * Edit a release asset.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function editAsset(string $repo_full_name, string $name, string $label, int $asset_id): void
     {
@@ -255,7 +254,7 @@ class ReleasesClient
      *
      * 204
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function deleteAsset(string $repo_full_name, int $asset_id): void
     {

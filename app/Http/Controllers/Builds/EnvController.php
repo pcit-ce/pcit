@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Builds;
 
 use App\Env;
 use App\Http\Controllers\Users\JWTController;
-use Exception;
 
 class EnvController
 {
@@ -19,7 +18,7 @@ class EnvController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke(...$args)
     {
@@ -43,7 +42,7 @@ class EnvController
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(...$args)
     {
@@ -72,7 +71,7 @@ class EnvController
      *
      * @return array|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(...$args)
     {
@@ -96,7 +95,7 @@ class EnvController
      *
      * @param array $args
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function update(...$args): void
     {
@@ -125,7 +124,7 @@ class EnvController
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete(...$args)
     {

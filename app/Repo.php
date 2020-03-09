@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
 
@@ -17,7 +16,7 @@ class Repo extends Model
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getRid(string $username, string $repo, $git_type = 'github')
     {
@@ -33,7 +32,7 @@ class Repo extends Model
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getDefaultBranch(string $username, string $repo, $git_type = 'github')
     {
@@ -49,7 +48,7 @@ class Repo extends Model
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getRepoFullName(int $rid, $git_type = 'github')
     {
@@ -63,7 +62,7 @@ class Repo extends Model
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name, $git_type = 'github')
     {
@@ -79,7 +78,7 @@ class Repo extends Model
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getGitHubInstallationIdByRid(int $rid, $git_type = 'github')
     {
@@ -93,7 +92,7 @@ class Repo extends Model
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getAdmin(int $rid, bool $collaborators = false, $git_type = 'github')
     {
@@ -111,7 +110,7 @@ class Repo extends Model
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function checkAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github')
     {
@@ -127,7 +126,7 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateAdmin(int $rid, int $uid, $git_type = 'github', bool $collaborators = false): void
     {
@@ -157,7 +156,7 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function deleteAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github'): void
     {
@@ -182,7 +181,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function allByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
@@ -202,7 +201,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function allByUsername(string $username, $git_type = 'github')
     {
@@ -263,7 +262,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function findByRepoFullName(string $username, string $repo_name, $git_type = 'github')
     {
@@ -277,7 +276,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getActiveByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
@@ -297,7 +296,7 @@ EOF;
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function exists(int $rid, $git_type = 'github')
     {
@@ -309,7 +308,7 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateRepoInfo(int $rid,
                                           string $repo_full_name,
@@ -365,7 +364,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
@@ -382,7 +381,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function deleteByRid(int $rid, $git_type = 'github')
     {
@@ -394,7 +393,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateBuildActive(int $build_active, string $git_type, string $repo_full_name)
     {
@@ -406,7 +405,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateWebhookStatus(int $webhooks_status, string $git_type, string $repo_full_name)
     {
@@ -416,7 +415,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function active(string $repo_full_name, string $git_type = 'gitee'): void
     {
@@ -427,7 +426,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function deactive(string $repo_full_name, string $git_type = 'gitee'): void
     {
@@ -440,7 +439,7 @@ EOF;
     /**
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function canBuild(string $repo_full_name, string $git_type)
     {

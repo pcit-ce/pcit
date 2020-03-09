@@ -8,7 +8,6 @@ use App\GetAccessToken;
 use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use App\User;
-use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\PCIT;
 
@@ -29,7 +28,7 @@ class SyncController
     private $access_token;
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke()
     {
@@ -62,7 +61,7 @@ class SyncController
     /**
      * sync user basic info.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function updateBasicInfo(): void
     {
@@ -78,7 +77,7 @@ class SyncController
     /**
      * Sync user repos.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getRepo(): void
     {
@@ -98,7 +97,7 @@ class SyncController
     /**
      * Sync orgs.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getOrgs(): void
     {
@@ -145,7 +144,7 @@ class SyncController
     /**
      * Sync orgs repos.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function getOrgsRepo(string $org_name): void
     {
@@ -165,7 +164,7 @@ class SyncController
     /**
      * parse repo json output.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function parseRepo(string $json): void
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\PCIT;
 
-use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,11 +18,9 @@ class InitCommand extends Command
     }
 
     /**
-     * @return int|null
-     *
-     * @throws Exception
+     * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->write('Please exec <info>pcitinit</info> command');
 

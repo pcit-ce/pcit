@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Exception;
 use PCIT\Framework\Foundation\Testing\TestCase as BaseTestCase;
 use PCIT\PCIT;
 
@@ -19,7 +18,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return PCIT
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getTest(array $config = [], string $git_type = null)
     {

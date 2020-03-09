@@ -37,7 +37,7 @@ class Server extends Kernel
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle(): void
     {
@@ -59,7 +59,7 @@ class Server extends Kernel
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function handleBuild(): void
     {
@@ -105,7 +105,7 @@ class Server extends Kernel
     /**
      * 外部调用服务
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function runWebhooks(): void
     {
@@ -115,7 +115,7 @@ class Server extends Kernel
     /**
      * 从缓存中拿出 webhooks 数据，存入数据库中.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function handleWebhooks(): void
     {

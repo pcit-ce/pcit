@@ -19,7 +19,7 @@ class SettingsController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke(...$args)
     {
@@ -39,7 +39,7 @@ class SettingsController
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function get(...$args)
     {
@@ -67,7 +67,7 @@ class SettingsController
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function update(...$args)
     {

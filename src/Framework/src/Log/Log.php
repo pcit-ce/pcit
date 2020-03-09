@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Log;
 
-use Exception;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -13,7 +12,7 @@ class Log extends Logger
     /**
      * @return Logger
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct(string $name = 'pcit', string $log_path = null)
     {

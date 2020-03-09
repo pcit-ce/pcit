@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Notifications\GitHubChecksConclusion;
 
-use Exception;
-
 class Passed extends Kernel
 {
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function markdown()
     {

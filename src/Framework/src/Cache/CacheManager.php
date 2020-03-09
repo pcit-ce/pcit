@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Cache;
 
-use Exception;
 use PCIT\Framework\Contracts\Cache\Factory;
 use Redis;
 
@@ -15,7 +14,7 @@ class CacheManager implements Factory
     /**
      * @return \PCIT\Framework\Contracts\Cache\Repository
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function store($name = 'redis')
     {

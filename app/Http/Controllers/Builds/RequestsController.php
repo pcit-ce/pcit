@@ -25,7 +25,7 @@ class RequestsController
      *
      * @return array|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke(...$args)
     {
@@ -73,7 +73,7 @@ class RequestsController
      *
      * @param array $args
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(...$args)
     {
@@ -138,7 +138,7 @@ class RequestsController
      *
      * @return array|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(...$args)
     {

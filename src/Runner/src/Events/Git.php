@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events;
 
-use Exception;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\Client;
@@ -63,7 +62,7 @@ class Git
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      *
      * @see https://github.com/drone-plugins/drone-git
      */

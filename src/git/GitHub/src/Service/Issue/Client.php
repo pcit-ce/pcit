@@ -44,7 +44,7 @@ class Client
      * List all issues assigned to the authenticated user across all visible repositories including owned repositories,
      * member repositories, and organization repositories:.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list()
     {
@@ -67,7 +67,7 @@ class Client
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getSingle(string $repo_full_name, int $issue_number)
     {
@@ -82,7 +82,7 @@ class Client
      * @param array $labels
      * @param array $assignees
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $repo_full_name,
                            string $title,
@@ -119,7 +119,7 @@ class Client
      *
      * @see https://developer.github.com/v3/issues/#edit-an-issue
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function edit(string $repo_full_name,
                          int $issue_number,
@@ -153,7 +153,7 @@ class Client
      * @param string $lock_reason The reason for locking the issue or pull request conversation. Lock will fail if
      *                            you don't use one of these reasons: off-topic too heated resolved spam
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function lock(string $repo_full_name, int $issue_number, string $lock_reason = null): void
     {
@@ -187,7 +187,7 @@ class Client
     /**
      * Unlock an issue.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function unlock(string $repo_full_name, int $issue_number): void
     {
@@ -207,7 +207,7 @@ class Client
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function timeline(string $repo_full_name, int $issue_number)
     {

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Dotenv;
 
+/**
+ * @see https://github.com/vlucas/phpdotenv
+ */
 class Dotenv
 {
     public static function load(?string $app_env)
@@ -19,7 +22,11 @@ class Dotenv
             $env_file = null;
         }
 
-        $env_file && \Dotenv\Dotenv::createImmutable(base_path(), $env_file)->load();
+        if ($env_file) {
+            $dotenv = \Dotenv\Dotenv::createImmutable(base_path(), $env_file)->load();
+
+            // $dotenv ->required('DATABASE_DSN');
+        }
 
         return $env_file;
     }

@@ -184,6 +184,8 @@ steps: # pipeline
     uses: khs1994/php-cs-fixer
     run: php-cs-fixer fix
 
+  psalm: composer run psalm
+
   sami:
     image: khs1994/sami
     when:
@@ -319,7 +321,9 @@ steps: # pipeline
       - CI_BUILD_ID=${PCIT_BUILD_ID}
       - CI_JOB_ID=${PCIT_JOB_ID}
     commands:
-      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID} -K
+      # - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID} -K
+      # -K           Remove color from the output
+      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID}
 
   after_success:
     - echo "build success"

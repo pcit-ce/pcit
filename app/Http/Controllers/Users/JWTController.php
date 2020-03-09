@@ -18,7 +18,7 @@ class JWTController
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private static function getToken()
     {
@@ -40,7 +40,7 @@ class JWTController
     /**
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUser(bool $returnGitTypeFirst = true)
     {
@@ -67,7 +67,7 @@ class JWTController
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function check(int $build_key_id)
     {
@@ -99,7 +99,7 @@ class JWTController
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function checkByRepo(string $username, string $repo_name)
     {
@@ -126,7 +126,7 @@ class JWTController
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function generate(string $git_type = null, string $username = null, int $uid = null)
     {

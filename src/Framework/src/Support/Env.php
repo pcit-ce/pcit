@@ -9,7 +9,7 @@ class Env
     /**
      * @param string|int $default
      *
-     * @return array|false|string
+     * @return false|string
      */
     public static function get(string $key, $default = null)
     {

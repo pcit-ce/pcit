@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Builds;
 
 use App\Build;
 use App\Repo;
-use Exception;
 use PCIT\Support\Env;
 
 class ShowStatusController
@@ -14,7 +13,7 @@ class ShowStatusController
     /**
      * @param mixed ...$arg
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __invoke(...$arg)
     {

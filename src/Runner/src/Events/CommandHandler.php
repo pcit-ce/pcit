@@ -9,7 +9,7 @@ class CommandHandler
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function parse(string $shell = 'sh', string $step, string $image, ?array $commands)
     {

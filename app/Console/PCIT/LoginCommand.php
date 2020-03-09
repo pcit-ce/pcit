@@ -34,7 +34,7 @@ class LoginCommand extends Command
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Repositories;
 
 use Curl\Curl;
-use Exception;
 
 /**
  * The status API allows external services to mark commits with an
@@ -32,7 +31,7 @@ class StatusClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $username, string $repo, string $ref)
     {
@@ -47,7 +46,7 @@ class StatusClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $username,
                            string $repo,
@@ -89,7 +88,7 @@ class StatusClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listCombinedStatus($username, $repo, $ref)
     {

@@ -53,7 +53,7 @@ pcit env get   VAR_ID
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Repo;
-use Exception;
 use PCIT\Framework\Support\HttpClient;
 use PCIT\Support\Git;
 use Symfony\Component\Yaml\Yaml;
@@ -55,7 +54,7 @@ class GetConfig
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle()
     {

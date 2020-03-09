@@ -6,6 +6,7 @@ namespace PCIT\Runner\Agent\Exec;
 
 use PCIT\Exception\PCITException;
 use PCIT\Runner\Agent\Interfaces\RunnerHandlerInterface;
+use PCIT\Support\CI;
 
 class ExecHandler implements RunnerHandlerInterface
 {

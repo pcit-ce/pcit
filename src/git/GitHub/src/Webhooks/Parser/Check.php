@@ -27,7 +27,7 @@ class Check
 
         $action = $obj->action;
 
-        \Log::info('Receive event', ['Check Suite' => $action]);
+        \Log::info('Receive event', ['type' => 'Check Suite', 'action' => $action]);
 
         // 仓库所属用户或组织的信息
         $repository_owner = $repository->owner;
@@ -64,7 +64,7 @@ class Check
 
         $action = $obj->action;
 
-        \Log::info('Receive event', ['Check Run' => $action]);
+        \Log::info('Receive event', ['type' => 'Check Run', 'action' => $action]);
 
         $installation_id = $obj->installation->id ?? null;
         $repository = $obj->repository;

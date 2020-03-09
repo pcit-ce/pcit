@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
-use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Support\CI;
 use PCIT\Support\Git;
@@ -16,7 +15,7 @@ class PullRequestsController
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function post(...$args)
     {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Build;
-use Exception;
 use PCIT\Runner\Conditional\Branch;
 
 /**
@@ -38,7 +37,7 @@ class Skip
     /**
      * 检查 commit 信息跳过构建. branch 匹配构建.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function handle(): void
     {
@@ -81,7 +80,7 @@ class Skip
     /**
      * @param bool $noConfig
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function writeSkipToDB($noConfig = false): void
     {

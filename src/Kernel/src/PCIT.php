@@ -6,7 +6,6 @@ namespace PCIT;
 
 use Curl\Curl;
 use Docker\Docker;
-use Exception;
 use PCIT\Support\Config;
 use PCIT\Support\Git;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -107,7 +106,7 @@ class PCIT extends Container
     /**
      * PCIT constructor.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct(array $config = [],
                                 string $git_type = 'github',
@@ -188,7 +187,7 @@ class PCIT extends Container
      *
      * @param $name
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return mixed
      */
@@ -208,7 +207,7 @@ class PCIT extends Container
      * @param $name
      * @param $arguments
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return mixed
      */

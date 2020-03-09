@@ -29,7 +29,7 @@ class Git
     /**
      * @param $git_type
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function checkGit($git_type): void
     {
@@ -41,7 +41,7 @@ class Git
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUrl(string $type, string $repo_full_name, bool $ssh = false)
     {
@@ -92,7 +92,7 @@ class Git
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getPullRequestUrl(string $type, string $repo_full_name, int $pull_id)
     {
@@ -116,7 +116,7 @@ class Git
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getIssueUrl(string $type, string $repo_full_name, string $issue_id)
     {
@@ -140,7 +140,7 @@ class Git
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCommitUrl(string $type, string $repo_full_name, string $commit_id)
     {
@@ -162,7 +162,7 @@ class Git
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getRawUrl(string $type,
                                      string $repo_full_name,
@@ -186,7 +186,7 @@ class Git
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getApiUrl(string $git_type)
     {
@@ -223,7 +223,7 @@ class Git
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getClassName(string $git_type)
     {

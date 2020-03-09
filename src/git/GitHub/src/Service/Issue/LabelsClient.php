@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Issue;
 
-use Exception;
 use PCIT\GitHub\Service\CICommon;
 
 /**
@@ -21,7 +20,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function all(string $repo_full_name)
     {
@@ -35,7 +34,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function find(string $repo_full_name, string $label_name)
     {
@@ -53,7 +52,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function create(string $repo_full_name, string $name, string $color, string $description)
     {
@@ -71,7 +70,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function update(string $repo_full_name,
                            string $label_current_name,
@@ -91,7 +90,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function delete(string $repo_full_name, string $label_name)
     {
@@ -105,7 +104,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function listLabelsOnIssue(string $repo_full_name, int $issue_number)
     {
@@ -119,7 +118,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function addLabelsOnIssue(string $repo_full_name, int $issue_number, array $label)
     {
@@ -133,7 +132,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function removeLabelOnIssue(string $repo_full_name, int $issue_number, string $label_name)
     {
@@ -147,7 +146,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function replaceAllLabelsForIssue(string $repo_full_name, int $issue_number, array $labels = [])
     {
@@ -163,7 +162,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function removeAllLabelsFromIssue(string $repo_full_name, int $issue_number)
     {
@@ -177,7 +176,7 @@ class LabelsClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function getLabelsForEveryIssueInMilestone(string $repo_full_name, int $milestones_number)
     {

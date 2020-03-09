@@ -22,7 +22,7 @@ class Installation
 
         $action = $obj->action;
 
-        \Log::info('Receive event', ['installation' => $action]);
+        \Log::info('Receive event', ['type' => 'installation', 'action' => $action]);
 
         $installation = $obj->installation;
 
@@ -57,7 +57,7 @@ class Installation
 
         $action = $obj->action;
 
-        \Log::info('Receive event', ['installation_repositories' => $action]);
+        \Log::info('Receive event', ['type' => 'installation_repositories', 'action' => $action]);
 
         $installation = $obj->installation;
 

@@ -45,7 +45,7 @@ class Model
      *
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function all()
     {
@@ -63,7 +63,7 @@ class Model
      *
      * @return int|array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function find($table_primary_key_id)
     {
@@ -94,7 +94,7 @@ class Model
      *
      * @return array|int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function findOrFail($table_primary_key_id)
     {
@@ -127,7 +127,7 @@ class Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function save(): void
     {
@@ -152,7 +152,7 @@ class Model
     /**
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getLastKeyId()
     {

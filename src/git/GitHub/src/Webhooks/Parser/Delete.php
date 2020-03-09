@@ -17,7 +17,7 @@ class Delete
      */
     public static function handle($json_content)
     {
-        \Log::info('Receive event', ['delete']);
+        \Log::info('Receive event', ['type' => 'delete']);
 
         $obj = json_decode($json_content);
 

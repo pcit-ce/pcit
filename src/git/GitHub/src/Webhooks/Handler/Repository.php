@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 class Repository
 {
-    public function handle($json): void
+    public static function handle($json): void
     {
     }
 }

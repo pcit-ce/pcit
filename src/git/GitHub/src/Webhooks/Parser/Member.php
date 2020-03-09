@@ -21,7 +21,10 @@ class Member
 
         $action = $obj->action;
 
-        \Log::info('Receive member event is '.$action, []);
+        \Log::info('Receive member event', [
+            'type' => 'member',
+            'action' => $action,
+        ]);
 
         $member = $obj->member;
         $member_username = $member->login;

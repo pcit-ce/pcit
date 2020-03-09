@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Support;
 
-use Exception;
-
 class Config
 {
     /**
@@ -13,7 +11,7 @@ class Config
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function config(array $config, string $git_type)
     {

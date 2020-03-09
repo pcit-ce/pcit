@@ -20,7 +20,7 @@ class Setting extends Model
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function list(int $rid, string $git_type = 'github')
     {
@@ -42,7 +42,7 @@ EOF;
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function get(int $rid, string $setting_name, string $git_type = 'github')
     {
@@ -58,7 +58,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function update(int $rid, string $setting_name, string $setting_value, string $git_type = 'github')
     {

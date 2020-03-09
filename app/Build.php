@@ -67,7 +67,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getStartAt(int $build_key_id)
     {
@@ -77,7 +77,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateStartAt(int $build_key_id, ?int $time): void
     {
@@ -90,7 +90,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getStopAt(int $build_key_id)
     {
@@ -100,7 +100,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateFinishedAt(int $buildId): void
     {
@@ -114,7 +114,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getGitType(int $build_key_id)
     {
@@ -126,7 +126,7 @@ EOF;
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getRid(int $build_key_id)
     {
@@ -146,7 +146,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateBuildStatus(int $build_key_id, ?string $status)
     {
@@ -162,7 +162,7 @@ EOF;
     /**
      * @return array|string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBuildStatus(int $build_key_id)
     {
@@ -178,7 +178,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateBuildStatusByCommitId(string $build_status,
                                                        int $rid,
@@ -194,7 +194,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getLastBuildStatus(int $rid, string $branch)
     {
@@ -206,7 +206,7 @@ EOF;
     /**
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function buildStatusIsChanged(int $rid, string $branch)
     {
@@ -226,7 +226,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBranches(int $rid, $git_type = 'github')
     {
@@ -242,7 +242,7 @@ EOF;
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
@@ -264,7 +264,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getConfig(int $build_key_id)
     {
@@ -282,7 +282,7 @@ EOF;
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBuildStatusByBuildKeyId(int $build_key_id)
     {
@@ -296,7 +296,7 @@ EOF;
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getBranch($build_key_id)
     {
@@ -312,7 +312,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function allByBranch(int $rid,
                                        string $branch_name,
@@ -349,7 +349,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function allByRid(int $rid,
                                     ?int $before,
@@ -398,7 +398,7 @@ EOF;
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function allByAdmin(int $uid, ?int $before, ?int $limit, $git_type = 'github')
     {
@@ -426,7 +426,7 @@ EOF;
     /**
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCommitterEmail(int $build_key_id)
     {
@@ -438,7 +438,7 @@ EOF;
     /**
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCommitterName(int $build_key_id)
     {
@@ -465,7 +465,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function insertTag($branch,
                                      $tag,
@@ -525,7 +525,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function insert($event_type,
                                   $branch,
@@ -576,7 +576,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function insertPing($rid, $created_at, $git_type = 'github')
     {
@@ -610,7 +610,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function insertPullRequest($event_time,
                                              string $action,
@@ -650,7 +650,7 @@ EOF;
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateCheckSuiteId(int $rid,
                                               string $commit_id,

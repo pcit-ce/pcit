@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
 
@@ -13,7 +12,7 @@ class Issue extends Model
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function comment_edited(int $issue_id,
                                           int $comment_id,
@@ -35,7 +34,7 @@ class Issue extends Model
     /**
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function comment_deleted(int $issue_id,
                                            int $comment_id,
@@ -53,7 +52,7 @@ class Issue extends Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateLabels(array $labels,
                                         string $git_type,
@@ -70,7 +69,7 @@ class Issue extends Model
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public static function updateAssignees(array $assignees,
                                            string $git_type,
@@ -106,7 +105,7 @@ class Issue extends Model
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function insert($rid,
                                   $issue_id,
@@ -156,7 +155,7 @@ EOF;
      *
      * @return int
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function insertComment($rid,
                                          $issue_id,

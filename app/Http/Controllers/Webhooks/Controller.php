@@ -36,7 +36,7 @@ class Controller
      *
      * @return bool|null
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private static function checkAccessToken()
     {
@@ -60,7 +60,7 @@ class Controller
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function list(...$arg)
     {
@@ -85,7 +85,7 @@ class Controller
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function add(...$arg)
     {
@@ -151,7 +151,7 @@ class Controller
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function delete(...$arg)
     {
@@ -178,7 +178,7 @@ class Controller
      *
      * @param mixed ...$arg
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private static function setBuildStatusCache(int $status = 0, ...$arg): void
     {
@@ -200,7 +200,7 @@ class Controller
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function activate(...$arg)
     {
@@ -224,7 +224,7 @@ class Controller
      *
      * @return array
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function deactivate(...$arg)
     {

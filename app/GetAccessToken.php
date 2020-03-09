@@ -12,7 +12,7 @@ class GetAccessToken
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function byRid(int $rid)
     {
@@ -22,7 +22,7 @@ class GetAccessToken
     /**
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function byRepoFullName(?string $repo_full_name, ?int $rid = null)
     {
@@ -59,7 +59,7 @@ class GetAccessToken
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getGitHubAppAccessToken($rid = null, string $repo_full_name = null, int $installation_id = null)
     {
@@ -84,7 +84,7 @@ class GetAccessToken
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getAccessTokenByUid(int $uid, $git_type = 'github')
     {

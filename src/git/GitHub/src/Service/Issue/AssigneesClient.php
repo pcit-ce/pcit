@@ -39,7 +39,7 @@ class AssigneesClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function list(string $repo_full_name)
     {
@@ -55,7 +55,7 @@ class AssigneesClient
      *
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function check(string $repo_full_name, string $assignees)
     {
@@ -75,7 +75,7 @@ class AssigneesClient
      *
      * 201
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function add(string $repo_full_name, int $issue_number, array $assignees): void
     {
@@ -95,7 +95,7 @@ class AssigneesClient
     /**
      * Remove assignees from an issue.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function remove(string $repo_full_name, int $issue_number, array $assignees): void
     {

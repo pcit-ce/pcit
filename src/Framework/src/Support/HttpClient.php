@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PCIT\Framework\Support;
 
 use Curl\Curl;
-use Exception;
 
 class HttpClient
 {
@@ -24,7 +23,7 @@ class HttpClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function post(string $url, string $data = null, array $header = [])
     {
@@ -55,7 +54,7 @@ class HttpClient
      *
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function get(string $url, string $data = null, array $header = [], $timeout = 5)
     {
@@ -72,7 +71,7 @@ class HttpClient
     /**
      * @return mixed
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function delete(string $url, array $header = [])
     {
