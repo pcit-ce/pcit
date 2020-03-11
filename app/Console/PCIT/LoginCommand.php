@@ -14,8 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class LoginCommand extends Command
 {
-    private $curl;
-
     public function configure(): void
     {
         $this->setName('login');
@@ -32,8 +30,6 @@ class LoginCommand extends Command
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -75,7 +71,7 @@ class LoginCommand extends Command
 
             $output->writeln('<info>Login Success</info>');
 
-            return;
+            return 0;
         }
 
         file_put_contents($file_name, JSON::beautiful(

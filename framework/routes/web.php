@@ -225,6 +225,10 @@ Route::get('api/livez/database', 'System\Healthz@database');
 Route::get('api/openapi', 'System\OpenAPI');
 Route::get('api/openapi/v3', 'System\OpenAPI');
 
+Route::get('api/config_schema.json', function () {
+    return Response::json(file_get_contents(base_path().'config/config_schema.json'), true);
+});
+
 /* Issues */
 Route::patch('api/repo/${username}/${repo_name}/issues/translate/${issue_number}',
     'Repos\Issues@translate');

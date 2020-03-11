@@ -1,0 +1,11 @@
+{
+    "name": ".pcit.yml",
+    "description": "JSON schema for configuring PCIT CI/CD",
+    "fileMatch": [
+        ".pcit.yaml",
+        ".pcit.yml",
+        ".pcit/**.yaml",
+        ".pcit/**.yml"
+    ],
+    "url": "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json"
+}

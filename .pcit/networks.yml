@@ -1,0 +1,6 @@
+networks:
+  hosts:
+    - pcit.dev=127.0.0.1
+
+steps:
+  script: echo exec script

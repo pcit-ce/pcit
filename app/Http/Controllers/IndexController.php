@@ -8,7 +8,7 @@ use PCIT\Support\Env;
 
 class IndexController
 {
-    public function about()
+    public function about(): array
     {
         return [
             'code' => 200,
@@ -124,6 +124,7 @@ class IndexController
 
     public function sitemap()
     {
+        /** @var string */
         $host = getenv('CI_HOST');
 
         return [
@@ -259,7 +260,7 @@ class IndexController
 
     public function issues(): void
     {
-        Response::redirect('https://github.com/pcit-ce/pcit/issues');
+        \Response::redirect('https://github.com/pcit-ce/pcit/issues');
     }
 
     public function support(): void

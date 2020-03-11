@@ -23,8 +23,6 @@ class IndexController
      *
      * @param mixed ...$args
      *
-     * @return mixed
-     *
      * @throws \Exception
      */
     public function __invoke(string $git_type, string $username): void

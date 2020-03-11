@@ -1,0 +1,14 @@
+{
+  "yaml.schemas": {
+    "config/config_schema.json": [
+      ".pcit.yaml",
+      ".pcit.yml",
+      ".pcit/**.yaml",
+      ".pcit/**.yml"
+    ],
+    "http://json.schemastore.org/drone": [
+      ".drone.yml"
+    ],
+    "http://json.schemastore.org/travis": ".travis.yml"
+  }
+}
