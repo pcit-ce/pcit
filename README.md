@@ -87,9 +87,9 @@ push by you, test and deploy by us.
 
 > 这里只是介绍部署 PCIT 之后如何使用 PCIT 进行 CI/CD 实践，如何部署 PCIT 请查看下一小节
 
-* 点击 [PCIT-CE GitHub App](https://github.com/apps/pcit-ce) 进行安装
+**1.** 点击 [PCIT-CE GitHub App](https://github.com/apps/pcit-ce) 进行安装
 
-* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/pcit-ce/pcit/tree/master/pcit_examples) 来配置 CI 规则
+**2.** Git 仓库根目录包含 [`.pcit.yml`](https://github.com/pcit-ce/pcit/tree/master/pcit_examples) 来配置 CI 规则
 
 ```yaml
 language: php
@@ -113,7 +113,22 @@ services:
   mysql:
 ```
 
-* 推送 git 仓库到 GitHub，PCIT 开始进行 **构建** **测试** **部署** 等一系列工作。
+> 为了智能补全、错误提示等功能，推荐使用 vsCode 编辑 `.pcit.yml` 文件。安装 `redhat.vscode-yaml` 扩展并在项目的 `.vscode/settings.json` 文件中增加以下内容。
+
+```diff
+{
++  "yaml.schemas": {
++    "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json": [
++      ".pcit.yaml",
++      ".pcit.yml",
++      ".pcit/**.yaml",
++      ".pcit/**.yml"
++    ]
++  }
+}
+```
+
+**3.** 推送 git 仓库到 GitHub，PCIT 开始进行 **构建** **测试** **部署** 等一系列工作。
 
 > 查看构建的聚合页面，请登录 https://ci.khs1994.com/login
 
@@ -163,21 +178,6 @@ $ ./lnmp-docker pcit-up
 **5.** 点击刚才注册好的 **GitHub App** 地址 https://github.com/apps/YOUR_APP_NAME ，进行安装。
 
 **6.** Git 仓库根目录包含 `.pcit.yml` 文件
-
-> 为了获得智能补全，推荐使用 vsCode 编辑 `.pcit.yml` 文件。安装 `redhat.vscode-yaml` 扩展并在项目的 `.vscode/settings.json` 中增加以下内容。
-
-```diff
-{
-+  "yaml.schemas": {
-+    "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json": [
-+      ".pcit.yaml",
-+      ".pcit.yml",
-+      ".pcit/**.yaml",
-+      ".pcit/**.yml"
-+    ]
-+  }
-}
-```
 
 **7.** 推送项目到 GitHub，在 **Commit** 详情处查看构建。
 

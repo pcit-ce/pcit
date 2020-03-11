@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Config;
 
+use JsonSchema\Constraints\BaseConstraint;
 use JsonSchema\Validator;
 use PCIT\Framework\Http\Request;
 use Symfony\Component\Yaml\Yaml;
@@ -15,12 +16,11 @@ class Validate
         /** @var string */
         $pcit_config = $request->getContent();
 
-        $is_json = false;
         if ('application/json' === strtolower($request->getContentType() ?? '')) {
-            $is_json = true;
+            $data = json_decode($pcit_config);
+        } else {
+            $data = BaseConstraint::arrayToObjectRecursive(Yaml::parse($pcit_config));
         }
-
-        $data = json_decode($is_json ? $pcit_config : json_encode(Yaml::parse($pcit_config)));
 
         $validator = new Validator();
         $validator->validate($data,

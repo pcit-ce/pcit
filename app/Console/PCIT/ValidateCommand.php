@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\PCIT;
 
+use JsonSchema\Constraints\BaseConstraint;
 use JsonSchema\Validator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -17,6 +18,9 @@ use Symfony\Component\Yaml\Yaml;
 
 class ValidateCommand extends Command
 {
+    /** @var object */
+    public $json_schema;
+
     public function configure(): void
     {
         $this->setName('validate');
@@ -30,8 +34,19 @@ class ValidateCommand extends Command
         /** @var string */
         $pcit_file = $input->getArgument('pcit_file');
 
-        if (is_dir($pcit_file)) {
-            $finder = Finder::create()
+        if (!file_exists($pcit_file)) {
+            $output->writeln("<error>$pcit_file not exists</error>");
+
+            return 1;
+        }
+
+        $this->json_schema = json_decode(file_get_contents(base_path().'config/config_schema.json'));
+
+        if (is_file($pcit_file)) {
+            return $this->validate($input, $output, getcwd().'/'.$pcit_file);
+        }
+
+        $finder = Finder::create()
            ->in(realpath(getcwd().'/'.('.' === $pcit_file ? './' : $pcit_file)))
            ->files()
            ->ignoreDotFiles(false)
@@ -39,27 +54,24 @@ class ValidateCommand extends Command
            ->name('.pcit' === $pcit_file
                   ? ['*.yaml', '*.yml']
                   : ['.pcit.yml', '.pcit.yaml']
-        );
+            );
 
-            foreach ($finder as $file) {
-                $this->validate($input, $output, $file->getRealPath());
-            }
-
-            return 0;
+        foreach ($finder as $file) {
+            $this->validate($input, $output, $file->getRealPath());
         }
 
-        return $this->validate($input, $output, getcwd().'/'.$pcit_file);
+        return 0;
     }
 
-    public function validate(InputInterface $input, OutputInterface $output, string $pcit_file)
+    public function validate(InputInterface $input, OutputInterface $output, string $pcit_file): int
     {
         $yaml = file_get_contents($pcit_file);
 
-        $data = json_decode(json_encode(Yaml::parse($yaml)));
+        $data = BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml));
 
         $validator = new Validator();
-        $validator->validate($data,
-        (object) ['$ref' => 'file://'.realpath(base_path().'config/config_schema.json')]);
+        // $json_schema = ['$ref' => 'file://'.realpath(base_path().'config/config_schema.json')];
+        $validator->validate($data, $this->json_schema);
 
         if ($validator->isValid()) {
             $output->writeln("<info>==> The supplied $pcit_file validates against the schema.</info>");

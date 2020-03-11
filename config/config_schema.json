@@ -148,7 +148,13 @@
                                     "description": "git clone depth",
                                     "default": 25
                                 },
-                                "hosts": {},
+                                "hosts": {
+                                    "type": "array",
+                                    "description": "example\nhosts:\n- \"pcit.dev:127.0.0.1\"",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
                                 "recursive": {
                                     "type": "boolean"
                                 },
@@ -156,14 +162,18 @@
                                     "type": "boolean",
                                     "default": false
                                 },
-                                "tags": {},
+                                "tags": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
                                 "submodule_override": {
                                     "type": "object"
                                 }
                             },
                             "additionalProperties": false
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "workspace": {
                     "type": "object",
