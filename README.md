@@ -20,17 +20,19 @@
 
 **积极开发中** 部分描述或功能只是 [**路线图**](ROADMAP.md) 中的一部分，有待实现，请点击 `Star` 或关注微信订阅号保持对 PCIT 的关注。
 
-**预览** 点击 https://ci.khs1994.com/github/khs1994-docker/lnmp 查看 PCIT 功能界面。
-
-本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎开发者 [参与 PCIT 开发](https://github.com/pcit-ce/pcit/blob/master/CONTRIBUTING.md)。
-
-## 微信订阅号
-
 <p align="center">
 <img width="200" src="https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg">
 </p>
 
 <p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
+
+## 预览
+
+点击 https://ci.khs1994.com/github/khs1994-docker/lnmp 查看 PCIT 功能界面。
+
+## 参与开发
+
+本项目适用于对 CI/CD 感兴趣的开发者（特别是 PHP 开发者），欢迎开发者 [参与 PCIT 开发](https://github.com/pcit-ce/pcit/blob/master/CONTRIBUTING.md)。
 
 ## 愿景
 
@@ -45,10 +47,6 @@ push by you, test and deploy by us.
 </p>
 
 <p align="center"><strong>掌上 PCIT</strong></p>
-
-## 博客
-
-将来我会在 https://ci.khs1994.com/blog 中对 PCIT 所涉及的概念进行系统讲解，敬请期待。
 
 ## 什么是持续集成 Continuous Integration (CI)?
 
@@ -66,13 +64,13 @@ push by you, test and deploy by us.
 
 ## PCIT 架构
 
-**PCIT** 由 **PHP 分布式后端（1+N）**（`Webhooks Server` + `Daemon CLI`） + **GitHub App** + **CLI** + **开放平台**（`插件`、`API`）四部分组成
+**PCIT** 由 **PHP 分布式后端（1+N）**（`Webhooks Server` + `Daemon CLI` + `Runner(N)`） + **GitHub App** + **CLI** + **开放平台**（`插件`、`API`）四部分组成
 
 * **Webhooks Server** 接收 Git 事件
 
-* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 事件生成一个 build 并将其分解为多个 job (Server 节点)，之后在 Docker 单机或集群（Kubernetes）中执行构建、测试、容器化部署的自动化过程（Runner）。
+* **Daemon CLI** 后端常驻 (守护) 程序，解析 Git 事件生成一个 **build** 并将其分解为多个 **job** (Server 节点)，之后在 Docker 单机或集群（Kubernetes）中执行构建、测试、容器化部署的自动化过程（Runner）。
 
-* **CLI** 提供各种实用的功能，例如命令行查看构建状态，命令行操作 GitHub，命令行调用 Tencent AI 开放能力
+* **CLI** 提供各种实用的功能，例如命令行查看构建状态
 
 * **开放平台** 包含用于功能扩展的 **插件** 和 **RESTFul API**，与开发者一道构建 PCIT 生态系统
 
@@ -89,9 +87,9 @@ push by you, test and deploy by us.
 
 > 这里只是介绍部署 PCIT 之后如何使用 PCIT 进行 CI/CD 实践，如何部署 PCIT 请查看下一小节
 
-* 点击 [PCIT-CE GitHub App](https://github.com/apps/pcit-ce) 进行安装
+**1.** 点击 [PCIT-CE GitHub App](https://github.com/apps/pcit-ce) 进行安装
 
-* Git 仓库根目录包含 [`.pcit.yml`](https://github.com/pcit-ce/pcit/tree/master/pcit_examples) 来配置 CI 规则
+**2.** Git 仓库根目录包含 [`.pcit.yml`](https://github.com/pcit-ce/pcit/tree/master/pcit_examples) 来配置 CI 规则
 
 ```yaml
 language: php
@@ -115,7 +113,22 @@ services:
   mysql:
 ```
 
-* 推送 git 仓库到 GitHub，PCIT 开始进行 **构建** **测试** **部署** 等一系列工作。
+> 为了智能补全、错误提示等功能，推荐使用 vsCode 编辑 `.pcit.yml` 文件。安装 `redhat.vscode-yaml` 扩展并在项目的 `.vscode/settings.json` 文件中增加以下内容。
+
+```diff
+{
++  "yaml.schemas": {
++    "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json": [
++      ".pcit.yaml",
++      ".pcit.yml",
++      ".pcit/**.yaml",
++      ".pcit/**.yml"
++    ]
++  }
+}
+```
+
+**3.** 推送 git 仓库到 GitHub，PCIT 开始进行 **构建** **测试** **部署** 等一系列工作。
 
 > 查看构建的聚合页面，请登录 https://ci.khs1994.com/login
 
@@ -135,8 +148,6 @@ services:
 
 * ~~Redis~~
 
-* ~~RabbitMQ~~
-
 * **仅仅** 需要 [安装 Docker](https://github.com/yeasy/docker_practice/tree/master/install) 和 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) 和 [网站的 SSL/TLS 证书](https://github.com/Neilpang/acme.sh)
 
 ```bash
@@ -152,9 +163,9 @@ $ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git ~/lnmp
 $ cd ~/lnmp
 ```
 
-**1.** 在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App，用于 **OAuth2** 账号体系
+**1.** 在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 **GitHub Oauth App**
 
-**2.** 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 GitHub App
+**2.** 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 **GitHub App**
 
 **3.** 准备证书文件，包括网站证书以及 GitHub App 的私钥证书
 
@@ -164,15 +175,13 @@ $ cd ~/lnmp
 $ ./lnmp-docker pcit-up
 ```
 
-**5.** 点击刚才注册好的 GitHub App 地址 https://github.com/apps/YOUR_APP_NAME ，进行安装。
+**5.** 点击刚才注册好的 **GitHub App** 地址 https://github.com/apps/YOUR_APP_NAME ，进行安装。
 
-**6.** Git 仓库根目录包含 `.pcit.yml` 文件，推送到 GitHub，在 Commit 详情处查看构建。
+**6.** Git 仓库根目录包含 `.pcit.yml` 文件
+
+**7.** 推送项目到 GitHub，在 **Commit** 详情处查看构建。
 
 详细的步骤请查看 https://github.com/pcit-ce/pcit/blob/master/docs/install/ee.md
-
-### 视频教程
-
-文字版看不明白？请查看 [视频版]() 安装教程。
 
 ## 示例项目
 
@@ -201,10 +210,6 @@ $ ./lnmp-docker pcit-up
 * [Tencent AI CLI]()
 
 * [WeChat PHP SDK](https://github.com/khs1994-php/libwechat)
-
-* [DingTalk PHP SDK]()
-
-* [GitHub CLI]()
 
 ## 项目拆分
 

@@ -3,7 +3,7 @@
 > 发布 `Pages`。
 
 ```yaml
-pipeline:
+steps:
   pages:
     image: pcit/pages
     settings:

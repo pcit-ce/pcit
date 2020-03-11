@@ -1,7 +1,7 @@
 # PCIT plugin -- Gitee Release
 
 ```yaml
-pipeline:
+steps:
   deploy:
     image: pcit/gitee-release
     when:

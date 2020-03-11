@@ -1,6 +1,6 @@
 # platform
 
-`platform` 指令只对 `steps/pipeline` 有效，对 `services` 无效。与 `docker run --platform` 参数的作用一致。
+`platform` 指令只对 `steps` 有效，对 `services` 无效。与 `docker run --platform` 参数的作用一致。
 
 ```yaml
 platform:

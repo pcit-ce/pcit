@@ -7,9 +7,9 @@ namespace App\Http\Controllers\OAuth;
 use App\User;
 use Error;
 use Exception;
-use PCIT\Coding\OAuth\Client as CodingClient;
-use PCIT\Gitee\OAuth\Client as GiteeClient;
-use PCIT\GitHub\OAuth\Client as GitHubClient;
+use PCIT\Coding\Service\OAuth\Client as CodingClient;
+use PCIT\Gitee\Service\OAuth\Client as GiteeClient;
+use PCIT\GitHub\Service\OAuth\Client as GitHubClient;
 use PCIT\PCIT;
 
 class IndexController

@@ -61,6 +61,19 @@ CMD ["up"]
 # CMD ["server"]
 # CMD ["agent"]
 
+# cli
+FROM khs1994/php:${PHP_VERSION}-cli-alpine as pcit_cli
+
+COPY --from=dump /app/pcit/ /app/pcit/
+
+VOLUME [ "/workspace" ]
+
+WORKDIR /workspace
+
+ENTRYPOINT ["/app/pcit/bin/pcit"]
+
+CMD ["list"]
+
 # nginx unit
 
 FROM khs1994/php:7.4.3-unit-alpine as unit

@@ -85,6 +85,7 @@
     "doctrine/cache": "^1.6",
     "filp/whoops": "^2.3",
     "firebase/php-jwt": "^5.0",
+    "justinrainbow/json-schema": "^5.2",
     "khs1994/curl": "~18.06.0",
     "khs1994/docker": "~18.06.0",
     "khs1994/tencent-ai": "~18.06.0",
@@ -105,6 +106,7 @@
     "pcit/runner": "19.12-dev",
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
+    "symfony/finder": "^5.0",
     "vlucas/phpdotenv": "^4.1.0"
   },
   "require-dev": {
@@ -160,8 +162,8 @@
       "cp -r -f src/notification/ vendor/pcit/notification",
       "cp -r -f src/notifications/notification-wechat/ vendor/pcit/notification-wechat"
     ],
-    "compile:pcit": "phar-builder.php package --name=pcit --output=./ --entry-point=bin/src/pcit.php --bz2 --included framework,bin",
-    "compile:pcitd": "phar-builder.php package --name=pcitd --output=./ --entry-point=bin/src/pcitd.php --bz2 --included framework,bin"
+    "compile:pcit": "phar-builder.php package --name=pcit --output=./ --entry-point=bin/src/pcit.php --bz2 --included framework,bin,config",
+    "compile:pcitd": "phar-builder.php package --name=pcitd --output=./ --entry-point=bin/src/pcitd.php --bz2 --included framework,bin,config"
   },
   "bin": [
      "bin/src/pcit",

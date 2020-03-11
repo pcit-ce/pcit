@@ -1,7 +1,7 @@
 # PCIT plugin -- GitHub Release
 
 ```yaml
-pipeline:
+steps:
   deploy:
     image: pcit/github-release
     when:

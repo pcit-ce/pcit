@@ -12,14 +12,14 @@ info:
   description: PCIT API
   version: 1.0.0
   title: PCIT API
-  termsOfService: 'https://github.com/pcit-ce/pcit/blob/master/docs/terms-of-service.md'
+  termsOfService: "https://github.com/pcit-ce/pcit/blob/master/docs/terms-of-service.md"
   contact:
     email: ci@khs1994.com
     name: pcit
-    url: 'https://ci.khs1994.com'
+    url: "https://ci.khs1994.com"
   license:
     name: MIT
-    url: 'https://github.com/pcit-ce/pcit/blob/master/LICENSE'
+    url: "https://github.com/pcit-ce/pcit/blob/master/LICENSE"
 tags:
   - name: Builds
   - name: Builds.log
@@ -50,7 +50,7 @@ paths:
       summary: list builds
       operationId: get-builds
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -58,15 +58,15 @@ paths:
                 type: array
                 description: build list
                 items:
-                  $ref: '#/components/schemas/builds'
+                  $ref: "#/components/schemas/builds"
               examples:
                 example1:
                   value:
-                    - id: '112'
+                    - id: "112"
                       branch: gh-pages
                       commit_id: 0fa67f2b1c0d59998b71035b402849f5075a3c60
                       tag: null
-                      commit_message: 'Deploy Git by PCIT https://ci.khs1994.com'
+                      commit_message: "Deploy Git by PCIT https://ci.khs1994.com"
                       compare: >-
                         https://github.com/pcit-ce/pcit/compare/d492689de936...0fa67f2b1c0d
                       committer_name: pcit-ce
@@ -74,7 +74,7 @@ paths:
                       build_status: misconfigured
                       event_type: push
                       pull_request_number: null
-                    - id: '111'
+                    - id: "111"
                       branch: master
                       commit_id: f807efaa677757682aa7a3f226d3e799086e90dd
                       tag: null
@@ -90,7 +90,7 @@ paths:
                       event_type: push
                       pull_request_number: null
       parameters: []
-  '/repo/{git_type}/{username}/{repo.name}/builds':
+  "/repo/{git_type}/{username}/{repo.name}/builds":
     get:
       tags:
         - Builds
@@ -116,7 +116,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -124,15 +124,15 @@ paths:
                 type: array
                 description: repo build list
                 items:
-                  $ref: '#/components/schemas/repo-builds'
+                  $ref: "#/components/schemas/repo-builds"
               examples:
                 example:
                   value:
-                    - id: '112'
+                    - id: "112"
                       branch: gh-pages
                       commit_id: 0fa67f2b1c0d59998b71035b402849f5075a3c60
                       tag: null
-                      commit_message: 'Deploy Git by PCIT https://ci.khs1994.com'
+                      commit_message: "Deploy Git by PCIT https://ci.khs1994.com"
                       compare: >-
                         https://github.com/pcit-ce/pcit/compare/d492689de936...0fa67f2b1c0d
                       committer_name: pcit-ce
@@ -140,9 +140,9 @@ paths:
                       build_status: misconfigured
                       event_type: push
                       pull_request_number: null
-                      created_at: '1577892876'
+                      created_at: "1577892876"
                       finished_at: null
-                    - id: '111'
+                    - id: "111"
                       branch: master
                       commit_id: f807efaa677757682aa7a3f226d3e799086e90dd
                       tag: null
@@ -157,9 +157,9 @@ paths:
                       build_status: queued
                       event_type: push
                       pull_request_number: null
-                      created_at: '1577892253'
+                      created_at: "1577892253"
                       finished_at: null
-  '/repo/{git_type}/{username}/{repo.name}/build/current':
+  "/repo/{git_type}/{username}/{repo.name}/build/current":
     get:
       tags:
         - Builds
@@ -183,18 +183,18 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/build-detail'
+                $ref: "#/components/schemas/build-detail"
               examples:
                 example1:
                   value:
-                    id: '112'
+                    id: "112"
                     git_type: github
-                    rid: '119219872'
+                    rid: "119219872"
                     event_type: push
                     build_status: misconfigured
                     branch: gh-pages
@@ -205,7 +205,7 @@ paths:
                     compare: >-
                       https://github.com/pcit-ce/pcit/compare/d492689de936...0fa67f2b1c0d
                     commit_id: 0fa67f2b1c0d59998b71035b402849f5075a3c60
-                    commit_message: 'Deploy Git by PCIT https://ci.khs1994.com'
+                    commit_message: "Deploy Git by PCIT https://ci.khs1994.com"
                     committer_uid: null
                     committer_name: pcit-ce
                     committer_username: pcit-deploy-robot
@@ -216,17 +216,17 @@ paths:
                     author_username: pcit-deploy-robot
                     author_email: ci@khs1994.com
                     author_pic: null
-                    created_at: '1577892876'
+                    created_at: "1577892876"
                     finished_at: null
                     deleted_at: null
-                    config: '[]'
+                    config: "[]"
                     action: null
                     check_suites_id: null
-                    internal: '1'
-                    private: '0'
-                    unique_key: '0'
+                    internal: "1"
+                    private: "0"
+                    unique_key: "0"
                     jobs: []
-  '/build/{build.id}':
+  "/build/{build.id}":
     get:
       tags:
         - Builds
@@ -240,18 +240,18 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/build-detail'
+                $ref: "#/components/schemas/build-detail"
               examples:
                 example1:
                   value:
-                    id: '100'
+                    id: "100"
                     git_type: github
-                    rid: '230709793'
+                    rid: "230709793"
                     event_type: push
                     build_status: success
                     branch: master
@@ -276,26 +276,26 @@ paths:
                     author_username: khs1994
                     author_email: khs1994@khs1994.com
                     author_pic: null
-                    created_at: '1577627893'
-                    finished_at: '1577627957'
+                    created_at: "1577627893"
+                    finished_at: "1577627957"
                     deleted_at: null
                     config: >-
                       {"steps":{"github_release":{"image":"pcit\/github_release","settings":{"token":"${GITHUB_TOKEN}","files":["Dockerfile","docker-entrypoint.sh"],"overwrite":true,"draft":true,"prerelease":true,"note":"nightly","title":"nightly","target_commitish":"refs\/tags\/nightly"}}}}
                     action: null
                     check_suites_id: null
-                    internal: '1'
-                    private: '0'
-                    unique_key: '0'
+                    internal: "1"
+                    private: "0"
+                    unique_key: "0"
                     jobs:
-                      - id: '131'
-                        allow_failure: '0'
+                      - id: "131"
+                        allow_failure: "0"
                         state: success
-                        started_at: '1577627938'
-                        finished_at: '1577627957'
-                        created_at: '1577627936'
+                        started_at: "1577627938"
+                        finished_at: "1577627957"
+                        created_at: "1577627936"
                         updated_at: null
                         deleted_at: null
-                        build_id: '100'
+                        build_id: "100"
                         build_log: >-
                           {"clone":"2019-12-29T13:58:58.902387600Z + git
                           init\n2019-12-29T13:58:58.922934900Z Initialized empty
@@ -322,11 +322,11 @@ paths:
                           uploaded Dockerfile
                           artifact\n2019-12-29T13:59:12.821705700Z Successfully
                           uploaded docker-entrypoint.sh artifact"}
-                        check_run_id: '366809624'
+                        check_run_id: "366809624"
                         config: null
-                        env_vars: 'null'
+                        env_vars: "null"
                         container_config: null
-  '/build/{build.id}/cancel':
+  "/build/{build.id}/cancel":
     post:
       tags:
         - Builds
@@ -342,9 +342,9 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: success
-  '/build/{build.id}/restart':
+  "/build/{build.id}/restart":
     post:
       tags:
         - Builds
@@ -352,7 +352,7 @@ paths:
       summary: restart build
       operationId: restart-single-build
       responses:
-        '200':
+        "200":
           description: success
       security: []
       parameters:
@@ -361,7 +361,7 @@ paths:
           required: true
           schema:
             type: integer
-  '/job/{job.id}/log':
+  "/job/{job.id}/log":
     get:
       tags:
         - Builds.log
@@ -375,7 +375,7 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -430,7 +430,7 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: success
   /jobs:
     get:
@@ -440,10 +440,10 @@ paths:
       description: This returns a list of jobs a current user has access to.
       operationId: get-jobs
       responses:
-        '200':
+        "200":
           description: successful operation
       parameters: []
-  '/job/{job.id}':
+  "/job/{job.id}":
     get:
       tags:
         - Builds.job
@@ -451,26 +451,26 @@ paths:
       description: This returns a single job.
       operationId: get-single-job-log
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/jobs'
+                $ref: "#/components/schemas/jobs"
               examples:
                 example1:
                   value:
-                    id: '100'
-                    allow_failure: '0'
+                    id: "100"
+                    allow_failure: "0"
                     state: success
-                    started_at: '1577537406'
-                    finished_at: '1577537724'
-                    created_at: '1577537046'
+                    started_at: "1577537406"
+                    finished_at: "1577537724"
+                    created_at: "1577537046"
                     updated_at: null
                     deleted_at: null
-                    build_id: '52'
+                    build_id: "52"
                     build_log: log string
-                    check_run_id: '366020520'
+                    check_run_id: "366020520"
                     config: null
                     env_vars: >-
                       {"PHP_VERSION":"7.2.24","NGINX_VERSION":"1.15.8","REDIS_VERSION":"5.0.3","MYSQL_VERSION":"5.7.24"}
@@ -481,7 +481,7 @@ paths:
           required: true
           schema:
             type: integer
-  '/job/{job.id}/cancel':
+  "/job/{job.id}/cancel":
     post:
       tags:
         - Builds.job
@@ -497,7 +497,7 @@ paths:
           required: true
           schema:
             type: integer
-  '/job/{job.id}/restart':
+  "/job/{job.id}/restart":
     post:
       tags:
         - Builds.job
@@ -511,7 +511,7 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: success
   /orgs:
     get:
@@ -521,44 +521,44 @@ paths:
       description: This returns a list of organizations the current user is a member of.
       operationId: get-orgs
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
-                description: ''
+                description: ""
                 items:
-                  $ref: '#/components/schemas/org'
+                  $ref: "#/components/schemas/org"
               examples:
                 example1:
                   value:
-                    - id: '3'
+                    - id: "3"
                       git_type: github
-                      uid: '31106763'
+                      uid: "31106763"
                       name: null
                       username: khs1994-website
                       email: null
-                      pic: 'https://avatars2.githubusercontent.com/u/31106763?v=4'
+                      pic: "https://avatars2.githubusercontent.com/u/31106763?v=4"
                       access_token: null
                       refresh_token: null
                       org_admin: '["16733187"]'
                       type: org
-                      installation_id: '0'
-                    - id: '4'
+                      installation_id: "0"
+                    - id: "4"
                       git_type: github
-                      uid: '31461768'
+                      uid: "31461768"
                       name: null
                       username: khs1994-php
                       email: null
-                      pic: 'https://avatars0.githubusercontent.com/u/31461768?v=4'
+                      pic: "https://avatars0.githubusercontent.com/u/31461768?v=4"
                       access_token: null
                       refresh_token: null
                       org_admin: '["16733187"]'
                       type: org
-                      installation_id: '0'
+                      installation_id: "0"
       parameters: []
-  '/org/{git_type}/{organization.name}':
+  "/org/{git_type}/{organization.name}":
     get:
       tags:
         - Organization
@@ -577,27 +577,27 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/org'
+                $ref: "#/components/schemas/org"
               examples:
                 example1:
                   value:
-                    id: '2'
+                    id: "2"
                     git_type: github
-                    uid: '45250309'
+                    uid: "45250309"
                     name: pcit-ce
                     username: pcit-ce
                     email: ci@khs1994.com
-                    pic: 'https://avatars3.githubusercontent.com/u/45250309?v=4'
+                    pic: "https://avatars3.githubusercontent.com/u/45250309?v=4"
                     access_token: null
                     refresh_token: null
                     org_admin: '["16733187"]'
                     type: org
-                    installation_id: '469299'
+                    installation_id: "469299"
   /repos:
     get:
       tags:
@@ -607,18 +607,18 @@ paths:
       parameters: []
       operationId: get-repos
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
                 type: array
-                description: ''
+                description: ""
                 items: {}
               examples:
                 example1:
                   value: []
-  '/repos/{git_type}/{username}':
+  "/repos/{git_type}/{username}":
     get:
       tags:
         - Repositories
@@ -637,34 +637,34 @@ paths:
             type: string
       operationId: get-owner-repo
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
                 type: array
-                description: ''
+                description: ""
                 items: {}
               examples:
                 example1:
                   value:
-                    - rid: '119219872'
+                    - rid: "119219872"
                       repo_full_name: pcit-ce/pcit
                       default_branch: master
                       git_type: github
                       webhooks_status: 1
-                      build_id: '111'
+                      build_id: "111"
                       build_status: queued
                       commit_id: f807efaa677757682aa7a3f226d3e799086e90dd
-                    - rid: '230623025'
+                    - rid: "230623025"
                       repo_full_name: pcit-ce/pcit-release
                       default_branch: master
                       git_type: github
                       webhooks_status: 1
                       build_id: null
                       build_status: null
-                      commit_id: '0'
-  '/repo/{git_type}/{username}/{repo.name}':
+                      commit_id: "0"
+  "/repo/{git_type}/{username}/{repo.name}":
     get:
       tags:
         - Repositories
@@ -688,35 +688,35 @@ paths:
             type: string
       operationId: get-repo
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
                 type: object
-                description: ''
+                description: ""
                 properties: {}
               examples:
                 example1:
                   value:
-                    id: '1'
+                    id: "1"
                     git_type: github
-                    rid: '119219872'
+                    rid: "119219872"
                     repo_full_name: pcit-ce/pcit
                     webhooks_status: null
                     build_activate: null
                     repo_admin: '["16733187"]'
                     repo_collaborators: null
                     default_branch: master
-                    last_sync: '1577893114'
+                    last_sync: "1577893114"
                     secrets: null
                     auto_merge: null
-  '/repo/{username}/{repo.name}/activate':
+  "/repo/{username}/{repo.name}/activate":
     post:
       tags:
         - Repositories.activate
       summary: activate a repository
-      description: 'This will activate a repository, allowing its tests to be run on PCIT.'
+      description: "This will activate a repository, allowing its tests to be run on PCIT."
       parameters:
         - name: username
           in: path
@@ -730,9 +730,9 @@ paths:
             type: string
       operationId: activate-repo
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{username}/{repo.name}/deactivate':
+  "/repo/{username}/{repo.name}/deactivate":
     post:
       tags:
         - Repositories.activate
@@ -753,9 +753,9 @@ paths:
             type: string
       operationId: deactivate-repo
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{git_type}/{username}/{repo.name}/branches':
+  "/repo/{git_type}/{username}/{repo.name}/branches":
     get:
       tags:
         - Repositories.branches
@@ -779,20 +779,20 @@ paths:
             type: string
       operationId: get-branches
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
                 type: array
-                description: ''
+                description: ""
                 items: {}
               examples:
                 example1:
                   value:
                     - gh-pages
                     - master
-  '/repo/{git_type}/{username}/{repo.name}/branch/{branch.name}':
+  "/repo/{git_type}/{username}/{repo.name}/branch/{branch.name}":
     get:
       tags:
         - Repositories.branches
@@ -821,19 +821,19 @@ paths:
             type: string
       operationId: get-branch
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
                 type: array
-                description: ''
+                description: ""
                 items:
-                  $ref: '#/components/schemas/builds'
+                  $ref: "#/components/schemas/builds"
               examples:
                 example1:
                   value:
-                    - id: '111'
+                    - id: "111"
                       branch: master
                       commit_id: f807efaa677757682aa7a3f226d3e799086e90dd
                       tag: null
@@ -847,7 +847,7 @@ paths:
                       committer_username: khs1994
                       build_status: queued
                       event_type: push
-                    - id: '109'
+                    - id: "109"
                       branch: master
                       commit_id: 6746c883155ebb80014904211de818ee9c625338
                       tag: null
@@ -861,7 +861,7 @@ paths:
                       committer_username: khs1994
                       build_status: failure
                       event_type: push
-  '/repo/{username}/{repo.name}/caches':
+  "/repo/{username}/{repo.name}/caches":
     get:
       tags:
         - Repositories.caches
@@ -880,7 +880,7 @@ paths:
             type: string
       operationId: get-repo-caches
       responses:
-        '200':
+        "200":
           description: success
     delete:
       tags:
@@ -900,9 +900,9 @@ paths:
             type: string
       operationId: delete-repo-caches
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{username}/{repo.name}/crons':
+  "/repo/{username}/{repo.name}/crons":
     get:
       tags:
         - Repositories.crons
@@ -921,9 +921,9 @@ paths:
             type: string
       operationId: get-repo-crons
       responses:
-        '200':
+        "200":
           description: success
-  '/cron/{cron.id}':
+  "/cron/{cron.id}":
     get:
       tags:
         - Repositories.crons
@@ -937,7 +937,7 @@ paths:
             type: integer
       operationId: get-cron
       responses:
-        '200':
+        "200":
           description: success
     delete:
       tags:
@@ -952,9 +952,9 @@ paths:
             type: integer
       operationId: delete-cron
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{username}/{repo.name}/branch/{branch.name}/cron':
+  "/repo/{username}/{repo.name}/branch/{branch.name}/cron":
     get:
       tags:
         - Repositories.crons
@@ -980,7 +980,7 @@ paths:
             type: string
       operationId: get-repo-branch-cron
       responses:
-        '200':
+        "200":
           description: success
     post:
       tags:
@@ -1008,7 +1008,7 @@ paths:
             type: string
       operationId: create-repo-branch-cron
       responses:
-        '200':
+        "200":
           description: success
       requestBody:
         content:
@@ -1018,7 +1018,7 @@ paths:
               properties:
                 cron.interval:
                   type: string
-                  description: 'interval, daily, weekly or monthly'
+                  description: "interval, daily, weekly or monthly"
                 cron.dont_run_if_recent_build_exists:
                   type: boolean
                   description: dont_run_if_recent_build_exists
@@ -1030,7 +1030,7 @@ paths:
                 value:
                   cron.interval: daily
                   cron.dont_run_if_recent_build_exists: true
-  '/repo/{username}/{repo.name}/env_vars':
+  "/repo/{username}/{repo.name}/env_vars":
     get:
       tags:
         - Repositories.env_vars
@@ -1052,7 +1052,7 @@ paths:
             type: string
       operationId: get-repo-env-list
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1060,18 +1060,18 @@ paths:
               examples:
                 example1:
                   value:
-                    - id: '33'
+                    - id: "33"
                       git_type: github
-                      rid: '119219872'
+                      rid: "119219872"
                       name: ACCESS_TOKEN
                       value: abcdefg
-                      public: '0'
-                    - id: '4'
+                      public: "0"
+                    - id: "4"
                       git_type: github
-                      rid: '119219872'
+                      rid: "119219872"
                       name: CODECOV_TOKEN
                       value: abcdefg
-                      public: '0'
+                      public: "0"
     post:
       tags:
         - Repositories.env_vars
@@ -1091,7 +1091,7 @@ paths:
             type: string
       operationId: create-repo-env
       responses:
-        '200':
+        "200":
           description: success
       requestBody:
         content:
@@ -1110,8 +1110,8 @@ paths:
                 value:
                   env_var.name: k1
                   env_var.value: v1
-                  env_var.public: '0'
-  '/repo/{username}/{repo.name}/env_var/{env_var.id}':
+                  env_var.public: "0"
+  "/repo/{username}/{repo.name}/env_var/{env_var.id}":
     get:
       tags:
         - Repositories.env_vars
@@ -1135,7 +1135,7 @@ paths:
             type: integer
       operationId: get-repo-single-env
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1143,12 +1143,12 @@ paths:
               examples:
                 example1:
                   value:
-                    id: '4'
+                    id: "4"
                     git_type: github
-                    rid: '119219872'
+                    rid: "119219872"
                     name: CODECOV_TOKEN
                     value: abcdef
-                    public: '0'
+                    public: "0"
     post:
       tags:
         - Repositories.env_vars
@@ -1172,7 +1172,7 @@ paths:
             type: integer
       operationId: update-repo-single-env
       responses:
-        '200':
+        "200":
           description: success
       requestBody:
         content:
@@ -1207,9 +1207,9 @@ paths:
             type: integer
       operationId: delete repo single env
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{username}/{repo.name}/requests':
+  "/repo/{username}/{repo.name}/requests":
     get:
       tags:
         - Repositories.requests
@@ -1228,20 +1228,20 @@ paths:
             type: string
       operationId: get-repo-request-list
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/repo-builds'
+                $ref: "#/components/schemas/repo-builds"
               examples:
                 example1:
                   value:
-                    - id: '112'
+                    - id: "112"
                       branch: gh-pages
                       commit_id: 0fa67f2b1c0d59998b71035b402849f5075a3c60
                       tag: null
-                      commit_message: 'Deploy Git by PCIT https://ci.khs1994.com'
+                      commit_message: "Deploy Git by PCIT https://ci.khs1994.com"
                       compare: >-
                         https://github.com/pcit-ce/pcit/compare/d492689de936...0fa67f2b1c0d
                       committer_name: pcit-ce
@@ -1249,9 +1249,9 @@ paths:
                       build_status: misconfigured
                       event_type: push
                       pull_request_number: null
-                      created_at: '1577892876'
+                      created_at: "1577892876"
                       finished_at: null
-                    - id: '111'
+                    - id: "111"
                       branch: master
                       commit_id: f807efaa677757682aa7a3f226d3e799086e90dd
                       tag: null
@@ -1266,7 +1266,7 @@ paths:
                       build_status: queued
                       event_type: push
                       pull_request_number: null
-                      created_at: '1577892253'
+                      created_at: "1577892253"
                       finished_at: null
     post:
       tags:
@@ -1288,9 +1288,9 @@ paths:
             type: string
       operationId: create-repo-single-request
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{username}/{repo.name}/request/{request.id}':
+  "/repo/{username}/{repo.name}/request/{request.id}":
     get:
       tags:
         - Repositories.requests
@@ -1314,18 +1314,18 @@ paths:
             type: integer
       operationId: get-repo-single-request
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/request'
+                $ref: "#/components/schemas/request"
               examples:
                 example1:
                   value:
-                    id: '111'
+                    id: "111"
                     git_type: github
-                    rid: '119219872'
+                    rid: "119219872"
                     event_type: push
                     build_status: queued
                     branch: master
@@ -1350,16 +1350,16 @@ paths:
                     author_username: khs1994
                     author_email: khs1994@khs1994.com
                     author_pic: null
-                    created_at: '1577892253'
+                    created_at: "1577892253"
                     finished_at: null
                     deleted_at: null
-                    config: '{}'
+                    config: "{}"
                     action: null
                     check_suites_id: null
-                    internal: '1'
-                    private: '0'
-                    unique_key: '0'
-  '/repo/{username}/{repo.name}/settings':
+                    internal: "1"
+                    private: "0"
+                    unique_key: "0"
+  "/repo/{username}/{repo.name}/settings":
     get:
       tags:
         - Repositories.settings
@@ -1378,7 +1378,7 @@ paths:
             type: string
       operationId: get-repo-setting-list
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1393,12 +1393,12 @@ paths:
               examples:
                 example1:
                   value:
-                    build_pushes: '1'
-                    build_pull_requests: '1'
-                    maximum_number_of_builds: '1'
-                    auto_cancel_branch_builds: '0'
-                    auto_cancel_pull_request_builds: '0'
-  '/repo/{username}/{repo.name}/setting/{setting.name}':
+                    build_pushes: "1"
+                    build_pull_requests: "1"
+                    maximum_number_of_builds: "1"
+                    auto_cancel_branch_builds: "0"
+                    auto_cancel_pull_request_builds: "0"
+  "/repo/{username}/{repo.name}/setting/{setting.name}":
     get:
       tags:
         - Repositories.settings
@@ -1422,7 +1422,7 @@ paths:
             type: string
       operationId: get-repo-single-setting
       responses:
-        '200':
+        "200":
           description: success
           content: {}
     post:
@@ -1448,7 +1448,7 @@ paths:
             type: string
       operationId: update-repo-single-setting
       responses:
-        '200':
+        "200":
           description: success
       requestBody:
         content:
@@ -1461,8 +1461,8 @@ paths:
             examples:
               example1:
                 value:
-                  setting.value: '1'
-  '/repo/{username}/{repo.name}/star':
+                  setting.value: "1"
+  "/repo/{username}/{repo.name}/star":
     post:
       tags:
         - Repositories.star
@@ -1481,9 +1481,9 @@ paths:
             type: string
       operationId: star-repo
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{username}/{repo.name}/unstar':
+  "/repo/{username}/{repo.name}/unstar":
     post:
       tags:
         - Repositories.star
@@ -1502,9 +1502,9 @@ paths:
             type: string
       operationId: unstar-repo
       responses:
-        '200':
+        "200":
           description: success
-  '/repo/{username}/{repo.name}/issues/translate/{issue.number}':
+  "/repo/{username}/{repo.name}/issues/translate/{issue.number}":
     patch:
       tags:
         - Repositories.issues
@@ -1528,7 +1528,7 @@ paths:
             type: integer
       operationId: translate-issue-title
       responses:
-        '200':
+        "200":
           description: success
   /user/token:
     post:
@@ -1539,7 +1539,7 @@ paths:
       parameters: []
       operationId: get-token
       responses:
-        '200':
+        "200":
           description: success
       requestBody:
         content:
@@ -1568,7 +1568,7 @@ paths:
       parameters: []
       operationId: get-current-user-info
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1576,19 +1576,19 @@ paths:
               examples:
                 example1:
                   value:
-                    id: '1'
+                    id: "1"
                     git_type: github
-                    uid: '16733187'
+                    uid: "16733187"
                     name: null
                     username: khs1994
                     email: khs1994@khs1994.com
-                    pic: 'https://avatars2.githubusercontent.com/u/16733187?v=4'
+                    pic: "https://avatars2.githubusercontent.com/u/16733187?v=4"
                     access_token: abcdefg
                     refresh_token: null
                     org_admin: null
                     type: user
-                    installation_id: '0'
-  '/user/{git_type}/{username}':
+                    installation_id: "0"
+  "/user/{git_type}/{username}":
     get:
       tags:
         - User
@@ -1607,7 +1607,7 @@ paths:
             type: string
       operationId: get-user-info
       responses:
-        '200':
+        "200":
           description: sucess
           content:
             application/json:
@@ -1615,18 +1615,18 @@ paths:
               examples:
                 example1:
                   value:
-                    id: '1'
+                    id: "1"
                     git_type: github
-                    uid: '16733187'
+                    uid: "16733187"
                     name: null
                     username: khs1994
                     email: khs1994@khs1994.com
-                    pic: 'https://avatars2.githubusercontent.com/u/16733187?v=4'
+                    pic: "https://avatars2.githubusercontent.com/u/16733187?v=4"
                     access_token: abcdefg
                     refresh_token: null
                     org_admin: null
                     type: user
-                    installation_id: '0'
+                    installation_id: "0"
   /user/sync:
     post:
       tags:
@@ -1636,9 +1636,9 @@ paths:
       parameters: []
       operationId: sync-user-info
       responses:
-        '200':
+        "200":
           description: success
-  '/user/{git_type}/{owner.login}/active':
+  "/user/{git_type}/{owner.login}/active":
     get:
       tags:
         - User
@@ -1657,11 +1657,11 @@ paths:
           required: true
           schema:
             type: string
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
-  '/user/{user.name}/beta_features':
+  "/user/{user.name}/beta_features":
     get:
       tags:
         - User.beta_features
@@ -1673,11 +1673,11 @@ paths:
           required: true
           schema:
             type: string
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
-  '/user/{user.name}/beta_feature/{beta_feature.id}':
+  "/user/{user.name}/beta_feature/{beta_feature.id}":
     patch:
       tags:
         - User.beta_features
@@ -1694,9 +1694,9 @@ paths:
           required: true
           schema:
             type: string
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
     delete:
       tags:
@@ -1714,9 +1714,9 @@ paths:
           required: true
           schema:
             type: string
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
   /ci/oauth_client_id:
     get:
@@ -1725,9 +1725,9 @@ paths:
       summary: get oauth client id
       description: get oauth client id
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1748,11 +1748,11 @@ paths:
       summary: get pending jobs number
       description: get pending jobs number
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
-  '/ci/github_app_installation/{uid}':
+  "/ci/github_app_installation/{uid}":
     get:
       tags:
         - System
@@ -1764,9 +1764,9 @@ paths:
           required: true
           schema:
             type: integer
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1780,7 +1780,7 @@ paths:
                   value:
                     url: >-
                       https://github.com/apps/pcit-ce2/installations/new/permissions?suggested_target_id=31106763
-  '/ci/github_app_settings/{org_name}':
+  "/ci/github_app_settings/{org_name}":
     get:
       tags:
         - System
@@ -1793,9 +1793,9 @@ paths:
           description: org name
           schema:
             type: string
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1816,9 +1816,9 @@ paths:
       summary: get pcit about info
       description: get pcit about info
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
   /ci/changelog:
     get:
@@ -1827,9 +1827,9 @@ paths:
       summary: get pcit about changelog
       description: get pcit about changelog
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
   /metrics:
     get:
@@ -1838,9 +1838,9 @@ paths:
       summary: get pcit metrics
       description: get pcit metrics
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
           content:
             text/plain:
@@ -1853,9 +1853,9 @@ paths:
       summary: get pcit healthz
       description: get pcit healthz
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
           content:
             text/plain:
@@ -1871,9 +1871,9 @@ paths:
       summary: get pcit readyz
       description: get pcit readyz
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
           content:
             text/plain:
@@ -1889,9 +1889,9 @@ paths:
       summary: get pcit livez
       description: get pcit livez
       parameters: []
-      operationId: ''
+      operationId: ""
       responses:
-        '200':
+        "200":
           description: success
           content:
             text/plain:
@@ -1916,7 +1916,7 @@ paths:
             default: false
       operationId: openapi
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
@@ -1939,13 +1939,62 @@ paths:
             default: false
       operationId: openapi
       responses:
-        '200':
+        "200":
           description: success
           content:
             application/json:
               schema:
                 type: object
                 description: openapi
+  /validate:
+    post:
+      tags:
+        - System
+      summary: validate .pcit.yml
+      description: validate .pcit.yml
+      operationId: validate
+      requestBody:
+        content:
+          plain/text:
+            schema:
+              type: string
+            examples:
+              example1:
+                value: |-
+                  language: php
+
+                  steps:
+                    script: echo exec script
+          application/json:
+            schema:
+              type: string
+            examples:
+              example:
+                value: |-
+                  {"language": "php","steps":{"script":"echo exec script"}}
+      responses:
+        "200":
+          description: validate result
+          content:
+            plain/text:
+              schema:
+                type: string
+                description: validate passed
+              examples:
+                example1:
+                  value: "ok"
+            application/json:
+              schema:
+                type: array
+                description: validate error
+                items:
+                  type: object
+              examples:
+                example1:
+                  value:
+                    - steps: The property steps is required
+                    - "": The property lanuage is not defined and the definition does not allow additional properties
+                    - "": The property test is not defined and the definition does not allow additional properties
 components:
   parameters:
     org_name:
@@ -2142,7 +2191,7 @@ components:
         jobs:
           type: array
           items:
-            $ref: '#/components/schemas/jobs'
+            $ref: "#/components/schemas/jobs"
     request:
       title: request
       type: object
@@ -2292,7 +2341,7 @@ components:
           description: container config
     org:
       title: org
-      description: ''
+      description: ""
       type: object
       properties:
         id:
@@ -2323,7 +2372,7 @@ components:
           description: org or user
         installation_id:
           type: integer
-          description: ''
+          description: ""
     repos: {}
     repo-detail: {}
   requestBodies: {}
@@ -2339,4 +2388,4 @@ security:
   - BearerToken: []
 externalDocs:
   description: PCIT API
-  url: 'https://docs.ci.khs1994.com'
+  url: "https://docs.ci.khs1994.com"

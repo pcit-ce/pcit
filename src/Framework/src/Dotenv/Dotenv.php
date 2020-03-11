@@ -25,7 +25,7 @@ class Dotenv
         if ($env_file) {
             $dotenv = \Dotenv\Dotenv::createImmutable(base_path(), $env_file)->load();
 
-            // $dotenv ->required('DATABASE_DSN');
+            // $dotenv ->required('CI_HOST');
         }
 
         return $env_file;

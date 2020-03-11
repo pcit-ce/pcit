@@ -5,7 +5,7 @@
 **该插件底层由 https://github.com/drone-plugins/drone-npm 支持**
 
 ```yaml
-pipeline:
+steps:
   deploy:
     image: pcit/npm
     settings:

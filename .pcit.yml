@@ -28,6 +28,7 @@ workspace: # or workdir
 cache:
   - cache
   - .php_cs.cache
+  - .psalm
   # - vendor
 
 # 构建步骤
@@ -124,8 +125,6 @@ steps: # pipeline
       # status: changed
       # status: [ failure, success, changed ]
 
-      # event: tag
-      # event: [push, pull_request, tag, cron]
       event: [push, pull_request, tag]
 
       # branch: master
@@ -185,6 +184,8 @@ steps: # pipeline
     run: php-cs-fixer fix
 
   psalm: composer run psalm || true
+
+  validate: ./bin/pcit validate
 
   sami:
     image: khs1994/sami
@@ -254,6 +255,15 @@ steps: # pipeline
     - php pcitd.phar
     - mkdir phar_dist
     - cp -a *.phar phar_dist
+    - chmod +x phar_dist/*
+
+  validate_by_phar:
+    when:
+      status: success
+    run: |
+      ./phar_dist/pcit.phar validate
+
+      ./phar_dist/pcit.phar validate .
 
   s3:
     image: pcit/s3
@@ -444,17 +454,6 @@ branches:
   exclude: test*
   # include: [ master, release/* ]
   # exclude: [ release/1.0.0, release/1.1.* ]
-
-# 通知设置
-notifications:
-  email:
-    recipients:
-      - khs1994@khs1994.com
-    on_success: never # default: change
-    on_failure: always # default: always
-
-    # email:
-    # - khs1994@khs1994.com
 
 # 网络相关配置
 networks:

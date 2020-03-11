@@ -56,7 +56,7 @@ class LogHandler
         $steps = [];
 
         foreach ($types as $type) {
-            $cacheKey = CacheKey::pipelineListKey($this->jobId, $type, 'loghandler');
+            $cacheKey = CacheKey::pipelineListKey($this->jobId, $type);
 
             $step = array_reverse($this->cache->lrange($cacheKey, 0, -1));
 

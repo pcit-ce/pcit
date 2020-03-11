@@ -8,7 +8,7 @@ use PCIT\Support\Env;
 
 class IndexController
 {
-    public function about()
+    public function about(): array
     {
         return [
             'code' => 200,
@@ -102,6 +102,7 @@ class IndexController
                 'livez' => $ci_host.'/livez',
                 'openapi' => $ci_host.'/openapi',
                 'openapi_v3' => $ci_host.'/openapi/v3',
+                'validate@post' => $ci_host.'/validate',
             ],
         ];
 
@@ -124,21 +125,25 @@ class IndexController
 
     public function sitemap()
     {
+        /** @var string */
         $host = getenv('CI_HOST');
 
         return [
             'homepage' => $host,
             'login' => $host.'/login',
             'beta' => $host.'/beta',
-            'dashboard' => $host.'/dashboard',
+            'dashboard' => $host.'/{git_type}/dashboard',
             'api' => $host.'/api',
             'about' => $host.'/about',
             'team' => $host.'/team',
             'blog' => $host.'/blog',
             'docs' => $host.'/docs',
+            'changelog' => $host.'/changelog',
             'wechat' => $host.'/wechat',
             'status' => $host.'/status',
             'feedback' => 'https://github.com/pcit-ce/pcit/issues',
+            'validate@get' => $host.'/validate',
+            'validate@post' => $host.'/validate',
             'tests' => [
                 'route not found' => $host.'/not_exists_url',
                 'test' => $host.'/test5',
@@ -259,7 +264,7 @@ class IndexController
 
     public function issues(): void
     {
-        Response::redirect('https://github.com/pcit-ce/pcit/issues');
+        \Response::redirect('https://github.com/pcit-ce/pcit/issues');
     }
 
     public function support(): void

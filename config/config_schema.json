@@ -1,0 +1,318 @@
+{
+    "title": "JSON schema for PCIT CI configuration files",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "see https://docs.ci.khs1994.com/usage/",
+    "definitions": {
+        "when": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "description": "string or array, one of \nfailure \nsuccess \nchanged",
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "enum": [
+                                "failure",
+                                "success",
+                                "changed"
+                            ]
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "enum": [
+                                    "failure",
+                                    "success",
+                                    "changed"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "event": {
+                    "description": "string or array, one of \npush \npull_request \ntag \ncron",
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "enum": [
+                                "push",
+                                "pull_request",
+                                "tag",
+                                "cron"
+                            ]
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "enum": [
+                                    "push",
+                                    "pull_request",
+                                    "tag",
+                                    "cron"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "platform": {},
+                "branch": {},
+                "jobs": {}
+            },
+            "additionalProperties": false
+        },
+        "steps": {
+            "type": "object",
+            "description": "job step",
+            "properties": {
+                "image": {
+                    "type": "string"
+                },
+                "uses": {
+                    "type": "string"
+                },
+                "run": {},
+                "command": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array"
+                        }
+                    ]
+                },
+                "commands": {},
+                "shell": {
+                    "type": "string",
+                    "enum": [
+                        "bash",
+                        "sh",
+                        "pwsh",
+                        "node",
+                        "python"
+                    ]
+                },
+                "env": {
+                    "type": "array"
+                },
+                "environment": {},
+                "settings": {
+                    "type": "object"
+                },
+                "with": {},
+                "pull": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "privileged": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "when": {
+                    "$ref": "#/definitions/when",
+                    "additionalProperties": false
+                },
+                "if": {
+                    "$ref": "#/definitions/when",
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "allOf": [
+        {
+            "type": "object",
+            "properties": {
+                "language": {
+                    "type": "string",
+                    "description": "project language"
+                },
+                "clone": {
+                    "type": "object",
+                    "description": "git clone, see https://docs.ci.khs1994.com/usage/clone.html",
+                    "$comment": "https://docs.ci.khs1994.com/usage/clone.html",
+                    "properties": {
+                        "git": {
+                            "type": "object",
+                            "description": "setting git clone",
+                            "properties": {
+                                "image": {
+                                    "type": "string",
+                                    "description": "git clone image",
+                                    "default": "pcit/git"
+                                },
+                                "depth": {
+                                    "type": "integer",
+                                    "description": "git clone depth",
+                                    "default": 25
+                                },
+                                "hosts": {
+                                    "type": "array",
+                                    "description": "example\nhosts:\n- \"pcit.dev:127.0.0.1\"",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "recursive": {
+                                    "type": "boolean"
+                                },
+                                "skip_verify": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "tags": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "submodule_override": {
+                                    "type": "object"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "workspace": {
+                    "type": "object",
+                    "properties": {
+                        "base": {},
+                        "path": {}
+                    },
+                    "additionalProperties": false
+                },
+                "cache": {
+                    "additionalProperties": false
+                },
+                "steps": {
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "patternProperties": {
+                                "^[a-zA-Z0-9._-]+$": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/definitions/steps"
+                                        },
+                                        {
+                                            "type": "string",
+                                            "description": "step only include command with string fomat"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "description": "step only include command with array fomat",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    ]
+                },
+                "services": {
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "patternProperties": {
+                                "^[a-zA-Z0-9._-]+$": {
+                                    "type": "null"
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "patternProperties": {
+                                "^[a-zA-Z0-9._-]+$": {
+                                    "$ref": "#/definitions/steps"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "jobs": {
+                    "type": "object",
+                    "description": "jobs",
+                    "patternProperties": {
+                        "^[a-zA-Z0-9._]+$": {
+                            "type": "array",
+                            "description": "env name",
+                            "items": {
+                                "type": "string",
+                                "description": "env value"
+                            },
+                            "minItems": 1
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "platform": {
+                    "type": "array",
+                    "items": {
+                        "enum": [
+                            "linux/amd64",
+                            "linux/arm64",
+                            "linux/ppc64le",
+                            "linux/s390x",
+                            "linux/386",
+                            "linux/arm/v7",
+                            "linux/arm/v6"
+                        ]
+                    },
+                    "additionalProperties": false
+                },
+                "branches": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "include": {
+                                    "oneOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "array"
+                                        }
+                                    ]
+                                },
+                                "exclude": {}
+                            }
+                        }
+                    ]
+                },
+                "networks": {
+                    "type": "object",
+                    "properties": {
+                        "hosts": {
+                            "type": "array",
+                            "description": "setting hosts /etc/hosts",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "image": {
+                    "type": "string",
+                    "description": "step default image"
+                }
+            },
+            "additionalProperties": false
+        }
+    ],
+    "required": [
+        "steps"
+    ]
+}
