@@ -255,6 +255,7 @@ steps: # pipeline
     - php pcitd.phar
     - mkdir phar_dist
     - cp -a *.phar phar_dist
+    - chmod +x phar_dist/*
 
   validate_by_phar:
     when:

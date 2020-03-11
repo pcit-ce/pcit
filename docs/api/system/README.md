@@ -4,7 +4,7 @@
 
 | Method | URL                     |
 | :----- | :-----------------------|
-| `GET`    | `/ci/oauth_client_id` |
+| `GET`  | `/ci/oauth_client_id`   |
 
 **Example:** `/ci/oauth_client_id`
 
@@ -12,19 +12,19 @@
 
 | Method | URL                     |
 | :----- | :-----------------------|
-| `GET`    | `/ci/pending`         |
+| `GET`  | `/ci/pending`           |
 
 ## 获取 GitHub App 安装地址
 
 | Method | URL                                   |
 | :----- | :-----------------------              |
-| `GET`    | `/ci/github_app_installation/{uid}` |
+| `GET`  | `/ci/github_app_installation/{uid}`   |
 
 ## 获取 GitHub App 设置地址
 
 | Method | URL                                    |
 | :----- | :-----------------------               |
-| `GET`    | `/ci/github_app_settings/{org_name}` |
+| `GET`  | `/ci/github_app_settings/{org_name}`   |
 
 ## About
 
@@ -32,7 +32,7 @@
 
 | Method | URL |
 | :---   | :--- |
-| `GET` | `/ci/about` |
+| `GET`  | `/ci/about` |
 
 ## Changelog
 
@@ -40,4 +40,10 @@
 
 | Method | URL |
 | :---   | :--- |
-| `GET` | `/ci/changelog` |
+| `GET`  | `/ci/changelog` |
+
+## 验证 `.pcit.yml`
+
+| Method | URL |
+| :---   | :--- |
+| `POST` | `/validate` |

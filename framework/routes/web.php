@@ -229,6 +229,13 @@ Route::get('api/config_schema.json', function () {
     return Response::json(file_get_contents(base_path().'config/config_schema.json'), true);
 });
 
+Route::get('validate', function () {
+    return 'Coming Soon';
+});
+
+Route::post('validate', 'Config\Validate');
+Route::post('api/validate', 'Config\Validate');
+
 /* Issues */
 Route::patch('api/repo/${username}/${repo_name}/issues/translate/${issue_number}',
     'Repos\Issues@translate');
