@@ -1,16 +1,16 @@
-# matrix
+# jobs
 
-`matrix` 用来设置构建矩阵。常见的场景就是项目需要在不同的软件版本中进行测试。
+`jobs` 用来设置构建矩阵。常见的场景就是项目需要在不同的软件版本中进行测试。
 
 例如我们需要在 PHP 7.4 和 7.3 版本中进行测试。
 
 ```yaml
-pipeline:
+steps:
   php:
     image: khs1994/php-fpm:${PHP_TAG}
     ...
 
-matrix:
+jobs:
   PHP_TAG:
     - 7.4.3-alpine
     - 7.3.11-alpine    
@@ -18,12 +18,12 @@ matrix:
 
 我们在 `image` 指令中设置变量 `${PHP_TAG}`
 
-在 `matrix` 中设置变量值
+在 `jobs` 中设置变量值
 
 以上构建相当于
 
 ```yaml
-pipeline:
+steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
     ...
@@ -33,4 +33,4 @@ pipeline:
     ...
 ```
 
-很明显 `matrix` 指令的使用可以简化 `pipeline` 指令。同时很适用于项目需要在多个软件版本中进行测试、构建的场景。
+很明显 `jobs` 指令的使用可以简化 `steps` 指令。同时很适用于项目需要在多个软件版本中进行测试、构建的场景。

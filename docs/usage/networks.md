@@ -5,7 +5,7 @@
 ## 自定义 hosts
 
 ```yaml
-pipeline:
+steps:
   ping:
     commands:
       - ping

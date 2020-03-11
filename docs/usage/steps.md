@@ -1,13 +1,13 @@
-# pipeline
+# steps
 
 ## 基本指令
 
-`pipeline` 指令用来设置具体的构建步骤，每个步骤均运行在容器中，所以每个步骤必须首先指定 Docker Image 名称 (`image`) 和具体的构建指令 (`commands`) 。
+`steps` 指令用来设置具体的构建步骤，每个步骤均运行在容器中，所以每个步骤必须首先指定 Docker Image 名称 (`image`) 和具体的构建指令 (`commands`) 。
 
-> pipeline 指令可以包含多个构建步骤
+> steps 指令可以包含多个构建步骤
 
 ```yaml
-pipeline:
+steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
     commands:
@@ -34,7 +34,7 @@ pipeline:
 除了以上两个基本指令外，还可以像我们平时使用 `$ docker container run -e "K=V" ...` 命令那样设置 **环境变量**。
 
 ```yaml
-pipeline:
+steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
     environment:
@@ -49,7 +49,7 @@ pipeline:
 每次构建时，无论 Docker Image 是否存在总是拉取镜像，可以使用 `pull: true` 指令(默认为 `false`)。
 
 ```yaml
-pipeline:
+steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
     pull: true
@@ -63,7 +63,7 @@ pipeline:
 默认的 shell 为 `sh`，你可以改为 `bash`
 
 ```yaml
-pipeline:
+steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
     shell: bash
@@ -76,7 +76,7 @@ pipeline:
 可以通过 `when` 指令设置构建条件。
 
 ```yaml
-pipeline:
+steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
     commands:
@@ -109,7 +109,7 @@ when:
   #   include: [ master, release/* ]
   #   exclude: [ release/1.0.0, release/1.1.* ]
 
-  # matrix:
+  # jobs:
   # - K: v
   #   K2: v2
   #   K3: v3
@@ -124,7 +124,7 @@ when:
 该指令用来配置插件。
 
 ```yaml
-pipeline:
+steps:
   settings:
     provider: docker
     k: v

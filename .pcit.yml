@@ -256,7 +256,13 @@ steps: # pipeline
     - mkdir phar_dist
     - cp -a *.phar phar_dist
 
-  validate_by_phar: ./phar_dist/pcit.phar validate
+  validate_by_phar:
+    when:
+      status: success
+    run: |
+      ./phar_dist/pcit.phar validate
+
+      ./phar_dist/pcit.phar validate .
 
   s3:
     image: pcit/s3

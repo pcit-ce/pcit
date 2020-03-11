@@ -28,11 +28,24 @@ jobs:
           docker buildx build \
             -t pcit/pcit \
             -t pcit/pcit:${TAG} \
+            -t pcit/pcit:server \
+            -t pcit/pcit:${TAG}-server \
+            -t pcit/server \
+            -t pcit/server:${TAG} \
             --target=pcit --push .
+
+          docker buildx build \
+            -t pcit/pcit:cli \
+            -t pcit/pcit:${TAG}-cli \
+            -t pcit/cli \
+            -t pcit/cli:${TAG} \
+            --target=pcit_cli --push .
 
           docker buildx build \
             -t pcit/pcit:unit \
             -t pcit/pcit:${TAG}-unit \
+            -t pcit/unit \
+            -t pcit/unit:${TAG} \
             --target=unit --push .
 
           docker buildx build \
@@ -48,11 +61,11 @@ jobs:
         name: List files
       - name: Test image
         run: |
-          echo docker run -i --rm pcit/pcit list > /dev/null
-
           set -x
 
-          docker run -i --rm --entrypoint=/app/pcit/bin/pcit pcit/pcit list
+          echo docker run -i --rm pcit/pcit list > /dev/null
+
+          docker run -i --rm pcit/pcit:cli list
 
           docker run -i --rm -v $PWD/dist:/var/www/pcit/public pcit/pcit:frontend
           ls -la dist

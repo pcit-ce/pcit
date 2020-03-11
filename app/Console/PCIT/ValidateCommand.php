@@ -21,7 +21,7 @@ class ValidateCommand extends Command
     {
         $this->setName('validate');
         $this->setDescription('Validate and view the .pcit.yml file');
-        $this->addArgument('pcit_file', InputArgument::OPTIONAL, 'pcit file', '.pcit.yml');
+        $this->addArgument('pcit_file', InputArgument::OPTIONAL, 'pcit file or dir include pcit file', '.pcit.yml');
         $this->addOption('table', null, InputOption::VALUE_NONE, 'displays data as a table');
     }
 
@@ -32,9 +32,14 @@ class ValidateCommand extends Command
 
         if (is_dir($pcit_file)) {
             $finder = Finder::create()
-           ->in(getcwd().'/'.$pcit_file)
+           ->in(realpath(getcwd().'/'.('.' === $pcit_file ? './' : $pcit_file)))
            ->files()
-           ->name(['*.yaml', '*.yml']);
+           ->ignoreDotFiles(false)
+           ->exclude(['vendor', 'node_modules'])
+           ->name('.pcit' === $pcit_file
+                  ? ['*.yaml', '*.yml']
+                  : ['.pcit.yml', '.pcit.yaml']
+        );
 
             foreach ($finder as $file) {
                 $this->validate($input, $output, $file->getRealPath());
@@ -57,16 +62,17 @@ class ValidateCommand extends Command
         (object) ['$ref' => 'file://'.realpath(base_path().'config/config_schema.json')]);
 
         if ($validator->isValid()) {
-            $output->writeln("<info>The supplied $pcit_file validates against the schema.</info>");
+            $output->writeln("<info>==> The supplied $pcit_file validates against the schema.</info>");
 
             return 0;
         } else {
+            $output->writeln("<error>==> The supplied $pcit_file does not validate.</error>");
+
             if (!$input->getOption('table')) {
                 foreach ($validator->getErrors() as $error) {
                     // echo sprintf("[%s] %s\n", $error['property'], $error['message']);
                     $output->writeln(sprintf('<info>%s</info> <error>%s</error>', $error['property'], $error['message']));
                 }
-                $output->writeln("<error>The supplied $pcit_file does not validate.</error>");
 
                 return 1;
             }
@@ -85,7 +91,6 @@ class ValidateCommand extends Command
                 $rows
             );
             $table->render();
-            $output->writeln("<error>The supplied $pcit_file does not validate.</error>");
         }
 
         return 1;
