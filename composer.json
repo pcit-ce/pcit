@@ -16,7 +16,7 @@
     },
     {
       "type": "path",
-      "url": "./src/Runners/kubeRunner"
+      "url": "./src/Runners/kube-runner"
     },
     {
       "type": "path",
@@ -104,6 +104,8 @@
     "pcit/provider": "19.12-dev",
     "pcit/provider-aliyun-docker-registry": "19.12-dev",
     "pcit/runner": "19.12-dev",
+    "pcit/exec-runner": "19.12-dev",
+    "pcit/kube-runner": "19.12-dev",
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
     "symfony/finder": "^5.0",
@@ -153,6 +155,8 @@
       "cp -r -f src/Kernel/ vendor/pcit/kernel",
       "cp -r -f src/Log/ vendor/pcit/log",
       "cp -r -f src/Runner/ vendor/pcit/runner",
+      "cp -r -f src/Runners/exec-runner vendor/pcit/exec-runner",
+      "cp -r -f src/Runners/kube-runner vendor/pcit/kube-runner",
       "cp -r -f src/git/Coding/ vendor/pcit/git-coding",
       "cp -r -f src/git/Gitee/ vendor/pcit/git-gitee",
       "cp -r -f src/git/GitHub/ vendor/pcit/git-github",

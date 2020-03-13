@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Framework\Http\Response;
+namespace PCIT\Framework\Http;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
