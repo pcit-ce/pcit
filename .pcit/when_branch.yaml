@@ -1,0 +1,42 @@
+steps:
+  script:
+    when:
+      branch: master
+
+  script2:
+    when:
+      branch:
+      - dev
+
+  # script3:
+  #   when:
+  #     branch:
+  #       k: v
+
+  script4:
+    when:
+      branch:
+        include: master
+
+  script5:
+    when:
+      branch:
+        include:
+        - master
+
+  script6:
+    when:
+      branch:
+        exclude: master
+
+  script7:
+    when:
+      branch:
+        exclude:
+        - master
+
+  # script8:
+  #   when:
+  #     branch:
+  #       exclude:
+  #         k: v

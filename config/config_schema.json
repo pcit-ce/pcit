@@ -1,32 +1,262 @@
 {
-    "title": "JSON schema for PCIT CI configuration files",
-    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "JSON schema for configuring PCIT CI/CD",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://ci.khs1994.com",
     "$comment": "https://docs.ci.khs1994.com/usage/",
     "description": "see https://docs.ci.khs1994.com/usage/",
+    "fileMatch": [
+        ".pcit.yaml",
+        ".pcit.yml",
+        ".pcit/**.yaml",
+        ".pcit/**.yml"
+    ],
     "definitions": {
+        "step_settings": {
+            "type": "object",
+            "patternProperties": {
+                "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "description": "value is string"
+                        },
+                        {
+                            "type": "array",
+                            "description": "value is array"
+                        },
+                        {
+                            "type": "object",
+                            "description": "value is object"
+                        },
+                        {
+                            "type": "boolean",
+                            "description": "value is boolean"
+                        }
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "image": {
+            "type": "string",
+            "anyOf": [
+                {
+                    "pattern": "^pcit/",
+                    "description": "this plugin is official plugin, \n- see https://github.com/pcit-plugins , see https://docs.ci.khs1994.com/plugins/"
+                },
+                {
+                    "pattern": "^github://",
+                    "description": "this plugin is github action, see https://docs.ci.khs1994.com/plugins/"
+                },
+                {
+                    "pattern": "username/repo",
+                    "description": "plugin description, see https://url"
+                },
+                {
+                    "type": "string",
+                    "description": "step container image name"
+                }
+            ]
+        },
+        "plugin_settings": {
+            "type": "object",
+            "properties": {}
+        },
+        "command": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "defined command with string, see https://docs.ci.khs1994.com/usage/steps.html#_2-commands"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "defined command with array, see https://docs.ci.khs1994.com/usage/steps.html#_2-commands"
+                }
+            ]
+        },
+        "service": {
+            "anyOf": [
+                {
+                    "type": "null",
+                    "description": "run service container with default settings"
+                },
+                {
+                    "type": "object",
+                    "description": "run service container with custom settings",
+                    "properties": {
+                        "env": {
+                            "$ref": "#/definitions/env"
+                        },
+                        "image": {
+                            "type": "string",
+                            "description": "service container image name"
+                        },
+                        "entrypoint": {
+                            "$ref": "#/definitions/command"
+                        },
+                        "commands": {
+                            "$ref": "#/definitions/command"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "env": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "example\n env:\n- k=v\nsee https://docs.ci.khs1994.com/usage/steps.html#_3-environment"
+        },
+        "branch": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "description": "setting branch with string"
+                },
+                {
+                    "type": "array",
+                    "description": "setting branch with array"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "include": {
+                            "oneOf": [
+                                {
+                                    "type": "string",
+                                    "description": "setting branch include with string"
+                                },
+                                {
+                                    "type": "array",
+                                    "description": "setting branch include with array"
+                                }
+                            ]
+                        },
+                        "exclude": {
+                            "oneOf": [
+                                {
+                                    "type": "string",
+                                    "description": "setting branch exclude with string"
+                                },
+                                {
+                                    "type": "array",
+                                    "description": "setting branch exclude with array"
+                                }
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "git": {
+            "type": "object",
+            "description": "setting git clone, see https://docs.ci.khs1994.com/usage/clone.html",
+            "properties": {
+                "image": {
+                    "type": "string",
+                    "description": "run git clone container image name",
+                    "default": "pcit/git"
+                },
+                "depth": {
+                    "type": "integer",
+                    "description": "clone depth",
+                    "default": 25
+                },
+                "hosts": {
+                    "$ref": "#/definitions/hosts"
+                },
+                "recursive": {
+                    "type": "boolean",
+                    "description": "clone submodules",
+                    "default": false
+                },
+                "skip_verify": {
+                    "type": "boolean",
+                    "description": "skip tls verification",
+                    "default": false
+                },
+                "tags": {
+                    "type": "boolean",
+                    "description": "clone tags",
+                    "default": false
+                },
+                "submodule_override": {
+                    "type": "object",
+                    "description": "submodule overrides, example:\n path: git_url"
+                }
+            },
+            "additionalProperties": false
+        },
+        "hosts": {
+            "type": "array",
+            "description": "example:\n\nhosts:\n- \"pcit.dev:127.0.0.1\"\n\nsee https://docs.docker.com/compose/compose-file/#extra_hosts",
+            "items": {
+                "type": "string"
+            },
+            "examples": [
+                [
+                    "pcit.dev:127.0.0.1"
+                ]
+            ]
+        },
+        "platform": {
+            "enum": [
+                "linux/amd64",
+                "linux/arm64",
+                "linux/ppc64le",
+                "linux/s390x",
+                "linux/386",
+                "linux/arm/v7",
+                "linux/arm/v6",
+                "windows/amd64"
+            ],
+            "description": "container platform, see https://github.com/containerd/containerd/blob/master/platforms/platforms.go"
+        },
+        "status": {
+            "enum": [
+                "failure",
+                "success",
+                "changed"
+            ]
+        },
+        "event": {
+            "enum": [
+                "push",
+                "pull_request",
+                "tag",
+                "cron"
+            ]
+        },
         "when": {
             "type": "object",
+            "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when",
             "properties": {
                 "status": {
                     "description": "string or array, one of \nfailure \nsuccess \nchanged",
                     "oneOf": [
                         {
                             "type": "string",
-                            "enum": [
-                                "failure",
-                                "success",
-                                "changed"
+                            "$ref": "#/definitions/status",
+                            "examples": [
+                                "failure"
                             ]
                         },
                         {
                             "type": "array",
                             "items": {
-                                "enum": [
-                                    "failure",
-                                    "success",
-                                    "changed"
+                                "$ref": "#/definitions/status"
+                            },
+                            "examples": [
+                                [
+                                    "failure"
                                 ]
-                            }
+                            ]
                         }
                     ]
                 },
@@ -35,56 +265,76 @@
                     "oneOf": [
                         {
                             "type": "string",
-                            "enum": [
-                                "push",
-                                "pull_request",
-                                "tag",
-                                "cron"
+                            "$ref": "#/definitions/event",
+                            "examples": [
+                                "push"
                             ]
                         },
                         {
                             "type": "array",
                             "items": {
-                                "enum": [
+                                "$ref": "#/definitions/event"
+                            },
+                            "examples": [
+                                [
                                     "push",
-                                    "pull_request",
-                                    "tag",
-                                    "cron"
+                                    "tag"
                                 ]
-                            }
+                            ]
                         }
                     ]
                 },
-                "platform": {},
-                "branch": {},
-                "jobs": {}
+                "platform": {
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "$ref": "#/definitions/platform",
+                            "description": "set container platform with string"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/platform"
+                            },
+                            "description": "set container platform with array"
+                        }
+                    ]
+                },
+                "branch": {
+                    "$ref": "#/definitions/branch"
+                },
+                "jobs": {
+                    "type": "array",
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when"
+                }
             },
             "additionalProperties": false
         },
         "steps": {
             "type": "object",
-            "description": "job step",
+            "description": "step, see https://docs.ci.khs1994.com/usage/steps.html",
             "properties": {
                 "image": {
-                    "type": "string"
+                    "$ref": "#/definitions/image"
                 },
                 "uses": {
-                    "type": "string"
+                    "$ref": "#/definitions/image"
                 },
-                "run": {},
+                "run": {
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_2-commands",
+                    "$ref": "#/definitions/command"
+                },
                 "command": {
-                    "oneOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "array"
-                        }
-                    ]
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_2-commands",
+                    "$ref": "#/definitions/command"
                 },
-                "commands": {},
+                "commands": {
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_2-commands",
+                    "$ref": "#/definitions/command"
+                },
                 "shell": {
                     "type": "string",
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_5-shell",
                     "enum": [
                         "bash",
                         "sh",
@@ -94,28 +344,52 @@
                     ]
                 },
                 "env": {
-                    "type": "array"
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_3-environment",
+                    "$ref": "#/definitions/env"
                 },
-                "environment": {},
+                "environment": {
+                    "$ref": "#/definitions/env"
+                },
                 "settings": {
+                    "$ref": "#/definitions/step_settings"
+                },
+                "setting": {
+                    "$ref": "#/definitions/step_settings"
+                },
+                "with": {
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_8-settings",
                     "type": "object"
                 },
-                "with": {},
                 "pull": {
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_4-pull",
                     "type": "boolean",
                     "default": false
                 },
                 "privileged": {
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_7-privileged",
                     "type": "boolean",
                     "default": false
                 },
                 "when": {
-                    "$ref": "#/definitions/when",
-                    "additionalProperties": false
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when",
+                    "$ref": "#/definitions/when"
                 },
                 "if": {
-                    "$ref": "#/definitions/when",
-                    "additionalProperties": false
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when",
+                    "$ref": "#/definitions/when"
+                }
+            },
+            "additionalProperties": false
+        },
+        "workspace": {
+            "type": "object",
+            "description": "see https://docs.ci.khs1994.com/usage/workspace.html",
+            "properties": {
+                "base": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
                 }
             },
             "additionalProperties": false
@@ -127,7 +401,17 @@
             "properties": {
                 "language": {
                     "type": "string",
-                    "description": "project language"
+                    "enum": [
+                        "php",
+                        "node",
+                        "node_js",
+                        "node.js",
+                        "js",
+                        "go",
+                        "golang",
+                        "java"
+                    ],
+                    "description": "project language, see https://docs.ci.khs1994.com/usage/language.html"
                 },
                 "clone": {
                     "type": "object",
@@ -137,106 +421,68 @@
                         "git": {
                             "type": "object",
                             "description": "setting git clone",
-                            "properties": {
-                                "image": {
-                                    "type": "string",
-                                    "description": "git clone image",
-                                    "default": "pcit/git"
-                                },
-                                "depth": {
-                                    "type": "integer",
-                                    "description": "git clone depth",
-                                    "default": 25
-                                },
-                                "hosts": {
-                                    "type": "array",
-                                    "description": "example\nhosts:\n- \"pcit.dev:127.0.0.1\"",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "recursive": {
-                                    "type": "boolean"
-                                },
-                                "skip_verify": {
-                                    "type": "boolean",
-                                    "default": false
-                                },
-                                "tags": {
-                                    "type": "boolean",
-                                    "default": false
-                                },
-                                "submodule_override": {
-                                    "type": "object"
-                                }
-                            },
+                            "$ref": "#/definitions/git",
                             "additionalProperties": false
                         }
                     },
                     "additionalProperties": false
                 },
                 "workspace": {
+                    "$ref": "#/definitions/workspace"
+                },
+                "workdir": {
+                    "$ref": "#/definitions/workspace"
+                },
+                "cache": {
+                    "type": [
+                        "string",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "see https://docs.ci.khs1994.com/usage/cache.html"
+                },
+                "steps": {
                     "type": "object",
-                    "properties": {
-                        "base": {},
-                        "path": {}
+                    "description": "job step, see https://docs.ci.khs1994.com/usage/steps.html",
+                    "patternProperties": {
+                        "^[a-zA-Z0-9._-]+$": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/steps"
+                                },
+                                {
+                                    "type": "string",
+                                    "description": "step only include command with string fomat, see https://docs.ci.khs1994.com/usage/steps.html"
+                                },
+                                {
+                                    "type": "array",
+                                    "description": "step only include command with array fomat, see https://docs.ci.khs1994.com/usage/steps.html",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            ]
+                        }
                     },
                     "additionalProperties": false
                 },
-                "cache": {
-                    "additionalProperties": false
-                },
-                "steps": {
-                    "oneOf": [
-                        {
-                            "type": "object",
-                            "patternProperties": {
-                                "^[a-zA-Z0-9._-]+$": {
-                                    "oneOf": [
-                                        {
-                                            "$ref": "#/definitions/steps"
-                                        },
-                                        {
-                                            "type": "string",
-                                            "description": "step only include command with string fomat"
-                                        },
-                                        {
-                                            "type": "array",
-                                            "description": "step only include command with array fomat",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    ]
-                                }
-                            },
-                            "additionalProperties": false
-                        }
-                    ]
-                },
                 "services": {
-                    "oneOf": [
-                        {
-                            "type": "object",
-                            "patternProperties": {
-                                "^[a-zA-Z0-9._-]+$": {
-                                    "type": "null"
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "patternProperties": {
-                                "^[a-zA-Z0-9._-]+$": {
-                                    "$ref": "#/definitions/steps"
-                                }
-                            }
+                    "type": "object",
+                    "$comment": "https://docs.ci.khs1994.com/usage/services.html",
+                    "description": "Additional containers to host services for a job. These are useful for creating databases or cache services like redis. see https://docs.ci.khs1994.com/usage/services.html",
+                    "patternProperties": {
+                        "^[a-zA-Z0-9._-]+$": {
+                            "$ref": "#/definitions/service"
                         }
-                    ]
+                    },
+                    "additionalProperties": false
                 },
                 "jobs": {
                     "type": "object",
-                    "description": "jobs",
+                    "$comment": "https://docs.ci.khs1994.com/usage/jobs.html",
+                    "description": "jobs, see https://docs.ci.khs1994.com/usage/jobs.html",
                     "patternProperties": {
                         "^[a-zA-Z0-9._]+$": {
                             "type": "array",
@@ -247,66 +493,38 @@
                             },
                             "minItems": 1
                         }
-                    },
-                    "additionalProperties": false
+                    }
                 },
                 "platform": {
                     "type": "array",
+                    "$comment": "https://docs.ci.khs1994.com/usage/platform.html",
                     "items": {
-                        "enum": [
-                            "linux/amd64",
-                            "linux/arm64",
-                            "linux/ppc64le",
-                            "linux/s390x",
-                            "linux/386",
-                            "linux/arm/v7",
-                            "linux/arm/v6"
-                        ]
+                        "$ref": "#/definitions/platform"
                     },
-                    "additionalProperties": false
+                    "description": "container platform",
+                    "minItems": 1,
+                    "uniqueItems": true
                 },
                 "branches": {
-                    "oneOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "array"
-                        },
-                        {
-                            "type": "object",
-                            "properties": {
-                                "include": {
-                                    "oneOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
-                                            "type": "array"
-                                        }
-                                    ]
-                                },
-                                "exclude": {}
-                            }
-                        }
-                    ]
+                    "$ref": "#/definitions/branch",
+                    "$comment": "https://docs.ci.khs1994.com/usage/branches.html",
+                    "description": "which branches trigger job, see https://docs.ci.khs1994.com/usage/branches.html"
                 },
                 "networks": {
                     "type": "object",
+                    "$comment": "https://docs.ci.khs1994.com/usage/networks.html",
+                    "description": "setting step container network, see https://docs.ci.khs1994.com/usage/networks.html",
                     "properties": {
                         "hosts": {
-                            "type": "array",
-                            "description": "setting hosts /etc/hosts",
-                            "items": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/hosts"
                         }
                     },
                     "additionalProperties": false
                 },
                 "image": {
                     "type": "string",
-                    "description": "step default image"
+                    "$comment": "https://docs.ci.khs1994.com/usage/image.html",
+                    "description": "set step default image, see https://docs.ci.khs1994.com/usage/image.html"
                 }
             },
             "additionalProperties": false

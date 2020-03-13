@@ -1,0 +1,7 @@
+language: php
+
+steps:
+  script: echo exec script
+
+branches:
+  - master

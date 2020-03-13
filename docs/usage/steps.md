@@ -29,7 +29,7 @@ steps:
 
 设置构建步骤所运行的命令。
 
-## 3. `environment` 环境变量
+## 3. `environment`
 
 除了以上两个基本指令外，还可以像我们平时使用 `$ docker container run -e "K=V" ...` 命令那样设置 **环境变量**。
 
@@ -44,7 +44,7 @@ steps:
       - vendor/bin/phpunit
 ```
 
-## 4. `pull` 镜像拉取策略
+## 4. `pull`
 
 每次构建时，无论 Docker Image 是否存在总是拉取镜像，可以使用 `pull: true` 指令(默认为 `false`)。
 
@@ -71,7 +71,7 @@ steps:
 
 全部支持的 `shell` 包括 `sh` `bash` `python` `pwsh` `node`
 
-## 6. `when` 构建条件
+## 6. `when`
 
 可以通过 `when` 指令设置构建条件。
 

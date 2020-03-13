@@ -49,7 +49,7 @@ RUN rm -rf /app/pcit/Dockerfile \
     && rm -rf /app/pcit/frontend \
     && rm -rf /app/pcit/.docker
 
-# pcit
+# ==> pcit
 FROM khs1994/php:${PHP_VERSION}-cli-alpine as pcit
 
 COPY --from=dump /app/pcit/ /app/pcit/
@@ -61,7 +61,7 @@ CMD ["up"]
 # CMD ["server"]
 # CMD ["agent"]
 
-# cli
+# ==> cli
 FROM khs1994/php:${PHP_VERSION}-cli-alpine as pcit_cli
 
 COPY --from=dump /app/pcit/ /app/pcit/
@@ -74,8 +74,21 @@ ENTRYPOINT ["/app/pcit/bin/pcit"]
 
 CMD ["list"]
 
-# nginx unit
+# ==> fpm
+FROM khs1994/php:${PHP_VERSION}-fpm-alpine as pcit_fpm
 
+COPY --from=dump /app/pcit/ /app/.pcit/
+
+COPY .docker/fpm/docker-entrypoint.sh /
+
+ENV CI_DAEMON_ENABLED=true
+
+ENTRYPOINT [ "sh","/docker-entrypoint.sh" ]
+
+CMD ["up"]
+# CMD ["server"]
+
+# ==> nginx unit
 FROM khs1994/php:7.4.3-unit-alpine as unit
 
 COPY --from=dump /app/pcit/ /app/pcit/
@@ -86,12 +99,14 @@ COPY .docker/unit/config.json /etc/nginx-unit/
 
 EXPOSE 80
 
+ENV CI_DAEMON_ENABLED=true
+
 ENTRYPOINT [ "sh","/docker-entrypoint.sh" ]
 
 CMD ["up"]
 # CMD ["server"]
 
-# 前端资源
+# ==> 前端资源
 FROM alpine as frontend
 
 COPY --from=dump /app/pcit/public/ /app/pcit/public/

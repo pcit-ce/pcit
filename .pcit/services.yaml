@@ -1,0 +1,13 @@
+steps:
+  script: echo exec script
+
+services:
+  mysql:
+
+  redis:
+    env:
+    - k=v
+    image: redis
+    entrypoint: entrypoint
+    commands: cmd
+    # k: v

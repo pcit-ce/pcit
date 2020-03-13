@@ -1,0 +1,11 @@
+steps:
+  script:
+    command: string
+
+  script2:
+    command:
+    - array
+
+  # script3:
+  #   command:
+  #     k: v

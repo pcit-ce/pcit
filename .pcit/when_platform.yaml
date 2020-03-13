@@ -1,0 +1,14 @@
+steps:
+  script:
+    when:
+      platform: linux/amd64
+
+  script2:
+    when:
+      platform:
+      - linux/amd64
+
+  # script3:
+  #   when:
+  #     platform:
+  #       k: v

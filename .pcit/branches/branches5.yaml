@@ -1,0 +1,9 @@
+language: php
+
+steps:
+  script: echo exec script
+
+branches:
+  exclude: master
+  # include:
+  #   k: v

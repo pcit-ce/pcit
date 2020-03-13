@@ -3,6 +3,7 @@
     // for the documentation about the extensions.json format
     "recommendations": [
         "getpsalm.psalm-vscode-plugin",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "zainchen.json"
     ]
 }

@@ -6,9 +6,9 @@
       ".pcit/**.yaml",
       ".pcit/**.yml"
     ],
-    "http://json.schemastore.org/drone": [
-      ".drone.yml"
-    ],
+    // "http://json.schemastore.org/drone": [
+    //  ".drone.yml"
+    // ],
     "http://json.schemastore.org/travis": ".travis.yml"
   }
 }

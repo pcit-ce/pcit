@@ -26,12 +26,18 @@
                 ]
             },
             "action": {
-                "share": "/app/pcit/public/"
+                "share": "/app/pcit/public/",
+                "fallback": {
+                    "pass": "applications/pcit"
+                }
             }
         },
         {
             "action": {
-                "pass": "applications/pcit"
+                "share": "/app/pcit/public/",
+                "fallback": {
+                    "pass": "applications/pcit"
+                }
             }
         }
     ],

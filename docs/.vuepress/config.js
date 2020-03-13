@@ -49,7 +49,7 @@ module.exports = {
         'jobs',
         'cache',
         'branches',
-        'notifications',
+        'image',
         'networks',
         'system',
         'platform',

@@ -16,4 +16,11 @@ set +x
 cd /app/pcit
 set -x
 
+if [ "${CI_DAEMON_ENABLED}" = 'false' ];then
+  UNIT_PID=`cat /usr/local/nginx-unit/unit.pid`
+  kill $UNIT_PID
+
+  exec unitd --no-daemon --user root --group root --log /var/log/nginx-unit/nginx-unit.log
+fi
+
 exec /app/pcit/bin/pcitd $@

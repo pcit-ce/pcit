@@ -1,0 +1,11 @@
+steps:
+  script:
+    setting:
+      a: a
+      -a: a
+      _a: a
+      1a: a
+      a-: a
+      a_: a
+      a-a: a
+      a_a: a

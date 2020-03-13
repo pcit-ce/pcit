@@ -23,7 +23,7 @@
     * [jobs](usage/jobs.md)
     * [cache](usage/cache.md)
     * [branches](usage/branches.md)
-    * [notifications](usage/notifications.md)
+    * [image](usage/image.md)
     * [networks](usage/networks.md)
     * [system](usage/system.md)  
     * [skip build](usage/skip.md)
