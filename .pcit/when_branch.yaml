@@ -1,42 +1,42 @@
 steps:
   script:
-    when:
+    if:
       branch: master
 
   script2:
-    when:
+    if:
       branch:
       - dev
 
   # script3:
-  #   when:
+  #   if:
   #     branch:
   #       k: v
 
   script4:
-    when:
+    if:
       branch:
         include: master
 
   script5:
-    when:
+    if:
       branch:
         include:
         - master
 
   script6:
-    when:
+    if:
       branch:
         exclude: master
 
   script7:
-    when:
+    if:
       branch:
         exclude:
         - master
 
   # script8:
-  #   when:
+  #   if:
   #     branch:
   #       exclude:
   #         k: v

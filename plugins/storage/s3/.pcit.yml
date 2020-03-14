@@ -8,7 +8,7 @@ steps:
 
   s3:
     image: pcit/s3
-    settings:
+    with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
@@ -22,7 +22,7 @@ steps:
 
   s3_2:
     image: pcit/s3
-    settings:
+    with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
@@ -36,7 +36,7 @@ steps:
 
   s3_3:
     image: pcit/s3
-    settings:
+    with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
@@ -51,7 +51,7 @@ steps:
 
   s3_4:
     image: pcit/s3
-    settings:
+    with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}

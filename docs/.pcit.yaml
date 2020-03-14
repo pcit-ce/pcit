@@ -6,10 +6,10 @@ steps:
 
   upload-docs:
     image: pcit/pages
-    when:
+    if:
       status: success
       event: ['push']
-    settings:
+    with:
       keep_history: true
       # target_branch: gh-pages
       git_url: github.com/pcit-ce/docs
@@ -21,10 +21,10 @@ steps:
 
   upload-docs-to-gitee:
     image: pcit/pages
-    when:
+    if:
       status: success
       event: ['push']
-    settings:
+    with:
       keep_history: true
       # target_branch: gh-pages
       git_url: gitee.com/pcit-ce/docs

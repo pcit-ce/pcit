@@ -1,11 +1,11 @@
 steps:
   script:
-    command: string
+    run: string
 
   script2:
-    command:
+    run:
     - array
 
   # script3:
-  #   command:
+  #   run:
   #     k: v

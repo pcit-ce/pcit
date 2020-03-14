@@ -13,9 +13,10 @@ class JSON
      *
      * @author www.veryhuo.com
      *
+     * @deprecated please use JSON_PRETTY_PRINT
      * @see    http://www.veryhuo.com/a/view/50222.html
      */
-    public static function beautiful(?string $json)
+    public static function beautiful(?string $json, string $indentStr = '  ')
     {
         if (null === $json) {
             return null;
@@ -24,7 +25,7 @@ class JSON
         $result = '';
         $pos = 0;
         $strLen = \strlen($json);
-        $indentStr = '  ';
+
         $newLine = "\n";
         $prevChar = '';
         $outOfQuotes = true;

@@ -1,7 +1,7 @@
 steps:
   gitee-release:
     image: pcit/gitee-release
-    settings:
+    with:
       token: ${GITEE_TOKEN}
       # repo: pcit-ce/release
       files:

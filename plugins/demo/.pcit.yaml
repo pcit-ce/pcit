@@ -1,7 +1,7 @@
 steps:
   plugin:
     image: pcit/demo
-    settings:
+    with:
       var: 'var'
       var_array:
       - a

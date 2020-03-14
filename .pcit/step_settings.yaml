@@ -1,6 +1,6 @@
 steps:
   script:
-    setting:
+    with:
       a: a
       -a: a
       _a: a

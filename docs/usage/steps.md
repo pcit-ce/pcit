@@ -71,9 +71,9 @@ steps:
 
 全部支持的 `shell` 包括 `sh` `bash` `python` `pwsh` `node`
 
-## 6. `when`
+## 6. `if`
 
-可以通过 `when` 指令设置构建条件。
+可以通过 `if` 指令设置构建条件。
 
 ```yaml
 steps:
@@ -82,16 +82,16 @@ steps:
     commands:
       - composer install -q
       - vendor/bin/phpunit
-    when:
+    if:
       event: tag
 ```
 
-增加以上的 `when` 指令之后，构建仅在 Git 打标签之后执行，当 push、pull_request 均不进行构建。
+增加以上的 `if` 指令之后，构建仅在 Git 打标签之后执行，当 push、pull_request 均不进行构建。
 
 全部可用的设置如下：
 
 ```yaml
-when:
+if:
   # platform: linux/amd64
   # platform:  [ linux/*, windows/amd64 ]
 

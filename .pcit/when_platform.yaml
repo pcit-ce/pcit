@@ -1,14 +1,14 @@
 steps:
   script:
-    when:
+    if:
       platform: linux/amd64
 
   script2:
-    when:
+    if:
       platform:
       - linux/amd64
 
   # script3:
-  #   when:
+  #   if:
   #     platform:
   #       k: v

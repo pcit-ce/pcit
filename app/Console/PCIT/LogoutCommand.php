@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\PCIT;
 
-use PCIT\Framework\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,7 +35,7 @@ class LogoutCommand extends Command
 
             unset($tokenContent['endpoints'][$api_endpoint][$git_type]);
 
-            file_put_contents($file_name, JSON::beautiful(json_encode($tokenContent)));
+            file_put_contents($file_name, json_encode($tokenContent, JSON_PRETTY_PRINT));
 
             $output->writeln('<info>Successfully logged out!</info>');
         } else {

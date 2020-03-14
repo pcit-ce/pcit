@@ -4,6 +4,7 @@
     "$id": "https://ci.khs1994.com",
     "$comment": "https://docs.ci.khs1994.com/usage/",
     "description": "see https://docs.ci.khs1994.com/usage/",
+    "type": "object",
     "fileMatch": [
         ".pcit.yaml",
         ".pcit.yml",
@@ -11,8 +12,193 @@
         ".pcit/**.yml"
     ],
     "definitions": {
+        "plugins": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "description": "The github-release plugin is used to publish files and artifacts to GitHub Release.",
+                    "properties": {
+                        "image": {
+                            "type": "string",
+                            "const": "pcit/github-release",
+                            "description": "plugin image name"
+                        },
+                        "with": {
+                            "type": "object",
+                            "description": "plugin settings",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "GitHub oauth token with public_repo or repo permission, see https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/",
+                                    "default": "${GITHUB_TOKEN}"
+                                },
+                                "repo": {
+                                    "type": "string",
+                                    "description": "github repository name"
+                                },
+                                "files": {
+                                    "type": "array",
+                                    "description": "files to upload to GitHub Release, globs are allowed",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "minItems": 1,
+                                    "default": "dist/*",
+                                    "examples": [
+                                        "dist/*",
+                                        "bin/binary.exe"
+                                    ]
+                                },
+                                "checksum": {
+                                    "type": "array",
+                                    "description": "checksum takes hash methods to include in your GitHub release for the files specified.",
+                                    "items": {
+                                        "enum": [
+                                            "md5",
+                                            "sha1",
+                                            "sha256",
+                                            "sha512",
+                                            "adler32",
+                                            "crc32"
+                                        ]
+                                    },
+                                    "default": [
+                                        [
+                                            "sha256"
+                                        ]
+                                    ]
+                                },
+                                "draft": {
+                                    "type": "boolean",
+                                    "description": "create a draft release if set to true",
+                                    "default": false
+                                },
+                                "prerelease": {
+                                    "type": "boolean",
+                                    "description": "set the release as prerelease if set to true",
+                                    "default": false
+                                },
+                                "file_exists": {
+                                    "type": "string",
+                                    "description": "what to do if an file asset already exists",
+                                    "enum": [
+                                        "overwrite",
+                                        "skip",
+                                        "fail"
+                                    ],
+                                    "default": "overwrite"
+                                },
+                                "target_commitish": {
+                                    "type": "string",
+                                    "description": "",
+                                    "examples": [
+                                        "refs/tags/nightly"
+                                    ]
+                                },
+                                "note": {
+                                    "type": "string",
+                                    "description": "file or string with notes for the release, see https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "description": "file or string for the title shown in the github release, see https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release"
+                                },
+                                "overwrite": {
+                                    "type": "boolean",
+                                    "description": "force overwrite existing release informations (only title and note)",
+                                    "default": false
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "token",
+                                "files"
+                            ]
+                        },
+                        "if": {
+                            "$ref": "#/definitions/if"
+                        },
+                        "pull": {
+                            "$ref": "#/definitions/pull"
+                        },
+                        "privileged": {
+                            "$ref": "#/definitions/privileged"
+                        },
+                        "additionalProperties": false
+                    },
+                    "required": [
+                        "image"
+                    ],
+                    "additionalProperties": false,
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "image": {
+                            "type": "string",
+                            "const": "pcit/demo",
+                            "description": "plugin image name"
+                        },
+                        "with": {
+                            "properties": {
+                                "var": {
+                                    "type": "string",
+                                    "description": "value is string",
+                                    "default": "1"
+                                },
+                                "var_array": {
+                                    "type": "array",
+                                    "description": "value is array",
+                                    "default": [
+                                        "a=1",
+                                        "b=2"
+                                    ]
+                                },
+                                "var_obj": {
+                                    "type": "object",
+                                    "description": "value is object",
+                                    "default": {
+                                        "k1": "v1",
+                                        "k2": "v2"
+                                    }
+                                }
+                            },
+                            "description": "plugin settings",
+                            "additionalProperties": false
+                        },
+                        "if": {
+                            "$ref": "#/definitions/if"
+                        },
+                        "pull": {
+                            "$ref": "#/definitions/pull"
+                        },
+                        "privileged": {
+                            "$ref": "#/definitions/privileged"
+                        },
+                        "additionalProperties": false
+                    },
+                    "additionalProperties": false,
+                    "description": "this is a pcit demo plugin",
+                    "required": [
+                        "image"
+                    ],
+                    "type": "object"
+                }
+            ]
+        },
+        "pull": {
+            "description": "see https://docs.ci.khs1994.com/usage/steps.html#_4-pull",
+            "type": "boolean",
+            "default": false
+        },
+        "privileged": {
+            "description": "see https://docs.ci.khs1994.com/usage/steps.html#_7-privileged",
+            "type": "boolean",
+            "default": false
+        },
         "step_settings": {
             "type": "object",
+            "description": "step settings",
             "patternProperties": {
                 "^[_a-zA-Z][a-zA-Z0-9_-]*$": {
                     "oneOf": [
@@ -31,36 +217,24 @@
                         {
                             "type": "boolean",
                             "description": "value is boolean"
+                        },
+                        {
+                            "type": "integer",
+                            "description": "value is boolean"
                         }
                     ]
                 }
-            },
-            "additionalProperties": false
+            }
         },
         "image": {
             "type": "string",
-            "anyOf": [
-                {
-                    "pattern": "^pcit/",
-                    "description": "this plugin is official plugin, \n- see https://github.com/pcit-plugins , see https://docs.ci.khs1994.com/plugins/"
-                },
-                {
-                    "pattern": "^github://",
-                    "description": "this plugin is github action, see https://docs.ci.khs1994.com/plugins/"
-                },
-                {
-                    "pattern": "username/repo",
-                    "description": "plugin description, see https://url"
-                },
-                {
-                    "type": "string",
-                    "description": "step container image name"
-                }
-            ]
-        },
-        "plugin_settings": {
-            "type": "object",
-            "properties": {}
+            "description": "step container image name",
+            "not": {
+                "enum": [
+                    "pcit/github-release",
+                    "pcit/demo"
+                ]
+            }
         },
         "command": {
             "oneOf": [
@@ -233,9 +407,9 @@
                 "cron"
             ]
         },
-        "when": {
+        "if": {
             "type": "object",
-            "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when",
+            "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-if",
             "properties": {
                 "status": {
                     "description": "string or array, one of \nfailure \nsuccess \nchanged",
@@ -305,81 +479,59 @@
                 },
                 "jobs": {
                     "type": "array",
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when"
+                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-if",
+                    "items": {
+                        "type": "object"
+                    }
                 }
             },
             "additionalProperties": false
         },
         "steps": {
-            "type": "object",
-            "description": "step, see https://docs.ci.khs1994.com/usage/steps.html",
-            "properties": {
-                "image": {
-                    "$ref": "#/definitions/image"
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/plugins"
                 },
-                "uses": {
-                    "$ref": "#/definitions/image"
-                },
-                "run": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_2-commands",
-                    "$ref": "#/definitions/command"
-                },
-                "command": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_2-commands",
-                    "$ref": "#/definitions/command"
-                },
-                "commands": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_2-commands",
-                    "$ref": "#/definitions/command"
-                },
-                "shell": {
-                    "type": "string",
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_5-shell",
-                    "enum": [
-                        "bash",
-                        "sh",
-                        "pwsh",
-                        "node",
-                        "python"
-                    ]
-                },
-                "env": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_3-environment",
-                    "$ref": "#/definitions/env"
-                },
-                "environment": {
-                    "$ref": "#/definitions/env"
-                },
-                "settings": {
-                    "$ref": "#/definitions/step_settings"
-                },
-                "setting": {
-                    "$ref": "#/definitions/step_settings"
-                },
-                "with": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_8-settings",
-                    "type": "object"
-                },
-                "pull": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_4-pull",
-                    "type": "boolean",
-                    "default": false
-                },
-                "privileged": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_7-privileged",
-                    "type": "boolean",
-                    "default": false
-                },
-                "when": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when",
-                    "$ref": "#/definitions/when"
-                },
-                "if": {
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-when",
-                    "$ref": "#/definitions/when"
+                {
+                    "type": "object",
+                    "description": "step, see https://docs.ci.khs1994.com/usage/steps.html",
+                    "properties": {
+                        "image": {
+                            "$ref": "#/definitions/image"
+                        },
+                        "run": {
+                            "$ref": "#/definitions/command"
+                        },
+                        "shell": {
+                            "type": "string",
+                            "description": "see https://docs.ci.khs1994.com/usage/steps.html#_5-shell",
+                            "enum": [
+                                "bash",
+                                "sh",
+                                "pwsh",
+                                "node",
+                                "python"
+                            ]
+                        },
+                        "env": {
+                            "$ref": "#/definitions/env"
+                        },
+                        "with": {
+                            "$ref": "#/definitions/step_settings"
+                        },
+                        "pull": {
+                            "$ref": "#/definitions/pull"
+                        },
+                        "privileged": {
+                            "$ref": "#/definitions/privileged"
+                        },
+                        "if": {
+                            "$ref": "#/definitions/if"
+                        }
+                    },
+                    "additionalProperties": false
                 }
-            },
-            "additionalProperties": false
+            ]
         },
         "workspace": {
             "type": "object",
@@ -397,7 +549,6 @@
     },
     "allOf": [
         {
-            "type": "object",
             "properties": {
                 "language": {
                     "type": "string",
@@ -450,6 +601,7 @@
                         "^[a-zA-Z0-9._-]+$": {
                             "oneOf": [
                                 {
+                                    "type": "object",
                                     "$ref": "#/definitions/steps"
                                 },
                                 {

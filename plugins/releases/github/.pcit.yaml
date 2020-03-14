@@ -1,7 +1,7 @@
 steps:
   github-release:
     image: pcit/github-release
-    settings:
+    with:
       token: ${GITHUB_TOKEN}
       # repo: pcit-ce/release
       files:

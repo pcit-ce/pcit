@@ -189,18 +189,17 @@ class Pipeline
         foreach ($this->pipeline as $step => $pipelineContent) {
             \Log::emergency('Handle pipeline', ['pipeline' => $step]);
 
-            $image = $pipelineContent->uses
-                ?? $pipelineContent->image
+            $image = $pipelineContent->image
                 ?? $this->client->image
                 ?? Image::get($language);
             $commands = $this->handleCommands($step, $pipelineContent);
-            $env = $pipelineContent->env ?? $pipelineContent->environment ?? [];
+            $env = $pipelineContent->env ?? [];
             $shell = $pipelineContent->shell ?? 'sh';
             $privileged = $pipelineContent->privileged ?? false;
             $pull = $pipelineContent->pull ?? false;
-            $settings = $pipelineContent->with ?? $pipelineContent->setting ?? $pipelineContent->settings ?? new \stdClass();
+            $settings = $pipelineContent->with ?? new \stdClass();
             $settings = (array) $settings;
-            $when = $pipelineContent->if ?? $pipelineContent->when ?? null;
+            $when = $pipelineContent->if ?? null;
 
             // 预处理 env
             $preEnv = $this->handleEnv($env);

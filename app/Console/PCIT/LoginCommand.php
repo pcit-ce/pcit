@@ -6,7 +6,6 @@ namespace App\Console\PCIT;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -67,14 +66,14 @@ class LoginCommand extends Command
 
             $tokenContent['endpoints'][$api_endpoint][$git_type] = $token;
 
-            file_put_contents($file_name, JSON::beautiful(json_encode($tokenContent)));
+            file_put_contents($file_name, json_encode($tokenContent, JSON_PRETTY_PRINT));
 
             $output->writeln('<info>Login Success</info>');
 
             return 0;
         }
 
-        file_put_contents($file_name, JSON::beautiful(
+        file_put_contents($file_name,
             json_encode(
                 [
                     'endpoints' => [
@@ -82,9 +81,9 @@ class LoginCommand extends Command
                             $git_type => $token,
                         ],
                     ],
-                ]
+                ], JSON_PRETTY_PRINT
             )
-        ));
+        );
 
         $output->writeln('<info>Login Success</info>');
 

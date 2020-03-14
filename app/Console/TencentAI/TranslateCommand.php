@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\TencentAI;
 
-use PCIT\Framework\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +36,7 @@ EOF
 
         $output_array = TencentAICommand::get()->translate()->aILabText($source_language);
 
-        $output->writeln(JSON::beautiful(json_encode($output_array, JSON_UNESCAPED_UNICODE)));
+        $output->writeln(json_encode($output_array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         return 0;
     }

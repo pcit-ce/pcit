@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\TencentAI;
 
-use PCIT\Framework\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,11 +29,10 @@ class OCRCommand extends Command
     {
         if ($input->getOption('raw')) {
             $output->writeln(
-                JSON::beautiful(json_encode(
+                json_encode(
                         TencentAICommand::get()->ocr()->general(getcwd().'/'.$input->getArgument('image')
-                        ), JSON_UNESCAPED_UNICODE
+                        ), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
                     )
-                )
             );
 
             return 0;

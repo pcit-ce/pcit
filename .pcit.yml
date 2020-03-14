@@ -44,30 +44,25 @@ steps:
     - echo init script
     - echo init script2
 
-  # 当构建步骤仅指定 command(s)，可以使用以上三种方式进行简写
+  # 当构建步骤仅指定 run，可以使用以上三种方式进行简写
   before_install_4:
     run: ["echo init script"]
 
   before_install_5:
-    # image: or uses
-    # environment: or env
     env:
       - k=v
-    # command: or commands or run
     run: ["echo init script", "echo $k"]
-    # setting: or settings or with
-    # when: or if
 
   python_shell:
     image: python:3.7-alpine
     shell: python
-    commands: |
+    run: |
       import os
       print(os.environ['PATH'])
 
   pwsh_shell:
-    # uses: mcr.microsoft.com/powershell:preview-alpine-3.10
-    uses: mcr.azk8s.cn/powershell:preview-alpine-3.10
+    # image: mcr.microsoft.com/powershell:preview-alpine-3.10
+    image: mcr.azk8s.cn/powershell:preview-alpine-3.10
     shell: pwsh
     run: |
       pwd
@@ -91,7 +86,7 @@ steps:
 
   install:
     # image: khs1994/php:7.3.0-composer-alpine
-    command:
+    run:
       - pwd
       - composer config -g cache-dir /tmp/pcit_cache/composer
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
@@ -102,7 +97,7 @@ steps:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine # 支持变量
     pull: true # default is false # 不支持变量
     privileged: true # default is false # 不支持变量
-    environment:
+    env:
       - CI_REDIS_HOST=redis
       - CI_REDIS_PORT=6379
       - CI_REDIS_DATABASE=15
@@ -112,13 +107,13 @@ steps:
       - CI_MYSQL_PASSWORD=test
       - CI_MYSQL_DATABASE=test
       - CI_WEBHOOKS_TOKEN=pcit
-    commands:
+    run:
       - pwd
       - echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit --coverage-clover=coverage.xml
-    when: # 不支持变量
+    if: # 不支持变量
       # platform: linux/amd64
       # platform: [ linux/*, windows/amd64 ]
 
@@ -142,34 +137,34 @@ steps:
     image: bash
     if:
       platform: windows/amd64
-    commands: echo "Only run on Windows amd64"
+    run: echo "Only run on Windows amd64"
 
   master_branch_only:
     image: bash
-    when:
+    if:
       branch: master
-    commands:
+    run:
       - echo "Only run on master branch"
 
   dev_branch_only:
     image: bash
-    when:
+    if:
       branch:
         include: dev
-    commands:
+    run:
       - echo "Only run on dev branch"
 
   master_branch_exclude:
     image: bash
-    when:
+    if:
       branch:
         exclude: master
-    commands:
+    run:
       - echo "Don't run on master branch"
 
   plugin-demo:
     image: pcit/demo
-    settings:
+    with:
       var: "1"
       var_array:
         - a=1
@@ -179,7 +174,7 @@ steps:
         k2: v2
 
   php-cs-fixer:
-    uses: khs1994/php-cs-fixer
+    image: khs1994/php-cs-fixer
     run: php-cs-fixer fix
 
   psalm: composer run psalm || true
@@ -188,14 +183,14 @@ steps:
 
   sami:
     image: khs1994/sami
-    when:
+    if:
       status: success
       jobs:
         - PHP_VERSION: 7.4.3
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 5.0.7
           MYSQL_VERSION: 5.7.29
-    commands:
+    run:
       - sami update .sami.php
 
   gitee_pages:
@@ -220,7 +215,7 @@ steps:
 
   github_pages:
     image: pcit/pages
-    when:
+    if:
       status: success
       event: ["push"]
       jobs:
@@ -228,7 +223,7 @@ steps:
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 5.0.7
           MYSQL_VERSION: 5.7.29
-    settings:
+    with:
       keep_history: true
       # target_branch: gh-pages
       git_url: github.com/pcit-ce/sami-docs
@@ -239,7 +234,7 @@ steps:
       depth: "10"
 
   compile_phar:
-    when:
+    if:
       status: success
     run:
       - echo "[Phar]" >> /usr/local/etc/php/conf.d/phar.ini
@@ -257,7 +252,7 @@ steps:
       - chmod +x phar_dist/*
 
   validate_by_phar:
-    when:
+    if:
       status: success
     run: |
       ./phar_dist/pcit.phar validate
@@ -266,7 +261,7 @@ steps:
 
   s3:
     image: pcit/s3
-    when:
+    if:
       status: success
       event: ["push"]
       jobs:
@@ -274,7 +269,7 @@ steps:
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 5.0.7
           MYSQL_VERSION: 5.7.29
-    settings:
+    with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
@@ -288,7 +283,7 @@ steps:
 
   github-releases:
     image: pcit/github-release
-    when:
+    if:
       status: success
       event: push
       jobs:
@@ -296,7 +291,7 @@ steps:
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 5.0.7
           MYSQL_VERSION: 5.7.29
-    settings:
+    with:
       token: ${GITHUB_TOKEN}
       # files: pcit.phar
       files:
@@ -310,13 +305,15 @@ steps:
       target_commitish: refs/tags/nightly
       note: nightly
       title: nightly
+      checksum:
+        - sha256
 
   codecov:
     shell: bash
-    when:
+    if:
       status: success
-    # please set env in settings
-    environment:
+    # please set env in with
+    env:
       # - CODECOV_TOKEN=XXX
       - PCIT_OS_NAME=linux
       - VCS_COMMIT_ID=${PCIT_COMMIT}
@@ -327,7 +324,7 @@ steps:
       - CI_BUILD_URL=${PCIT_JOB_WEB_URL}
       - CI_BUILD_ID=${PCIT_BUILD_ID}
       - CI_JOB_ID=${PCIT_JOB_ID}
-    commands:
+    run:
       # - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID} -K
       # -K           Remove color from the output
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID}
@@ -337,28 +334,28 @@ steps:
 
   after_failure:
     image: bash
-    # when:
+    # if:
     #   status: failure
-    commands:
+    run:
       - echo "build failure"
 
   after_changed:
     image: bash
-    # when:
+    # if:
     #   status: changed
-    commands:
+    run:
       - echo "build changed"
 
   ping: ["ping -c 5 git.khs1994.io"]
 
   cron_only:
-    commands: ["echo only run on cron event"]
-    when:
+    run: ["echo only run on cron event"]
+    if:
       event: cron
 
   coding_openapi:
     image: ecoding/apidoc-publisher
-    environment:
+    env:
       - ACCESS_TOKEN=${CODING_OPENAPI_TOKEN}
       - APIDOC_TEAM=pcit
       - APIDOC_PROJECT=pcit
@@ -369,7 +366,7 @@ steps:
       - curl -fsSL ${PCIT_URL}/api/openapi?coding=true -o /opt/data.txt
       # - cp openapi/openapi.yaml /opt/data.txt
       - sh /my_shell/api_doc_release.sh
-    when:
+    if:
       status: success
       event: push
       branch: master
@@ -411,7 +408,7 @@ jobs:
   PHP_VERSION:
     - 7.4.3
     - 7.3.11
-    # - nightly
+    - nightly
     # - 7.2.24
     # - 7.1.26
   NGINX_VERSION:
@@ -436,7 +433,6 @@ jobs:
 #       REDIS_VERSION: 5.0.7
 
 platform:
-  - linux/amd64
   - linux/amd64
   - linux/arm64
 

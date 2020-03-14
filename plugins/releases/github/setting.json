@@ -1,0 +1,94 @@
+{
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "pcit/github-release",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The github-release plugin is used to publish files and artifacts to GitHub Release.",
+    "properties": {
+        "token": {
+            "type": "string",
+            "description": "GitHub oauth token with public_repo or repo permission, see https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/",
+            "default": "${GITHUB_TOKEN}"
+        },
+        "repo": {
+            "type": "string",
+            "description": "github repository name"
+        },
+        "files": {
+            "type": "array",
+            "description": "files to upload to GitHub Release, globs are allowed",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1,
+            "default": "dist/*",
+            "examples": [
+                "dist/*",
+                "bin/binary.exe"
+            ]
+        },
+        "checksum": {
+            "type": "array",
+            "description": "checksum takes hash methods to include in your GitHub release for the files specified.",
+            "items": {
+                "enum": [
+                    "md5",
+                    "sha1",
+                    "sha256",
+                    "sha512",
+                    "adler32",
+                    "crc32"
+                ]
+            },
+            "default": [
+                [
+                    "sha256"
+                ]
+            ]
+        },
+        "draft": {
+            "type": "boolean",
+            "description": "create a draft release if set to true",
+            "default": false
+        },
+        "prerelease": {
+            "type": "boolean",
+            "description": "set the release as prerelease if set to true",
+            "default": false
+        },
+        "file_exists": {
+            "type": "string",
+            "description": "what to do if an file asset already exists",
+            "enum": [
+                "overwrite",
+                "skip",
+                "fail"
+            ],
+            "default": "overwrite"
+        },
+        "target_commitish": {
+            "type": "string",
+            "description": "",
+            "examples": [
+                "refs/tags/nightly"
+            ]
+        },
+        "note": {
+            "type": "string",
+            "description": "file or string with notes for the release, see https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release"
+        },
+        "title": {
+            "type": "string",
+            "description": "file or string for the title shown in the github release, see https://help.github.com/en/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release"
+        },
+        "overwrite": {
+            "type": "boolean",
+            "description": "force overwrite existing release informations (only title and note)",
+            "default": false
+        }
+    },
+    "required": [
+        "token",
+        "files"
+    ]
+}

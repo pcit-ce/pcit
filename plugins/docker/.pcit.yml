@@ -1,7 +1,7 @@
 steps:
   docker_build:
     image: pcit/docker
-    settings:
+    with:
       # registry: docker.khs1994.com
       repo: pcit/alpine
       tags: latest
@@ -25,14 +25,14 @@ steps:
         - ci.khs1994.com=true
         - plugin.ci.khs1994.com=true
       no_cache: false
-    when:
+    if:
       event: push
       branch: master
       # event: tag
 
   docker_build_dont_push:
     image: pcit/docker
-    settings:
+    with:
       # registry: docker.khs1994.com
       repo: pcit/alpine
       # target: php
@@ -46,7 +46,7 @@ steps:
       password: ${DOCKER_PASSWORD}
       dry_run: true
       purge: false
-    when:
+    if:
       event: push
       # event: tag
       branch: master

@@ -1,7 +1,7 @@
 steps:
   qiniu:
     image: pcit/qiniu
-    settings:
+    with:
       access_key: ${QINIUYUN_ACCESS_KEY}
       secret_key: ${QINIUYUN_SECRET_KEY}
       bucket: ${QINIUYUN_BUCKET}
@@ -11,7 +11,7 @@ steps:
       - Dockerfile
   qiniu_2:
     image: pcit/qiniu
-    settings:
+    with:
       access_key: ${QINIUYUN_ACCESS_KEY}
       secret_key: ${QINIUYUN_SECRET_KEY}
       bucket: ${QINIUYUN_BUCKET}

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\TencentAI;
 
-use PCIT\Framework\Support\JSON;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,7 +37,7 @@ EOF
 
         $output_array = TencentAICommand::get()->nlp()->chat(...$args);
 
-        $output->writeln(JSON::beautiful(json_encode($output_array, JSON_UNESCAPED_UNICODE)));
+        $output->writeln(json_encode($output_array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         return 0;
     }

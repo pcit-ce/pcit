@@ -1,7 +1,7 @@
 steps:
   cos:
     image: pcit/tencent_cos:v5
-    settings:
+    with:
       region: ${COS_REGION}
       app_id: ${COS_APP_ID}
       secret_id: ${COS_SECRET_ID}
@@ -13,7 +13,7 @@ steps:
       - Dockerfile
   cos_2:
     image: pcit/tencent_cos:v5
-    settings:
+    with:
       region: ${COS_REGION}
       app_id: ${COS_APP_ID}
       secret_id: ${COS_SECRET_ID}
