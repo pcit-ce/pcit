@@ -87,7 +87,7 @@ class Router
     /**
      * 获取方法参数列表.
      */
-    private function getParameters($obj = null, $method, $arg = [])
+    private function getParameters($obj = null, $method = null, $arg = [])
     {
         try {
             $reflection = $obj ?

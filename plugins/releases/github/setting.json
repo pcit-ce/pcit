@@ -16,6 +16,7 @@
         },
         "files": {
             "type": "array",
+            "uniqueItems": true,
             "description": "files to upload to GitHub Release, globs are allowed",
             "items": {
                 "type": "string"
@@ -29,6 +30,8 @@
         },
         "checksum": {
             "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
             "description": "checksum takes hash methods to include in your GitHub release for the files specified.",
             "items": {
                 "enum": [

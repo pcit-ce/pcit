@@ -303,10 +303,11 @@ steps:
       prerelease: true
       # target_commitish: 508c7456a3c9f778c378b94e95bd0f61056f1fe1
       target_commitish: refs/tags/nightly
-      note: nightly
+      note: release nightly
       title: nightly
       checksum:
         - sha256
+        - adler32
 
   codecov:
     shell: bash

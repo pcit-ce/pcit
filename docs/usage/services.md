@@ -17,7 +17,7 @@ services:
 services:
   mysql:
     image: mysql:${MYSQL_VERSION}
-    environment:
+    env:
       - MYSQL_DATABASE=test
       - MYSQL_ROOT_PASSWORD=test
     # entrypoint: [ "mysqld" ]

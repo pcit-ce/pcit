@@ -38,6 +38,7 @@
                                 },
                                 "files": {
                                     "type": "array",
+                                    "uniqueItems": true,
                                     "description": "files to upload to GitHub Release, globs are allowed",
                                     "items": {
                                         "type": "string"
@@ -51,6 +52,8 @@
                                 },
                                 "checksum": {
                                     "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
                                     "description": "checksum takes hash methods to include in your GitHub release for the files specified.",
                                     "items": {
                                         "enum": [
@@ -148,6 +151,8 @@
                                 },
                                 "var_array": {
                                     "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
                                     "description": "value is array",
                                     "default": [
                                         "a=1",
@@ -208,6 +213,7 @@
                         },
                         {
                             "type": "array",
+                            "uniqueItems": true,
                             "description": "value is array"
                         },
                         {
@@ -240,14 +246,14 @@
             "oneOf": [
                 {
                     "type": "string",
-                    "description": "defined command with string, see https://docs.ci.khs1994.com/usage/steps.html#_2-commands"
+                    "description": "defined command with string, see https://docs.ci.khs1994.com/usage/steps.html#_2-run"
                 },
                 {
                     "type": "array",
                     "items": {
                         "type": "string"
                     },
-                    "description": "defined command with array, see https://docs.ci.khs1994.com/usage/steps.html#_2-commands"
+                    "description": "defined command with array, see https://docs.ci.khs1994.com/usage/steps.html#_2-run"
                 }
             ]
         },
@@ -284,7 +290,8 @@
             "items": {
                 "type": "string"
             },
-            "description": "example\n env:\n- k=v\nsee https://docs.ci.khs1994.com/usage/steps.html#_3-environment"
+            "uniqueItems": true,
+            "description": "example\n env:\n- k=v\nsee https://docs.ci.khs1994.com/usage/steps.html#_3-env"
         },
         "branch": {
             "oneOf": [
@@ -294,6 +301,7 @@
                 },
                 {
                     "type": "array",
+                    "uniqueItems": true,
                     "description": "setting branch with array"
                 },
                 {
@@ -307,6 +315,7 @@
                                 },
                                 {
                                     "type": "array",
+                                    "uniqueItems": true,
                                     "description": "setting branch include with array"
                                 }
                             ]
@@ -319,6 +328,7 @@
                                 },
                                 {
                                     "type": "array",
+                                    "uniqueItems": true,
                                     "description": "setting branch exclude with array"
                                 }
                             ]
@@ -369,6 +379,7 @@
         },
         "hosts": {
             "type": "array",
+            "uniqueItems": true,
             "description": "example:\n\nhosts:\n- \"pcit.dev:127.0.0.1\"\n\nsee https://docs.docker.com/compose/compose-file/#extra_hosts",
             "items": {
                 "type": "string"
@@ -423,6 +434,7 @@
                         },
                         {
                             "type": "array",
+                            "uniqueItems": true,
                             "items": {
                                 "$ref": "#/definitions/status"
                             },
@@ -446,6 +458,7 @@
                         },
                         {
                             "type": "array",
+                            "uniqueItems": true,
                             "items": {
                                 "$ref": "#/definitions/event"
                             },
@@ -467,6 +480,7 @@
                         },
                         {
                             "type": "array",
+                            "uniqueItems": true,
                             "items": {
                                 "$ref": "#/definitions/platform"
                             },
@@ -479,6 +493,7 @@
                 },
                 "jobs": {
                     "type": "array",
+                    "uniqueItems": true,
                     "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-if",
                     "items": {
                         "type": "object"
@@ -638,6 +653,7 @@
                     "patternProperties": {
                         "^[a-zA-Z0-9._]+$": {
                             "type": "array",
+                            "uniqueItems": true,
                             "description": "env name",
                             "items": {
                                 "type": "string",

@@ -7,7 +7,7 @@
 ```yaml
 steps:
   ping:
-    commands:
+    run:
       - ping
       - domain.com
       - -c

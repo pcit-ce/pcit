@@ -12,6 +12,8 @@
         },
         "var_array": {
             "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
             "description": "value is array",
             "default": [
                 "a=1",

@@ -2,7 +2,7 @@
 
 ## 基本指令
 
-`steps` 指令用来设置具体的构建步骤，每个步骤均运行在容器中，所以每个步骤必须首先指定 Docker Image 名称 (`image`) 和具体的构建指令 (`commands`) 。
+`steps` 指令用来设置具体的构建步骤，每个步骤均运行在容器中，所以每个步骤必须首先指定 Docker Image 名称 (`image`) 和具体的运行指令 (`run`) 。
 
 > steps 指令可以包含多个构建步骤
 
@@ -10,7 +10,7 @@
 steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
-    commands:
+    run:
       - composer install -q
       - vendor/bin/phpunit
 
@@ -25,11 +25,11 @@ steps:
 
 设置构建步骤所使用的镜像。
 
-## 2. `commands`
+## 2. `run`
 
 设置构建步骤所运行的命令。
 
-## 3. `environment`
+## 3. `env`
 
 除了以上两个基本指令外，还可以像我们平时使用 `$ docker container run -e "K=V" ...` 命令那样设置 **环境变量**。
 
@@ -37,9 +37,9 @@ steps:
 steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
-    environment:
+    env:
       - key=value
-    commands:
+    run:
       - composer install -q
       - vendor/bin/phpunit
 ```
@@ -53,7 +53,7 @@ steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
     pull: true
-    commands:
+    run:
       - composer install -q
       - vendor/bin/phpunit
 ```
@@ -79,7 +79,7 @@ steps:
 steps:
   php:
     image: khs1994/php-fpm:7.4.3-alpine
-    commands:
+    run:
       - composer install -q
       - vendor/bin/phpunit
     if:
@@ -119,13 +119,13 @@ if:
 
 与 `docker run --privileged` 参数的行为一致。
 
-## 8. `settings`
+## 8. `with`
 
 该指令用来配置插件。
 
 ```yaml
 steps:
-  settings:
+  with:
     provider: docker
     k: v
     k2: v2
