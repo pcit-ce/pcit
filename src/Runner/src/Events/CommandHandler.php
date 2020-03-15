@@ -11,7 +11,7 @@ class CommandHandler
      *
      * @throws \Exception
      */
-    public static function parse(string $shell = 'sh', string $step, string $image, ?array $commands)
+    public static function parse(string $shell, string $step, string $image, ?array $commands)
     {
         if (null === $commands) {
             return null;
