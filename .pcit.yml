@@ -162,6 +162,16 @@ steps:
     run:
       - echo "Don't run on master branch"
 
+  dont_run_on_nightly:
+    if:
+      jobs:
+        exclude:
+        - PHP_VERSION: nightly
+          NGINX_VERSION: 1.15.8
+          REDIS_VERSION: 5.0.7
+          MYSQL_VERSION: 5.7.29
+    run: echo "don't run on php nightly version"
+
   plugin-demo:
     image: pcit/demo
     with:
@@ -216,8 +226,10 @@ steps:
   github_pages:
     image: pcit/pages
     if:
-      status: success
-      event: ["push"]
+      status:
+        include: success
+      event:
+        include: ["push"]
       jobs:
         - PHP_VERSION: 7.4.3
           NGINX_VERSION: 1.15.8
@@ -440,8 +452,7 @@ platform:
 # 分支设置
 branches:
   include: [master, dev]
-  exclude: test*
-  # include: [ master, release/* ]
+  # include: [ master, release/*, refs/tags/1.1.* ]
   # exclude: [ release/1.0.0, release/1.1.* ]
 
 # 网络相关配置

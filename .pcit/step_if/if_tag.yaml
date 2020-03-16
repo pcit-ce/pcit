@@ -1,42 +1,42 @@
 steps:
   script:
     if:
-      branch: master
+      tag: master
 
   script2:
     if:
-      branch:
+      tag:
       - dev
 
   # script3:
   #   if:
-  #     branch:
+  #     tag:
   #       k: v
 
   script4:
     if:
-      branch:
+      tag:
         include: master
 
   script5:
     if:
-      branch:
+      tag:
         include:
         - master
 
   script6:
     if:
-      branch:
+      tag:
         exclude: master
 
   script7:
     if:
-      branch:
+      tag:
         exclude:
         - master
 
   # script8:
   #   if:
-  #     branch:
+  #     tag:
   #       exclude:
   #         k: v

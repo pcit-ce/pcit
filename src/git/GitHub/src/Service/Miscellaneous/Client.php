@@ -142,7 +142,7 @@ class Client
      *
      * @throws \Exception
      */
-    public function RenderMarkdown(string $text, string $mode = 'markdown', string $context)
+    public function RenderMarkdown(string $text, string $context, string $mode = 'markdown')
     {
         $data = [
             'text' => $text,

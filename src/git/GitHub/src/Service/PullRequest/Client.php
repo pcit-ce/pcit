@@ -81,7 +81,7 @@ class Client
      */
     public function create(string $username,
                            string $repo_name,
-                           int $from_issue = 0,
+                           int $from_issue,
                            string $title,
                            string $head,
                            string $base,
@@ -119,7 +119,7 @@ class Client
      */
     public function update(string $username,
                            string $repo_name,
-                           int $from_issue = 0,
+                           int $from_issue,
                            string $title,
                            string $head,
                            string $base,

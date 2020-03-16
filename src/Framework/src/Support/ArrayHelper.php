@@ -46,4 +46,12 @@ class ArrayHelper
 
         return $rows;
     }
+
+    public static function compare(array $arr1, array $arr2): bool
+    {
+        ksort($arr1);
+        ksort($arr2);
+
+        return $arr1 === $arr2;
+    }
 }

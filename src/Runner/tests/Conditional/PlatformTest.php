@@ -14,10 +14,10 @@ class PlatformTest extends TestCase
      */
     public function test(): void
     {
-        $result = (new Platform('linux/*', 'linux/amd64'))->regHandle();
+        $result = (new Platform('linux/*', 'linux/amd64'))->handle(true);
         $this->assertTrue($result);
 
-        $result = (new Platform('windows/*', 'linux/amd64'))->regHandle();
+        $result = (new Platform('windows/*', 'linux/amd64'))->handle(true);
         $this->assertFalse($result);
     }
 
@@ -26,13 +26,13 @@ class PlatformTest extends TestCase
      */
     public function testArray(): void
     {
-        $result = (new Platform(['linux/*'], 'linux/amd64'))->regHandle();
+        $result = (new Platform(['linux/*'], 'linux/amd64'))->handle(true);
         $this->assertTrue($result);
 
-        $result = (new Platform(['windows/*'], 'linux/amd64'))->regHandle();
+        $result = (new Platform(['windows/*'], 'linux/amd64'))->handle(true);
         $this->assertFalse($result);
 
-        $result = (new Platform(null, 'linux/amd64'))->regHandle();
+        $result = (new Platform(null, 'linux/amd64'))->handle(true);
         $this->assertTrue($result);
     }
 }

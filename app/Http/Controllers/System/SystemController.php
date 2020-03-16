@@ -85,16 +85,13 @@ language: php
 
 steps:
 
-  install:
-    command:
-      - composer install
+  install: composer install
 
   script:
-    commands:
-      - ./vendor/bin/phpunit
+    - ./vendor/bin/phpunit
 
   after_success:
-    commands:
+    run:
       - echo "Build is success"
 ```
 

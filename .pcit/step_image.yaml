@@ -1,0 +1,7 @@
+steps:
+  script:
+    image: pcit/cli
+
+  # script2:
+  #   image:
+  #   - k: v

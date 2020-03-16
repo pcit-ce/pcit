@@ -1,0 +1,32 @@
+steps:
+  script:
+    if:
+      event: push
+
+  script2:
+    if:
+      event:
+      - push
+
+  script4:
+    if:
+      event:
+        include: push
+
+  script5:
+    if:
+      event:
+        include:
+        - push
+
+  script6:
+    if:
+      event:
+        exclude: push
+
+  script7:
+    if:
+      event:
+        exclude:
+        - push
+        # - push1

@@ -14,22 +14,22 @@ class TagTest extends TestCase
      */
     public function test(): void
     {
-        $result = (new Tag('^[0-9.]+$', '1.2.0'))->regHandle();
+        $result = (new Tag('^[0-9.]+$', '1.2.0'))->handle(true);
         $this->assertTrue($result);
 
-        $result = (new Tag('^[0-9.]+$', '1.2.0-rc'))->regHandle();
+        $result = (new Tag('^[0-9.]+$', '1.2.0-rc'))->handle(true);
         $this->assertFalse($result);
 
-        $result = (new Tag('^[0-9.]+', '1.2.0-rc'))->regHandle();
+        $result = (new Tag('^[0-9.]+', '1.2.0-rc'))->handle(true);
         $this->assertTrue($result);
 
-        $result = (new Tag('^[0-9.]+', 'v1.2.0'))->regHandle();
+        $result = (new Tag('^[0-9.]+', 'v1.2.0'))->handle(true);
         $this->assertFalse($result);
 
-        $result = (new Tag('^v([0-9.]+)$', 'v1.2.0'))->regHandle();
+        $result = (new Tag('^v([0-9.]+)$', 'v1.2.0'))->handle(true);
         $this->assertTrue($result);
 
-        $result = (new Tag('^v([0-9.]+)$', '1.2.0'))->regHandle();
+        $result = (new Tag('^v([0-9.]+)$', '1.2.0'))->handle(true);
         $this->assertFalse($result);
     }
 }

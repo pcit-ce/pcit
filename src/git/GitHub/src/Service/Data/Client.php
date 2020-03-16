@@ -217,7 +217,7 @@ class Client
                               string $tag_name,
                               string $tag_message,
                               string $object,
-                              string $type = 'commit',
+                              string $type,
                               ?string $committer_name,
                               ?string $committer_email,
                               ?string $date): void

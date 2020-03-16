@@ -1,0 +1,19 @@
+steps:
+  script:
+    if:
+      jobs:
+        - k: v
+        - k2: v2
+
+  script2:
+    if:
+      jobs:
+        include:
+          - k: v
+          - k2: v2
+
+  script3:
+    if:
+      jobs:
+        exclude:
+          - k: v

@@ -57,6 +57,8 @@ class Pipeline
     /**
      * @param $when
      *
+     * @return bool true: skip
+     *
      * @throws \Exception
      */
     public function checkWhen($when): bool
@@ -71,7 +73,7 @@ class Pipeline
         $when_tag = $when->tag ?? null;
         $when_matrix = $when->jobs ?? $when->matrix ?? null;
 
-        if (!(new Platform($when_platform, 'linux/amd64'))->regHandle()) {
+        if (!(new Platform($when_platform, 'linux/amd64'))->handle(true)) {
             \Log::emergency('skip by platform check');
 
             return true;
@@ -83,13 +85,13 @@ class Pipeline
             return true;
         }
 
-        if (!(new Branch($when_branch, $this->build->branch))->regHandle()) {
+        if (!(new Branch($when_branch, $this->build->branch))->handle(true)) {
             \Log::emergency('skip by branch check');
 
             return true;
         }
 
-        if (!(new Tag($when_tag, $this->build->tag))->regHandle()) {
+        if (!(new Tag($when_tag, $this->build->tag))->handle(true)) {
             \Log::emergency('skip by tag check');
 
             return true;
@@ -157,9 +159,7 @@ class Pipeline
             }
         }
 
-        $commands = $pipelineContent->commands
-            ?? $pipelineContent->command
-            ?? $pipelineContent->run
+        $commands = $pipelineContent->run
             ?? Commands::get($this->language, $pipeline);
 
         return \is_string($commands) ? [$commands] : $commands;
@@ -209,16 +209,16 @@ class Pipeline
                 $preEnv = array_merge($preEnv, $this->pluginHandler->handleSettings($settings, $preEnv));
             }
 
-            // 处理构建条件
+            // 处理构建条件 true: skip
             if ($this->checkWhen($when)) {
                 continue;
             }
 
             // 根据 pipeline 获取默认的构建条件
             $status = $when->status ?? CIDefaultStatus::get($step);
-            $failure = (new Status())->handle($status, 'failure');
-            $success = (new Status())->handle($status, 'success');
-            $changed = (new Status())->handle($status, 'changed');
+            $failure = (new Status($status, 'failure'))->handle();
+            $success = (new Status($status, 'success'))->handle();
+            $changed = (new Status($status, 'changed'))->handle();
 
             $no_status = $status ? false : true;
 

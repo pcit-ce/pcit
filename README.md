@@ -105,7 +105,7 @@ steps:
 
   after_success:
     image: bash
-    commands:
+    run:
       - echo "build is success"
 
 services:

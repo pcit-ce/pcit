@@ -27,8 +27,8 @@ EOF;
 matrix:
   include:
     - PHP_VERSION: 7.4.2
-      REDIS_VERSION: 5.0.7
       MYSQL_VERSION: 8.0.19
+      REDIS_VERSION: 5.0.7
     - PHP_VERSION: 7.1.27
       REDIS_VERSION: 5.0.7
       MYSQL_VERSION: 8.0.19
