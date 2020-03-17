@@ -450,6 +450,11 @@ platform:
   - linux/arm64
 
 # 分支设置
+# branch:  refs/heads/{branch-name}
+# branch:  refs/heads/feature/*
+# pr:      refs/pull/2/merge
+# pr:      refs/pull/2/head
+# tag:     refs/tags/{tag-name}
 branches:
   include: [master, dev]
   # include: [ master, release/*, refs/tags/1.1.* ]

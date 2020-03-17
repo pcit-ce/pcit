@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Runner\Events\EnvHandler;
+use PCIT\Runner\Events\Handler\EnvHandler;
 use PHPUnit\Framework\TestCase;
 
 class EnvHandlerTest extends TestCase

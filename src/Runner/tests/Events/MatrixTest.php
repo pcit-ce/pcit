@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
+use JsonSchema\Constraints\BaseConstraint;
 use PCIT\Runner\Events\Matrix;
 use Symfony\Component\Yaml\Yaml;
 use Tests\TestCase;
@@ -34,12 +35,12 @@ matrix:
       MYSQL_VERSION: 8.0.19
 EOF;
 
-        $result1 = Yaml::parse($yaml);
-        $result2 = Yaml::parse($yaml2);
+        $result1 = (array) BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml)['matrix']);
+        $result2 = (array) BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml2)['matrix']);
 
-        $result = Matrix::parseMatrix($result1['matrix']);
-        $result2 = Matrix::parseMatrix($result2['matrix']);
+        $result1 = Matrix::parseMatrix($result1);
+        $result2 = Matrix::parseMatrix($result2);
 
-        $this->assertEquals($result, $result2);
+        $this->assertEquals($result1, $result2);
     }
 }

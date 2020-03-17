@@ -31,7 +31,7 @@ class CacheTest extends TestCase
 
         $cache = new Cache(1,
             1, '', 'github', 1,
-            'master', json_decode($json)->cache);
+            'master', ['PHP_VERSION' => '7.4.0'], json_decode($json)->cache);
 
         $cache->handle();
 

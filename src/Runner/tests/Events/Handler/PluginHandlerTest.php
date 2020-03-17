@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Runner\Events\PluginHandler;
+use PCIT\Runner\Events\Handler\PluginHandler;
 use PHPUnit\Framework\TestCase;
 
 class PluginHandlerTest extends TestCase

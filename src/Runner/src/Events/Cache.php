@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use Docker\Container\Client as DockerContainer;
-use PCIT\Framework\Support\Env;
 use PCIT\PCIT;
+use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Support\CacheKey;
 
 class Cache
@@ -28,9 +28,16 @@ class Cache
     public $disableUpload;
 
     /**
+     * 一个 job 一个缓存.
+     *
+     * @var array|null
+     */
+    public $matrix;
+
+    /**
      * Cache constructor.
      *
-     * @param string|array $cache
+     * @param string|array $cacheConfig
      */
     public function __construct(int $jobId,
                                 int $build_key_id,
@@ -38,7 +45,8 @@ class Cache
                                 string $gitType,
                                 int $rid,
                                 string $branch,
-                                $cache = null,
+                                ?array $matrix,
+                                $cacheConfig = null,
                                 bool $disableUpload = false)
     {
         $this->jobId = $jobId;
@@ -47,7 +55,8 @@ class Cache
         $this->gitType = $gitType;
         $this->rid = $rid;
         $this->branch = $branch;
-        $this->cache = $cache;
+        $this->matrix = $matrix;
+        $this->cache = $cacheConfig;
         $this->disableUpload = $disableUpload;
     }
 
@@ -56,8 +65,13 @@ class Cache
      */
     public function getPrefix(): string
     {
-        // github_rid_branch_folder
-        $prefix = sprintf('%s_%s_%s', $this->gitType, $this->rid, $this->branch);
+        $matrix = $this->matrix ?? [];
+        ksort($matrix);
+
+        $matrix = md5(json_encode($matrix));
+
+        // {git_type}_{rid}_{branch}-{matrix}
+        $prefix = sprintf('%s_%s_%s-%s', $this->gitType, $this->rid, $this->branch, $matrix);
 
         return $prefix;
     }

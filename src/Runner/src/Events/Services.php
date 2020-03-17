@@ -36,14 +36,19 @@ class Services
         }
 
         foreach ($this->service as $service_name => $serviceContent) {
+            /**
+             * @var \PCIT\Runner\Agent\Interfaces\ServiceInterface
+             */
+            $class = 'PCIT\Runner\Agent\Docker\Service\\'.ucfirst($service_name).'Service';
+
             list(
                 'image' => $image,
                 'env' => $env,
                 'entrypoint' => $entrypoint,
                 'commands' => $commands
-                ) = ServiceDefault::handle($service_name);
+                ) = $class::handle();
 
-            if (\is_array($serviceContent)) {
+            if (\is_object($serviceContent)) {
                 $image = $serviceContent->image ?? $image;
                 $env = $serviceContent->environment ?? $env;
                 $entrypoint = $serviceContent->entrypoint ?? $entrypoint;

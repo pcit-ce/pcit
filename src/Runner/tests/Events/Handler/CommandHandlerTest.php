@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Runner\Events\CommandHandler;
+use PCIT\Runner\Events\Handler\CommandHandler;
 use Symfony\Component\Yaml\Yaml;
 use Tests\TestCase;
 

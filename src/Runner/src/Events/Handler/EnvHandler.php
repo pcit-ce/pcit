@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Runner\Events;
+namespace PCIT\Runner\Events\Handler;
 
 use PCIT\Runner\Parser\TextHandler as TextParser;
 
 class EnvHandler
 {
     /**
-     * @param $pre_env ['k'=>'v']
-     * @param $env      SystemEnv ['k=v']
+     * @param array  $pre_env ['k'=>'v']
+     * @param array  $env     SystemEnv ['k=v']
      * @param string $prefix  key prefix
      * @param bool   $replace replace '-' with '_' on key
      *

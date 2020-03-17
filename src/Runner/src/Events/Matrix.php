@@ -18,7 +18,13 @@ class Matrix
     public static function parseMatrix(?array $matrix)
     {
         if ($matrix['include'] ?? false) {
-            return $matrix['include'];
+            $matrix_array = [];
+
+            foreach ($matrix['include'] as $item) {
+                $matrix_array[] = (array) $item;
+            }
+
+            return $matrix_array;
         }
 
         if (!$matrix) {
