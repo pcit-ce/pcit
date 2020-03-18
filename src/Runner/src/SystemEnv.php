@@ -10,6 +10,9 @@ class SystemEnv
 
     public $client;
 
+    /**
+     * @var array<string> ['k=v']
+     */
     public $env;
 
     public function __construct(BuildData $build, Client $client)

@@ -40,6 +40,11 @@ abstract class BuildData
 
     public $branch;
 
+    /**
+     * env add by settings.
+     *
+     * @var array<string> ['k=v']
+     */
     public $env;
 
     // repo config

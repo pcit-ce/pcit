@@ -11,7 +11,7 @@ class RedisService implements ServiceInterface
     public static $image = 'redis:5.0.7-alpine';
     public static $env = [];
     public static $entrypoint = null;
-    public static $commands = [
+    public static $command = [
         '--bind',
         '0.0.0.0',
     ];
@@ -21,8 +21,8 @@ class RedisService implements ServiceInterface
         $image = self::$image;
         $env = self::$env;
         $entrypoint = self::$entrypoint;
-        $commands = self::$commands;
+        $command = self::$command;
 
-        return compact('image', 'env', 'entrypoint', 'commands');
+        return compact('image', 'env', 'entrypoint', 'command');
     }
 }

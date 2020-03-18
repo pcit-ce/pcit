@@ -13,7 +13,7 @@ class Matrix
      *
      * @param array $matrix
      *
-     * @return array
+     * @return array [['k1'=>'v1'],['k1'=>'v2']]
      */
     public static function parseMatrix(?array $matrix)
     {

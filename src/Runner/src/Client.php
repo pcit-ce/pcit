@@ -22,8 +22,14 @@ class Client
      */
     public $build;
 
+    /**
+     * @var array<string> ['k=v']
+     */
     public $system_env = [];
 
+    /**
+     * @var array<string> ['k=v']
+     */
     public $system_job_env = [];
 
     public $pipeline;
@@ -104,7 +110,7 @@ class Client
 
         $this->workdir = $workdir = $base_path.'/'.$path;
 
-        // ci system env
+        // ci system env ['k=v']
         $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
 
         if ($job_id) {
@@ -145,13 +151,15 @@ class Client
     /**
      * 生成 job 缓存.
      *
+     * @param array|null $matrix_config ['k'=>'v','k2'=>'v2']
+     *
      * @throws \Exception
      */
     private function handleJob(int $job_id, ?array $matrix_config): void
     {
         $this->job_id = $job_id = $job_id ?: Job::create($this->build->build_key_id);
 
-        \Log::emergency('===== Handle job Start =====', ['job_id' => $this->job_id]);
+        \Log::emergency('===== Generate job Start =====', ['job_id' => $this->job_id]);
 
         // 清理缓存
         CacheKey::flush($job_id);
@@ -176,7 +184,7 @@ class Client
             // git
             ->register(new Git($this->git, $this->build, $this))
             // services
-            ->register(new Services($this->services, (int) $this->job_id, $matrix_config))
+            ->register(new Services($this->services, (int) $this->job_id, $this, $matrix_config))
             // pipeline
             ->register(new Pipeline($this->pipeline, $this->build, $this, $matrix_config))
             // cache

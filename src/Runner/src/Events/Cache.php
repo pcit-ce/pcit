@@ -104,17 +104,19 @@ class Cache
             'INPUT_BUCKET='.env('', 'pcit'),
             'INPUT_REGION='.env('', 'us-east-1'),
             'INPUT_CACHE_PREFIX='.$prefix,
-            'INPUT_CACHE='.(new EnvHandler())->arrayHandler($cacheList),
+            'INPUT_CACHE='.(new EnvHandler())->array2str($cacheList),
             'INPUT_USE_PATH_STYLE_ENDPOINT='.
             (env('CI_S3_USE_PATH_STYLE_ENDPOINT', true) ? 'true' : 'false'),
             // must latest key
             'INPUT_CACHE_DOWNLOAD=true',
         ];
 
+        $container_config = $this->getContainerConfig($dockerContainer, $env);
+
+        \Log::info('Handle cache downloader', json_decode($container_config, true));
+
         \Cache::store()
-            ->set(CacheKey::cacheKey($this->jobId, 'download'),
-                $this->getContainerConfig($dockerContainer, $env)
-            );
+            ->set(CacheKey::cacheKey($this->jobId, 'download'), $container_config);
 
         array_pop($env);
 
@@ -122,10 +124,12 @@ class Cache
             return;
         }
 
+        $container_config = $this->getContainerConfig($dockerContainer, $env);
+
+        \Log::info('Handle cache uploader', json_decode($container_config, true));
+
         \Cache::store()
-            ->set(CacheKey::cacheKey($this->jobId, 'upload'),
-                $this->getContainerConfig($dockerContainer, $env)
-            );
+            ->set(CacheKey::cacheKey($this->jobId, 'upload'), $container_config);
     }
 
     /**

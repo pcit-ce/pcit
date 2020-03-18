@@ -14,7 +14,7 @@ class MysqlService implements ServiceInterface
         'MYSQL_ROOT_PASSWORD=test',
     ];
     public static $entrypoint = null;
-    public static $commands = [
+    public static $command = [
         '--character-set-server=utf8mb4',
         '--default-authentication-plugin=mysql_native_password',
     ];
@@ -24,8 +24,8 @@ class MysqlService implements ServiceInterface
         $image = self::$image;
         $env = self::$env;
         $entrypoint = self::$entrypoint;
-        $commands = self::$commands;
+        $command = self::$command;
 
-        return compact('image', 'env', 'entrypoint', 'commands');
+        return compact('image', 'env', 'entrypoint', 'command');
     }
 }

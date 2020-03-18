@@ -7,6 +7,8 @@ namespace PCIT\Runner\Events;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\Client;
+use PCIT\Runner\Events\Handler\EnvHandler;
+use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 use PCIT\Support\Git as GitSupport;
@@ -26,37 +28,33 @@ class Git
         $this->client = $client;
     }
 
-    private function parseGit()
+    public function parseGit()
     {
-        $git_config = [];
+        $envHandler = new EnvHandler();
+        $textHandler = new TextHandler();
 
         $git = $this->git;
 
-        $depth = $git->depth ?? 25;
-        $recursive = $git->recursive ?? false;
-        $skip_verify = $git->skip_verify ?? false;
-        $tags = $git->tags ?? false;
-        $submodule_override = $git->submodule_override ?? null;
-        $hosts = $git->hosts ?? [];
-        $hosts = array_merge($hosts, $this->client->networks->hosts ?? []);
-        // 防止用户传入 false
-        if ($depth) {
-            array_push($git_config, "PLUGIN_DEPTH=$depth");
-        } else {
-            array_push($git_config, 'PLUGIN_DEPTH=2');
-        }
-
-        $recursive && array_push($git_config, 'PLUGIN_RECURSIVE=true');
-
-        $skip_verify && array_push($git_config, 'PLUGIN_SKIP_VERIFY=true');
-
-        $tags && array_push($git_config, 'PLUGIN_TAGS=true');
-
-        $submodule_override && array_push(
-            $git_config, 'PLUGIN_SUBMODULE_OVERRIDE='.json_encode($submodule_override)
+        $env = array_merge(
+            $this->client->system_env ?? [],
+            $this->client->system_job_env ?? []
         );
 
+        $hosts = $git->hosts ?? [];
+        $hosts = array_merge($hosts, $this->client->networks->hosts ?? []);
+        $hosts = $textHandler->handleArray($hosts, $env);
+
         $git_image = $git->image ?? 'pcit/git';
+        $git_image = $textHandler->handle($git_image, $env);
+
+        unset($git->image);
+        unset($git->hosts);
+
+        $git_config = $envHandler->handle(
+            (array) $git,
+            $env,
+            'PLUGIN', true
+        );
 
         return [$git_config, $git_image, $hosts];
     }
@@ -126,11 +124,16 @@ class Git
 
         $config = $this->generateDocker($git_env, $git_image, $hosts, $client->job_id, $client->workdir);
 
+        \Log::info('Handle clone git', json_decode($config, true));
+
         \Cache::store()->set(CacheKey::cloneKey($client->job_id), $config);
     }
 
     public function generateDocker($git_env, $git_image, $hosts, $job_id, $workdir, $binds = [])
     {
+        /**
+         * @var \Docker\Container\Client
+         */
         $docker_container = app(PCIT::class)->docker->container;
 
         if (!$binds) {

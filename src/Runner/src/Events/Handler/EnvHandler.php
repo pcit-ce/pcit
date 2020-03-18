@@ -4,29 +4,29 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events\Handler;
 
-use PCIT\Runner\Parser\TextHandler as TextParser;
-
 class EnvHandler
 {
     /**
-     * @param array  $pre_env ['k'=>'v']
-     * @param array  $env     SystemEnv ['k=v']
-     * @param string $prefix  key prefix
-     * @param bool   $replace replace '-' with '_' on key
+     * @param array  $env_with_var ['k'=>'${K}'] 或 ['k=${K}']
+     * @param array  $env          SystemEnv ['k'=>'v'] 或 ['k=v']
+     * @param string $prefix       key prefix
+     * @param bool   $replace      replace '-' with '_' on key
      *
      * @return array ['k=v']
      *
      * @throws \Exception
      */
-    public function handle($pre_env, $env, string $prefix = '', bool $replace = false): array
+    public function handle($env_with_var, $env, string $prefix = '', bool $replace = false): array
     {
-        if (!$pre_env) {
+        if (!$env_with_var) {
             return [];
         }
-        $text = json_encode($pre_env);
+
+        $env = $this->obj2array($env);
+        $text = json_encode($this->array2obj($env_with_var));
 
         // ${} 变量替换
-        $result = (new TextParser())->handle($text, $env);
+        $result = (new TextHandler())->handle($text, $env);
 
         $pre_env = json_decode($result, true);
 
@@ -41,7 +41,7 @@ class EnvHandler
                         break;
                     } else {
                         // is array
-                        $value = $this->arrayHandler($value);
+                        $value = $this->array2str($value);
                         break;
                     }
                 }
@@ -67,16 +67,65 @@ class EnvHandler
         return $env;
     }
 
-    public function arrayHandler($value)
+    /**
+     * conver [a,b,c] to a,b,c.
+     */
+    public function array2str($value): string
     {
         if (\is_string($value)) {
             return $value;
         }
-        $new_value = null;
-        foreach ($value as $k) {
-            $new_value .= $k.',';
+
+        return implode(',', $value);
+    }
+
+    /**
+     * conver ['k'=>'v'] to ['k=v'].
+     */
+    public function obj2array(?array $env)
+    {
+        if (!$env) {
+            return $env;
         }
 
-        return rtrim($new_value, ',');
+        $env_after = [];
+
+        foreach ($env as $k => $v) {
+            if (0 === $k) {
+                return $env;
+            }
+
+            $env_after[] = $k.'='.$v;
+        }
+
+        return $env_after;
+    }
+
+    /**
+     * conver ['k=v','k2=v2'] to ['k'=>'v','k2'=>'v2'].
+     */
+    public function array2obj(?array $env)
+    {
+        if (!$env) {
+            return $env;
+        }
+
+        $env_after = [];
+
+        foreach ($env as $k => $v) {
+            if (0 !== $k) {
+                return $env;
+            }
+
+            break;
+        }
+
+        foreach ($env as $k => $v) {
+            [$key,$value] = explode('=', $v, 2);
+
+            $env_after[$key] = $value;
+        }
+
+        return $env_after;
     }
 }

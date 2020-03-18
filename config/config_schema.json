@@ -277,7 +277,7 @@
                         "entrypoint": {
                             "$ref": "#/definitions/command"
                         },
-                        "commands": {
+                        "command": {
                             "$ref": "#/definitions/command"
                         }
                     },

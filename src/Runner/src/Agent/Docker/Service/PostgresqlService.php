@@ -16,15 +16,15 @@ class PostgresqlService implements ServiceInterface
         'POSTGRES_DB=test',
     ];
 
-    public static $commands = null;
+    public static $command = null;
 
     public static function handle(): array
     {
         $image = self::$image;
         $env = self::$env;
         $entrypoint = self::$entrypoint;
-        $commands = self::$commands;
+        $command = self::$command;
 
-        return compact('image', 'env', 'entrypoint', 'commands');
+        return compact('image', 'env', 'entrypoint', 'command');
     }
 }

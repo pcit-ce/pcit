@@ -162,7 +162,7 @@ class ContentsClient
      *
      * @throws \Exception
      */
-    public function getArchiveLink(string $repo_full_name, string $archive_format = 'tarball', string $ref)
+    public function getArchiveLink(string $repo_full_name, string $ref, string $archive_format = 'tarball')
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/'.$archive_format.'/'.$ref;
 

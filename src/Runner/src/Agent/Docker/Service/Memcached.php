@@ -11,15 +11,15 @@ class Memcached implements ServiceInterface
     public static $image = 'memcached:1.5.12-alpine';
     public static $env = [];
     public static $entrypoint = null;
-    public static $commands = null;
+    public static $command = null;
 
     public static function handle(): array
     {
         $image = self::$image;
         $env = self::$env;
         $entrypoint = self::$entrypoint;
-        $commands = self::$commands;
+        $command = self::$command;
 
-        return compact('image', 'env', 'entrypoint', 'commands');
+        return compact('image', 'env', 'entrypoint', 'command');
     }
 }
