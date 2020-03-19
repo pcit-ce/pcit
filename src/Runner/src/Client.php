@@ -102,13 +102,7 @@ class Client
         $this->networks = $yaml_obj->networks ?? null;
 
         //项目根目录
-        $base_path = $workspace->base ?? null;
-
-        $path = $workspace->path ?? $this->build->repo_full_name;
-
-        $path = '.' === $path ? null : $path;
-
-        $this->workdir = $workdir = $base_path.'/'.$path;
+        $this->handleWorkdir($workspace);
 
         // ci system env ['k=v']
         $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
@@ -122,11 +116,11 @@ class Client
         }
 
         // 解析构建矩阵
-        $matrix = Matrix::parseMatrix((array) $matrix);
+        $matrix = Matrix::handle((array) $matrix);
 
         // 不存在构建矩阵
         if (!$matrix) {
-            \Log::emergency('This build is not matrix');
+            \Log::emergency('This build only include one job');
 
             $job_id = (int) (Job::getJobIDByBuildKeyID($this->build_id)[0] ?? 0);
 
@@ -135,7 +129,15 @@ class Client
             return;
         }
 
-        \Log::emergency('This build include matrix');
+        $this->handleMatrix($matrix);
+    }
+
+    /**
+     * @param array<array> $matrix [['k'=>'v'],['k'=>'v2']]
+     */
+    public function handleMatrix(array $matrix): void
+    {
+        \Log::emergency('This build include one more jobs');
 
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
@@ -146,6 +148,17 @@ class Client
 
             $this->handleJob($job_id, $matrix_config);
         }
+    }
+
+    public function handleWorkdir($workspace): void
+    {
+        $base_path = $workspace->base ?? null;
+
+        $path = $workspace->path ?? $this->build->repo_full_name;
+
+        $path = '.' === $path ? null : $path;
+
+        $this->workdir = $base_path.'/'.$path;
     }
 
     /**

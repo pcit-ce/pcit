@@ -28,7 +28,7 @@ class Git
         $this->client = $client;
     }
 
-    public function parseGit()
+    public function parseGit(): array
     {
         $envHandler = new EnvHandler();
         $textHandler = new TextHandler();
@@ -122,14 +122,20 @@ class Git
                 break;
         }
 
-        $config = $this->generateDocker($git_env, $git_image, $hosts, $client->job_id, $client->workdir);
+        $config = $this->generateDocker($git_env, $git_image, $hosts, (int) $client->job_id, $client->workdir);
 
         \Log::info('Handle clone git', json_decode($config, true));
 
         \Cache::store()->set(CacheKey::cloneKey($client->job_id), $config);
     }
 
-    public function generateDocker($git_env, $git_image, $hosts, $job_id, $workdir, $binds = [])
+    public function generateDocker(
+        ?array $git_env,
+        string $git_image,
+        ?array $hosts,
+        int $job_id,
+        string $workdir,
+        array $binds = []): string
     {
         /**
          * @var \Docker\Container\Client
@@ -147,7 +153,7 @@ class Git
             'com.khs1994.ci' => (string) $job_id,
         ])
         ->setBinds($binds)
-        ->setExtraHosts($hosts)
+        ->setExtraHosts($hosts ?? [])
         ->setImage($git_image)
         ->setWorkingDir($workdir)
         ->setCreateJson(null)

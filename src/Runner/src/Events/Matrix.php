@@ -15,7 +15,7 @@ class Matrix
      *
      * @return array [['k1'=>'v1'],['k1'=>'v2']]
      */
-    public static function parseMatrix(?array $matrix)
+    public static function handle(?array $matrix)
     {
         if ($matrix['include'] ?? false) {
             $matrix_array = [];

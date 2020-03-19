@@ -7,11 +7,11 @@ namespace PCIT\Runner\Events\Handler;
 class CommandHandler
 {
     /**
-     * @return string
+     * @return ?string
      *
      * @throws \Exception
      */
-    public static function parse(string $shell, string $step, string $image, ?array $commands)
+    public static function parse(string $shell, string $step, string $image, ?array $commands): ?string
     {
         if (null === $commands) {
             return null;

@@ -155,8 +155,7 @@ class Pipeline
             break;
         }
 
-        $commands = $pipelineContent->run
-            ?? Commands::get($this->language, $pipeline);
+        $commands = $pipelineContent->run ?? Commands::get($this->language, $pipeline);
 
         return \is_string($commands) ? [$commands] : $commands;
     }
@@ -247,6 +246,8 @@ class Pipeline
             \Log::info(json_encode($env), []);
 
             $timeout = env('CI_STEP_TIMEOUT', 21600);
+
+            $cmd = null;
 
             if ('bash' === $shell || 'sh' === $shell) {
                 $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' '.$shell.' -e'] : null;

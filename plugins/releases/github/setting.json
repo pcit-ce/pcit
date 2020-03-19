@@ -49,6 +49,16 @@
                 ]
             ]
         },
+        "checksum_file": {
+            "type": "string",
+            "description": "name used for checksum file. \"CHECKSUM\" is replaced with the chosen method",
+            "default": "CHECKSUMsum.txt"
+        },
+        "checksum_flatten": {
+            "type": "boolean",
+            "description": "include only the basename of the file in the checksum file",
+            "default": false
+        },
         "draft": {
             "type": "boolean",
             "description": "create a draft release if set to true",
