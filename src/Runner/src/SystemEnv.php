@@ -45,6 +45,7 @@ class SystemEnv
             'PCIT_EVENT_TYPE='.$this->build->event_type,
             'PCIT_PULL_REQUEST=false',
             'PCIT_REPO_SLUG='.$repo_full_name,
+            'PCIT_REPO='.$repo_full_name,
 
             'DEBIAN_FRONTEND=noninteractive',
             'LANG=en_US.UTF-8',

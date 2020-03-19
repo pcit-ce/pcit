@@ -345,6 +345,12 @@ steps:
       # -K           Remove color from the output
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID}
 
+  test_pcit_self:
+    env:
+    - k=${PCIT_STEP_NAME}
+    run: |
+      echo ${k}
+
   after_success:
     - echo "build success"
 

@@ -19,6 +19,7 @@ use PCIT\Runner\Conditional\Tag;
 use PCIT\Runner\Events\Handler\CommandHandler;
 use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Runner\Events\Handler\PluginHandler;
+use PCIT\Runner\Events\Handler\ShellHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Support\CacheKey;
 
@@ -119,15 +120,23 @@ class Pipeline
      *
      * @return array ['k=v']
      */
-    public function handleEnv(array $pipelineEnv): array
+    public function handleEnv(array $pipelineEnv, string $step_name): array
     {
+        $step_system_env = [
+            'PCIT_STEP_NAME='.$step_name,
+        ];
+
         $envHandler = new EnvHandler();
         $pipelineEnv = $envHandler->handle($pipelineEnv, array_merge(
-            $this->client->system_env, $this->client->system_job_env
+            $step_system_env,
+            $this->client->system_env,
+            $this->client->system_job_env,
             )
         );
 
-        $preEnv = array_merge($this->client->system_env,
+        $preEnv = array_merge(
+            $step_system_env,
+            $this->client->system_env,
             $this->client->system_job_env,
             $pipelineEnv
         );
@@ -198,7 +207,7 @@ class Pipeline
             $when = $pipelineContent->if ?? null;
 
             // 预处理 env
-            $preEnv = $this->handleEnv($env);
+            $preEnv = $this->handleEnv($env, $step);
 
             // 处理插件
             if ($settings) {
@@ -242,31 +251,9 @@ class Pipeline
             $ci_script = CommandHandler::parse($shell, $step, $image, $commands);
 
             $env = array_merge(["CI_SCRIPT=$ci_script"], $preEnv);
-
             \Log::info(json_encode($env), []);
 
-            $timeout = env('CI_STEP_TIMEOUT', 21600);
-
-            $cmd = null;
-
-            if ('bash' === $shell || 'sh' === $shell) {
-                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' '.$shell.' -e'] : null;
-            }
-
-            if ('python' === $shell) {
-                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' python'] : null;
-            }
-
-            if ('pwsh' === $shell) {
-                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' pwsh -Command -'] : null;
-            }
-
-            if ('node' === $shell) {
-                $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' node -'] : null;
-            }
-
-            // 有 commands 指令则改为 ['/bin/sh', '-c'], 否则为默认值
-            $entrypoint = $commands ? ['/bin/sh', '-c'] : null;
+            [$entrypoint,$cmd] = (new ShellHandler())->handle($shell, $commands);
 
             $container_config = $docker_container
                 ->setEnv($env)
