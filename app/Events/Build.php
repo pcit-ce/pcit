@@ -18,11 +18,9 @@ use PCIT\Support\CI;
 class Build extends BuildData
 {
     /**
-     * @return Build
-     *
      * @throws PCITException
      */
-    public function handle(int $buildId = 0)
+    public function handle(int $buildId = 0): self
     {
         $result = \App\Build::getData($buildId);
 
@@ -85,7 +83,7 @@ class Build extends BuildData
     }
 
     /**
-     * get user set build env.
+     * get user set build env. ['k=v'].
      *
      * @throws \Exception
      */

@@ -4,34 +4,14 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Conditional;
 
-class Status
+class Status extends Kernel
 {
-    /**
-     * @param string|array|null $status
-     * @param string            $target
-     *
-     * @return bool
-     */
-    public function handle($status, $target)
+    public function handle(bool $reg = false): bool
     {
-        if (!$status) {
+        if (!$this->conditional) {
             return false;
         }
 
-        if (\is_string($status)) {
-            if (\in_array($status, ['failure', 'success', 'changed'], true)) {
-                return $status === $target;
-            }
-        }
-
-        if (\is_array($status)) {
-            foreach ($status as $k) {
-                if ($k === $target) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return parent::handle($reg);
     }
 }

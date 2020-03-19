@@ -10,7 +10,6 @@ use PCIT\Framework\Support\Subject;
 use PCIT\Runner\Events\Cache;
 use PCIT\Runner\Events\Git;
 use PCIT\Runner\Events\Matrix;
-use PCIT\Runner\Events\Notifications;
 use PCIT\Runner\Events\Pipeline;
 use PCIT\Runner\Events\Services;
 use PCIT\Support\CacheKey;
@@ -23,8 +22,14 @@ class Client
      */
     public $build;
 
+    /**
+     * @var array<string> ['k=v']
+     */
     public $system_env = [];
 
+    /**
+     * @var array<string> ['k=v']
+     */
     public $system_job_env = [];
 
     public $pipeline;
@@ -33,7 +38,7 @@ class Client
 
     public $job_id;
 
-    public $buildID;
+    public $build_id;
 
     public $language;
 
@@ -55,7 +60,7 @@ class Client
     public function handle(BuildData $build, int $job_id = 0): void
     {
         $this->build = $build;
-        $this->buildID = (int) $this->build->build_key_id;
+        $this->build_id = (int) $this->build->build_key_id;
 
         $this->system_env = array_merge($this->system_env, $this->build->env);
 
@@ -90,30 +95,16 @@ class Client
         $this->git = $git = $yaml_obj->clone->git ?? null;
         $this->cache = $cache = $yaml_obj->cache ?? null;
         $workspace = $yaml_obj->workdir ?? $yaml_obj->workspace ?? null;
-        $pipeline = $yaml_obj->steps ?? $yaml_obj->pipeline ?? null;
+        $this->pipeline = $pipeline = $yaml_obj->steps ?? $yaml_obj->pipeline ?? null;
         $this->services = $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->jobs ?? $yaml_obj->matrix ?? null;
-        $notifications = $yaml_obj->notifications ?? null;
         $this->image = $yaml_obj->image ?? null;
         $this->networks = $yaml_obj->networks ?? null;
 
-        $this->pipeline = $pipeline;
-
         //项目根目录
-        $base_path = $workspace->base ?? null;
+        $this->handleWorkdir($workspace);
 
-        $path = $workspace->path ?? $this->build->repo_full_name;
-
-        $path = '.' === $path ? null : $path;
-
-        $this->workdir = $workdir = $base_path.'/'.$path;
-
-        (new Subject())
-            // notification
-            ->register(new Notifications($this->build->build_key_id, $notifications))
-            ->handle();
-
-        // ci system env
+        // ci system env ['k=v']
         $this->system_env = (new SystemEnv($this->build, $this))->handle()->env;
 
         if ($job_id) {
@@ -125,34 +116,55 @@ class Client
         }
 
         // 解析构建矩阵
-        $matrix = Matrix::parseMatrix((array) $matrix);
+        $matrix = Matrix::handle((array) $matrix);
 
         // 不存在构建矩阵
         if (!$matrix) {
-            \Log::emergency('This build is not matrix');
+            \Log::emergency('This build only include one job');
 
-            $job_id = (int) (Job::getJobIDByBuildKeyID($this->buildID)[0] ?? 0);
+            $job_id = (int) (Job::getJobIDByBuildKeyID($this->build_id)[0] ?? 0);
 
             $this->handleJob($job_id, null);
 
             return;
         }
 
-        \Log::emergency('This build include matrix');
+        $this->handleMatrix($matrix);
+    }
+
+    /**
+     * @param array<array> $matrix [['k'=>'v'],['k'=>'v2']]
+     */
+    public function handleMatrix(array $matrix): void
+    {
+        \Log::emergency('This build include one more jobs');
 
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
-            // 用户点击重新构建，必须重新生成 job
+            // 用户点击重新构建 build，必须重新生成 job
             // 获取已有的 job_id
             $job_id = Job::getJobIDByBuildKeyIDAndEnv(
-                $this->buildID, json_encode($matrix_config));
+                $this->build_id, json_encode($matrix_config));
 
             $this->handleJob($job_id, $matrix_config);
         }
     }
 
+    public function handleWorkdir($workspace): void
+    {
+        $base_path = $workspace->base ?? null;
+
+        $path = $workspace->path ?? $this->build->repo_full_name;
+
+        $path = '.' === $path ? null : $path;
+
+        $this->workdir = $base_path.'/'.$path;
+    }
+
     /**
      * 生成 job 缓存.
+     *
+     * @param array|null $matrix_config ['k'=>'v','k2'=>'v2']
      *
      * @throws \Exception
      */
@@ -160,8 +172,8 @@ class Client
     {
         $this->job_id = $job_id = $job_id ?: Job::create($this->build->build_key_id);
 
-        \Log::emergency(
-            '===== Handle job Start =====', ['job_id' => $this->job_id]);
+        \Log::emergency('===== Generate job Start =====', ['job_id' => $this->job_id]);
+
         // 清理缓存
         CacheKey::flush($job_id);
 
@@ -185,12 +197,12 @@ class Client
             // git
             ->register(new Git($this->git, $this->build, $this))
             // services
-            ->register(new Services($this->services, (int) $this->job_id, $matrix_config))
+            ->register(new Services($this->services, (int) $this->job_id, $this, $matrix_config))
             // pipeline
             ->register(new Pipeline($this->pipeline, $this->build, $this, $matrix_config))
             // cache
             ->register(new Cache((int) $this->job_id, $build_key_id, $this->workdir, $gitType,
-                       $rid, $branch, $this->cache,
+                       $rid, $branch, $matrix_config, $this->cache,
                        // pull_request 事件不上传缓存
                        'pull_request' === $this->build->event_type
             ))

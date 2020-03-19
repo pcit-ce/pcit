@@ -1,5 +1,6 @@
 {
   "name": "pcit/framework",
+  "description": "pcit framework",
   "version": "19.12-dev",
   "type": "library",
   "require": {

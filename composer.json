@@ -87,7 +87,7 @@
     "firebase/php-jwt": "^5.0",
     "justinrainbow/json-schema": "^5.2",
     "khs1994/curl": "~18.06.0",
-    "khs1994/docker": "~18.06.0",
+    "khs1994/docker": "18.06.05",
     "khs1994/tencent-ai": "~18.06.0",
     "khs1994/wechat": "dev-master",
     "monolog/monolog": "^2.0.2",

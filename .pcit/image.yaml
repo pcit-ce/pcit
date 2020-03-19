@@ -1,0 +1,4 @@
+image: pcit/cli
+
+steps:
+  script: echo exec script

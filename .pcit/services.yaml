@@ -1,6 +1,3 @@
-steps:
-  script: echo exec script
-
 services:
   mysql:
 
@@ -11,3 +8,6 @@ services:
     entrypoint: entrypoint
     commands: cmd
     # k: v
+
+steps:
+  script: echo exec script

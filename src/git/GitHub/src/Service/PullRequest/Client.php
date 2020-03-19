@@ -81,7 +81,7 @@ class Client
      */
     public function create(string $username,
                            string $repo_name,
-                           int $from_issue = 0,
+                           int $from_issue,
                            string $title,
                            string $head,
                            string $base,
@@ -119,7 +119,7 @@ class Client
      */
     public function update(string $username,
                            string $repo_name,
-                           int $from_issue = 0,
+                           int $from_issue,
                            string $title,
                            string $head,
                            string $base,
@@ -349,7 +349,7 @@ class Client
      *
      * @throws \Exception
      */
-    public function listComments(string $repo_full_name, int $pull_number, string $sort = 'created', ?string $direction, ?string $since)
+    public function listComments(string $repo_full_name, int $pull_number, string $sort, ?string $direction, ?string $since)
     {
         return $this->curl->get($this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/comments?'.http_build_query([
                     'sort' => $sort,

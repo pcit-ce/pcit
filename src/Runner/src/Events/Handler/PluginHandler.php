@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Runner\Events;
+namespace PCIT\Runner\Events\Handler;
 
 class PluginHandler
 {

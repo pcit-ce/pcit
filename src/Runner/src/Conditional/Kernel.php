@@ -17,22 +17,53 @@ abstract class Kernel
     }
 
     /**
+     * @param bool $reg conditional is reg
+     *
      * @return bool true 不跳过
      *
      * @throws \Exception
      */
-    public function handle()
+    public function handle(bool $reg = false): bool
     {
         if (!$this->conditional) {
             return true;
         }
 
+        // branch: dev
         if (\is_string($this->conditional)) {
-            $result = $this->stringHandle();
+            $result = $reg ? $this->stringRegHandle() : $this->stringHandle();
         }
 
+        // branch: ["dev"]
         if (\is_array($this->conditional)) {
-            $result = $this->arrayHandle();
+            $result = $reg ? $this->arrayRegHandle() : $this->arrayHandle();
+        }
+
+        // branch:
+        //   include: dev
+        if (\is_object($this->conditional)) {
+            $include = $this->conditional->include ?? [];
+            $exclude = $this->conditional->exclude ?? [];
+
+            if ($exclude) {
+                $this->conditional = $exclude;
+                $result = $this->handle($reg);
+
+                if (true === ($result ?? false)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            if ($include) {
+                $this->conditional = $include;
+                $result = $this->handle($reg);
+
+                if (true === ($result ?? false)) {
+                    return true;
+                }
+            }
         }
 
         if (false === ($result ?? false)) {
@@ -44,34 +75,8 @@ abstract class Kernel
 
     /**
      * @return bool
-     *
-     * @throws \Exception
      */
-    public function regHandle()
-    {
-        if (!$this->conditional) {
-            return true;
-        }
-
-        if (\is_string($this->conditional)) {
-            $result = $this->stringRegHandle();
-        }
-
-        if (\is_array($this->conditional)) {
-            $result = $this->arrayRegHandle();
-        }
-
-        if (false === ($result ?? false)) {
-            \Log::emergency(static::class.' conditional not match, skip');
-        }
-
-        return $result ?? false;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function stringHandle()
+    public function stringHandle()
     {
         if ($this->current === $this->conditional) {
             return true;
@@ -83,7 +88,7 @@ abstract class Kernel
     /**
      * @return bool
      */
-    protected function arrayHandle()
+    public function arrayHandle()
     {
         if ((\in_array($this->current, $this->conditional, true))) {
             return true;

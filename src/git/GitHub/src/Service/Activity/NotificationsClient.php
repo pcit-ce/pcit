@@ -17,7 +17,7 @@ class NotificationsClient
      *
      * @throws \Exception
      */
-    public function list(bool $all = false, bool $participating, string $since, string $before)
+    public function list(bool $all, bool $participating, string $since, string $before)
     {
         $data = [
             'all' => $all,
@@ -36,7 +36,7 @@ class NotificationsClient
      *
      * @throws \Exception
      */
-    public function repository(string $repo_full_name, bool $all = false, bool $participating, string $since, string $before)
+    public function repository(string $repo_full_name, bool $all, bool $participating, string $since, string $before)
     {
         $data = [
             'all' => $all,

@@ -28,7 +28,7 @@ class WebhooksClient
      *
      * @throws \Exception
      */
-    public function getWebhooks(bool $raw = false, string $username, string $repo)
+    public function getWebhooks(bool $raw, string $username, string $repo)
     {
         $url = $this->api_url.'/repos/'.$username.'/'.$repo.'/hooks';
 

@@ -71,6 +71,16 @@
                                         ]
                                     ]
                                 },
+                                "checksum_file": {
+                                    "type": "string",
+                                    "description": "name used for checksum file. \"CHECKSUM\" is replaced with the chosen method",
+                                    "default": "CHECKSUMsum.txt"
+                                },
+                                "checksum_flatten": {
+                                    "type": "boolean",
+                                    "description": "include only the basename of the file in the checksum file",
+                                    "default": false
+                                },
                                 "draft": {
                                     "type": "boolean",
                                     "description": "create a draft release if set to true",
@@ -275,10 +285,10 @@
                             "description": "service container image name"
                         },
                         "entrypoint": {
-                            "$ref": "#/definitions/command"
+                            "type": "array"
                         },
-                        "commands": {
-                            "$ref": "#/definitions/command"
+                        "command": {
+                            "type": "array"
                         }
                     },
                     "additionalProperties": false
@@ -316,10 +326,20 @@
                                 {
                                     "type": "array",
                                     "uniqueItems": true,
+                                    "minItems": 1,
                                     "description": "setting branch include with array"
                                 }
                             ]
-                        },
+                        }
+                    },
+                    "required": [
+                        "include"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "exclude": {
                             "oneOf": [
                                 {
@@ -329,11 +349,15 @@
                                 {
                                     "type": "array",
                                     "uniqueItems": true,
+                                    "minItems": 1,
                                     "description": "setting branch exclude with array"
                                 }
                             ]
                         }
                     },
+                    "required": [
+                        "exclude"
+                    ],
                     "additionalProperties": false
                 }
             ]
@@ -418,6 +442,168 @@
                 "cron"
             ]
         },
+        "if_include": {
+            "type": "object",
+            "properties": {
+                "include": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "minItems": 1
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "include"
+            ],
+            "additionalProperties": false
+        },
+        "if_exclude": {
+            "type": "object",
+            "properties": {
+                "exclude": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "minItems": 1
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "exclude"
+            ],
+            "additionalProperties": false
+        },
+        "if_event": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "$ref": "#/definitions/event"
+                },
+                {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/event"
+                    }
+                }
+            ]
+        },
+        "if_event_include": {
+            "type": "object",
+            "properties": {
+                "include": {
+                    "$ref": "#/definitions/if_event"
+                }
+            },
+            "required": [
+                "include"
+            ],
+            "additionalProperties": false
+        },
+        "if_event_exclude": {
+            "type": "object",
+            "properties": {
+                "exclude": {
+                    "$ref": "#/definitions/if_event"
+                }
+            },
+            "required": [
+                "exclude"
+            ],
+            "additionalProperties": false
+        },
+        "if_platform": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "$ref": "#/definitions/platform"
+                },
+                {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/platform"
+                    }
+                }
+            ]
+        },
+        "if_platform_include": {
+            "type": "object",
+            "properties": {
+                "include": {
+                    "$ref": "#/definitions/if_platform"
+                }
+            },
+            "required": [
+                "include"
+            ],
+            "additionalProperties": false
+        },
+        "if_platform_exclude": {
+            "type": "object",
+            "properties": {
+                "exclude": {
+                    "$ref": "#/definitions/if_platform"
+                }
+            },
+            "required": [
+                "exclude"
+            ],
+            "additionalProperties": false
+        },
+        "if_status": {
+            "oneOf": [
+                {
+                    "type": "string",
+                    "$ref": "#/definitions/status"
+                },
+                {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/status"
+                    }
+                }
+            ]
+        },
+        "if_status_include": {
+            "type": "object",
+            "properties": {
+                "include": {
+                    "$ref": "#/definitions/if_status"
+                }
+            },
+            "required": [
+                "include"
+            ],
+            "additionalProperties": false
+        },
+        "if_status_exclude": {
+            "type": "object",
+            "properties": {
+                "exclude": {
+                    "$ref": "#/definitions/if_status"
+                }
+            },
+            "required": [
+                "exclude"
+            ],
+            "additionalProperties": false
+        },
         "if": {
             "type": "object",
             "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-if",
@@ -443,6 +629,12 @@
                                     "failure"
                                 ]
                             ]
+                        },
+                        {
+                            "$ref": "#/definitions/if_status_include"
+                        },
+                        {
+                            "$ref": "#/definitions/if_status_exclude"
                         }
                     ]
                 },
@@ -468,6 +660,12 @@
                                     "tag"
                                 ]
                             ]
+                        },
+                        {
+                            "$ref": "#/definitions/if_event_include"
+                        },
+                        {
+                            "$ref": "#/definitions/if_event_exclude"
                         }
                     ]
                 },
@@ -485,19 +683,70 @@
                                 "$ref": "#/definitions/platform"
                             },
                             "description": "set container platform with array"
+                        },
+                        {
+                            "$ref": "#/definitions/if_platform_include"
+                        },
+                        {
+                            "$ref": "#/definitions/if_platform_exclude"
                         }
                     ]
                 },
                 "branch": {
                     "$ref": "#/definitions/branch"
                 },
+                "tag": {
+                    "$ref": "#/definitions/branch"
+                },
                 "jobs": {
-                    "type": "array",
-                    "uniqueItems": true,
-                    "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-if",
-                    "items": {
-                        "type": "object"
-                    }
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "description": "see https://docs.ci.khs1994.com/usage/steps.html#_6-if",
+                            "items": {
+                                "type": "object"
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "description": "only run on this jobs",
+                            "properties": {
+                                "include": {
+                                    "type": "array",
+                                    "description": "only run on this jobs",
+                                    "items": {
+                                        "type": "object"
+                                    },
+                                    "uniqueItems": true,
+                                    "minItems": 1
+                                }
+                            },
+                            "required": [
+                                "include"
+                            ],
+                            "additionalProperties": false
+                        },
+                        {
+                            "type": "object",
+                            "description": "don't run on this jobs",
+                            "properties": {
+                                "exclude": {
+                                    "type": "array",
+                                    "description": "don't run on this jobs",
+                                    "items": {
+                                        "type": "object"
+                                    },
+                                    "uniqueItems": true,
+                                    "minItems": 1
+                                }
+                            },
+                            "required": [
+                                "exclude"
+                            ],
+                            "additionalProperties": false
+                        }
+                    ]
                 }
             },
             "additionalProperties": false

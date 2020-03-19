@@ -1,0 +1,38 @@
+steps:
+  script:
+    if:
+      status: success
+
+  script2:
+    if:
+      status:
+      - success
+
+  script4:
+    if:
+      status:
+        include: success
+
+  script5:
+    if:
+      status:
+        include:
+        - success
+
+  script6:
+    if:
+      status:
+        exclude: success
+
+  script7:
+    if:
+      status:
+        exclude:
+        - success
+        # - my_event
+
+  # script8:
+  #   if:
+  #     status:
+  #       exclude:
+  #         k: v

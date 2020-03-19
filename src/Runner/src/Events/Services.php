@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events;
 
-use Docker\Container\Client;
 use PCIT\PCIT;
-use PCIT\Runner\Parser\TextHandler as TextParser;
+use PCIT\Runner\Client;
+use PCIT\Runner\Events\Handler\EnvHandler;
+use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Support\CacheKey;
 
 class Services
@@ -17,10 +18,16 @@ class Services
 
     private $matrix_config;
 
-    public function __construct($service, int $job_id, ?array $matrix_config)
+    private $client;
+
+    /**
+     * @param array|null $matrix_config ['k'=>'v']
+     */
+    public function __construct($service, int $job_id, Client $client, ?array $matrix_config)
     {
         $this->service = $service;
         $this->job_id = $job_id;
+        $this->client = $client;
         $this->matrix_config = $matrix_config;
     }
 
@@ -35,38 +42,62 @@ class Services
             return;
         }
 
+        $envHandler = new EnvHandler();
+
         foreach ($this->service as $service_name => $serviceContent) {
-            list(
+            /**
+             * @var \PCIT\Runner\Agent\Interfaces\ServiceInterface
+             */
+            $class = 'PCIT\Runner\Agent\Docker\Service\\'.ucfirst($service_name).'Service';
+
+            $image = null;
+            $env = [];
+            $entrypoint = null;
+            $command = null;
+
+            if (class_exists($class)) {
+                list(
                 'image' => $image,
                 'env' => $env,
                 'entrypoint' => $entrypoint,
-                'commands' => $commands
-                ) = ServiceDefault::handle($service_name);
-
-            if (\is_array($serviceContent)) {
-                $image = $serviceContent->image ?? $image;
-                $env = $serviceContent->environment ?? $env;
-                $entrypoint = $serviceContent->entrypoint ?? $entrypoint;
-                $commands = $serviceContent->commands ?? $serviceContent->command ?? $commands;
-
-                $image = (new TextParser())->handle($image, $this->matrix_config);
+                'command' => $command
+                ) = $class::handle();
             }
 
+            if (\is_object($serviceContent)) {
+                $image = $serviceContent->image ?? $image ?? $service_name;
+                $env = $serviceContent->env ?? $env ?? [];
+                $entrypoint = $serviceContent->entrypoint ?? $entrypoint ?? null;
+                $command = $serviceContent->command ?? $command ?? null;
+            }
+
+            $system_env = array_merge(
+                $this->client->system_env,
+                $this->client->system_job_env,
+                $envHandler->obj2array($this->matrix_config),
+            );
+
+            $image = (new TextHandler())->handle($image ?? $service_name, $system_env);
+            $env = $envHandler->handle($env ?? [], $system_env);
+
             /**
-             * @var Client
+             * @var \Docker\Container\Client
              */
             $docker_container = app(PCIT::class)->docker->container;
 
+            $entrypoint = \is_string($entrypoint ?? null) ? [$entrypoint ?? null] : $entrypoint ?? null;
+            $command = \is_string($command ?? null) ? [$command ?? null] : $command ?? null;
+
             $container_config = $docker_container
                 ->setEnv($env)
-                ->setEntrypoint($entrypoint)
+                ->setEntrypoint($entrypoint ?? null)
                 ->setLabels([
                     'com.khs1994.ci.service' => (string) $this->job_id,
                     'com.khs1994.ci.service.name' => $service_name,
                     'com.khs1994.ci' => (string) $this->job_id,
                 ])
                 ->setImage($image)
-                ->setCmd($commands)
+                ->setCmd($command ?? null)
                 ->setNetworkingConfig([
                     'EndpointsConfig' => [
                         "pcit_$this->job_id" => [
@@ -78,6 +109,8 @@ class Services
                 ])
                 ->setCreateJson(null)
                 ->getCreateJson();
+
+            \Log::info('Handle service '.$service_name, json_decode($container_config, true));
 
             \Cache::store()->hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
         }

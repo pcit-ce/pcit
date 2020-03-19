@@ -1,5 +1,6 @@
 {
     "name": "pcit/exec-runner",
+    "description": "pcit runner: exec",
     "version": "19.12-dev",
     "autoload": {
         "psr-4": {

@@ -13,12 +13,18 @@ class Matrix
      *
      * @param array $matrix
      *
-     * @return array
+     * @return array [['k1'=>'v1'],['k1'=>'v2']]
      */
-    public static function parseMatrix(?array $matrix)
+    public static function handle(?array $matrix)
     {
         if ($matrix['include'] ?? false) {
-            return $matrix['include'];
+            $matrix_array = [];
+
+            foreach ($matrix['include'] as $item) {
+                $matrix_array[] = (array) $item;
+            }
+
+            return $matrix_array;
         }
 
         if (!$matrix) {

@@ -1,5 +1,6 @@
 {
   "name": "pcit/git-github",
+  "description": "pcit git: github",
   "version": "19.12-dev",
   "autoload": {
     "psr-4": {

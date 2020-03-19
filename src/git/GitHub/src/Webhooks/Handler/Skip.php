@@ -66,7 +66,7 @@ class Skip
         // check branch
         $yaml_obj = json_decode($this->config);
         $branches = $yaml_obj->branches ?? null;
-        $result = (new Branch($branches, $this->branch))->regHandle();
+        $result = (new Branch($branches, $this->branch))->handle(true);
 
         if (!$result) {
             $this->writeSkipToDB();

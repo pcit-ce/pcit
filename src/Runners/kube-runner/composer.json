@@ -1,5 +1,6 @@
 {
     "name": "pcit/kube-runner",
+    "description": "pcit runner: kube",
     "version": "19.12-dev",
     "autoload": {
         "psr-4": {

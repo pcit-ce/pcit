@@ -1,5 +1,6 @@
 {
   "name": "pcit/kernel",
+  "description": "pcit kernel",
   "version": "19.12-dev",
   "autoload": {
     "psr-4": {

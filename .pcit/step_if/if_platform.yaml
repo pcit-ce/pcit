@@ -1,0 +1,32 @@
+steps:
+  script:
+    if:
+      platform: linux/amd64
+
+  script2:
+    if:
+      platform:
+      - linux/amd64
+
+  script3:
+    if:
+      platform:
+        include: linux/amd64
+
+  script4:
+    if:
+      platform:
+        include:
+        - linux/amd64
+
+  script5:
+    if:
+      platform:
+        exclude: linux/amd64
+
+  script6:
+    if:
+      platform:
+        exclude:
+        - linux/amd64
+        # - os/arch

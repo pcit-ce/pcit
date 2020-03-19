@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Runner\Events\PluginHandler;
+use PCIT\Runner\Events\Handler\PluginHandler;
 use PHPUnit\Framework\TestCase;
 
 class PluginHandlerTest extends TestCase
@@ -21,8 +21,8 @@ class PluginHandlerTest extends TestCase
             'var_array' => ['a', 'b'],
             'var_obj' => ['k1' => 'v1', 'k2' => 'v2'],
         ], [
-            'PCIT_COMMIT=fa65eed5098221166a6507d64ab792fc2ae69b13',
-            'PCIT_BUILD_ID=100',
+            'PCIT_COMMIT' => 'fa65eed5098221166a6507d64ab792fc2ae69b13',
+            'PCIT_BUILD_ID' => '100',
         ]
     );
 
