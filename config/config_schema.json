@@ -774,6 +774,7 @@
                                 "sh",
                                 "pwsh",
                                 "node",
+                                "deno",
                                 "python"
                             ]
                         },

@@ -79,6 +79,15 @@ steps:
       console.log(1)
       console.log(2)
 
+  deno_shell:
+    image: pcit/deno
+    shell: deno
+    if:
+      branch: alpha
+    run: |
+      console.log(1)
+      console.log(2)
+
   alpine:
     image: alpine
     run: |
@@ -350,6 +359,38 @@ steps:
     - k=${PCIT_STEP_NAME}
     run: |
       echo ${k}
+      echo ${public_key}
+      echo ${LOG_HIDE_SECRET}
+
+      echo "::set-env name={name}::{value}"
+      echo "::set-env name=action_state::yellow"
+      echo "::set-env name=MY_ENV::${k}"
+      echo "::set-env name=MY_ENV2::`echo 1`"
+
+      echo "::set-output name={name}::{value}"
+      echo "::set-output name=action_fruit::strawberry"
+
+      echo "::add-path::{path}"
+      echo "::add-path::/path/to/dir"
+
+      echo "::debug::{message}"
+      echo "::debug file=app.js,line=1::Entered octocatAddition method"
+
+      echo "::warning file={name},line={line},col={col}::{message}"
+      echo "::warning file=app.js,line=1,col=5::Missing semicolon"
+
+      echo "::error file={name},line={line},col={col}::{message}"
+      echo "::error file=app.js,line=10,col=15::Something went wrong"
+
+      echo "::add-mask::{value}"
+      echo "::add-mask::Mona The Octocat"
+      MY_NAME="Mona The Octocat"
+      echo "::add-mask::$MY_NAME"
+
+  test_pcit_self_after:
+    run: |
+      echo ${MY_ENV:-}
+      echo ${PATH}
 
   after_success:
     - echo "build success"

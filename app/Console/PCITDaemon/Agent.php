@@ -69,7 +69,7 @@ class Agent extends Kernel
         } catch (\Throwable $e) {
             \Log::emergency('Handle job success '.$job_id, ['job_id' => $job_id, 'message' => $e->getMessage()]);
 
-            Job::updateFinishedAt((int) $job_id, time());
+            $this->updateJobFinishedAt((int) $job_id);
 
             try {
                 // TODO
@@ -82,6 +82,11 @@ class Agent extends Kernel
                 \Log::emergency($e->getMessage(), []);
             }
         }
+    }
+
+    public function updateJobFinishedAt(int $job_id): void
+    {
+        Job::updateFinishedAt($job_id, time());
     }
 
     /**

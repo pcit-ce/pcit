@@ -5,6 +5,7 @@
             <directory>tests</directory>
             <directory>src/Framework/tests</directory>
             <directory>src/Kernel/tests</directory>
+            <directory>src/Log/tests</directory>
             <directory>src/Runner/tests</directory>
             <directory>src/git/GitHub/tests</directory>
         </testsuite>
@@ -13,6 +14,7 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Framework/src</directory>
             <directory suffix=".php">./src/Kernel/src</directory>
+            <directory suffix=".php">./src/Log/src</directory>
             <directory suffix=".php">./src/Runner/src</directory>
             <directory suffix=".php">./src/git/GitHub/src</directory>
             <directory suffix=".php">./app</directory>

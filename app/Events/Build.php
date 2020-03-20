@@ -85,15 +85,23 @@ class Build extends BuildData
     /**
      * get user set build env. ['k=v'].
      *
+     * public true:           只获取公开的 secret
+     *        false(default): 获取所有的 secret
+     *
      * @throws \Exception
      */
-    private function getEnv(): void
+    public function getEnv(bool $public = false): void
     {
         $env = [];
 
         $env_array = \App\Env::list($this->rid, $this->git_type);
 
         foreach ($env_array as $k) {
+            if ($public) {
+                if ('0' === $k['public']) {
+                    continue;
+                }
+            }
             $name = $k['name'];
             $value = $k['value'];
 

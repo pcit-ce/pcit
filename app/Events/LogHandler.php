@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Events;
 
+use App\Build;
 use App\Job;
 use PCIT\Support\CacheKey;
 
@@ -14,11 +15,16 @@ class LogHandler
 {
     private $jobId;
 
+    private $build_id;
+
     public $cache;
 
     public function __construct(int $jobId)
     {
         $this->jobId = $jobId;
+
+        $this->build_id = Job::getBuildKeyId($jobId);
+
         $this->cache = \Cache::store();
     }
 
@@ -39,9 +45,28 @@ class LogHandler
         }
 
         $logs = array_filter($logs);
-        $logs = json_encode($logs, JSON_THROW_ON_ERROR + JSON_UNESCAPED_UNICODE);
+        $logs = json_encode($logs, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
 
         Job::updateLog($this->jobId, $logs);
+    }
+
+    public function getSecretPattern():array
+    {
+        $secret_value_pattern = [];
+
+        $env_array = \App\Env::list(
+            Build::getRid($this->build_id),
+            Build::getGitType($this->build_id)
+        );
+
+        foreach ($env_array as $k) {
+            if ('0' !== $k['public']) {
+                continue;
+            }
+            $secret_value_pattern[] = '/'.preg_quote($k['value'], '/').'/';
+        }
+
+        return $secret_value_pattern;
     }
 
     public function getSteps()
@@ -95,6 +120,12 @@ class LogHandler
             $log .= $line."\n";
         }
 
-        return iconv('utf-8', 'utf-8//IGNORE', trim($log));
+        $log = iconv('utf-8', 'utf-8//IGNORE', trim($log));
+
+        // 获取 secret
+        $secret_value_pattern = $this->getSecretPattern();
+        $log = preg_replace($secret_value_pattern, '***', $log);
+
+        return $log;
     }
 }

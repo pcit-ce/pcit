@@ -132,16 +132,9 @@ class Cache
             ->set(CacheKey::cacheKey($this->jobId, 'upload'), $container_config);
     }
 
-    /**
-     * @param $env
-     *
-     * @return mixed
-     *
-     * @throws \Exception
-     */
-    private function getContainerConfig(DockerContainer $dockerContainer, $env)
+    private function getContainerConfig(DockerContainer $dockerContainer, ?array $env): string
     {
-        return $config = $dockerContainer
+        return $dockerContainer
             ->setImage('pcit/s3')
             ->setEnv($env)
             ->setWorkingDir($this->workdir)
