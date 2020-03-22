@@ -11,5 +11,10 @@
     "psr-4": {
       "PCIT\\Gogs\\Tests": "tests/"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "19.12-dev"
+    }
   }
 }

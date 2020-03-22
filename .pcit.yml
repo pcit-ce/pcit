@@ -365,7 +365,7 @@ steps:
       echo "::set-env name={name}::{value}"
       echo "::set-env name=action_state::yellow"
       echo "::set-env name=MY_ENV::${k}"
-      echo "::set-env name=MY_ENV2::`echo 1`"
+      echo "::set-env name=ENV_SET_BY_STEP::`echo 1`"
 
       echo "::set-output name={name}::{value}"
       echo "::set-output name=action_fruit::strawberry"
@@ -389,8 +389,21 @@ steps:
 
   test_pcit_self_after:
     run: |
+      echo "test env command"
       echo ${MY_ENV:-}
+      echo ${ENV_SET_BY_STEP}
+
       echo ${PATH}
+
+      echo "test mask command"
+      echo "hideValue: Mona The Octocat"
+      echo "::add-mask::`echo hide_value`"
+      echo "hideValue: hide_value"
+
+      echo "test output command"
+      echo ${OUTPUT_VALUE}
+    env:
+      - OUTPUT_VALUE={{steps.test_pcit_self.outputs}}
 
   after_success:
     - echo "build success"

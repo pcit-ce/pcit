@@ -6,5 +6,10 @@
     "psr-4": {
       "PCIT\\Provider\\AliyunDockerRegistry\\": "src/"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "19.12-dev"
+    }
   }
 }

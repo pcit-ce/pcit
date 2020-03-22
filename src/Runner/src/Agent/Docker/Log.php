@@ -6,7 +6,13 @@ namespace PCIT\Runner\Agent\Docker;
 
 use Exception;
 use PCIT\Framework\Support\Date;
+use PCIT\Log\Handler\DebugHandler;
+use PCIT\Log\Handler\EnvHandler as LogEnvHandler;
+use PCIT\Log\Handler\ErrorHandler;
+use PCIT\Log\Handler\MaskHandler;
+use PCIT\Log\Handler\WarningHandler;
 use PCIT\PCIT;
+use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 
@@ -41,20 +47,21 @@ class Log
     }
 
     /**
-     * @return array
+     * @return array<array>
      *
      * @throws \Exception
      */
-    public function handle()
+    public function handle(array $mask_value_array = []): array
     {
-        $cache = $this->cache;
-
         $i = -1;
 
         $startedAt = null;
         $finishedAt = null;
         $until_time = 0;
 
+        /**
+         * @var \Docker\Container\Client
+         */
         $docker_container = app(PCIT::class)->docker->container;
 
         while (1) {
@@ -95,8 +102,33 @@ class Log
                     $container_log = '12345678 log not found!';
                 }
 
-                $cache->hset(
-                    CacheKey::logHashKey($this->job_id), $this->step, $container_log);
+                // 去掉非法字符
+                $container_log = $this->fmt($container_log);
+
+                // env
+                [$container_log,$env] = (new LogEnvHandler())->handle($container_log, 31);
+
+                $env = (new EnvHandler())->obj2array($env);
+
+                // path
+
+                // output
+
+                // debug
+                [$container_log,$debug_context] = (new DebugHandler())->handle($container_log, 31);
+
+                // warning
+                [$container_log,$warning_context] = (new WarningHandler())->handle($container_log, 31);
+
+                // error
+                [$container_log,$error_context] = (new ErrorHandler())->handle($container_log, 31);
+
+                // mask
+                [$container_log,$hide_value ] = (new MaskHandler())
+                ->handle($container_log, 31, $mask_value_array);
+
+                // store log
+                $this->storeLog($container_log);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
@@ -120,6 +152,41 @@ class Log
         return [
             'start' => $startedAt,
             'stop' => $finishedAt,
+            'env' => $env ?? [],
+            'mask' => $hide_value ?? [],
+            'context' => [
+                'error' => $error_context ?? [],
+                'debug' => $debug_context ?? [],
+                'warning' => $warning_context ?? [],
+            ],
+            // 'output' => $output ?? []
+            // 'path' => $path ?? []
         ];
+    }
+
+    public function storeLog(string $container_log): void
+    {
+        $cache = $this->cache;
+
+        $cache->hset(CacheKey::logHashKey($this->job_id), $this->step, $container_log);
+    }
+
+    public function fmt(string $log): string
+    {
+        $log_line_array = explode("\n", $log) ?: [];
+
+        $log = [];
+
+        foreach ($log_line_array as $line) {
+            $line = substr($line, 8);
+
+            $log[] = $line;
+        }
+
+        $log = implode("\n", $log);
+
+        $log = iconv('utf-8', 'utf-8//IGNORE', trim($log));
+
+        return $log;
     }
 }

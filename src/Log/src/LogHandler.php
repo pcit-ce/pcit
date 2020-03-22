@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Events;
+namespace PCIT\Log;
 
 use App\Build;
 use App\Job;
@@ -50,7 +50,7 @@ class LogHandler
         Job::updateLog($this->jobId, $logs);
     }
 
-    public function getSecretPattern():array
+    public function getSecretPattern(): array
     {
         $secret_value_pattern = [];
 
@@ -102,25 +102,13 @@ class LogHandler
         $cache = $this->cache;
 
         // 日志美化
-        $result = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
+        $log = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
-        if (!$result) {
+        if (!$log) {
             \Log::warning('Step Log empty, skip', ['jobId' => $this->jobId, 'step' => $pipeline]);
 
             return;
         }
-
-        $result_array = explode("\n", $result);
-
-        $log = null;
-
-        foreach ($result_array as $line) {
-            $line = substr($line, 8);
-
-            $log .= $line."\n";
-        }
-
-        $log = iconv('utf-8', 'utf-8//IGNORE', trim($log));
 
         // 获取 secret
         $secret_value_pattern = $this->getSecretPattern();

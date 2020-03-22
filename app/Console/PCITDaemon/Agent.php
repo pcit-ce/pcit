@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\PCITDaemon;
 
-use App\Events\LogHandler;
 use App\Events\UpdateBuildStatus;
 use App\Job;
 use PCIT\Framework\Support\Subject;
+use PCIT\Log\LogHandler;
 use PCIT\Support\CI;
 
 /**

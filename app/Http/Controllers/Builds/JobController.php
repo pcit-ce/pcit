@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
-use App\Events\LogHandler;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
 use PCIT\Framework\Support\DB;
+use PCIT\Log\LogHandler;
 use PCIT\PCIT;
 use PCIT\Support\CI;
 

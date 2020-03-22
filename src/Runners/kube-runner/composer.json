@@ -4,7 +4,12 @@
     "version": "19.12-dev",
     "autoload": {
         "psr-4": {
-            "PCIT\\Runner\\Agent\\Kube\\" : "src/"
+            "PCIT\\Runner\\Agent\\Kube\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "19.12-dev"
         }
     }
 }

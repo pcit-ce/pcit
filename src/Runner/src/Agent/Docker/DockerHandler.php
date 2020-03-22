@@ -31,6 +31,14 @@ class DockerHandler implements RunnerHandlerInterface
 
     private $cache;
 
+    private $env = [];
+
+    private $path = [];
+
+    private $output = [];
+
+    private $mask_value_array = [];
+
     /**
      * RunContainer constructor.
      *
@@ -192,6 +200,28 @@ class DockerHandler implements RunnerHandlerInterface
     }
 
     /**
+     * 将在 step 中设置的 env 注入到接下来的容器配置中.
+     */
+    public function insertEnv(string $container_config): string
+    {
+        if (!$this->env) {
+            return $container_config;
+        }
+
+        $container_env = json_decode($container_config)->Env;
+
+        $container_env = array_merge(
+           $container_env,
+           $this->env,
+        );
+
+        $container_config = json_decode($container_config);
+        $container_config->Env = $container_env;
+
+        return json_encode($container_config);
+    }
+
+    /**
      * 执行 step.
      *
      * @throws \Exception
@@ -201,15 +231,34 @@ class DockerHandler implements RunnerHandlerInterface
         \Log::emergency('Run job container', ['job_id' => $job_id,
                 'container_config' => $container_config, ]);
 
+        $container_config = $this->insertEnv($container_config);
+
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
             ->create(false)
             ->start(null);
 
-        (new ContainerLog($job_id, $container_id, $step))->handle();
+        [
+            'env' => $env,
+            'mask' => $mask_value_array
+        ] = (new ContainerLog($job_id, $container_id, $step))
+        ->handle($this->mask_value_array);
 
-        \Log::emergency('Run job container success', [
-            'job_id' => $job_id, ]);
+        \Log::emergency('Run job container success', ['job_id' => $job_id]);
+
+        // env
+        // var_dump($step,$env);
+        $this->env = array_merge($this->env, $env);
+
+        // output
+
+        // path
+
+        // mask
+        $this->mask_value_array = array_merge(
+            $this->mask_value_array,
+            $mask_value_array
+        );
     }
 
     /**
