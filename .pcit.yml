@@ -349,7 +349,7 @@ steps:
         - adler32
 
   codecov:
-    image: debian:buster-slim
+    image: pcit/codecov
     shell: bash
     if:
       status: success

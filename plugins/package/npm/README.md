@@ -8,7 +8,7 @@
 steps:
   deploy:
     image: pcit/npm
-    settings:
+    with:
       # username: yourusername # 必填（与 api_key 二选一）
       # password: yourpassword # 必填（与 api_key 二选一）
       email: khs1994@khs1994.com # 必填
@@ -18,9 +18,9 @@ steps:
       # skip_verify: false
       # fail_on_version_conflict: false
       # access: public # public | restricted
-    when:
+    if:
       event: ['push']
       status: success
-      matrix:
+      jobs:
         - NODE_VERSION: 11
 ```

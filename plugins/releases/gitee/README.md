@@ -4,10 +4,10 @@
 steps:
   deploy:
     image: pcit/gitee-release
-    when:
+    if:
       status: success
       event: tag
-    settings:
+    with:
       token: ${GITEE_TOKEN}
       # repo: pcit-ce/pcit
       files:

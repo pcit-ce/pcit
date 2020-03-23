@@ -4,10 +4,10 @@
 steps:
   deploy:
     image: pcit/github-release
-    when:
+    if:
       status: success
       event: tag
-    settings:
+    with:
       token: ${GITHUB_TOKEN}
       # repo: pcit-ce/pcit
       files:
