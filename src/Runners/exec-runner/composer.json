@@ -1,5 +1,5 @@
 {
-    "name": "pcit/exec-runner",
+    "name": "pcit/runner-exec",
     "description": "pcit runner: exec",
     "version": "19.12-dev",
     "autoload": {

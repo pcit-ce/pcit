@@ -112,12 +112,10 @@ class DockerHandler implements RunnerHandlerInterface
 
         // create network
         \Log::emergency('Create Network '.$job_id, [$job_id]);
-
         $this->createNetwork();
 
         // git clone container
         \Log::emergency('Run git clone container', []);
-
         $this->gitClone();
 
         // download cache
@@ -127,6 +125,7 @@ class DockerHandler implements RunnerHandlerInterface
         // run service
         $this->runService($job_id);
 
+        // run step
         $this->handleSteps();
 
         throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
@@ -161,7 +160,13 @@ class DockerHandler implements RunnerHandlerInterface
     {
         $git_container_config = $this->cache->get(CacheKey::cloneKey($this->job_id));
 
-        $this->runStep($this->job_id, $git_container_config, 'clone');
+        try {
+            $this->runStep($this->job_id, $git_container_config, 'clone');
+        } catch (\Exception $e) {
+            // 重试 1 次
+            \Log::emergency('first run git clone failure, retry...');
+            $this->runStep($this->job_id, $git_container_config, 'clone');
+        }
     }
 
     public function handleSteps(): void

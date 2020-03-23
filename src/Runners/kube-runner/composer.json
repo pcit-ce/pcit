@@ -1,5 +1,5 @@
 {
-    "name": "pcit/kube-runner",
+    "name": "pcit/runner-kube",
     "description": "pcit runner: kube",
     "version": "19.12-dev",
     "autoload": {

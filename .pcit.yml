@@ -349,6 +349,7 @@ steps:
         - adler32
 
   codecov:
+    image: debian:buster-slim
     shell: bash
     if:
       status: success

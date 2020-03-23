@@ -41,7 +41,7 @@ class Log
      */
     public static function drop(int $job_id): void
     {
-        \Log::emergency('Drop prev jon '.$job_id.' logs', []);
+        \Log::emergency('Drop prev job '.$job_id.' logs', []);
 
         \Cache::store()->del(CacheKey::logHashKey($job_id));
     }
@@ -127,17 +127,17 @@ class Log
                 [$container_log,$hide_value ] = (new MaskHandler())
                 ->handle($container_log, 31, $mask_value_array);
 
+                $exitCode = $container_status_obj->ExitCode;
+                $finishedAt = $container_status_obj->FinishedAt;
+
                 // store log
-                $this->storeLog($container_log);
+                $this->storeLog($container_log, $exitCode, $finishedAt);
 
                 /**
                  * 2018-05-01T05:16:37.6722812Z
                  * 0001-01-01T00:00:00Z.
                  */
                 $startedAt = $container_status_obj->StartedAt;
-                $finishedAt = $container_status_obj->FinishedAt;
-
-                $exitCode = $container_status_obj->ExitCode;
 
                 if (0 !== $exitCode) {
                     \Log::error("Container $this->container_id ExitCode is $exitCode, not 0", []);
@@ -164,11 +164,13 @@ class Log
         ];
     }
 
-    public function storeLog(string $container_log): void
+    public function storeLog(string $container_log, int $exitCode, string $finishedAt): void
     {
         $cache = $this->cache;
 
-        $cache->hset(CacheKey::logHashKey($this->job_id), $this->step, $container_log);
+        $cache->hset(CacheKey::logHashKey($this->job_id), $this->step,
+        $container_log.PHP_EOL.substr($finishedAt, 0, 27).'00Z'.' ::exit-code::'.$exitCode
+        );
     }
 
     public function fmt(string $log): string
