@@ -101,8 +101,8 @@ class Cache
             'INPUT_ENDPOINT='.env('CI_S3_ENDPOINT'),
             'INPUT_ACCESS_KEY_ID='.env('CI_S3_ACCESS_KEY_ID'),
             'INPUT_SECRET_ACCESS_KEY='.env('CI_S3_SECRET_ACCESS_KEY'),
-            'INPUT_BUCKET='.env('', 'pcit'),
-            'INPUT_REGION='.env('', 'us-east-1'),
+            'INPUT_BUCKET='.env('CI_S3_BUCKET', 'pcit'),
+            'INPUT_REGION='.env('CI_S3_REGION', 'us-east-1'),
             'INPUT_CACHE_PREFIX='.$prefix,
             'INPUT_CACHE='.(new EnvHandler())->array2str($cacheList),
             'INPUT_USE_PATH_STYLE_ENDPOINT='.

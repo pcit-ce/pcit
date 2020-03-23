@@ -1,0 +1,21 @@
+{
+    "name": "pcit/demo-use-toolkit",
+    "description": "pcit plugin demo use toolkit",
+    "version": "19.12-dev",
+    "require": {
+        "pcit/plugin-toolkit": "19.12-dev"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../src/plugin-toolkit"
+        }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "19.12-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

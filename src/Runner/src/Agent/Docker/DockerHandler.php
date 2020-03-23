@@ -12,6 +12,7 @@ use PCIT\Exception\PCITException;
 use PCIT\PCIT;
 use PCIT\Runner\Agent\Docker\Log as ContainerLog;
 use PCIT\Runner\Agent\Interfaces\RunnerHandlerInterface;
+use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 
@@ -228,10 +229,12 @@ class DockerHandler implements RunnerHandlerInterface
      */
     public function runStep(int $job_id, string $container_config, string $step = null): void
     {
-        \Log::emergency('Run job container', ['job_id' => $job_id,
+        \Log::emergency('Run step container', ['job_id' => $job_id,
                 'container_config' => $container_config, ]);
 
         $container_config = $this->insertEnv($container_config);
+
+        $container_config = $this->handleArtifact($job_id, $container_config);
 
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
@@ -244,7 +247,7 @@ class DockerHandler implements RunnerHandlerInterface
         ] = (new ContainerLog($job_id, $container_id, $step))
         ->handle($this->mask_value_array);
 
-        \Log::emergency('Run job container success', ['job_id' => $job_id]);
+        \Log::emergency('Run step container success', ['job_id' => $job_id]);
 
         // env
         // var_dump($step,$env);
@@ -259,6 +262,51 @@ class DockerHandler implements RunnerHandlerInterface
             $this->mask_value_array,
             $mask_value_array
         );
+    }
+
+    public function handleArtifact(int $job_id, string $container_config): string
+    {
+        $container_config_object = json_decode($container_config);
+        $image = $container_config_object->Image;
+
+        if ('pcit/upload-artifact' !== $image) {
+            return $container_config;
+        }
+
+        \Log::emergency('this step is artifact uploader');
+
+        $preEnv = $container_config_object->Env;
+
+        $name = (new EnvHandler())->array2obj($preEnv)['INPUT_NAME'];
+        $path = (new EnvHandler())->array2obj($preEnv)['INPUT_PATH'];
+
+        $git_type = Job::getGitType($job_id);
+        $repo_full_name = Job::getRepoFullName($job_id);
+        $s3_dir_root = "$git_type/$repo_full_name/$job_id";
+
+        $env = array_merge($preEnv, [
+                'INPUT_ENDPOINT='.env('CI_S3_ENDPOINT'),
+                'INPUT_ACCESS_KEY_ID='.env('CI_S3_ACCESS_KEY_ID'),
+                'INPUT_SECRET_ACCESS_KEY='.env('CI_S3_SECRET_ACCESS_KEY'),
+                'INPUT_BUCKET='.env('CI_S3_ARTIFACT_BUCKET', 'pcit-artifact'),
+                'INPUT_REGION='.env('CI_S3_REGION', 'us-east-1'),
+                'INPUT_USE_PATH_STYLE_ENDPOINT='.
+                (env('CI_S3_USE_PATH_STYLE_ENDPOINT', true) ? 'true' : 'false'),
+                'INPUT_ARTIFACT_NAME='.$name,
+                'INPUT_ARTIFACT_PATH='.$path,
+                'INPUT_UPLOAD_DIR='.$s3_dir_root,
+                // must latest key
+                'INPUT_ARTIFACT_DOWNLOAD=',
+        ]);
+
+        $container_config_object->Image = 'pcit/s3';
+        $container_config_object->Env = $env;
+
+        $container_config = json_encode($container_config_object);
+
+        \Log::emergency('run step artifact uploader', json_decode($container_config, true));
+
+        return $container_config;
     }
 
     /**

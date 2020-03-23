@@ -26,6 +26,10 @@ module.exports = {
         link: '/api/',
       },
       {
+        text: 'CLI',
+        link: '/cli/',
+      },
+      {
         text: 'CHANGELOG',
         link: 'https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md',
       },
@@ -45,6 +49,7 @@ module.exports = {
         'clone',
         'workspace',
         'steps',
+        'special-step',
         'services',
         'jobs',
         'cache',
@@ -55,6 +60,7 @@ module.exports = {
         'platform',
         'skip',
         'system_env',
+        'special-command.md',
       ],
       '/plugins/': [
 
@@ -71,6 +77,7 @@ module.exports = {
         'builds/',
         'builds/job',
         'builds/log',
+        'builds/artifact',
         'orgs/',
         'repo/',
         'repo/activate',
@@ -85,7 +92,10 @@ module.exports = {
         'user/',
         'system/',
         'sdk',
-      ]
+      ],
+      '/cli/': [
+         'tencent-ai-cli/'
+      ],
     },
     repo: 'pcit-ce/pcit',
     docsDir: 'docs',

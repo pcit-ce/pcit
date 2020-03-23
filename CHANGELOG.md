@@ -25,9 +25,13 @@
 
 ## v19.12
 
+### 2020/03/23
+
+* [x] 支持上传资源(artifacts)，新增资源(artifacts)相关 API
+
 ### 2020/03/20
 
-* [ ] Build 日志隐藏 secret
+* [x] Build 日志隐藏 secret
 
 ### 2020/03/17
 

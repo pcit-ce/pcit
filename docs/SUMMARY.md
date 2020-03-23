@@ -19,6 +19,7 @@
     * [clone](usage/clone.md)
     * [workspace](usage/workspace.md)
     * [steps](usage/steps.md)
+    * [special-step](special-step.md)
     * [services](usage/services.md)
     * [jobs](usage/jobs.md)
     * [cache](usage/cache.md)
@@ -27,8 +28,8 @@
     * [networks](usage/networks.md)
     * [system](usage/system.md)  
     * [skip build](usage/skip.md)
-    * [System Env](usage/system_env.md)
-    * [CLI](usage/cli/README.md)
+    * [system env](usage/system_env.md)
+    * [special command](usage/special-command.md)
 
 ## Example
 
@@ -45,7 +46,6 @@
 
 * [CLI](cli/README.md)
     * [Tencent AI](cli/tencent-ai-cli/README.md)
-    * [GitHub](cli/github-cli/README.md)
 
 ## Terms of Service
 

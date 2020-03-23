@@ -162,7 +162,7 @@ class GitHubAppChecks
         // var_dump($result);
         $check_run_id = json_decode($result)->id ?? null;
 
-        \Log::info('Create GitHub App Check Run, build status', compact(
+        \Log::info('Create GitHub App Check Run, build status summary', compact(
             'build_key_id', 'build_status', 'conclusion', 'status', 'check_run_id', 'commit_id'
         ));
     }

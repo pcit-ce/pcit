@@ -1,0 +1,20 @@
+{
+    "name": "pcit/plugin-toolkit",
+    "description": "pcit plugin toolkit",
+    "version": "19.12-dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "19.12-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "PCIT\\Plugin\\Toolkit\\":"src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PCIT\\Plugin\\Toolkit\\Tests\\":"tests/"
+        }
+    }
+}

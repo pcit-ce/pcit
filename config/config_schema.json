@@ -198,6 +198,50 @@
                         "image"
                     ],
                     "type": "object"
+                },
+                {
+                    "properties": {
+                        "image": {
+                            "type": "string",
+                            "const": "pcit/upload-artifact",
+                            "description": "pcit upload artifact plugin"
+                        },
+                        "with": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "artifact name"
+                                },
+                                "path": {
+                                    "type": "string",
+                                    "description": "artifact local path"
+                                }
+                            },
+                            "required": [
+                                "name",
+                                "path"
+                            ],
+                            "description": "plugin settings",
+                            "additionalProperties": false
+                        },
+                        "if": {
+                            "$ref": "#/definitions/if"
+                        },
+                        "pull": {
+                            "$ref": "#/definitions/pull"
+                        },
+                        "privileged": {
+                            "$ref": "#/definitions/privileged"
+                        },
+                        "additionalProperties": false
+                    },
+                    "additionalProperties": false,
+                    "description": "pcit upload artifact plugin",
+                    "required": [
+                        "image",
+                        "with"
+                    ],
+                    "type": "object"
                 }
             ]
         },

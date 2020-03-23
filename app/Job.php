@@ -301,6 +301,13 @@ EOF;
         return DB::select($sql, [$job_key_id], true);
     }
 
+    public static function getRepoFullName(int $job_key_id): string
+    {
+        $rid = self::getRid($job_key_id);
+
+        return Repo::getRepoFullName($rid, self::getGitType($job_key_id));
+    }
+
     /**
      * @return int
      *

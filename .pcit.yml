@@ -305,6 +305,21 @@ steps:
       endpoint: ${S3_ENTRYPOINT}
       use_path_style_endpoint: true
 
+  upload_artifact:
+    # 暂不支持 download artifact
+    image: pcit/upload-artifact
+    if:
+      status: success
+      event: ["push"]
+      jobs:
+        - PHP_VERSION: 7.4.3
+          NGINX_VERSION: 1.15.8
+          REDIS_VERSION: 5.0.7
+          MYSQL_VERSION: 5.7.29
+    with:
+      path: phar_dist
+      name: pcit-nightly
+
   github-releases:
     image: pcit/github-release
     if:

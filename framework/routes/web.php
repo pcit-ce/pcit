@@ -134,7 +134,14 @@ Route::post('api/build/{build_id}/cancel', 'Builds\BuildsController@cancel');
 Route::post('api/build/{build_id}/restart', 'Builds\BuildsController@restart');
 
 // job
-Route::get('{git_type}/{username}/{repo_name}/jobs/{build_id}', 'Builds\IndexController');
+Route::get('{git_type}/{username}/{repo_name}/jobs/{job_id}', 'Builds\IndexController');
+// job artifact
+Route::get('api/{git_type}/{username}/{repo_name}/artifacts', 'Builds\Artifact@listByRepo');
+Route::get('api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts', 'Builds\Artifact@listByJob');
+
+Route::get('api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}', 'Builds\Artifact');
+Route::get('api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}/{format}', 'Builds\Artifact@download');
+Route::delete('api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}', 'Builds\Artifact@delete');
 
 Route::get('api/jobs', 'Builds\JobController@list');
 Route::get('api/job/{job_id}', 'Builds\JobController@find');

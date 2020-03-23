@@ -29,6 +29,32 @@ $bucket = getenv('INPUT_BUCKET') ?: 'pcit';
 $flysystem = new Filesystem(
     new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));
 
+// handle artifact
+
+if ($artifact_name = getenv('INPUT_ARTIFACT_NAME')) {
+    $s3_path_root = getenv('INPUT_UPLOAD_DIR');
+    $local_path = getenv('INPUT_ARTIFACT_PATH');
+
+    if (getenv('INPUT_ARTIFACT_DOWNLOAD')) {
+        // tar -zxvf .tar.gz -C local_path
+        exit;
+    }
+
+    // tar -zcvf .tar.gz local_path
+
+    $tar_gz_name = $artifact_name.'.tar.gz';
+
+    exec("set -ex ; tar -zcvf $tar_gz_name $local_path");
+
+    $result = $flysystem->put($s3_path_root.'/'.$tar_gz_name, file_get_contents($tar_gz_name));
+
+    exec("rm -rf $tar_gz_name");
+
+    echo $result ? 'success' : 'failure';
+
+    exit;
+}
+
 // handle cache
 if ($s3_cache = getenv('INPUT_CACHE')) {
     $prefix = getenv('INPUT_CACHE_PREFIX');
