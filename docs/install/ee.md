@@ -20,7 +20,7 @@ $ cd ~/lnmp
 
 ## 新建 GitHub OAuth App
 
-在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App，用于 **OAuth2** 账号体系
+在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App
 
 部分重要信息填写如下：
 

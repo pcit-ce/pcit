@@ -28,7 +28,8 @@
 ### 2020/03/23
 
 * [x] 支持上传资源(artifacts)，新增资源(artifacts)相关 API
-* [x] git clone 支持重试(重试 1 次)
+* [x] git clone 支持重试(默认重试 1 次) `CI_GIT_CLONE_STEP_RETRY`
+* [x] 新增 toolkit，通过数据卷挂载到 `/opt/pcit/toolkit/pcit-CMD`
 
 ### 2020/03/20
 

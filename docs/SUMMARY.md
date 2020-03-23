@@ -30,6 +30,7 @@
     * [skip build](usage/skip.md)
     * [system env](usage/system_env.md)
     * [special command](usage/special-command.md)
+    * [toolkit](usage/toolkit.md)
 
 ## Example
 

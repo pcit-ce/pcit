@@ -59,9 +59,12 @@ class DockerHandler implements RunnerHandlerInterface
      */
     public function handle(int $job_id): void
     {
-        \Log::emergency("Handle job $job_id start...", ['job_id' => $job_id]);
+        \Log::emergency("Run job $job_id step containers...", ['job_id' => $job_id]);
 
         try {
+            // 运行 toolkit 容器
+            $this->handleToolkit();
+
             // 运行一个 job
             Job::updateStartAt($job_id, time());
             self::handleJob($job_id);
@@ -93,6 +96,22 @@ class DockerHandler implements RunnerHandlerInterface
         Cleanup::systemDelete((string) $job_id, true);
 
         throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
+    }
+
+    public function handleToolkit(): void
+    {
+        \Log::emergency('run toolkit container');
+
+        $this->docker_container
+        ->setImage('pcit/toolkit')
+        ->setBinds([
+            'pcit_toolkit:/data',
+        ])
+        ->setLabels([
+            'com.khs1994.ci' => 'toolkit',
+        ])
+        ->create()
+        ->start(null);
     }
 
     /**
@@ -160,13 +179,13 @@ class DockerHandler implements RunnerHandlerInterface
     {
         $git_container_config = $this->cache->get(CacheKey::cloneKey($this->job_id));
 
-        try {
-            $this->runStep($this->job_id, $git_container_config, 'clone');
-        } catch (\Exception $e) {
-            // 重试 1 次
-            \Log::emergency('first run git clone failure, retry...');
-            $this->runStep($this->job_id, $git_container_config, 'clone');
-        }
+        $job_id = $this->job_id;
+
+        $retry = (int) env('CI_GIT_CLONE_STEP_RETRY', 1);
+
+        retry($retry, function () use ($job_id,$git_container_config): void {
+            $this->runStep($job_id, $git_container_config, 'clone');
+        });
     }
 
     public function handleSteps(): void

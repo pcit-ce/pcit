@@ -260,6 +260,7 @@ class Pipeline
                 ->setBinds([
                     "pcit_$jobId:$workdir",
                     'pcit_cache:/tmp/pcit_cache',
+                    'pcit_toolkit:/opt/pcit/toolkit',
                     'pcit_actions_'.$jobId.':'.'/var/run/actions',
                     '/var/run/docker.sock:/var/run/docker.sock',
                 ])

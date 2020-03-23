@@ -102,7 +102,7 @@ steps:
       - pwd
       - composer config -g cache-dir /tmp/pcit_cache/composer
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
-      - composer install
+      - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 5 composer install
       # - composer update
 
   script:
@@ -467,6 +467,12 @@ steps:
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 5.0.7
           MYSQL_VERSION: 5.7.29
+
+  use_pcit_toolkit:
+    run: |
+      /opt/pcit/toolkit/pcit-retry -t 2 --sleep 5 'echo "y u no work"; false'
+    if:
+      status: success
 
 # 配置服务
 services:

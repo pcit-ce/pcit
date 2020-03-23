@@ -63,3 +63,22 @@ if (!function_exists('view')) {
         exit;
     }
 }
+
+/*
+ * https://github.com/igorw/retry
+ */
+if (!function_exists('retry')) {
+    function retry(int $retries, callable $fn)
+    {
+        beginning:
+        try {
+            return $fn();
+        } catch (\Exception $e) {
+            if (!$retries) {
+                throw new \Exception($e->getMessage(), 0, $e);
+            }
+            --$retries;
+            goto beginning;
+        }
+    }
+}

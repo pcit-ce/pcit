@@ -61,6 +61,7 @@ module.exports = {
         'skip',
         'system_env',
         'special-command.md',
+        'toolkit',
       ],
       '/plugins/': [
 
