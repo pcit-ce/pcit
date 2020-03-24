@@ -1,4 +1,4 @@
-# special-step
+# special step
 
 具有特殊含义的 `step`
 

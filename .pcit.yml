@@ -82,11 +82,11 @@ steps:
   deno_shell:
     image: pcit/deno
     shell: deno
-    if:
-      branch: alpha
     run: |
       console.log(1)
       console.log(2)
+
+      Deno.version
 
   alpine:
     image: alpine
@@ -102,7 +102,7 @@ steps:
       - pwd
       - composer config -g cache-dir /tmp/pcit_cache/composer
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
-      - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 5 composer install
+      - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 15 composer install
       # - composer update
 
   script:

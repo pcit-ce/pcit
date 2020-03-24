@@ -1,4 +1,4 @@
-# artifact
+# Artifact
 
 ## 获取某个仓库的资源
 

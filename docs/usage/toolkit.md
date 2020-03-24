@@ -1,4 +1,4 @@
-# Toolkit
+# toolkit
 
 一些位于 `/opt/pcit/toolkit/pcit-CMD` 的工具命令，例如 `pcit-retry` 支持重试。详情 https://github.com/pcit-ce/toolkit
 

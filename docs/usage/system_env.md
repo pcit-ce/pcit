@@ -1,4 +1,4 @@
-# System Env
+# system env
 
 `CI=true`  
 `PCIT=true`  
