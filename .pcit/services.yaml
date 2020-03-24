@@ -5,8 +5,10 @@ services:
     env:
     - k=v
     image: redis
-    entrypoint: entrypoint
-    commands: cmd
+    entrypoint:
+    - entrypoint
+    command:
+    - cmd
     # k: v
 
 steps:

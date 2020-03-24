@@ -9,6 +9,7 @@ use Exception;
 use PCIT\Framework\Support\Subject;
 use PCIT\Runner\Events\Cache;
 use PCIT\Runner\Events\Git;
+use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Runner\Events\Matrix;
 use PCIT\Runner\Events\Pipeline;
 use PCIT\Runner\Events\Services;
@@ -53,18 +54,25 @@ class Client
     public $networks;
 
     /**
+     * @var TextHandler
+     */
+    public $textHandler;
+
+    /**
      * @param int $job_id 处理 job 重新构建
      *
      * @throws \Exception
      */
     public function handle(BuildData $build, int $job_id = 0): void
     {
+        $this->textHandler = new TextHandler();
+
         $this->build = $build;
         $this->build_id = (int) $this->build->build_key_id;
 
         $this->system_env = array_merge($this->system_env, $this->build->env);
 
-        \Log::emergency('This build property', [
+        \Log::emergency('build property is ', [
             'build_key_id' => $this->build->build_key_id,
             'event_type' => $this->build->event_type,
             'commit_id' => $this->build->commit_id,
@@ -98,8 +106,19 @@ class Client
         $this->pipeline = $pipeline = $yaml_obj->steps ?? $yaml_obj->pipeline ?? null;
         $this->services = $services = $yaml_obj->services ?? null;
         $matrix = $yaml_obj->jobs ?? $yaml_obj->matrix ?? null;
-        $this->image = $yaml_obj->image ?? null;
-        $this->networks = $yaml_obj->networks ?? null;
+        $image = $yaml_obj->image ?? null;
+        $this->networks = $networks = $yaml_obj->networks ?? null;
+
+        if ($networks->hosts ?? null) {
+            $this->networks->hosts = $this->textHandler->handleArray(
+            $networks->hosts, $this->system_env
+        );
+        }
+
+        $this->image = null === $image ? null : $this->textHandler->handle($image, $this->system_env);
+
+        \Log::info('.pcit.yml set network hosts: ', $this->networks->hosts ?? []);
+        \Log::info('.pcit.yml set default image: ', [$this->image]);
 
         //项目根目录
         $this->handleWorkdir($workspace);

@@ -1,0 +1,12 @@
+steps:
+  script: ping -c 5 pcit.io
+
+networks:
+  hosts:
+    - 'pcit.io:${PCIT_IO_HOST}'
+
+image: ${MY_DEFAULT_IMAGE}
+
+clone:
+  git:
+    disable: true

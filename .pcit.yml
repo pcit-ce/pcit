@@ -18,6 +18,7 @@ clone:
     #   hello-world: https://github.com/octocat/hello-world.git
     hosts:
       - "git.t.khs1994.com:192.168.199.100"
+    disable: false
 
 # 工作目录
 # 不支持变量
@@ -234,28 +235,6 @@ steps:
       username: khs1994
       git_token: ${GITEE_TOKEN}
       message: "commit by pcit"
-
-  github_pages:
-    image: pcit/pages
-    if:
-      status:
-        include: success
-      event:
-        include: ["push"]
-      jobs:
-        - PHP_VERSION: 7.4.3
-          NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
-          MYSQL_VERSION: 5.7.29
-    with:
-      keep_history: true
-      # target_branch: gh-pages
-      git_url: github.com/pcit-ce/sami-docs
-      local_dir: build
-      # email: ${EMAIL}
-      # username: khs1994
-      git_token: ${GITHUB_TOKEN}
-      depth: "10"
 
   compile_phar:
     if:
@@ -569,6 +548,10 @@ networks:
     - "git.khs1994.com:127.0.0.1"
     - "docker.khs1994.com:127.0.0.1"
     - "git.khs1994.io:127.0.0.1"
+    - "var.khs1994.io:${MY_HOST}"
 
 # 指定构建步骤的默认镜像
-image: khs1994/php:7.4.3-composer-alpine
+# 若使用变量，请在 settings 页面将变量设为 public,否则 pull_request 将不能运行
+# 如果只在 push 触发，则无需设为 public
+# image: khs1994/php:7.4.3-composer-alpine
+image: ${MY_DEFAULT_IMAGE}

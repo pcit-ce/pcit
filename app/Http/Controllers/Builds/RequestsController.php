@@ -100,7 +100,12 @@ class RequestsController
         $result = json_decode($result);
 
         $compare = null;
-        $commit = $result->commit;
+        $commit = $result->commit ?? null;
+
+        if (!$commit) {
+            throw new \Exception('git repo empty, please commit to git repo', 404);
+        }
+
         $commit_id = $commit->sha;
         $commit_message = $commit->commit->message;
         $committer = $commit->commit->committer;

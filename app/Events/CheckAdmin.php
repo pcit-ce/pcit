@@ -33,7 +33,7 @@ class CheckAdmin
         $ci_root = env('CI_ROOT');
 
         while ($ci_root) {
-            \Log::info('PCIT already set ci root', []);
+            \Log::info('ci root(admin) already set, only ci root\'s repo can run!', []);
 
             $admin = Repo::getAdmin((int) $build->rid, false, $build->git_type);
 

@@ -441,6 +441,11 @@
                 "submodule_override": {
                     "type": "object",
                     "description": "submodule overrides, example:\n path: git_url"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": "disable git clone",
+                    "default": false
                 }
             },
             "additionalProperties": false

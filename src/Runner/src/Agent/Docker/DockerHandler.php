@@ -65,7 +65,7 @@ class DockerHandler implements RunnerHandlerInterface
             // 运行 toolkit 容器
             $this->handleToolkit();
 
-            // 运行一个 job
+            // 运行一个 job 的 steps containers
             Job::updateStartAt($job_id, time());
             self::handleJob($job_id);
         } catch (\Throwable $e) {
@@ -91,6 +91,7 @@ class DockerHandler implements RunnerHandlerInterface
         }
 
         // upload cache
+        \Log::emergency('Run cache uploader container...', []);
         $this->runCacheContainer($job_id, false);
 
         Cleanup::systemDelete((string) $job_id, true);
@@ -100,7 +101,7 @@ class DockerHandler implements RunnerHandlerInterface
 
     public function handleToolkit(): void
     {
-        \Log::emergency('run toolkit container');
+        \Log::emergency('run toolkit container ...');
 
         $this->docker_container
         ->setImage('pcit/toolkit')
@@ -122,7 +123,6 @@ class DockerHandler implements RunnerHandlerInterface
     private function handleJob(int $job_id): void
     {
         $this->job_id = $job_id;
-        $cache = $this->cache;
 
         // drop prev log
         $this->dropLog();
@@ -130,15 +130,15 @@ class DockerHandler implements RunnerHandlerInterface
         \Log::emergency('Handle job '.$job_id, ['job_id' => $job_id]);
 
         // create network
-        \Log::emergency('Create Network '.$job_id, [$job_id]);
+        \Log::emergency('Create docker network '.$job_id, [$job_id]);
         $this->createNetwork();
 
         // git clone container
-        \Log::emergency('Run git clone container', []);
+        \Log::emergency('Run git clone container...', []);
         $this->gitClone();
 
         // download cache
-        \Log::emergency('Run cache downloader container', []);
+        \Log::emergency('Run cache downloader container...', []);
         $this->runCacheContainer($job_id);
 
         // run service
@@ -178,6 +178,12 @@ class DockerHandler implements RunnerHandlerInterface
     public function gitClone(): void
     {
         $git_container_config = $this->cache->get(CacheKey::cloneKey($this->job_id));
+
+        if (!$git_container_config) {
+            \Log::emergency('git clone container config not found, maybe disabled');
+
+            return;
+        }
 
         $job_id = $this->job_id;
 
@@ -253,7 +259,7 @@ class DockerHandler implements RunnerHandlerInterface
      */
     public function runStep(int $job_id, string $container_config, string $step = null): void
     {
-        \Log::emergency('Run step container', ['job_id' => $job_id,
+        \Log::emergency('Run step container ...', ['job_id' => $job_id,
                 'container_config' => $container_config, ]);
 
         $container_config = $this->insertEnv($container_config);
@@ -271,7 +277,7 @@ class DockerHandler implements RunnerHandlerInterface
         ] = (new ContainerLog($job_id, $container_id, $step))
         ->handle($this->mask_value_array);
 
-        \Log::emergency('Run step container success', ['job_id' => $job_id]);
+        \Log::emergency('step container success', ['job_id' => $job_id]);
 
         // env
         // var_dump($step,$env);
@@ -345,36 +351,18 @@ class DockerHandler implements RunnerHandlerInterface
         $containerConfig = \Cache::store()->get(CacheKey::cacheKey($job_id, $type));
 
         if (!$containerConfig) {
+            \Log::emergency('cache container config not found');
+
             return;
         }
 
         try {
             $this->runStep($job_id, $containerConfig, 'cache_'.$type);
-            'upload' === $type && $this->updateCacheInfo($containerConfig);
         } catch (\Throwable $e) {
             \Log::emergency(
                 'upload or download cache error, please check s3(minio) server status',
                 ['message' => $e->getMessage(), 'code' => $e->getCode()]);
         }
-    }
-
-    /**
-     * 更新缓存信息，存入数据库.
-     *
-     * TODO
-     */
-    public function updateCacheInfo(string $containerConfig): void
-    {
-        $envs = json_decode($containerConfig)->Env;
-
-        $envArray = preg_grep('/S3_CACHE_PREFIX=*/', $envs);
-
-        $prefix = explode('=', array_values($envArray)[0])[1];
-
-        [$gitType,$rid,$branch] = explode('_', $prefix);
-
-        \App\Cache::insert($gitType, (int) $rid, $branch, $prefix);
-        \App\Cache::update($gitType, (int) $rid, $branch);
     }
 
     /**
@@ -399,7 +387,7 @@ class DockerHandler implements RunnerHandlerInterface
      */
     private function after(int $job_id, $status): void
     {
-        \Log::emergency('Run job after container', ['job_id' => $job_id, 'status' => $status]);
+        \Log::emergency('Run job after step container ...', ['job_id' => $job_id, 'status' => $status]);
 
         // TODO 获取上一次 build 的状况
         if ('changed' === $status && !Build::buildStatusIsChanged(Job::getRid($job_id), 'master')) {
@@ -434,7 +422,7 @@ class DockerHandler implements RunnerHandlerInterface
 
         $cache->del($copyKey);
 
-        \Log::emergency('Run job after finished', ['status' => $status]);
+        \Log::emergency('job after step finished', ['status' => $status]);
     }
 
     /**
@@ -444,7 +432,7 @@ class DockerHandler implements RunnerHandlerInterface
      */
     private function runService(int $job_id): void
     {
-        \Log::emergency('Run job services container', ['job_id' => $job_id]);
+        \Log::emergency('Run job services container ...', ['job_id' => $job_id]);
 
         $container_configs = \Cache::store()->hgetall(CacheKey::serviceHashKey($job_id));
 
@@ -454,7 +442,7 @@ class DockerHandler implements RunnerHandlerInterface
                 ->create(false)
                 ->start(null);
 
-            \Log::emergency('Run Services success', [
+            \Log::emergency("Run service $service  success", [
                 'job_id' => $job_id, 'container_id' => $container_id, ]);
         }
     }

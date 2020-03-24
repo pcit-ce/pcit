@@ -192,7 +192,7 @@ class Pipeline
         }
 
         foreach ($this->pipeline as $step => $pipelineContent) {
-            \Log::emergency('Handle step', compact('step'));
+            \Log::emergency("Handle step $step ...");
 
             $image = $pipelineContent->image
                 ?? $this->client->image

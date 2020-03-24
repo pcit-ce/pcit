@@ -67,6 +67,13 @@ class Git
     public function handle(): void
     {
         $git = $this->git;
+
+        if ($this->git->disable ?? false) {
+            \Log::emergency('git clone disabled');
+
+            return;
+        }
+
         $client = $this->client;
         $build = $this->build;
 
