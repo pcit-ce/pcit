@@ -37,63 +37,10 @@ cache:
 
 # 构建步骤
 steps:
-  # 构建指令最简 字符串
-  before_install: echo init script
-
-  # 构建指令最简多个步骤 数组
-  before_install_2: ["echo init script", "echo init script2"]
-
-  # 构建指令最简多个步骤 数组 另一种写法
-  before_install_3:
-    - echo init script
-    - echo init script2
-
-  # 当构建步骤仅指定 run，可以使用以上三种方式进行简写
-  before_install_4:
-    run: ["echo init script"]
-
-  before_install_5:
+  before_install:
     env:
       - k=v
     run: ["echo init script", "echo $k"]
-
-  python_shell:
-    image: python:3.7-alpine
-    shell: python
-    run: |
-      import os
-      print(os.environ['PATH'])
-
-  pwsh_shell:
-    # image: mcr.microsoft.com/powershell:preview-alpine-3.10
-    image: mcr.azk8s.cn/powershell:preview-alpine-3.10
-    shell: pwsh
-    run: |
-      pwd
-      write-host 1
-      write-host 2
-
-  node_shell:
-    image: node:alpine
-    shell: node
-    run: |
-      console.log(1)
-      console.log(2)
-
-  deno_shell:
-    image: pcit/deno
-    shell: deno
-    run: |
-      console.log(1)
-      console.log(2)
-
-      Deno.version
-
-  alpine:
-    image: alpine
-    run: |
-      echo 1
-      echo 2
 
   platform: uname -a
 
@@ -349,73 +296,21 @@ steps:
       # -K           Remove color from the output
       - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID}
 
-  test_pcit_self:
-    env:
-    - k=${PCIT_STEP_NAME}
-    run: |
-      echo ${k}
-      echo ${public_key}
-      echo ${LOG_HIDE_SECRET}
-
-      echo "::set-env name={name}::{value}"
-      echo "::set-env name=action_state::yellow"
-      echo "::set-env name=MY_ENV::${k}"
-      echo "::set-env name=ENV_SET_BY_STEP::`echo 1`"
-
-      echo "::set-output name={name}::{value}"
-      echo "::set-output name=action_fruit::strawberry"
-
-      echo "::add-path::{path}"
-      echo "::add-path::/path/to/dir"
-
-      echo "::debug::{message}"
-      echo "::debug file=app.js,line=1::Entered octocatAddition method"
-
-      echo "::warning file={name},line={line},col={col}::{message}"
-      echo "::warning file=app.js,line=1,col=5::Missing semicolon"
-
-      echo "::error file={name},line={line},col={col}::{message}"
-      echo "::error file=app.js,line=10,col=15::Something went wrong"
-
-      echo "::add-mask::{value}"
-      echo "::add-mask::Mona The Octocat"
-      MY_NAME="Mona The Octocat"
-      echo "::add-mask::$MY_NAME"
-
-  test_pcit_self_after:
-    run: |
-      echo "test env command"
-      echo ${MY_ENV:-}
-      echo ${ENV_SET_BY_STEP}
-
-      echo ${PATH}
-
-      echo "test mask command"
-      echo "hideValue: Mona The Octocat"
-      echo "::add-mask::`echo hide_value`"
-      echo "hideValue: hide_value"
-
-      echo "test output command"
-      echo ${OUTPUT_VALUE}
-    env:
-      - OUTPUT_VALUE={{steps.test_pcit_self.outputs}}
-
   after_success:
-    - echo "build success"
+    if:
+      status: success
+    run: echo "build success"
 
   after_failure:
-    image: bash
-    # if:
-    #   status: failure
+    if:
+      status: failure
     run:
       - echo "build failure"
 
   after_changed:
-    image: bash
-    # if:
-    #   status: changed
-    run:
-      - echo "build changed"
+    if:
+      status: changed
+    run: echo "build changed"
 
   ping: ["ping -c 5 git.khs1994.io"]
 

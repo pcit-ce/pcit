@@ -1,0 +1,36 @@
+steps:
+  python_shell:
+    image: python:3.7-alpine
+    shell: python
+    run: |
+      import os
+      print(os.environ['PATH'])
+
+  pwsh_shell:
+    # image: mcr.microsoft.com/powershell:preview-alpine-3.10
+    image: mcr.azk8s.cn/powershell:preview-alpine-3.10
+    shell: pwsh
+    run: |
+      pwd
+      write-host 1
+      write-host 2
+
+  node_shell:
+    image: node:alpine
+    shell: node
+    run: |
+      console.log(1)
+      console.log(2)
+
+  deno_shell:
+    image: pcit/deno
+    shell: deno
+    run: |
+      console.log(1)
+      console.log(2)
+
+      Deno.version
+
+clone:
+  git:
+    disable: true

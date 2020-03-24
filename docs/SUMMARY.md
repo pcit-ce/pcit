@@ -19,7 +19,6 @@
     * [clone](usage/clone.md)
     * [workspace](usage/workspace.md)
     * [steps](usage/steps.md)
-    * [special-step](special-step.md)
     * [services](usage/services.md)
     * [jobs](usage/jobs.md)
     * [cache](usage/cache.md)

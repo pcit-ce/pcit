@@ -8,7 +8,6 @@ use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\CIDefault\Commands;
 use PCIT\Runner\CIDefault\Image;
-use PCIT\Runner\CIDefault\Status as CIDefaultStatus;
 use PCIT\Runner\Client as Runner;
 use PCIT\Runner\Conditional\Branch;
 use PCIT\Runner\Conditional\Event;
@@ -219,8 +218,8 @@ class Pipeline
                 continue;
             }
 
-            // 根据 pipeline 获取默认的构建条件
-            $status = $when->status ?? CIDefaultStatus::get($step);
+            // 解析运行条件
+            $status = $when->status ?? null;
             $failure = (new Status($status, 'failure'))->handle();
             $success = (new Status($status, 'success'))->handle();
             $changed = (new Status($status, 'changed'))->handle();

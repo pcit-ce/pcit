@@ -1,11 +1,18 @@
 steps:
   script:
-    run: string
+    run: echo string
 
   script2:
     run:
-    - array
+    - echo array
 
-  # script3:
+  script3:
+    run: ['echo array']
+
+  # script4:
   #   run:
   #     k: v
+
+clone:
+  git:
+    disable: true

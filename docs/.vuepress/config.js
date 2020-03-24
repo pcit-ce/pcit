@@ -49,7 +49,6 @@ module.exports = {
         'clone',
         'workspace',
         'steps',
-        'special-step',
         'services',
         'jobs',
         'cache',
