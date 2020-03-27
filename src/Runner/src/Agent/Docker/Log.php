@@ -169,7 +169,7 @@ class Log
         $cache = $this->cache;
 
         $cache->hset(CacheKey::logHashKey($this->job_id), $this->step,
-        $container_log.PHP_EOL.substr($finishedAt, 0, 27).'00Z'.' ::exit-code::'.$exitCode
+        $container_log."\n".substr($finishedAt, 0, 27).'00Z'.' ::exit-code::'.$exitCode
         );
     }
 

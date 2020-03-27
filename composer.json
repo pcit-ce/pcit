@@ -65,6 +65,10 @@
     {
       "type": "path",
       "url": "./src/notifications/notification-wechat"
+    },
+    {
+      "type": "path",
+      "url": "./src/plugin-toolkit"
     }
   ],
   "authors": [{
@@ -102,6 +106,7 @@
     "pcit/log": "19.12-dev",
     "pcit/notification": "19.12-dev",
     "pcit/notification-wechat": "19.12-dev",
+    "pcit/plugin-toolkit": "19.12-dev",
     "pcit/provider": "19.12-dev",
     "pcit/provider-aliyun-docker-registry": "19.12-dev",
     "pcit/runner": "19.12-dev",
@@ -163,6 +168,7 @@
       "cp -r -f src/git/Gitee/ vendor/pcit/git-gitee",
       "cp -r -f src/git/GitHub/ vendor/pcit/git-github",
       "cp -r -f src/git/Gogs/ vendor/pcit/git-gogs",
+      "cp -r -f src/plugin-toolkit/ vendor/pcit/plugin-toolkit",
       "cp -r -f src/provider/ vendor/pcit/provider",
       "cp -r -f src/providers/provider-aliyun_docker_registry/ vendor/pcit/provider-aliyun-docker-registry",
       "cp -r -f src/notification/ vendor/pcit/notification",

@@ -12,6 +12,11 @@
         ".pcit/**.yml"
     ],
     "definitions": {
+        "read_only": {
+           "type": "boolean",
+           "description": "Mount the container's root filesystem as read only",
+           "default": false
+        },
         "plugins": {
             "type": "object",
             "oneOf": [
@@ -137,6 +142,9 @@
                         "privileged": {
                             "$ref": "#/definitions/privileged"
                         },
+                        "read_only": {
+                            "$ref": "#/definitions/read_only"
+                        },
                         "additionalProperties": false
                     },
                     "required": [
@@ -190,6 +198,9 @@
                         "privileged": {
                             "$ref": "#/definitions/privileged"
                         },
+                        "read_only": {
+                            "$ref": "#/definitions/read_only"
+                        },
                         "additionalProperties": false
                     },
                     "additionalProperties": false,
@@ -232,6 +243,9 @@
                         },
                         "privileged": {
                             "$ref": "#/definitions/privileged"
+                        },
+                        "read_only": {
+                            "$ref": "#/definitions/read_only"
                         },
                         "additionalProperties": false
                     },
@@ -841,6 +855,9 @@
                         },
                         "if": {
                             "$ref": "#/definitions/if"
+                        },
+                        "read_only": {
+                            "$ref": "#/definitions/read_only"
                         }
                     },
                     "additionalProperties": false

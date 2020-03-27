@@ -21,7 +21,7 @@ class Core
      */
     public function debug(string $message): void
     {
-        echo "::debug::$message".PHP_EOL;
+        echo "::debug::$message"."\n";
     }
 
     /**
@@ -31,7 +31,7 @@ class Core
      */
     public function warning(string $message): void
     {
-        echo "::warning::$message".PHP_EOL;
+        echo "::warning::$message"."\n";
     }
 
     /**
@@ -41,7 +41,7 @@ class Core
      */
     public function error(string $message): void
     {
-        echo "::error::$message".PHP_EOL;
+        echo "::error::$message"."\n";
     }
 
     /**
@@ -52,7 +52,7 @@ class Core
      */
     public function exportVariable(string $name, string $value): void
     {
-        echo "::set-env name=$name::$value".PHP_EOL;
+        echo "::set-env name=$name::$value"."\n";
     }
 
     /**
@@ -62,7 +62,7 @@ class Core
      */
     public function setSecret(string $secret): void
     {
-        echo "::add-mask::$secret".PHP_EOL;
+        echo "::add-mask::$secret"."\n";
     }
 
     /**
@@ -70,7 +70,7 @@ class Core
      */
     public function addPath(string $inputPath): void
     {
-        echo "::add-path::${inputPath}".PHP_EOL;
+        echo "::add-path::${inputPath}"."\n";
     }
 
     /**
@@ -98,7 +98,7 @@ class Core
      */
     public function setOutput(string $name, string $value): void
     {
-        echo "::set-output name=$name::$value".PHP_EOL;
+        echo "::set-output name=$name::$value"."\n";
     }
 
     /**
@@ -120,7 +120,7 @@ class Core
      */
     public function saveState(string $name, string $value): void
     {
-        echo "::save-state name=$name::$value".PHP_EOL;
+        echo "::save-state name=$name::$value"."\n";
     }
 
     /**

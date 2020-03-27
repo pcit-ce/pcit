@@ -11,36 +11,78 @@ class CommandHandler
      *
      * @throws \Exception
      */
-    public static function parse(string $shell, string $step, string $image, ?array $commands): ?string
-    {
+    public static function parse(
+        string $shell,
+        string $step,
+        string $image,
+        ?array $commands,
+        bool $raw = false
+    ): ?string {
         if (null === $commands) {
             return null;
         }
 
         if ('sh' === $shell or 'bash' === $shell) {
-            $content = '\n';
+            $content = '';
 
-            $content .= 'echo;echo\n\necho "==>" Pipeline ['.$step.'] Run On "=>" ['.$image.']';
-
-            $content .= '\n\nsleep 0.1;echo;echo\n\nset -x\n\n';
+            $content .= <<<EOF
+echo '
+##[metadata]
+{
+    "step" : "$step",
+    "image": "$image"
+}
+##[endmetadata]
+'
+EOF;
+            $content .= "\n";
 
             for ($i = 0; $i < \count($commands); ++$i) {
-                $command = addslashes($commands[$i]);
+                $command = $commands[$i];
 
-                $content .= $command;
-
-                $content .= '\n\n';
+                $content .= self::prepend($command);
             }
         } else {
             $content = $commands[0];
         }
 
-        // var_dump(stripcslashes($content));
+        if ($raw) {
+            return $content;
+        }
 
-        $ci_script = base64_encode(stripcslashes($content));
+        $ci_script = base64_encode($content);
 
         \Log::emergency('Command base64encode is '.$ci_script, []);
 
         return $ci_script;
+    }
+
+    public static function prepend($command)
+    {
+        $array = explode("\n", $command);
+
+        $cmd = '';
+        $special_cmd = '';
+
+        foreach ($array as $item) {
+            if ('' === $item) {
+                continue;
+            }
+
+            if ('\\' === substr($item, -1)) {
+                // $cmd .= $item;
+                $special_cmd .= trim($item, '\\');
+                continue;
+            }
+
+            if ($special_cmd) {
+                $item = $special_cmd.$item;
+                $special_cmd = '';
+            }
+
+            $cmd .= 'cat > /dev/stdout <<\'EOF\''."\n".'[36m[command]'.$item.'[0m'."\nEOF"."\n".$item."\n";
+        }
+
+        return $cmd."\n";
     }
 }

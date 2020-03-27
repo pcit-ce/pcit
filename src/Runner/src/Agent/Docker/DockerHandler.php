@@ -76,7 +76,7 @@ class DockerHandler implements RunnerHandlerInterface
                 // 清理 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);
 
-                throw new PCITException($e->getMessage(), $e->getCode());
+                throw new PCITException($e->getMessage(), $e->getCode(), $e);
             } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                 // job success
                 $this->after($job_id, 'success');
@@ -86,7 +86,7 @@ class DockerHandler implements RunnerHandlerInterface
                 // 清理 job 的构建环境
                 Cleanup::systemDelete((string) $job_id, true);
 
-                throw new \Exception($e->__toString(), $e->getCode());
+                throw new \Exception($e->__toString(), $e->getCode(), $e);
             }
         }
 
@@ -442,7 +442,7 @@ class DockerHandler implements RunnerHandlerInterface
                 ->create(false)
                 ->start(null);
 
-            \Log::emergency("Run service $service  success", [
+            \Log::emergency("Run service $service success", [
                 'job_id' => $job_id, 'container_id' => $container_id, ]);
         }
     }

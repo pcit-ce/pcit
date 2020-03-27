@@ -8,16 +8,18 @@
             <directory>src/Log/tests</directory>
             <directory>src/Runner/tests</directory>
             <directory>src/git/GitHub/tests</directory>
+            <directory>src/plugin-toolkit/tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app</directory>
             <directory suffix=".php">./src/Framework/src</directory>
             <directory suffix=".php">./src/Kernel/src</directory>
             <directory suffix=".php">./src/Log/src</directory>
             <directory suffix=".php">./src/Runner/src</directory>
             <directory suffix=".php">./src/git/GitHub/src</directory>
-            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./src/plugin-toolkit/src</directory>
         </whitelist>
     </filter>
     <groups>

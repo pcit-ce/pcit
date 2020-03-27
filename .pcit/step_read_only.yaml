@@ -1,0 +1,23 @@
+steps:
+  install: echo install
+
+  script:
+    image: alpine
+    read_only: true
+    if:
+      status: success
+    run: |
+      pwd
+
+      echo 1 1111
+
+      echo 1\
+       1111
+
+      echo 1 > 1.txt
+
+      echo 2 > /1.txt
+
+clone:
+  git:
+    disable: true

@@ -88,6 +88,9 @@ $plugins[] = [
         'privileged' => [
             '$ref' => '#/definitions/privileged',
         ],
+        'read_only' => [
+            '$ref' => '#/definitions/read_only',
+        ],
         'additionalProperties' => false,
     ],
     'additionalProperties' => false,

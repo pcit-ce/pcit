@@ -204,6 +204,7 @@ class Pipeline
             $settings = $pipelineContent->with ?? new \stdClass();
             $settings = (array) $settings;
             $when = $pipelineContent->if ?? null;
+            $read_only = $pipelineContent->read_only ?? false;
 
             // 预处理 env
             $preEnv = $this->handleEnv($env, $step);
@@ -287,6 +288,7 @@ class Pipeline
                         ],
                     ],
                 ])
+                ->setReadonlyRootfs($read_only)
                 ->setCreateJson(null)
                 ->getCreateJson();
 
