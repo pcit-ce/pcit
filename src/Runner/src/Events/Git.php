@@ -131,9 +131,14 @@ class Git
 
         $config = $this->generateDocker($git_env, $git_image, $hosts, (int) $client->job_id, $client->workdir);
 
+        $this->storeContainerConfig($config, (int) $client->job_id);
+    }
+
+    public function storeContainerConfig(string $config, int $job_id): void
+    {
         \Log::info('Handle clone git', json_decode($config, true));
 
-        \Cache::store()->set(CacheKey::cloneKey($client->job_id), $config);
+        \Cache::store()->set(CacheKey::cloneKey($job_id), $config);
     }
 
     public function generateDocker(

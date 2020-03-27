@@ -34,6 +34,7 @@ jobs:
             -t pcit/pcitd:${TAG} \
             -t pcit/server \
             -t pcit/server:${TAG} \
+            --platform ${PLATFORM} \
             --target=pcit --push .
 
           docker buildx build \
@@ -41,6 +42,7 @@ jobs:
             -t pcit/pcit:${TAG}-cli \
             -t pcit/cli \
             -t pcit/cli:${TAG} \
+            --platform ${PLATFORM} \
             --target=pcit_cli --push .
 
           docker buildx build \
@@ -48,6 +50,7 @@ jobs:
             -t pcit/pcit:${TAG}-fpm \
             -t pcit/fpm \
             -t pcit/fpm:${TAG} \
+            --platform ${PLATFORM} \
             --target=pcit_fpm --push .
 
           docker buildx build \
@@ -55,6 +58,7 @@ jobs:
             -t pcit/pcit:${TAG}-unit \
             -t pcit/unit \
             -t pcit/unit:${TAG} \
+            --platform ${PLATFORM} \
             --target=unit --push .
 
           docker buildx build \
@@ -62,9 +66,11 @@ jobs:
             -t pcit/pcit:${TAG}-frontend \
             -t pcit/frontend \
             -t pcit/frontend:${TAG} \
+            --platform ${PLATFORM} \
             --target=frontend --push .
         env:
           GITHUB_REF: ${{github.ref}}
+          PLATFORM: linux/amd64,linux/arm64
         name: Build image
       - run: docker run -i --rm --entrypoint=sh pcit/pcit -c "ls -la /app/pcit"
         name: List files

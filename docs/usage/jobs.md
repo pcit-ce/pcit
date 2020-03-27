@@ -12,7 +12,7 @@ steps:
 
 jobs:
   PHP_TAG:
-    - 7.4.3-alpine
+    - 7.4.4-alpine
     - 7.3.11-alpine    
 ```
 
@@ -25,7 +25,7 @@ jobs:
 ```yaml
 steps:
   php:
-    image: khs1994/php-fpm:7.4.3-alpine
+    image: khs1994/php-fpm:7.4.4-alpine
     ...
 
   php2:

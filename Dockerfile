@@ -3,7 +3,7 @@
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 
-ARG PHP_VERSION=7.4.3
+ARG PHP_VERSION=7.4.4
 ARG NODE_VERSION=13.8.0
 
 # 前端构建
@@ -29,7 +29,7 @@ RUN cd /app/pcit/frontend \
       && npm run build
 
 # 安装 composer 依赖
-FROM khs1994/php:7.4.3-composer-alpine as composer
+FROM khs1994/php:7.4.4-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
@@ -50,7 +50,7 @@ RUN rm -rf /app/pcit/Dockerfile \
     && rm -rf /app/pcit/.docker
 
 # ==> pcit
-FROM khs1994/php:${PHP_VERSION}-cli-alpine as pcit
+FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine as pcit
 
 COPY --from=dump /app/pcit/ /app/pcit/
 
@@ -62,7 +62,7 @@ CMD ["up"]
 # CMD ["agent"]
 
 # ==> cli
-FROM khs1994/php:${PHP_VERSION}-cli-alpine as pcit_cli
+FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine as pcit_cli
 
 COPY --from=dump /app/pcit/ /app/pcit/
 
@@ -75,7 +75,7 @@ ENTRYPOINT ["/app/pcit/bin/pcit"]
 CMD ["list"]
 
 # ==> fpm
-FROM khs1994/php:${PHP_VERSION}-fpm-alpine as pcit_fpm
+FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine as pcit_fpm
 
 COPY --from=dump /app/pcit/ /app/.pcit/
 
@@ -89,7 +89,7 @@ CMD ["up"]
 # CMD ["server"]
 
 # ==> nginx unit
-FROM khs1994/php:7.4.3-unit-alpine as unit
+FROM --platform=$TARGETPLATFORM khs1994/php:7.4.4-unit-alpine as unit
 
 COPY --from=dump /app/pcit/ /app/pcit/
 
@@ -107,7 +107,7 @@ CMD ["up"]
 # CMD ["server"]
 
 # ==> 前端资源
-FROM alpine as frontend
+FROM --platform=$TARGETPLATFORM alpine as frontend
 
 COPY --from=dump /app/pcit/public/ /app/pcit/public/
 
