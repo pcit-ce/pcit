@@ -296,4 +296,9 @@ class IndexController
     {
         \Response::redirect('https://docs.ci.khs1994.com/terms-of-service.html');
     }
+
+    public function security(): void
+    {
+        \Response::redirect('https://docs.ci.khs1994.com/usage/security.html');
+    }
 }

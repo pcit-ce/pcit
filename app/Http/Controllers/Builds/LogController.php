@@ -43,10 +43,12 @@ class LogController
      *
      * @throws \Exception
      */
-    public function delete($job_id): void
+    public function delete($job_id)
     {
-        JWTController::check((int) $job_id);
+        JWTController::check(Job::getBuildKeyId((int) $job_id));
 
         Job::updateLog((int) $job_id, 'Log removed at '.date('c'));
+
+        return \Response::make('', 204);
     }
 }

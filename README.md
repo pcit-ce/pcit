@@ -191,7 +191,7 @@ $ ./lnmp-docker pcit-up
 | --          | --   | -- |
 | **PHP**     | https://github.com/khs1994-php/tencent-ai | [![Build Status](https://ci.khs1994.com/github/khs1994-php/tencent-ai/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/tencent-ai) |
 | **Node.js** | https://github.com/khs1994/tencent-ai-js | [![Build Status](https://ci.khs1994.com/github/khs1994/tencent-ai-js/status?branch=master)](https://ci.khs1994.com/github/khs1994/tencent-ai-js) |
-| **Go**      | https://github.com/khs1994-php/tencent-ai-go | [![Build Status](https://ci.khs1994.com/github/khs1994-php/tencent-ai-go/status?branch=master)](https://ci.khs1994.com/github/khs1994-php/tencent-ai-go) |
+| **微信小程序 (Node.js)** | https://github.com/docker-practice/miniprogram |  |
 | **Hexo (Node.js)** | https://github.com/khs1994/khs1994.github.io | [![Build Status](https://ci.khs1994.com/github/khs1994/khs1994.github.io/status?branch=hexo)](https://ci.khs1994.com/github/khs1994/khs1994.github.io) |
 | **Bash Shell**| https://github.com/khs1994-docker/lnmp | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 
