@@ -48,7 +48,7 @@ class Agent extends Kernel
         \Log::debug('🐳Docker container start ...');
 
         // 取出一个 job,包括 job config, build key id
-        $job_data = $this->getJob();
+        $job_data = $this->getQueuedJob();
 
         if (!$job_data) {
             return;
@@ -67,24 +67,31 @@ class Agent extends Kernel
         try {
             $this->pcit->runner_agent_docker->handle((int) $job_id);
         } catch (\Throwable $e) {
-            \Log::emergency('🟢Handle job success '.$job_id, [
+            \Log::emergency('🟢Handle job finished '.$job_id, [
                 'job_id' => $job_id,
                 'message' => $e->getMessage(),
-                'error' => $e->__toString(),
+                'trace' => $e->__toString(),
                 ]);
 
-            $this->updateJobFinishedAt((int) $job_id);
+            $this->handleJobFinished(
+                (int) $job_id, (int) $build_key_id, $e->getMessage()
+            );
+        }
+    }
 
-            try {
-                // TODO
-                $this->subject
-                    ->register(new LogHandler((int) $job_id))
-                    ->register(new UpdateBuildStatus((int) $job_id, (int) $build_key_id, $e->getMessage()))
-                    ->handle();
-            } catch (\Throwable $e) {
-                // catch curl error (timeout,etc)
-                \Log::emergency('❌'.$e->getMessage(), []);
-            }
+    public function handleJobFinished(int $job_id, int $build_key_id, $result): void
+    {
+        $this->updateJobFinishedAt($job_id);
+
+        try {
+            // TODO
+            $this->subject
+                ->register(new LogHandler($job_id))
+                ->register(new UpdateBuildStatus($job_id, $build_key_id, $result))
+                ->handle();
+        } catch (\Throwable $e) {
+            // catch curl error (timeout,etc)
+            \Log::emergency('❌'.$e->getMessage(), []);
         }
     }
 
@@ -96,7 +103,7 @@ class Agent extends Kernel
     /**
      * TODO 从服务端获取待执行 job.
      */
-    public function getJob()
+    public function getQueuedJob()
     {
         return Job::getQueuedJob()[0] ?? null;
     }

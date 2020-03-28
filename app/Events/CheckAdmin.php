@@ -33,7 +33,7 @@ class CheckAdmin
         $ci_root = env('CI_ROOT');
 
         while ($ci_root) {
-            \Log::info('🚧ci root(admin) already set, only ci root\'s repo can run!', []);
+            \Log::info('🚧ci root(admin) already set, only ci root\'s repo can run!');
 
             $admin = Repo::getAdmin((int) $build->rid, false, $build->git_type);
 
@@ -52,13 +52,13 @@ class CheckAdmin
                 $uid = User::getUid($k, $build->git_type);
 
                 if (\in_array($uid, $admin_array, true)) {
-                    \Log::info('🟢This repo is ci root\'s repo, continue...', []);
+                    \Log::info('🟢This repo is ci root\'s repo, continue...');
 
                     return;
                 }
             }
 
-            \Log::warning('❌This repo is not ci root\'s repo, skip', []);
+            \Log::warning('❌This repo is not ci root\'s repo, skip');
 
             a:
 
