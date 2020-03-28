@@ -31,6 +31,7 @@
     * [special command](usage/special-command.md)
     * [toolkit](usage/toolkit.md)
     * [security](usage/security.md)
+    * [secret](usage/secret.md)
 
 ## Example
 

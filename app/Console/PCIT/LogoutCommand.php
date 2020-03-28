@@ -28,7 +28,7 @@ class LogoutCommand extends Command
     {
         $file_name = PCITCommand::getConfigFileName();
 
-        ['git_type' => $git_type, 'api-endpoint' => $api_endpoint] = $input->getOptions();
+        ['git-type' => $git_type, 'api-endpoint' => $api_endpoint] = $input->getOptions();
 
         if (is_file($file_name)) {
             $tokenContent = json_decode(file_get_contents($file_name), true);

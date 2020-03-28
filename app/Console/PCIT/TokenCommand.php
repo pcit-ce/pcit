@@ -29,7 +29,7 @@ class TokenCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        list('api-endpoint' => $api_endpoint, 'git_type' => $git_type) = $input->getOptions();
+        list('api-endpoint' => $api_endpoint, 'git-type' => $git_type) = $input->getOptions();
 
         try {
             $output->writeln('Your access token is '.PCITCommand::getToken($input, false));

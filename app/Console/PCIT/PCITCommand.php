@@ -36,7 +36,7 @@ class PCITCommand
 
     public static function getGitTypeOptionArray()
     {
-        return ['git_type',
+        return ['git-type',
             'g',
             InputOption::VALUE_OPTIONAL,
             'Git Type',
@@ -96,7 +96,7 @@ class PCITCommand
 
         $tokenContent = json_decode(file_get_contents(self::getConfigFileName()), true);
 
-        $git_type = $input->getOption('git_type');
+        $git_type = $input->getOption('git-type');
 
         $endpoints_url = $input->getOption('api-endpoint');
 

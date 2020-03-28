@@ -67,10 +67,13 @@ class Core
 
     /**
      * Prepends inputPath to the PATH (for this action and future actions).
+     *
+     * @deprecated
      */
     public function addPath(string $inputPath): void
     {
-        echo "::add-path::${inputPath}"."\n";
+        // echo "::add-path::${inputPath}"."\n";
+        $this->warning('add PATH not support');
     }
 
     /**

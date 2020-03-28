@@ -44,6 +44,18 @@ steps:
       - vendor/bin/phpunit
 ```
 
+如果你设置的 env 依赖系统级 ENV 例如 `${HOME}` `${PATH}`，请勿在 `env` 指令中设置，请在 `run` 指令中使用 `export ...` 命令设置变量。
+
+```diff
+  env:
+    - k=v
+-   - key=${HOME}
+-   - PATH=${PATH}:/my/path
++ run:
++   - export key=${HOME}
++   - export PATH=${PATH}:/my/path
+```
+
 ## 4. `pull`
 
 每次构建时，无论 Docker Image 是否存在总是拉取镜像，可以使用 `pull: true` 指令(默认为 `false`)。
@@ -69,7 +81,7 @@ steps:
     shell: bash
 ```
 
-全部支持的 `shell` 包括 `sh` `bash` `python` `pwsh` `node`
+全部支持的 `shell` 包括 `sh` `bash` `python` `pwsh` `node` `deno`
 
 ## 6. `if`
 
@@ -129,6 +141,16 @@ steps:
     provider: docker
     k: v
     k2: v2
+    k3:
+    - a
+    - b
+    - c
+    k4:
+      kk: vv
 ```
 
-将 `PCIT_K=v PCIT_K2=v2` 作为环境变量传入容器中。
+将 `INPUT_K=v INPUT_K2=v2 INPUT_K3=a,b,c INPUT_K4={"kk":"vv"}` 作为环境变量传入容器中。
+
+## 9. `read_only`
+
+与 `docker run --read-only` 参数的行为一致。

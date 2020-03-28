@@ -36,12 +36,12 @@ class LoginCommand extends Command
         list(
             'username' => $username,
             'password' => $password,
-            'git_type' => $git_type,
+            'git-type' => $git_type,
             'api-endpoint' => $api_endpoint
             ) = $input->getOptions();
 
         $request = json_encode([
-                'git_type' => $git_type,
+                'git-type' => $git_type,
                 'username' => $username,
                 'password' => $password,
             ]
@@ -56,7 +56,7 @@ class LoginCommand extends Command
         $http_return_code = $curl->getCode();
 
         if (200 !== $http_return_code or !$token) {
-            throw new Exception('Incorrect username or password or git_type', $http_return_code);
+            throw new Exception('Incorrect username or password or git-type', $http_return_code);
         }
 
         $file_name = PCITCommand::getConfigFileName();

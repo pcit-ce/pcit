@@ -259,12 +259,12 @@ class DockerHandler implements RunnerHandlerInterface
      */
     public function runStep(int $job_id, string $container_config, string $step = null): void
     {
-        \Log::emergency('Run step container ...', ['job_id' => $job_id,
-                'container_config' => $container_config, ]);
-
         $container_config = $this->insertEnv($container_config);
 
         $container_config = $this->handleArtifact($job_id, $container_config);
+
+        \Log::emergency('🔄Run step container ...', ['job_id' => $job_id,
+        'container_config' => $container_config, ]);
 
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
@@ -277,7 +277,7 @@ class DockerHandler implements RunnerHandlerInterface
         ] = (new ContainerLog($job_id, $container_id, $step))
         ->handle($this->mask_value_array);
 
-        \Log::emergency('step container success', ['job_id' => $job_id]);
+        \Log::emergency('✔step container success', ['job_id' => $job_id]);
 
         // env
         // var_dump($step,$env);

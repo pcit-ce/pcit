@@ -62,6 +62,7 @@ module.exports = {
         'special-command.md',
         'toolkit',
         'security',
+        'secret',
       ],
       '/plugins/': [
 

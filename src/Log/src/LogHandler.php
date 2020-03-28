@@ -97,7 +97,7 @@ class LogHandler
 
     public function handlePipeline($pipeline)
     {
-        \Log::emergency('Handle step log', ['jobId' => $this->jobId, 'step' => $pipeline]);
+        \Log::emergency('📃Handle step log', ['jobId' => $this->jobId, 'step' => $pipeline]);
 
         $cache = $this->cache;
 

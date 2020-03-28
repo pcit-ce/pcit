@@ -12,6 +12,11 @@ steps:
       echo "::set-env name=MY_ENV::${k}"
       echo "::set-env name=ENV_SET_BY_STEP::`echo 1`"
 
+      echo -e "\n\n\n111 122\t2\n\n44 4\n7890\n%\r:." > 1.txt
+      echo "::set-env name=file_content::`cat 1.txt | base64`"
+
+      cat 1.txt
+
       echo "::set-output name={name}::{value}"
       echo "::set-output name=action_fruit::strawberry"
 
@@ -37,6 +42,13 @@ steps:
       echo "test env command"
       echo ${MY_ENV:-}
       echo ${ENV_SET_BY_STEP}
+      echo $file_content
+
+      echo $file_content | base64 -d > 2.txt
+
+      cat 2.txt
+
+      diff 1.txt 2.txt || echo "not same"
 
       echo ${PATH}
 
