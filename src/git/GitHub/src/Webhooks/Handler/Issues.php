@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\GetAccessToken;
+use App\Repo;
 use PCIT\PCIT;
 
 class Issues
@@ -50,8 +51,6 @@ class Issues
 
         self::translateTitle($repo_full_name, (int) $issue_number, (int) $rid, $title);
 
-        // self::createComment($rid, $repo_full_name, $issue_number, $body);
-
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
             ->handle();
@@ -62,9 +61,7 @@ class Issues
     }
 
     /**
-     * 检查标题是否为中文.
-     *
-     * 若为中文则翻译为英文
+     * 检查标题是否为中文，若为中文则翻译为英文.
      *
      * @param $title
      * @param $rid
@@ -150,9 +147,21 @@ class Issues
             return;
         }
 
-        // self::createComment($rid, $repo_full_name, $issue_number, $body);
+        if (Repo::checkAdmin((int) $rid, (int) $sender_uid)) {
+            if ('/LGTM' === $body) {
+                $body = <<<EOF
+I will merge this pull_request.
+EOF;
+            }
 
-        // \Log::info('Create AI Bot Issue Comment', []);
+            self::createComment((int) $rid, $repo_full_name, $issue_number, $body);
+
+            try {
+                PullRequest::merge($repo_full_name, (int) $issue_number);
+            } catch (\Throwable $e) {
+                \Log::emergency($e->__toString());
+            }
+        }
     }
 
     /**

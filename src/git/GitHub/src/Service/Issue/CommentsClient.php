@@ -45,19 +45,12 @@ class CommentsClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
 
-        if (!$source) {
-            return null;
-        }
-
         $output = $this->curl->post($url, json_encode(compact('body')));
 
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
             \Log::debug('Http Return Code is not 201 '.$http_return_code);
-        }
-
-        if ($enable_tencent_ai) {
         }
 
         return $output;
