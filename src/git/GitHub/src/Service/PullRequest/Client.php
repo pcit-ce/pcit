@@ -186,7 +186,7 @@ class Client
     }
 
     /**
-     * @param string $commit_message
+     * @param int $merge_method 1:merge 2:squash 3:rebase
      *
      * @return bool|mixed
      *
@@ -195,10 +195,10 @@ class Client
     public function merge(string $username,
                           string $repo_name,
                           int $pr_num,
-                          string $commit_title,
-                          ?string $commit_message,
-                          string $sha,
-                          int $merge_method)
+                          ?string $commit_title = null,
+                          ?string $commit_message = null,
+                          ?string $sha = null,
+                          int $merge_method = 1)
     {
         switch ($merge_method) {
             case 1:
@@ -213,18 +213,20 @@ class Client
                 $merge_method = 'rebase';
 
                 break;
+            default:
+                $merge_method = 'merge';
         }
 
         $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, 'pulls', $pr_num, 'merge']);
 
         $data = [
             'commit_title' => $commit_title,
-            'commit_message' => $commit_message ?? '',
+            'commit_message' => $commit_message,
             'sha' => $sha,
             'merge_method' => $merge_method,
         ];
 
-        $output = $this->curl->put($url, json_encode($data));
+        $output = $this->curl->put($url, json_encode(array_filter($data)));
 
         $http_return_code = $this->curl->getCode();
 
