@@ -113,7 +113,7 @@ class Cache
 
         $container_config = $this->getContainerConfig($dockerContainer, $env);
 
-        \Log::info('Handle cache downloader', json_decode($container_config, true));
+        \Log::info('🔽Handle cache downloader', json_decode($container_config, true));
 
         \Cache::store()
             ->set(CacheKey::cacheKey($this->jobId, 'download'), $container_config);
@@ -126,7 +126,7 @@ class Cache
 
         $container_config = $this->getContainerConfig($dockerContainer, $env);
 
-        \Log::info('Handle cache uploader', json_decode($container_config, true));
+        \Log::info('🔼Handle cache uploader', json_decode($container_config, true));
 
         \Cache::store()
             ->set(CacheKey::cacheKey($this->jobId, 'upload'), $container_config);

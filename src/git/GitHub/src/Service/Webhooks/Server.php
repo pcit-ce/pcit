@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Webhooks;
 
 use Exception;
-use PCIT\Framework\Support\Env;
 
 /**
  * @see https://developer.github.com/webhooks/#events
  */
-class Client
+class Server
 {
     /**
      * @var string

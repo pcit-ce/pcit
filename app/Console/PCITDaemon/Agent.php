@@ -34,7 +34,7 @@ class Agent extends Kernel
      */
     public function handle(): void
     {
-        \Log::debug('Docker connect ...');
+        \Log::debug('🐳Docker connect ...');
 
         try {
             $this->pcit->docker->system->ping(1);
@@ -45,7 +45,7 @@ class Agent extends Kernel
             return;
         }
 
-        \Log::debug('Docker container start ...');
+        \Log::debug('🐳Docker container start ...');
 
         // 取出一个 job,包括 job config, build key id
         $job_data = $this->getJob();
@@ -56,7 +56,7 @@ class Agent extends Kernel
 
         ['id' => $job_id, 'build_id' => $build_key_id] = $job_data;
 
-        \Log::emergency('====== Run job '.$job_id.' ======', ['job_id' => $job_id]);
+        \Log::emergency('====== 🚩Run job '.$job_id.' ======', ['job_id' => $job_id]);
 
         $this->subject
             // TODO update build status in progress
@@ -67,7 +67,7 @@ class Agent extends Kernel
         try {
             $this->pcit->runner_agent_docker->handle((int) $job_id);
         } catch (\Throwable $e) {
-            \Log::emergency('Handle job success '.$job_id, [
+            \Log::emergency('🟢Handle job success '.$job_id, [
                 'job_id' => $job_id,
                 'message' => $e->getMessage(),
                 'error' => $e->__toString(),
@@ -83,7 +83,7 @@ class Agent extends Kernel
                     ->handle();
             } catch (\Throwable $e) {
                 // catch curl error (timeout,etc)
-                \Log::emergency($e->getMessage(), []);
+                \Log::emergency('❌'.$e->getMessage(), []);
             }
         }
     }

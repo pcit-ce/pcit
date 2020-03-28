@@ -24,6 +24,8 @@ jobs:
       - run: |
           set -x
 
+          git -C frontend log
+
           TAG=`echo $GITHUB_REF | cut -d '/' -f 3`
           docker buildx build \
             -t pcit/pcit \

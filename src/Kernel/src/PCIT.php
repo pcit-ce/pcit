@@ -53,7 +53,7 @@ use WeChat\WeChat;
  * @property GitHub\Service\Repositories\WebhooksClient      $repo_webhooks
  * @property PHPMailer                                       $mail
  * @property GitHub\Service\PullRequest\Client               $pull_request
- * @property GitHub\Service\Webhooks\Client                  $webhooks
+ * @property GitHub\Service\Webhooks\Server                  $webhooks
  * @property \PCIT\Runner\Client                             $runner
  * @property \PCIT\Runner\Agent\Docker\DockerHandler         $runner_agent_docker
  * @property \TencentAI\TencentAI                            $tencent_ai
