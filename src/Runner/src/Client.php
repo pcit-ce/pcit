@@ -72,7 +72,7 @@ class Client
 
         $this->system_env = array_merge($this->system_env, $this->build->env);
 
-        \Log::emergency('build property is ', [
+        \Log::emergency('⚙build property is ', [
             'build_key_id' => $this->build->build_key_id,
             'event_type' => $this->build->event_type,
             'commit_id' => $this->build->commit_id,
@@ -117,8 +117,8 @@ class Client
 
         $this->image = null === $image ? null : $this->textHandler->handle($image, $this->system_env);
 
-        \Log::info('.pcit.yml set network hosts: ', $this->networks->hosts ?? []);
-        \Log::info('.pcit.yml set default image: ', [$this->image]);
+        \Log::info('💻.pcit.yml set network hosts: ', $this->networks->hosts ?? []);
+        \Log::info('🐳.pcit.yml set default image: ', [$this->image]);
 
         //项目根目录
         $this->handleWorkdir($workspace);
@@ -139,7 +139,7 @@ class Client
 
         // 不存在构建矩阵
         if (!$matrix) {
-            \Log::emergency('This build only include one job');
+            \Log::emergency('1️⃣This build only include one job');
 
             $job_id = (int) (Job::getJobIDByBuildKeyID($this->build_id)[0] ?? 0);
 
@@ -156,7 +156,7 @@ class Client
      */
     public function handleMatrix(array $matrix): void
     {
-        \Log::emergency('This build include one more jobs');
+        \Log::emergency('🔢This build include one more jobs');
 
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
@@ -191,7 +191,7 @@ class Client
     {
         $this->job_id = $job_id = $job_id ?: Job::create($this->build->build_key_id);
 
-        \Log::emergency('===== Generate job Start =====', ['job_id' => $this->job_id]);
+        \Log::emergency('===== ⛲Generate job Start =====', ['job_id' => $this->job_id]);
 
         // 清理缓存
         CacheKey::flush($job_id);

@@ -105,7 +105,7 @@ class LogHandler
         $log = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
         if (!$log) {
-            \Log::warning('Step Log empty, skip', ['jobId' => $this->jobId, 'step' => $pipeline]);
+            \Log::warning('📕Step Log empty, skip', ['jobId' => $this->jobId, 'step' => $pipeline]);
 
             return;
         }

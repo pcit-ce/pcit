@@ -69,7 +69,7 @@ class Git
         $git = $this->git;
 
         if ($this->git->disable ?? false) {
-            \Log::emergency('git clone disabled');
+            \Log::emergency('🛑git clone disabled');
 
             return;
         }
@@ -136,7 +136,7 @@ class Git
 
     public function storeContainerConfig(string $config, int $job_id): void
     {
-        \Log::info('Handle clone git', json_decode($config, true));
+        \Log::info('📥Handle clone git', json_decode($config, true));
 
         \Cache::store()->set(CacheKey::cloneKey($job_id), $config);
     }

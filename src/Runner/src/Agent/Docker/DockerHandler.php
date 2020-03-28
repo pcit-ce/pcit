@@ -101,7 +101,7 @@ class DockerHandler implements RunnerHandlerInterface
 
     public function handleToolkit(): void
     {
-        \Log::emergency('run toolkit container ...');
+        \Log::emergency('🧰run toolkit container ...');
 
         $this->docker_container
         ->setImage('pcit/toolkit')
@@ -130,11 +130,11 @@ class DockerHandler implements RunnerHandlerInterface
         \Log::emergency('Handle job '.$job_id, ['job_id' => $job_id]);
 
         // create network
-        \Log::emergency('Create docker network '.$job_id, [$job_id]);
+        \Log::emergency('🖧Create docker network '.$job_id, [$job_id]);
         $this->createNetwork();
 
         // git clone container
-        \Log::emergency('Run git clone container...', []);
+        \Log::emergency('📥Run git clone container...', []);
         $this->gitClone();
 
         // download cache
@@ -277,7 +277,7 @@ class DockerHandler implements RunnerHandlerInterface
         ] = (new ContainerLog($job_id, $container_id, $step))
         ->handle($this->mask_value_array);
 
-        \Log::emergency('✔step container success', ['job_id' => $job_id]);
+        \Log::emergency('☑step container success', ['job_id' => $job_id]);
 
         // env
         // var_dump($step,$env);
@@ -303,7 +303,7 @@ class DockerHandler implements RunnerHandlerInterface
             return $container_config;
         }
 
-        \Log::emergency('this step is artifact uploader');
+        \Log::emergency('⬆this step is artifact uploader');
 
         $preEnv = $container_config_object->Env;
 

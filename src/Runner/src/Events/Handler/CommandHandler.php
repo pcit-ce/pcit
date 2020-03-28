@@ -52,7 +52,7 @@ EOF;
 
         $ci_script = base64_encode($content);
 
-        \Log::emergency('Command base64encode is '.$ci_script, []);
+        \Log::emergency('💻Command base64encode is '.$ci_script, []);
 
         return $ci_script;
     }

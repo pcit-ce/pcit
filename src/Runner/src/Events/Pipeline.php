@@ -80,31 +80,31 @@ class Pipeline
         $when_matrix = $when->jobs ?? $when->matrix ?? null;
 
         if (!(new Platform($when_platform, 'linux/amd64'))->handle(true)) {
-            \Log::emergency('skip by platform check');
+            \Log::emergency('🛑skip by platform check');
 
             return true;
         }
 
         if (!(new Event($when_event, $this->build->event_type))->handle()) {
-            \Log::emergency('skip by event check');
+            \Log::emergency('🛑skip by event check');
 
             return true;
         }
 
         if (!(new Branch($when_branch, $this->build->branch))->handle(true)) {
-            \Log::emergency('skip by branch check');
+            \Log::emergency('🛑skip by branch check');
 
             return true;
         }
 
         if (!(new Tag($when_tag, $this->build->tag))->handle(true)) {
-            \Log::emergency('skip by tag check');
+            \Log::emergency('🛑skip by tag check');
 
             return true;
         }
 
         if (!(new Matrix($when_matrix, $this->matrix_config))->handle()) {
-            \Log::emergency('skip by matrix check');
+            \Log::emergency('🛑skip by matrix check');
 
             return true;
         }
@@ -191,7 +191,7 @@ class Pipeline
         }
 
         foreach ($this->pipeline as $step => $pipelineContent) {
-            \Log::emergency("Handle step $step ...");
+            \Log::emergency("🔄Handle step $step ...");
 
             $image = $pipelineContent->image
                 ?? $this->client->image
@@ -237,7 +237,7 @@ class Pipeline
                     $commands = $actionHandler->handle($step, $image);
                     // 由于获取 action.yml 文件可能超时，捕获该错误
                 } catch (\Throwable $e) {
-                    \Log::emergency('handle pipeline use actions error'.$e->getMessage(), []);
+                    \Log::emergency('🛑handle pipeline use actions error'.$e->getMessage(), []);
 
                     continue;
                 }

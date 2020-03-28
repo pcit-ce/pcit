@@ -66,7 +66,7 @@ class SystemEnv
 
         $system_env = array_merge($system_env, $this->client->system_env);
 
-        \Log::emergency('generate system env', $system_env);
+        \Log::emergency('📐generate system env', $system_env);
 
         $this->env = $system_env;
 

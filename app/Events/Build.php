@@ -57,7 +57,7 @@ class Build extends BuildData
 
         $this->config = JSON::beautiful($this->config);
 
-        \Log::emergency('====== Get Build '.$this->build_key_id.' Data Start ======');
+        \Log::emergency('====== 🚩Get Build '.$this->build_key_id.' Data Start ======');
 
         $this->getRepoConfig();
 
