@@ -83,7 +83,7 @@ class Server extends Kernel
             $buildData->build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_QUEUED);
 
         try {
-            // 处理 build
+            // 处理 build 生成 jobs
             $this->pcit->runner->handle($buildData);
         } catch (\Throwable $e) {
             \Log::emergency($e->__toString(), ['message' => $e->getMessage(), 'code' => $e->getCode()]);
@@ -100,16 +100,6 @@ class Server extends Kernel
         HttpClient::close();
         \Log::close();
         TencentAI::close();
-    }
-
-    /**
-     * 外部调用服务
-     *
-     * @throws \Exception
-     */
-    public static function runWebhooks(): void
-    {
-        (new self())->webhooks();
     }
 
     /**
@@ -162,20 +152,5 @@ class Server extends Kernel
                 $webhooks->pushErrorCache($json_raw);
             }
         }
-    }
-
-    /**
-     * @param $name
-     * @param $arguments
-     *
-     * @return mixed
-     */
-    public function __call($name, $arguments)
-    {
-        if (method_exists($this, $name)) {
-            return $this->$name(...$arguments);
-        }
-
-        return 0;
     }
 }

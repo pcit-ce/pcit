@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\GetAccessToken;
-use App\Issue;
 use PCIT\PCIT;
 
 class Issues
 {
-    private static $cache_key_github_issue = 'github_issue';
-
     /**
      *  "assigned", "unassigned",
      *  "labeled", "unlabeled",
@@ -46,19 +43,6 @@ class Issues
             'labels' => $labels,
             'account' => $account,
         ] = \PCIT\GitHub\Webhooks\Parser\Issues::handle($json_content);
-
-        $assignees && Issue::updateAssignees($assignees, 'github', $issue_id);
-
-        $labels && Issue::updateLabels($labels, 'github', $issue_id);
-
-        if (\in_array($action, ['opened', 'edited', 'closed' or 'reopened'], true)) {
-            Issue::insert(
-                $rid, $issue_id, $issue_number, $action, $title, $body,
-                $sender_username, $sender_uid, $sender_pic,
-                $state, (int) $locked,
-                $created_at, $closed_at, $updated_at, 'github'
-            );
-        }
 
         if ('opened' !== $action) {
             return;
@@ -116,6 +100,8 @@ class Issues
                 $title = $result['data']['trans_text'] ?? null;
             }
         } catch (\Throwable $e) {
+            \Log::info($e->__toString());
+
             return;
         }
 
@@ -161,20 +147,8 @@ class Issues
         }
 
         if ('deleted' === $action) {
-            $result = Issue::comment_deleted($issue_id, $comment_id, $updated_at);
-
-            if (1 === $result) {
-                $debug_info = 'Delete Issue Comment SUCCESS';
-
-                \Log::info($debug_info, []);
-            }
-
             return;
         }
-
-        $last_insert_id = Issue::insertComment($rid, $issue_id, $comment_id, $issue_number, $body, $sender_uid, $created_at);
-
-        \Cache::store()->lPush(self::$cache_key_github_issue, $last_insert_id);
 
         // self::createComment($rid, $repo_full_name, $issue_number, $body);
 
