@@ -20,10 +20,8 @@ AliasLoader::load(config('app.alias'));
 date_default_timezone_set(env('CI_TZ', 'PRC'));
 
 // set web error handler
-$debug = config('app.debug');
-
 // don't enable on cli
-if ($debug && \PHP_SAPI === !'cli') {
+if ($app->isDebug && \PHP_SAPI !== 'cli') {
     $whoops = new \Whoops\Run();
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
     $whoops->register();

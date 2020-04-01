@@ -24,7 +24,18 @@ class EnvController
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        return Env::list((int) $rid, $git_type);
+        $array = Env::list((int) $rid, $git_type);
+
+        $i = -1;
+
+        foreach ($array as $item) {
+            ++$i;
+            if ('1' !== $item['public']) {
+                $array[$i]['value'] = '***';
+            }
+        }
+
+        return $array;
     }
 
     /**

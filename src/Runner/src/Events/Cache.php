@@ -71,7 +71,7 @@ class Cache
         $matrix = md5(json_encode($matrix));
 
         // {git_type}_{rid}_{branch}-{matrix}
-        $prefix = sprintf('%s_%s_%s-%s', $this->gitType, $this->rid, $this->branch, $matrix);
+        $prefix = sprintf('%s/%s/%s/%s', $this->gitType, $this->rid, $this->branch, $matrix);
 
         return $prefix;
     }
@@ -101,7 +101,7 @@ class Cache
             'INPUT_ENDPOINT='.env('CI_S3_ENDPOINT'),
             'INPUT_ACCESS_KEY_ID='.env('CI_S3_ACCESS_KEY_ID'),
             'INPUT_SECRET_ACCESS_KEY='.env('CI_S3_SECRET_ACCESS_KEY'),
-            'INPUT_BUCKET='.env('CI_S3_BUCKET', 'pcit'),
+            'INPUT_BUCKET='.env('CI_S3_CACHE_BUCKET', 'pcit-caches'),
             'INPUT_REGION='.env('CI_S3_REGION', 'us-east-1'),
             'INPUT_CACHE_PREFIX='.$prefix,
             'INPUT_CACHE='.(new EnvHandler())->array2str($cacheList),

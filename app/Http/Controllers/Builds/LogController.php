@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Builds;
 
 use App\Http\Controllers\Users\JWTController;
 use App\Job;
-use Exception;
 
 class LogController
 {
@@ -25,11 +24,32 @@ class LogController
     {
         $log = Job::getLog((int) $job_id);
 
-        if ($log) {
-            return json_decode($log, true);
+        try {
+            $log_array = json_decode($log, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\Throwable $e) {
+            return \Response::make('not found', 404);
         }
 
-        throw new Exception('Not Found', 404);
+        // return json
+        if ($log_array && \in_array('application/json', \Request::getAcceptableContentTypes())) {
+            return $log_array;
+        }
+
+        // return text/plain (default)
+        if ($log_array) {
+            $text_plain_log = '';
+
+            foreach ($log_array as $step => $log) {
+                $start_time = substr(explode("\n", $log)[0], 0, 30);
+                $text_plain_log .= $start_time.' ##[step]'.$step."\n".$log."\n";
+            }
+
+            return \Response::make($text_plain_log, 200, [
+                'Content-type' => 'text/plain',
+                ]);
+        }
+
+        return \Response::make('not found', 404);
     }
 
     /**

@@ -1,3 +1,6 @@
+cache:
+  - 3.txt
+
 steps:
   specil_command:
     env:
@@ -16,6 +19,13 @@ steps:
       echo "::set-env name=file_content::`cat 1.txt | base64`"
 
       cat 1.txt
+
+      echo -e "first_line\nxx\nxxx\n" > 3.txt
+      echo -e "${SECRET_FILE_CONTENT}" > 4.txt
+      cat 3.txt
+      cat 4.txt
+
+      diff 3.txt 4.txt || true
 
       echo "::set-output name={name}::{value}"
       echo "::set-output name=action_fruit::strawberry"

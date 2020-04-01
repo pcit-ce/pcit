@@ -12,12 +12,16 @@ class Response extends BaseResponse
 {
     const HTTP_CODE = [
         200,
+        204,
+
         304,
+
         401,
         402,
         403,
         404,
         422,
+
         500,
     ];
 
@@ -28,6 +32,8 @@ class Response extends BaseResponse
      */
     public function make($content = '', int $status = 200, array $headers = [])
     {
+        $status = \in_array($status, self::HTTP_CODE) ? $status : 500;
+
         $response = app()->make('response')->setContent($content)
         ->setStatusCode($status)->setHeaders($headers);
 
@@ -47,6 +53,7 @@ class Response extends BaseResponse
 
         if (!$json) {
             $code = $content['code'] ?? 200;
+            $code = \in_array($code, self::HTTP_CODE) ? $code : 500;
             unset($content['code']);
         }
 

@@ -18,7 +18,7 @@ This returns a single job artifact.
 
 | Method | URL                     |
 | :----- | :---------------------- |
-| `GET`  | `{git_type}/{username}/{repo_name}/job/{job.id}/artifacts` |
+| `GET`  | `{git_type}/{username}/{repo_name}/jobs/{job.id}/artifacts` |
 
 ## 获取某个资源详情
 
@@ -28,7 +28,7 @@ This returns a single job single artifact.
 
 | Method | URL                                      |
 | :----- | :----------------------                  |
-| `GET`  | `{git_type}/{username}/{repo_name}/job/{job.id}/artifacts/{artifact_name}` |
+| `GET`  | `{git_type}/{username}/{repo_name}/jobs/{job.id}/artifacts/{artifact_name}` |
 
 ## 下载某个资源
 
@@ -38,7 +38,7 @@ This returns a single job single artifact.
 
 | Method | URL                                      |
 | :----- | :----------------------                  |
-| `GET`  | `{git_type}/{username}/{repo_name}/job/{job.id}/artifacts/{artifact_name}/{format}` |
+| `GET`  | `{git_type}/{username}/{repo_name}/jobs/{job.id}/artifacts/{artifact_name}/{format}` |
 
 ## 删除某个资源
 
@@ -48,4 +48,4 @@ Delete a single job single artifact.
 
 | Method | URL                                      |
 | :----- | :----------------------                  |
-| `DELETE`  | `{git_type}/{username}/{repo_name}/job/{job.id}/artifacts/{artifact_name}` |
+| `DELETE`  | `{git_type}/{username}/{repo_name}/jobs/{job.id}/artifacts/{artifact_name}` |

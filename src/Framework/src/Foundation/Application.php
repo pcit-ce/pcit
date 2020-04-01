@@ -27,6 +27,11 @@ class Application extends Container
     public $resolves = [];
 
     /**
+     * @var bool
+     */
+    public $isDebug;
+
+    /**
      * 返回当前 ENV.
      *
      * 传入 env, 判断是否与当前环境匹配
@@ -75,6 +80,8 @@ class Application extends Container
         $this->resolveEnv();
 
         $this->registerProviders();
+
+        $this->isDebug = (bool) config('app.debug');
     }
 
     public function registerProviders(): void

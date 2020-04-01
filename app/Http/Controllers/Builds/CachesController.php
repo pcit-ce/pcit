@@ -5,9 +5,37 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Http\Controllers\Users\JWTController;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Filesystem;
 
 class CachesController
 {
+    public $flysystem;
+
+    public function __construct()
+    {
+        $bucket = env('CI_S3_CACHE_BUCKET', 'pcit-caches');
+
+        $options = [
+            'version' => 'latest',
+            'region' => env('CI_S3_REGION', 'us-east'),
+            'endpoint' => env('CI_S3_ENDPOINT'),
+            'use_path_style_endpoint' => env('CI_S3_USE_PATH_STYLE_ENDPOINT', true),
+            'credentials' => [
+                'key' => env('CI_S3_ACCESS_KEY_ID'),
+                'secret' => env('CI_S3_SECRET_ACCESS_KEY'),
+            ],
+            'http' => [
+                'connect_timeout' => 0,
+            ],
+        ];
+
+        $this->flysystem = new Filesystem(
+            new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));
+
+        // $this->flysystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
+    }
+
     /**
      * Returns all the caches for a repository.
      *
@@ -23,24 +51,54 @@ class CachesController
 
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        return [];
+        $path = "$git_type/$rid";
+
+        $result = $this->flysystem->listContents($path, true);
+
+        $result2 = [];
+
+        foreach ($result as $item) {
+            if ('dir' === $item['type']) {
+                continue;
+            }
+
+            $branch = explode('/', $item['dirname'])[2];
+
+            $size = $result2[$branch]['size'] ?? 0;
+            $result2[$branch]['size'] = $size + $item['size'] / 1024 / 1024;
+        }
+
+        return $result2;
     }
 
     /**
-     * Deletes all caches for a repository.
+     * Deletes caches for a repository.
      *
      * delete
      *
      * /repo/{repository.slug}/caches
+     * /repo/{repository.slug}/caches/{branch}
      *
      * @param array $args
      *
      * @throws \Exception
      */
-    public function delete(...$args): void
+    public function delete(...$args)
     {
-        list($username, $repo_name) = $args;
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
+        $path = "$git_type/$rid";
 
-        JWTController::checkByRepo(...$args);
+        if (2 == \count($args)) {
+            list($username, $repo_name) = $args;
+        } else {
+            list($username, $repo_name, $branch) = $args;
+            $path .= "/$branch";
+        }
+
+        list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
+
+        $this->flysystem->deleteDir($path);
+
+        return \Response::make('', 204);
     }
 }

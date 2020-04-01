@@ -235,16 +235,29 @@ class DockerHandler implements RunnerHandlerInterface
      */
     public function insertEnv(string $container_config): string
     {
-        if (!$this->env) {
-            return $container_config;
-        }
-
         $container_env = json_decode($container_config)->Env;
 
         $container_env = array_merge(
            $container_env,
            $this->env,
         );
+
+        // env 值包含 \n 将每一行加入 mask 列表
+        $container_env_obj = (new EnvHandler())->array2obj($container_env);
+
+        foreach ($container_env_obj as $k => $v) {
+            if (false === strpos($v, "\n")) {
+                continue;
+            }
+
+            $mask_array = array_filter(explode("\n", $v));
+            $this->mask_value_array = array_merge($this->mask_value_array, $mask_array);
+            $mask_array = [];
+        } // end
+
+        if (!$this->env) {
+            return $container_config;
+        }
 
         $container_config = json_decode($container_config);
         $container_config->Env = $container_env;

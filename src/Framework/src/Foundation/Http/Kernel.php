@@ -74,14 +74,14 @@ class Kernel
             $previousErr = $e->getPrevious();
             // var_dump($previousErr);
 
-            $errDetails['trace'] = $previousErr->getTrace();
+            $errDetails['trace'] = $previousErr ? $previousErr->getTrace() : $e->getTrace();
 
             return \Response::json(array_filter([
                 'code' => $e->getCode(),
                 'message' => $e->getMessage() ?: 'ERROR',
                 'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
-                'file' => $debug ? $previousErr->getFile() : null,
-                'line' => $debug ? $previousErr->getLine() : null,
+                'file' => $debug ? ($previousErr ? $previousErr->getFile() : $e->getFile()) : null,
+                'line' => $debug ? ($previousErr ? $previousErr->getLine() : $e->getLine()) : null,
                 'details' => $debug ? $errDetails : null,
             ]));
         }

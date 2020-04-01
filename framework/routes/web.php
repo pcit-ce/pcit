@@ -170,6 +170,7 @@ Route::get('api/repo/{username}/{repo_name}/request/{requests_id}', 'Builds\Requ
 Route::get('{git_type}/{username}/{repo_name}/caches', 'Builds\IndexController');
 Route::get('api/repo/{username}/{repo_name}/caches', 'Builds\CachesController');
 Route::delete('api/repo/{username}/{repo_name}/caches', 'Builds\CachesController@delete');
+Route::delete('api/repo/{username}/{repo_name}/caches/{branch}', 'Builds\CachesController@delete');
 
 Route::get('api/repo/{username}/{repo_name}/crons', 'Builds\CronController');
 Route::get('api/repo/{username}/{repo_name}/cron/{cron_id}', 'Builds\CronController@find');
