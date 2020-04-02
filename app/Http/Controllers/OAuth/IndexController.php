@@ -133,10 +133,10 @@ class IndexController
         \Session::put($git_type.'.username', $name);
         \Session::put($git_type.'.pic', $pic);
         \Session::put($git_type.'.email', $email);
-        $remember_day = env('CI_REMEMBER_DAY', 10);
+        $remember_day = config('session.remember_day');
         \Session::put($git_type.'.expire', time() + $remember_day * 24 * 60 * 60);
 
-        \Response::redirect(getenv('CI_HOST').'/profile/'.$git_type.'/'.$name);
+        \Response::redirect(config('app.host').'/profile/'.$git_type.'/'.$name);
 
         exit;
     }

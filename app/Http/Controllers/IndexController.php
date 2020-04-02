@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use PCIT\Support\Env;
-
 class IndexController
 {
     public function about(): array
@@ -23,7 +21,7 @@ class IndexController
 
     public function api()
     {
-        $ci_host = env('CI_HOST').'/api';
+        $ci_host = config('app.host').'/api';
 
         $array = [
             'user' => [
@@ -108,7 +106,7 @@ class IndexController
 
         ksort($array);
 
-        $array['sitemap'] = env('CI_HOST').'/sitemap';
+        $array['sitemap'] = config('app.host').'/sitemap';
 
         return $array;
     }
@@ -125,8 +123,7 @@ class IndexController
 
     public function sitemap()
     {
-        /** @var string */
-        $host = getenv('CI_HOST');
+        $host = config('app.host');
 
         return [
             'homepage' => $host,

@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Users\JWTController;
 use App\User;
-use PCIT\Support\Env;
 
 /**
  * 个人中心.
@@ -35,7 +34,7 @@ class IndexController
         $email = \Session::get($git_type.'.email');
 
         if (null === $username or null === $access_token) {
-            \Response::redirect(env('CI_HOST').'/login');
+            \Response::redirect(config('app.host').'/login');
 
             exit;
         }
@@ -54,7 +53,7 @@ class IndexController
             $api_token,
             time() + 24 * 60 * 60,
             '/',
-            env('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
+            config('session.domain'), true
         );
 
         User::updateUserInfo((int) $uid, null, (string) $username, (string) $email, (string) $pic, false, $git_type);

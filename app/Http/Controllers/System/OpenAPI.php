@@ -14,7 +14,7 @@ class OpenAPI
 
         $is_coding = $request->get('coding');
 
-        $ci_host = env('CI_HOST').'/api';
+        $ci_host = config('app.host').'/api';
 
         if ('true' === $is_coding) {
             $yaml .= <<<EOF

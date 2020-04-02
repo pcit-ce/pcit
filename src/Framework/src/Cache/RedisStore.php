@@ -15,9 +15,9 @@ class RedisStore implements Store
     public function __construct(Redis $redis)
     {
         try {
-            $redis->connect(env('CI_REDIS_HOST', 'redis'), (int) env('CI_REDIS_PORT', 6379));
+            $redis->connect(config('cache.stores.redis.host'), (int) config('cache.stores.redis.port'));
             $redis->getLastError();
-            $redis->select((int) env('CI_REDIS_DATABASE', 16));
+            $redis->select((int) config('cache.stores.redis.database'));
         } catch (Exception $e) {
             throw new Exception("Can't connect Redis server, error code ".$e->getCode(), 500);
         }

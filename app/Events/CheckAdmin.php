@@ -30,7 +30,7 @@ class CheckAdmin
     {
         $build = $this->build;
 
-        $ci_root = env('CI_ROOT');
+        $ci_root = config('pcit.root');
 
         while ($ci_root) {
             \Log::info('🚧ci root(admin) already set, only ci root\'s repo can run!');

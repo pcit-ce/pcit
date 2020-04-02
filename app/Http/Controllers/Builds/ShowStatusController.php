@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Builds;
 
 use App\Build;
 use App\Repo;
-use PCIT\Support\Env;
 
 class ShowStatusController
 {
@@ -60,7 +59,7 @@ class ShowStatusController
     public function getStatus(...$arg)
     {
         list($git_type, $username, $repo) = $arg;
-        $host = env('CI_HOST');
+        $host = config('app.host');
 
         return <<<EOF
 <pre>

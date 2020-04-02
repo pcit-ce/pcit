@@ -107,7 +107,7 @@ class Controller
             throw new Exception('Invalid request, must include JSON', 422);
         }
 
-        $webhooksUrl = env('CI_HOST').'/webhooks/'.$gitType;
+        $webhooksUrl = config('app.host').'/webhooks/'.$gitType;
 
         $access_token = self::checkAccessToken();
 
@@ -239,7 +239,7 @@ class Controller
 
     public static function codingJson()
     {
-        $url = env('CI_HOST').'/webhooks/coding';
+        $url = config('app.host').'/webhooks/coding';
 
         $token = env('WEBHOOKS_TOKEN', md5('pcit'));
 
@@ -260,7 +260,7 @@ EOF;
 
     public static function giteeJson()
     {
-        $url = env('CI_HOST').'/webhooks/gitee';
+        $url = config('app.host').'/webhooks/gitee';
 
         $token = env('WEBHOOKS_TOKEN', md5('pcit'));
 
@@ -280,7 +280,7 @@ EOF;
 
     public static function githubJson()
     {
-        $url = env('CI_HOST').'/webhooks/github';
+        $url = config('app.host').'/webhooks/github';
 
         $token = env('WEBHOOKS_TOKEN', md5('pcit'));
 

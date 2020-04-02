@@ -2,3 +2,8 @@
 !.gitignore
 !app.php
 !filesystems.php
+!pcit.php
+!session.php
+!logging.php
+!database.php
+!cache.php

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
-use PCIT\Support\Env;
-
 /**
  * 注销
  */
@@ -22,9 +20,9 @@ class LogOut
             '',
             time() - 3600,
             '/',
-            env('CI_SESSION_DOMAIN', 'ci.khs1994.com'), true
+            config('session.domain'), true
         );
 
-        \Response::redirect(env('CI_HOST'));
+        \Response::redirect(config('app.host'));
     }
 }

@@ -18,7 +18,7 @@ class CacheServiceProvider extends ServiceProvider
         };
 
         $pimple['cache.store'] = function ($app) {
-            return $app['cache']->store(env('CI_CACHE_DRIVE', 'redis'));
+            return $app['cache']->store(config('cache.default'));
         };
 
         $pimple[Repository::class] = $pimple['cache.store'];

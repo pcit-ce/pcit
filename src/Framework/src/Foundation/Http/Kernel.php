@@ -47,7 +47,7 @@ class Kernel
 
                         break;
                     case 'integer':
-                       if ('testing' === env('APP_ENV')) {
+                       if ('testing' === config('app.env')) {
                            return $output;
                        }
 
@@ -55,7 +55,7 @@ class Kernel
 
                         break;
                     case 'string':
-                        if ('testing' === env('APP_ENV')) {
+                        if ('testing' === config('app.env')) {
                             return $output;
                         }
 
@@ -90,7 +90,7 @@ class Kernel
         return \Response::json(array_filter([
             'code' => 404,
             'message' => 'Not Found',
-            'api_url' => getenv('CI_HOST').'/api',
+            'api_url' => config('app.host').'/api',
             'obj' => $debug ? Route::getObj() ?? null : null,
             'method' => $debug ? Route::getMethod() ?? null : null,
             'details' => $debug ? '路由控制器填写错误' : null,
@@ -101,7 +101,7 @@ class Kernel
     {
         try {
             ini_set('session.cookie_path', '/');
-            ini_set('session.cookie_domain', '.'.getenv('CI_SESSION_DOMAIN'));
+            ini_set('session.cookie_domain', '.'.config('session.domain'));
             ini_set('session.gc_maxlifetime', '690000'); // s
             ini_set('session.cookie_lifetime', '690000'); // s
             ini_set('session.cookie_secure', 'On');
@@ -111,7 +111,7 @@ class Kernel
         app()->instance('request', $request);
         app()->instance(\PCIT\Framework\Http\Request::class, $request);
 
-        // session_set_cookie_params(1800 , '/', '.'getenv('CI_SESSION_DOMAIN', true));
+        // session_set_cookie_params());
 
         $response = $this->sendRequestThroughRouter($request);
 

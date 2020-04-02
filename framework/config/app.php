@@ -6,6 +6,8 @@ return [
     'name' => env('CI_NAME', 'PCIT'),
     'debug' => env('CI_DEBUG', false),
     'env' => env('APP_ENV', 'production'),
+    'host' => env('CI_HOST'),
+    'timezone' => env('CI_TZ', 'PRC'),
     'alias' => [
         'Route' => PCIT\Framework\Support\Facades\Route::class,
         'Request' => PCIT\Framework\Support\Facades\Request::class,

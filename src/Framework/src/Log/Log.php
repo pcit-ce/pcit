@@ -16,13 +16,13 @@ class Log extends Logger
      */
     public function __construct(string $name = 'pcit', string $log_path = null)
     {
-        date_default_timezone_set(env('CI_TZ', 'PRC'));
+        date_default_timezone_set(config('app.timezone'));
 
         $log_path = $log_path ?? sys_get_temp_dir().\DIRECTORY_SEPARATOR.'pcit.'.date('Y-m-d').'.log';
 
         parent::__construct($name);
 
-        $log_level = env('CI_LOG_LEVEL', 'info');
+        $log_level = config('logging.level');
 
         $this->pushHandler(new StreamHandler($log_path, $log_level));
     }
