@@ -61,7 +61,7 @@ class Build extends BuildData
 
         $this->getRepoConfig();
 
-        $this->getEnv(0 === $this->internal);
+        $this->getEnv('0' === $this->internal);
 
         $this->repo_full_name = Repo::getRepoFullName((int) $this->rid, $this->git_type);
 

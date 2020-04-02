@@ -1,0 +1,15 @@
+{
+    "name": "pcit/pustomize-pull-request-auto-merge",
+    "description": "pcit customize pull request auto merge",
+    "version": "19.12-dev",
+    "autoload": {
+        "psr-4": {
+            "PCIT\\Pustomize\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "19.12-dev"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "name": "pcit/pustomize",
+    "description": "pcit customize",
+    "version": "19.12-dev",
+    "autoload": {
+        "psr-4": {
+            "PCIT\\Pustomize\\Interfaces\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "19.12-dev"
+        }
+    }
+}

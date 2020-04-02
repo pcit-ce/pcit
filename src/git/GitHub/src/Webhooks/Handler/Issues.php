@@ -148,18 +148,33 @@ class Issues
         }
 
         if (Repo::checkAdmin((int) $rid, (int) $sender_uid)) {
-            if ('/LGTM' === $body) {
-                $body = <<<EOF
-I will merge this pull_request.
-EOF;
+            $pustomize_class = 'PCIT\\Pustomize\\PullRequest\\AutoMerge';
+
+            if (!class_exists($pustomize_class)) {
+                return;
             }
 
-            self::createComment((int) $rid, $repo_full_name, $issue_number, $body);
+            $result = (new $pustomize_class())->handle($body);
+
+            if (!$result) {
+                return;
+            }
+
+            [$body,$merge_method] = $result;
 
             try {
-                PullRequest::merge($repo_full_name, (int) $issue_number);
+                PullRequest::merge(
+                    $repo_full_name, (int) $issue_number, null, null, null,
+                    $merge_method ?? 1
+                );
+
+                self::createComment((int) $rid, $repo_full_name, $issue_number, $body);
             } catch (\Throwable $e) {
-                \Log::emergency($e->__toString());
+                \Log::error('auto merge error: '.$e->__toString());
+
+                self::createComment((int) $rid, $repo_full_name, $issue_number,
+                    ':disappointed_relieved: merge cannot be performed, please check status below'
+                );
             }
         }
     }

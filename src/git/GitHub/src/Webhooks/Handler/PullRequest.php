@@ -79,7 +79,11 @@ class PullRequest
         }
 
         $comment_body = <<<'EOF'
-Repo administrator can comment `/LGTM`, I will merge this Pull_request.
+Repo administrator can comment `/LGTM` or `/LGTM <type>`, I will merge this Pull_request.
+
+> /LGTM
+> /LGTM rebase
+> /LGTM squash
 
 ---
 
@@ -133,6 +137,9 @@ EOF;
         ] = $content;
     }
 
+    /**
+     * @param int $method 1: merge 2:squash 3:rebase
+     */
     public static function merge(
         string $repo_full_name,
         int $pull_request_number,
@@ -148,8 +155,7 @@ EOF;
 
         $repo_array = explode('/', $repo_full_name);
 
-        try {
-            $pcit->pull_request
+        $pcit->pull_request
                     ->merge(
                         $repo_array[0],
                         $repo_array[1],
@@ -159,9 +165,6 @@ EOF;
                         $commit_id,
                         (int) $method
                     );
-            \Log::info('auto merge success, method is '.$method);
-        } catch (\Throwable $e) {
-            \Log::debug($e->__toString());
-        }
+        \Log::info('auto merge success, method is '.$method);
     }
 }
