@@ -18,7 +18,7 @@ class Build extends Model
 SELECT
 
 id,git_type,rid,commit_id,commit_message,branch,event_type,
-pull_request_number,tag,config
+pull_request_number,tag,config,internal
 
 FROM
 
@@ -28,7 +28,7 @@ EOF;
 SELECT
 
 id,git_type,rid,commit_id,commit_message,branch,event_type,
-pull_request_number,tag,config
+pull_request_number,tag,config,internal
 
 FROM
 

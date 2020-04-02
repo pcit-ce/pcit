@@ -14,6 +14,7 @@ return [
         'Session' => PCIT\Framework\Support\Facades\Session::class,
         'Log' => PCIT\Framework\Support\Facades\Log::class,
         'App' => PCIT\Framework\Support\Facades\App::class,
+        'Storage' => PCIT\Framework\Support\Facades\Storage::class,
     ],
     'providers' => [
         PCIT\Framework\Routing\RoutingServiceProvider::class,
@@ -21,6 +22,7 @@ return [
         PCIT\Framework\Cache\CacheServiceProvider::class,
         PCIT\Framework\Session\SessionServiceProvider::class,
         PCIT\Framework\Log\LogServiceProvider::class,
+        PCIT\Framework\Storage\StorageServiceProvider::class,
 
         App\Providers\AppServiceProvider::class,
     ],

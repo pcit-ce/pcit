@@ -60,6 +60,7 @@ class SystemEnv
                     'PCIT_PULL_REQUEST=true',
                     'PCIT_PULL_REQUEST_BRANCH='.$this->build->branch,
                     'PCIT_PULL_REQUEST_SHA='.$this->build->commit_id,
+                    'PCIT_PULL_REQUEST_INTERNAL='.$this->build->internal,
                 ]
             );
         }

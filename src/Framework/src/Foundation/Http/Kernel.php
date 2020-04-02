@@ -77,7 +77,7 @@ class Kernel
             $errDetails['trace'] = $previousErr ? $previousErr->getTrace() : $e->getTrace();
 
             return \Response::json(array_filter([
-                'code' => $e->getCode(),
+                'code' => $e->getCode() ?: 500,
                 'message' => $e->getMessage() ?: 'ERROR',
                 'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
                 'file' => $debug ? ($previousErr ? $previousErr->getFile() : $e->getFile()) : null,

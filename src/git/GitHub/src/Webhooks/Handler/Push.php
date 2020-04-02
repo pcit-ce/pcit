@@ -57,6 +57,8 @@ class Push
 
         $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
             ->handle();
+
+        \Storage::put('github/events/'.$last_insert_id.'.json', $json_content);
     }
 
     /**

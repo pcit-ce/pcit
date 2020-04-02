@@ -14,21 +14,9 @@ class CachesController
 
     public function __construct()
     {
-        $bucket = env('CI_S3_CACHE_BUCKET', 'pcit-caches');
+        $bucket = config('filesystems.cache_bucket');
 
-        $options = [
-            'version' => 'latest',
-            'region' => env('CI_S3_REGION', 'us-east'),
-            'endpoint' => env('CI_S3_ENDPOINT'),
-            'use_path_style_endpoint' => env('CI_S3_USE_PATH_STYLE_ENDPOINT', true),
-            'credentials' => [
-                'key' => env('CI_S3_ACCESS_KEY_ID'),
-                'secret' => env('CI_S3_SECRET_ACCESS_KEY'),
-            ],
-            'http' => [
-                'connect_timeout' => 0,
-            ],
-        ];
+        $options = config('filesystems.disks.s3');
 
         $this->flysystem = new Filesystem(
             new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));

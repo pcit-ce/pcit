@@ -29,3 +29,7 @@ class Session extends \PCIT\Framework\Support\Facades\Session
 class Log extends \PCIT\Framework\Support\Facades\Log
 {
 }
+
+class Storage extends \PCIT\Framework\Support\Facades\Storage
+{
+}

@@ -35,7 +35,7 @@ class Build extends BuildData
             $this->event_type,
             $pull_request_number,
             $this->tag,
-            $this->config) = $result;
+            $this->config, $this->internal) = $result;
 
         if (!$this->config or !json_decode($this->config)) {
             BuildDB::updateBuildStatus($buildId, 'misconfigured');
@@ -61,7 +61,7 @@ class Build extends BuildData
 
         $this->getRepoConfig();
 
-        $this->getEnv();
+        $this->getEnv(0 === $this->internal);
 
         $this->repo_full_name = Repo::getRepoFullName((int) $this->rid, $this->git_type);
 

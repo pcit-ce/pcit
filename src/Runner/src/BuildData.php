@@ -47,6 +47,13 @@ abstract class BuildData
      */
     public $env;
 
+    /**
+     * 是否为内部 pr.
+     *
+     * @var 0|1
+     */
+    public $internal;
+
     // repo config
 
     public $build_pushes;
