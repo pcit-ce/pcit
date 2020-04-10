@@ -4,7 +4,7 @@
     "version": "19.12-dev",
     "autoload": {
         "psr-4": {
-            "PCIT\\Pustomize\\Interfaces\\": "src/"
+            "PCIT\\Pustomize\\": "src/"
         }
     },
     "extra": {

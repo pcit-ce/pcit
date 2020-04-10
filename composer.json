@@ -129,7 +129,7 @@
     "vlucas/phpdotenv": "^4.1.0"
   },
   "require-dev": {
-    "khs1994/phar-builder": "^20.02.11",
+    "khs1994/phar-builder": "20.04.11",
     "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^5.0",
     "vimeo/psalm": "^3.9"
