@@ -50,7 +50,7 @@ steps:
       - pwd
       - composer config -g cache-dir /tmp/pcit_cache/composer
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
-      - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 15 composer install
+      - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 15 -- composer install --ansi
       # - composer update
 
   script:

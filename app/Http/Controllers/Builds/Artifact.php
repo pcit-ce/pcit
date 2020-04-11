@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use App\Http\Controllers\Users\JWTController;
+use App\Job;
 use Etime\Flysystem\Plugin\AWS_S3 as AWS_S3_Plugin;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
@@ -75,6 +77,8 @@ class Artifact
     public function delete(...$args)
     {
         [$git_type,$user,$repo,$job_id,$file_name] = $args;
+
+        JWTController::check(Job::getBuildKeyId((int) $job_id));
 
         $path = "$git_type/$user/$repo/$job_id/$file_name";
 
