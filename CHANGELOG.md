@@ -290,7 +290,7 @@
 
 ### 2018/05/15
 
-* [x] 使用 `.pcit.yml` 定义一切 https://github.com/khs1994-php/khsci/issues/66
+* [x] 使用 `.pcit.yml` 定义一切 https://github.com/pcit-ce/pcit/issues/66
 
 ### 2018/05/14
 

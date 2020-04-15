@@ -55,7 +55,7 @@ class Server
             return;
         }
 
-        $secret = env('CI_WEBHOOKS_TOKEN', null) ?? md5('khsci');
+        $secret = env('CI_WEBHOOKS_TOKEN', null) ?? md5('pcit-secret');
 
         $signature = \Request::getHeader('X-Hub-Signature');
 
