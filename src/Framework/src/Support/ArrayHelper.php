@@ -17,6 +17,9 @@ class ArrayHelper
     {
         $rows = [];
 
+        unset($options['include']);
+        unset($options['exclude']);
+
         foreach ($options as $option => $items) {
             if (\count($rows) > 0) {
                 // 2、将第一列作为模板

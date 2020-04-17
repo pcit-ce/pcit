@@ -10,5 +10,14 @@
     //  ".drone.yml"
     // ],
     "http://json.schemastore.org/travis": ".travis.yml"
-  }
+  },
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "plugins/**/metadata.json"
+      ],
+      "url": "/config/plugin.schema.json"
+    }
+  ],
+  "editor.renderWhitespace": "all"
 }

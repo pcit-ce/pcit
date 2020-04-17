@@ -17,20 +17,48 @@ class Matrix
      */
     public static function handle(?array $matrix)
     {
-        if ($matrix['include'] ?? false) {
-            $matrix_array = [];
-
-            foreach ($matrix['include'] as $item) {
-                $matrix_array[] = (array) $item;
-            }
-
-            return $matrix_array;
-        }
-
         if (!$matrix) {
             return [];
         }
 
-        return ArrayHelper::combination($matrix);
+        // var_dump($matrix);
+
+        $include_matrix_array = [];
+
+        if ($matrix['include'] ?? false) {
+            foreach ($matrix['include'] as $item) {
+                $include_matrix_array[] = (array) $item;
+            }
+
+            if (1 === \count($matrix)) {
+                return $include_matrix_array;
+            }
+        }
+
+        $matrix_array = array_merge(
+            ArrayHelper::combination($matrix),
+            $include_matrix_array
+        );
+
+        // 不包含 exclude 返回
+        if (!($matrix['exclude'] ?? false)) {
+            return $matrix_array;
+        }
+
+        $exclude_matrix_array = [];
+        foreach ($matrix['exclude'] as $item) {
+            $exclude_matrix_array[] = (array) $item;
+        }
+
+        return array_values(
+            array_filter(
+                $matrix_array,
+                function ($item) use ($exclude_matrix_array) {
+                    if (!\in_array($item, $exclude_matrix_array)) {
+                        return true;
+                    }
+                }
+            )
+        );
     }
 }

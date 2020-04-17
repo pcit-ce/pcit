@@ -48,6 +48,7 @@ steps:
     # image: khs1994/php:7.3.0-composer-alpine
     run:
       - pwd
+      - echo "${NEW_ENV}" || true
       - composer config -g cache-dir /tmp/pcit_cache/composer
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
       - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 15 -- composer install --ansi
@@ -395,7 +396,7 @@ jobs:
     - 7.4.4
     - 7.3.11
     - nightly
-    # - 7.2.24
+    - 7.2.24
     # - 7.1.26
   NGINX_VERSION:
     - 1.15.8
@@ -408,6 +409,18 @@ jobs:
   # - 4.1.4
   # POSTGRESQL_VERSION:
   # - 10.5
+  # 排除以上 jobs 矩阵中的某些 job
+  exclude:
+  - PHP_VERSION: 7.2.24
+    NGINX_VERSION: 1.15.8
+    REDIS_VERSION: 5.0.7
+    MYSQL_VERSION: 5.7.29
+  # 向以上 jobs 矩阵添加新的 job
+  include:
+  - PHP_VERSION: 7.4.4
+    MYSQL_VERSION: 8.0.19
+    REDIS_VERSION: 5.0.7
+    NEW_ENV: new_env
 
 # 不支持变量
 # jobs:

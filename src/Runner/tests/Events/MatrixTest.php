@@ -45,7 +45,7 @@ EOF;
         $result1 = $this->parse($yaml);
         $result2 = $this->parse($yaml2);
 
-        $this->assertEquals($result1, $result2);
+        $this->assertEquals($result2, $result1);
 
         $yaml3 = <<<EOF
 matrix:
@@ -71,6 +71,65 @@ EOF;
 
         // var_dump($result4);
 
-        $this->assertEquals($result3, $result4);
+        $this->assertEquals($result4, $result3);
+    }
+
+    public function testMatrixWithinclude(): void
+    {
+        $yaml5 = <<<EOF
+matrix:
+  PHP_VERSION:
+  - 7.4.2
+  include:
+  - PHP_VERSION: nightly
+    MYSQL_VERSION: 8.0.19
+    REDIS_VERSION: 5.0.7
+EOF;
+        $result5 = $this->parse($yaml5);
+
+        $yaml6 = <<<EOF
+matrix:
+  include:
+  - PHP_VERSION: 7.4.2
+  - PHP_VERSION: nightly
+    MYSQL_VERSION: 8.0.19
+    REDIS_VERSION: 5.0.7
+EOF;
+        $result6 = $this->parse($yaml6);
+
+        $this->assertEquals($result6, $result5);
+    }
+
+    public function testMatrixWithExclude(): void
+    {
+        $yaml7 = <<<EOF
+matrix:
+  PHP_VERSION:
+  - 7.4.2
+  - 7.2.0
+  NGINX_VERSION:
+  - 1.17.10
+  include:
+  - PHP_VERSION: nightly
+    MYSQL_VERSION: 8.0.19
+    REDIS_VERSION: 5.0.7
+  exclude:
+  - PHP_VERSION: 7.2.0
+    NGINX_VERSION: 1.17.10
+EOF;
+        $result7 = $this->parse($yaml7);
+
+        $yaml8 = <<<EOF
+matrix:
+  include:
+  - PHP_VERSION: 7.4.2
+    NGINX_VERSION: 1.17.10
+  - PHP_VERSION: nightly
+    MYSQL_VERSION: 8.0.19
+    REDIS_VERSION: 5.0.7
+EOF;
+        $result8 = $this->parse($yaml8);
+
+        $this->assertEquals($result8, $result7);
     }
 }

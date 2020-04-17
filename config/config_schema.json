@@ -13,9 +13,9 @@
     ],
     "definitions": {
         "read_only": {
-           "type": "boolean",
-           "description": "Mount the container's root filesystem as read only",
-           "default": false
+            "type": "boolean",
+            "description": "Mount the container's root filesystem as read only",
+            "default": false
         },
         "plugins": {
             "type": "object",
@@ -967,17 +967,27 @@
                     "$comment": "https://docs.ci.khs1994.com/usage/jobs.html",
                     "description": "jobs, see https://docs.ci.khs1994.com/usage/jobs.html",
                     "patternProperties": {
-                        "^[a-zA-Z0-9._]+$": {
+                        "^(in|ex)clude$": {
+                            "description": "plase see https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy",
                             "type": "array",
-                            "uniqueItems": true,
-                            "description": "env name",
                             "items": {
-                                "type": "string",
-                                "description": "env value"
+                                "type": "object"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "additionalItems": false
                         }
-                    }
+                    },
+                    "additionalProperties": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "description": "env name",
+                        "items": {
+                            "type": "string",
+                            "description": "env value"
+                        },
+                        "minItems": 1
+                    },
+                    "minProperties": 1
                 },
                 "platform": {
                     "type": "array",

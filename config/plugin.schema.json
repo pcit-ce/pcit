@@ -1,0 +1,47 @@
+{
+    "title": "JSON schema for configuring PCIT CI/CD",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://ci.khs1994.com",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "see https://docs.ci.khs1994.com/usage/",
+    "type": "object",
+    "properties": {
+        "$id": {
+            "description": "pcit plugin image name",
+            "type": "string"
+        },
+        "$comment": {
+            "description": "pcit plugin website",
+            "type": "string"
+        },
+        "tags": {
+            "description": "pcit plugin tags",
+            "type": "string"
+        },
+        "github": {
+            "description": "pcit plugin github",
+            "type": "string"
+        },
+        "description": {
+            "description": "pcit plugin description",
+            "type": "string"
+        },
+        "author": {
+            "description": "pcit plugin author",
+            "type": "string"
+        },
+        "title": {
+            "type": "string",
+            "description": "json schema title"
+        },
+        "$schema": {
+            "type": "string",
+            "description": "json schema"
+        },
+        "properties": {
+            "type": "object",
+            "description": "pcit plugin setting"
+        }
+    },
+    "additionalProperties": false
+}

@@ -51,6 +51,7 @@ Route::get('ee', 'IndexController@ee');
 Route::get('why', 'IndexController@why');
 Route::get('donate', 'IndexController@donate');
 Route::get('plugins', 'IndexController@plugins');
+Route::get('plugins/metadata', 'Plugins\Metadata');
 Route::get('terms-of-service', 'IndexController@terms_of_service');
 Route::get('privacy-policy', 'IndexController@privacy_policy');
 
