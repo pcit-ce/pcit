@@ -12,7 +12,7 @@ echo "\n\n===> use PCIT Plugin s3\n\n";
 
 $options = [
     'version' => 'latest',
-    'region' => getenv('INPUT_REGION'),
+    'region' => getenv('INPUT_REGION') ?: 'us-east-1',
     'endpoint' => getenv('INPUT_ENDPOINT'),
     'use_path_style_endpoint' => 'true' === getenv('INPUT_USE_PATH_STYLE_ENDPOINT'),
     'credentials' => [

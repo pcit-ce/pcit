@@ -108,7 +108,7 @@
                                 },
                                 "target_commitish": {
                                     "type": "string",
-                                    "description": "",
+                                    "description": "target commitish",
                                     "examples": [
                                         "refs/tags/nightly"
                                     ]
@@ -256,6 +256,302 @@
                         "with"
                     ],
                     "type": "object"
+                },
+                {
+                    "type": "object",
+                    "description": "The Docker plugin can be used to build and publish images to the Docker registry.",
+                    "properties": {
+                        "image": {
+                            "type": "string",
+                            "const": "pcit/docker",
+                            "description": "plugin image name"
+                        },
+                        "with": {
+                            "type": "object",
+                            "description": "plugin settings",
+                            "properties": {
+                                "registry": {
+                                    "type": "string",
+                                    "description": "docker registry"
+                                },
+                                "repo": {
+                                    "type": "string",
+                                    "description": "docker repo, examples: username/image_name"
+                                },
+                                "tags": {
+                                    "type": "string",
+                                    "description": "-t, --tag"
+                                },
+                                "target": {
+                                    "type": "string",
+                                    "description": "--target"
+                                },
+                                "username": {
+                                    "type": "string",
+                                    "description": "docker registry username"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "description": "docker registry password"
+                                },
+                                "day_run": {
+                                    "type": "boolean",
+                                    "description": "don't push",
+                                    "default": false
+                                },
+                                "context": {
+                                    "type": "string",
+                                    "description": "docker build context",
+                                    "default": "."
+                                },
+                                "dockerfile": {
+                                    "type": "string",
+                                    "description": "-f, --file",
+                                    "default": "Dockerfile"
+                                },
+                                "pull": {
+                                    "type": "boolean",
+                                    "description": "--pull",
+                                    "default": false
+                                },
+                                "build_args": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
+                                    "description": "--build-arg"
+                                },
+                                "platform": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
+                                    "description": "--platform",
+                                    "items": {
+                                        "enum": [
+                                            "linux/amd64",
+                                            "linux/arm64",
+                                            "linux/ppc64le",
+                                            "linux/s390x",
+                                            "linux/386",
+                                            "linux/arm/v7",
+                                            "linux/arm/v6"
+                                        ]
+                                    }
+                                },
+                                "labels": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
+                                    "description": "--label"
+                                },
+                                "no_cache": {
+                                    "type": "boolean",
+                                    "description": "--no-cache",
+                                    "default": false
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "repo",
+                                "usernamw",
+                                "password"
+                            ]
+                        },
+                        "if": {
+                            "$ref": "#/definitions/if"
+                        },
+                        "pull": {
+                            "$ref": "#/definitions/pull"
+                        },
+                        "privileged": {
+                            "$ref": "#/definitions/privileged"
+                        },
+                        "read_only": {
+                            "$ref": "#/definitions/read_only"
+                        },
+                        "additionalProperties": false
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "image"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "description": "The pages plugin is used to push dir to git.",
+                    "properties": {
+                        "image": {
+                            "type": "string",
+                            "const": "pcit/pages",
+                            "description": "plugin image name"
+                        },
+                        "with": {
+                            "type": "object",
+                            "description": "plugin settings",
+                            "properties": {
+                                "username": {
+                                    "type": "string",
+                                    "description": "git username",
+                                    "default": "pcit-ce"
+                                },
+                                "target_branch": {
+                                    "type": "string",
+                                    "description": "git branch",
+                                    "default": "gh-pages"
+                                },
+                                "git_url": {
+                                    "type": "string",
+                                    "description": "git url"
+                                },
+                                "local_dir": {
+                                    "type": "string",
+                                    "description": "dir"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "description": "git email",
+                                    "default": "ci@khs1994.com"
+                                },
+                                "keep_history": {
+                                    "type": "boolean",
+                                    "description": "keep history",
+                                    "default": false
+                                },
+                                "git_token": {
+                                    "type": "string",
+                                    "description": "git token"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "description": "git commit message",
+                                    "default": "Deploy Git by PCIT https://ci.khs1994.com"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "git_url",
+                                "local_dir",
+                                "git_token"
+                            ]
+                        },
+                        "if": {
+                            "$ref": "#/definitions/if"
+                        },
+                        "pull": {
+                            "$ref": "#/definitions/pull"
+                        },
+                        "privileged": {
+                            "$ref": "#/definitions/privileged"
+                        },
+                        "read_only": {
+                            "$ref": "#/definitions/read_only"
+                        },
+                        "additionalProperties": false
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "image"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "description": "The S3 plugin uploads files and build artifacts to your S3 bucket, or S3-compatible(example: Minio).",
+                    "properties": {
+                        "image": {
+                            "type": "string",
+                            "const": "pcit/s3",
+                            "description": "plugin image name"
+                        },
+                        "with": {
+                            "type": "object",
+                            "description": "plugin settings",
+                            "properties": {
+                                "endpoint": {
+                                    "type": "string",
+                                    "description": "s3 endpoint"
+                                },
+                                "access_key_id": {
+                                    "type": "string",
+                                    "description": "s3 access key id"
+                                },
+                                "secret_access_key": {
+                                    "type": "string",
+                                    "description": "s3 access key"
+                                },
+                                "bucket": {
+                                    "type": "string",
+                                    "description": "s3 bucket"
+                                },
+                                "region": {
+                                    "type": "string",
+                                    "description": "s3 region",
+                                    "default": "us-east-1"
+                                },
+                                "cache": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
+                                    "description": "cache dir array"
+                                },
+                                "cache_prefix": {
+                                    "type": "string",
+                                    "description": "cache prefix"
+                                },
+                                "cache_download": {
+                                    "type": "boolean",
+                                    "description": "download cache",
+                                    "default": false
+                                },
+                                "use_path_style_endpoint": {
+                                    "type": "boolean",
+                                    "description": "when use minio, please set true",
+                                    "default": false
+                                },
+                                "connect_timeout": {
+                                    "type": "string",
+                                    "description": "connect timeout, s",
+                                    "default": 20
+                                },
+                                "acl": {
+                                    "type": "string",
+                                    "description": "see https://docs.aws.amazon.com/zh_cn/AmazonS3/latest/dev/acl-overview.html#canned-acl",
+                                    "default": "public_read"
+                                },
+                                "local_dir": {
+                                    "type": "string",
+                                    "description": "local dir"
+                                },
+                                "upload_dir": {
+                                    "type": "string",
+                                    "description": "s3 dir"
+                                },
+                                "files": {
+                                    "type": [
+                                        "object",
+                                        "array"
+                                    ],
+                                    "description": "dir,dir2 or local_path:s3_path"
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "if": {
+                            "$ref": "#/definitions/if"
+                        },
+                        "pull": {
+                            "$ref": "#/definitions/pull"
+                        },
+                        "privileged": {
+                            "$ref": "#/definitions/privileged"
+                        },
+                        "read_only": {
+                            "$ref": "#/definitions/read_only"
+                        },
+                        "additionalProperties": false
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "image"
+                    ]
                 }
             ]
         },

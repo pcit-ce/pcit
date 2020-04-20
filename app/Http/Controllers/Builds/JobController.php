@@ -155,6 +155,8 @@ class JobController
 
         app(PCIT::class)->runner->handle($build, (int) $job_id);
 
+        // 删除 s3 中的log
+        (new LogController())->deleteStoreInS3($job_id);
         Job::updateBuildStatus($job_id, 'queued');
 
         $this->updateBuildStatus($job_id);

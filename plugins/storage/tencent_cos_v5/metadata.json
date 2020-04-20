@@ -1,0 +1,46 @@
+{
+    "$id": "pcit/tencent-cos:v5",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The COSv5 plugin uploads files and build artifacts to your COSv5 bucket.",
+    "github": "https://github.com/pcit-plugins/pcit-tencent-cos-v5",
+    "tags": "Storage",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "region": {
+            "type": "string",
+            "description": "cos v5 region",
+            "default": "1"
+        },
+        "app_id": {
+            "type": "string",
+            "description": "cos v5 app id",
+            "default": "1"
+        },
+        "secret_key": {
+            "type": "string",
+            "description": "cos v5 secret key",
+            "default": "1"
+        },
+        "secret_id": {
+            "type": "string",
+            "description": "cos v5 secret id",
+            "default": "1"
+        },
+        "bucket": {
+            "type": "string",
+            "description": "cos v5 bucket",
+            "default": "1"
+        },
+        "prefix": {
+            "type": "string",
+            "description": "cos v5 prefix",
+            "default": "1"
+        },
+        "files": {
+            "type": "object",
+            "description": "local_path:cos_v5_path"
+        }
+    }
+}

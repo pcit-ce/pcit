@@ -1,0 +1,11 @@
+{
+    "$id": "pcit/kubectl",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The kubectl plugin can be used to exec kubectl command",
+    "github": "https://github.com/pcit-plugins/pcit-kubectl",
+    "tags": "Container",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {}
+}

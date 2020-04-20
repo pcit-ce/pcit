@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-if (in_array($argv[1], ['help', '-h', '--help'])) {
+if (in_array($argv[1] ?? '-h', ['help', '-h', '--help']) or 0 === $argc) {
     echo <<<EOF
 
 Usage:
@@ -64,7 +64,7 @@ foreach ($plugins as $plugin) {
 
 echo 'not found, insert'.PHP_EOL;
 
-$plugins[] = [
+$plugin = [
     'type' => 'object',
     'description' => $insert_plugin_description,
     'properties' => [
@@ -98,6 +98,10 @@ $plugins[] = [
         'image',
     ],
 ];
+
+$insert_plugin_required && $plugin['properties']['with']['required'] = $insert_plugin_required;
+
+$plugins[] = $plugin;
 
 $json_schem['definitions']['plugins']['oneOf'] = $plugins;
 write($json_schem, $generate_to_file);

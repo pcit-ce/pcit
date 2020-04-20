@@ -1,0 +1,17 @@
+{
+    "$id": "pcit/vuepress",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The Vuepress plugin is used to build Vuepress.",
+    "github": "https://github.com/pcit-plugins/pcit-vuepress",
+    "tags": "Static Website",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "dir": {
+            "type": "string",
+            "description": "vuepress markdown source dir",
+            "default": "docs"
+        }
+    }
+}

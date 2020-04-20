@@ -1,0 +1,36 @@
+{
+    "$id": "pcit/git",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The Git plugin can be used to exec git command",
+    "github": "https://github.com/pcit-plugins/pcit-git",
+    "tags": "Git",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "depth": {
+            "type": "integer",
+            "description": "clone depth",
+            "default": 25
+        },
+        "recursive": {
+            "type": "boolean",
+            "description": "clone submodules",
+            "default": false
+        },
+        "skip_verify": {
+            "type": "boolean",
+            "description": "skip tls verification",
+            "default": false
+        },
+        "tags": {
+            "type": "boolean",
+            "description": "clone tags",
+            "default": false
+        },
+        "submodule_override": {
+            "type": "object",
+            "description": "submodule overrides, example:\n path: git_url"
+        }
+    }
+}

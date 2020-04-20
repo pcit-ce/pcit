@@ -1,0 +1,83 @@
+{
+    "$id": "pcit/s3",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The S3 plugin uploads files and build artifacts to your S3 bucket, or S3-compatible(example: Minio).",
+    "github": "https://github.com/pcit-plugins/pcit-s3",
+    "tags": "Storage",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "endpoint": {
+            "type": "string",
+            "description": "s3 endpoint"
+        },
+        "access_key_id": {
+            "type": "string",
+            "description": "s3 access key id"
+        },
+        "secret_access_key": {
+            "type": "string",
+            "description": "s3 access key"
+        },
+        "bucket": {
+            "type": "string",
+            "description": "s3 bucket"
+        },
+        "region": {
+            "type": "string",
+            "description": "s3 region",
+            "default": "us-east-1"
+        },
+        "cache": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "cache dir array"
+        },
+        "cache_prefix": {
+            "type": "string",
+            "description": "cache prefix"
+        },
+        "cache_download": {
+            "type": "boolean",
+            "description": "download cache",
+            "default": false
+        },
+        "use_path_style_endpoint": {
+            "type": "boolean",
+            "description": "when use minio, please set true",
+            "default": false
+        },
+        "connect_timeout": {
+            "type": "string",
+            "description": "connect timeout, s",
+            "default": 20
+        },
+        "acl": {
+            "type": "string",
+            "description": "see https://docs.aws.amazon.com/zh_cn/AmazonS3/latest/dev/acl-overview.html#canned-acl",
+            "default": "public_read",
+            "enum": [
+                "private",
+                "public-read",
+                "public-read-write"
+            ]
+        },
+        "local_dir": {
+            "type": "string",
+            "description": "local dir"
+        },
+        "upload_dir": {
+            "type": "string",
+            "description": "s3 dir"
+        },
+        "files": {
+            "type": [
+                "object",
+                "array"
+            ],
+            "description": "dir,dir2 or local_path:s3_path"
+        }
+    }
+}

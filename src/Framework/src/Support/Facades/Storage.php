@@ -27,6 +27,7 @@ namespace PCIT\Framework\Support\Facades;
  * @method static bool put(string $path, string $contents, array $config = [])
  * @method static bool putStream(string $path, resource $resource, array $config = [])
  * @method static string|false readAndDelete(string $path)
+ * @method static string|false getPresignedUrl(string $path,string $expiration = "+20 minutes",array $getObjectOptions = [])
  */
 class Storage extends Facade
 {

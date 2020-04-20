@@ -4,6 +4,9 @@
     "$id": "pcit/github-release",
     "$comment": "https://docs.ci.khs1994.com/usage/",
     "description": "The github-release plugin is used to publish files and artifacts to GitHub Release.",
+    "github": "https://github.com/pcit-plugins/pcit-github-release",
+    "tags": "Release",
+    "author": "PCIT",
     "properties": {
         "token": {
             "type": "string",
@@ -81,7 +84,7 @@
         },
         "target_commitish": {
             "type": "string",
-            "description": "",
+            "description": "target commitish",
             "examples": [
                 "refs/tags/nightly"
             ]

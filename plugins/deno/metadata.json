@@ -1,0 +1,12 @@
+{
+    "$id": "pcit/deno",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The Deno plugin can be used to exec deno command",
+    "github": "https://github.com/pcit-plugins/deno",
+    "tags": "Language",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+    }
+}

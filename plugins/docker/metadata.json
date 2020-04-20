@@ -1,0 +1,95 @@
+{
+    "$id": "pcit/docker",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The Docker plugin can be used to build and publish images to the Docker registry.",
+    "github": "https://github.com/pcit-plugins/pcit-docker",
+    "author": "PCIT",
+    "tags": "Container",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "registry": {
+            "type": "string",
+            "description": "docker registry"
+        },
+        "repo": {
+            "type": "string",
+            "description": "docker repo, examples: username/image_name"
+        },
+        "tags": {
+            "type": "string",
+            "description": "-t, --tag"
+        },
+        "target": {
+            "type": "string",
+            "description": "--target"
+        },
+        "username": {
+            "type": "string",
+            "description": "docker registry username"
+        },
+        "password": {
+            "type": "string",
+            "description": "docker registry password"
+        },
+        "day_run": {
+            "type": "boolean",
+            "description": "don't push",
+            "default": false
+        },
+        "context": {
+            "type": "string",
+            "description": "docker build context",
+            "default": "."
+        },
+        "dockerfile": {
+            "type": "string",
+            "description": "-f, --file",
+            "default": "Dockerfile"
+        },
+        "pull": {
+            "type": "boolean",
+            "description": "--pull",
+            "default": false
+        },
+        "build_args": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "--build-arg"
+        },
+        "platform": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "--platform",
+            "items": {
+                "enum": [
+                    "linux/amd64",
+                    "linux/arm64",
+                    "linux/ppc64le",
+                    "linux/s390x",
+                    "linux/386",
+                    "linux/arm/v7",
+                    "linux/arm/v6"
+                ]
+            }
+        },
+        "labels": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "--label"
+        },
+        "no_cache": {
+            "type": "boolean",
+            "description": "--no-cache",
+            "default": false
+        }
+    },
+    "required": [
+        "repo",
+        "usernamw",
+        "password"
+    ]
+}

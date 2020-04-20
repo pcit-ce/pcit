@@ -174,6 +174,8 @@ class BuildsController
             throw new Exception('.pcit.yml not found', 500);
         }
 
+        // 删除 s3 中的log
+        (new LogController())->deleteStoreInS3(null, $build_id);
         Build::updateBuildStatus($build_id, 'pending');
         Build::updateStartAt($build_id, null);
         $this->updateJobStatus($build_id, 'queued');

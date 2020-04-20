@@ -1,0 +1,54 @@
+{
+    "$id": "pcit/pages",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The pages plugin is used to push dir to git.",
+    "github": "https://github.com/pcit-plugins/pcit-pages",
+    "tags": "Git",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "username": {
+            "type": "string",
+            "description": "git username",
+            "default": "pcit-ce"
+        },
+        "target_branch": {
+            "type": "string",
+            "description": "git branch",
+            "default": "gh-pages"
+        },
+        "git_url": {
+            "type": "string",
+            "description": "git url"
+        },
+        "local_dir": {
+            "type": "string",
+            "description": "dir"
+        },
+        "email": {
+            "type": "string",
+            "description": "git email",
+            "default": "ci@khs1994.com"
+        },
+        "keep_history": {
+            "type": "boolean",
+            "description": "keep history",
+            "default": false
+        },
+        "git_token": {
+            "type": "string",
+            "description": "git token"
+        },
+        "message": {
+            "type": "string",
+            "description": "git commit message",
+            "default": "Deploy Git by PCIT https://ci.khs1994.com"
+        }
+    },
+    "required": [
+        "git_url",
+        "local_dir",
+        "git_token"
+    ]
+}

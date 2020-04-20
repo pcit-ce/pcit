@@ -48,7 +48,6 @@ steps:
     # image: khs1994/php:7.3.0-composer-alpine
     run:
       - pwd
-      - echo "${NEW_ENV}" || true
       - composer config -g cache-dir /tmp/pcit_cache/composer
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
       - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 15 -- composer install --ansi
@@ -70,6 +69,7 @@ steps:
       - CI_WEBHOOKS_TOKEN=pcit
     run:
       - pwd
+      - echo "${NEW_ENV}" || true
       - echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       # 服务初始化需要时间，这里延迟执行
       - sleep 30

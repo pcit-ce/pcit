@@ -1,0 +1,57 @@
+{
+    "$id": "pcit/npm",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The NPM plugin can be used to publish libraries to public or private registries.",
+    "github": "https://github.com/pcit-plugins/pcit-npm",
+    "tags": "JS",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "username": {
+            "type": "string",
+            "description": "npm username"
+        },
+        "password": {
+            "type": "string",
+            "description": "npm user password"
+        },
+        "email": {
+            "type": "string",
+            "description": "npm user email"
+        },
+        "token": {
+            "type": "string",
+            "description": "npm user token"
+        },
+        "tag": {
+            "type": "string",
+            "description": "npm package tag, --tag",
+            "default": "current"
+        },
+        "registry": {
+            "type": "string",
+            "description": "--registry",
+            "default": "https://registry.npmjs.org"
+        },
+        "skip_verify": {
+            "type":"boolean",
+            "description": "skip verify https",
+            "default": false
+        },
+        "fail_on_version_conflict": {
+            "type":"boolean",
+            "description": "fail on version conflict",
+            "default": true
+        },
+        "access": {
+            "type": "string",
+            "description": "--access <public|restricted>",
+            "default": "public",
+            "enum": [
+                "public",
+                "restricted"
+            ]
+        }
+    }
+}

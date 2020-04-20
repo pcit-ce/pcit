@@ -1,0 +1,47 @@
+{
+    "$id": "pcit/gitee-release",
+    "$comment": "https://docs.ci.khs1994.com/usage/",
+    "description": "The gitee-release plugin is used to create Gitee Release.",
+    "github": "https://github.com/pcit-plugins/pcit-gitee-release",
+    "tags": "Release",
+    "author": "PCIT",
+    "title": "JSON schema for configuring PCIT CI/CD plugin",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "repo": {
+            "type": "string",
+            "description": "gitee repo",
+            "default": "${PCIT_REPO_SLUG}"
+        },
+        "target_commitish": {
+            "type": "string",
+            "description": "release target commitish",
+            "default": "${PCIT_COMMIT}"
+        },
+        "token": {
+            "type": "string",
+            "description": "gitee token"
+        },
+        "overwrite": {
+            "type": "boolean",
+            "description": "force overwrite existing release informations (only title and note)",
+            "default": false
+        },
+        "prerelease": {
+            "type": "boolean",
+            "description": "set the release as prerelease if set to true",
+            "default": false
+        },
+        "title": {
+            "type": "string",
+            "description": "gitee release title"
+        },
+        "note": {
+            "type": "string",
+            "description": "gitee release note"
+        }
+    },
+    "required": [
+        "token"
+    ]
+}
