@@ -41,6 +41,7 @@ class ClientTest extends TestCase
             [
                 'HTTP_X-Github-Event' => $event,
                 'HTTP_X-Hub-Signature' => 'sha1='.$secret,
+                'REQUEST_TIME_FLOAT' => microtime(true),
             ],
             $request_body
         );
