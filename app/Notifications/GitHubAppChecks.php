@@ -75,7 +75,7 @@ class GitHubAppChecks
             $status_use_in_title = 'in Progress';
         }
 
-        $name = $name ?? 'PCIT / '.ucfirst($event_type).' #'.$build_key_id.'-'.$job_key_id;
+        $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.ucfirst($event_type).' #'.$build_key_id.'-'.$job_key_id);
 
         $title = $title ??
             ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;

@@ -144,7 +144,7 @@ class LogController
     /**
      * 重新运行 job 时删除 S3 中的 log.
      */
-    public function deleteStoreInS3($job_id, $build_id): void
+    public function deleteStoreInS3($job_id = 0, $build_id = 0): void
     {
         if ($job_id) {
             $this->deletejobStoreInS3($job_id);
