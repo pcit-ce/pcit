@@ -9,9 +9,9 @@ class Kernel
     /**
      * @throws \Exception
      */
-    public function ping(string $content): void
+    public function ping(string $webhooks_content): void
     {
-        Ping::handle($content);
+        Ping::handle($webhooks_content);
     }
 
     /**
@@ -21,12 +21,12 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function push(string $json_content): void
+    public function push(string $webhooks_content): void
     {
-        Push::handle($json_content);
+        Push::handle($webhooks_content);
     }
 
-    public function status(string $content)
+    public function status(string $webhooks_content)
     {
         return 200;
     }
@@ -39,9 +39,9 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function issues(string $json_content): void
+    public function issues(string $webhooks_content): void
     {
-        Issues::handle($json_content);
+        Issues::handle($webhooks_content);
     }
 
     /**
@@ -49,9 +49,9 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function issue_comment(string $json_content): void
+    public function issue_comment(string $webhooks_content): void
     {
-        Issues::comment($json_content);
+        Issues::comment($webhooks_content);
     }
 
     /**
@@ -64,9 +64,9 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function pull_request(string $json_content)
+    public function pull_request(string $webhooks_content)
     {
-        PullRequest::handle($json_content);
+        PullRequest::handle($webhooks_content);
     }
 
     /**
@@ -100,7 +100,7 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function create(string $content)
+    public function create(string $webhooks_content)
     {
         return 200;
     }
@@ -110,9 +110,9 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function delete(string $json_content): void
+    public function delete(string $webhooks_content): void
     {
-        Delete::handle($json_content);
+        Delete::handle($webhooks_content);
     }
 
     /**
@@ -120,13 +120,13 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function member(string $content): void
+    public function member(string $webhooks_content): void
     {
     }
 
-    public function team_add(string $content): void
+    public function team_add(string $webhooks_content): void
     {
-        $obj = json_decode($content);
+        $obj = json_decode($webhooks_content);
 
         $repository = $obj->repository;
 
@@ -149,9 +149,9 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function installation(string $json_content): void
+    public function installation(string $webhooks_content): void
     {
-        Installation::handle($json_content);
+        Installation::handle($webhooks_content);
     }
 
     /**
@@ -165,9 +165,9 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function installation_repositories(string $json_content): void
+    public function installation_repositories(string $webhooks_content): void
     {
-        Installation::repositories($json_content);
+        Installation::repositories($webhooks_content);
     }
 
     /**
@@ -197,9 +197,9 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function check_suite(string $json_content): void
+    public function check_suite(string $webhooks_content): void
     {
-        Check::suite($json_content);
+        Check::suite($webhooks_content);
     }
 
     /**
@@ -211,22 +211,22 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function check_run(string $json_content): void
+    public function check_run(string $webhooks_content): void
     {
-        Check::run($json_content);
+        Check::run($webhooks_content);
     }
 
-    public function content_reference(string $json_content): void
+    public function content_reference(string $webhooks_content): void
     {
-        Content::handle($json_content);
+        Content::handle($webhooks_content);
     }
 
     /**
      * @see https://developer.github.com/v3/activity/events/types/#repositoryevent
      */
-    public function repository(string $json_content): void
+    public function repository(string $webhooks_content): void
     {
-        Repository::handle($json_content);
+        Repository::handle($webhooks_content);
     }
 
     public function __call($name, $args): void

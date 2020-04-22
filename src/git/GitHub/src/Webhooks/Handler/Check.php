@@ -17,11 +17,9 @@ class Check
      *
      * rerequested 用户点击了重新运行按钮
      *
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function suite($json_content): void
+    public static function suite(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,
@@ -32,7 +30,7 @@ class Check
             'action' => $action,
             'account' => $account,
             'check_suite_id' => $check_suite_id
-        ] = \PCIT\GitHub\Webhooks\Parser\Check::suite($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Check::suite($webhooks_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
@@ -45,11 +43,9 @@ class Check
     /**
      * created updated rerequested requested_action.
      *
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function run($json_content): void
+    public static function run(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,
@@ -62,7 +58,7 @@ class Check
             'check_run_id' => $check_run_id,
             'branch' => $branch,
             'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parser\Check::run($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Check::run($webhooks_content);
 
         if (\in_array($action, ['created', 'updated'], true)) {
             return;

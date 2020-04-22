@@ -14,11 +14,9 @@ class Installation
      *
      * deleted 用户卸载了 GitHub Apps
      *
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function handle($json_content): void
+    public static function handle(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,
@@ -26,7 +24,7 @@ class Installation
             'repo' => $repositories,
             'sender' => $sender,
             'account' => $account
-        ] = \PCIT\GitHub\Webhooks\Parser\Installation::handle($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Installation::handle($webhooks_content);
 
         if ('new_permissions_accepted' === $action) {
             \Log::info('receive event [ installation ] action [ new_permissions_accepted ]');
@@ -82,11 +80,9 @@ class Installation
      *
      * removed 移除仓库
      *
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function repositories($json_content): void
+    public static function repositories(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,
@@ -94,7 +90,7 @@ class Installation
             'repo' => $repo,
             'sender' => $sender,
             'account' => $account
-        ] = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($webhooks_content);
 
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
         User::updateUserInfo($account);

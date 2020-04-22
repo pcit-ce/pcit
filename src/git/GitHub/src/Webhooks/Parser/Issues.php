@@ -13,16 +13,9 @@ class Issues
         'CLAassistant',
     ];
 
-    /**
-     * @param $json_content
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    public static function handle($json_content)
+    public static function handle(string $webhooks_content): array
     {
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $action = $obj->action;
 
@@ -83,18 +76,11 @@ class Issues
         ];
     }
 
-    /**
-     * @param $json_content
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    public static function comment($json_content)
+    public static function comment(string $webhooks_content): array
     {
         \Log::info('Receive issue comment event', []);
 
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $action = $obj->action;
         $comment = $obj->comment;
@@ -132,6 +118,7 @@ class Issues
         $installation_id = $obj->installation->id ?? null;
 
         $org = ($obj->organization ?? false) ? true : false;
+        $is_pull_request = ($issue->pull_request ?? false) ? true : false;
 
         return [
             'installation_id' => $installation_id,
@@ -148,6 +135,7 @@ class Issues
             'updated_at' => $updated_at,
             'account' => (new Account($repository_owner, $org)),
             'action' => $action,
+            'is_pull_request' => $is_pull_request,
         ];
     }
 }

@@ -9,9 +9,9 @@ class Content
     /**
      * @see https://developer.github.com/apps/using-content-attachments/
      */
-    public static function handle($json_content)
+    public static function handle(string $webhooks_content): array
     {
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $action = $obj->action;
         $content_reference = $obj->content_reference;

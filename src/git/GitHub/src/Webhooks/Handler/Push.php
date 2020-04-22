@@ -9,13 +9,11 @@ use App\Build;
 class Push
 {
     /**
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function handle($json_content): void
+    public static function handle(string $webhooks_content): void
     {
-        $result = \PCIT\GitHub\Webhooks\Parser\Push::handle($json_content);
+        $result = \PCIT\GitHub\Webhooks\Parser\Push::handle($webhooks_content);
 
         $tag = $result['tag'] ?? null;
 
@@ -58,7 +56,7 @@ class Push
         $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
             ->handle();
 
-        \Storage::put('github/events/'.$last_insert_id.'.json', $json_content);
+        \Storage::put('github/events/'.$last_insert_id.'.json', $webhooks_content);
     }
 
     /**

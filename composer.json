@@ -76,7 +76,11 @@
     },
     {
       "type": "path",
-      "url": "./src/pustomizes/pustomize-pull-request-auto-merge"
+      "url": "./src/pustomizes/pustomize-issue"
+    },
+    {
+      "type": "path",
+      "url": "./src/pustomizes/pustomize-pull-request"
     }
   ],
   "authors": [{
@@ -118,7 +122,8 @@
     "pcit/provider": "19.12-dev",
     "pcit/provider-aliyun-docker-registry": "19.12-dev",
     "pcit/pustomize": "19.12-dev",
-    "pcit/pustomize-pull-request-auto-merge": "19.12-dev",
+    "pcit/pustomize-issue": "19.12-dev",
+    "pcit/pustomize-pull-request": "19.12-dev",
     "pcit/runner": "19.12-dev",
     "pcit/runner-exec": "19.12-dev",
     "pcit/runner-kube": "19.12-dev",
@@ -184,7 +189,8 @@
       "cp -r -f src/notification/ vendor/pcit/notification",
       "cp -r -f src/notifications/notification-wechat/ vendor/pcit/notification-wechat",
       "cp -r -f src/pustomize/ vendor/pcit/pustomize",
-      "cp -r -f src/pustomizes/pustomize-pull-request-auto-merge vendor/pcit/pustomize-pull-request-auto-merge"
+      "cp -r -f src/pustomizes/pustomize-issue vendor/pcit/pustomize-issue",
+      "cp -r -f src/pustomizes/pustomize-pull-request vendor/pcit/pustomize-pull-request"
     ],
     "compile:pcit": "phar-builder.php package --name=pcit --output=./ --entry-point=bin/src/pcit.php --bz2 --included framework,bin,config",
     "compile:pcitd": "phar-builder.php package --name=pcitd --output=./ --entry-point=bin/src/pcitd.php --bz2 --included framework,bin,config"

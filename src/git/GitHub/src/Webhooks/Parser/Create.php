@@ -8,14 +8,9 @@ use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class Create
 {
-    /**
-     * @param $json_content
-     *
-     * @return array
-     */
-    public static function handle($json_content)
+    public static function handle(string $webhooks_content): array
     {
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $repository = $obj->repository;
         $rid = $obj->repository->id;

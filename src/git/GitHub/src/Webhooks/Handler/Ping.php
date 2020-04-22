@@ -9,18 +9,16 @@ use App\Build;
 class Ping
 {
     /**
-     * @param $json_content
-     *
      * @return string
      *
      * @throws \Exception
      */
-    public static function handle($json_content)
+    public static function handle(string $webhooks_content)
     {
         [
             'rid' => $rid,
             'created_at' => $created_at
-        ] = \PCIT\GitHub\Webhooks\Parser\Ping::handle($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Ping::handle($webhooks_content);
 
         return Build::insertPing('github', $rid, $created_at);
     }

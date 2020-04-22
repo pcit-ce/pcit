@@ -12,18 +12,11 @@ use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Sender;
 
 class Push
 {
-    /**
-     * @param $json_content
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    public static function handle($json_content)
+    public static function handle(string $webhooks_content): array
     {
         \Log::info('Receive event', ['type' => 'push']);
 
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $repository = $obj->repository;
 
@@ -37,7 +30,7 @@ class Push
         $ref_array = explode('/', $ref);
 
         if ('tags' === $ref_array[1]) {
-            return self::tag($ref_array[2], $json_content);
+            return self::tag($ref_array[2], $webhooks_content);
         }
 
         $branch = self::ref2branch($ref);
@@ -72,19 +65,11 @@ class Push
         );
     }
 
-    /**
-     * @param $tag
-     * @param $json_content
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    public static function tag($tag, $json_content)
+    public static function tag($tag, string $webhooks_content): array
     {
         \Log::info('Receive event', ['type' => 'push', 'action' => 'tag']);
 
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $repository = $obj->repository;
 

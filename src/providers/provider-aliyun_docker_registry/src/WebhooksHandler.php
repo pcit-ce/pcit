@@ -17,16 +17,11 @@ use PCIT\Support\CI;
  */
 class WebhooksHandler implements WebhooksHandlerInterface
 {
-    /**
-     * @param $json_content
-     *
-     * @throws \Exception
-     */
-    public function handle($json_content): void
+    public function handle(string $webhooks_content): void
     {
         \Log::info('Handle Aliyun Docker Registry Webhooks', []);
 
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $aliyun_docker_registry_name = $obj->repository->repo_full_name;
 
@@ -62,7 +57,7 @@ class WebhooksHandler implements WebhooksHandlerInterface
                 'Build Docker image Success',
                 (new CheckRunText(
                     $build_key_id,
-                    JSON::beautiful($json_content),
+                    JSON::beautiful($webhooks_content),
                     'github'
                 ))->markdown(),
                 null,

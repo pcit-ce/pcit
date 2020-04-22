@@ -9,14 +9,14 @@ use PCIT\PCIT;
 
 class Content
 {
-    public static function handle($json_content): void
+    public static function handle(string $webhooks_content): void
     {
         [
             'action' => $action,
             'content_reference_id' => $content_reference_id,
             'content_reference_reference' => $content_reference_reference,
             'installation_id' => $installation_id,
-    ] = \PCIT\GitHub\Webhooks\Parser\Content::handle($json_content);
+    ] = \PCIT\GitHub\Webhooks\Parser\Content::handle($webhooks_content);
 
         $access_token = $access_token = GetAccessToken::getGitHubAppAccessToken(null, null, (int) $installation_id);
         $app = new PCIT(['github_access_token' => $access_token]);

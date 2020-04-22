@@ -9,11 +9,9 @@ class Create
     /**
      * Create "repository", "branch", or "tag".
      *
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function handle($json_content): void
+    public static function handle(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,
@@ -21,7 +19,7 @@ class Create
             'repo_full_name' => $repo_full_name,
             'ref_type' => $ref_type,
             'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parser\Create::handle($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Create::handle($webhooks_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))

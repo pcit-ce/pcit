@@ -7,11 +7,9 @@ namespace PCIT\GitHub\Webhooks\Handler;
 class Delete
 {
     /**
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function handle($json_content): void
+    public static function handle(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,
@@ -20,7 +18,7 @@ class Delete
             'ref_type' => $ref_type,
             'account' => $account,
             'ref' => $ref,
-        ] = \PCIT\GitHub\Webhooks\Parser\Delete::handle($json_content);
+        ] = \PCIT\GitHub\Webhooks\Parser\Delete::handle($webhooks_content);
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))

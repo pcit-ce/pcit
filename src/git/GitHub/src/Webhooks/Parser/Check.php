@@ -9,15 +9,11 @@ use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 class Check
 {
     /**
-     * @param $json_content
-     *
-     * @return array
-     *
      * @throws \Exception
      */
-    public static function suite($json_content)
+    public static function suite(string $webhooks_content): array
     {
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $installation_id = $obj->installation->id ?? null;
 
@@ -52,15 +48,11 @@ class Check
     }
 
     /**
-     * @param $json_content
-     *
-     * @return array
-     *
      * @throws \Exception
      */
-    public static function run($json_content)
+    public static function run(string $webhooks_content): array
     {
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $action = $obj->action;
 

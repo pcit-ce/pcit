@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-use App\GetAccessToken;
-use App\Repo;
-use PCIT\PCIT;
+use PCIT\GitHub\Webhooks\Parser\IssueCommentContext;
+use PCIT\GitHub\Webhooks\Parser\IssuesContext;
+use PCIT\GitHub\Webhooks\PustomizeHandler;
 
 class Issues
 {
@@ -17,12 +17,12 @@ class Issues
      *  "edited"
      *  "milestoned", "demilestoned".
      *
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function handle($json_content): void
+    public static function handle(string $webhooks_content): void
     {
+        $issue_parser_metadata = \PCIT\GitHub\Webhooks\Parser\Issues::handle($webhooks_content);
+
         [
             'installation_id' => $installation_id,
             'action' => $action,
@@ -43,81 +43,30 @@ class Issues
             'assignees' => $assignees,
             'labels' => $labels,
             'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parser\Issues::handle($json_content);
-
-        if ('opened' !== $action) {
-            return;
-        }
-
-        self::translateTitle($repo_full_name, (int) $issue_number, (int) $rid, $title);
+        ] = $issue_parser_metadata;
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
             ->handle();
 
-        \Log::info($issue_number.' opened', []);
+        \Log::info('issue #'.$issue_number.' '.$action);
 
-        return;
-    }
+        // pustomize
+        $class = 'PCIT\\Pustomize\\Issue\\Basic';
 
-    /**
-     * 检查标题是否为中文，若为中文则翻译为英文.
-     *
-     * @param $title
-     * @param $rid
-     * @param $repo_full_name
-     * @param $issue_number
-     *
-     * @throws \Exception
-     */
-    public static function translateTitle(string $repo_full_name,
-                                          int $issue_number,
-                                          ?int $rid,
-                                          ?string $title): void
-    {
-        $access_token = GetAccessToken::getGitHubAppAccessToken($rid ?: null, $repo_full_name);
+        $context = new IssuesContext($issue_parser_metadata, $webhooks_content);
 
-        $app = new PCIT(['github_access_token' => $access_token]);
-
-        if (!$title) {
-            // get issue title
-            $result = $app->issue->getSingle($repo_full_name, $issue_number);
-
-            $title = json_decode($result)->title;
-        }
-
-        try {
-            $result = $app->tencent_ai->translate->detect($title);
-
-            $lang = $result['data']['lang'] ?? 'en';
-
-            if ('zh' === $lang) {
-                $result = $app->tencent_ai->translate->aILabText($title, 1);
-
-                $title = $result['data']['trans_text'] ?? null;
-            }
-        } catch (\Throwable $e) {
-            \Log::info($e->__toString());
-
-            return;
-        }
-
-        if ('zh' !== $lang or null === $title) {
-            return;
-        }
-
-        $app->issue->edit($repo_full_name, $issue_number, $title);
+        (new PustomizeHandler())->handle($class, $context);
     }
 
     /**
      * "created", "edited", or "deleted".
      *
-     * @param $json_content
-     *
      * @throws \Exception
      */
-    public static function comment($json_content): void
+    public static function comment(string $webhooks_content): void
     {
+        $issue_comment_parser_metadata = \PCIT\GitHub\Webhooks\Parser\Issues::comment($webhooks_content);
         [
             'installation_id' => $installation_id,
             'rid' => $rid,
@@ -131,67 +80,17 @@ class Issues
             'body' => $body,
             'created_at' => $created_at,
             'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parser\Issues::comment($json_content);
+        ] = $issue_comment_parser_metadata;
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
             ->handle();
 
-        if ('edited' === $action) {
-            \Log::info('Edit Issue Comment SKIP', []);
+        // pustomize
+        $class = 'PCIT\\Pustomize\\Issue\\Comment';
 
-            return;
-        }
+        $context = new IssueCommentContext($issue_comment_parser_metadata, $webhooks_content);
 
-        if ('deleted' === $action) {
-            return;
-        }
-
-        if (Repo::checkAdmin((int) $rid, (int) $sender_uid)) {
-            $pustomize_class = 'PCIT\\Pustomize\\PullRequest\\AutoMerge';
-
-            if (!class_exists($pustomize_class)) {
-                return;
-            }
-
-            $result = (new $pustomize_class())->handle($body);
-
-            if (!$result) {
-                return;
-            }
-
-            [$body,$merge_method] = $result;
-
-            try {
-                PullRequest::merge(
-                    $repo_full_name, (int) $issue_number, null, null, null,
-                    $merge_method ?? 1
-                );
-
-                self::createComment((int) $rid, $repo_full_name, $issue_number, $body);
-            } catch (\Throwable $e) {
-                \Log::error('auto merge error: '.$e->__toString());
-
-                self::createComment((int) $rid, $repo_full_name, $issue_number,
-                    ':disappointed_relieved: merge cannot be performed, please check status below'
-                );
-            }
-        }
-    }
-
-    /**
-     * @param $rid
-     * @param $repo_full_name
-     * @param $issue_number
-     * @param $body
-     *
-     * @throws \Exception
-     */
-    private static function createComment($rid, $repo_full_name, $issue_number, $body): void
-    {
-        $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
-
-        (new PCIT(['github_access_token' => $access_token]))
-            ->issue_comments->create($repo_full_name, $issue_number, $body);
+        (new PustomizeHandler())->handle($class, $context);
     }
 }

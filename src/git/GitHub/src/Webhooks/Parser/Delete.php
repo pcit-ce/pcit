@@ -8,18 +8,11 @@ use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 
 class Delete
 {
-    /**
-     * @param $json_content
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    public static function handle($json_content)
+    public static function handle(string $webhooks_content): array
     {
         \Log::info('Receive event', ['type' => 'delete']);
 
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $ref_type = $obj->ref_type;
         $ref = $obj->ref;

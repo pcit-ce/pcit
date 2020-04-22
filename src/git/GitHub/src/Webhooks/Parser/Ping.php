@@ -6,18 +6,11 @@ namespace PCIT\GitHub\Webhooks\Parser;
 
 class Ping
 {
-    /**
-     * @param $json_content
-     *
-     * @return array
-     *
-     * @throws \Exception
-     */
-    public static function handle($json_content)
+    public static function handle(string $webhooks_content): array
     {
         \Log::info('receive ping event', []);
 
-        $obj = json_decode($json_content);
+        $obj = json_decode($webhooks_content);
 
         $rid = $obj->repository->id ?? 0;
 

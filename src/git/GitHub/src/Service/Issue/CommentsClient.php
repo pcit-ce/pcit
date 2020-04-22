@@ -50,7 +50,7 @@ class CommentsClient
         $http_return_code = $this->curl->getCode();
 
         if (201 !== $http_return_code) {
-            \Log::debug('Http Return Code is not 201 '.$http_return_code);
+            \Log::info('Http Return Code is not 201 '.$http_return_code);
         }
 
         return $output;

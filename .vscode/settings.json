@@ -19,5 +19,6 @@
       "url": "/config/plugin.schema.json"
     }
   ],
-  "editor.renderWhitespace": "all"
+  "editor.renderWhitespace": "all",
+  "php.validate.enable": false
 }

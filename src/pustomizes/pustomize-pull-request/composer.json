@@ -1,10 +1,10 @@
 {
-    "name": "pcit/pustomize-pull-request-auto-merge",
-    "description": "pcit customize pull request auto merge",
+    "name": "pcit/pustomize-pull-request",
+    "description": "pcit customize pull request handler",
     "version": "19.12-dev",
     "autoload": {
         "psr-4": {
-            "PCIT\\Pustomize\\": "src/"
+            "PCIT\\Pustomize\\PullRequest\\": "src/"
         }
     },
     "extra": {

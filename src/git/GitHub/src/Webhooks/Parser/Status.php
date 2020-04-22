@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Webhooks\Parser;
 
 class Status
 {
-    public static function handle($json_content): void
+    public static function handle(string $webhooks_content): void
     {
     }
 }

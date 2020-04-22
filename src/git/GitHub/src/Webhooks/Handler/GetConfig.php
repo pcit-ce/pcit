@@ -41,11 +41,13 @@ class GetConfig
 
             $yaml_file_content = HttpClient::get($url, null, [], 20);
 
-            if (404 !== HttpClient::getCode()) {
+            $http_code = HttpClient::getCode();
+
+            if (200 === $http_code) {
                 return $yaml_file_content;
             }
 
-            \Log::info("$repo_full_name $commit_id not include ".$file_name, []);
+            \Log::info("$repo_full_name $commit_id not include ".$file_name, compact('http_code'));
         }
 
         return [];

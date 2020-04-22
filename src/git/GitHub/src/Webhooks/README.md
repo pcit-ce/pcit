@@ -1,5 +1,8 @@
 # WebHooks
 
+* https://developer.github.com/webhooks/
+* https://developer.github.com/v3/activity/events/types/
+
 ## Handler
 
 PCITDaemon 处理 Webhooks 数据，存储到数据库。
@@ -8,7 +11,7 @@ PCITDaemon 处理 Webhooks 数据，存储到数据库。
 $webhooksHandler = new \PCIT\GitHub\Webhooks\Handler\Kernel();
 
 // save data to db
-$webhooksHandler->ping($json_content);
+$webhooksHandler->ping($webhooks_content);
 ```
 
 ## Parser

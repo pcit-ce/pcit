@@ -139,7 +139,7 @@ class Client
         $http_return_code = $this->curl->getCode();
 
         if (200 !== $http_return_code) {
-            \Log::debug('Http Return Code Is Not 200 '.$http_return_code);
+            \Log::info('Http Return Code Is Not 200 '.$http_return_code);
 
             throw new Exception('Edit Issue Error '.$http_return_code);
         }
@@ -216,5 +216,51 @@ class Client
         return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.machine-man-preview+json;
         application/vnd.github.speedy-preview+json;
         application/vnd.github.mockingbird-preview+json']);
+    }
+
+    /**
+     * 检查标题是否为中文，若为中文则翻译为英文.
+     *
+     * @param $title
+     * @param $rid
+     * @param $repo_full_name
+     * @param $issue_number
+     *
+     * @throws \Exception
+     */
+    public function translateTitle(
+        string $repo_full_name,
+        int $issue_number,
+        ?int $rid,
+        ?string $title
+    ): void {
+        if (!$title) {
+            // get issue title
+            $result = $this->getSingle($repo_full_name, $issue_number);
+
+            $title = json_decode($result)->title;
+        }
+
+        try {
+            $result = $this->tencent_ai->translate->detect($title);
+
+            $lang = $result['data']['lang'] ?? 'en';
+
+            if ('zh' === $lang) {
+                $result = $this->tencent_ai->translate->aILabText($title, 1);
+
+                $title = $result['data']['trans_text'] ?? null;
+            }
+        } catch (\Throwable $e) {
+            \Log::info($e->__toString());
+
+            return;
+        }
+
+        if ('zh' !== $lang or null === $title) {
+            return;
+        }
+
+        $this->edit($repo_full_name, $issue_number, $title);
     }
 }
