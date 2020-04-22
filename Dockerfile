@@ -3,8 +3,8 @@
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 
-ARG PHP_VERSION=7.4.4
-ARG NODE_VERSION=13.8.0
+ARG PHP_VERSION=7.4.5
+ARG NODE_VERSION=14.0.0
 
 # 前端构建
 FROM khs1994/node:git as frontend-builder
@@ -29,7 +29,7 @@ RUN cd /app/pcit/frontend \
       && npm run build
 
 # 安装 composer 依赖
-FROM khs1994/php:7.4.4-composer-alpine as composer
+FROM khs1994/php:7.4.5-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
@@ -89,7 +89,7 @@ CMD ["up"]
 # CMD ["server"]
 
 # ==> nginx unit
-FROM --platform=$TARGETPLATFORM khs1994/php:7.4.4-unit-alpine as unit
+FROM --platform=$TARGETPLATFORM khs1994/php:7.4.5-unit-alpine as unit
 
 COPY --from=dump /app/pcit/ /app/pcit/
 

@@ -9,7 +9,7 @@
 ```yaml
 steps:
   php:
-    image: khs1994/php-fpm:7.4.4-alpine
+    image: khs1994/php-fpm:7.4.5-alpine
     run:
       - composer install -q
       - vendor/bin/phpunit
@@ -36,7 +36,7 @@ steps:
 ```yaml
 steps:
   php:
-    image: khs1994/php-fpm:7.4.4-alpine
+    image: khs1994/php-fpm:7.4.5-alpine
     env:
       - key=value
     run:
@@ -63,7 +63,7 @@ steps:
 ```yaml
 steps:
   php:
-    image: khs1994/php-fpm:7.4.4-alpine
+    image: khs1994/php-fpm:7.4.5-alpine
     pull: true
     run:
       - composer install -q
@@ -77,7 +77,7 @@ steps:
 ```yaml
 steps:
   php:
-    image: khs1994/php-fpm:7.4.4-alpine
+    image: khs1994/php-fpm:7.4.5-alpine
     shell: bash
 ```
 
@@ -90,7 +90,7 @@ steps:
 ```yaml
 steps:
   php:
-    image: khs1994/php-fpm:7.4.4-alpine
+    image: khs1994/php-fpm:7.4.5-alpine
     run:
       - composer install -q
       - vendor/bin/phpunit
