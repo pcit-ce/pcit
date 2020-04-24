@@ -26,6 +26,10 @@ jobs:
 
           git -C frontend log
 
+          VCS_REF=`git rev-parse --short HEAD`
+
+          UI_VCS_REF=`git -C frontend rev-parse --short HEAD`
+
           TAG=`echo $GITHUB_REF | cut -d '/' -f 3`
           docker buildx build \
             -t pcit/pcit \
@@ -36,6 +40,8 @@ jobs:
             -t pcit/pcitd:${TAG} \
             -t pcit/server \
             -t pcit/server:${TAG} \
+            --build-arg VCS_REF=$VCS_REF \
+            --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
             --target=pcit --push .
 
@@ -44,6 +50,8 @@ jobs:
             -t pcit/pcit:${TAG}-cli \
             -t pcit/cli \
             -t pcit/cli:${TAG} \
+            --build-arg VCS_REF=$VCS_REF \
+            --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
             --target=pcit_cli --push .
 
@@ -52,6 +60,8 @@ jobs:
             -t pcit/pcit:${TAG}-fpm \
             -t pcit/fpm \
             -t pcit/fpm:${TAG} \
+            --build-arg VCS_REF=$VCS_REF \
+            --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
             --target=pcit_fpm --push .
 
@@ -60,6 +70,8 @@ jobs:
             -t pcit/pcit:${TAG}-unit \
             -t pcit/unit \
             -t pcit/unit:${TAG} \
+            --build-arg VCS_REF=$VCS_REF \
+            --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
             --target=unit --push .
 
@@ -68,6 +80,8 @@ jobs:
             -t pcit/pcit:${TAG}-frontend \
             -t pcit/frontend \
             -t pcit/frontend:${TAG} \
+            --build-arg VCS_REF=$VCS_REF \
+            --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
             --target=frontend --push .
         env:

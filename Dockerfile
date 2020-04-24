@@ -5,9 +5,10 @@
 
 ARG PHP_VERSION=7.4.5
 ARG NODE_VERSION=14.0.0
+ARG USERNAME=khs1994
 
 # 前端构建
-FROM khs1994/node:git as frontend-builder
+FROM ${USERNAME}/node:git as frontend-builder
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -29,7 +30,7 @@ RUN cd /app/pcit/frontend \
       && npm run build
 
 # 安装 composer 依赖
-FROM khs1994/php:7.4.5-composer-alpine as composer
+FROM ${USERNAME}/php:7.4.5-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
@@ -46,11 +47,18 @@ COPY . /app/pcit
 COPY --from=frontend-builder /app/pcit/public/ /app/pcit/public/
 
 RUN rm -rf /app/pcit/Dockerfile \
-    && rm -rf /app/pcit/frontend \
-    && rm -rf /app/pcit/.docker
+      && rm -rf /app/pcit/frontend \
+      && rm -rf /app/pcit/.docker
 
 # ==> pcit
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine as pcit
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine as pcit
+
+ARG VCS_REF="unknow"
+ARG UI_VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      ui.revision=$UI_VCS_REF \
+      org.opencontainers.image.source="https://github.com/pcit-ce/pcit"
 
 COPY --from=dump /app/pcit/ /app/pcit/
 
@@ -62,7 +70,14 @@ CMD ["up"]
 # CMD ["agent"]
 
 # ==> cli
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine as pcit_cli
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine as pcit_cli
+
+ARG VCS_REF="unknow"
+ARG UI_VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      ui.revision=$UI_VCS_REF \
+      org.opencontainers.image.source="https://github.com/pcit-ce/pcit"
 
 COPY --from=dump /app/pcit/ /app/pcit/
 
@@ -75,7 +90,14 @@ ENTRYPOINT ["/app/pcit/bin/pcit"]
 CMD ["list"]
 
 # ==> fpm
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine as pcit_fpm
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine as pcit_fpm
+
+ARG VCS_REF="unknow"
+ARG UI_VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      ui.revision=$UI_VCS_REF \
+      org.opencontainers.image.source="https://github.com/pcit-ce/pcit"
 
 COPY --from=dump /app/pcit/ /app/.pcit/
 
@@ -89,7 +111,14 @@ CMD ["up"]
 # CMD ["server"]
 
 # ==> nginx unit
-FROM --platform=$TARGETPLATFORM khs1994/php:7.4.5-unit-alpine as unit
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:7.4.5-unit-alpine as unit
+
+ARG VCS_REF="unknow"
+ARG UI_VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      ui.revision=$UI_VCS_REF \
+      org.opencontainers.image.source="https://github.com/pcit-ce/pcit"
 
 COPY --from=dump /app/pcit/ /app/pcit/
 
@@ -108,6 +137,13 @@ CMD ["up"]
 
 # ==> 前端资源
 FROM --platform=$TARGETPLATFORM alpine as frontend
+
+ARG VCS_REF="unknow"
+ARG UI_VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      ui.revision=$UI_VCS_REF \
+      org.opencontainers.image.source="https://github.com/pcit-ce/ui"
 
 COPY --from=dump /app/pcit/public/ /app/pcit/public/
 
