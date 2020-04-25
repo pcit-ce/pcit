@@ -4,3 +4,5 @@
 !json.schemastore.org.json
 !plugin_merge.php
 !plugin.schema.json
+
+plugin.metadata.json

@@ -10,12 +10,8 @@ set +x
 echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin "${INPUT_REGISTRY}"
 set -x
 
-docker buildx create --name pcit-builder --driver docker-container --use
-
-INPUT_IMAGE=${INPUT_REPO}:${INPUT_TAGS:-latest}
-
-# 若 INPUT_DOCKER_REGISTRY 存在，则镜像名加上地址
-[ -n "${INPUT_REGISTRY}" ] && INPUT_IMAGE="${INPUT_REGISTRY}/${INPUT_IMAGE}"
+docker buildx rm pcit-builder || true
+docker buildx create --name pcit-builder --driver docker-container --use --driver-opt image=${INPUT_BUILDX_IMAGE:-"moby/buildkit:buildx-stable-1"}
 
 split(){
   CMD_ARG=$1
@@ -34,14 +30,31 @@ split(){
   #遍历数组
   for item in ${arr[@]}
   do
+
+    if [ ${CMD_ARG} = "tag" ];then
+      if [ "${INPUT_REGISTRY}" ];then
+        item=${INPUT_REGISTRY}/${item}
+      fi
+      OPTIONS+=" --${CMD_ARG} ${item} "
+      continue
+    fi
+
     OPTIONS+=" --${CMD_ARG} ${item} "
   done
 }
 
-# build_args
+# build-arg
 split build-arg ${INPUT_BUILD_ARGS}
-# labels
+# label
 split label ${INPUT_LABELS}
+# tag
+split tag ${INPUT_REPO}
+# cache-from
+split cache-from ${INPUT_CACHE_FROM}
+# cache-to
+split cache-to ${INPUT_CACHE_TO}
+# secret
+split secret ${INPUT_SECRET}
 
 docker buildx build \
 -t ${INPUT_IMAGE} \

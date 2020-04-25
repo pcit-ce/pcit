@@ -13,12 +13,11 @@
             "description": "docker registry"
         },
         "repo": {
-            "type": "string",
-            "description": "docker repo, examples: username/image_name"
-        },
-        "tags": {
-            "type": "string",
-            "description": "-t, --tag"
+            "type": [
+                "string",
+                "array"
+            ],
+            "description": "docker repo, examples: username/image_name:tag"
         },
         "target": {
             "type": "string",
@@ -32,7 +31,7 @@
             "type": "string",
             "description": "docker registry password"
         },
-        "day_run": {
+        "dry_run": {
             "type": "boolean",
             "description": "don't push",
             "default": false
@@ -47,6 +46,11 @@
             "description": "-f, --file",
             "default": "Dockerfile"
         },
+        "buildx_image": {
+            "type": "string",
+            "description": "docker buildx create --driver-opt image= , e.g.\nmoby/buildkit:buildx-stable-1\ndockerpracticesig/buildkit:master",
+            "default": "moby/buildkit:buildx-stable-1"
+        },
         "pull": {
             "type": "boolean",
             "description": "--pull",
@@ -57,6 +61,24 @@
             "uniqueItems": true,
             "minItems": 1,
             "description": "--build-arg"
+        },
+        "cache_from": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "--cache-from, e.g.\nuser/app:cache, type=local,src=path/to/dir"
+        },
+        "cache_to": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "--cache-to, e.g.\nuser/app:cache, type=local,dest=path/to/dir"
+        },
+        "secret": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "--secret, e.g.\nid=mysecret,src=/local/secret"
         },
         "platform": {
             "type": "array",
@@ -89,7 +111,7 @@
     },
     "required": [
         "repo",
-        "usernamw",
+        "username",
         "password"
     ]
 }

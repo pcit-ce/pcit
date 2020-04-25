@@ -1,10 +1,48 @@
 steps:
+  init:
+    - echo secret_v1 > secret.txt
   docker_build:
     image: pcit/docker
     with:
       # registry: docker.khs1994.com
       repo: pcit/alpine
-      tags: latest
+      # target: php
+      build_args:
+        - a=1
+        - b=2
+      context: ./tests
+      dockerfile: tests/Dockerfile.secret
+      username: ${DOCKER_USERNAME}
+      password: ${DOCKER_PASSWORD}
+      dry_run: false
+      pull: false
+      platform:
+        - linux/arm/v7
+        - linux/arm64
+        - linux/amd64
+      labels:
+        - ci.khs1994.com=true
+        - plugin.ci.khs1994.com=true
+      no_cache: false
+      cache_from:
+        - pict/alpine:cache
+      cache_to:
+        - type=local,dest=/tmp/build-cache
+      secret:
+        - id=mysecret,src=secret.txt
+      buildx_image: dockerpracticesig/buildkit:master
+    if:
+      event: push
+      branch: master
+      # event: tag
+
+  docker_build_repo_array:
+    image: pcit/docker
+    with:
+      # registry: docker.khs1994.com
+      repo:
+        - pcit/alpine
+        - pcit/alpine:v2
       # target: php
       build_args:
         - a=1
@@ -16,15 +54,15 @@ steps:
       password: ${DOCKER_PASSWORD}
       dry_run: false
       pull: false
-      purge: false
       platform:
-        - linux/arm
+        - linux/arm/v7
         - linux/arm64
         - linux/amd64
       labels:
         - ci.khs1994.com=true
         - plugin.ci.khs1994.com=true
       no_cache: false
+      buildx_image: dockerpracticesig/buildkit:master
     if:
       event: push
       branch: master
@@ -45,7 +83,7 @@ steps:
       username: ${DOCKER_USERNAME}
       password: ${DOCKER_PASSWORD}
       dry_run: true
-      purge: false
+      buildx_image: dockerpracticesig/buildkit:master
     if:
       event: push
       # event: tag
@@ -54,9 +92,11 @@ steps:
   exec_command:
     image: pcit/docker
     run: |
-      docker buildx create --name mybuilder --driver docker-container --use
+      docker buildx create --name pcit-builder \
+        --driver docker-container --use \
+        --driver-opt image=dockerpracticesig/buildkit:master
 
       docker buildx build -f tests/Dockerfile tests
       docker buildx build -t test -f tests/Dockerfile tests
 
-      docker buildx rm mybuilder
+      docker buildx rm pcit-builder
