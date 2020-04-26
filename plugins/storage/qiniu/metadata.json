@@ -10,27 +10,26 @@
     "properties": {
         "secret_key": {
             "type": "string",
-            "description": "qiniu secret key",
-            "default": "1"
+            "description": "qiniu secret key, copy from https://portal.qiniu.com/user/key"
         },
         "access_key": {
             "type": "string",
-            "description": "qiniu access key",
-            "default": "1"
+            "description": "qiniu access key, copy from https://portal.qiniu.com/user/key"
         },
         "bucket": {
             "type": "string",
-            "description": "qiniu bucket",
-            "default": "1"
+            "description": "qiniu bucket, get from https://portal.qiniu.com/kodo/bucket"
         },
         "endpoint": {
             "type": "string",
-            "description": "qiniu endpoint",
-            "default": "1"
+            "description": "qiniu endpoint"
         },
         "files": {
-            "type": "object",
-            "description": "local_path:qiniu_path"
+            "type": [
+                "object",
+                "array"
+            ],
+            "description": "dir,dir2 or local_path:qiniu_path"
         }
     },
     "required": [

@@ -57,7 +57,6 @@ split cache-to ${INPUT_CACHE_TO}
 split secret ${INPUT_SECRET}
 
 docker buildx build \
--t ${INPUT_IMAGE} \
 --platform ${INPUT_PLATFORM:-linux/amd64} \
 -f ${INPUT_DOCKERFILE:-Dockerfile} \
 $(test "${INPUT_DRY_RUN}" != "true" && echo " --push ") \

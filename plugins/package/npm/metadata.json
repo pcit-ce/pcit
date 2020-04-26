@@ -27,12 +27,12 @@
         "tag": {
             "type": "string",
             "description": "npm package tag, --tag",
-            "default": "current"
+            "default": " current"
         },
         "registry": {
             "type": "string",
             "description": "--registry",
-            "default": "https://registry.npmjs.org"
+            "default": " https://registry.npmjs.org"
         },
         "skip_verify": {
             "type":"boolean",
@@ -47,7 +47,7 @@
         "access": {
             "type": "string",
             "description": "--access <public|restricted>",
-            "default": "public",
+            "default": " public",
             "enum": [
                 "public",
                 "restricted"

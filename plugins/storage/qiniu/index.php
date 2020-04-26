@@ -27,6 +27,7 @@ try {
 
     $input_files = getenv('INPUT_FILES');
 
+    // obj
     if (is_object(json_decode($input_files))) {
         foreach (json_decode($input_files, true) as $file => $label) {
             $result = $flysystem->write($label, file_get_contents($file));
@@ -35,6 +36,7 @@ try {
             var_dump($result);
             echo "\n";
         }
+        // array
     } else {
         $files = explode(',', $input_files);
 

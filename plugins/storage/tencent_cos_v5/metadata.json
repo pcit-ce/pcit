@@ -10,37 +10,42 @@
     "properties": {
         "region": {
             "type": "string",
-            "description": "cos v5 region",
-            "default": "1"
+            "description": "cos v5 region, see https://cloud.tencent.com/document/product/436/6224\nap-beijing-1\nap-beijing\nap-nanjing\nap-shanghai\nap-guangzhou\nap-chengdu\nap-chongqing\nap-shenzhen-fsi\nap-shanghai-fsi\nap-beijing-fsi"
         },
         "app_id": {
             "type": "string",
-            "description": "cos v5 app id",
-            "default": "1"
+            "description": "cos v5 app id, copy from https://console.cloud.tencent.com/cam/capi"
         },
         "secret_key": {
             "type": "string",
-            "description": "cos v5 secret key",
-            "default": "1"
+            "description": "cos v5 secret key, copy from https://console.cloud.tencent.com/cam/capi"
         },
         "secret_id": {
             "type": "string",
-            "description": "cos v5 secret id",
-            "default": "1"
+            "description": "cos v5 secret id, copy from https://console.cloud.tencent.com/cam/capi"
         },
         "bucket": {
             "type": "string",
-            "description": "cos v5 bucket",
-            "default": "1"
+            "description": "cos v5 bucket, get from https://console.cloud.tencent.com/cos5/bucket"
         },
         "prefix": {
             "type": "string",
-            "description": "cos v5 prefix",
-            "default": "1"
+            "description": "cos v5 prefix"
         },
         "files": {
-            "type": "object",
-            "description": "local_path:cos_v5_path"
+            "type": [
+                "object",
+                "array"
+            ],
+            "description": "dir,dir2 or local_path:cos_v5_path"
         }
-    }
+    },
+    "required": [
+        "region",
+        "app_id",
+        "secret_key",
+        "secret_id",
+        "bucket",
+        "files"
+    ]
 }

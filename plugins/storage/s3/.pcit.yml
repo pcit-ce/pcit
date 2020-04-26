@@ -13,7 +13,7 @@ steps:
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
       bucket: pcit-plugin-s3
-      acl: public_read
+      acl: public-read
       local_dir: test
       upload_dir: test_dist
       # endpoint: https://storage.khs1994.com
@@ -27,21 +27,21 @@ steps:
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
       bucket: ${S3_BUCKET}
-      acl: public_read
+      acl: public-read
       local_dir: test
       # upload_dir: pcit-nightly
       # endpoint: https://storage.khs1994.com
       endpoint: ${S3_ENTRYPOINT}
       use_path_style_endpoint: true
 
-  s3_3:
+  s3_array:
     image: pcit/s3
     with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
       bucket: ${S3_BUCKET}
-      acl: public_read
+      acl: public-read
       files:
         - .pcit.yml
         - Dockerfile
@@ -49,14 +49,14 @@ steps:
       endpoint: ${S3_ENTRYPOINT}
       use_path_style_endpoint: true
 
-  s3_4:
+  s3_obj:
     image: pcit/s3
     with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
       bucket: ${S3_BUCKET}
-      acl: public_read
+      acl: public-read
       files:
         .pcit.yml: .pcit.yml.dist
         Dockerfile: Dockerfile.dist

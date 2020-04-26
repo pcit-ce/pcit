@@ -39,17 +39,17 @@
         "context": {
             "type": "string",
             "description": "docker build context",
-            "default": "."
+            "default": " ."
         },
         "dockerfile": {
             "type": "string",
             "description": "-f, --file",
-            "default": "Dockerfile"
+            "default": " Dockerfile"
         },
         "buildx_image": {
             "type": "string",
             "description": "docker buildx create --driver-opt image= , e.g.\nmoby/buildkit:buildx-stable-1\ndockerpracticesig/buildkit:master",
-            "default": "moby/buildkit:buildx-stable-1"
+            "default": " moby/buildkit:buildx-stable-1"
         },
         "pull": {
             "type": "boolean",
@@ -101,7 +101,10 @@
             "type": "array",
             "uniqueItems": true,
             "minItems": 1,
-            "description": "--label"
+            "description": "--label",
+            "default": [
+                "\n  - org.opencontainers.image.revision=${PCIT_COMMIT}\n  - org.opencontainers.image.source=https://github.com/${PCIT_REPO_SLUG}"
+            ]
         },
         "no_cache": {
             "type": "boolean",

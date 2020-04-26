@@ -11,7 +11,7 @@
         "dir": {
             "type": "string",
             "description": "vuepress markdown source dir",
-            "default": "docs"
+            "default": " docs"
         }
     }
 }

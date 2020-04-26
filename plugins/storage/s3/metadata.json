@@ -27,7 +27,7 @@
         "region": {
             "type": "string",
             "description": "s3 region",
-            "default": "us-east-1"
+            "default": " us-east-1"
         },
         "cache": {
             "type": "array",
@@ -57,7 +57,7 @@
         "acl": {
             "type": "string",
             "description": "see https://docs.aws.amazon.com/zh_cn/AmazonS3/latest/dev/acl-overview.html#canned-acl",
-            "default": "public_read",
+            "default": " public-read",
             "enum": [
                 "private",
                 "public-read",
@@ -79,5 +79,11 @@
             ],
             "description": "dir,dir2 or local_path:s3_path"
         }
-    }
+    },
+    "required": [
+        "endpoint",
+        "access_key_id",
+        "secret_access_key",
+        "bucket"
+    ]
 }

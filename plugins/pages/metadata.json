@@ -11,16 +11,16 @@
         "username": {
             "type": "string",
             "description": "git username",
-            "default": "pcit-ce"
+            "default": " pcit-ce"
         },
         "target_branch": {
             "type": "string",
             "description": "git branch",
-            "default": "gh-pages"
+            "default": " gh-pages"
         },
         "git_url": {
             "type": "string",
-            "description": "git url"
+            "description": " git url"
         },
         "local_dir": {
             "type": "string",
@@ -29,7 +29,7 @@
         "email": {
             "type": "string",
             "description": "git email",
-            "default": "ci@khs1994.com"
+            "default": " ci@khs1994.com"
         },
         "keep_history": {
             "type": "boolean",
@@ -38,12 +38,15 @@
         },
         "git_token": {
             "type": "string",
-            "description": "git token"
+            "description": "git token",
+            "default": [
+                " ${GITHUB_TOKEN}"
+            ]
         },
         "message": {
             "type": "string",
             "description": "git commit message",
-            "default": "Deploy Git by PCIT https://ci.khs1994.com"
+            "default": " Deploy Git by PCIT https://ci.khs1994.com"
         }
     },
     "required": [

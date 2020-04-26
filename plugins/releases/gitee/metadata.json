@@ -11,12 +11,12 @@
         "repo": {
             "type": "string",
             "description": "gitee repo",
-            "default": "${PCIT_REPO_SLUG}"
+            "default": " ${PCIT_REPO_SLUG}"
         },
         "target_commitish": {
             "type": "string",
             "description": "release target commitish",
-            "default": "${PCIT_COMMIT}"
+            "default": " ${PCIT_COMMIT}"
         },
         "token": {
             "type": "string",

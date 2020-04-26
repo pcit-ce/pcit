@@ -21,8 +21,8 @@ steps:
         - linux/arm64
         - linux/amd64
       labels:
-        - ci.khs1994.com=true
-        - plugin.ci.khs1994.com=true
+        - org.opencontainers.image.revision=${PCIT_COMMIT}
+        - org.opencontainers.image.source=https://github.com/${PCIT_REPO_SLUG}
       no_cache: false
       cache_from:
         - pict/alpine:cache
@@ -39,7 +39,7 @@ steps:
   docker_build_repo_array:
     image: pcit/docker
     with:
-      # registry: docker.khs1994.com
+      registry: ccr.ccs.tencentyun.com
       repo:
         - pcit/alpine
         - pcit/alpine:v2
@@ -50,7 +50,7 @@ steps:
       context: ./tests
       dockerfile: tests/Dockerfile
       # dockerfile: path/to/Dockerfile
-      username: ${DOCKER_USERNAME}
+      username: ${TENCENT_DOCKER_USERNAME}
       password: ${DOCKER_PASSWORD}
       dry_run: false
       pull: false
@@ -59,8 +59,8 @@ steps:
         - linux/arm64
         - linux/amd64
       labels:
-        - ci.khs1994.com=true
-        - plugin.ci.khs1994.com=true
+        - org.opencontainers.image.revision=${PCIT_COMMIT}
+        - org.opencontainers.image.source=https://github.com/${PCIT_REPO_SLUG}
       no_cache: false
       buildx_image: dockerpracticesig/buildkit:master
     if:
@@ -75,8 +75,8 @@ steps:
       repo: pcit/alpine
       # target: php
       build_args:
-        - a=1
-        - b=2
+        - a=4
+        - b=5
       context: ./tests
       dockerfile: tests/Dockerfile
       # dockerfile: path/to/Dockerfile

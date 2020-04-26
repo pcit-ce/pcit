@@ -11,7 +11,7 @@
         "var": {
             "type": "string",
             "description": "value is string",
-            "default": "1"
+            "default": " 1"
         },
         "var_array": {
             "type": "array",
@@ -19,17 +19,15 @@
             "minItems": 1,
             "description": "value is array",
             "default": [
-                "a=1",
-                "b=2"
+                "\n  - a\n  - b"
             ]
         },
         "var_obj": {
             "type": "object",
             "description": "value is object",
-            "default": {
-                "k1": "v1",
-                "k2": "v2"
-            }
+            "default": [
+                "\n  k1: v1\n  k2: v2"
+            ]
         }
     }
 }

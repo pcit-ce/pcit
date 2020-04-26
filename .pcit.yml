@@ -225,7 +225,7 @@ steps:
       access_key_id: ${S3_ACCESS_KEY_ID}
       secret_access_key: ${S3_SECRET_ACCESS_KEY}
       bucket: ${S3_BUCKET}
-      acl: public_read
+      acl: public-read
       local_dir: phar_dist
       upload_dir: pcit-nightly
       # endpoint: https://storage.khs1994.com

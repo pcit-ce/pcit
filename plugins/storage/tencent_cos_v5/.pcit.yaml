@@ -1,25 +1,50 @@
 steps:
   cos:
-    image: pcit/tencent_cos:v5
+    image: pcit/tencent-cos:v5
     with:
       region: ${COS_REGION}
       app_id: ${COS_APP_ID}
       secret_id: ${COS_SECRET_ID}
       secret_key: ${COS_SECRET_KEY}
       bucket: ${COS_BUCKET}
-      prefix: cos
       files:
       - composer.json
       - Dockerfile
-  cos_2:
-    image: pcit/tencent_cos:v5
+
+  cos_array_prefix:
+    image: pcit/tencent-cos:v5
     with:
       region: ${COS_REGION}
       app_id: ${COS_APP_ID}
       secret_id: ${COS_SECRET_ID}
       secret_key: ${COS_SECRET_KEY}
       bucket: ${COS_BUCKET}
-      prefix: cos
+      prefix: prefix
       files:
-        composer.json: composer.json.dist
-        Dockerfile: Dockerfile.dist
+      - composer.json
+      - Dockerfile
+
+  cos_obj:
+    image: pcit/tencent-cos:v5
+    with:
+      region: ${COS_REGION}
+      app_id: ${COS_APP_ID}
+      secret_id: ${COS_SECRET_ID}
+      secret_key: ${COS_SECRET_KEY}
+      bucket: ${COS_BUCKET}
+      files:
+        composer.json: dist.composer.json
+        Dockerfile: cos/dist.Dockerfile
+
+  cos_obj_prefix:
+    image: pcit/tencent-cos:v5
+    with:
+      region: ${COS_REGION}
+      app_id: ${COS_APP_ID}
+      secret_id: ${COS_SECRET_ID}
+      secret_key: ${COS_SECRET_KEY}
+      bucket: ${COS_BUCKET}
+      prefix: prefix
+      files:
+        composer.json: dist.composer.json
+        Dockerfile: cos/dist.Dockerfile
