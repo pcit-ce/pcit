@@ -31,6 +31,10 @@
 
 ## v19.12
 
+### 2020/05/13
+
+* [ ] 基于 [tekton](https://github.com/tektoncd/pipeline) 在 Kubernetes 上运行
+
 ### 2020/04/01
 
 * [ ] secret 加密存储

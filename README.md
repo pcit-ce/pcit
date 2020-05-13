@@ -5,12 +5,13 @@
 **国内首个基于 GitHub Checks API 使用 PHP 编写的运行于 Docker 之上的由 Tencent AI 驱动的开源云原生 CI/CD 系统**
 
 * [Support Docs](https://docs.ci.khs1994.com)
+* [Support Docs | mirror](https://pcit-ce.gitee.io/)
 * [Changelog](https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md)
 * [Feedback](https://github.com/pcit-ce/pcit/issues)
-* [API](https://ci.khs1994.com/api)
+* [API endpoint](https://ci.khs1994.com/api)
 * [API Docs](https://docs.ci.khs1994.com/api)
+* [API Docs | mirror](https://pcit-ce.gitee.io/api)
 * [Plugins](https://github.com/pcit-ce/pcit/tree/master/plugins)
-* [PHP Docs](https://pcit-ce.github.io/pcit/)
 * [Donate](https://zan.khs1994.com)
 * [PCIT EE](https://github.com/pcit-ce/pcit/tree/master/docs#about-pcit-ce-and-ee)
 * [openAPI](https://openapi-pcit.doc.coding.io)

@@ -1,5 +1,7 @@
 # PCIT Plugin -- NPM
 
+[![Docker Stars](https://img.shields.io/docker/stars/pcit/npm.svg)](https://hub.docker.com/r/pcit/npm) [![Docker Pulls](https://img.shields.io/docker/pulls/pcit/npm.svg)](https://hub.docker.com/r/pcit/npm)
+
 > 发布 `npm` 包。
 
 **该插件底层由 https://github.com/drone-plugins/drone-npm 支持**

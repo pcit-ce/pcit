@@ -1,0 +1,74 @@
+[
+  {
+    "source": "pcit/pcit"
+  },
+  {
+    "source": "pcit/pcit:master"
+  },
+  {
+    "source": "pcit/pcit:server"
+  },
+  {
+    "source": "pcit/pcit:master-server"
+  },
+  {
+    "source": "pcit/pcitd"
+  },
+  {
+    "source": "pcit/pcitd:master"
+  },
+  {
+    "source": "pcit/server"
+  },
+  {
+    "source": "pcit/server:master"
+  },
+  {
+    "source": "pcit/pcit:cli"
+  },
+  {
+    "source": "pcit/pcit:master-cli"
+  },
+  {
+    "source": "pcit/cli"
+  },
+  {
+    "source": "pcit/cli:master"
+  },
+  {
+    "source": "pcit/pcit:fpm"
+  },
+  {
+    "source": "pcit/pcit:master-fpm"
+  },
+  {
+    "source": "pcit/fpm"
+  },
+  {
+    "source": "pcit/fpm:master"
+  },
+  {
+    "source": "pcit/pcit:unit"
+  },
+  {
+    "source": "pcit/pcit:master-unit"
+  },
+  {
+    "source": "pcit/unit"
+  },
+  {
+    "source": "pcit/unit:master"
+  },
+  {
+    "source": "pcit/pcit:frontend"
+  },
+  {
+    "source": "pcit/pcit:master-frontend"
+  },
+  {
+    "source": "pcit/frontend"
+  },
+  {
+    "source": "pcit/frontend:master"
+  }
+]

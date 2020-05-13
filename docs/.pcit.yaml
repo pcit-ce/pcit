@@ -17,7 +17,6 @@ steps:
       # email: ${EMAIL}
       # username: khs1994
       git_token: ${GITHUB_TOKEN}
-      depth: 10
 
   upload-docs-to-gitee:
     image: pcit/pages
@@ -27,9 +26,8 @@ steps:
     with:
       keep_history: true
       # target_branch: gh-pages
-      git_url: gitee.com/pcit-ce/docs
+      git_url: gitee.com/pcit-ce/pcit-ce
       local_dir: .vuepress/dist
       # email: ${EMAIL}
       username: khs1994
       git_token: ${GITEE_TOKEN}
-      depth: 10

@@ -25,10 +25,9 @@ if [ ${PCIT_KEEP_HISTORY:-'false'} = 'true' ];then
   git clone --bare -b ${PCIT_TARGET_BRANCH:-gh-pages} https://${PCIT_GIT_URL} ${PCIT_LOCAL_DIR}/.git || true
 fi
 
-set +x; echo "Deploying application"; set -x
-
 cd ${PCIT_LOCAL_DIR}
 
+# 原始仓库不存在（分支不存在）
 if ! [ -d .git ];then
   new=true
 fi

@@ -1,5 +1,7 @@
 # PCIT Plugin -- AWS S3 (Minio)
 
+[![Docker Stars](https://img.shields.io/docker/stars/pcit/s3.svg)](https://hub.docker.com/r/pcit/s3) [![Docker Pulls](https://img.shields.io/docker/pulls/pcit/s3.svg)](https://hub.docker.com/r/pcit/s3)
+
 ## Test
 
 ```bash

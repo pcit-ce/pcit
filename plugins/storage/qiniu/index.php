@@ -32,7 +32,7 @@ try {
         foreach (json_decode($input_files, true) as $file => $label) {
             $result = $flysystem->write($label, file_get_contents($file));
 
-            echo "===> Upload $file TO $label result\n";
+            echo "===> Upload [ $file ] TO [ $label ] result\n";
             var_dump($result);
             echo "\n";
         }
@@ -43,7 +43,7 @@ try {
         foreach ($files as $file) {
             $result = $flysystem->write($file, file_get_contents($file));
 
-            echo "===> Upload $file TO $file result\n";
+            echo "===> Upload [ $file ] TO [ $file ] result\n";
             var_dump($result);
             echo "\n";
         }

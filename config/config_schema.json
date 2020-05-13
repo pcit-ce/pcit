@@ -427,7 +427,7 @@
                                 },
                                 "local_dir": {
                                     "type": "string",
-                                    "description": "dir"
+                                    "description": "local dir"
                                 },
                                 "email": {
                                     "type": "string",

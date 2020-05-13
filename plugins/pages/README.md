@@ -1,5 +1,7 @@
 # PCIT plugin -- Git Pages
 
+[![Docker Stars](https://img.shields.io/docker/stars/pcit/pages.svg)](https://hub.docker.com/r/pcit/pages) [![Docker Pulls](https://img.shields.io/docker/pulls/pcit/pages.svg)](https://hub.docker.com/r/pcit/pages)
+
 > 发布 `Pages`。
 
 ```yaml

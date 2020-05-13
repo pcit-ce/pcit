@@ -28,7 +28,7 @@ try {
                 'Body' => fopen($file, 'r'),
             ]);
 
-            echo "===> Upload $file TO $key result\n";
+            echo "===> Upload [ $file ] TO [ $key ] result\n";
 
             var_dump($result);
         }
@@ -44,7 +44,7 @@ try {
                 'Body' => fopen($file, 'r'),
             ]);
 
-            echo "===> Upload $file TO $key result\n";
+            echo "===> Upload [ $file ] TO [ $key ] result\n";
 
             var_dump($result);
         }

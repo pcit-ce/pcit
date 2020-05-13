@@ -1,5 +1,7 @@
 # PCIT Plugin -- Tencent Cloud COS V5
 
+[![Docker Stars](https://img.shields.io/docker/stars/pcit/tencent-cos.svg)](https://hub.docker.com/r/pcit/tencent-cos) [![Docker Pulls](https://img.shields.io/docker/pulls/pcit/tencent-cos.svg)](https://hub.docker.com/r/pcit/tencent-cos)
+
 ## 变量
 
 * `COS_REGION` https://cloud.tencent.com/document/product/436/6224
