@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events;
 
+use App\GetAccessToken;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\Client;
@@ -95,6 +96,15 @@ class Git
         }
 
         $git_url = GitSupport::getUrl($build->git_type, $build->repo_full_name);
+        ['host' => $git_host ] = parse_url($git_url);
+
+        // TODO 在运行容器时注入 token
+        $token = GetAccessToken::getGitHubAppAccessToken(null, $build->repo_full_name);
+        if ('1' === $build->private) {
+            $git_config[] = 'DRONE_NETRC_MACHINE='.$git_host;
+            $git_config[] = 'DRONE_NETRC_USERNAME=pcit';
+            $git_config[] = 'DRONE_NETRC_PASSWORD='.$token;
+        }
 
         switch ($build->event_type) {
             case CI::BUILD_EVENT_PUSH:

@@ -164,7 +164,7 @@ class Git
      *
      * @throws \Exception
      */
-    public static function getRawUrl(string $type,
+    private static function getRawUrl(string $type,
                                      string $repo_full_name,
                                      string $commit_id,
                                      string $file_name)

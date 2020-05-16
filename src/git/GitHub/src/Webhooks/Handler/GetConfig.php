@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
+use App\GetAccessToken;
 use App\Repo;
-use PCIT\Framework\Support\HttpClient;
-use PCIT\Support\Git;
+use PCIT\PCIT;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -36,18 +36,17 @@ class GetConfig
         $git_type = $this->git_type;
         $repo_full_name = $this->repo_full_name;
 
+        $access_token = GetAccessToken::getGitHubAppAccessToken(null, $repo_full_name);
+
         foreach ($configName as $file_name) {
-            $url = Git::getRawUrl($git_type, $repo_full_name, $commit_id, $file_name);
-
-            $yaml_file_content = HttpClient::get($url, null, [], 20);
-
-            $http_code = HttpClient::getCode();
-
-            if (200 === $http_code) {
-                return $yaml_file_content;
+            try {
+                return (new PCIT([], $git_type, $access_token))->repo_contents->getContents(
+                $repo_full_name, $file_name, $commit_id);
+            } catch (\Throwable $e) {
+                continue;
             }
 
-            \Log::info("$repo_full_name $commit_id not include ".$file_name, compact('http_code'));
+            \Log::info("$repo_full_name $commit_id not include ".$file_name);
         }
 
         return [];

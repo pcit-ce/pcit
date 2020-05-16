@@ -55,6 +55,7 @@ class ActionHandler
         $this->handleGit($step, $repo, $ref);
 
         // action.yml
+        // TODO get action.yml by api
         $action_yml = HttpClient::get(
             'https://raw.githubusercontent.com/'.$repo.'/'.$ref.$path.'/action.yml',
             null,

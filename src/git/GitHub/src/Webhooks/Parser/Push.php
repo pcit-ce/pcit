@@ -22,7 +22,7 @@ class Push
 
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
-
+        $private = $repository->private;
         // 仓库所属用户或组织的信息
         $repository_owner = $repository->owner;
 
@@ -61,7 +61,7 @@ class Push
 
         return compact('rid', 'repo_full_name', 'branch', 'commit_id', 'commit_message',
             'compare', 'event_time', 'author', 'committer',
-            'installation_id', 'account', 'sender'
+            'installation_id', 'account', 'sender', 'private'
         );
     }
 

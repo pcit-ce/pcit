@@ -54,6 +54,9 @@ abstract class BuildData
      */
     public $internal;
 
+    /* @var "0" | "1" 是否为私有仓库*/
+    public $private;
+
     // repo config
 
     public $build_pushes;

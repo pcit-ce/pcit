@@ -11,7 +11,7 @@ use PCIT\Pustomize\Interfaces\PullRequest\BasicInterface;
 
 class Basic implements BasicInterface
 {
-    /** @var PullRequestContext $context */
+    /** @var PullRequestContext */
     public $context;
 
     public function handle(PullRequestContext $context): void

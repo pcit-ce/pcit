@@ -35,7 +35,7 @@ class Build extends BuildData
             $this->event_type,
             $pull_request_number,
             $this->tag,
-            $this->config, $this->internal) = $result;
+            $this->config, $this->internal, $this->private) = $result;
 
         if (!$this->config or !json_decode($this->config)) {
             BuildDB::updateBuildStatus($buildId, 'misconfigured');

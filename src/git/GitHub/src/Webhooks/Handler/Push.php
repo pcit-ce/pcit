@@ -35,7 +35,8 @@ class Push
             'compare' => $compare,
             'event_time' => $event_time,
             'account' => $account,
-            'sender' => $sender
+            'sender' => $sender,
+            'private' => $private,
         ] = $result;
 
         // user table not include user info
@@ -51,7 +52,7 @@ class Push
         $last_insert_id = Build::insert('push', $branch, $compare, $commit_id,
             $commit_message, $committer->name, $committer->email, $committer->username,
             $author->name, $author->email, $author->username,
-            $rid, $event_time, $config);
+            $rid, $event_time, $config, $private);
 
         $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
             ->handle();

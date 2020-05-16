@@ -119,10 +119,11 @@ class RequestsController
             $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
             $config = json_encode($config_array);
         }
+        // TODO: 判断是否为私有仓库
         $last_insert_id = Build::insert('push', $branch, $compare, $commit_id,
             $commit_message, $committer->name, $committer->email, $committer->name,
             $author->name, $author->email, $author->name,
-            $rid, $event_time, $config, 'github', true);
+            $rid, $event_time, $config, false, 'github', true);
 
         // trigger build 不检测是否跳过
         // 检查是否有配置文件 .pcit.yml

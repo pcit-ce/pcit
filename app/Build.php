@@ -18,7 +18,7 @@ class Build extends Model
 SELECT
 
 id,git_type,rid,commit_id,commit_message,branch,event_type,
-pull_request_number,tag,config,internal
+pull_request_number,tag,config,internal,private
 
 FROM
 
@@ -28,7 +28,7 @@ EOF;
 SELECT
 
 id,git_type,rid,commit_id,commit_message,branch,event_type,
-pull_request_number,tag,config,internal
+pull_request_number,tag,config,internal,private
 
 FROM
 
@@ -541,6 +541,7 @@ EOF;
                                   $rid,
                                   $event_time,
                                   $config,
+                                  bool $private,
                                   $git_type = 'github',
                                   bool $unique = false)
     {
@@ -551,9 +552,9 @@ git_type,event_type,branch,compare,
 commit_id,commit_message,
 committer_name,committer_email,committer_username,
 author_name,author_email,author_username,
-rid,created_at,config,unique_key
+rid,created_at,config,unique_key,private
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
         $unique_key = $unique ? time() : 0;
@@ -563,7 +564,7 @@ EOF;
             $commit_id, $commit_message,
             $committer_name, $committer_email, $committer_username,
             $author_name, $author_email, $author_username,
-            $rid, $event_time, $config, $unique_key,
+            $rid, $event_time, $config, $unique_key, true === $private ? 1 : 0,
         ]);
 
         return $last_insert_id;
