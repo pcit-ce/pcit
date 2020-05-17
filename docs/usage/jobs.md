@@ -12,8 +12,8 @@ steps:
 
 jobs:
   PHP_TAG:
-    - 7.4.5-alpine
-    - 7.3.11-alpine    
+    - 7.4.6-alpine
+    - 7.3.18-alpine    
 ```
 
 我们在 `image` 指令中设置变量 `${PHP_TAG}`
@@ -25,11 +25,11 @@ jobs:
 ```yaml
 steps:
   php:
-    image: khs1994/php-fpm:7.4.5-alpine
+    image: khs1994/php-fpm:7.4.6-alpine
     ...
 
   php2:
-    image: khs1994/php-fpn:7.3.11-alpine
+    image: khs1994/php-fpn:7.3.18-alpine
     ...
 ```
 

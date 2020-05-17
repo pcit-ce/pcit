@@ -143,7 +143,7 @@ class GitHubAppChecks
         $build_status = Build::getBuildStatusByBuildKeyId($build_key_id);
         $conclusion = self::buildStatus2conclusion($build_status);
 
-        $run_data->name = 'PCIT / '.ucfirst($event_type);
+        $run_data->name = env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.ucfirst($event_type);
         $run_data->details_url = config('app.host').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
         $run_data->external_id = $build_key_id;
         $conclusion = $run_data->conclusion = $conclusion;

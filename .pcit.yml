@@ -129,7 +129,7 @@ steps:
         exclude:
         - PHP_VERSION: nightly
           NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
+          REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
     run: echo "don't run on php nightly version"
 
@@ -157,9 +157,9 @@ steps:
     if:
       status: success
       jobs:
-        - PHP_VERSION: 7.4.5
+        - PHP_VERSION: 7.4.6
           NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
+          REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
     run:
       - sami update .sami.php
@@ -170,9 +170,9 @@ steps:
       status: success
       event: ["push"]
       jobs:
-        - PHP_VERSION: 7.4.5
+        - PHP_VERSION: 7.4.6
           NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
+          REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
     with:
       keep_history: true
@@ -216,9 +216,9 @@ steps:
       status: success
       event: ["push"]
       jobs:
-        - PHP_VERSION: 7.4.5
+        - PHP_VERSION: 7.4.6
           NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
+          REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
     with:
       region: ${S3_REGION}
@@ -239,9 +239,9 @@ steps:
       status: success
       event: ["push"]
       jobs:
-        - PHP_VERSION: 7.4.5
+        - PHP_VERSION: 7.4.6
           NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
+          REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
     with:
       path: phar_dist
@@ -253,9 +253,9 @@ steps:
       status: success
       event: push
       jobs:
-        - PHP_VERSION: 7.4.5
+        - PHP_VERSION: 7.4.6
           NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
+          REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
     with:
       token: ${GITHUB_TOKEN}
@@ -338,9 +338,9 @@ steps:
       event: push
       branch: master
       jobs:
-        - PHP_VERSION: 7.4.5
+        - PHP_VERSION: 7.4.6
           NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 5.0.7
+          REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
 
   use_pcit_toolkit:
@@ -393,15 +393,15 @@ services:
 # 不支持变量
 jobs:
   PHP_VERSION:
-    - 7.4.5
-    - 7.3.11
+    - 7.4.6
+    - 7.3.18
     - nightly
     - 7.2.24
     # - 7.1.26
   NGINX_VERSION:
     - 1.15.8
   REDIS_VERSION:
-    - 5.0.7
+    - 6.0.2
   MYSQL_VERSION:
     - 5.7.29
     # - 8.0.15
@@ -413,13 +413,13 @@ jobs:
   exclude:
   - PHP_VERSION: 7.2.24
     NGINX_VERSION: 1.15.8
-    REDIS_VERSION: 5.0.7
+    REDIS_VERSION: 6.0.2
     MYSQL_VERSION: 5.7.29
   # 向以上 jobs 矩阵添加新的 job
   include:
-  - PHP_VERSION: 7.4.5
-    MYSQL_VERSION: 8.0.19
-    REDIS_VERSION: 5.0.7
+  - PHP_VERSION: 7.4.6
+    MYSQL_VERSION: 8.0.20
+    REDIS_VERSION: 6.0.2
     NEW_ENV: new_env
 
 # 不支持变量
@@ -427,10 +427,10 @@ jobs:
 #   include:
 #     - PHP_VERSION: 7.2.24
 #       MYSQL_VERSION: 5.7.29
-#       REDIS_VERSION: 5.0.7
+#       REDIS_VERSION: 6.0.2
 #     - PHP_VERSION: 7.1.26
 #       MYSQL_VERSION: 5.7.29
-#       REDIS_VERSION: 5.0.7
+#       REDIS_VERSION: 6.0.2
 
 # 不支持变量
 platform:
@@ -461,4 +461,4 @@ networks:
 # 指定构建步骤的默认镜像
 # 若使用变量，请在 settings 页面将变量设为 public,否则 pull_request 将不能运行
 # 如果只在 push 触发，则无需设为 public
-image: khs1994/php:7.4.5-composer-alpine
+image: khs1994/php:7.4.6-composer-alpine

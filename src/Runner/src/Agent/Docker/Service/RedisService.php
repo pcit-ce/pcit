@@ -8,7 +8,7 @@ use PCIT\Runner\Agent\Interfaces\ServiceInterface;
 
 class RedisService implements ServiceInterface
 {
-    public static $image = 'redis:5.0.7-alpine';
+    public static $image = 'redis:6.0.2-alpine';
     public static $env = [];
     public static $entrypoint = null;
     public static $command = [
