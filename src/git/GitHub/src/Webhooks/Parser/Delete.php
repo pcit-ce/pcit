@@ -29,7 +29,7 @@ class Delete
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        $account = (new Account($repository_owner, $org));
+        $account = new Account($repository_owner, $org);
 
         $context = new DeleteContext([], $webhooks_content);
 

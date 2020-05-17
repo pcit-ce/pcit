@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-use PCIT\GPI\Webhooks\Handler\Issues\IssuesAbstract;
+use PCIT\GPI\Webhooks\Handler\IssuesAbstract;
 
 class Issues extends IssuesAbstract
 {

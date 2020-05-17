@@ -48,7 +48,7 @@ class Member
         $memberContext->member_uid = $member_uid;
         $memberContext->member_username = $member_username;
         $memberContext->member_pic = $member_pic;
-        $memberContext->account = (new Account($repository_owner, $org));
+        $memberContext->account = new Account($repository_owner, $org);
 
         return $memberContext;
     }

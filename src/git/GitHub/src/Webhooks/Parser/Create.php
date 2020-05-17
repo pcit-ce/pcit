@@ -32,7 +32,7 @@ class Create
         $context->rid = $rid;
         $context->repo_full_name = $repo_full_name;
         $context->ref_type = $ref_type;
-        $context->account = (new Account($repository_owner, $org));
+        $context->account = new Account($repository_owner, $org);
 
         return $context;
     }

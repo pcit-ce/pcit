@@ -69,7 +69,7 @@ class Issues
         $issuesContext->body = $body;
         $issuesContext->created_at = $created_at;
         $issuesContext->updated_at = $updated_at;
-        $issuesContext->account = (new Account($repository_owner, $org));
+        $issuesContext->account = new Account($repository_owner, $org);
         $issuesContext->action = $action;
         $issuesContext->state = $state;
         $issuesContext->labels = $labels;
@@ -138,7 +138,7 @@ class Issues
         $issueCommentContext->body = $body;
         $issueCommentContext->created_at = $created_at;
         $issueCommentContext->updated_at = $updated_at;
-        $issueCommentContext->account = (new Account($repository_owner, $org));
+        $issueCommentContext->account = new Account($repository_owner, $org);
         $issueCommentContext->action = $action;
         $issueCommentContext->is_pull_request = $is_pull_request;
 

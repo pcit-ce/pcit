@@ -46,7 +46,7 @@ class Check
         $context->branch = $branch;
         $context->commit_id = $commit_id;
         $context->check_suite_id = $check_suite_id;
-        $context->account = (new Account($repository_owner, $org));
+        $context->account = new Account($repository_owner, $org);
 
         return $context;
     }
@@ -82,7 +82,7 @@ class Check
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        $account = (new Account($repository_owner, $org));
+        $account = new Account($repository_owner, $org);
 
         $context = new CheckRunContext([], $webhooks_content);
 

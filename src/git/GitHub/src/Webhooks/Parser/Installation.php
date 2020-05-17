@@ -34,8 +34,8 @@ class Installation
         $installationContext->action = $action;
         $installationContext->repo = $repo;
         // sender 可视为管理员
-        $installationContext->sender = (new Sender($obj->sender));
-        $installationContext->account = (new Account($account, $org));
+        $installationContext->sender = new Sender($obj->sender);
+        $installationContext->account = new Account($account, $org);
 
         return $installationContext;
     }
@@ -65,8 +65,8 @@ class Installation
         $irc->installation_id = $installation_id;
         $irc->action = $action;
         $irc->repo = $repo;
-        $irc->sender = (new Sender($obj->sender));
-        $irc->account = (new Account($account, $org));
+        $irc->sender = new Sender($obj->sender);
+        $irc->account = new Account($account, $org);
 
         return $irc;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GPI\Webhooks\Handler\Issues;
+namespace PCIT\GPI\Webhooks\Handler;
 
 use PCIT\GPI\Webhooks\Context\IssueCommentContext;
 use PCIT\GPI\Webhooks\Context\IssuesContext;

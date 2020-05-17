@@ -6,7 +6,7 @@ namespace App;
 
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 class User extends Model
 {

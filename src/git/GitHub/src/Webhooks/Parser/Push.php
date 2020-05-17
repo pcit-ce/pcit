@@ -60,10 +60,10 @@ class Push
         $org = ($obj->organization ?? false) ? true : false;
 
         $event_time = $commit_timestamp;
-        $author = (new Author($author));
-        $committer = (new Committer($committer));
-        $account = (new Account($repository_owner, $org));
-        $sender = (new Sender($obj->sender));
+        $author = new Author($author);
+        $committer = new Committer($committer);
+        $account = new Account($repository_owner, $org);
+        $sender = new Sender($obj->sender);
 
         $pushContext = new PushContext([], $webhooks_content);
         $pushContext->rid = $rid;
