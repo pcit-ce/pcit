@@ -13,7 +13,7 @@ class Member
      *
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content): void
+    public function handle(string $webhooks_content): void
     {
         [
             'action' => $action,

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\cODING\Service\Repositories;
 
+use PCIT\Coding\ServiceClientCommon;
 use PCIT\GPI\Service\Repositories\ContentsClientInterface;
-use PCIT\GPI\ServiceClientCommon;
 
 class ContentsClient implements ContentsClientInterface
 {
@@ -16,11 +16,11 @@ class ContentsClient implements ContentsClientInterface
      */
     public function getContents(string $repo_full_name, string $path, string $ref, bool $raw = true): string
     {
-        $pcit_team_name = env('CI_CODING_TEAM');
+        $pcit_team_name = $this->getTeamName();
 
         [$project_name,$depot_name] = explode('/', $repo_full_name);
 
-        $result = $this->curl->get($this->api_url."/api/user/$pcit_team_name/project/$project_name/depot/$depot_name/git/blob/$ref/$path");
+        $result = $this->curl->get($this->api_url."/api/user/$pcit_team_name/project/$project_name/depot/$depot_name/git/blob/$ref/$path".'?'.$this->getAccessTokenUrlParameter());
 
         $this->successOrFailure(200, true);
 

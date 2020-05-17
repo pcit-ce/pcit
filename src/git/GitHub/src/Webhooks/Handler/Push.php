@@ -11,14 +11,14 @@ class Push
     /**
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content): void
+    public function handle(string $webhooks_content): void
     {
         $result = \PCIT\GitHub\Webhooks\Parser\Push::handle($webhooks_content);
 
         $tag = $result['tag'] ?? null;
 
         if ($tag) {
-            self::tag($result);
+            $this->tag($result);
 
             return;
         }
@@ -63,7 +63,7 @@ class Push
     /**
      * @throws \Exception
      */
-    public static function tag(array $content): void
+    public function tag(array $content): void
     {
         [
             'installation_id' => $installation_id,

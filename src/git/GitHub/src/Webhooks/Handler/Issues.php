@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use PCIT\GitHub\Webhooks\Parser\IssueCommentContext;
 use PCIT\GitHub\Webhooks\Parser\IssuesContext;
-use PCIT\GitHub\Webhooks\PustomizeHandler;
+use PCIT\GPI\Webhooks\PustomizeHandler;
 
 class Issues
 {
@@ -19,7 +19,7 @@ class Issues
      *
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content): void
+    public function handle(string $webhooks_content): void
     {
         $issue_parser_metadata = \PCIT\GitHub\Webhooks\Parser\Issues::handle($webhooks_content);
 
@@ -64,7 +64,7 @@ class Issues
      *
      * @throws \Exception
      */
-    public static function comment(string $webhooks_content): void
+    public function comment(string $webhooks_content): void
     {
         $issue_comment_parser_metadata = \PCIT\GitHub\Webhooks\Parser\Issues::comment($webhooks_content);
         [

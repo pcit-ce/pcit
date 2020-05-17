@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Webhooks;
 use App\Repo;
 use Error;
 use Exception;
-use PCIT\Framework\Support\Env;
 use PCIT\PCIT;
 use PCIT\Support\CI;
 
@@ -96,7 +95,7 @@ class Controller
         $method = $gitType.'Json';
 
         try {
-            $data = self::$method();
+            $data = self::$method(...$arg);
         } catch (Exception | Error $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         }
@@ -237,23 +236,19 @@ class Controller
         ];
     }
 
-    public static function codingJson()
+    public static function codingJson($project, $repo)
     {
         $url = config('app.host').'/webhooks/coding';
 
-        $token = env('WEBHOOKS_TOKEN', md5('pcit'));
+        $rid = (int) Repo::getRid($project, $repo, 'coding');
+
+        $token = env('WEBHOOKS_TOKEN');
 
         return <<<EOF
 {
   "hook_url": "$url",
   "token": "$token",
-  "type_push": true,
-  "type_mr_pr": true,
-  "type_agile": true,
-  "type_document": true,
-  "type_member": true,
-  "type_artifact": true,
-  "type_ci": true
+  "rid": $rid
 }
 EOF;
     }

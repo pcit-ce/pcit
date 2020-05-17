@@ -13,7 +13,7 @@ class Ping
      *
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content)
+    public function handle(string $webhooks_content)
     {
         [
             'rid' => $rid,

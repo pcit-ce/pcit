@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\GitHub\Webhooks\Context;
 use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Context;
 
 /**
  * @property string                           $installation_id

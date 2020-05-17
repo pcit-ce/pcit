@@ -11,7 +11,7 @@ class Create
      *
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content): void
+    public function handle(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,

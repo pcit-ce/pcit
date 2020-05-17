@@ -19,7 +19,7 @@ class Check
      *
      * @throws \Exception
      */
-    public static function suite(string $webhooks_content): void
+    public function suite(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,
@@ -45,7 +45,7 @@ class Check
      *
      * @throws \Exception
      */
-    public static function run(string $webhooks_content): void
+    public function run(string $webhooks_content): void
     {
         [
             'installation_id' => $installation_id,

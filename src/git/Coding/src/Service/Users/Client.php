@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace PCIT\Coding\Service\Users;
 
 use Exception;
+use PCIT\Coding\ServiceClientCommon;
 use PCIT\GitHub\Service\Users\Client as GitHubClient;
-use PCIT\GPI\ServiceClientCommon;
 
 class Client extends GitHubClient
 {
     use ServiceClientCommon;
-
-    public function getAccessToken()
-    {
-        return '?access_token='.explode(' ', $this->curl->headers['x-coding-token'])[1];
-    }
 
     /**
      * @param string $username
@@ -32,7 +27,7 @@ class Client extends GitHubClient
             $url = $this->api_url.'/account/key'.$username;
         }
 
-        $json = $this->curl->get($url.$this->getAccessToken());
+        $json = $this->curl->get($url.'?'.$this->getAccessTokenUrlParameter());
 
         if ($raw) {
             return $json;
@@ -71,7 +66,7 @@ class Client extends GitHubClient
             $url = $this->api_url.'/api/user/'.$username.'/projects/public';
         }
 
-        $json = $this->curl->get($url.$this->getAccessToken());
+        $json = $this->curl->get($url.'?'.$this->getAccessTokenUrlParameter());
 
         $json_obj = json_decode($json);
 
@@ -113,7 +108,7 @@ class Client extends GitHubClient
     {
         $url = $this->api_url.'/user/projects';
 
-        $result = $this->curl->get($url.$this->getAccessToken());
+        $result = $this->curl->get($url.'?'.$this->getAccessTokenUrlParameter());
 
         $orgs = json_decode($result)->data->list;
 

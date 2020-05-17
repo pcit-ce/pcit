@@ -205,12 +205,6 @@ EOF;
      */
     public static function allByUsername(string $username, $git_type = 'github')
     {
-        if ('coding' === $git_type) {
-            $uid = User::getUid($username, $git_type);
-
-            return self::allByAdmin((int) $uid, false, $git_type);
-        }
-
         $sql = "SELECT rid FROM repo WHERE git_type=? AND repo_full_name LIKE \"$username/%\"";
 
         $result = DB::select($sql, [$git_type]);

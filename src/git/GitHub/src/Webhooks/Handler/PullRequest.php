@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Build;
 use PCIT\GitHub\Webhooks\Parser\PullRequestContext;
-use PCIT\GitHub\Webhooks\PustomizeHandler;
+use PCIT\GPI\Webhooks\PustomizeHandler;
 
 class PullRequest
 {
@@ -18,7 +18,7 @@ class PullRequest
      *
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content): void
+    public function handle(string $webhooks_content): void
     {
         $pull_request_parser_metadata = \PCIT\GitHub\Webhooks\Parser\PullRequest::handle($webhooks_content);
 
