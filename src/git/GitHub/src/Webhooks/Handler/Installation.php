@@ -18,13 +18,13 @@ class Installation
      */
     public function handle(string $webhooks_content): void
     {
-        [
-            'installation_id' => $installation_id,
-            'action' => $action,
-            'repo' => $repositories,
-            'sender' => $sender,
-            'account' => $account
-        ] = \PCIT\GitHub\Webhooks\Parser\Installation::handle($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Installation::handle($webhooks_content);
+
+        $installation_id = $context->installation_id;
+        $action = $context->action;
+        $repositories = $context->repositories;
+        $sender = $context->sender;
+        $account = $context->account;
 
         if ('new_permissions_accepted' === $action) {
             \Log::info('receive event [ installation ] action [ new_permissions_accepted ]');
@@ -84,13 +84,13 @@ class Installation
      */
     public function repositories(string $webhooks_content): void
     {
-        [
-            'installation_id' => $installation_id,
-            'action' => $action,
-            'repo' => $repo,
-            'sender' => $sender,
-            'account' => $account
-        ] = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($webhooks_content);
+
+        $installation_id = $context->installation_id;
+        $action = $context->action;
+        $repo = $context->repo;
+        $sender = $context->sender;
+        $account = $context->account;
 
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
         User::updateUserInfo($account);

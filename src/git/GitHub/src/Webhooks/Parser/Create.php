@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Context\CreateContext;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 class Create
 {
-    public static function handle(string $webhooks_content): array
+    public static function handle(string $webhooks_content): CreateContext
     {
         $obj = json_decode($webhooks_content);
 
@@ -25,12 +26,14 @@ class Create
         // 仓库所属用户或组织的信息
         $repository_owner = $repository->owner;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'ref_type' => $ref_type,
-            'account' => (new Account($repository_owner, $org)),
-        ];
+        $context = new CreateContext([], $webhooks_content);
+
+        $context->installation_id = $installation_id;
+        $context->rid = $rid;
+        $context->repo_full_name = $repo_full_name;
+        $context->ref_type = $ref_type;
+        $context->account = (new Account($repository_owner, $org));
+
+        return $context;
     }
 }

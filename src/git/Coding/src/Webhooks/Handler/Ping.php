@@ -4,15 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Coding\Webhooks\Handler;
 
-class Ping
+use PCIT\GPI\Webhooks\Handler\PingAbstract;
+
+class Ping extends PingAbstract
 {
-    /**
-     * @return string
-     *
-     * @throws \Exception
-     */
-    public function handle(string $webhooks_content)
-    {
-        \Log::error('receive ping event');
-    }
 }

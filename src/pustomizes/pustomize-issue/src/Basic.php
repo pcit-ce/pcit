@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Pustomize\Issue;
 
 use App\GetAccessToken;
-use PCIT\GitHub\Webhooks\Parser\IssuesContext;
+use PCIT\GPI\Webhooks\Context\IssuesContext;
 use PCIT\Pustomize\Interfaces\Issue\BasicInterface;
 
 class Basic implements BasicInterface

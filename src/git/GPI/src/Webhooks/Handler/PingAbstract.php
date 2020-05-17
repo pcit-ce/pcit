@@ -6,14 +6,13 @@ namespace PCIT\GPI\Webhooks\Handler;
 
 use PCIT\GPI\Webhooks\Handler\Interfaces\PingInterface;
 
-class Ping implements PingInterface
+class PingAbstract implements PingInterface
 {
     /**
-     * @return string
-     *
      * @throws \Exception
      */
-    public function handle(string $webhooks_content)
+    public function handle(string $webhooks_content): void
     {
+        \Log::info('receive ping event');
     }
 }

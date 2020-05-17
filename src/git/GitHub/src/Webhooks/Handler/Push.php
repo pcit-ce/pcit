@@ -5,39 +5,38 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Build;
+use PCIT\GPI\Webhooks\Handler\PushAbstract;
 
-class Push
+class Push extends PushAbstract
 {
     /**
      * @throws \Exception
      */
     public function handle(string $webhooks_content): void
     {
-        $result = \PCIT\GitHub\Webhooks\Parser\Push::handle($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Push::handle($webhooks_content);
 
-        $tag = $result['tag'] ?? null;
+        $tag = $context->tag ?? null;
 
         if ($tag) {
-            $this->tag($result);
+            $this->tag($context);
 
             return;
         }
 
-        [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'branch' => $branch,
-            'commit_id' => $commit_id,
-            'commit_message' => $commit_message,
-            'committer' => $committer,
-            'author' => $author,
-            'compare' => $compare,
-            'event_time' => $event_time,
-            'account' => $account,
-            'sender' => $sender,
-            'private' => $private,
-        ] = $result;
+        $installation_id = $context->installation_id;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $branch = $context->branch;
+        $commit_id = $context->commit_id;
+        $commit_message = $context->commit_message;
+        $committer = $context->committer;
+        $author = $context->author;
+        $compare = $context->compare;
+        $event_time = $context->event_time;
+        $account = $context->account;
+        $sender = $context->sender;
+        $private = $context->private;
 
         // user table not include user info
         $subject = new Subject();
@@ -63,22 +62,20 @@ class Push
     /**
      * @throws \Exception
      */
-    public function tag(array $content): void
+    public function tag($context): void
     {
-        [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'branch' => $branch,
-            'tag' => $tag,
-            'commit_id' => $commit_id,
-            'commit_message' => $commit_message,
-            'committer' => $committer,
-            'author' => $author,
-            'event_time' => $event_time,
-            'account' => $account,
-            'sender' => $sender
-        ] = $content;
+        $installation_id = $context->installation_id;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $branch = $context->branch;
+        $tag = $context->tag;
+        $commit_id = $context->commit_id;
+        $commit_message = $context->commit_message;
+        $committer = $context->committer;
+        $author = $context->author;
+        $event_time = $context->event_time;
+        $account = $context->account;
+        $sender = $context->sender;
 
         $subject = new Subject();
 

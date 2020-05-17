@@ -6,8 +6,8 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Repo;
 use App\User;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Sender;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 /**
  * 每收到 webhooks 更新数据.

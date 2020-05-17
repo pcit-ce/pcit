@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Pustomize\Interfaces\PullRequest;
 
-use PCIT\GitHub\Webhooks\Parser\PullRequestContext;
+use PCIT\GPI\Webhooks\Context\PullRequestContext;
 
 /**
  * Triggered when a pull request is `assigned`, `unassigned`,

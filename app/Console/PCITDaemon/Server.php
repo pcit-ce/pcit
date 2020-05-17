@@ -144,9 +144,9 @@ class Server extends Kernel
 
             try {
                 $webhooksHandler->$event_type($json, $git_type);
-                \Log::info($event_type.' webhooks handle success', compact('git_type'));
+                \Log::info('[ '.$event_type.' ] webhooks handle success', compact('git_type'));
             } catch (Error | Exception $e) {
-                \Log::error($event_type.' webhooks handle error', [$e->__toString()]);
+                \Log::error('[ '.$event_type.' ] webhooks handle error', [$e->__toString()]);
                 $webhooks->pushErrorCache($json_raw);
             }
         }

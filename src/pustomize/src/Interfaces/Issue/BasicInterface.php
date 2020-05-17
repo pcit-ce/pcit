@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Pustomize\Interfaces\Issue;
 
-use PCIT\GitHub\Webhooks\Parser\IssuesContext;
+use PCIT\GPI\Webhooks\Context\IssuesContext;
 
 /**
  * Triggered when an issue is `opened`, `edited`, `deleted`,

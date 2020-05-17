@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Author;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Committer;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Sender;
+use PCIT\GPI\Webhooks\Context;
+use PCIT\GPI\Webhooks\Context\PushContext;
+use PCIT\GPI\Webhooks\Context\TagContext;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 class Push
 {
-    public static function handle(string $webhooks_content): array
+    /**
+     * @return PushContext|TagContext
+     */
+    public static function handle(string $webhooks_content): Context
     {
         \Log::info('Receive event', ['type' => 'push']);
 
@@ -59,13 +65,25 @@ class Push
         $account = (new Account($repository_owner, $org));
         $sender = (new Sender($obj->sender));
 
-        return compact('rid', 'repo_full_name', 'branch', 'commit_id', 'commit_message',
-            'compare', 'event_time', 'author', 'committer',
-            'installation_id', 'account', 'sender', 'private'
-        );
+        $pushContext = new PushContext([], $webhooks_content);
+        $pushContext->rid = $rid;
+        $pushContext->repo_full_name = $repo_full_name;
+        $pushContext->branch = $branch;
+        $pushContext->commit_id = $commit_id;
+        $pushContext->commit_message = $commit_message;
+        $pushContext->compare = $compare;
+        $pushContext->event_time = $event_time;
+        $pushContext->author = $author;
+        $pushContext->committer = $committer;
+        $pushContext->installation_id = $installation_id;
+        $pushContext->account = $account;
+        $pushContext->sender = $sender;
+        $pushContext->private = $private;
+
+        return $pushContext;
     }
 
-    public static function tag($tag, string $webhooks_content): array
+    public static function tag($tag, string $webhooks_content): TagContext
     {
         \Log::info('Receive event', ['type' => 'push', 'action' => 'tag']);
 
@@ -75,6 +93,7 @@ class Push
 
         $rid = $repository->id;
         $repo_full_name = $repository->full_name;
+        $private = $repository->private;
 
         $branch = self::ref2branch($obj->base_ref ?? 'refs/heads/master');
 
@@ -94,20 +113,23 @@ class Push
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'branch' => $branch,
-            'tag' => $tag,
-            'commit_id' => $commit_id,
-            'commit_message' => $commit_message,
-            'event_time' => $event_time,
-            'author' => (new Author($author)),
-            'committer' => (new Committer($committer)),
-            'account' => (new Account($repository_owner, $org)),
-            'sender' => (new Sender($obj->sender)),
-        ];
+        $tagContext = new TagContext([], $webhooks_content);
+
+        $tagContext->rid = $rid;
+        $tagContext->repo_full_name = $repo_full_name;
+        $tagContext->branch = $branch;
+        $tagContext->tag = $tag;
+        $tagContext->commit_id = $commit_id;
+        $tagContext->commit_message = $commit_message;
+        $tagContext->event_time = $event_time;
+        $tagContext->author = new Author($author);
+        $tagContext->committer = $committer;
+        $tagContext->installation_id = $installation_id;
+        $tagContext->account = new Account($repository_owner, $org);
+        $tagContext->sender = new Sender($obj->sender);
+        $tagContext->private = $private;
+
+        return $tagContext;
     }
 
     /**

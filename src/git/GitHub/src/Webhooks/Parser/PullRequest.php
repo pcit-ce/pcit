@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Context\PullRequestContext;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 class PullRequest
 {
@@ -15,7 +16,7 @@ class PullRequest
      * "labeled", "unlabeled",
      * "opened", "synchronize", "edited", "closed", or "reopened".
      */
-    public static function handle(string $webhooks_content): array
+    public static function handle(string $webhooks_content): PullRequestContext
     {
         $obj = json_decode($webhooks_content);
 
@@ -59,21 +60,24 @@ class PullRequest
 
         // 谁开启 PR
         // 谁推送的 commit 多个
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'action' => $action,
-            'event_time' => $event_time,
-            'commit_message' => $commit_message,
-            'commit_id' => $commit_id,
-            'committer_username' => $committer_username,
-            'committer_uid' => $committer_uid,
-            'pull_request_number' => $pull_request_number,
-            'branch' => $branch,
-            'internal' => $internal,
-            'pull_request_source' => $pull_request_source,
-            'account' => (new Account($repository_owner, $org)),
-        ];
+
+        $pullRequestContext = new PullRequestContext([], $webhooks_content);
+
+        $pullRequestContext->installation_id = $installation_id;
+        $pullRequestContext->rid = $rid;
+        $pullRequestContext->repo_full_name = $repo_full_name;
+        $pullRequestContext->action = $action;
+        $pullRequestContext->event_time = $event_time;
+        $pullRequestContext->commit_message = $commit_message;
+        $pullRequestContext->commit_id = $commit_id;
+        $pullRequestContext->committer_username = $committer_username;
+        $pullRequestContext->committer_uid = $committer_uid;
+        $pullRequestContext->pull_request_number = $pull_request_number;
+        $pullRequestContext->branch = $branch;
+        $pullRequestContext->internal = $internal;
+        $pullRequestContext->pull_request_source = $pull_request_source;
+        $pullRequestContext->account = (new Account($repository_owner, $org));
+
+        return $pullRequestContext;
     }
 }

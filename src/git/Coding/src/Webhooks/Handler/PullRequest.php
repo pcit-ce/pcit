@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\Coding\Webhooks\Handler;
 
-use PCIT\GPI\Webhooks\Handler\PushAbstract;
+use PCIT\GPI\Webhooks\Handler\PullRequestAbstract;
 
-class Push extends PushAbstract
+class PullRequest extends PullRequestAbstract
 {
     public function handle(string $webhooks_content): void
-    {
-    }
-
-    public function tag(array $content): void
     {
     }
 }

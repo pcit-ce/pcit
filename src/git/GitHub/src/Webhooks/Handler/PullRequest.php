@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Build;
-use PCIT\GitHub\Webhooks\Parser\PullRequestContext;
-use PCIT\GPI\Webhooks\PustomizeHandler;
+use PCIT\GPI\Webhooks\Handler\PullRequestAbstract;
 
-class PullRequest
+class PullRequest extends PullRequestAbstract
 {
     /**
      * Action.
@@ -20,24 +19,22 @@ class PullRequest
      */
     public function handle(string $webhooks_content): void
     {
-        $pull_request_parser_metadata = \PCIT\GitHub\Webhooks\Parser\PullRequest::handle($webhooks_content);
+        $pullRequestContext = \PCIT\GitHub\Webhooks\Parser\PullRequest::handle($webhooks_content);
 
-        [
-            'installation_id' => $installation_id,
-            'action' => $action,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'commit_id' => $commit_id,
-            'event_time' => $event_time,
-            'commit_message' => $commit_message,
-            'committer_username' => $committer_username,
-            'committer_uid' => $committer_uid,
-            'pull_request_number' => $pull_request_number,
-            'branch' => $branch,
-            'internal' => $internal,
-            'pull_request_source' => $pull_request_source,
-            'account' => $account,
-        ] = $pull_request_parser_metadata;
+        $installation_id = $pullRequestContext->installation_id;
+        $action = $pullRequestContext->action;
+        $rid = $pullRequestContext->rid;
+        $repo_full_name = $pullRequestContext->repo_full_name;
+        $commit_id = $pullRequestContext->commit_id;
+        $event_time = $pullRequestContext->event_time;
+        $commit_message = $pullRequestContext->commit_message;
+        $committer_username = $pullRequestContext->committer_username;
+        $committer_uid = $pullRequestContext->committer_uid;
+        $pull_request_number = $pullRequestContext->pull_request_number;
+        $branch = $pullRequestContext->branch;
+        $internal = $pullRequestContext->internal;
+        $pull_request_source = $pullRequestContext->pull_request_source;
+        $account = $pullRequestContext->account;
 
         $subject = new Subject();
 
@@ -68,11 +65,6 @@ class PullRequest
         \Storage::put('github/events/'.$last_insert_id.'.json', $webhooks_content);
 
         // pustomize
-
-        $class = 'PCIT\\Pustomize\\PullRequest\\Basic';
-
-        $context = new PullRequestContext($pull_request_parser_metadata, $webhooks_content);
-
-        (new PustomizeHandler())->handle($class, $context);
+        $this->triggerPullRequestPustomize($pullRequestContext);
     }
 }

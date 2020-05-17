@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Parser;
+namespace PCIT\GPI\Webhooks\Context;
 
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
 use PCIT\GPI\Webhooks\Context;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 /**
  * @property string                           $installation_id

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-use PCIT\GitHub\Webhooks\Parser\IssueCommentContext;
-use PCIT\GitHub\Webhooks\Parser\IssuesContext;
-use PCIT\GPI\Webhooks\PustomizeHandler;
+use PCIT\GPI\Webhooks\Handler\Issues\IssuesAbstract;
 
-class Issues
+class Issues extends IssuesAbstract
 {
     /**
      *  "assigned", "unassigned",
@@ -21,29 +19,14 @@ class Issues
      */
     public function handle(string $webhooks_content): void
     {
-        $issue_parser_metadata = \PCIT\GitHub\Webhooks\Parser\Issues::handle($webhooks_content);
+        $issuesContext = \PCIT\GitHub\Webhooks\Parser\Issues::handle($webhooks_content);
 
-        [
-            'installation_id' => $installation_id,
-            'action' => $action,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'issue_id' => $issue_id,
-            'issue_number' => $issue_number,
-            'title' => $title,
-            'body' => $body,
-            'sender_username' => $sender_username,
-            'sender_uid' => $sender_uid,
-            'sender_pic' => $sender_pic,
-            'state' => $state,
-            'locked' => $locked,
-            'created_at' => $created_at,
-            'closed_at' => $closed_at,
-            'updated_at' => $updated_at,
-            'assignees' => $assignees,
-            'labels' => $labels,
-            'account' => $account,
-        ] = $issue_parser_metadata;
+        $installation_id = $issuesContext->installation_id;
+        $action = $issuesContext->action;
+        $rid = $issuesContext->rid;
+        $repo_full_name = $issuesContext->repo_full_name;
+        $issue_number = $issuesContext->issue_number;
+        $account = $issuesContext->account;
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
@@ -52,11 +35,7 @@ class Issues
         \Log::info('issue #'.$issue_number.' '.$action);
 
         // pustomize
-        $class = 'PCIT\\Pustomize\\Issue\\Basic';
-
-        $context = new IssuesContext($issue_parser_metadata, $webhooks_content);
-
-        (new PustomizeHandler())->handle($class, $context);
+        $this->triggerIssuesPustomize($issuesContext);
     }
 
     /**
@@ -66,31 +45,18 @@ class Issues
      */
     public function comment(string $webhooks_content): void
     {
-        $issue_comment_parser_metadata = \PCIT\GitHub\Webhooks\Parser\Issues::comment($webhooks_content);
-        [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'action' => $action,
-            'issue_id' => $issue_id,
-            'comment_id' => $comment_id,
-            'issue_number' => $issue_number,
-            'updated_at' => $updated_at,
-            'sender_uid' => $sender_uid,
-            'body' => $body,
-            'created_at' => $created_at,
-            'account' => $account,
-        ] = $issue_comment_parser_metadata;
+        $issueCommentContext = \PCIT\GitHub\Webhooks\Parser\Issues::comment($webhooks_content);
+
+        $installation_id = $issueCommentContext->installation_id;
+        $rid = $issueCommentContext->rid;
+        $repo_full_name = $issueCommentContext->repo_full_name;
+        $account = $issueCommentContext->account;
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
             ->handle();
 
         // pustomize
-        $class = 'PCIT\\Pustomize\\Issue\\Comment';
-
-        $context = new IssueCommentContext($issue_comment_parser_metadata, $webhooks_content);
-
-        (new PustomizeHandler())->handle($class, $context);
+        $this->triggerIssueCommentPustomize($issueCommentContext);
     }
 }

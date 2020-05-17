@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Context\CheckRunContext;
+use PCIT\GPI\Webhooks\Context\CheckSuiteContext;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 class Check
 {
     /**
      * @throws \Exception
      */
-    public static function suite(string $webhooks_content): array
+    public static function suite(string $webhooks_content): CheckSuiteContext
     {
         $obj = json_decode($webhooks_content);
 
@@ -35,22 +37,24 @@ class Check
 
         $org = $obj->organization ? true : false;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'action' => $action,
-            'branch' => $branch,
-            'commit_id' => $commit_id,
-            'check_suite_id' => $check_suite_id,
-            'account' => (new Account($repository_owner, $org)),
-        ];
+        $context = new CheckSuiteContext([], $webhooks_content);
+
+        $context->installation_id = $installation_id;
+        $context->rid = $rid;
+        $context->repo_full_name = $repo_full_name;
+        $context->action = $action;
+        $context->branch = $branch;
+        $context->commit_id = $commit_id;
+        $context->check_suite_id = $check_suite_id;
+        $context->account = (new Account($repository_owner, $org));
+
+        return $context;
     }
 
     /**
      * @throws \Exception
      */
-    public static function run(string $webhooks_content): array
+    public static function run(string $webhooks_content): CheckRunContext
     {
         $obj = json_decode($webhooks_content);
 
@@ -80,7 +84,19 @@ class Check
 
         $account = (new Account($repository_owner, $org));
 
-        return compact('installation_id', 'rid', 'repo_full_name', 'action',
-            'branch', 'commit_id', 'check_suite_id', 'check_run_id', 'external_id', 'account');
+        $context = new CheckRunContext([], $webhooks_content);
+
+        $context->installation_id = $installation_id;
+        $context->rid = $rid;
+        $context->repo_full_name = $repo_full_name;
+        $context->action = $action;
+        $context->branch = $branch;
+        $context->commit_id = $commit_id;
+        $context->check_suite_id = $check_suite_id;
+        $context->check_run_id = $check_run_id;
+        $context->external_id = $external_id;
+        $context->account = $account;
+
+        return $context;
     }
 }
