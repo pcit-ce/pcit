@@ -16,15 +16,15 @@ class Installation
      *
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content): void
+    public function handle(string $webhooks_content): void
     {
-        [
-            'installation_id' => $installation_id,
-            'action' => $action,
-            'repo' => $repositories,
-            'sender' => $sender,
-            'account' => $account
-        ] = \PCIT\GitHub\Webhooks\Parser\Installation::handle($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Installation::handle($webhooks_content);
+
+        $installation_id = $context->installation_id;
+        $action = $context->action;
+        $repositories = $context->repositories;
+        $sender = $context->sender;
+        $account = $context->account;
 
         if ('new_permissions_accepted' === $action) {
             \Log::info('receive event [ installation ] action [ new_permissions_accepted ]');
@@ -33,7 +33,7 @@ class Installation
         }
 
         if ('deleted' === $action) {
-            self::delete($installation_id, $account->username);
+            $this->delete($installation_id, $account->username);
 
             return;
         }
@@ -42,7 +42,7 @@ class Installation
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
         User::updateUserInfo($account);
         User::updateInstallationId((int) $installation_id, $account->username);
-        self::create($repositories, $sender->uid);
+        $this->create($repositories, $sender->uid);
     }
 
     /**
@@ -50,7 +50,7 @@ class Installation
      *
      * @throws \Exception
      */
-    public static function create(array $repo, int $sender_uid): void
+    public function create(array $repo, int $sender_uid): void
     {
         foreach ($repo as $k) {
             // 仓库信息存入 repo 表
@@ -67,7 +67,7 @@ class Installation
      *
      * @throws \Exception
      */
-    public static function delete(int $installation_id, string $username): void
+    public function delete(int $installation_id, string $username): void
     {
         Repo::deleteByInstallationId($installation_id);
         User::updateInstallationId(0, $username);
@@ -82,27 +82,27 @@ class Installation
      *
      * @throws \Exception
      */
-    public static function repositories(string $webhooks_content): void
+    public function repositories(string $webhooks_content): void
     {
-        [
-            'installation_id' => $installation_id,
-            'action' => $action,
-            'repo' => $repo,
-            'sender' => $sender,
-            'account' => $account
-        ] = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($webhooks_content);
+
+        $installation_id = $context->installation_id;
+        $action = $context->action;
+        $repo = $context->repo;
+        $sender = $context->sender;
+        $account = $context->account;
 
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
         User::updateUserInfo($account);
         User::updateInstallationId((int) $installation_id, $account->username);
 
         if ('added' === $action) {
-            self::create($repo, $sender->uid);
+            $this->create($repo, $sender->uid);
 
             return;
         }
 
-        self::repositories_action_removed($repo);
+        $this->repositories_action_removed($repo);
     }
 
     /**
@@ -110,7 +110,7 @@ class Installation
      *
      * @throws \Exception
      */
-    private static function repositories_action_removed(array $repo): void
+    private function repositories_action_removed(array $repo): void
     {
         foreach ($repo as $k) {
             $rid = $k->id;

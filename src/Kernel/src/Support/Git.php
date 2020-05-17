@@ -198,7 +198,7 @@ class Git
 
                 break;
             case 'coding':
-                // 支持 Coding 企业版
+                // 支持 Coding 企业版(私有部署)
                 $url = env('CI_CODING_HOST', null) ?? env('CI_CODING_TEAM').'.coding.net';
                 $url .= '/api';
                 break;

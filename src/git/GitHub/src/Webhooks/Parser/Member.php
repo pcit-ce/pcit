@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Context\MemberContext;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 class Member
 {
-    public static function handle(string $webhooks_content): array
+    public static function handle(string $webhooks_content): MemberContext
     {
         $obj = json_decode($webhooks_content);
 
@@ -38,14 +39,17 @@ class Member
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'member_uid' => $member_uid,
-            'member_username' => $member_username,
-            'member_pic' => $member_pic,
-            'account' => (new Account($repository_owner, $org)),
-        ];
+        $memberContext = new MemberContext([], $webhooks_content);
+
+        $memberContext->action = $action;
+        $memberContext->installation_id = $installation_id;
+        $memberContext->rid = $rid;
+        $memberContext->repo_full_name = $repo_full_name;
+        $memberContext->member_uid = $member_uid;
+        $memberContext->member_username = $member_username;
+        $memberContext->member_pic = $member_pic;
+        $memberContext->account = new Account($repository_owner, $org);
+
+        return $memberContext;
     }
 }

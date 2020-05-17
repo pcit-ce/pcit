@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Repositories;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class BranchesClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     public function list(string $repo_full_name, bool $protected): void
     {

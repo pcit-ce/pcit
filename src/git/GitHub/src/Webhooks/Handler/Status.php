@@ -13,7 +13,7 @@ class Status
      *
      * @throws \Exception
      */
-    public static function handle(string $webhooks_content)
+    public function handle(string $webhooks_content)
     {
         $sql = <<<'EOF'
         INSERT INTO builds(

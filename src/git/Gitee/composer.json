@@ -1,6 +1,6 @@
 {
   "name": "pcit/git-gitee",
-  "description": "pcit git: gitee",
+  "description": "GPI (Git Provider Interface): Gitee",
   "version": "19.12-dev",
   "autoload": {
     "psr-4": {

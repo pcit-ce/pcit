@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\Gitee\Service\Data;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class Client
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     public function getBlob(): void
     {

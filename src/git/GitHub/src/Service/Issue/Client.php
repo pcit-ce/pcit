@@ -6,9 +6,10 @@ namespace PCIT\GitHub\Service\Issue;
 
 use Curl\Curl;
 use Exception;
+use PCIT\GPI\Service\Issue\ClientInterface;
 use TencentAI\TencentAI;
 
-class Client
+class Client implements ClientInterface
 {
     /**
      * @var Curl

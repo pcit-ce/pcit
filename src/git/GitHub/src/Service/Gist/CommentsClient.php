@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Gist;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class CommentsClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List comments on a gist.

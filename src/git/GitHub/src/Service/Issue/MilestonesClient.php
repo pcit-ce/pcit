@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Issue;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class MilestonesClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List milestones for a repository.

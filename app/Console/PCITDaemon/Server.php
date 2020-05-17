@@ -14,7 +14,6 @@ use PCIT\Framework\Support\HttpClient;
 use PCIT\Framework\Support\StringSupport;
 use PCIT\Framework\Support\Subject;
 use PCIT\Support\CI;
-use PCIT\Support\Git;
 use TencentAI\TencentAI;
 
 /**
@@ -141,14 +140,13 @@ class Server extends Kernel
 
             $this->git_type = $git_type;
 
-            $class = 'PCIT\\'.Git::getClassName($git_type).'\Webhooks\Handler\Kernel';
-            $webhooksHandler = new $class();
+            $webhooksHandler = new \PCIT\GPI\Webhooks\Handler\Kernel();
 
             try {
-                $webhooksHandler->$event_type($json);
-                \Log::info($event_type.' webhooks handle success', []);
+                $webhooksHandler->$event_type($json, $git_type);
+                \Log::info('[ '.$event_type.' ] webhooks handle success', compact('git_type'));
             } catch (Error | Exception $e) {
-                \Log::error($event_type.' webhooks handle error', [$e->__toString()]);
+                \Log::error('[ '.$event_type.' ] webhooks handle error', [$e->__toString()]);
                 $webhooks->pushErrorCache($json_raw);
             }
         }

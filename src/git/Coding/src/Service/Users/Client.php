@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace PCIT\Coding\Service\Users;
 
 use Exception;
-use PCIT\GitHub\Service\CICommon;
+use PCIT\Coding\ServiceClientCommon;
 use PCIT\GitHub\Service\Users\Client as GitHubClient;
 
 class Client extends GitHubClient
 {
-    use CICommon;
-
-    public function getAccessToken()
-    {
-        return '?access_token='.explode(' ', $this->curl->headers['x-coding-token'])[1];
-    }
+    use ServiceClientCommon;
 
     /**
      * @param string $username
@@ -32,7 +27,7 @@ class Client extends GitHubClient
             $url = $this->api_url.'/account/key'.$username;
         }
 
-        $json = $this->curl->get($url.$this->getAccessToken());
+        $json = $this->curl->get($url.'?'.$this->getAccessTokenUrlParameter());
 
         if ($raw) {
             return $json;
@@ -55,6 +50,8 @@ class Client extends GitHubClient
     }
 
     /**
+     * 这里指项目中的仓库，个人用户不包含仓库。
+     *
      * @return mixed
      *
      * @throws \Exception
@@ -63,11 +60,13 @@ class Client extends GitHubClient
     {
         $url = $this->api_url.'/user/projects';
 
+        return '[]';
+
         if ($username) {
             $url = $this->api_url.'/api/user/'.$username.'/projects/public';
         }
 
-        $json = $this->curl->get($url.$this->getAccessToken());
+        $json = $this->curl->get($url.'?'.$this->getAccessTokenUrlParameter());
 
         $json_obj = json_decode($json);
 
@@ -102,8 +101,32 @@ class Client extends GitHubClient
         return json_encode($array);
     }
 
+    /**
+     * 这里指项目.
+     */
     public function listOrgs()
     {
-        return [];
+        $url = $this->api_url.'/user/projects';
+
+        $result = $this->curl->get($url.'?'.$this->getAccessTokenUrlParameter());
+
+        $orgs = json_decode($result)->data->list;
+
+        $orgs_array = [];
+
+        foreach ($orgs as $org) {
+            $icon = $org->icon;
+            if (false === strrpos($icon, 'https')) {
+                $icon = 'https://dn-coding-net-production-pp.codehub.cn/79a8bcc4-d9cc-4061-940d-5b3bb31bf571.png';
+            }
+
+            $orgs_array[] = [
+                'id' => $org->id,
+                'login' => $org->default_depot_name,
+                'avatar_url' => $icon,
+            ];
+        }
+
+        return json_encode($orgs_array);
     }
 }

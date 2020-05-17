@@ -4,22 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-use App\Build;
+use PCIT\GPI\Webhooks\Handler\PingAbstract;
 
-class Ping
+class Ping extends PingAbstract
 {
-    /**
-     * @return string
-     *
-     * @throws \Exception
-     */
-    public static function handle(string $webhooks_content)
-    {
-        [
-            'rid' => $rid,
-            'created_at' => $created_at
-        ] = \PCIT\GitHub\Webhooks\Parser\Ping::handle($webhooks_content);
-
-        return Build::insertPing('github', $rid, $created_at);
-    }
 }

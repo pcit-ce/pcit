@@ -1,6 +1,6 @@
 {
   "name": "pcit/git-gogs",
-  "description": "pcit git: gogs",
+  "description": "GPI (Git Provider Interface): Gogs",
   "version": "19.12-dev",
   "autoload": {
     "psr-4": {

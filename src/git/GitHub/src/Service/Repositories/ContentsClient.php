@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Repositories;
 
 use Exception;
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\Service\Repositories\ContentsClientInterface;
+use PCIT\GPI\ServiceClientCommon;
 
-class ContentsClient
+class ContentsClient implements ContentsClientInterface
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * Get the README.
@@ -28,11 +29,9 @@ class ContentsClient
     /**
      * Get contents.
      *
-     * @return string
-     *
      * @throws \Exception
      */
-    public function getContents(string $repo_full_name, string $path, string $ref, bool $raw = true)
+    public function getContents(string $repo_full_name, string $path, string $ref, bool $raw = true): string
     {
         $headers = [];
         if ($raw) {

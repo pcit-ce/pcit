@@ -6,7 +6,7 @@ namespace PCIT\Pustomize\Issue;
 
 use App\GetAccessToken;
 use App\Repo;
-use PCIT\GitHub\Webhooks\Parser\IssueCommentContext;
+use PCIT\GPI\Webhooks\Context\IssueCommentContext;
 use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\Issue\CommentInterface;
 

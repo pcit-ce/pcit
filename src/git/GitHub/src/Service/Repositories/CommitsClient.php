@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Repositories;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class CommitsClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List commits on a repository.

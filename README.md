@@ -77,11 +77,11 @@ push by you, test and deploy by us.
 
 ### 开放(合作共赢)
 
-* GitProviders
-* Providers
-* Runners
-* Plugins
-* notifications
+* [GPI (Git Provider Interface)](https://github.com/pcit-ce/git-gpi)
+* [Providers](https://github.com/pcit-ce/kernel-provider)
+* [Runners](https://github.com/pcit-ce/kernel-runner)
+* [Plugins](https://github.com/pcit-plugins)
+* [Notifications](https://github.com/pcit-ce/kernel-notification)
 * OpenAPI
 
 ## 使用方法（使用之前需要私有部署 PCIT EE）

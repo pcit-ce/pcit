@@ -1,4 +1,4 @@
-# PCIT + Gogs
+# GPI (Git Provider Interface): Gogs
 
 ## 项目状态
 

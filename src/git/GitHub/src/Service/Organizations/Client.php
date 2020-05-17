@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Organizations;
 
 use Exception;
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class Client
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * 获取组织的基本信息.

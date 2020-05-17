@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Deployment;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 /**
  * 展示 CI 状态
@@ -13,7 +13,7 @@ use PCIT\GitHub\Service\CICommon;
  */
 class Client
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List deployments.

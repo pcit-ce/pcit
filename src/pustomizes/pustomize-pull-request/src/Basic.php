@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Pustomize\PullRequest;
 
 use App\GetAccessToken;
-use PCIT\GitHub\Webhooks\Parser\PullRequestContext;
+use PCIT\GPI\Webhooks\Context\PullRequestContext;
 use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\PullRequest\BasicInterface;
 

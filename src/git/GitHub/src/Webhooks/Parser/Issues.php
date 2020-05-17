@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Context\IssueCommentContext;
+use PCIT\GPI\Webhooks\Context\IssuesContext;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 class Issues
 {
@@ -13,7 +15,7 @@ class Issues
         'CLAassistant',
     ];
 
-    public static function handle(string $webhooks_content): array
+    public static function handle(string $webhooks_content): IssuesContext
     {
         $obj = json_decode($webhooks_content);
 
@@ -53,30 +55,32 @@ class Issues
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'issue_id' => $issue_id,
-            'issue_number' => $issue_number,
-            'title' => $title,
-            'body' => $body,
-            'sender_uid' => $sender_uid,
-            'sender_username' => $sender_username,
-            'sender_pic' => $sender_pic,
-            'state' => $state,
-            'locked' => $locked,
-            'assignees' => $assignees,
-            'labels' => $labels,
-            'created_at' => $created_at,
-            'updated_at' => $updated_at,
-            'closed_at' => $closed_at,
-            'account' => (new Account($repository_owner, $org)),
-            'action' => $action,
-        ];
+        $issuesContext = new IssuesContext([], '');
+
+        $issuesContext->installation_id = $installation_id;
+        $issuesContext->rid = $rid;
+        $issuesContext->repo_full_name = $repo_full_name;
+        $issuesContext->sender_username = $sender_username;
+        $issuesContext->sender_uid = $sender_uid;
+        $issuesContext->sender_pic = $sender_pic;
+        $issuesContext->issue_id = $issue_id;
+        $issuesContext->issue_number = $issue_number;
+        $issuesContext->title = $title;
+        $issuesContext->body = $body;
+        $issuesContext->created_at = $created_at;
+        $issuesContext->updated_at = $updated_at;
+        $issuesContext->account = new Account($repository_owner, $org);
+        $issuesContext->action = $action;
+        $issuesContext->state = $state;
+        $issuesContext->labels = $labels;
+        $issuesContext->assignees = $assignees;
+        $issuesContext->locked = $locked;
+        $issuesContext->closed_at = $closed_at;
+
+        return $issuesContext;
     }
 
-    public static function comment(string $webhooks_content): array
+    public static function comment(string $webhooks_content): IssueCommentContext
     {
         \Log::info('Receive issue comment event', []);
 
@@ -120,22 +124,24 @@ class Issues
         $org = ($obj->organization ?? false) ? true : false;
         $is_pull_request = ($issue->pull_request ?? false) ? true : false;
 
-        return [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'sender_username' => $sender_username,
-            'sender_uid' => $sender_uid,
-            'sender_pic' => $sender_pic,
-            'issue_id' => $issue_id,
-            'issue_number' => $issue_number,
-            'comment_id' => $comment_id,
-            'body' => $body,
-            'created_at' => $created_at,
-            'updated_at' => $updated_at,
-            'account' => (new Account($repository_owner, $org)),
-            'action' => $action,
-            'is_pull_request' => $is_pull_request,
-        ];
+        $issueCommentContext = new IssueCommentContext([], '');
+
+        $issueCommentContext->installation_id = $installation_id;
+        $issueCommentContext->rid = $rid;
+        $issueCommentContext->repo_full_name = $repo_full_name;
+        $issueCommentContext->sender_username = $sender_username;
+        $issueCommentContext->sender_uid = $sender_uid;
+        $issueCommentContext->sender_pic = $sender_pic;
+        $issueCommentContext->issue_id = $issue_id;
+        $issueCommentContext->issue_number = $issue_number;
+        $issueCommentContext->comment_id = $comment_id;
+        $issueCommentContext->body = $body;
+        $issueCommentContext->created_at = $created_at;
+        $issueCommentContext->updated_at = $updated_at;
+        $issueCommentContext->account = new Account($repository_owner, $org);
+        $issueCommentContext->action = $action;
+        $issueCommentContext->is_pull_request = $is_pull_request;
+
+        return $issueCommentContext;
     }
 }

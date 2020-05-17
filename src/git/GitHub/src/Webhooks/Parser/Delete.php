@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\GitHub\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Context\DeleteContext;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 class Delete
 {
-    public static function handle(string $webhooks_content): array
+    public static function handle(string $webhooks_content): DeleteContext
     {
         \Log::info('Receive event', ['type' => 'delete']);
 
@@ -28,9 +29,17 @@ class Delete
 
         $org = ($obj->organization ?? false) ? true : false;
 
-        $account = (new Account($repository_owner, $org));
+        $account = new Account($repository_owner, $org);
 
-        return compact('installation_id', 'rid', 'repo_full_name',
-            'account', 'ref_type', 'ref');
+        $context = new DeleteContext([], $webhooks_content);
+
+        $context->installation_id = $installation_id;
+        $context->rid = $rid;
+        $context->repo_full_name = $repo_full_name;
+        $context->account = $account;
+        $context->ref_type = $ref_type;
+        $context->ref = $ref;
+
+        return $context;
     }
 }

@@ -2,16 +2,27 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Handler;
+namespace PCIT\GPI\Webhooks\Handler;
+
+use PCIT\Support\Git;
 
 class Kernel
 {
+    public function getNamespace(string $git_type): string
+    {
+        Git::getClassName($git_type);
+
+        return 'PCIT\\'.Git::getClassName($git_type).'\\Webhooks\Handler\\';
+    }
+
     /**
      * @throws \Exception
      */
-    public function ping(string $webhooks_content): void
+    public function ping(string $webhooks_content, string $git_type): void
     {
-        Ping::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'Ping';
+
+        (new $class())->handle($webhooks_content);
     }
 
     /**
@@ -21,12 +32,13 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function push(string $webhooks_content): void
+    public function push(string $webhooks_content, string $git_type): void
     {
-        Push::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'Push';
+        (new $class())->handle($webhooks_content);
     }
 
-    public function status(string $webhooks_content)
+    public function status(string $webhooks_content, string $git_type)
     {
         return 200;
     }
@@ -39,9 +51,10 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function issues(string $webhooks_content): void
+    public function issues(string $webhooks_content, string $git_type): void
     {
-        Issues::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'Issues';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
@@ -49,9 +62,10 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function issue_comment(string $webhooks_content): void
+    public function issue_comment(string $webhooks_content, string $git_type): void
     {
-        Issues::comment($webhooks_content);
+        $class = $this->getNamespace($git_type).'Issues';
+        (new $class())->comment($webhooks_content);
     }
 
     /**
@@ -64,9 +78,10 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function pull_request(string $webhooks_content)
+    public function pull_request(string $webhooks_content, string $git_type)
     {
-        PullRequest::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'PullRequest';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
@@ -100,7 +115,7 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function create(string $webhooks_content)
+    public function create(string $webhooks_content, string $git_type)
     {
         return 200;
     }
@@ -110,9 +125,10 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function delete(string $webhooks_content): void
+    public function delete(string $webhooks_content, string $git_type): void
     {
-        Delete::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'Delete';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
@@ -120,11 +136,11 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function member(string $webhooks_content): void
+    public function member(string $webhooks_content, string $git_type): void
     {
     }
 
-    public function team_add(string $webhooks_content): void
+    public function team_add(string $webhooks_content, string $git_type): void
     {
         $obj = json_decode($webhooks_content);
 
@@ -149,9 +165,10 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function installation(string $webhooks_content): void
+    public function installation(string $webhooks_content, string $git_type): void
     {
-        Installation::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'Installation';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
@@ -165,9 +182,10 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function installation_repositories(string $webhooks_content): void
+    public function installation_repositories(string $webhooks_content, string $git_type): void
     {
-        Installation::repositories($webhooks_content);
+        $class = $this->getNamespace($git_type).'Installation';
+        (new $class())->repositories($webhooks_content);
     }
 
     /**
@@ -197,9 +215,10 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function check_suite(string $webhooks_content): void
+    public function check_suite(string $webhooks_content, string $git_type): void
     {
-        Check::suite($webhooks_content);
+        $class = $this->getNamespace($git_type).'Check';
+        (new $class())->suite($webhooks_content);
     }
 
     /**
@@ -211,22 +230,25 @@ class Kernel
      *
      * @throws \Exception
      */
-    public function check_run(string $webhooks_content): void
+    public function check_run(string $webhooks_content, string $git_type): void
     {
-        Check::run($webhooks_content);
+        $class = $this->getNamespace($git_type).'Check';
+        (new $class())->run($webhooks_content);
     }
 
-    public function content_reference(string $webhooks_content): void
+    public function content_reference(string $webhooks_content, string $git_type): void
     {
-        Content::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'Content';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
      * @see https://developer.github.com/v3/activity/events/types/#repositoryevent
      */
-    public function repository(string $webhooks_content): void
+    public function repository(string $webhooks_content, string $git_type): void
     {
-        Repository::handle($webhooks_content);
+        $class = $this->getNamespace($git_type).'Repository';
+        (new $class())->handle($webhooks_content);
     }
 
     public function __call($name, $args): void

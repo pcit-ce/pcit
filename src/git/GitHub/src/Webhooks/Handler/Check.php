@@ -19,24 +19,24 @@ class Check
      *
      * @throws \Exception
      */
-    public static function suite(string $webhooks_content): void
+    public function suite(string $webhooks_content): void
     {
-        [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'branch' => $branch,
-            'commit_id' => $commit_id,
-            'action' => $action,
-            'account' => $account,
-            'check_suite_id' => $check_suite_id
-        ] = \PCIT\GitHub\Webhooks\Parser\Check::suite($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Check::suite($webhooks_content);
+
+        $installation_id = $context->installation_id;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $branch = $context->branch;
+        $commit_id = $context->commit_id;
+        $action = $context->action;
+        $account = $context->account;
+        $check_suite_id = $context->check_suite_id;
 
         (new Subject())
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
             ->handle();
 
-        'request' === $account && Build::updateCheckSuiteId((int) $rid, $commit_id, (int) $check_suite_id);
+        'request' === $action && Build::updateCheckSuiteId((int) $rid, $commit_id, (int) $check_suite_id);
         'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
     }
 
@@ -45,20 +45,20 @@ class Check
      *
      * @throws \Exception
      */
-    public static function run(string $webhooks_content): void
+    public function run(string $webhooks_content): void
     {
-        [
-            'installation_id' => $installation_id,
-            'rid' => $rid,
-            'repo_full_name' => $repo_full_name,
-            'action' => $action,
-            'commit_id' => $commit_id,
-            'external_id' => $external_id,
-            'check_suite_id' => $check_suite_id,
-            'check_run_id' => $check_run_id,
-            'branch' => $branch,
-            'account' => $account,
-        ] = \PCIT\GitHub\Webhooks\Parser\Check::run($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Check::run($webhooks_content);
+
+        $installation_id = $context->installation_id;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $action = $context->action;
+        $commit_id = $context->commit_id;
+        $external_id = $context->external_id;
+        $check_suite_id = $context->check_suite_id;
+        $check_run_id = $context->check_run_id;
+        $branch = $context->branch;
+        $account = $context->account;
 
         if (\in_array($action, ['created', 'updated'], true)) {
             return;

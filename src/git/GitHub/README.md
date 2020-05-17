@@ -1,4 +1,4 @@
-# PCIT + GitHub
+# GPI (Git Provider Interface): GitHub
 
 ## 项目状态
 

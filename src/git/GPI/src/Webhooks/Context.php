@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks;
+namespace PCIT\GPI\Webhooks;
 
-class Context implements ContextInterface
+abstract class Context implements ContextInterface
 {
     public $raw;
     public $context_array;
@@ -17,6 +17,11 @@ class Context implements ContextInterface
 
     public function __get(string $name)
     {
-        return $this->context_array[$name];
+        return $this->context_array[$name] ?? null;
+    }
+
+    public function __set(string $name, $value): void
+    {
+        $this->context_array[$name] = $value;
     }
 }
