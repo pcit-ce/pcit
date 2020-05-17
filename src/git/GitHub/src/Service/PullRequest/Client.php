@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\PullRequest;
 
 use Exception;
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 /**
  * Class GitHubClient.
@@ -14,7 +14,7 @@ use PCIT\GitHub\Service\CICommon;
  */
 class Client
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     private $is_update;
 

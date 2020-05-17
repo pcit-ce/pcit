@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Gist;
 
 use Exception;
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class Client
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List a user's gists.

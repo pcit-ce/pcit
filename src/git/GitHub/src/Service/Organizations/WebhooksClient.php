@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Organizations;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class WebhooksClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List hooks.

@@ -48,6 +48,10 @@
     },
     {
       "type": "path",
+      "url": "./src/git/GPI"
+    },
+    {
+      "type": "path",
       "url": "./src/Kernel"
     },
     {
@@ -114,6 +118,7 @@
     "pcit/git-gitee": "19.12-dev",
     "pcit/git-github": "19.12-dev",
     "pcit/git-gogs": "19.12-dev",
+    "pcit/git-gpi": "19.12-dev",
     "pcit/kernel": "19.12-dev",
     "pcit/log": "19.12-dev",
     "pcit/notification": "19.12-dev",
@@ -183,6 +188,7 @@
       "cp -r -f src/git/Gitee/ vendor/pcit/git-gitee",
       "cp -r -f src/git/GitHub/ vendor/pcit/git-github",
       "cp -r -f src/git/Gogs/ vendor/pcit/git-gogs",
+      "cp -r -f src/git/GPI/ vendor/pcit/git-gpi",
       "cp -r -f src/plugin-toolkit/ vendor/pcit/plugin-toolkit",
       "cp -r -f src/provider/ vendor/pcit/provider",
       "cp -r -f src/providers/provider-aliyun_docker_registry/ vendor/pcit/provider-aliyun-docker-registry",

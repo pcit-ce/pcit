@@ -1,4 +1,4 @@
-# PCIT + Gitee
+# GPI (Git Provider Interface): Gitee
 
 ## 项目状态
 

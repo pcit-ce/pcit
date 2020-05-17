@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Repositories;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 /**
  * Class Releases.
@@ -13,7 +13,7 @@ use PCIT\GitHub\Service\CICommon;
  */
 class ReleasesClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * @return mixed

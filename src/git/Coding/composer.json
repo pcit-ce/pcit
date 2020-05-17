@@ -1,6 +1,6 @@
 {
   "name": "pcit/git-coding",
-  "description": "pcit git: coding",
+  "description": "GPI (Git Provider Interface): coding.net",
   "version": "19.12-dev",
   "autoload": {
     "psr-4": {

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Activity;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 class StarringClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List Stargazers.

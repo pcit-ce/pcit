@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Issue;
 
-use PCIT\GitHub\Service\CICommon;
+use PCIT\GPI\ServiceClientCommon;
 
 /**
  * Class Labels.
@@ -13,7 +13,7 @@ use PCIT\GitHub\Service\CICommon;
  */
 class LabelsClient
 {
-    use CICommon;
+    use ServiceClientCommon;
 
     /**
      * List all labels for this repository.
