@@ -480,7 +480,8 @@ EOF;
                                      $rid,
                                      $event_time,
                                      $config,
-                                     $git_type = 'github')
+                                     bool $private,
+                                     string $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -489,9 +490,9 @@ git_type,event_type,branch,tag,
 commit_id,commit_message,
 committer_name,committer_email,committer_username,
 author_name,author_email,author_username,
-rid,created_at,config
+rid,created_at,config,private
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
         $last_insert_id = DB::insert($sql, [
@@ -499,7 +500,7 @@ EOF;
             $commit_id, $commit_message,
             $committer_name, $committer_email, $committer_username,
             $author_name, $author_email, $author_username,
-            $rid, $event_time, $config,
+            $rid, $event_time, $config, $private ? 1 : 0,
         ]);
 
         return $last_insert_id;

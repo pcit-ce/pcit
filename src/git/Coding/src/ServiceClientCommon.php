@@ -24,4 +24,21 @@ trait ServiceClientCommon
     {
         return env('CI_CODING_TEAM');
     }
+
+    private function checkResultCode(string $result, bool $throw = false): void
+    {
+        $code = json_decode($result)->code;
+
+        $message = 'Result Code Is Not 0, code is '.$code;
+
+        if (0 === $code) {
+            return;
+        }
+
+        \Log::debug($message);
+
+        if ($throw) {
+            throw new \Exception($message);
+        }
+    }
 }

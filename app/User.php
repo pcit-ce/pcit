@@ -43,7 +43,7 @@ class User extends Model
                                           string $username = null,
                                           ?string $email = null,
                                           ?string $pic = null,
-                                          bool $org = false,
+                                          ?bool $org = false,
                                           string $git_type = 'github'): void
     {
         if ($uid instanceof Account) {

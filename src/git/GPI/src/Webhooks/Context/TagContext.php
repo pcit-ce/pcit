@@ -17,10 +17,9 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
  * @property string    $tag
  * @property string    $commit_id
  * @property string    $commit_message
- * @property string    $event_time
+ * @property int       $installation_id
  * @property Author    $author
  * @property Committer $committer
- * @property string    $installation_id
  * @property Account   $account
  * @property Sender    $sender
  * @property bool      $private

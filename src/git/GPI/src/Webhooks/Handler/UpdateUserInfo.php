@@ -24,29 +24,33 @@ class UpdateUserInfo
 
     private $repo_full_name;
 
-    private $sender;
+    private $sender_uid;
+
+    private $git_type;
 
     /**
      * UpdateUserInfo constructor.
      *
      * @param $rid
-     * @param $repo_full_name
      *
      * @throws \Exception
      */
     public function __construct(Account $account,
-                                int $installation_id,
+                                ?int $installation_id,
                                 $rid,
-                                $repo_full_name,
-                                Sender $sender = null)
+                                string $repo_full_name,
+                                Sender $sender = null,
+                                string $git_type = 'github')
     {
         $this->account = $account;
         $this->installation_id = $installation_id;
         $this->rid = $rid;
         $this->repo_full_name = $repo_full_name;
-        $this->sender = $sender->uid ?? null;
+        $this->sender_uid = $sender->uid ?? null;
+        $this->git_type = $git_type;
+
         if ($sender) {
-            User::updateUserInfo($sender->uid, null, $sender->username);
+            User::updateUserInfo($sender->uid, null, $sender->username, null, null, false, $git_type);
         }
     }
 
@@ -55,8 +59,12 @@ class UpdateUserInfo
      */
     public function handle(): void
     {
-        User::updateUserInfo($this->account);
-        User::updateInstallationId($this->installation_id, $this->account->username);
-        Repo::updateRepoInfo($this->rid, $this->repo_full_name, $this->sender, null);
+        $git_type = $this->git_type;
+        User::updateUserInfo($this->account, null, null, null, null, null, $git_type);
+        Repo::updateRepoInfo($this->rid, $this->repo_full_name, $this->sender_uid, null, $git_type);
+
+        if ('github' === $git_type) {
+            User::updateInstallationId($this->installation_id, $this->account->username);
+        }
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Coding\Service\Webhooks;
 
-use Exception;
 use PCIT\GPI\Service\Webhooks\ServerAbstract;
 
 class Server extends ServerAbstract
@@ -13,18 +12,10 @@ class Server extends ServerAbstract
 
     public function server()
     {
-        $content = \Request::GetContent();
+        $this->verify('X-Coding-Signature');
 
-        $type = \Request::getHeader('X-Coding-Event') ?? 'undefined';
+        $event_type = $this->getEventType('X-Coding-Event');
 
-        try {
-            return $this->pushCache($type, $content);
-        } catch (\Throwable $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
-        }
-    }
-
-    public function secret(string $content): void
-    {
+        return $this->storeAfterVerify($event_type);
     }
 }

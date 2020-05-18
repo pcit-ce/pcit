@@ -8,5 +8,5 @@ interface ServerInterface
 {
     public function server();
 
-    public function secret(string $content);
+    public function verify(string $signature_header): void;
 }

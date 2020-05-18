@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace PCIT\Coding\Webhooks\Handler;
 
-use PCIT\Coding\Webhooks\Parser\Push as ParserPush;
+use PCIT\Coding\Webhooks\Parser\Push as PushParser;
 use PCIT\GPI\Webhooks\Handler\Abstracts\PushAbstract;
 
 class Push extends PushAbstract
 {
+    public $git_type = 'coding';
+
     public function handle(string $webhooks_content): void
     {
-        $context = ParserPush::handle($webhooks_content);
+        $context = PushParser::handle($webhooks_content);
 
-        $tag = $context->tag ?? null;
-
-        if ($tag) {
+        if ($context->tag ?? null) {
             $this->tag($context);
 
             return;
         }
 
-        $this->handle_push($context, 'coding');
+        $this->handlePush($context, $this->git_type);
     }
 
-    public function tag(array $content): void
+    public function tag($context): void
     {
+        $this->handleTag($context, $this->git_type);
     }
 }

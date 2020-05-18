@@ -9,7 +9,7 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 /**
  * @property string  $action
- * @property string  $installation_id
+ * @property int     $installation_id
  * @property int     $rid
  * @property string  $repo_full_name
  * @property int     $member_uid

@@ -16,6 +16,6 @@ class Author
     {
         $this->name = $author->name;
         $this->email = $author->email;
-        $this->username = $author->username;
+        $this->username = $author->username ?? '';
     }
 }

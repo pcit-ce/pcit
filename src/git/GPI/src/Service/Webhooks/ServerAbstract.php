@@ -6,7 +6,50 @@ namespace PCIT\GPI\Service\Webhooks;
 
 abstract class ServerAbstract implements ServerInterface
 {
+    protected $git_type;
+
     public $cache_key = '/pcit/webhooks';
+
+    public function getWebhookContent()
+    {
+        return \Request::GetContent();
+    }
+
+    public function getEventType(string $event_header): string
+    {
+        $event_type = explode(' ', \Request::getHeader($event_header))[0] ?? 'undefined';
+
+        return strtolower($event_type);
+    }
+
+    /**
+     * 验证 webhooks 内容之后存入缓存.
+     */
+    public function storeAfterVerify(string $event_type)
+    {
+        return $this->pushCache($event_type, $this->getWebhookContent());
+    }
+
+    public function verify(string $signature_header): void
+    {
+        if (env('CI_WEBHOOKS_DEBUG', false)) {
+            return;
+        }
+
+        $secret = env('CI_WEBHOOKS_TOKEN', null);
+
+        $signature = \Request::getHeader($signature_header);
+
+        list($algo, $client_hash) = explode('=', $signature, 2);
+
+        $server_hash = hash_hmac($algo, $this->getWebhookContent(), $secret);
+
+        if ($client_hash === $server_hash) {
+            return;
+        }
+
+        throw new \Exception('', 402);
+    }
 
     /**
      * 仅接收收据,除有效性验证外不做任何处理.

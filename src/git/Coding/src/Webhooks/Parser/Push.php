@@ -6,7 +6,6 @@ namespace PCIT\Coding\Webhooks\Parser;
 
 use PCIT\GitHub\Webhooks\Parser\Push as GitHubPushParser;
 use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Context\TagContext;
 
 class Push extends GitHubPushParser
 {
@@ -17,13 +16,6 @@ class Push extends GitHubPushParser
         $context = parent::handle($webhooks_content);
 
         $context->repo_full_name = self::handle_repo_full_name($context->repo_full_name);
-
-        return $context;
-    }
-
-    public static function tag($tag, string $webhooks_content): TagContext
-    {
-        $context = new TagContext([], $webhooks_content);
 
         return $context;
     }

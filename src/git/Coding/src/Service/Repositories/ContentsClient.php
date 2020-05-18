@@ -29,6 +29,8 @@ class ContentsClient implements ContentsClientInterface
 
         $result = $this->curl->get($this->api_url."/user/$pcit_team_name/project/$project_name/depot/$depot_name/git/blob/$ref/$path".'?'.$this->getAccessTokenUrlParameter());
 
+        $this->checkResultCode($result, true);
+
         return $result;
     }
 }

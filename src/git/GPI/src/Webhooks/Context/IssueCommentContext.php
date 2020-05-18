@@ -8,18 +8,18 @@ use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 
 /**
- * @property string                           $installation_id
- * @property string                           $rid
+ * @property int                              $installation_id
+ * @property int                              $rid
  * @property string                           $repo_full_name
  * @property string                           $sender_username
- * @property string                           $sender_uid
+ * @property int                              $sender_uid
  * @property string                           $sender_pic
- * @property string                           $issue_id
- * @property string                           $issue_number
+ * @property int                              $issue_id
+ * @property int                              $issue_number
  * @property string                           $comment_id
  * @property string                           $body
- * @property string                           $created_at
- * @property string                           $updated_at
+ * @property int                              $created_at
+ * @property int                              $updated_at
  * @property Account                          $account
  * @property "created" | "edited" | "deleted" $action
  * @property bool                             $is_pull_request

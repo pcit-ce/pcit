@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Service\Webhooks;
 
-use Exception;
 use PCIT\GPI\Service\Webhooks\ServerAbstract;
 
 /**
@@ -24,41 +23,10 @@ class Server extends ServerAbstract
      */
     public function server()
     {
-        $type = \Request::getHeader('X-Github-Event') ?? 'undefined';
-        // $content = file_get_contents('php://input');
+        $this->verify('X-Hub-Signature');
 
-        $content = \Request::getContent();
+        $event_type = $this->getEventType('X-Github-Event');
 
-        $this->secret($content);
-
-        try {
-            return $this->pushCache($type, $content);
-        } catch (\Throwable $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function secret(string $content): void
-    {
-        if (env('CI_WEBHOOKS_DEBUG', false)) {
-            return;
-        }
-
-        $secret = env('CI_WEBHOOKS_TOKEN', null) ?? md5('pcit-secret');
-
-        $signature = \Request::getHeader('X-Hub-Signature');
-
-        list($algo, $github_hash) = explode('=', $signature, 2);
-
-        $serverHash = hash_hmac($algo, $content, $secret);
-
-        if ($github_hash === $serverHash) {
-            return;
-        }
-
-        throw new Exception('', 402);
+        return $this->storeAfterVerify($event_type);
     }
 }

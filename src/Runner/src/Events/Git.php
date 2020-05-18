@@ -109,6 +109,9 @@ class Git
             $git_config[] = 'DRONE_NETRC_MACHINE='.$git_host;
             $git_config[] = 'DRONE_NETRC_USERNAME=pcit';
             $git_config[] = 'DRONE_NETRC_PASSWORD='.$token;
+            if ('gitee' === $build->git_type) {
+                $git_config[] = 'DRONE_NETRC_USERNAME=oauth2';
+            }
         }
 
         if ('coding' === $build->git_type) {
