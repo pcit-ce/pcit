@@ -19,7 +19,7 @@ if (\App::environment('testing')) {
     });
 
     Route::get('testing/{id}', function ($id) {
-        return $id;
+        return (string) $id;
     });
 }
 

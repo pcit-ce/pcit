@@ -61,7 +61,7 @@ EOF;
 
         $this->config = JSON::beautiful($config);
 
-        $this->config = $config ??
+        $this->config = $this->config ??
             'This repo not include .pcit.yml file or build log is empty, please see https://docs.ci.khs1994.com/usage/';
 
         $this->language = $language ?? 'PHP';

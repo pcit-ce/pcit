@@ -48,6 +48,14 @@ class GitHubAppChecks
     {
         \Log::info('Create GitHub App Check Run', ['job_key_id' => $job_key_id]);
 
+        $job_env_vars = Job::getEnv($job_key_id);
+        $job_env = null;
+        if ($job_env_vars) {
+            $job_env_values = array_values($job_env_vars);
+
+            $job_env = '('.implode(', ', $job_env_values).')';
+        }
+
         $rid = Job::getRid((int) $job_key_id);
 
         $build_key_id = (int) Job::getBuildKeyID($job_key_id);
@@ -75,7 +83,7 @@ class GitHubAppChecks
             $status_use_in_title = 'in Progress';
         }
 
-        $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.ucfirst($event_type).' #'.$build_key_id.'-'.$job_key_id);
+        $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.ucfirst($event_type).' '.$job_env);
 
         $title = $title ??
             ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
@@ -87,7 +95,7 @@ class GitHubAppChecks
             (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
                 ->markdown();
 
-        $check_run_id = Job::getCheckRunId((int) $job_key_id);
+        // $check_run_id = Job::getCheckRunId((int) $job_key_id);
 
         $run_data = new RunData(
             $repo_full_name,
@@ -107,13 +115,13 @@ class GitHubAppChecks
             $actions
         );
 
-        $run_data->check_run_id = $check_run_id;
+        // $run_data->check_run_id = $check_run_id;
 
-        if ($check_run_id and !$force_create) {
-            $result = $pcit->check_run->update($run_data);
-        } else {
-            $result = $pcit->check_run->create($run_data);
-        }
+        // if ($check_run_id and !$force_create) {
+        // $result = $pcit->check_run->update($run_data);
+        // } else {
+        $result = $pcit->check_run->create($run_data);
+        // }
 
         $check_run_id = json_decode($result)->id ?? null;
 
