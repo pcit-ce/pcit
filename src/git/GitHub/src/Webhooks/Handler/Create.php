@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
+use PCIT\GPI\Webhooks\Handler\Subject;
+use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
+
 class Create
 {
     /**

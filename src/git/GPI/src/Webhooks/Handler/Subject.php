@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Handler;
+namespace PCIT\GPI\Webhooks\Handler;
 
 /**
  * 观察者模式 主题.

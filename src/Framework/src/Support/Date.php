@@ -15,7 +15,7 @@ class Date
      *
      * @throws \Exception
      */
-    public static function parse(?string $timestamp, bool $returnArray = false)
+    public static function parse($timestamp, bool $returnArray = false)
     {
         /*
          * 2018-05-02T04:15:49.011488700Z
@@ -26,6 +26,10 @@ class Date
          */
         if (!$timestamp) {
             return null;
+        }
+
+        if (\is_int($timestamp)) {
+            return (int) substr((string) $timestamp, 0, 10);
         }
 
         date_default_timezone_set('PRC');

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Handler;
+namespace PCIT\GPI\Webhooks\Handler;
 
 use App\GetAccessToken;
 use App\Repo;
@@ -36,7 +36,11 @@ class GetConfig
         $git_type = $this->git_type;
         $repo_full_name = $this->repo_full_name;
 
-        $access_token = GetAccessToken::getGitHubAppAccessToken(null, $repo_full_name);
+        if ('github' === $git_type) {
+            $access_token = GetAccessToken::getGitHubAppAccessToken(null, $repo_full_name);
+        } else {
+            $access_token = GetAccessToken::byRepoFullName($repo_full_name, null, $git_type);
+        }
 
         foreach ($configName as $file_name) {
             try {
@@ -46,7 +50,7 @@ class GetConfig
                 continue;
             }
 
-            \Log::info("$repo_full_name $commit_id not include ".$file_name);
+            \Log::info("$git_type $repo_full_name $commit_id not include ".$file_name);
         }
 
         return [];
@@ -80,7 +84,7 @@ class GetConfig
         $config = Yaml::parse($yaml_file_content);
 
         if (!$config) {
-            \Log::info("$repo_full_name $commit_id .pcit.yml parse error", []);
+            \Log::info("$git_type $repo_full_name $commit_id .pcit.yml parse error", []);
 
             return [];
         }

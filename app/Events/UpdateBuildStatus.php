@@ -48,6 +48,11 @@ class UpdateBuildStatus
         $config = $this->config;
         $build_log = $this->build_log;
 
+        $is_github = false;
+        if ('github' === Job::getGitType($job_key_id)) {
+            $is_github = true;
+        }
+
         switch ($this->build_status) {
             case 'inactive':
                 $this->build_status = 'inactive';
@@ -56,28 +61,28 @@ class UpdateBuildStatus
                 break;
             case CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS;
-                (new InProgress($job_key_id, $config, $build_log))->handle();
+                $is_github && (new InProgress($job_key_id, $config, $build_log))->handle();
 
                 break;
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
                 $this->updateBuildStatus();
-                (new Failed($job_key_id, $config, $build_log))->handle();
+                $is_github && (new Failed($job_key_id, $config, $build_log))->handle();
 
                 break;
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
                 $this->updateBuildStatus();
-                (new Passed($job_key_id, $config, $build_log))->handle();
+                $is_github && (new Passed($job_key_id, $config, $build_log))->handle();
 
                 break;
             default:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
                 $this->updateBuildStatus();
-                (new Cancelled($job_key_id, $config, $build_log))->handle();
+                $is_github && (new Cancelled($job_key_id, $config, $build_log))->handle();
         }
     }
 

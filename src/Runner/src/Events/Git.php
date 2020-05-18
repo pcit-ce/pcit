@@ -99,10 +99,22 @@ class Git
         ['host' => $git_host ] = parse_url($git_url);
 
         // TODO 在运行容器时注入 token
-        $token = GetAccessToken::getGitHubAppAccessToken(null, $build->repo_full_name);
+        if ('github' === $build->git_type) {
+            $token = GetAccessToken::getGitHubAppAccessToken(null, $build->repo_full_name);
+        } else {
+            $token = GetAccessToken::byRepoFullName($build->repo_full_name, null, $build->git_type);
+        }
+
         if ('1' === $build->private) {
             $git_config[] = 'DRONE_NETRC_MACHINE='.$git_host;
             $git_config[] = 'DRONE_NETRC_USERNAME=pcit';
+            $git_config[] = 'DRONE_NETRC_PASSWORD='.$token;
+        }
+
+        if ('coding' === $build->git_type) {
+            $git_username = '';
+            $token = '';
+            $git_config[] = 'DRONE_NETRC_USERNAME='.$git_username;
             $git_config[] = 'DRONE_NETRC_PASSWORD='.$token;
         }
 

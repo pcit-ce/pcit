@@ -59,7 +59,8 @@ class Git
 
                 break;
             case 'coding':
-                $url = 'https://e.coding.net/'.$username.'/'.$repo;
+                $team = env('CI_CODING_TEAM');
+                $url = 'https://e.coding.net/'.$team.'/'.$username.'/'.$repo;
 
                 if ($ssh) {
                     $url = 'git@e.coding.net:'.$repo_full_name;

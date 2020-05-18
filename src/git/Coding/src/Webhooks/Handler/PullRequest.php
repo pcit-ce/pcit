@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Coding\Webhooks\Handler;
 
-use PCIT\GPI\Webhooks\Handler\PullRequestAbstract;
+use PCIT\GPI\Webhooks\Handler\Abstracts\PullRequestAbstract;
 
 class PullRequest extends PullRequestAbstract
 {

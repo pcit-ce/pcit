@@ -8,12 +8,13 @@ use PCIT\Framework\Support\Date;
 use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\PushContext;
 use PCIT\GPI\Webhooks\Context\TagContext;
+use PCIT\GPI\Webhooks\Parser\Abstracts\PushAbstract;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
-class Push
+class Push extends PushAbstract
 {
     /**
      * @return PushContext|TagContext

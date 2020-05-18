@@ -20,9 +20,14 @@ class ContentsClient implements ContentsClientInterface
 
         [$project_name,$depot_name] = explode('/', $repo_full_name);
 
-        $result = $this->curl->get($this->api_url."/api/user/$pcit_team_name/project/$project_name/depot/$depot_name/git/blob/$ref/$path".'?'.$this->getAccessTokenUrlParameter());
+        if ($raw) {
+            $result = $this->curl->get("https://${pcit_team_name}.coding.net/p/$project_name/d/$depot_name/git/raw/".$ref.'/'.$path.'?'.$this->getAccessTokenUrlParameter());
+            $this->successOrFailure(200, true);
 
-        $this->successOrFailure(200, true);
+            return $result;
+        }
+
+        $result = $this->curl->get($this->api_url."/user/$pcit_team_name/project/$project_name/depot/$depot_name/git/blob/$ref/$path".'?'.$this->getAccessTokenUrlParameter());
 
         return $result;
     }

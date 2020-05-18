@@ -7,6 +7,9 @@ namespace PCIT\GitHub\Webhooks\Handler;
 use App\Build;
 use App\Job;
 use App\Notifications\GitHubAppChecks;
+use PCIT\GPI\Webhooks\Handler\Skip;
+use PCIT\GPI\Webhooks\Handler\Subject;
+use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
 
 class Check
 {

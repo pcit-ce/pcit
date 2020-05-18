@@ -28,11 +28,13 @@ trait ServiceClientCommon
     {
         $http_return_code = $this->curl->getCode();
 
-        $message = 'Http Response Code Is Not '.$http_return_code.' , code is '.$http_return_code;
+        $message = 'Http Response Code Is Not '.$http_code.' , code is '.$http_return_code;
 
-        if ($http_code !== $http_return_code) {
-            \Log::debug($message);
+        if ($http_code === $http_return_code) {
+            return;
         }
+
+        \Log::debug($message);
 
         if ($throw) {
             throw new \Exception($message);

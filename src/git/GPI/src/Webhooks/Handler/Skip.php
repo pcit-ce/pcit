@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GitHub\Webhooks\Handler;
+namespace PCIT\GPI\Webhooks\Handler;
 
 use App\Build;
 use PCIT\Runner\Conditional\Branch;

@@ -24,7 +24,7 @@ class GetAccessToken
      *
      * @throws \Exception
      */
-    public static function byRepoFullName(?string $repo_full_name, ?int $rid = null)
+    public static function byRepoFullName(?string $repo_full_name, ?int $rid = null, string $git_type = 'github')
     {
         if ($rid) {
             $sql = 'SELECT repo_admin FROM repo WHERE rid=? AND git_type=? LIMIT 1';
@@ -32,13 +32,13 @@ class GetAccessToken
             $sql = 'SELECT repo_admin FROM repo WHERE repo_full_name=? AND git_type=? LIMIT 1';
         }
 
-        $admin = DB::select($sql, [$repo_full_name ?? $rid, 'github'], true);
+        $admin = DB::select($sql, [$repo_full_name ?? $rid, $git_type], true);
 
         $accessToken = null;
 
         foreach (json_decode($admin, true) as $k) {
             $sql = 'SELECT access_token FROM user WHERE uid=? AND git_type=? LIMIT 1';
-            $result = DB::select($sql, [$k, 'github'], true);
+            $result = DB::select($sql, [$k, $git_type], true);
 
             if ($result) {
                 $accessToken = $result;

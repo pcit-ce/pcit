@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Build;
-use PCIT\GPI\Webhooks\Handler\PullRequestAbstract;
+use PCIT\GPI\Webhooks\Handler\Abstracts\PullRequestAbstract;
+use PCIT\GPI\Webhooks\Handler\GetConfig;
+use PCIT\GPI\Webhooks\Handler\Skip;
+use PCIT\GPI\Webhooks\Handler\Subject;
+use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
 
 class PullRequest extends PullRequestAbstract
 {

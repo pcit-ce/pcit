@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GPI\Webhooks\Handler;
+namespace PCIT\GPI\Webhooks\Handler\Abstracts;
 
 use PCIT\GPI\Webhooks\Handler\Interfaces\PingInterface;
 
