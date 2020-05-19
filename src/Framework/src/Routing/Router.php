@@ -120,7 +120,11 @@ class Router
         // 遍历
         foreach ($method_parameters as $key => $parameter) {
             // 获取参数类型
-            $parameter_class = $parameter->getClass()->name ?? null;
+            $parameter_class = null;
+
+            if($parameter->getType()){
+                $parameter_class = $parameter->getType()->getName();
+            }
 
             // 可变参数列表 function demo(...$args){}
             if ($parameter->isVariadic()) {
@@ -129,7 +133,7 @@ class Router
                 break;
             }
 
-            if ($parameter_class) {
+            if ($parameter_class and class_exists($parameter_class)) {
                 try {
                     $args[$key] = app($parameter_class);
                 } catch (Throwable $e) {
