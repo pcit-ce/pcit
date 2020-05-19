@@ -6,6 +6,7 @@ namespace PCIT\Coding\Webhooks\Handler;
 
 use PCIT\Coding\Webhooks\Parser\Push as PushParser;
 use PCIT\GPI\Webhooks\Handler\Abstracts\PushAbstract;
+use PCIT\GPI\Webhooks\Handler\DisableHandler;
 
 class Push extends PushAbstract
 {
@@ -14,6 +15,8 @@ class Push extends PushAbstract
     public function handle(string $webhooks_content): void
     {
         $context = PushParser::handle($webhooks_content);
+
+        DisableHandler::handle($context->repo_full_name, $this->git_type);
 
         if ($context->tag ?? null) {
             $this->tag($context);

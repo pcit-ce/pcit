@@ -77,6 +77,11 @@ class Controller
         return json_decode($json, true);
     }
 
+    private static function getWebhooksUrl($gitType)
+    {
+        return config('app.host').'/webhooks/'.$gitType;
+    }
+
     /**
      * 增加 Webhooks，增加之前必须先判断是否已存在，GitHub 除外.
      *
@@ -106,7 +111,7 @@ class Controller
             throw new Exception('Invalid request, must include JSON', 422);
         }
 
-        $webhooksUrl = config('app.host').'/webhooks/'.$gitType;
+        $webhooksUrl = self::getWebhooksUrl($gitType);
 
         $access_token = self::checkAccessToken();
 
@@ -125,6 +130,8 @@ class Controller
 
         try {
             $json = $pcit->repo_webhooks->setWebhooks($data, ...$arg);
+
+            // $webhook_id = json_decode($json)->id ?? null;
         } catch (Exception $e) {
             if (422 === $e->getCode()) {
                 Repo::updateWebhookStatus(1, $gitType, $repo_full_name);
@@ -217,7 +224,7 @@ class Controller
     }
 
     /**
-     * 停止构建，暂时不主动删除 Webhooks.
+     * 禁用构建，暂时不主动删除 Webhooks.
      *
      * @param array $arg
      *
@@ -236,7 +243,7 @@ class Controller
         ];
     }
 
-    public static function codingJson($project, $repo)
+    private static function codingJson($project, $repo)
     {
         $url = config('app.host').'/webhooks/coding';
 
@@ -253,7 +260,7 @@ class Controller
 EOF;
     }
 
-    public static function giteeJson()
+    private static function giteeJson()
     {
         $url = config('app.host').'/webhooks/gitee';
 
@@ -273,7 +280,7 @@ EOF;
 EOF;
     }
 
-    public static function githubJson()
+    private static function githubJson()
     {
         $url = config('app.host').'/webhooks/github';
 

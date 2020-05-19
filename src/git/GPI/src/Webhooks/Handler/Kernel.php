@@ -25,6 +25,11 @@ class Kernel
         (new $class())->handle($webhooks_content);
     }
 
+    public function note(string $webhooks_content, string $git_type): void
+    {
+        $this->ping($webhooks_content, $git_type);
+    }
+
     /**
      * push.
      *

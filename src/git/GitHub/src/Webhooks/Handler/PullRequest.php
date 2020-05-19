@@ -39,10 +39,11 @@ class PullRequest extends PullRequestAbstract
         $internal = $pullRequestContext->internal;
         $pull_request_source = $pullRequestContext->pull_request_source;
         $account = $pullRequestContext->account;
+        $default_branch = $pullRequestContext->repository->default_branch;
 
         $subject = new Subject();
 
-        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name));
+        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch));
 
         $config_array = $subject->register(new GetConfig($rid, $commit_id))->handle()->config_array;
 

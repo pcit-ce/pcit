@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Gitee\Webhooks\Parser;
 
-use PCIT\GitHub\Webhooks\Parser\Push as ParserPush;
+use PCIT\GitHub\Webhooks\Parser\Push as PushParser;
 
-class Push extends ParserPush
+class Push extends PushParser
 {
 }

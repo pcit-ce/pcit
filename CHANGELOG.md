@@ -31,6 +31,10 @@
 
 ## v19.12
 
+### 2020/05/18
+
+* [ ] Coding.net 不支持通过 OAuth 获取的 Token 克隆仓库。
+
 ### 2020/05/13
 
 * [ ] 基于 [tekton](https://github.com/tektoncd/pipeline) 在 Kubernetes 上运行

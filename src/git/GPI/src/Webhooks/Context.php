@@ -17,7 +17,7 @@ abstract class Context implements ContextInterface
 
     public function __get(string $name)
     {
-        return $this->context_array[$name] ?? null;
+        return $this->context_array[$name] ?? (json_decode($this->raw)->$name) ?? null;
     }
 
     public function __set(string $name, $value): void

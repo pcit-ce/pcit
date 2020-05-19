@@ -22,9 +22,10 @@ class Delete
         $ref_type = $context->ref_type;
         $account = $context->account;
         $ref = $context->ref;
+        $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
         if ('branch' === $ref_type) {

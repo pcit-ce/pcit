@@ -29,9 +29,10 @@ class Issues extends IssuesAbstract
         $repo_full_name = $issuesContext->repo_full_name;
         $issue_number = $issuesContext->issue_number;
         $account = $issuesContext->account;
+        $default_branch = $issuesContext->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
         \Log::info('issue #'.$issue_number.' '.$action);
@@ -47,18 +48,19 @@ class Issues extends IssuesAbstract
      */
     public function comment(string $webhooks_content): void
     {
-        $issueCommentContext = \PCIT\GitHub\Webhooks\Parser\Issues::comment($webhooks_content);
+        $context = \PCIT\GitHub\Webhooks\Parser\Issues::comment($webhooks_content);
 
-        $installation_id = $issueCommentContext->installation_id;
-        $rid = $issueCommentContext->rid;
-        $repo_full_name = $issueCommentContext->repo_full_name;
-        $account = $issueCommentContext->account;
+        $installation_id = $context->installation_id;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $account = $context->account;
+        $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
         // pustomize
-        $this->triggerIssueCommentPustomize($issueCommentContext);
+        $this->triggerIssueCommentPustomize($context);
     }
 }

@@ -6,8 +6,9 @@ namespace PCIT\Coding\Service\Repositories;
 
 use Exception;
 use PCIT\Coding\ServiceClientCommon;
+use PCIT\GPI\Service\Repositories\WebhooksClientInterface;
 
-class WebhooksClient
+class WebhooksClient implements WebhooksClientInterface
 {
     use ServiceClientCommon;
 
@@ -46,7 +47,7 @@ class WebhooksClient
      *
      * @throws \Exception
      */
-    public function setWebhooks($data, string $username, string $repo, string $id)
+    public function setWebhooks($data, string $username, string $repo, ?string $id = null)
     {
         $team = $this->getTeamName();
         $data = json_decode($data);
@@ -88,7 +89,7 @@ class WebhooksClient
     }
 
     /**
-     * 获取 webhooks 设置状态
+     * TODO: 获取 webhooks 设置状态
      */
     public function getStatus(string $url, string $username, string $repo_name)
     {

@@ -34,9 +34,10 @@ class Check
         $action = $context->action;
         $account = $context->account;
         $check_suite_id = $context->check_suite_id;
+        $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
         'request' === $action && Build::updateCheckSuiteId((int) $rid, $commit_id, (int) $check_suite_id);
@@ -62,6 +63,7 @@ class Check
         $check_run_id = $context->check_run_id;
         $branch = $context->branch;
         $account = $context->account;
+        $default_branch = $context->repository->default_branch;
 
         if (\in_array($action, ['created', 'updated'], true)) {
             return;
@@ -78,7 +80,7 @@ class Check
         $config_array = json_decode($config, true);
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->register(new Skip(null, (int) $external_id, $branch, $config))
             ->handle();
 

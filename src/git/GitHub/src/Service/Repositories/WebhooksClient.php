@@ -6,8 +6,9 @@ namespace PCIT\GitHub\Service\Repositories;
 
 use Curl\Curl;
 use Exception;
+use PCIT\GPI\Service\Repositories\WebhooksClientInterface;
 
-class WebhooksClient
+class WebhooksClient implements WebhooksClientInterface
 {
     private $api_url;
 
@@ -48,7 +49,9 @@ class WebhooksClient
     }
 
     /**
-     * @return int
+     * 查看 webhooks 是否已经添加（根据 url 判断）.
+     *
+     * @return 1|0
      *
      * @throws \Exception
      */
@@ -83,7 +86,7 @@ class WebhooksClient
      *
      * @throws \Exception
      */
-    public function setWebhooks($data, string $username, string $repo, ?string $id)
+    public function setWebhooks($data, string $username, string $repo, ?string $id = null)
     {
         $url = $this->api_url.'/repos/'.$username.'/'.$repo.'/hooks';
 

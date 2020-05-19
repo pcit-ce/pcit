@@ -22,9 +22,10 @@ class Create
         $repo_full_name = $context->repo_full_name;
         $ref_type = $context->ref_type;
         $account = $context->account;
+        $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name))
+            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
         if ('branch' === $ref_type) {

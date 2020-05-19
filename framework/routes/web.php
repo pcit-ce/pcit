@@ -64,16 +64,16 @@ Route::get('oauth/${git_type}', 'OAuth\IndexController@getAccessToken');
 
 Route::get('{git_type}/logout', 'Profile\LogOut');
 
-/*Admin webhooks: list create delete*/
-Route::post('webhooks/{git_type}/{username}/{repo_name}/{id}', 'Webhooks\Controller@add');
+/*(Test-only)Admin webhooks: list create delete*/
+Route::post('webhooks/{git_type}/{username}/{repo_name}/{id}/add', 'Webhooks\Controller@add');
 
 Route::get('webhooks/{git_type}/{username}/{repo_name}', 'Webhooks\Controller@list');
 
-Route::delete('webhooks/{git_type}/{username}/{repo_name}/{id}', 'Webhooks\Controller@delete');
+Route::delete('webhooks/{git_type}/{username}/{repo_name}/{id}/delete', 'Webhooks\Controller@delete');
 
-Route::post('webhooks/{git_type}/{username}/{repo_name}/{id}/activate', 'Webhooks\Controller@activate');
+Route::post('webhooks/{git_type}/{username}/{repo_name}/activate', 'Webhooks\Controller@activate');
 
-Route::delete('webhooks/{git_type}/{username}/{repo_name}/{id}/deactivate', 'Webhooks\Controller@deactivate');
+Route::delete('webhooks/{git_type}/{username}/{repo_name}/deactivate', 'Webhooks\Controller@deactivate');
 
 /*Webhooks server: receive git webhooks*/
 Route::post('webhooks/${git_type}', 'Webhooks\Server\IndexController');

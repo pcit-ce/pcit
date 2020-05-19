@@ -308,7 +308,7 @@ EOF;
                                           string $repo_full_name,
                                           ?int $insert_admin,
                                           ?int $insert_collaborators,
-                                          string $default_branch = 'master',
+                                          ?string $default_branch = 'master',
                                           $git_type = 'github'): void
     {
         if ($repo_key_id = self::exists($rid, $git_type)) {
@@ -394,6 +394,13 @@ EOF;
         $sql = 'UPDATE repo SET build_activate=? WHERE git_type=? AND repo_full_name=?';
 
         return DB::update($sql, [$build_active, $git_type, $repo_full_name]);
+    }
+
+    public static function isActived(string $repo_full_name, string $git_type): bool
+    {
+        $sql = 'SELECT build_activate FROM repo WHERE git_type=? AND repo_full_name=?';
+
+        return '1' === DB::select($sql, [$git_type, $repo_full_name], true);
     }
 
     /**

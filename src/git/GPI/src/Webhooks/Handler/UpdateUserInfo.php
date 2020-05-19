@@ -16,6 +16,9 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
  */
 class UpdateUserInfo
 {
+    /**
+     * 项目拥有者 组织账号或个人.
+     */
     private $account;
 
     private $installation_id;
@@ -23,6 +26,8 @@ class UpdateUserInfo
     private $rid;
 
     private $repo_full_name;
+
+    private $default_branch;
 
     private $sender_uid;
 
@@ -39,6 +44,7 @@ class UpdateUserInfo
                                 ?int $installation_id,
                                 $rid,
                                 string $repo_full_name,
+                                ?string $default_branch,
                                 Sender $sender = null,
                                 string $git_type = 'github')
     {
@@ -60,8 +66,9 @@ class UpdateUserInfo
     public function handle(): void
     {
         $git_type = $this->git_type;
+        $default_branch = $this->default_branch;
         User::updateUserInfo($this->account, null, null, null, null, null, $git_type);
-        Repo::updateRepoInfo($this->rid, $this->repo_full_name, $this->sender_uid, null, $git_type);
+        Repo::updateRepoInfo($this->rid, $this->repo_full_name, $this->sender_uid, null, $default_branch, $git_type);
 
         if ('github' === $git_type) {
             User::updateInstallationId($this->installation_id, $this->account->username);
