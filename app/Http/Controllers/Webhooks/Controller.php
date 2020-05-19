@@ -195,6 +195,7 @@ class Controller
         $repoFullName = $arg[0].'/'.$arg[1];
 
         Repo::updateBuildActive($status, $gitType, $repoFullName);
+        0 === $status && Repo::updateWebhookStatus($status, $gitType, $repoFullName);
 
         \Cache::store()->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
     }

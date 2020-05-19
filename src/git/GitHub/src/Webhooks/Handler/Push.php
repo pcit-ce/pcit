@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
+use PCIT\GPI\Webhooks\Context\TagContext;
 use PCIT\GPI\Webhooks\Handler\Abstracts\PushAbstract;
 
 class Push extends PushAbstract
@@ -21,14 +22,14 @@ class Push extends PushAbstract
             return;
         }
 
-        $this->handlePush($context);
+        $this->handlePush($context, 'github');
     }
 
     /**
      * @throws \Exception
      */
-    public function tag($context): void
+    public function tag(TagContext $context): void
     {
-        $this->handleTag($context);
+        $this->handleTag($context, 'github');
     }
 }

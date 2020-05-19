@@ -8,6 +8,7 @@ abstract class Context implements ContextInterface
 {
     public $raw;
     public $context_array;
+    public $git_type;
 
     public function __construct(array $context_array, string $raw)
     {

@@ -83,10 +83,10 @@ class GitHubAppChecks
             $status_use_in_title = 'in Progress';
         }
 
-        $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.ucfirst($event_type).' '.$job_env);
+        $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.$event_type.' '.$job_env);
 
         $title = $title ??
-            ucfirst($status_use_in_title).' #'.$build_key_id.'-'.$job_key_id;
+            $status_use_in_title.' #'.$build_key_id.'-'.$job_key_id;
 
         $summary = $summary ??
             'This Repository CI/CD Powered By [PCIT](https://github.com/pcit-ce/pcit)';
@@ -151,7 +151,7 @@ class GitHubAppChecks
         $build_status = Build::getBuildStatusByBuildKeyId($build_key_id);
         $conclusion = self::buildStatus2conclusion($build_status);
 
-        $run_data->name = env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.ucfirst($event_type);
+        $run_data->name = env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.$event_type;
         $run_data->details_url = config('app.host').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
         $run_data->external_id = $build_key_id;
         $conclusion = $run_data->conclusion = $conclusion;

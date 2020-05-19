@@ -77,6 +77,7 @@ class PullRequest
         $pullRequestContext->internal = $internal;
         $pullRequestContext->pull_request_source = $pull_request_source;
         $pullRequestContext->account = new Account($repository_owner, $org);
+        $pullRequestContext->private = $repository->private;
 
         return $pullRequestContext;
     }

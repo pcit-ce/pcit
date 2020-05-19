@@ -122,7 +122,7 @@ class Router
             // 获取参数类型
             $parameter_class = null;
 
-            if($parameter->getType()){
+            if ($parameter->getType()) {
                 $parameter_class = $parameter->getType()->getName();
             }
 

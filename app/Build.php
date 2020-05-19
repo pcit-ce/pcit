@@ -626,6 +626,7 @@ EOF;
                                              string $config,
                                              $internal,
                                              $pull_request_source,
+                                             bool $private,
                                              $git_type = 'github')
     {
         $sql = <<<'EOF'
@@ -634,9 +635,9 @@ INSERT INTO builds(
 git_type,event_type,created_at,action,
 commit_id,commit_message,pull_request_number,
 committer_uid,committer_username,
-branch,rid,config,internal,pull_request_source
+branch,rid,config,internal,pull_request_source,private
 
-) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 
 EOF;
 
@@ -644,7 +645,7 @@ EOF;
                 $git_type, 'pull_request', $event_time, $action,
                 $commit_id, $commit_message, $pull_request_number,
                 $committer_uid, $committer_username,
-                $branch, $rid, $config, $internal, $pull_request_source,
+                $branch, $rid, $config, $internal, $pull_request_source, $private,
             ]
         );
 

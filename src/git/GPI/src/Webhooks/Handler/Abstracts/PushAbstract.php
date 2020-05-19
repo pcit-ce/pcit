@@ -15,8 +15,9 @@ use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
 
 abstract class PushAbstract implements PushInterface
 {
-    public function handlePush(Context $context, string $git_type = 'github'): void
+    public function handlePush(Context $context, string $git_type): void
     {
+        $context->git_type = $git_type;
         $installation_id = $context->installation_id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
@@ -53,8 +54,9 @@ abstract class PushAbstract implements PushInterface
         \Storage::put($git_type.'/events/'.$last_insert_id.'.json', $context->raw);
     }
 
-    public function handleTag(TagContext $context, string $git_type = 'github'): void
+    public function handleTag(TagContext $context, string $git_type): void
     {
+        $context->git_type = $git_type;
         $installation_id = $context->installation_id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;

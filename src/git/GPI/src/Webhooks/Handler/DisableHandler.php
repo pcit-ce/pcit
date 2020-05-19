@@ -18,6 +18,6 @@ class DisableHandler
             return;
         }
 
-        throw new \Exception('🛑This repo not active');
+        throw new \Exception('This repo not active');
     }
 }

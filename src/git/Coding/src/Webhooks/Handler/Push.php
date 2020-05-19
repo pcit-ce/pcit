@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Coding\Webhooks\Handler;
 
 use PCIT\Coding\Webhooks\Parser\Push as PushParser;
+use PCIT\GPI\Webhooks\Context\TagContext;
 use PCIT\GPI\Webhooks\Handler\Abstracts\PushAbstract;
 use PCIT\GPI\Webhooks\Handler\DisableHandler;
 
@@ -27,7 +28,7 @@ class Push extends PushAbstract
         $this->handlePush($context, $this->git_type);
     }
 
-    public function tag($context): void
+    public function tag(TagContext $context): void
     {
         $this->handleTag($context, $this->git_type);
     }

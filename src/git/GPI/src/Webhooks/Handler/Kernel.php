@@ -89,6 +89,11 @@ class Kernel
         (new $class())->handle($webhooks_content);
     }
 
+    public function merge(string $webhooks_content, string $git_type): void
+    {
+        $this->pull_request($webhooks_content, $git_type);
+    }
+
     /**
      * Do Nothing.
      */
