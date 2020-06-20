@@ -24,7 +24,7 @@ trait ServiceClientCommon
      *
      * @throws \Exception
      */
-    private function successOrFailure(int $http_code, bool $throw = false): void
+    public function successOrFailure(int $http_code, bool $throw = false): void
     {
         $http_return_code = $this->curl->getCode();
 
@@ -34,7 +34,7 @@ trait ServiceClientCommon
             return;
         }
 
-        \Log::debug($message);
+        \Log::emergency($message);
 
         if ($throw) {
             throw new \Exception($message);

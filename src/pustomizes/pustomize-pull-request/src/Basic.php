@@ -18,7 +18,7 @@ class Basic implements BasicInterface
     {
         $this->context = $context;
 
-        if ('opened' !== $context->action) {
+        if (!\in_array($context->action, ['opened', 'open'])) {
             return;
         }
 
@@ -40,7 +40,7 @@ EOF;
 
     private function sendComment(string $comment_body): void
     {
-        (new PCIT(['github_access_token' => GetAccessToken::getGitHubAppAccessToken($this->context->rid)]))
+        (new PCIT([$this->context->git_type.'_access_token' => GetAccessToken::byRid($this->context->rid, $this->context->git_type)]))
             ->issue_comments
             ->create(
                 $this->context->repo_full_name,

@@ -6,6 +6,7 @@ namespace PCIT\Pustomize\Issue;
 
 use App\GetAccessToken;
 use PCIT\GPI\Webhooks\Context\IssuesContext;
+use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\Issue\BasicInterface;
 
 class Basic implements BasicInterface
@@ -18,16 +19,16 @@ class Basic implements BasicInterface
 
     public function handle(IssuesContext $context): void
     {
-        if ('opened' !== $context->action) {
+        if (!\in_array($context->action, ['opened', 'open'])) {
             return;
         }
 
         $this->context = $context;
 
-        $accessToken = GetAccessToken::getGitHubAppAccessToken($this->context->rid);
+        $accessToken = GetAccessToken::byRepoFullName($context->repo_full_name, null, $context->git_type);
 
         /* @var \PCIT\PCIT $pcit */
-        $this->pcit = app('pcit')->setAccessToken($accessToken);
+        $this->pcit = new PCIT([], $context->git_type, $accessToken);
 
         $body = <<<EOF
 You can writing some word in a comment to trigger action:
@@ -43,7 +44,7 @@ EOF;
     {
         $this->pcit->issue_comments->create(
             $this->context->repo_full_name,
-            (int) $this->context->issue_number,
+            $this->context->issue_number,
             $body
         );
     }
@@ -52,7 +53,7 @@ EOF;
     {
         $this->pcit->issue->translateTitle(
             $this->context->repo_full_name,
-            (int) $this->context->issue_number,
+            $this->context->issue_number,
             (int) $this->context->rid,
             $this->context->title,
         );

@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Service\Issue;
 
 use Curl\Curl;
-use Exception;
+use PCIT\GitHub\Service\ClientCommon;
 use PCIT\GPI\Service\Issue\ClientInterface;
 use TencentAI\TencentAI;
 
-class Client implements ClientInterface
+class Client extends ClientCommon implements ClientInterface
 {
     /**
      * @var Curl
      */
-    private $curl;
+    protected $curl;
 
     /**
      * @var string
      */
-    private $api_url;
+    protected $api_url;
 
     private $header = [
         'Accept' => 'application/vnd.github.machine-man-preview+json;
@@ -70,7 +70,7 @@ class Client implements ClientInterface
      *
      * @throws \Exception
      */
-    public function getSingle(string $repo_full_name, int $issue_number)
+    public function getSingle(string $repo_full_name, $issue_number)
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number;
 
@@ -98,13 +98,7 @@ class Client implements ClientInterface
             'title', 'body', 'milestone', 'labels', 'assignees'
         ))), $this->header);
 
-        $http_return_code = $this->curl->getCode();
-
-        if (201 !== $http_return_code) {
-            \Log::debug('Http Return Code Is Not 201 '.$http_return_code);
-
-            throw new Exception('Create Issue Error', $http_return_code);
-        }
+        $this->successOrFailure(201, true);
     }
 
     /**
@@ -123,7 +117,7 @@ class Client implements ClientInterface
      * @throws \Exception
      */
     public function edit(string $repo_full_name,
-                         int $issue_number,
+                         $issue_number,
                          string $title = null,
                          string $body = null,
                          string $state = null,
@@ -137,13 +131,7 @@ class Client implements ClientInterface
             'title', 'body', 'state', 'milestone', 'labels', 'assignees'
         ))), $this->header);
 
-        $http_return_code = $this->curl->getCode();
-
-        if (200 !== $http_return_code) {
-            \Log::info('Http Return Code Is Not 200 '.$http_return_code);
-
-            throw new Exception('Edit Issue Error '.$http_return_code);
-        }
+        $this->successOrFailure(200, true);
     }
 
     /**
@@ -156,7 +144,7 @@ class Client implements ClientInterface
      *
      * @throws \Exception
      */
-    public function lock(string $repo_full_name, int $issue_number, string $lock_reason = null): void
+    public function lock(string $repo_full_name, $issue_number, string $lock_reason = null): void
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/lock';
 
@@ -176,13 +164,7 @@ class Client implements ClientInterface
                 application/vnd.github.sailor-v-preview+json']);
         }
 
-        $http_return_code = $this->curl->getCode();
-
-        if (204 !== $http_return_code) {
-            \Log::debug('Http Return Code Is Not 204 '.$http_return_code);
-
-            throw new Exception('Lock Issue Error', $http_return_code);
-        }
+        $this->successOrFailure(204, true);
     }
 
     /**
@@ -190,19 +172,13 @@ class Client implements ClientInterface
      *
      * @throws \Exception
      */
-    public function unlock(string $repo_full_name, int $issue_number): void
+    public function unlock(string $repo_full_name, $issue_number): void
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/lock';
 
         $this->curl->delete($url);
 
-        $http_return_code = $this->curl->getCode();
-
-        if (204 !== $http_return_code) {
-            \Log::debug('Http Return Code Is Not 204 '.$http_return_code);
-
-            throw new Exception('Unlock Issue Error', $http_return_code);
-        }
+        $this->successOrFailure(204, true);
     }
 
     /**
@@ -210,7 +186,7 @@ class Client implements ClientInterface
      *
      * @throws \Exception
      */
-    public function timeline(string $repo_full_name, int $issue_number)
+    public function timeline(string $repo_full_name, $issue_number)
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/timeline';
 
@@ -231,7 +207,7 @@ class Client implements ClientInterface
      */
     public function translateTitle(
         string $repo_full_name,
-        int $issue_number,
+        $issue_number,
         ?int $rid,
         ?string $title
     ): void {

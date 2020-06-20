@@ -35,7 +35,6 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
  * @property Author       $author
  * @property Committer    $committer
  * @property Account      $account
- * @property bool         $private
  */
 class PushContext extends Context
 {

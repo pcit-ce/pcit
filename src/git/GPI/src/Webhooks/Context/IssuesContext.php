@@ -12,7 +12,7 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
  * @property int                                                                                                             $rid
  * @property string                                                                                                          $repo_full_name
  * @property int                                                                                                             $issue_id
- * @property int                                                                                                             $issue_number
+ * @property int|string                                                                                                      $issue_number
  * @property string                                                                                                          $title
  * @property string                                                                                                          $body
  * @property int                                                                                                             $sender_uid

@@ -24,14 +24,13 @@ class Comment implements CommentInterface
 
         $body = strtolower($context->body);
 
-        if ('created' !== $context->action) {
+        if (!\in_array($context->action, ['created', 'comment'])) {
             return;
         }
 
-        $this->pcit = app(PCIT::class)->setGitType('github')
-            ->setAccessToken(GetAccessToken::getGitHubAppAccessToken(
-                null,
-                $this->context->repo_full_name
+        $this->pcit = new PCIT([], $context->git_type, GetAccessToken::byRid(
+                $context->rid,
+                $context->git_type
             ));
 
         if ('/translate-title' === $body) {

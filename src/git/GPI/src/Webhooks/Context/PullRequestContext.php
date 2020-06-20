@@ -19,7 +19,6 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
  * @property string                                                                                                                                        $pull_request_number
  * @property string                                                                                                                                        $branch
  * @property string                                                                                                                                        $internal
- * @property bool                                                                                                                                          $private
  * @property string                                                                                                                                        $pull_request_source
  * @property Account                                                                                                                                       $account
  * @property "assigned"|"unassigned"|"review_requested"|"review_request_removed"|"labeled"|"unlabeled"|"opened"|"synchronize"|"edited"|"closed"|"reopened" $action

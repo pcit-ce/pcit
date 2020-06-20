@@ -14,9 +14,9 @@ class GetAccessToken
      *
      * @throws \Exception
      */
-    public static function byRid(int $rid)
+    public static function byRid(int $rid, string $git_type = 'github')
     {
-        return self::byRepoFullName(null, $rid);
+        return self::byRepoFullName(null, $rid, $git_type);
     }
 
     /**
@@ -26,6 +26,10 @@ class GetAccessToken
      */
     public static function byRepoFullName(?string $repo_full_name, ?int $rid = null, string $git_type = 'github')
     {
+        if ('github' === $git_type) {
+            return self::getGitHubAppAccessToken($rid, $repo_full_name);
+        }
+
         if ($rid) {
             $sql = 'SELECT repo_admin FROM repo WHERE rid=? AND git_type=? LIMIT 1';
         } else {

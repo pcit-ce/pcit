@@ -157,6 +157,7 @@ class PCIT extends Container
                     'Authorization' => 'token '.$this['config']['github']['access_token'],
                     'Accept' => 'application/vnd.github.machine-man-preview+json;
                     application/vnd.github.speedy-preview+json',
+                    'Content-Type' => 'application/json',
                 ],
             ];
         } elseif ($this['config']['gitee']['access_token'] ?? false) {

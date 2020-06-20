@@ -6,15 +6,16 @@ namespace PCIT\GitHub\Service\Issue;
 
 use Curl\Curl;
 use Exception;
+use PCIT\GitHub\Service\ClientCommon;
 
-class CommentsClient
+class CommentsClient extends ClientCommon
 {
     /**
      * @var Curl
      */
-    private $curl;
+    protected $curl;
 
-    private $api_url;
+    protected $api_url;
 
     /**
      * @var \TencentAI\TencentAI
@@ -40,18 +41,14 @@ class CommentsClient
      * @throws \Exception
      */
     public function create(string $repo_full_name,
-                           int $issue_number,
+                           $issue_number,
                            string $body)
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
 
         $output = $this->curl->post($url, json_encode(compact('body')));
 
-        $http_return_code = $this->curl->getCode();
-
-        if (201 !== $http_return_code) {
-            \Log::info('Http Return Code is not 201 '.$http_return_code);
-        }
+        $this->successOrFailure(201);
 
         return $output;
     }
@@ -109,13 +106,7 @@ class CommentsClient
 
         $this->curl->patch($url, json_encode(compact('body')));
 
-        $http_return_code = $this->curl->getCode();
-
-        if (200 !== $http_return_code) {
-            \Log::debug('Http Return Code is not 200 '.$http_return_code);
-
-            throw new Exception('Edit Issue comment Error', $http_return_code);
-        }
+        $this->successOrFailure(200, true);
     }
 
     /**

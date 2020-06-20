@@ -22,7 +22,6 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
  * @property Committer $committer
  * @property Account   $account
  * @property Sender    $sender
- * @property bool      $private
  */
 class TagContext extends Context
 {

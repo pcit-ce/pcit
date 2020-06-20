@@ -16,7 +16,6 @@ class Push extends PushAbstract
     public function handle(string $webhooks_content): void
     {
         $context = PushParser::handle($webhooks_content);
-        $context->git_type = $this->git_type;
 
         DisableHandler::handle($context->repo_full_name, $this->git_type);
 

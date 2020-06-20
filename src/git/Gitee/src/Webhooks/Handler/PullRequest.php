@@ -14,7 +14,6 @@ class PullRequest extends PullRequestAbstract
     public function handle(string $webhooks_content): void
     {
         $context = PullRequestParser::handle($webhooks_content);
-        $context->git_type = $this->git_type;
 
         $this->handlePullRequest($context, $this->git_type);
     }

@@ -27,7 +27,7 @@ class Kernel
 
     public function note(string $webhooks_content, string $git_type): void
     {
-        $this->ping($webhooks_content, $git_type);
+        $this->issue_comment($webhooks_content, $git_type);
     }
 
     /**
@@ -49,17 +49,17 @@ class Kernel
     }
 
     /**
-     *  "assigned", "unassigned",
-     *  "labeled",  "unlabeled",
-     *  "opened",   "edited", "closed" or "reopened"
-     *  "milestoned", "demilestoned".
-     *
      * @throws \Exception
      */
     public function issues(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'Issues';
         (new $class())->handle($webhooks_content);
+    }
+
+    public function issue(string $webhooks_content, string $git_type): void
+    {
+        $this->issues($webhooks_content, $git_type);
     }
 
     /**
