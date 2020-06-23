@@ -27,6 +27,8 @@ class CI
 
     const GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED = 'cancelled'; // web-canceled web-errored ico-error
 
+    const GITHUB_CHECK_SUITE_CONCLUSION_SKIPPED = 'skipped';
+
     const GITHUB_CHECK_SUITE_CONCLUSION_TIMED_OUT = 'timed_out';
 
     // 需要注意，有意外情况.

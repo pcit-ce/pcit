@@ -145,7 +145,7 @@ class GitHubAppChecks
         ]);
 
         // 更新 PCIT / EVENT_TYPE 状态
-        // eg: PCIT / Push
+        // eg: PCIT / push
         // 获取 build 状态
 
         $build_status = Build::getBuildStatusByBuildKeyId($build_key_id);

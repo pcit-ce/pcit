@@ -645,7 +645,7 @@ EOF;
                 $git_type, 'pull_request', $event_time, $action,
                 $commit_id, $commit_message, $pull_request_number,
                 $committer_uid, $committer_username,
-                $branch, $rid, $config, $internal, $pull_request_source, $private,
+                $branch, $rid, $config, $internal, $pull_request_source, true === $private ? 1 : 0,
             ]
         );
 
