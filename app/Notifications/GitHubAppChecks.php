@@ -80,7 +80,7 @@ class GitHubAppChecks
         $status_use_in_title = $status;
 
         if (CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS === $status) {
-            $status_use_in_title = 'in Progress';
+            $status_use_in_title = 'In progress';
         }
 
         $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.$event_type.' '.$job_env);
