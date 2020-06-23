@@ -77,16 +77,19 @@ class GitHubAppChecks
 
         $status = $status ?? CI::GITHUB_CHECK_SUITE_STATUS_QUEUED;
 
-        $status_use_in_title = $status;
+        if ($conclusion) {
+            $title_prefix = 'Build '.ucfirst($conclusion);
+        } else {
+            $title_prefix = $status;
 
-        if (CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS === $status) {
-            $status_use_in_title = 'In progress';
+            if (CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS === $status) {
+                $title_prefix = 'In progress';
+            }
         }
 
         $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.$event_type.' '.$job_env);
 
-        $title = $title ??
-            $status_use_in_title.' #'.$build_key_id.'-'.$job_key_id;
+        $title = $title ?? $title_prefix.' #'.$build_key_id.'-'.$job_key_id;
 
         $summary = $summary ??
             'This Repository CI/CD Powered By [PCIT](https://github.com/pcit-ce/pcit)';
