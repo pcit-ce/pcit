@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Runner\Tests\Events;
 
 use JsonSchema\Constraints\BaseConstraint;
-use PCIT\Runner\Client;
+use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Events\Services;
 use PCIT\Support\CacheKey;
 use Symfony\Component\Yaml\Yaml;
@@ -26,7 +26,7 @@ services:
 EOF;
         $services = BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml)['services']);
 
-        (new Services($services, 1, new Client(), []))->handle();
+        (new Services($services, 1, new JobGenerator(), []))->handle();
 
         $result = \Cache::store()->hget(CacheKey::serviceHashKey(1), 'mysql');
 
@@ -49,7 +49,7 @@ services:
 EOF;
         $services = BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml)['services']);
 
-        (new Services($services, 1, new Client(), []))->handle();
+        (new Services($services, 1, new jobGenerator(), []))->handle();
 
         $result = \Cache::store()->hget(CacheKey::serviceHashKey(1), 'mysql');
 
@@ -68,11 +68,11 @@ services:
 EOF;
         $services = BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml)['services']);
 
-        $client = new Client();
-        $client->system_env = ['K=V'];
-        $client->system_job_env = ['K1=v1'];
+        $jobGenerator = new JobGenerator();
+        $jobGenerator->system_env = ['K=V'];
+        $jobGenerator->system_job_env = ['K1=v1'];
 
-        (new Services($services, 1, $client, ['K2' => 'v2']))->handle();
+        (new Services($services, 1, $jobGenerator, ['K2' => 'v2']))->handle();
 
         $result = \Cache::store()->hget(CacheKey::serviceHashKey(1), 'mysql');
 

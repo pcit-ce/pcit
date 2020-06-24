@@ -1,7 +1,7 @@
 # WebHooks
 
 * https://developer.github.com/webhooks/
-* https://developer.github.com/v3/activity/events/types/
+* https://developer.github.com/webhooks/event-payloads/
 
 ## Handler
 

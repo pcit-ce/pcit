@@ -83,7 +83,7 @@ class Server extends Kernel
 
         try {
             // 处理 build 生成 jobs
-            $this->pcit->runner->handle($buildData);
+            $this->pcit->runner_job_generator->handle($buildData);
         } catch (\Throwable $e) {
             \Log::emergency($e->__toString(), ['message' => $e->getMessage(), 'code' => $e->getCode()]);
         }

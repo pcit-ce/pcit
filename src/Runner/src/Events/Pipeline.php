@@ -8,7 +8,7 @@ use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\CIDefault\Commands;
 use PCIT\Runner\CIDefault\Image;
-use PCIT\Runner\Client as Runner;
+use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Conditional\Branch;
 use PCIT\Runner\Conditional\Event;
 use PCIT\Runner\Conditional\Matrix;
@@ -32,7 +32,7 @@ class Pipeline
 
     public $build;
 
-    public $client;
+    public $jobGenerator;
 
     private $cache;
 
@@ -43,19 +43,19 @@ class Pipeline
     /**
      * Pipeline constructor.
      *
-     * @param            $pipeline
-     * @param BuildData  $build
-     * @param Runner     $client
-     * @param array|null $matrix_config ['k'=>'v']
+     * @param              $pipeline
+     * @param BuildData    $build
+     * @param JobGenerator $jobGenerator
+     * @param array|null   $matrix_config ['k'=>'v']
      *
      * @throws \Exception
      */
-    public function __construct($pipeline, ?BuildData $build, ?Runner $client, ?array $matrix_config)
+    public function __construct($pipeline, ?BuildData $build, ?JobGenerator $jobGenerator, ?array $matrix_config)
     {
         $this->pipeline = $pipeline;
         $this->matrix_config = $matrix_config;
         $this->build = $build;
-        $this->client = $client;
+        $this->jobGenerator = $jobGenerator;
         $this->cache = \Cache::store();
         $this->pluginHandler = new PluginHandler();
     }
@@ -128,15 +128,15 @@ class Pipeline
         $envHandler = new EnvHandler();
         $pipelineEnv = $envHandler->handle($pipelineEnv, array_merge(
             $step_system_env,
-            $this->client->system_env,
-            $this->client->system_job_env,
+            $this->jobGenerator->system_env,
+            $this->jobGenerator->system_job_env,
             )
         );
 
         $preEnv = array_merge(
             $step_system_env,
-            $this->client->system_env,
-            $this->client->system_job_env,
+            $this->jobGenerator->system_env,
+            $this->jobGenerator->system_job_env,
             $pipelineEnv
         );
 
@@ -178,10 +178,10 @@ class Pipeline
          */
         $docker_container = app(PCIT::class)->docker->container;
 
-        $jobId = $this->client->job_id;
-        $workdir = $this->client->workdir;
-        $this->language = $language = $this->client->language ?? 'php';
-        $hosts = $this->client->networks->hosts ?? [];
+        $jobId = $this->jobGenerator->job_id;
+        $workdir = $this->jobGenerator->workdir;
+        $this->language = $language = $this->jobGenerator->language ?? 'php';
+        $hosts = $this->jobGenerator->networks->hosts ?? [];
 
         // custome github.com hosts
         if (env('CI_GITHUB_HOST')) {
@@ -194,7 +194,7 @@ class Pipeline
             \Log::emergency("🔄Handle step $step ...");
 
             $image = $pipelineContent->image
-                ?? $this->client->image
+                ?? $this->jobGenerator->image
                 ?? Image::get($language);
             $commands = $this->handleCommands($step, $pipelineContent);
             $env = $pipelineContent->env ?? [];

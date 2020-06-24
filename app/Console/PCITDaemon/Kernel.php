@@ -8,6 +8,9 @@ use PCIT\PCIT;
 
 abstract class Kernel
 {
+    /**
+     * @var \PCIT\PCIT
+     */
     public $pcit;
 
     public function __construct()

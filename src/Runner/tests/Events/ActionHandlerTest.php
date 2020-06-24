@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Runner\Client;
+use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Events\ActionHandler;
 use PCIT\Runner\Events\Pipeline;
 use PHPUnit\Framework\TestCase;
@@ -14,9 +14,9 @@ class ActionHandlerTest extends TestCase
     public function test_actionsHandler(): void
     {
         $pipeline = null;
-        $client = new Client();
-        $client->job_id = 1;
-        $step = new Pipeline($pipeline, null, $client, null);
+        $jobGenerator = new JobGenerator();
+        $jobGenerator->job_id = 1;
+        $step = new Pipeline($pipeline, null, $jobGenerator, null);
         $actionHandler = new ActionHandler($step);
         $result = $actionHandler->handle(
             'actions', 'github://actions/checkout@master'
@@ -29,9 +29,9 @@ class ActionHandlerTest extends TestCase
     public function test_actionsHandler_with_path(): void
     {
         $pipeline = null;
-        $client = new Client();
-        $client->job_id = 1;
-        $step = new Pipeline($pipeline, null, $client, null);
+        $jobGenerator = new JobGenerator();
+        $jobGenerator->job_id = 1;
+        $step = new Pipeline($pipeline, null, $jobGenerator, null);
         $actionHandler = new ActionHandler($step);
 
         $result = $actionHandler->handle(
