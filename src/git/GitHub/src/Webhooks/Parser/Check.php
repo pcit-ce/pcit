@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
+use PCIT\Framework\Support\Date;
 use PCIT\GPI\Webhooks\Context\CheckRunContext;
 use PCIT\GPI\Webhooks\Context\CheckSuiteContext;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 class Check
 {
@@ -35,7 +39,7 @@ class Check
         $branch = $check_suite->head_branch;
         $commit_id = $check_suite->head_sha;
 
-        $org = $obj->organization ? true : false;
+        $org = ($obj->organization ?? false) ? true : false;
 
         $context = new CheckSuiteContext([], $webhooks_content);
 
@@ -45,8 +49,21 @@ class Check
         $context->action = $action;
         $context->branch = $branch;
         $context->commit_id = $commit_id;
+        $context->commit_message = $check_suite->head_commit->message;
         $context->check_suite_id = $check_suite_id;
         $context->account = new Account($repository_owner, $org);
+        $context->ref = 'refs/heads/'.$branch;
+        $context->base_ref = '';
+        $context->forced = false;
+        $context->before = $check_suite->before;
+        $context->after = $check_suite->after;
+        $context->compare = 'https://github.com/'.$repo_full_name.'/compare/'.$context->before.'...'.$context->after;
+        $context->head_commit = $check_suite->head_commit;
+        $context->event_time = Date::parse($check_suite->head_commit->timestamp);
+        $context->author = new Author($check_suite->head_commit->author);
+        $context->committer = new Committer($check_suite->head_commit->committer);
+        $context->sender = new Sender($obj->sender);
+        $context->private = $repository->private;
 
         return $context;
     }

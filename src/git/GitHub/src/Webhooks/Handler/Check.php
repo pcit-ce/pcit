@@ -6,24 +6,29 @@ namespace PCIT\GitHub\Webhooks\Handler;
 
 use App\Events\Build;
 use App\Job;
+use PCIT\GPI\Webhooks\Handler\Abstracts\CheckAbstract;
 use PCIT\GPI\Webhooks\Handler\Subject;
 use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
 use PCIT\Runner\Client as JobGenerator;
 
-class Check
+class Check extends CheckAbstract
 {
     /**
      * completed.
      *
-     * requested 用户推送分支
+     * requested: when new code is pushed to the app's repository
      *
-     * rerequested 用户点击了重新运行按钮
+     * rerequested: re-run the entire check suite
      *
      * @throws \Exception
      */
     public function suite(string $webhooks_content): void
     {
         $context = \PCIT\GitHub\Webhooks\Parser\Check::suite($webhooks_content);
+
+        if (!\in_array($context->action, ['requested'])) {
+            return;
+        }
 
         $installation_id = $context->installation_id;
         $rid = $context->rid;
@@ -39,7 +44,15 @@ class Check
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
-        // 'request' === $action && Build::updateCheckSuiteId((int) $rid, $commit_id, (int) $check_suite_id);
+        if ('requested' === $action) {
+            if ($context->check_suite->pull_requests) {
+            } else {
+                $this->handlePush($context, 'github');
+            }
+
+            return;
+        }
+
         // 'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
     }
 
@@ -54,6 +67,10 @@ class Check
     {
         $context = \PCIT\GitHub\Webhooks\Parser\Check::run($webhooks_content);
 
+        if (!\in_array($context->action, ['rerequested'], true)) {
+            return;
+        }
+
         $installation_id = $context->installation_id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
@@ -65,10 +82,6 @@ class Check
         $branch = $context->branch;
         $account = $context->account;
         $default_branch = $context->repository->default_branch;
-
-        if (!\in_array($action, ['rerequested'], true)) {
-            return;
-        }
 
         // 用户点击了某一 run 的 Re-run
         if ('rerequested' === $action) {

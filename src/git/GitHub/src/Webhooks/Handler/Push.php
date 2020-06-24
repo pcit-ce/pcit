@@ -22,6 +22,8 @@ class Push extends PushAbstract
             return;
         }
 
+        return;
+
         $this->handlePush($context, 'github');
     }
 
@@ -30,6 +32,11 @@ class Push extends PushAbstract
      */
     public function tag(TagContext $context): void
     {
+        // tag 删除也会触发 push 事件
+        if ('0000000000000000000000000000000000000000' === $context->commit_id) {
+            return;
+        }
+
         $this->handleTag($context, 'github');
     }
 }
