@@ -12,6 +12,10 @@ class PullRequest extends PullRequestAbstract
     {
         $context = \PCIT\GitHub\Webhooks\Parser\PullRequest::handle($webhooks_content);
 
+        if (!\in_array($context->action, ['opened', 'synchronize'])) {
+            return;
+        }
+
         $this->handlePullRequest($context, 'github');
     }
 }

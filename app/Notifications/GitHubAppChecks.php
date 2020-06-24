@@ -87,6 +87,8 @@ class GitHubAppChecks
             }
         }
 
+        $title_prefix = str_replace('_', ' ', $title_prefix);
+
         $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.$event_type.' '.$job_env);
 
         $title = $title ?? $title_prefix.' #'.$build_key_id.'-'.$job_key_id;
