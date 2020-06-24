@@ -209,8 +209,7 @@ class Client
 
         Job::updateEnv($job_id, json_encode($matrix_config));
 
-        (new Queued($this->job_id, $this->build->config, null, $this->language, 'Linux', $this->build->git_type))
-        ->handle();
+        $this->changeJobToQueued();
 
         $build_key_id = (int) $this->build->build_key_id;
 
@@ -242,5 +241,13 @@ class Client
             ->handle();
 
         \Log::emergency('===== Generate Job Success =====', ['job_id' => $this->job_id]);
+    }
+
+    public function changeJobToQueued(): void
+    {
+        (new Queued($this->job_id, $this->build->config, null, $this->language, 'Linux', $this->build->git_type))
+        ->handle();
+
+        Job::updateBuildStatus($this->job_id, CI::GITHUB_CHECK_SUITE_STATUS_QUEUED);
     }
 }

@@ -70,5 +70,50 @@
   },
   {
     "source": "pcit/frontend:master"
+  },
+  {
+    "source": "pcit/npm"
+  },
+  {
+    "source": "pcit/git"
+  },
+  {
+    "source": "pcit/pages"
+  },
+  {
+    "source": "pcit/demo"
+  },
+  {
+    "source": "pcit/qiniu"
+  },
+  {
+    "source": "pcit/tencent-cos:v5"
+  },
+  {
+    "source": "pcit/s3"
+  },
+  {
+    "source": "pcit/vuepress"
+  },
+  {
+    "source": "pcit/github-release"
+  },
+  {
+    "source": "pcit/gitee-release"
+  },
+  {
+    "source": "pcit/docker"
+  },
+  {
+    "source": "pcit/deno"
+  },
+  {
+    "source": "pcit/actions-downloader"
+  },
+  {
+    "source": "pcit/toolkit"
+  },
+  {
+    "source": "pcit/codecov"
   }
 ]

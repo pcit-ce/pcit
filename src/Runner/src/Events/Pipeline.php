@@ -32,6 +32,9 @@ class Pipeline
 
     public $build;
 
+    /**
+     * @var JobGenerator
+     */
     public $jobGenerator;
 
     private $cache;

@@ -82,7 +82,7 @@ class ActionHandler
     {
         $step .= '_actions_downloader';
         $workdir = '/var/run/actions/'.$repo;
-        $jobId = $this->step->client->job_id;
+        $jobId = $this->step->jobGenerator->job_id;
         $env = [
             'INPUT_REPO='.$repo,
             'INPUT_REF='.$ref,

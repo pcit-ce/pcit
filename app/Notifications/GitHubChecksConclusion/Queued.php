@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Notifications\GitHubChecksConclusion;
 
-use App\Job;
 use App\Notifications\GitHubAppChecks;
 use PCIT\Support\CI;
 
@@ -48,8 +47,8 @@ EOF;
             $job_key_id,
             null,
             CI::GITHUB_CHECK_SUITE_STATUS_QUEUED,
-            (int) Job::getStartAt($job_key_id),
-            (int) Job::getFinishedAt($job_key_id),
+            null,
+            null,
             null,
             null,
             null,

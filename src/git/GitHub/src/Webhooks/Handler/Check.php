@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-use App\Build;
+use App\Events\Build;
 use App\Job;
-use App\Notifications\GitHubAppChecks;
-use PCIT\GPI\Webhooks\Handler\Skip;
 use PCIT\GPI\Webhooks\Handler\Subject;
 use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
+use PCIT\Runner\Client as JobGenerator;
 
 class Check
 {
@@ -40,12 +39,14 @@ class Check
             ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
-        'request' === $action && Build::updateCheckSuiteId((int) $rid, $commit_id, (int) $check_suite_id);
-        'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
+        // 'request' === $action && Build::updateCheckSuiteId((int) $rid, $commit_id, (int) $check_suite_id);
+        // 'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
     }
 
     /**
      * created updated rerequested requested_action.
+     *
+     * rerequested 用户点击了重新运行(Re-run)按钮
      *
      * @throws \Exception
      */
@@ -65,29 +66,20 @@ class Check
         $account = $context->account;
         $default_branch = $context->repository->default_branch;
 
-        if (\in_array($action, ['created', 'updated'], true)) {
+        if (!\in_array($action, ['rerequested'], true)) {
             return;
         }
 
-        // 用户点击了某一 run 的 re-run
-        'rerequested' === $action && Job::updateBuildStatus($external_id, 'pending');
+        // 用户点击了某一 run 的 Re-run
+        if ('rerequested' === $action) {
+            $build_id = Job::getBuildKeyId((int) $external_id);
+
+            (new JobGenerator())->handle((new Build())->handle($build_id), (int) $external_id);
+
+            return;
+        }
 
         // 用户点击了按钮，CI 推送修复补丁
         // 'requested_action' === $action &&
-
-        $config = Build::getConfig((int) $external_id);
-
-        $config_array = json_decode($config, true);
-
-        (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
-            ->register(new Skip(null, (int) $external_id, $branch, $config))
-            ->handle();
-
-        if ($config_array) {
-            Build::updateBuildStatus((int) $external_id, 'pending');
-        }
-
-        GitHubAppChecks::send((int) $external_id);
     }
 }
