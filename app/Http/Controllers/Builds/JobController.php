@@ -153,7 +153,11 @@ class JobController
 
         $build = (new \App\Events\Build())->handle($buildId);
 
-        app(PCIT::class)->runner->handle($build, (int) $job_id);
+        /**
+         * @var \PCIT\PCIT
+         */
+        $pcit = app(PCIT::class);
+        $pcit->runner_job_generator->handle($build, (int) $job_id);
 
         // 删除 s3 中的log
         (new LogController())->deleteStoreInS3($job_id);

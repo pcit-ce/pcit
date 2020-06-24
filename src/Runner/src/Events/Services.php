@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use PCIT\PCIT;
-use PCIT\Runner\Client;
+use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Support\CacheKey;
@@ -18,16 +18,16 @@ class Services
 
     private $matrix_config;
 
-    private $client;
+    private $jobGenerator;
 
     /**
      * @param array|null $matrix_config ['k'=>'v']
      */
-    public function __construct($service, int $job_id, Client $client, ?array $matrix_config)
+    public function __construct($service, int $job_id, JobGenerator $jobGenerator, ?array $matrix_config)
     {
         $this->service = $service;
         $this->job_id = $job_id;
-        $this->client = $client;
+        $this->jobGenerator = $jobGenerator;
         $this->matrix_config = $matrix_config;
     }
 
@@ -72,8 +72,8 @@ class Services
             }
 
             $system_env = array_merge(
-                $this->client->system_env,
-                $this->client->system_job_env,
+                $this->jobGenerator->system_env,
+                $this->jobGenerator->system_job_env,
                 $envHandler->obj2array($this->matrix_config),
             );
 

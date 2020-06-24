@@ -80,7 +80,7 @@ class GitHubAppChecks
         if ($conclusion) {
             $title_prefix = 'Build '.ucfirst($conclusion);
         } else {
-            $title_prefix = $status;
+            $title_prefix = ucfirst($status);
 
             if (CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS === $status) {
                 $title_prefix = 'In progress';

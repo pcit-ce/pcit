@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace PCIT\Runner;
 
+use PCIT\Runner\Client as JobGenerator;
+
 class SystemEnv
 {
     public $build;
 
-    public $client;
+    public $jobGenerator;
 
     /**
      * @var array<string> ['k=v']
      */
     public $env;
 
-    public function __construct(BuildData $build, Client $client)
+    public function __construct(BuildData $build, JobGenerator $jobGenerator)
     {
         $this->build = $build;
-        $this->client = $client;
+        $this->jobGenerator = $jobGenerator;
     }
 
     /**
@@ -37,7 +39,7 @@ class SystemEnv
             'CONTINUOUS_INTEGRATION=true',
             'PCIT_BRANCH='.$this->build->branch,
             'PCIT_TAG='.$this->build->tag,
-            'PCIT_BUILD_DIR='.$this->client->workdir,
+            'PCIT_BUILD_DIR='.$this->jobGenerator->workdir,
             'PCIT_BUILD_ID='.$build_id,
             "PCIT_BUILD_WEB_URL=${ci_host}/$gitType/$repo_full_name/builds/$build_id",
             'PCIT_COMMIT='.$this->build->commit_id,
@@ -65,7 +67,7 @@ class SystemEnv
             );
         }
 
-        $system_env = array_merge($system_env, $this->client->system_env);
+        $system_env = array_merge($system_env, $this->jobGenerator->system_env);
 
         \Log::emergency('📐generate system env', $system_env);
 
