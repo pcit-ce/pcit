@@ -9,6 +9,8 @@ use App\User;
 
 class Installation
 {
+    public $git_type = 'github';
+
     /**
      * created 用户点击安装按钮.
      *
@@ -71,51 +73,5 @@ class Installation
     {
         Repo::deleteByInstallationId($installation_id);
         User::updateInstallationId(0, $username);
-    }
-
-    /**
-     * 用户对仓库的操作.
-     *
-     * added 用户增加仓库
-     *
-     * removed 移除仓库
-     *
-     * @throws \Exception
-     */
-    public function repositories(string $webhooks_content): void
-    {
-        $context = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($webhooks_content);
-
-        $installation_id = $context->installation_id;
-        $action = $context->action;
-        $repo = $context->repo;
-        $sender = $context->sender;
-        $owner = $context->owner;
-
-        User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
-        User::updateUserInfo($owner);
-        User::updateInstallationId((int) $installation_id, $owner->username);
-
-        if ('added' === $action) {
-            $this->create($repo, $sender->uid);
-
-            return;
-        }
-
-        $this->repositories_action_removed($repo);
-    }
-
-    /**
-     * 用户在设置页面移除了仓库.
-     *
-     * @throws \Exception
-     */
-    private function repositories_action_removed(array $repo): void
-    {
-        foreach ($repo as $k) {
-            $rid = $k->id;
-
-            Repo::deleteByRid((int) $rid);
-        }
     }
 }

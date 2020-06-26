@@ -12,7 +12,7 @@ use PCIT\GPI\Webhooks\Handler\Skip;
 use PCIT\GPI\Webhooks\Handler\Subject;
 use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
 
-abstract class CheckAbstract
+abstract class CheckSuiteAbstract
 {
     public function handlePush(Context $context, string $git_type): void
     {

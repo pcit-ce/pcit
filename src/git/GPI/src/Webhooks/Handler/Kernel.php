@@ -31,8 +31,8 @@ class Kernel
      */
     public function check_run(string $webhooks_content, string $git_type): void
     {
-        $class = $this->getNamespace($git_type).'Check';
-        (new $class())->run($webhooks_content);
+        $class = $this->getNamespace($git_type).'CheckRun';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
@@ -48,8 +48,8 @@ class Kernel
      */
     public function check_suite(string $webhooks_content, string $git_type): void
     {
-        $class = $this->getNamespace($git_type).'Check';
-        (new $class())->suite($webhooks_content);
+        $class = $this->getNamespace($git_type).'CheckSuite';
+        (new $class())->handle($webhooks_content);
     }
 
     public function commit_comment(string $webhooks_content, string $git_type): void
@@ -140,8 +140,8 @@ class Kernel
      */
     public function installation_repositories(string $webhooks_content, string $git_type): void
     {
-        $class = $this->getNamespace($git_type).'Installation';
-        (new $class())->repositories($webhooks_content);
+        $class = $this->getNamespace($git_type).'InstallationRepositories';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
@@ -151,8 +151,8 @@ class Kernel
      */
     public function issue_comment(string $webhooks_content, string $git_type): void
     {
-        $class = $this->getNamespace($git_type).'Issues';
-        (new $class())->comment($webhooks_content);
+        $class = $this->getNamespace($git_type).'IssueComment';
+        (new $class())->handle($webhooks_content);
     }
 
     /**
