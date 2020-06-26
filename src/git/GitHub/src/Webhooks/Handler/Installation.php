@@ -9,6 +9,8 @@ use App\User;
 
 class Installation
 {
+    public $git_type = 'github';
+
     /**
      * created 用户点击安装按钮.
      *
@@ -24,7 +26,7 @@ class Installation
         $action = $context->action;
         $repositories = $context->repositories;
         $sender = $context->sender;
-        $account = $context->account;
+        $owner = $context->owner;
 
         if ('new_permissions_accepted' === $action) {
             \Log::info('receive event [ installation ] action [ new_permissions_accepted ]');
@@ -33,15 +35,15 @@ class Installation
         }
 
         if ('deleted' === $action) {
-            $this->delete($installation_id, $account->username);
+            $this->delete($installation_id, $owner->username);
 
             return;
         }
 
         // 仓库管理员信息
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
+        User::updateUserInfo($owner);
+        User::updateInstallationId((int) $installation_id, $owner->username);
         $this->create($repositories, $sender->uid);
     }
 
@@ -71,51 +73,5 @@ class Installation
     {
         Repo::deleteByInstallationId($installation_id);
         User::updateInstallationId(0, $username);
-    }
-
-    /**
-     * 用户对仓库的操作.
-     *
-     * added 用户增加仓库
-     *
-     * removed 移除仓库
-     *
-     * @throws \Exception
-     */
-    public function repositories(string $webhooks_content): void
-    {
-        $context = \PCIT\GitHub\Webhooks\Parser\Installation::repositories($webhooks_content);
-
-        $installation_id = $context->installation_id;
-        $action = $context->action;
-        $repo = $context->repo;
-        $sender = $context->sender;
-        $account = $context->account;
-
-        User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
-        User::updateUserInfo($account);
-        User::updateInstallationId((int) $installation_id, $account->username);
-
-        if ('added' === $action) {
-            $this->create($repo, $sender->uid);
-
-            return;
-        }
-
-        $this->repositories_action_removed($repo);
-    }
-
-    /**
-     * 用户在设置页面移除了仓库.
-     *
-     * @throws \Exception
-     */
-    private function repositories_action_removed(array $repo): void
-    {
-        foreach ($repo as $k) {
-            $rid = $k->id;
-
-            Repo::deleteByRid((int) $rid);
-        }
     }
 }

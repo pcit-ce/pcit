@@ -8,12 +8,11 @@ use App\Build;
 use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\TagContext;
 use PCIT\GPI\Webhooks\Handler\GetConfig;
-use PCIT\GPI\Webhooks\Handler\Interfaces\PushInterface;
 use PCIT\GPI\Webhooks\Handler\Skip;
 use PCIT\GPI\Webhooks\Handler\Subject;
 use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
 
-abstract class PushAbstract implements PushInterface
+abstract class CheckSuiteAbstract
 {
     public function handlePush(Context $context, string $git_type): void
     {

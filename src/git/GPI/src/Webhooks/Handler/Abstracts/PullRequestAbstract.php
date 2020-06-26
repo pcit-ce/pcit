@@ -31,13 +31,13 @@ abstract class PullRequestAbstract implements PullRequestInterface
         $branch = $context->branch;
         $internal = $context->internal;
         $pull_request_source = $context->pull_request_source;
-        $account = $context->account;
+        $owner = $context->owner;
         $default_branch = $context->repository->default_branch;
         $private = $context->private;
 
         $subject = new Subject();
 
-        $subject->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type));
+        $subject->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type));
 
         $config_array = $subject->register(new GetConfig($rid, $commit_id, $git_type))->handle()->config_array;
 

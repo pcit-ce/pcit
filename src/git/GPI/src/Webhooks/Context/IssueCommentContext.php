@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 /**
  * @property int                          $installation_id
@@ -20,7 +20,7 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
  * @property string                       $body
  * @property int                          $created_at
  * @property int                          $updated_at
- * @property Account                      $account
+ * @property Owner                        $owner
  * @property "created"|"edited"|"deleted" $action
  * @property bool                         $is_pull_request
  */

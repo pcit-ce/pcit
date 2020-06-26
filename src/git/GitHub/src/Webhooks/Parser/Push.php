@@ -6,12 +6,14 @@ namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
 use PCIT\GPI\Webhooks\Context;
+use PCIT\GPI\Webhooks\Context\Components\HeadCommit;
+use PCIT\GPI\Webhooks\Context\Components\Repository;
 use PCIT\GPI\Webhooks\Context\PushContext;
 use PCIT\GPI\Webhooks\Context\TagContext;
 use PCIT\GPI\Webhooks\Parser\Abstracts\PushAbstract;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 class Push extends PushAbstract
@@ -25,13 +27,9 @@ class Push extends PushAbstract
 
         $obj = json_decode($webhooks_content);
 
-        $repository = $obj->repository;
-
-        $rid = $repository->id;
-        $repo_full_name = $repository->full_name;
-        $private = $repository->private;
-        // 仓库所属用户或组织的信息
-        $repository_owner = $repository->owner;
+        $repository = new Repository($obj->repository);
+        $org = ($obj->organization ?? false) ? true : false;
+        $repository->owner = new Owner($repository->owner, $org);
 
         $ref = $obj->ref;
         $ref_array = explode('/', $ref);
@@ -41,45 +39,38 @@ class Push extends PushAbstract
         }
 
         $branch = self::ref2branch($ref);
-        $commit_id = $obj->after;
-        $compare = $obj->compare;
-        $head_commit = $obj->head_commit;
 
-        if (null === $head_commit) {
+        $compare = $obj->compare;
+        $head_commit = new HeadCommit($obj->head_commit);
+
+        if (null === $obj->head_commit) {
             // 删除分支,也会产生一条 push 事件，此时 head commit 为 null
-            throw new \Exception('skip', 200);
+            throw new \Exception('branch delete event, skip', 200);
         }
 
-        $commit_message = $head_commit->message;
-        $commit_timestamp = Date::parse($head_commit->timestamp);
-
-        $author = $head_commit->author;
-        $committer = $head_commit->committer;
+        $head_commit->timestamp_int = Date::parse($head_commit->timestamp);
+        $head_commit->author = new Author($obj->head_commit->author);
+        $head_commit->committer = new Committer($obj->head_commit->committer);
 
         $installation_id = $obj->installation->id ?? null;
 
-        $org = ($obj->organization ?? false) ? true : false;
-
-        $event_time = $commit_timestamp;
-        $author = new Author($author);
-        $committer = new Committer($committer);
-        $account = new Account($repository_owner, $org);
-        $sender = new Sender($obj->sender);
-
         $pushContext = new PushContext([], $webhooks_content);
-        $pushContext->rid = $rid;
-        $pushContext->repo_full_name = $repo_full_name;
+
+        $pushContext->repository = $repository;
+        $pushContext->rid = $repository->id;
+        $pushContext->repo_full_name = $repository->full_name;
         $pushContext->branch = $branch;
-        $pushContext->commit_id = $commit_id;
-        $pushContext->commit_message = $commit_message;
+        $pushContext->head_commit = $head_commit;
+        $pushContext->commit_id = $head_commit->id;
+        $pushContext->commit_message = $head_commit->message;
         $pushContext->compare = $compare;
-        $pushContext->event_time = $event_time;
-        $pushContext->author = $author;
-        $pushContext->committer = $committer;
+        $pushContext->event_time = $head_commit->timestamp_int;
+        $pushContext->author = $head_commit->author;
+        $pushContext->committer = $head_commit->committer;
         $pushContext->installation_id = $installation_id;
-        $pushContext->account = $account;
-        $pushContext->sender = $sender;
-        $pushContext->private = $private;
+        $pushContext->owner = $repository->owner;
+        $pushContext->sender = new Sender($obj->sender);
+        $pushContext->private = $repository->private;
 
         return $pushContext;
     }
@@ -90,45 +81,44 @@ class Push extends PushAbstract
 
         $obj = json_decode($webhooks_content);
 
-        $repository = $obj->repository;
-
-        $rid = $repository->id;
-        $repo_full_name = $repository->full_name;
-        $private = $repository->private;
+        $repository = new Repository($obj->repository);
+        $org = ($obj->organization ?? false) ? true : false;
+        $repository->owner = new Owner($repository->owner, $org);
 
         $branch = self::ref2branch($obj->base_ref ?? 'refs/heads/master');
 
-        $head_commit = $obj->head_commit;
-        $commit_id = $head_commit->id;
-        $commit_message = $head_commit->message;
+        $head_commit = new HeadCommit($obj->head_commit);
+        if (!$obj->head_commit) {
+            $context = new TagContext([], $webhooks_content);
 
-        // 仓库所属用户或组织的信息
-        $repository_owner = $repository->owner;
+            $context->commit_id = $obj->after;
+            $context->tag = $tag;
 
-        $author = $head_commit->author;
-        $committer = $head_commit->committer;
+            return $context;
+        }
 
-        $event_time = Date::parse($head_commit->timestamp);
+        $head_commit->timestamp_int = Date::parse($head_commit->timestamp);
+        $head_commit->author = new Author($obj->head_commit->author);
+        $head_commit->committer = new Committer($obj->head_commit->committer);
 
         $installation_id = $obj->installation->id ?? null;
 
-        $org = ($obj->organization ?? false) ? true : false;
-
         $tagContext = new TagContext([], $webhooks_content);
 
-        $tagContext->rid = $rid;
-        $tagContext->repo_full_name = $repo_full_name;
+        $tagContext->rid = $repository->id;
+        $tagContext->repo_full_name = $repository->full_name;
         $tagContext->branch = $branch;
         $tagContext->tag = $tag;
-        $tagContext->commit_id = $commit_id;
-        $tagContext->commit_message = $commit_message;
-        $tagContext->event_time = $event_time;
-        $tagContext->author = new Author($author);
-        $tagContext->committer = $committer;
+        $tagContext->head_commit = $head_commit;
+        $tagContext->commit_id = $head_commit->id;
+        $tagContext->commit_message = $head_commit->message;
+        $tagContext->event_time = $head_commit->timestamp_int;
+        $tagContext->author = $head_commit->author;
+        $tagContext->committer = $head_commit->committer;
         $tagContext->installation_id = $installation_id;
-        $tagContext->account = new Account($repository_owner, $org);
+        $tagContext->owner = $repository->owner;
         $tagContext->sender = new Sender($obj->sender);
-        $tagContext->private = $private;
+        $tagContext->private = $repository->private;
 
         return $tagContext;
     }

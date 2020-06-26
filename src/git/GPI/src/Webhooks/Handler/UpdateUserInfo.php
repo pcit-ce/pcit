@@ -6,7 +6,7 @@ namespace PCIT\GPI\Webhooks\Handler;
 
 use App\Repo;
 use App\User;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 /**
@@ -19,7 +19,7 @@ class UpdateUserInfo
     /**
      * 项目拥有者 组织账号或个人.
      */
-    private $account;
+    private $owner;
 
     private $installation_id;
 
@@ -40,7 +40,7 @@ class UpdateUserInfo
      *
      * @throws \Exception
      */
-    public function __construct(Account $account,
+    public function __construct(Owner $owner,
                                 ?int $installation_id,
                                 $rid,
                                 string $repo_full_name,
@@ -48,7 +48,7 @@ class UpdateUserInfo
                                 Sender $sender = null,
                                 string $git_type = 'github')
     {
-        $this->account = $account;
+        $this->owner = $owner;
         $this->installation_id = $installation_id;
         $this->rid = $rid;
         $this->repo_full_name = $repo_full_name;
@@ -67,11 +67,11 @@ class UpdateUserInfo
     {
         $git_type = $this->git_type;
         $default_branch = $this->default_branch;
-        User::updateUserInfo($this->account, null, null, null, null, null, $git_type);
+        User::updateUserInfo($this->owner, null, null, null, null, null, $git_type);
         Repo::updateRepoInfo($this->rid, $this->repo_full_name, $this->sender_uid, null, $default_branch, $git_type);
 
         if ('github' === $git_type) {
-            User::updateInstallationId($this->installation_id, $this->account->username);
+            User::updateInstallationId($this->installation_id, $this->owner->username);
         }
     }
 }

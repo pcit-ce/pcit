@@ -16,11 +16,4 @@ class Issues extends IssuesAbstract
 
         $this->handleIssues($issuesContext, $this->git_type);
     }
-
-    public function comment(string $webhooks_content): void
-    {
-        $context = \PCIT\GitHub\Webhooks\Parser\Issues::comment($webhooks_content);
-
-        $this->handleComment($context, $this->git_type);
-    }
 }
