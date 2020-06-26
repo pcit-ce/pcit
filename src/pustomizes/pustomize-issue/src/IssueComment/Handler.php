@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Pustomize\Issue;
+namespace PCIT\Pustomize\IssueComment;
 
 use App\GetAccessToken;
 use App\Repo;
 use PCIT\GPI\Webhooks\Context\IssueCommentContext;
 use PCIT\PCIT;
-use PCIT\Pustomize\Interfaces\Issue\CommentInterface;
+use PCIT\Pustomize\Interfaces\IssueComment\HandlerInterface;
 
-class Comment implements CommentInterface
+class Handler implements HandlerInterface
 {
     /** @var IssueCommentContext */
     public $context;

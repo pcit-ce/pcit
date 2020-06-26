@@ -25,7 +25,6 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
  * @property bool         $forced
  * @property string       $base_ref
  * @property string       $compare
- * @property Commits      $commits
  * @property HeadCommit   $head_commit
  * @property int          $rid
  * @property string       $repo_full_name

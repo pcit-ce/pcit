@@ -8,14 +8,14 @@ use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 /**
- * @property string $action
- * @property int    $installation_id
- * @property int    $rid
- * @property string $repo_full_name
- * @property int    $member_uid
- * @property string $member_username
- * @property string $member_pic
- * @property Owner  $owner
+ * @property "added"|"removed"|"edited" $action
+ * @property int                        $installation_id
+ * @property int                        $rid
+ * @property string                     $repo_full_name
+ * @property int                        $member_uid
+ * @property string                     $member_username
+ * @property string                     $member_pic
+ * @property Owner                      $owner
  */
 class MemberContext extends Context
 {

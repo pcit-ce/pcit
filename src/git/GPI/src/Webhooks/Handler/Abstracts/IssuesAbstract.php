@@ -35,7 +35,7 @@ abstract class IssuesAbstract implements IssuesInterface
 
     public function triggerPustomize(IssuesContext $context): void
     {
-        $class = 'PCIT\\Pustomize\\Issue\\Basic';
+        $class = 'PCIT\\Pustomize\\Issues\\Handler';
 
         (new PustomizeHandler())->handle($class, $context);
     }

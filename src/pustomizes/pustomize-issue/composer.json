@@ -4,7 +4,8 @@
     "version": "19.12-dev",
     "autoload": {
         "psr-4": {
-            "PCIT\\Pustomize\\Issue\\": "src/"
+            "PCIT\\Pustomize\\Issues\\": "src/Issues/",
+            "PCIT\\Pustomize\\IssueComment\\": "src/IssueComment/"
         }
     },
     "extra": {

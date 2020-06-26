@@ -71,7 +71,7 @@ abstract class PullRequestAbstract implements PullRequestInterface
 
     public function triggerPullRequestPustomize(PullRequestContext $context): void
     {
-        $class = 'PCIT\\Pustomize\\PullRequest\\Basic';
+        $class = 'PCIT\\Pustomize\\PullRequest\\Handler';
 
         (new PustomizeHandler())->handle($class, $context);
     }

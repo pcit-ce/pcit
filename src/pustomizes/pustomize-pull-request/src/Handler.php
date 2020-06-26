@@ -7,9 +7,9 @@ namespace PCIT\Pustomize\PullRequest;
 use App\GetAccessToken;
 use PCIT\GPI\Webhooks\Context\PullRequestContext;
 use PCIT\PCIT;
-use PCIT\Pustomize\Interfaces\PullRequest\BasicInterface;
+use PCIT\Pustomize\Interfaces\PullRequest\HandlerInterface;
 
-class Basic implements BasicInterface
+class Handler implements HandlerInterface
 {
     /** @var PullRequestContext */
     public $context;

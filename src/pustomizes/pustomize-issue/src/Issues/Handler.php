@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Pustomize\Issue;
+namespace PCIT\Pustomize\Issues;
 
 use App\GetAccessToken;
 use PCIT\GPI\Webhooks\Context\IssuesContext;
 use PCIT\PCIT;
-use PCIT\Pustomize\Interfaces\Issue\BasicInterface;
+use PCIT\Pustomize\Interfaces\Issues\HandlerInterface;
 
-class Basic implements BasicInterface
+class Handler implements HandlerInterface
 {
     /** @var IssuesContext */
     public $context;

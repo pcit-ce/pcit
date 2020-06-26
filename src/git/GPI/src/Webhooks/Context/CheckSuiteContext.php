@@ -20,14 +20,12 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
  * @property string                                $before
  * @property string                                $after
  * @property Repository                            $repository
- * @property Pusher                                $pusher
  * @property Organization                          $organization
  * @property Sender                                $sender
  * @property bool                                  $created
  * @property bool                                  $forced
  * @property string                                $base_ref
  * @property string                                $compare
- * @property Commits                               $commits
  * @property HeadCommit                            $head_commit
  * @property int                                   $rid
  * @property string                                $repo_full_name

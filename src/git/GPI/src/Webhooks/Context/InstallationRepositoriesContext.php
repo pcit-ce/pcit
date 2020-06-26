@@ -9,11 +9,11 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 /**
- * @property int    $installation_id
- * @property string $action
- * @property array  $repo
- * @property Sender $sender
- * @property Owner  $owner
+ * @property int               $installation_id
+ * @property "added"|"removed" $action
+ * @property array             $repo
+ * @property Sender            $sender
+ * @property Owner             $owner
  */
 class InstallationRepositoriesContext extends Context
 {

@@ -8,11 +8,11 @@ use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 /**
- * @property int    $installation_id
- * @property int    $rid
- * @property string $repo_full_name
- * @property string $ref_type
- * @property Owner  $owner
+ * @property int            $installation_id
+ * @property int            $rid
+ * @property string         $repo_full_name
+ * @property "branch"|"tag" $ref_type
+ * @property Owner          $owner
  */
 class CreateContext extends Context
 {
