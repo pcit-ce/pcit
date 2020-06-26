@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 /**
  * @property int                                                    $installation_id
@@ -17,7 +17,7 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
  * @property int                                                    $check_suite_id
  * @property int                                                    $check_run_id
  * @property int                                                    $external_id
- * @property Account                                                $account
+ * @property Owner                                                  $owner
  */
 class CheckRunContext extends Context
 {

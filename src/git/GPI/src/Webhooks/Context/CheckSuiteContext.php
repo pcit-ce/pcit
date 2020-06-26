@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
+use PCIT\GPI\Webhooks\Context\Components\HeadCommit;
+use PCIT\GPI\Webhooks\Context\Components\Organization;
 use PCIT\GPI\Webhooks\Context\Components\Repository;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 /**
@@ -36,7 +38,7 @@ use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
  * @property int                                   $installation_id
  * @property Author                                $author
  * @property Committer                             $committer
- * @property Account                               $account
+ * @property Owner                                 $owner
  */
 class CheckSuiteContext extends Context
 {

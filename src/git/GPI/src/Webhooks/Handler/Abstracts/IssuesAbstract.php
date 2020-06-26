@@ -21,11 +21,11 @@ abstract class IssuesAbstract implements IssuesInterface
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
         $issue_number = $context->issue_number;
-        $account = $context->account;
+        $owner = $context->owner;
         $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
+            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
             ->handle();
 
         \Log::info('issue #'.$issue_number.' '.$action);
@@ -40,11 +40,11 @@ abstract class IssuesAbstract implements IssuesInterface
         $installation_id = $context->installation_id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
-        $account = $context->account;
+        $owner = $context->owner;
         $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
+            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
             ->handle();
 
         // pustomize

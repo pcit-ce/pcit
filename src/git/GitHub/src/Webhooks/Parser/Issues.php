@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
+use PCIT\GPI\Webhooks\Context\Components\Repository;
 use PCIT\GPI\Webhooks\Context\IssueCommentContext;
 use PCIT\GPI\Webhooks\Context\IssuesContext;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 class Issues
 {
@@ -25,13 +26,9 @@ class Issues
 
         $issue = $obj->issue;
 
-        $repository = $obj->repository;
-
-        $rid = $repository->id;
-        $repo_full_name = $repository->full_name;
-
-        // 仓库所属用户或组织的信息
-        $repository_owner = $repository->owner;
+        $repository = new Repository($obj->repository);
+        $org = ($obj->organization ?? false) ? true : false;
+        $repository->owner = new Owner($repository->owner, $org);
 
         $issue_id = $issue->id;
         $issue_number = $issue->number;
@@ -53,13 +50,11 @@ class Issues
 
         $installation_id = $obj->installation->id ?? null;
 
-        $org = ($obj->organization ?? false) ? true : false;
-
         $issuesContext = new IssuesContext([], $webhooks_content);
 
         $issuesContext->installation_id = $installation_id;
-        $issuesContext->rid = $rid;
-        $issuesContext->repo_full_name = $repo_full_name;
+        $issuesContext->rid = $repository->id;
+        $issuesContext->repo_full_name = $repository->full_name;
         $issuesContext->sender_username = $sender_username;
         $issuesContext->sender_uid = $sender_uid;
         $issuesContext->sender_pic = $sender_pic;
@@ -69,7 +64,7 @@ class Issues
         $issuesContext->body = $body;
         $issuesContext->created_at = $created_at;
         $issuesContext->updated_at = $updated_at;
-        $issuesContext->account = new Account($repository_owner, $org);
+        $issuesContext->owner = $repository->owner;
         $issuesContext->action = $action;
         $issuesContext->state = $state;
         $issuesContext->labels = $labels;
@@ -112,17 +107,12 @@ class Issues
         $created_at = Date::parse($comment->created_at);
         $updated_at = Date::parse($comment->updated_at);
 
-        $repository = $obj->repository;
-
-        $rid = $repository->id;
-        $repo_full_name = $repository->full_name;
-
-        // 仓库所属用户或组织的信息
-        $repository_owner = $repository->owner;
+        $repository = new Repository($obj->repository);
+        $org = ($obj->organization ?? false) ? true : false;
+        $repository->owner = new Owner($repository->owner, $org);
 
         $installation_id = $obj->installation->id ?? null;
 
-        $org = ($obj->organization ?? false) ? true : false;
         $is_pull_request = ($issue->pull_request ?? false) ? true : false;
 
         // gitee
@@ -133,8 +123,8 @@ class Issues
         $issueCommentContext = new IssueCommentContext([], $webhooks_content);
 
         $issueCommentContext->installation_id = $installation_id;
-        $issueCommentContext->rid = $rid;
-        $issueCommentContext->repo_full_name = $repo_full_name;
+        $issueCommentContext->rid = $repository->id;
+        $issueCommentContext->repo_full_name = $repository->full_name;
         $issueCommentContext->sender_username = $sender_username;
         $issueCommentContext->sender_uid = $sender_uid;
         $issueCommentContext->sender_pic = $sender_pic;
@@ -144,7 +134,7 @@ class Issues
         $issueCommentContext->body = $body;
         $issueCommentContext->created_at = $created_at;
         $issueCommentContext->updated_at = $updated_at;
-        $issueCommentContext->account = new Account($repository_owner, $org);
+        $issueCommentContext->owner = $repository->owner;
         $issueCommentContext->action = $action;
         $issueCommentContext->is_pull_request = $is_pull_request;
 

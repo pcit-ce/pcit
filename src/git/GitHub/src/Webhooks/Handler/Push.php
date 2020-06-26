@@ -34,6 +34,8 @@ class Push extends PushAbstract
     {
         // tag 删除也会触发 push 事件
         if ('0000000000000000000000000000000000000000' === $context->commit_id) {
+            \Log::info('tag delete event, skip');
+
             return;
         }
 

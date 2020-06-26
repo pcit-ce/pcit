@@ -36,12 +36,12 @@ class Check extends CheckAbstract
         $branch = $context->branch;
         $commit_id = $context->commit_id;
         $action = $context->action;
-        $account = $context->account;
+        $owner = $context->owner;
         $check_suite_id = $context->check_suite_id;
         $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
+            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
             ->handle();
 
         if ('requested' === $action) {
@@ -80,7 +80,7 @@ class Check extends CheckAbstract
         $check_suite_id = $context->check_suite_id;
         $check_run_id = $context->check_run_id;
         $branch = $context->branch;
-        $account = $context->account;
+        $owner = $context->owner;
         $default_branch = $context->repository->default_branch;
 
         // 用户点击了某一 run 的 Re-run

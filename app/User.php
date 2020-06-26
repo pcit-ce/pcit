@@ -6,7 +6,7 @@ namespace App;
 
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 class User extends Model
 {
@@ -32,9 +32,9 @@ class User extends Model
     }
 
     /**
-     * @param int |Account $uid
-     * @param string       $name
-     * @param string       $username
+     * @param int|Owner $uid
+     * @param string    $name
+     * @param string    $username
      *
      * @throws \Exception
      */
@@ -46,7 +46,7 @@ class User extends Model
                                           ?bool $org = false,
                                           string $git_type = 'github'): void
     {
-        if ($uid instanceof Account) {
+        if ($uid instanceof Owner) {
             $name = $uid->name;
             $username = $uid->username;
             $email = $uid->email;

@@ -28,7 +28,7 @@ abstract class PushAbstract implements PushInterface
         $author = $context->author;
         $compare = $context->compare;
         $event_time = $context->event_time;
-        $account = $context->account;
+        $owner = $context->owner;
         $sender = $context->sender;
         $private = $context->private;
         $default_branch = $context->repository->default_branch;
@@ -37,7 +37,7 @@ abstract class PushAbstract implements PushInterface
         $subject = new Subject();
 
         $subject->register(
-            new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, $sender, $git_type));
+            new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, $sender, $git_type));
 
         $config_array = $subject->register(new GetConfig((int) $rid, $commit_id, $git_type))->handle()->config_array;
 
@@ -67,7 +67,7 @@ abstract class PushAbstract implements PushInterface
         $committer = $context->committer;
         $author = $context->author;
         $event_time = $context->event_time;
-        $account = $context->account;
+        $owner = $context->owner;
         $sender = $context->sender;
         $private = $context->private;
         $default_branch = $context->repository->default_branch;
@@ -75,7 +75,7 @@ abstract class PushAbstract implements PushInterface
         $subject = new Subject();
 
         $subject->register(
-            new UpdateUserInfo($account, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, $sender, $git_type));
+            new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, $sender, $git_type));
 
         $config_array = $subject->register(new GetConfig((int) $rid, $commit_id, $git_type))->handle()->config_array;
 
