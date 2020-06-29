@@ -66,13 +66,6 @@ abstract class PullRequestAbstract implements PullRequestInterface
         \Storage::put($git_type.'/events/'.$last_insert_id.'.json', $context->raw);
 
         // pustomize
-        $this->triggerPullRequestPustomize($context);
-    }
-
-    public function triggerPullRequestPustomize(PullRequestContext $context): void
-    {
-        $class = 'PCIT\\Pustomize\\PullRequest\\Handler';
-
-        (new PustomizeHandler())->handle($class, $context);
+        (new PustomizeHandler())->handle('PullRequest', $context);
     }
 }

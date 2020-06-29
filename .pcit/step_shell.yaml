@@ -1,14 +1,14 @@
 steps:
   python_shell:
-    image: python:3.7-alpine
+    image: python:3.8-alpine
     shell: python
     run: |
       import os
       print(os.environ['PATH'])
 
   pwsh_shell:
-    # image: mcr.microsoft.com/powershell:preview-alpine-3.10
-    image: mcr.azk8s.cn/powershell:preview-alpine-3.10
+    image: mcr.microsoft.com/powershell:preview-alpine-3.11
+    # image: mcr.azk8s.cn/powershell:preview-alpine-3.11
     shell: pwsh
     run: |
       pwd

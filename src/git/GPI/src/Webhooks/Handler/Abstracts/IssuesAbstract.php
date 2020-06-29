@@ -30,13 +30,6 @@ abstract class IssuesAbstract implements IssuesInterface
         \Log::info('issue #'.$issue_number.' '.$action);
 
         // pustomize
-        $this->triggerPustomize($context);
-    }
-
-    public function triggerPustomize(IssuesContext $context): void
-    {
-        $class = 'PCIT\\Pustomize\\Issues\\Handler';
-
-        (new PustomizeHandler())->handle($class, $context);
+        (new PustomizeHandler())->handle('Issues', $context);
     }
 }

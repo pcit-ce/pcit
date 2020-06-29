@@ -179,7 +179,7 @@ class Router
         $kArray = [];
         $array = [];
 
-        if ($offset === []) {
+        if ([] === $offset) {
             if ($targetUrl === $url) {// 传统 url
                 $this->make($action);
             } else {

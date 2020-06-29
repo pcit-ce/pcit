@@ -8,6 +8,8 @@ class PustomizeHandler
 {
     public function handle(string $class, ContextInterface $context): void
     {
+        $class = 'PCIT\\Pustomize\\'.$class.'\\Handler';
+
         if (!class_exists($class)) {
             \Log::info('Pustomize: '.$class.' not found');
 

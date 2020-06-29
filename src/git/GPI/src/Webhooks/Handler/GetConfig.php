@@ -76,7 +76,7 @@ class GetConfig
                 '.pcit.yaml',
                 ]);
 
-        if ($yaml_file_content === []) {
+        if ([] === $yaml_file_content) {
             return [];
         }
 

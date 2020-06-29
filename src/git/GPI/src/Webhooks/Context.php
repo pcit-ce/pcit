@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks;
 
+use PCIT\GPI\Webhooks\Context\Components\Repository;
+
+/**
+ * @property Repository $repository
+ */
 abstract class Context implements ContextInterface
 {
     /** 原始 webhook 内容 */
     public $raw;
+
     public $context_array;
 
-    /** git 提供者 */
+    /** @var string git 提供者 */
     public $git_type;
 
-    /** 是否为私有仓库 */
+    /** @var bool 是否为私有仓库 */
     public $private;
 
     public function __construct(array $context_array, string $raw)

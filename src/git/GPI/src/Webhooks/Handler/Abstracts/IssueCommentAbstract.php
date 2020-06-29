@@ -26,13 +26,6 @@ abstract class IssueCommentAbstract implements IssueCommentInterface
             ->handle();
 
         // pustomize
-        $this->triggerPustomize($context);
-    }
-
-    public function triggerPustomize(IssueCommentContext $context): void
-    {
-        $class = 'PCIT\\Pustomize\\IssueComment\\Handler';
-
-        (new PustomizeHandler())->handle($class, $context);
+        (new PustomizeHandler())->handle('IssueComment', $context);
     }
 }
