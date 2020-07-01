@@ -4,5 +4,6 @@ ARG a
 
 ARG b
 
-RUN echo ${a} \
+RUN set -x \
+    && echo ${a} \
     && echo ${b}

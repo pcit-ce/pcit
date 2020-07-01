@@ -1,6 +1,6 @@
 FROM docker
 
-ENV BUILDX_VERSION=0.3.1
+ENV BUILDX_VERSION=0.4.1
 
 RUN set -x \
     && apk add --no-cache curl ca-certificates \

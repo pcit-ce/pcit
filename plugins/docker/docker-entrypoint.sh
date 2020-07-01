@@ -39,6 +39,14 @@ split(){
       continue
     fi
 
+    if [ ${CMD_ARG} = "cache-from" \
+       -o ${CMD_ARG} = "cache-to" \
+       -o ${CMD_ARG} = "secret" \
+       -o ${CMD_ARG} = "output" \
+       ];then
+      item=$(echo $item | sed "s/%2C/,/g")
+    fi
+
     OPTIONS+=" --${CMD_ARG} ${item} "
   done
 }
@@ -55,6 +63,8 @@ split cache-from ${INPUT_CACHE_FROM}
 split cache-to ${INPUT_CACHE_TO}
 # secret
 split secret ${INPUT_SECRET}
+# output
+split output ${INPUT_OUTPUT}
 
 docker buildx build \
 --platform ${INPUT_PLATFORM:-linux/amd64} \

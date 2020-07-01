@@ -1,4 +1,18 @@
 steps:
+  bash_shell:
+    image: bash
+    shell: bash
+    run: |
+      echo 1
+      echo 2
+
+  sh_shell:
+    image: alpine
+    shell: sh
+    run: |
+      echo 1
+      echo 2
+
   python_shell:
     image: python:3.8-alpine
     shell: python

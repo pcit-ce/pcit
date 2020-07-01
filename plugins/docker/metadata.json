@@ -66,19 +66,25 @@
             "type": "array",
             "uniqueItems": true,
             "minItems": 1,
-            "description": "--cache-from, e.g.\nuser/app:cache, type=local,src=path/to/dir"
+            "description": "--cache-from, please replace ',' with '%2C'\ne.g.\nuser/app:cache, type=local%2Csrc=path/to/dir"
         },
         "cache_to": {
             "type": "array",
             "uniqueItems": true,
             "minItems": 1,
-            "description": "--cache-to, e.g.\nuser/app:cache, type=local,dest=path/to/dir"
+            "description": "--cache-to, please replace ',' with '%2C'\ne.g.\nuser/app:cache, type=local%2Cdest=path/to/dir"
         },
         "secret": {
             "type": "array",
             "uniqueItems": true,
             "minItems": 1,
-            "description": "--secret, e.g.\nid=mysecret,src=/local/secret"
+            "description": "--secret, please replace ',' with '%2C'\ne.g.\nid=mysecret%2Csrc=/local/secret"
+        },
+        "output": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "--output, please replace ',' with '%2C'\ne.g.\ntype=local%2Cdest=path"
         },
         "platform": {
             "type": "array",
