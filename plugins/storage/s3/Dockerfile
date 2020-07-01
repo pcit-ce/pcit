@@ -8,6 +8,8 @@ RUN --mount=type=cache,target=/tmp/cache,id=composer_cache \
 
 FROM khs1994/php:7.4.7-cli-alpine
 
+RUN apk add --no-cache zstd
+
 COPY --from=composer /srv/pcit/plugin/s3/vendor/ /srv/pcit/plugin/s3/vendor/
 
 COPY index.php .env.example /srv/pcit/plugin/s3/

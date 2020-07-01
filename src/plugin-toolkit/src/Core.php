@@ -135,4 +135,14 @@ class Core
     {
         return getenv("STATE_${name}") || '';
     }
+
+    public function startGroup(string $name): void
+    {
+        echo "::group::$name";
+    }
+
+    public function endGroup(): void
+    {
+        echo '::endgroup::';
+    }
 }

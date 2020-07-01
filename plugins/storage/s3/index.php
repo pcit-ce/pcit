@@ -58,8 +58,8 @@ if ($artifact_name = getenv('INPUT_ARTIFACT_NAME')) {
 // handle cache
 if ($s3_cache = getenv('INPUT_CACHE')) {
     $prefix = getenv('INPUT_CACHE_PREFIX');
-    $s3_path = $prefix.'.tar.gz';
-    $cache_tar_gz_name = explode('/', $prefix)[3].'.tar.gz';
+    $s3_path = $prefix.'.tar.zstd';
+    $cache_tar_gz_name = explode('/', $prefix)[3].'.tar.zstd';
 
     if (getenv('INPUT_CACHE_DOWNLOAD')) {
         echo "\n\n==> Setting up build cache\n";
@@ -67,7 +67,7 @@ if ($s3_cache = getenv('INPUT_CACHE')) {
         try {
             file_put_contents($cache_tar_gz_name, $flysystem->read($s3_path));
 
-            exec("set -ex ; tar -zxvf $cache_tar_gz_name ; rm -rf $cache_tar_gz_name");
+            exec("set -ex ; tar -I zstd -xvf $cache_tar_gz_name ; rm -rf $cache_tar_gz_name");
         } catch (\League\Flysystem\FileNotFoundException $e) {
             echo $e->getMessage().'. Code is '.$e->getCode()."\n";
         }
@@ -83,7 +83,7 @@ if ($s3_cache = getenv('INPUT_CACHE')) {
 
     $file_list = trim($file_list, ' ');
 
-    exec("set -ex ; tar -zcvf $cache_tar_gz_name $file_list");
+    exec("set -ex ; tar -I zstd -cvf $cache_tar_gz_name $file_list");
 
     $result = $flysystem->put($s3_path, file_get_contents($cache_tar_gz_name));
 
