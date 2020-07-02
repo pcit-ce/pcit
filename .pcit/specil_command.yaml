@@ -15,7 +15,7 @@ steps:
       echo "::set-env name=MY_ENV::${k}"
       echo "::set-env name=ENV_SET_BY_STEP::`echo 1`"
 
-      echo -e "\n\n\n111 122\t2\n\n44 4\n7890\n%\r:." > 1.txt
+      echo -e "\n\n\n111 122\t2\n\n44 4\n7890\n%\r:.," > 1.txt
       echo "::set-env name=file_content::`cat 1.txt | base64`"
 
       cat 1.txt

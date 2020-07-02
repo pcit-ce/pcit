@@ -11,10 +11,8 @@ class ExecTest extends TestCase
 {
     public function test(): void
     {
-        //(new Exec())->exec('ls');
+        (new Exec())->exec('ls');
 
-        //(new Exec())->exec('echo "don\'t run"');
-
-        $this->assertTrue(true);
+        $this->expectOutputString('[36m[command]'.'ls'.'[0m'.PHP_EOL);
     }
 }

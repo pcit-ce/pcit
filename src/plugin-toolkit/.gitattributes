@@ -1,1 +1,7 @@
-/tests               export-ignore
+/js-tests               export-ignore
+/php-tests              export-ignore
+/tests                  export-ignore
+.gitattributest         export-ignore
+.gitignore              export-ignore
+package.json            export-ignore
+test.ps1                export-ignore

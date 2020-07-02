@@ -21,6 +21,7 @@ class Core
      */
     public function debug(string $message): void
     {
+        $message = $this->escapeData($message);
         echo "::debug::$message"."\n";
     }
 
@@ -29,8 +30,30 @@ class Core
      *
      * @param string $message warning issue message
      */
-    public function warning(string $message): void
+    public function warning(string $message,
+                            string $file = null,
+                            int $line = null,
+                            int $col = null): void
     {
+        $message = $this->escapeData($message);
+        if ($file && (null !== $line) && (null !== $col)) {
+            echo "::warning file=$file,line=$line,col=$col::$message"."\n";
+
+            return;
+        }
+
+        if ($file && (null !== $line)) {
+            echo "::warning file=$file,line=$line::$message"."\n";
+
+            return;
+        }
+
+        if ($file) {
+            echo "::warning file=$file::$message"."\n";
+
+            return;
+        }
+
         echo "::warning::$message"."\n";
     }
 
@@ -39,8 +62,29 @@ class Core
      *
      * @param string $message error issue message
      */
-    public function error(string $message): void
+    public function error(string $message,
+                          string $file = null,
+                          int $line = null,
+                          int $col = null): void
     {
+        $message = $this->escapeData($message);
+        if ($file && (null !== $line) && (null !== $col)) {
+            echo "::error file=$file,line=$line,col=$col::$message"."\n";
+
+            return;
+        }
+
+        if ($file && (null !== $line)) {
+            echo "::error file=$file,line=$line::$message"."\n";
+
+            return;
+        }
+
+        if ($file) {
+            echo "::error file=$file::$message"."\n";
+
+            return;
+        }
         echo "::error::$message"."\n";
     }
 
@@ -52,6 +96,9 @@ class Core
      */
     public function exportVariable(string $name, string $value): void
     {
+        putenv("$name=$value");
+
+        $value = $this->escapeData($value);
         echo "::set-env name=$name::$value"."\n";
     }
 
@@ -62,6 +109,7 @@ class Core
      */
     public function setSecret(string $secret): void
     {
+        $secret = $this->escapeData($secret);
         echo "::add-mask::$secret"."\n";
     }
 
@@ -72,8 +120,8 @@ class Core
      */
     public function addPath(string $inputPath): void
     {
-        // echo "::add-path::${inputPath}"."\n";
-        $this->warning('add PATH not support');
+        echo "::add-path::${inputPath}"."\n";
+        // $this->warning('add PATH not support');
     }
 
     /**
@@ -84,7 +132,9 @@ class Core
      */
     public function getInput(string $name, bool $required = false): string
     {
-        $value = getenv(strtoupper('INPUT_'.$name)) || '';
+        $value = getenv(strtoupper('INPUT_'.$name));
+
+        $value = false === $value ? '' : $value;
 
         if ($required && !$value) {
             throw new \Exception("Input required and not supplied: ${name}");
@@ -101,6 +151,7 @@ class Core
      */
     public function setOutput(string $name, string $value): void
     {
+        $value = $this->escapeData($value);
         echo "::set-output name=$name::$value"."\n";
     }
 
@@ -112,7 +163,8 @@ class Core
      */
     public function setFailed(string $message): void
     {
-        die($message);
+        $message = $this->escapeData($message);
+        die('::error::'.$message);
     }
 
     /**
@@ -123,6 +175,7 @@ class Core
      */
     public function saveState(string $name, string $value): void
     {
+        $value = $this->escapeData($value);
         echo "::save-state name=$name::$value"."\n";
     }
 
@@ -133,16 +186,32 @@ class Core
      */
     public function getState(string $name): string
     {
-        return getenv("STATE_${name}") || '';
+        $value = getenv(strtoupper("STATE_${name}"));
+
+        return false === $value ? '' : $value;
     }
 
     public function startGroup(string $name): void
     {
-        echo "::group::$name";
+        $name = $this->escapeData($name);
+        echo "::group::$name"."\n";
+    }
+
+    public function info(string $message): void
+    {
+        echo $message."\n";
     }
 
     public function endGroup(): void
     {
-        echo '::endgroup::';
+        echo '::endgroup::'."\n";
+    }
+
+    public function escapeData(string $string)
+    {
+        $string = str_replace('%', '%25', $string);
+        $string = str_replace("\n", '%0A', $string);
+
+        return str_replace("\r", '%0D', $string);
     }
 }

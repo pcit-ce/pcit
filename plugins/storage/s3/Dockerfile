@@ -14,6 +14,6 @@ COPY --from=composer /srv/pcit/plugin/s3/vendor/ /srv/pcit/plugin/s3/vendor/
 
 COPY index.php .env.example /srv/pcit/plugin/s3/
 
-ENTRYPOINT ["php"]
+ENTRYPOINT ["php","-d","memory_limit=500M"]
 
 CMD ["/srv/pcit/plugin/s3/index.php"]
