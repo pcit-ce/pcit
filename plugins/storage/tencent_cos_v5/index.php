@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
+use PCIT\Plugin\Toolkit\Core;
+
 require __DIR__.'/vendor/autoload.php';
+
+$core = new Core();
 
 $prefix = getenv('INPUT_PREFIX') ? getenv('INPUT_PREFIX').DIRECTORY_SEPARATOR : false;
 
@@ -28,9 +32,9 @@ try {
                 'Body' => fopen($file, 'r'),
             ]);
 
-            echo "===> Upload [ $file ] TO [ $key ] result\n";
+            $core->debug("Upload [ $file ] TO [ $key ]");
 
-            var_dump($result);
+            $core->debug((string) $result);
         }
         // array
     } else {
@@ -44,11 +48,11 @@ try {
                 'Body' => fopen($file, 'r'),
             ]);
 
-            echo "===> Upload [ $file ] TO [ $key ] result\n";
+            $core->debug("Upload [ $file ] TO [ $key ]");
 
-            var_dump($result);
+            $core->debug((string) $result);
         }
     }
 } catch (Throwable $e) {
-    echo $e->__toString();
+    $core->error($e->__toString());
 }

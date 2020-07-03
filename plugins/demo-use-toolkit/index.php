@@ -22,7 +22,7 @@ $core->debug('Inside try block');
 $core->warning('myInput was not set');
 $core->error('Error, action may still succeed though');
 
-$core->saveState('pidToKill', 12345);
+$core->saveState('pidToKill', '12345');
 $pid = $core->getState('pidToKill');
 
 $core->setFailed('Action failed with error');

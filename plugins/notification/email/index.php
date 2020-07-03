@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use PCIT\Plugin\Toolkit\Core;
 use PHPMailer\PHPMailer\PHPMailer;
 
 require __DIR__.'/vendor/autoload.php';
 
 $mail = new PHPMailer(true);
+$core = new Core();
 
 try {
     $mail->SMTPDebug = 4;
@@ -41,7 +43,7 @@ try {
     $mail->Body = getenv('INPUT_EMAIL_BODY');
 
     $mail->send();
-    echo 'Message has been sent';
+    $core->debug('Message has been sent');
 } catch (Exception $e) {
-    echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+    $core->debug('Message could not be sent. Mailer Error: ', $mail->ErrorInfo);
 }

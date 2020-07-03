@@ -5,10 +5,15 @@ declare(strict_types=1);
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
+use PCIT\Plugin\Toolkit\Core;
+use PCIT\Plugin\Toolkit\Exec;
 
 require __DIR__.'/vendor/autoload.php';
 
-echo "\n\n===> use PCIT Plugin s3\n\n";
+$core = new Core();
+$exec = new Exec();
+
+$core->debug('use PCIT Plugin s3');
 
 $options = [
     'version' => 'latest',
@@ -44,13 +49,15 @@ if ($artifact_name = getenv('INPUT_ARTIFACT_NAME')) {
 
     $tar_gz_name = $artifact_name.'.tar.gz';
 
-    exec("set -ex ; tar -zcvf $tar_gz_name $local_path");
+    $exec->exec("tar -zcvf $tar_gz_name $local_path");
+    exec("tar -zcvf $tar_gz_name $local_path");
 
     $result = $flysystem->put($s3_path_root.'/'.$tar_gz_name, file_get_contents($tar_gz_name));
 
+    $exec->exec("rm -rf $tar_gz_name");
     exec("rm -rf $tar_gz_name");
 
-    echo $result ? 'success' : 'failure';
+    $core->debug($result ? 'success' : 'failure');
 
     exit;
 }
@@ -62,14 +69,15 @@ if ($s3_cache = getenv('INPUT_CACHE')) {
     $cache_tar_gz_name = explode('/', $prefix)[3].'.tar.zstd';
 
     if (getenv('INPUT_CACHE_DOWNLOAD')) {
-        echo "\n\n==> Setting up build cache\n";
+        $core->debug('Setting up build cache');
 
         try {
             file_put_contents($cache_tar_gz_name, $flysystem->read($s3_path));
 
-            exec("set -ex ; tar -I zstd -xvf $cache_tar_gz_name ; rm -rf $cache_tar_gz_name");
+            $exec->exec("tar -I zstd -xvf $cache_tar_gz_name ; rm -rf $cache_tar_gz_name");
+            exec("tar -I zstd -xvf $cache_tar_gz_name ; rm -rf $cache_tar_gz_name");
         } catch (\League\Flysystem\FileNotFoundException $e) {
-            echo $e->getMessage().'. Code is '.$e->getCode()."\n";
+            $core->error($e->getMessage().'. Code is '.$e->getCode());
         }
 
         exit;
@@ -77,19 +85,21 @@ if ($s3_cache = getenv('INPUT_CACHE')) {
 
     $file_list = null;
 
-    echo "\n\n==> Store build cache\n";
+    $core->debug('Store build cache');
 
     $file_list = str_replace(',', ' ', $s3_cache);
 
     $file_list = trim($file_list, ' ');
 
-    exec("set -ex ; tar -I zstd -cvf $cache_tar_gz_name $file_list");
+    $exec->exec("tar -I zstd -cvf $cache_tar_gz_name $file_list");
+    exec("tar -I zstd -cvf $cache_tar_gz_name $file_list");
 
     $result = $flysystem->put($s3_path, file_get_contents($cache_tar_gz_name));
 
+    $exec->exec("rm -rf $cache_tar_gz_name");
     exec("rm -rf $cache_tar_gz_name");
 
-    echo $result ? 'success' : 'failure';
+    $core->debug($result ? 'success' : 'failure');
 
     exit;
 } // handle cache end
@@ -101,14 +111,14 @@ if (getenv('INPUT_FILES')) {
         foreach (json_decode($input_files, true) as $file => $s3_file) {
             $flysystem->put($s3_file, file_get_contents($file));
 
-            echo "\n===> Upload $file TO $s3_file \n";
+            $core->debug("Upload $file TO $s3_file");
         }
     } else {
         $files = explode(',', $input_files);
         foreach ($files as $file) {
             $flysystem->put($file, file_get_contents($file));
 
-            echo "\n===> Upload $file TO $file \n";
+            $core->debug("Upload $file TO $file");
         }
     }
 }
@@ -150,6 +160,6 @@ foreach ($contents as $key => $value) {
 
         $flysystem->put($upload_file, file_get_contents($local_file));
 
-        echo "\n===> Upload $local_file TO $upload_file \n";
+        $core->debug("Upload $local_file TO $upload_file");
     }
 }

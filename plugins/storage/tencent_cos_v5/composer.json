@@ -1,5 +1,8 @@
 {
     "require": {
-        "qcloud/cos-sdk-v5": "^2.0.8"
-    }
+        "qcloud/cos-sdk-v5": "^2.0.8",
+        "pcit/plugin-toolkit": "^19.12-dev"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

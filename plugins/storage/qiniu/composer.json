@@ -1,6 +1,7 @@
 {
   "require": {
-    "overtrue/flysystem-qiniu": "*"
+    "overtrue/flysystem-qiniu": "*",
+    "pcit/plugin-toolkit": "^19.12-dev"
   },
   "minimum-stability": "dev",
   "prefer-stable": true

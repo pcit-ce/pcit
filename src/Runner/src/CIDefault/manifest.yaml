@@ -4,7 +4,7 @@ image:
   js: node:14.4.0-alpine
   node: node:14.4.0-alpine
   bash: bash
-  sh: alpine:3.11
+  sh: alpine:3.12
   go: golang:1.14-alpine
   golang: golang:1.14-alpine
   deno: pcit/deno

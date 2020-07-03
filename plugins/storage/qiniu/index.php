@@ -6,6 +6,9 @@ require __DIR__.'/vendor/autoload.php';
 
 use League\Flysystem\Filesystem;
 use Overtrue\Flysystem\Qiniu\QiniuAdapter;
+use PCIT\Plugin\Toolkit\Core;
+
+$core= new Core();
 
 $config = [
     'app_id' => getenv('INPUT_APP_ID'),
@@ -32,9 +35,8 @@ try {
         foreach (json_decode($input_files, true) as $file => $label) {
             $result = $flysystem->write($label, file_get_contents($file));
 
-            echo "===> Upload [ $file ] TO [ $label ] result\n";
-            var_dump($result);
-            echo "\n";
+            $core->debug("Upload [ $file ] TO [ $label ]");
+            $core->debug((string)$result);
         }
         // array
     } else {
@@ -43,11 +45,10 @@ try {
         foreach ($files as $file) {
             $result = $flysystem->write($file, file_get_contents($file));
 
-            echo "===> Upload [ $file ] TO [ $file ] result\n";
-            var_dump($result);
-            echo "\n";
+            $core->debug("Upload [ $file ] TO [ $file ])";
+            $core->debug((string)$result);
         }
     }
 } catch (Throwable $e) {
-    echo $e->__toString();
+    $core->debug($e->__toString());
 }
