@@ -18,8 +18,8 @@ class AnsiHandler
     public function handle(
         string $log,
         int $line_offset = 0,
-        string $pattern = '::warning',
-        string $header = '[33mwarning[0m'
+        string $type = 'warning',
+        string $color_header = '[33m'
         ): array {
         $new_log = [];
 
@@ -32,13 +32,18 @@ class AnsiHandler
             $line_start = substr($line, 0, $line_offset);
             $line_content = substr($line, $line_offset) ?: '';
 
-            preg_match('/^'.$pattern.'/', $line_content, $matches);
+            preg_match('/^::'.$type.'/', $line_content, $matches);
 
             if ($matches) {
                 [,$context,$message] = explode('::', $line_content, 3);
                 $this->handleContext($context);
                 // $line_content = substr($line_content, \strlen($pattern));
-                $log_content = $header.' '.$message;
+
+                $message = str_replace('%0A', "\n$line_start$color_header", $message);
+                $message = str_replace('%0D', "\r", $message);
+                $message = str_replace('%25', '%', $message);
+
+                $log_content = $color_header.'##['.$type.']'.$message.'[0m';
             } else {
                 $log_content = $line_content;
             }

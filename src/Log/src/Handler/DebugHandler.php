@@ -11,8 +11,8 @@ class DebugHandler
         return (new AnsiHandler())->handle(
              $log,
              $line_offset,
-             '::debug',
-             '[32mdebug[0m'
+             'debug',
+             '[32m'
             );
     }
 }

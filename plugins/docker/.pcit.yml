@@ -27,18 +27,18 @@ steps:
       cache_from:
         - pict/alpine:cache
       cache_to:
-        - type=local%2Cdest=/tmp/build-cache
+        - type=local,dest=/tmp/build-cache
       secret:
-        - id=mysecret%2Csrc=secret.txt
+        - id=mysecret,src=secret.txt
       output:
         # - .
         # - path
-        # - type=local%2Cdest=path
-        # - type=tar%2Cdest=path
-        # - type=oci%2Cdest=path
-        # - type=docker%2Cdest=path%2Ccontext=my-context
-        # - type=image%2Cname=name%2Cpush=false
-        - type=image%2Cpush=true
+        # - type=local,dest=path
+        # - type=tar,dest=path
+        # - type=oci,dest=path
+        # - type=docker,dest=path,context=my-context
+        # - type=image,name=name,push=false
+        - type=image,push=true
         # - type=registry
       buildx_image: dockerpracticesig/buildkit:master
     if:

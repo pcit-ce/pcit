@@ -6,7 +6,7 @@ namespace PCIT\Runner\Agent\Interfaces;
 
 interface RunnerHandlerInterface
 {
-    public function handle(int $job_id);
+    public function handle(int $job_id): void;
 
-    public function runStep(int $job_id, string $container_config, string $step = null);
+    public function runStep(int $job_id, string $container_config, string $step): void;
 }

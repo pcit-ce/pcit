@@ -1,0 +1,26 @@
+language: php
+
+steps:
+  scripts: |
+    composer dump
+    sed -i "s#^require.*#require __DIR__.'/../vendor/autoload.php';#g" php-tests/core.php
+
+    php php-tests/core.php
+  tests:
+    run: |
+      echo -e "secret % \r \n : ,"
+
+      echo -e $var
+
+      echo $KKK
+      echo -e $KKK
+
+      echo $KKK_2
+      echo -e $KKK_2
+
+      echo $KKK_3
+      echo -e $KKK_3
+    env:
+      - KKK=${{ steps.scripts.outputs }}
+      - KKK_2=${{ steps.scripts.outputs.output }}
+      - KKK_3=${{ steps.scripts.outputs.output }}--${{github.event_type }}

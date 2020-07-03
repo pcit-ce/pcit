@@ -36,9 +36,11 @@ class DockerHandler implements RunnerHandlerInterface
 
     private $path = [];
 
-    private $output = [];
+    private $outputs = [];
 
     private $mask_value_array = [];
+
+    private $expressionHandler;
 
     /**
      * RunContainer constructor.
@@ -51,6 +53,7 @@ class DockerHandler implements RunnerHandlerInterface
         $this->docker_container = $docker->container;
         $this->docker_network = $docker->network;
         $this->cache = \Cache::store();
+        $this->expressionHandler = new ExpressionHandler();
     }
 
     /**
@@ -235,15 +238,23 @@ class DockerHandler implements RunnerHandlerInterface
      */
     public function insertEnv(string $container_config): string
     {
+        $env_handler = new EnvHandler();
         $container_env = json_decode($container_config)->Env;
 
+        // handle expressions
+        $container_env_obj = $env_handler->array2obj($container_env);
+        $container_env = [];
+        foreach ($container_env_obj as $k => $v) {
+            $container_env[$k] = $this->expressionHandler->handleOutput($v, $this->outputs);
+        }
+
         $container_env = array_merge(
-           $container_env,
+           $env_handler->obj2array($container_env),
            $this->env,
         );
 
         // env 值包含 \n 将每一行加入 mask 列表
-        $container_env_obj = (new EnvHandler())->array2obj($container_env);
+        $container_env_obj = $env_handler->array2obj($container_env);
 
         foreach ($container_env_obj as $k => $v) {
             if (false === strpos($v, "\n")) {
@@ -254,10 +265,6 @@ class DockerHandler implements RunnerHandlerInterface
             $this->mask_value_array = array_merge($this->mask_value_array, $mask_array);
             $mask_array = [];
         } // end
-
-        if (!$this->env) {
-            return $container_config;
-        }
 
         $container_config = json_decode($container_config);
         $container_config->Env = $container_env;
@@ -270,7 +277,7 @@ class DockerHandler implements RunnerHandlerInterface
      *
      * @throws \Exception
      */
-    public function runStep(int $job_id, string $container_config, string $step = null): void
+    public function runStep(int $job_id, string $container_config, string $step): void
     {
         $container_config = $this->insertEnv($container_config);
 
@@ -286,7 +293,8 @@ class DockerHandler implements RunnerHandlerInterface
 
         [
             'env' => $env,
-            'mask' => $mask_value_array
+            'mask' => $mask_value_array,
+            'output' => $output,
         ] = (new ContainerLog($job_id, $container_id, $step))
         ->handle($this->mask_value_array);
 
@@ -297,6 +305,7 @@ class DockerHandler implements RunnerHandlerInterface
         $this->env = array_merge($this->env, $env);
 
         // output
+        $this->outputs[$step] = $output;
 
         // path
 

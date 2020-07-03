@@ -36,6 +36,10 @@ steps:
       console.log(1)
       console.log(2)
 
+      let os = require('os')
+      console.log(`::set-output name=os_arch::${os.arch()}`)
+      console.log(`::set-output name=KKK::%0D %0A %25 : , !`)
+
   deno_shell:
     image: pcit/deno
     shell: deno
@@ -44,6 +48,12 @@ steps:
       console.log(2)
 
       Deno.version
+
+      Deno.env.get('OS_ARCH')
+      Deno.env.get('KKK')
+    env:
+      - OS_ARCH=${{steps.node_shell.outputs.os_arch}}
+      - KKK=${{steps.node_shell.outputs.KKK}}
 
 clone:
   git:

@@ -76,7 +76,15 @@ class EnvHandler
             return $value;
         }
 
-        return implode(',', $value);
+        $new_array = [];
+
+        foreach ($value as $item) {
+            $item = str_replace('%', '%25', $item);
+            $item = str_replace(',', '%2C', $item);
+            $new_array[] = $item;
+        }
+
+        return implode(',', $new_array);
     }
 
     /**

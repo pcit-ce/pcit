@@ -10,6 +10,7 @@ use PCIT\Log\Handler\DebugHandler;
 use PCIT\Log\Handler\EnvHandler as LogEnvHandler;
 use PCIT\Log\Handler\ErrorHandler;
 use PCIT\Log\Handler\MaskHandler;
+use PCIT\Log\Handler\OutputHandler;
 use PCIT\Log\Handler\WarningHandler;
 use PCIT\PCIT;
 use PCIT\Runner\Events\Handler\EnvHandler;
@@ -113,6 +114,7 @@ class Log
                 // path
 
                 // output
+                [$container_log,$output] = (new OutputHandler())->handle($container_log, 31);
 
                 // debug
                 [$container_log,$debug_context] = (new DebugHandler())->handle($container_log, 31);
@@ -159,7 +161,7 @@ class Log
                 'debug' => $debug_context ?? [],
                 'warning' => $warning_context ?? [],
             ],
-            // 'output' => $output ?? []
+            'output' => $output ?? [],
             // 'path' => $path ?? []
         ];
     }

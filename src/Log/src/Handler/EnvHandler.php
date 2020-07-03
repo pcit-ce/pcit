@@ -25,6 +25,11 @@ class EnvHandler
             if ($matches) {
                 $line_content = substr($line_content, 15);
                 [$env_key,$env_value] = explode('::', $line_content, 2);
+
+                $env_value = str_replace('%0A', "\n", $env_value);
+                $env_value = str_replace('%0D', "\r", $env_value);
+                $env_value = str_replace('%25', '%', $env_value);
+
                 $env[$env_key] = $env_value;
                 continue;
             } else {

@@ -23,9 +23,9 @@ class EnvHandlerTest extends TestCase
 
         $this->assertEquals('a', $result);
 
-        $result = (new EnvHandler())->array2str(['a', 'b']);
+        $result = (new EnvHandler())->array2str(['a,%%2C', 'b']);
 
-        $this->assertEquals('a,b', $result);
+        $this->assertEquals('a%2C%25%252C,b', $result);
     }
 
     public function test_obj2array(): void

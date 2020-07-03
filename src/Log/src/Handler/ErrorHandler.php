@@ -11,8 +11,8 @@ class ErrorHandler
         return (new AnsiHandler())->handle(
              $log,
              $line_offset,
-             '::error',
-             '[31merror[0m'
+             'error',
+             '[31m'
             );
     }
 }

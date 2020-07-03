@@ -45,6 +45,7 @@ split(){
        -o ${CMD_ARG} = "output" \
        ];then
       item=$(echo $item | sed "s/%2C/,/g")
+      item=$(echo $item | sed "s/%25/%/g")
     fi
 
     OPTIONS+=" --${CMD_ARG} ${item} "
