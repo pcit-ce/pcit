@@ -36,5 +36,7 @@ class Owner extends Kernel
         $this->email = $repository_owner->email ?? null;
         $this->pic = $repository_owner->avatar_url;
         $this->org = $org;
+
+        parent::__construct($repository_owner);
     }
 }

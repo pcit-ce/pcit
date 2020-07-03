@@ -8,7 +8,7 @@ use League\Flysystem\Filesystem;
 use Overtrue\Flysystem\Qiniu\QiniuAdapter;
 use PCIT\Plugin\Toolkit\Core;
 
-$core= new Core();
+$core = new Core();
 
 $config = [
     'app_id' => getenv('INPUT_APP_ID'),
@@ -36,7 +36,7 @@ try {
             $result = $flysystem->write($label, file_get_contents($file));
 
             $core->debug("Upload [ $file ] TO [ $label ]");
-            $core->debug((string)$result);
+            $core->debug((string) $result);
         }
         // array
     } else {
@@ -45,8 +45,8 @@ try {
         foreach ($files as $file) {
             $result = $flysystem->write($file, file_get_contents($file));
 
-            $core->debug("Upload [ $file ] TO [ $file ])";
-            $core->debug((string)$result);
+            $core->debug("Upload [ $file ] TO [ $file ]");
+            $core->debug((string) $result);
         }
     }
 } catch (Throwable $e) {

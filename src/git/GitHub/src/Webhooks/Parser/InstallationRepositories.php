@@ -26,7 +26,7 @@ class InstallationRepositories
 
         $repo_type = 'repositories_'.$action;
 
-        $repo = $obj->$repo_type;
+        $repositories = $obj->$repo_type;
 
         $org = 'Organization' === $account->type;
 
@@ -34,7 +34,7 @@ class InstallationRepositories
 
         $irc->installation_id = $installation_id;
         $irc->action = $action;
-        $irc->repo = $repo;
+        $irc->repositories = $repositories;
         $irc->sender = new Sender($obj->sender);
         $irc->account = new Account($account, $org);
 

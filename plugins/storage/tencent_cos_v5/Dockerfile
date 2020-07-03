@@ -12,6 +12,6 @@ COPY --from=composer /srv/pcit/plugin/cosv5/vendor/ /srv/pcit/plugin/cosv5/vendo
 
 COPY index.php .env.example /srv/pcit/plugin/cosv5/
 
-ENTRYPOINT ["php"]
+ENTRYPOINT ["php","-d","memory_limit=500M"]
 
 CMD ["/srv/pcit/plugin/cosv5/index.php"]

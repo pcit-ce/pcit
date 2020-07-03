@@ -12,6 +12,6 @@ COPY --from=composer /srv/pcit/plugin/demo-use-toolkit/vendor/ /srv/pcit/plugin/
 
 COPY index.php .env.example /srv/pcit/plugin/demo-use-toolkit/
 
-ENTRYPOINT ["php"]
+ENTRYPOINT ["php","-d","memory_limit=500M"]
 
 CMD ["/srv/pcit/plugin/demo-use-toolkit/index.php"]

@@ -12,6 +12,6 @@ COPY --from=composer /srv/pcit/plugin/qiniu/vendor/ /srv/pcit/plugin/qiniu/vendo
 
 COPY index.php .env.example /srv/pcit/plugin/qiniu/
 
-ENTRYPOINT ["php"]
+ENTRYPOINT ["php","-d","memory_limit=500M"]
 
 CMD ["/srv/pcit/plugin/qiniu/index.php"]

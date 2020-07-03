@@ -26,26 +26,26 @@ class InstallationRepositories
 
         $installation_id = $context->installation_id;
         $action = $context->action;
-        $repo = $context->repo;
+        $repositories = $context->repositories;
         $sender = $context->sender;
-        $owner = $context->owner;
+        $account = $context->account;
 
         User::updateUserInfo((int) $sender->uid, null, $sender->username, null, $sender->pic);
-        User::updateUserInfo($owner);
-        User::updateInstallationId((int) $installation_id, $owner->username);
+        User::updateUserInfo($account);
+        User::updateInstallationId((int) $installation_id, $account->login);
 
         if ('added' === $action) {
-            $this->added($repo, $sender->uid);
+            $this->added($repositories, $sender->uid);
 
             return;
         }
 
-        $this->removed($repo);
+        $this->removed($repositories);
     }
 
-    public function added(array $repo, int $sender_uid): void
+    public function added(array $repositories, int $sender_uid): void
     {
-        foreach ($repo as $k) {
+        foreach ($repositories as $k) {
             // 仓库信息存入 repo 表
             $rid = $k->id;
 
@@ -60,9 +60,9 @@ class InstallationRepositories
      *
      * @throws \Exception
      */
-    private function removed(array $repo): void
+    private function removed(array $repositories): void
     {
-        foreach ($repo as $k) {
+        foreach ($repositories as $k) {
             $rid = $k->id;
 
             Repo::deleteByRid((int) $rid);

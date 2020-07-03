@@ -9,8 +9,8 @@ use App\GetAccessToken;
 use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
-use PCIT\GitHub\Webhooks\Handler\GetConfig;
-use PCIT\GitHub\Webhooks\Handler\Subject;
+use PCIT\GPI\Webhooks\Handler\GetConfig;
+use PCIT\GPI\Webhooks\Handler\Subject;
 use PCIT\PCIT;
 use Symfony\Component\Yaml\Yaml;
 

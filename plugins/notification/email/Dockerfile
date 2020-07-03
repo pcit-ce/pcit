@@ -12,6 +12,6 @@ COPY --from=composer /srv/pcit/plugin/email/vendor/ /srv/pcit/plugin/email/vendo
 
 COPY index.php .env.example /srv/pcit/plugin/email/
 
-ENTRYPOINT ["php"]
+ENTRYPOINT ["php","-d","memory_limit=500M"]
 
 CMD ["/srv/pcit/plugin/email/index.php"]

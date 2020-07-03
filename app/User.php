@@ -6,6 +6,7 @@ namespace App;
 
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
+use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
 use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 class User extends Model
@@ -54,6 +55,16 @@ class User extends Model
             $org = $uid->org;
 
             $uid = $uid->uid;
+        }
+
+        if ($uid instanceof Account) {
+            $name = $uid->login;
+            $username = $uid->login;
+            $email = $uid->email;
+            $pic = $uid->avatar_url;
+            $org = $uid->org;
+
+            $uid = $uid->id;
         }
 
         $type = $org ? 'org' : 'user';

@@ -24,14 +24,14 @@ class Installation
 
         $account = $installation->account;
 
-        $repo = $obj->repositories ?? null;
+        $repositories = $obj->repositories ?? null;
 
         $org = 'Organization' === $account->type;
 
         $installationContext = new InstallationContext([], $webhooks_content);
         $installationContext->installation_id = $installation_id;
         $installationContext->action = $action;
-        $installationContext->repo = $repo;
+        $installationContext->repositories = $repositories;
         // sender 可视为管理员
         $installationContext->sender = new Sender($obj->sender);
         $installationContext->account = new Account($account, $org);

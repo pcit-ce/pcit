@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Parser\UserBasicInfo;
 
-class Sender
+use PCIT\GPI\Webhooks\Context\Components\Kernel;
+
+class Sender extends Kernel
 {
     public $uid;
 
@@ -17,5 +19,7 @@ class Sender
         $this->uid = $sender->id;
         $this->username = $sender->login;
         $this->pic = $sender->avatar_url;
+
+        parent::__construct($sender);
     }
 }
