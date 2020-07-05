@@ -113,6 +113,21 @@ CMD ["up"]
 # ==> nginx unit
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:7.4.7-unit-alpine as unit
 
+ARG S6_VERSION=2.0.0.1
+
+ARG TARGETARCH
+
+RUN set -x \
+    && if [ "${TARGETARCH}" = 'arm64' ];then TARGETARCH=aarch64; fi \
+    && if [ "${TARGETARCH}" = 'arm32' ];then TARGETARCH=arm; fi \
+    && curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${TARGETARCH}.tar.gz -o /tmp/s6-overlay.tar.gz \
+    && tar -zxvf /tmp/s6-overlay.tar.gz -C / \
+#    && tar -zxvf /tmp/s6-overlay.tar.gz -C / --exclude='./bin' \
+#    && tar -zxvf /tmp/s6-overlay.tar.gz -C /usr ./bin \
+    && rm -rf /tmp/s6-overlay.tar.gz \
+# https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
+    && ln -s /init /s6-init
+
 ARG VCS_REF="unknow"
 ARG UI_VCS_REF="unknow"
 
@@ -125,6 +140,8 @@ COPY --from=dump /app/pcit/ /app/pcit/
 COPY .docker/unit/docker-entrypoint.sh /
 
 COPY .docker/unit/config.json /etc/nginx-unit/
+
+COPY .docker/unit/services.d /etc/services.d
 
 EXPOSE 80
 

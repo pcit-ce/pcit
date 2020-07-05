@@ -17,10 +17,22 @@ cd /app/pcit
 set -x
 
 if [ "${CI_DAEMON_ENABLED}" = 'false' ];then
-  UNIT_PID=`cat /usr/local/nginx-unit/unit.pid`
-  kill $UNIT_PID
+  # UNIT_PID=`cat /usr/local/nginx-unit/unit.pid`
+  # kill $UNIT_PID
 
-  exec unitd --no-daemon --user root --group root --log /var/log/nginx-unit/nginx-unit.log
+  echo > /etc/services.d/pcitd/down
+
+  # exec unitd --no-daemon --user root --group root --log /var/log/nginx-unit/nginx-unit.log
 fi
 
-exec /app/pcit/bin/pcitd $@
+# exec /app/pcit/bin/pcitd $@
+
+UNIT_PID=`cat /usr/local/nginx-unit/unit.pid`
+kill $UNIT_PID
+
+chmod +x $(find /etc/services.d -name 'run')
+chmod +x $(find /etc/services.d -name 'finish')
+
+export PCITD_CMD=$@
+
+exec s6-svscan -t0 /etc/services.d

@@ -7,14 +7,31 @@
     "applications": {
         "pcit": {
             "type": "php",
-            "root": "/app/pcit/public",
-            "index": "index.php",
-            "script": "index.php",
             "user": "root",
-            "group": "root"
+            "group": "root",
+            "targets": {
+                "direct": {
+                    "root": "/app/pcit/public"
+                },
+                "index": {
+                    "root": "/app/pcit/public",
+                    "script": "index.php",
+                    "index": "index.php"
+                }
+            }
         }
     },
     "routes": [
+        {
+            "match": {
+                "uri": [
+                    "/index.php"
+                ]
+            },
+            "action": {
+                "pass": "applications/pcit/direct"
+            }
+        },
         {
             "match": {
                 "uri": [
@@ -28,7 +45,7 @@
             "action": {
                 "share": "/app/pcit/public/",
                 "fallback": {
-                    "pass": "applications/pcit"
+                    "pass": "applications/pcit/index"
                 }
             }
         },
@@ -36,7 +53,7 @@
             "action": {
                 "share": "/app/pcit/public/",
                 "fallback": {
-                    "pass": "applications/pcit"
+                    "pass": "applications/pcit/index"
                 }
             }
         }

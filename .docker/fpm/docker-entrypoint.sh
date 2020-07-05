@@ -4,7 +4,7 @@ php-fpm -D --pid /var/run/php-fpm.pid
 
 if [ "${CI_DAEMON_ENABLED}" = 'false' ];then
   FPM_PID=`cat /var/run/php-fpm.pid`
-  kill $UNIT_PID
+  kill $FPM_PID
 
   exec php-fpm -F
 fi

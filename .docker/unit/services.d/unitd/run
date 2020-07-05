@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec unitd --no-daemon --user root --group root --log /var/log/nginx-unit/nginx-unit.log
