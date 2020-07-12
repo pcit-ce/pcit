@@ -159,7 +159,7 @@ steps:
     if:
       status: success
       jobs:
-        - PHP_VERSION: 7.4.7
+        - PHP_VERSION: 7.4.8
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
@@ -172,7 +172,7 @@ steps:
       status: success
       event: ["push"]
       jobs:
-        - PHP_VERSION: 7.4.7
+        - PHP_VERSION: 7.4.8
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
@@ -218,7 +218,7 @@ steps:
       status: success
       event: ["push"]
       jobs:
-        - PHP_VERSION: 7.4.7
+        - PHP_VERSION: 7.4.8
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
@@ -241,7 +241,7 @@ steps:
       status: success
       event: ["push"]
       jobs:
-        - PHP_VERSION: 7.4.7
+        - PHP_VERSION: 7.4.8
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
@@ -255,7 +255,7 @@ steps:
       status: success
       event: push
       jobs:
-        - PHP_VERSION: 7.4.7
+        - PHP_VERSION: 7.4.8
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
@@ -340,7 +340,7 @@ steps:
       event: push
       branch: master
       jobs:
-        - PHP_VERSION: 7.4.7
+        - PHP_VERSION: 7.4.8
           NGINX_VERSION: 1.15.8
           REDIS_VERSION: 6.0.2
           MYSQL_VERSION: 5.7.29
@@ -395,10 +395,10 @@ services:
 # 不支持变量
 jobs:
   PHP_VERSION:
-    - 7.4.7
-    - 7.3.18
+    - 7.4.8
+    - 7.3.20
     - nightly
-    - 7.2.24
+    - 7.2.32
     # - 7.1.26
   NGINX_VERSION:
     - 1.15.8
@@ -413,13 +413,13 @@ jobs:
   # - 10.5
   # 排除以上 jobs 矩阵中的某些 job
   exclude:
-  - PHP_VERSION: 7.2.24
+  - PHP_VERSION: 7.2.32
     NGINX_VERSION: 1.15.8
     REDIS_VERSION: 6.0.2
     MYSQL_VERSION: 5.7.29
   # 向以上 jobs 矩阵添加新的 job
   include:
-  - PHP_VERSION: 7.4.7
+  - PHP_VERSION: 7.4.8
     MYSQL_VERSION: 8.0.20
     REDIS_VERSION: 6.0.2
     NEW_ENV: new_env
@@ -427,7 +427,7 @@ jobs:
 # 不支持变量
 # jobs:
 #   include:
-#     - PHP_VERSION: 7.2.24
+#     - PHP_VERSION: 7.2.32
 #       MYSQL_VERSION: 5.7.29
 #       REDIS_VERSION: 6.0.2
 #     - PHP_VERSION: 7.1.26
@@ -463,4 +463,4 @@ networks:
 # 指定构建步骤的默认镜像
 # 若使用变量，请在 settings 页面将变量设为 public,否则 pull_request 将不能运行
 # 如果只在 push 触发，则无需设为 public
-image: khs1994/php:7.4.7-composer-alpine
+image: khs1994/php:7.4.8-composer-alpine
