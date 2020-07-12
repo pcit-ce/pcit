@@ -13,3 +13,7 @@ $ ./toolkit/pcit-CMD
 ## pcit-retry(bash)
 
 * https://github.com/kadwanev/retry
+
+## pcit-wait-for-it(bash)
+
+* https://github.com/vishnubob/wait-for-it

@@ -72,7 +72,9 @@ steps:
       - echo "${NEW_ENV}" || true
       - echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       # 服务初始化需要时间，这里延迟执行
-      - sleep 30
+      # - sleep 30
+      - /opt/pcit/toolkit/pcit-wait-for-it mysql:3306 -- echo 'mysql is run'
+      - /opt/pcit/toolkit/pcit-wait-for-it redis:6379 -- echo 'redis is run'
       - vendor/bin/phpunit --coverage-clover=coverage.xml
     if: # 不支持变量
       # platform: linux/amd64
