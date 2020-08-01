@@ -1,6 +1,8 @@
 .git
 .github
 .idea
+.pcit
+.psalm
 
 vendor
 composer.lock
@@ -19,8 +21,11 @@ frontend/package-lock.json
 
 !.env.example
 
-framework/storage/private_key/private.key
-framework/storage/private_key/public.key
+/framework/storage/private_key
+!/framework/storage/private_key/.gitignore
+
+/openapi
+!/openapi/openapi.yaml
 
 .php_cs.cache
 
@@ -30,7 +35,6 @@ framework/storage/private_key/public.key
 /docs
 /examples
 /miniprogram
-/plugins
 /tests
 /coverage.xml
 /.editorconfig
@@ -48,4 +52,8 @@ framework/storage/private_key/public.key
 /.travis.yml
 /.dockerignore
 
+!/README.md
+
 app/Http/Controllers/Test
+
+/psalm.xml

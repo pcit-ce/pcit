@@ -15,6 +15,7 @@ ARG NODE_REGISTRY=https://registry.npmjs.org
 COPY frontend/package.json /app/pcit/frontend/
 
 RUN --mount=type=cache,target=/root/.npm,id=npm_cache cd /app/pcit/frontend \
+      set -x \
       # && npm install cross-env --registry=${NODE_REGISTRY} \
       # && npm install --registry=${NODE_REGISTRY} --production
       && npm install --registry=${NODE_REGISTRY}
@@ -26,7 +27,8 @@ COPY ./frontend/html /app/pcit/frontend/html
 COPY ./frontend/css /app/pcit/frontend/css
 COPY ./frontend/src /app/pcit/frontend/src
 
-RUN cd /app/pcit/frontend \
+RUN set -x \
+      && cd /app/pcit/frontend \
       && npm run build
 
 # 安装 composer 依赖
@@ -36,19 +38,24 @@ COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
 
 RUN --mount=type=cache,target=/tmp/composer/cache,id=composer_cache cd /app/pcit \
+      set -x \
       && composer install --no-dev \
       && rm -rf src
 
 # 整合项目
-FROM alpine as dump
+FROM ${USERNAME}/php:${PHP_VERSION}-cli-alpine as dump
 
 COPY --from=composer /app/pcit/vendor /app/pcit/vendor
 COPY . /app/pcit
 COPY --from=frontend-builder /app/pcit/public/ /app/pcit/public/
 
-RUN rm -rf /app/pcit/Dockerfile \
+RUN set -x \
+      && rm -rf /app/pcit/Dockerfile \
       && rm -rf /app/pcit/frontend \
-      && rm -rf /app/pcit/.docker
+      && rm -rf /app/pcit/.docker \
+      \
+      && /app/pcit/bin/pcit plugin \
+      && rm -rf /app/pcit/plugins
 
 # ==> pcit
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine as pcit
@@ -177,6 +184,7 @@ RUN set -x \
     \
     && mkdir -p /var/log/nginx-unit /usr/local/nginx-unit/tmp \
     && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log \
+    && ln -sf /dev/stdout /var/log/nginx-unit/access.log \
     \
     && php -v \
     && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));' \
@@ -202,6 +210,12 @@ RUN set -x \
 # https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
     && ln -s /init /s6-init
 
+COPY .docker/unit/docker-entrypoint.sh /
+
+COPY .docker/unit/config.json /etc/nginx-unit/
+
+COPY .docker/unit/services.d /etc/services.d
+
 ARG VCS_REF="unknow"
 ARG UI_VCS_REF="unknow"
 
@@ -210,12 +224,6 @@ LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/pcit-ce/pcit"
 
 COPY --from=dump /app/pcit/ /app/pcit/
-
-COPY .docker/unit/docker-entrypoint.sh /
-
-COPY .docker/unit/config.json /etc/nginx-unit/
-
-COPY .docker/unit/services.d /etc/services.d
 
 EXPOSE 80
 
@@ -234,6 +242,8 @@ VOLUME [ "/var/lib/docker" ]
 VOLUME [ "/data" ]
 # nginx unit
 VOLUME [ "/usr/local/nginx-unit/tmp", "/usr/local/nginx-unit/state" ]
+# vscode remote
+VOLUME [ "/root/.vscode-server", "/root/.vscode-server-insiders" ]
 
 # ==> 前端资源
 FROM --platform=$TARGETPLATFORM alpine as frontend

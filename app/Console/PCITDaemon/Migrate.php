@@ -30,7 +30,7 @@ class Migrate
     public static function all(): void
     {
         foreach (self::getSqlFileList() as $file) {
-            echo "\n\n===> Migrate $file ...\n\n";
+            echo "\n\n==> Migrate $file ...\n\n";
 
             self::migrateSqlFile(base_path().'framework/sql/'.$file);
         }
