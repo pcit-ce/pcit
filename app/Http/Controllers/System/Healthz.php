@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\System;
 
+use PCIT\Framework\Support\DB;
+
 class Healthz
 {
     public function __invoke()
@@ -15,21 +17,33 @@ class Healthz
     {
         try {
             \Cache::ping();
+
+            return $this->ok();
         } catch (\Throwable $e) {
             return $this->fail($e->getMessage());
         }
-
-        return $this->ok();
     }
 
     public function database()
     {
-        return $this->ok();
+        try {
+            DB::statement('use '.config('database.connections.mysql.database'));
+
+            return $this->ok();
+        } catch (\Throwable $e) {
+            return $this->fail();
+        }
     }
 
     public function docker()
     {
-        return $this->ok();
+        try {
+            app('pcit')->docker->system->ping();
+
+            return $this->ok();
+        } catch (\Throwable $e) {
+            return $this->fail();
+        }
     }
 
     public function ok($content = 'ok')

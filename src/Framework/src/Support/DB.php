@@ -51,15 +51,22 @@ class DB
 
                         return self::connection();
                     } catch (PDOException $e) {
-                        throw new Exception('Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
+                        if (\PHP_SAPI === 'cli') {
+                            die('[error] [PCIT] database not exists');
+                        }
+                        throw new Exception('database not exists', 500);
                     }
                 }
 
+                $errorCode = 500;
+
                 if (2002 === $e->getCode()) {
-                    die('[error] Can\'t connect DB Server'."\n");
+                    if (\PHP_SAPI === 'cli') {
+                        die('[error] PCIT can\'t connect DB Server'."\n");
+                    }
                 }
 
-                throw new Exception('Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
+                throw new Exception('PCIT can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), $errorCode);
             }
         }
 
@@ -258,14 +265,5 @@ class DB
     public static function getPdo()
     {
         return self::connection();
-    }
-
-    public static function ping(): void
-    {
-        if ($false) {
-            throw new Exception();
-        }
-
-        return;
     }
 }

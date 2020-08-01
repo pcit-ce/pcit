@@ -77,7 +77,7 @@ class Router
 
             0 === $code && $code = 500;
 
-            throw new Exception($e->getMessage(), $code, $e);
+            throw new Exception($e->getMessage(), (int) $code, $e);
         }
 
         // 处理完毕，退出
