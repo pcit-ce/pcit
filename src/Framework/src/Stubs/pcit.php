@@ -6,6 +6,9 @@ class App extends \PCIT\Framework\Support\Facades\App
 {
 }
 
+/**
+ * @inheritDoc
+ */
 class Route extends \PCIT\Framework\Support\Facades\Route
 {
 }

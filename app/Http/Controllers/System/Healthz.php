@@ -27,6 +27,11 @@ class Healthz
         return $this->ok();
     }
 
+    public function docker()
+    {
+        return $this->ok();
+    }
+
     public function ok($content = 'ok')
     {
         return \Response::make($content, 200, [

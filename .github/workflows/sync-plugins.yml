@@ -12,7 +12,7 @@ jobs:
       contains( github.event.head_commit.message, '[sync git]')
       || contains( github.ref, 'refs/tags/')
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 1
     - name: sync-plugin-toolkit

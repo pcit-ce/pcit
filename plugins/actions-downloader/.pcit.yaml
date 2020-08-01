@@ -1,6 +1,6 @@
 steps:
   actions_branch:
-    image: github://actions/checkout@master
+    image: github://actions/checkout@min
     with:
       fetch-depth: 1
       path: test_git

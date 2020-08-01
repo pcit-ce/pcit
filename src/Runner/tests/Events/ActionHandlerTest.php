@@ -19,7 +19,7 @@ class ActionHandlerTest extends TestCase
         $step = new Pipeline($pipeline, null, $jobGenerator, null);
         $actionHandler = new ActionHandler($step);
         $result = $actionHandler->handle(
-            'actions', 'github://actions/checkout@master'
+            'actions', 'github://actions/checkout@main'
         );
 
         $this->assertEquals('node /var/run/actions/actions/checkout/dist/index.js',
