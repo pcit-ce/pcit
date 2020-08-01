@@ -56,7 +56,7 @@ class DB
                 }
 
                 if (2002 === $e->getCode()) {
-                    die('DB_Error: Can\'t connect DB Server'."\n");
+                    die('[error] Can\'t connect DB Server'."\n");
                 }
 
                 throw new Exception('Can\'t connect mysql server, error message is '.$e->getMessage().'. error code '.$e->getCode(), 500);
@@ -258,5 +258,14 @@ class DB
     public static function getPdo()
     {
         return self::connection();
+    }
+
+    public static function ping(): void
+    {
+        if ($false) {
+            throw new Exception();
+        }
+
+        return;
     }
 }

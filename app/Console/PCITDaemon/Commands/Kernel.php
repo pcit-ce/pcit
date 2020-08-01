@@ -110,8 +110,7 @@ abstract class Kernel extends Command
         $public_key = $private_key_root.'/public.key';
 
         if ((!file_exists($private_key)) or (!file_exists($public_key))) {
-            echo "\n\n\n==> GitHub App private key or public cert not found, please see framework/storage/private_key/README.md\n\n\n";
-            exit;
+            echo "\n\n\n==> [error] GitHub App private key or public cert not found, please see framework/storage/private_key/README.md\n\n\n";
         }
     }
 }

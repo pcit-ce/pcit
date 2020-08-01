@@ -53,7 +53,7 @@ class Migrate
                 DB::statement($k);
             } catch (\Throwable $e) {
                 // 数据库执行出错则退出
-                echo 'DB_Error: '.$e->getMessage().PHP_EOL;
+                echo '[error]: '.$e->getMessage().PHP_EOL;
             }
         }
     }
