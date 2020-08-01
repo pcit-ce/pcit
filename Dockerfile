@@ -245,6 +245,8 @@ VOLUME [ "/usr/local/nginx-unit/tmp", "/usr/local/nginx-unit/state" ]
 # vscode remote
 VOLUME [ "/root/.vscode-server", "/root/.vscode-server-insiders" ]
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD [ "curl", "-f", "127.0.0.1:80/api/healthz" ]
+
 # ==> 前端资源
 FROM --platform=$TARGETPLATFORM alpine as frontend
 
