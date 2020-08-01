@@ -35,7 +35,7 @@ FROM ${USERNAME}/php:7.4.8-composer-alpine as composer
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
 
-RUN --mount=type=cache,target=/tmp/cache,id=composer_cache cd /app/pcit \
+RUN --mount=type=cache,target=/tmp/composer/cache,id=composer_cache cd /app/pcit \
       && composer install --no-dev \
       && rm -rf src
 
@@ -151,6 +151,89 @@ ENTRYPOINT [ "sh","/docker-entrypoint.sh" ]
 
 CMD ["up"]
 # CMD ["server"]
+
+# ==> nginx unit + dockerd + pcitd (all in one)
+FROM --platform=$TARGETPLATFORM docker:dind as all-in-one
+
+COPY --from=khs1994/php:7.4.8-unit-alpine /usr/local/ /usr/local
+
+COPY --from=redis:6.0.6-alpine /usr/local/bin /usr/local/bin/
+
+RUN set -x \
+#    && sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories \
+    && runDeps="$( \
+    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+      | tr ',' '\n' \
+      | sort -u \
+      | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+    )" \
+    && apk add --no-cache $runDeps \
+                          tzdata \
+                          bash \
+                          curl \
+    \
+    && mkdir -p /usr/local/etc/redis /data \
+    && echo > /usr/local/etc/redis/redis.conf \
+    \
+    && mkdir -p /var/log/nginx-unit /usr/local/nginx-unit/tmp \
+    && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log \
+    \
+    && php -v \
+    && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));' \
+    \
+    && dockerd -v \
+    \
+    && unitd --version \
+    \
+    && redis-server -v
+
+ARG S6_VERSION=2.0.0.1
+
+ARG TARGETARCH
+
+RUN set -x \
+    && if [ "${TARGETARCH}" = 'arm64' ];then TARGETARCH=aarch64; fi \
+    && if [ "${TARGETARCH}" = 'arm32' ];then TARGETARCH=arm; fi \
+    && curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${TARGETARCH}.tar.gz -o /tmp/s6-overlay.tar.gz \
+    && tar -zxvf /tmp/s6-overlay.tar.gz -C / \
+#    && tar -zxvf /tmp/s6-overlay.tar.gz -C / --exclude='./bin' \
+#    && tar -zxvf /tmp/s6-overlay.tar.gz -C /usr ./bin \
+    && rm -rf /tmp/s6-overlay.tar.gz \
+# https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
+    && ln -s /init /s6-init
+
+ARG VCS_REF="unknow"
+ARG UI_VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      ui.revision=$UI_VCS_REF \
+      org.opencontainers.image.source="https://github.com/pcit-ce/pcit"
+
+COPY --from=dump /app/pcit/ /app/pcit/
+
+COPY .docker/unit/docker-entrypoint.sh /
+
+COPY .docker/unit/config.json /etc/nginx-unit/
+
+COPY .docker/unit/services.d /etc/services.d
+
+EXPOSE 80
+
+ENV CI_DAEMON_ENABLED=true
+
+ENV CI_REDIS_HOST=127.0.0.1
+
+ENTRYPOINT [ "sh","/docker-entrypoint.sh" ]
+
+CMD ["up"]
+# CMD ["server"]
+
+# dockerd
+VOLUME [ "/var/lib/docker" ]
+# redis-server
+VOLUME [ "/data" ]
+# nginx unit
+VOLUME [ "/usr/local/nginx-unit/tmp", "/usr/local/nginx-unit/state" ]
 
 # ==> 前端资源
 FROM --platform=$TARGETPLATFORM alpine as frontend

@@ -60,6 +60,18 @@
     "source": "pcit/unit:master"
   },
   {
+    "source": "pcit/pcit:all-in-one"
+  },
+  {
+    "source": "pcit/pcit:master-all-in-one"
+  },
+  {
+    "source": "pcit/all-in-one"
+  },
+  {
+    "source": "pcit/all-in-one:master"
+  },
+  {
     "source": "pcit/pcit:frontend"
   },
   {

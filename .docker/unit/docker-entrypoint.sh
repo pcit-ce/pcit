@@ -33,6 +33,14 @@ kill $UNIT_PID
 chmod +x $(find /etc/services.d -name 'run')
 chmod +x $(find /etc/services.d -name 'finish')
 
+if ! [ -x /usr/local/bin/dind ];then
+  echo > /etc/services.d/dockerd/down
+fi
+
+if ! [ -x /usr/local/bin/redis-server ];then
+  echo > /etc/services.d/redis-server/down
+fi
+
 export PCITD_CMD=$@
 
 exec s6-svscan -t0 /etc/services.d

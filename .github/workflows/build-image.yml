@@ -73,7 +73,21 @@ jobs:
             --build-arg VCS_REF=$VCS_REF \
             --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
+            --cache-from=pcit/unit:cache \
+            --cache-to=pcit/unit:cache \
             --target=unit --push .
+
+          docker buildx build \
+            -t pcit/pcit:all-in-one \
+            -t pcit/pcit:${TAG}-all-in-one \
+            -t pcit/all-in-one \
+            -t pcit/all-in-one:${TAG} \
+            --build-arg VCS_REF=$VCS_REF \
+            --build-arg UI_VCS_REF=$UI_VCS_REF \
+            --platform ${PLATFORM} \
+            --cache-from=pcit/all-in-one:cache \
+            --cache-to=pcit/all-in-one:cache \
+            --target=all-in-one --push .
 
           docker buildx build \
             -t pcit/pcit:frontend \
