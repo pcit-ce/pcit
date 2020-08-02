@@ -69,6 +69,10 @@ class Client implements OAuthInterface
 
     public function getLoginUrl(?string $state): string
     {
+        if (!($this->clientId and $this->clientSecret and $this->callbackUrl)) {
+            return '';
+        }
+
         $url = static::URL.http_build_query([
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->callbackUrl,

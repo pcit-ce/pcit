@@ -53,7 +53,7 @@ class IndexController
             $api_token,
             time() + 24 * 60 * 60,
             '/',
-            config('session.domain'), true
+            config('session.domain')
         );
 
         User::updateUserInfo((int) $uid, null, (string) $username, (string) $email, (string) $pic, false, $git_type);

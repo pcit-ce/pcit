@@ -26,6 +26,8 @@ services:
       - tmp-data:/tmp
       - dockerd-data:/var/lib/docker
       - redis-data:/data
+      - framework-storage:/app/pcit/framework/storage
+
       # - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
       # - ./daemon.json:/etc/docker/daemon.json:ro
       # - ./docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
@@ -34,13 +36,53 @@ services:
       - vscode-data:/root/.vscode-server
       - vscode-insiders-data:/root/.vscode-server-insiders
 
+      - ../app:/app/pcit/app
+      - ../framework:/app/pcit/framework
+      - ../src:/app/pcit/src
+
+  smee-client-proxy-github:
+    image: lrew/smee
+    depends_on:
+      - pcit
+    environment:
+      SMEE_SERVICE: ''
+      SMEE_TARGET: http://pcit:80/webhooks/github
+    volumes:
+      - smee-client-proxy-github:/var/lib/smee-client
+
+  # smee-client-proxy-gitee:
+  #   image: lrew/smee
+  #   depends_on:
+  #     - pcit
+  #   environment:
+  #     SMEE_SERVICE: ''
+  #     SMEE_TARGET: http://pcit:80/webhooks/gitee
+  #   volumes:
+  #     - smee-client-proxy-gitee:/var/lib/smee-client
+
+  # smee-client-proxy-coding:
+  #   image: lrew/smee
+  #   depends_on:
+  #     - pcit
+  #   environment:
+  #     SMEE_SERVICE: ''
+  #     SMEE_TARGET: http://pcit:80/webhooks/coding
+  #   volumes:
+  #     - smee-client-proxy-coding:/var/lib/smee-client
+
 volumes:
   mysql-data:
   tmp-data:
   dockerd-data:
   redis-data:
+  framework-storage:
+
   vscode-data:
   vscode-insiders-data:
+
+  smee-client-proxy-github:
+  smee-client-proxy-gitee:
+  smee-client-proxy-coding:
 
 networks:
   default:

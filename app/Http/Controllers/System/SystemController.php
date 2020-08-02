@@ -24,12 +24,13 @@ class SystemController
 
         switch ($git_type) {
             case 'github':
-                $url = 'https://github.com/settings/connections/applications/';
+                //$url = 'https://github.com/settings/connections/applications/';
+                $url = 'https://github.com/settings/apps/'.env('CI_GITHUB_APP_NAME').'/installations';
 
                 break;
         }
 
-        $url = $url.env('CI_'.strtoupper($git_type).'_CLIENT_ID');
+        //$url = $url.env('CI_'.strtoupper($git_type).'_CLIENT_ID');
 
         return compact('url');
     }

@@ -38,6 +38,17 @@ class JWTController
     }
 
     /**
+     * @return resource
+     */
+    public static function getPublicKeyFromPrivateKey(string $private_key_path)
+    {
+        $resource = openssl_get_privatekey('file://'.$private_key_path);
+        $result = openssl_pkey_get_details($resource);
+
+        return openssl_get_publickey($result['key']);
+    }
+
+    /**
      * @return array
      *
      * @throws \Exception
@@ -46,10 +57,12 @@ class JWTController
     {
         $token = self::getToken();
 
+        $private_key_path = base_path().'framework/storage/private_key/private.key';
+        // $public_key_path = base_path().'framework/storage/private_key/public.key';
+        $public_key = self::getPublicKeyFromPrivateKey($private_key_path);
+
         list('git_type' => $git_type, 'uid' => $uid, 'exp' => $exp) = (array) JWT::decode(
-            $token,
-            base_path().'framework/storage/private_key/public.key'
-        );
+            $token, $public_key);
 
         if ($exp < time()) {
             throw new Exception('JWT Token timeout', 401);

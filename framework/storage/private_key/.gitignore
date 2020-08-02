@@ -2,6 +2,6 @@
 !.gitignore
 !README.md
 
-#
 # 该文件夹存放 GitHub App 私钥
-#
+
+private.key

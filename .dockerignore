@@ -23,6 +23,7 @@ frontend/package-lock.json
 
 /framework/storage/private_key
 !/framework/storage/private_key/.gitignore
+!/framework/storage/private_key/README.md
 
 /openapi
 !/openapi/openapi.yaml

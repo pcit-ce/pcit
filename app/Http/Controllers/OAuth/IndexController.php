@@ -69,6 +69,13 @@ class IndexController
 
         $url = static::$oauth->getLoginUrl($state);
 
+        if ('' === $url) {
+            if ('github' === static::$git_type) {
+                throw new Exception('GitHub App not set, you can create new GitHub App by click https://'.config('app.host').'/api/github/app/new', 500);
+            }
+            throw new Exception(static::$git_type.' OAuth App not set', 500);
+        }
+
         // 重定向到登录 url
         \Response::redirect($url);
 

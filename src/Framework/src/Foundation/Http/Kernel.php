@@ -101,10 +101,10 @@ class Kernel
     {
         try {
             ini_set('session.cookie_path', '/');
-            ini_set('session.cookie_domain', '.'.config('session.domain'));
+            ini_set('session.cookie_domain', config('session.domain'));
             ini_set('session.gc_maxlifetime', '690000'); // s
             ini_set('session.cookie_lifetime', '690000'); // s
-            ini_set('session.cookie_secure', 'On');
+            // ini_set('session.cookie_secure', 'On');
         } catch (Throwable $e) {
         }
 

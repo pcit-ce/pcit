@@ -20,7 +20,7 @@ class LogOut
             '',
             time() - 3600,
             '/',
-            config('session.domain'), true
+            config('session.domain')
         );
 
         \Response::redirect(config('app.host'));

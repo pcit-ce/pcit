@@ -31,9 +31,7 @@ Route::get('{git_type}/dashboard', function () {
 });
 
 /* Admin */
-Route::get('admin', function () {
-    return 'Coming Soon';
-});
+Route::get('admin', 'Admin\IndexController');
 
 Route::get('api', 'IndexController@api');
 Route::get('sitemap', 'IndexController@sitemap');
@@ -257,3 +255,7 @@ Route::get('websocket/server', 'Demo\WebSocket\WebSocketController');
 Route::get('sse/server', 'Demo\SSE\SSEController');
 Route::get('websocket/client', 'Demo\WebSocket\WebSocketController@client');
 Route::get('sse/client', 'Demo\SSE\SSEController@client');
+
+/* create github app */
+Route::get('api/github/app/new', 'GitHub\GitHubApp@new');
+Route::get('api/github/app/new/callback', 'GitHub\GitHubApp@callback');

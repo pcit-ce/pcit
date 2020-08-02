@@ -102,6 +102,12 @@ class IndexController
                 'openapi_v3' => $ci_host.'/openapi/v3',
                 'validate@post' => $ci_host.'/validate',
             ],
+            'github' => [
+                'app' => [
+                    'new' => $ci_host.'/github/app/new',
+                    'callback' => $ci_host.'/github/app/new/callback',
+                ],
+            ],
         ];
 
         ksort($array);

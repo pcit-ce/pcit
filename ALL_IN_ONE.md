@@ -29,6 +29,7 @@ $ docker run -it \
   --network pcit-all-in-one \
   --name pcit-all-in-one \
   -d \
+  -v pcit-all-in-one_framework-storage:/app/pcit/framework/storage \
   pcit/all-in-one
 
   # -v pcit-all-in-one_tmp-data:/tmp \

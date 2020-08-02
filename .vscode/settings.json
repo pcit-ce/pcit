@@ -20,5 +20,7 @@
     }
   ],
   "editor.renderWhitespace": "all",
-  "php.validate.enable": false
+  "php.validate.enable": false,
+  "php.suggest.basic": false,
+  "intelephense.diagnostics.enable": false
 }

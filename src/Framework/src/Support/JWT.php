@@ -59,12 +59,12 @@ class JWT
     /**
      * 解密 token.
      *
+     * @param resource $publicKey returned by openssl_get_publickey()
+     *
      * @return object
      */
-    public static function decode(string $jwt, string $publicKey)
+    public static function decode(string $jwt, $publicKey)
     {
-        $publicKey = file_get_contents($publicKey);
-
         $obj = JWTService::decode($jwt, $publicKey, ['RS256']);
 
         return $obj;

@@ -38,7 +38,7 @@ class HttpClient
     {
         if (!(self::$curl instanceof Curl)) {
             self::$curl = new Curl();
-            self::$curl->setTimeout(5);
+            self::$curl->setTimeout(20);
         }
 
         return self::$curl;
