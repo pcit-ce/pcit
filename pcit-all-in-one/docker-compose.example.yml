@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+  mysql:
+    image: mysql:8.0.21
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pcit
+    networks:
+      - default
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  pcit:
+    image: pcit/all-in-one
+    privileged: true
+    environment:
+      CI_MYSQL_HOST: mysql
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+    networks:
+      - default
+    volumes:
+      - tmp-data:/tmp
+      - dockerd-data:/var/lib/docker
+      - redis-data:/data
+      # - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+      # - ./daemon.json:/etc/docker/daemon.json:ro
+      # - ./docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
+      # - ./.env:/app/pcit/.env:ro
+
+      - vscode-data:/root/.vscode-server
+      - vscode-insiders-data:/root/.vscode-server-insiders
+
+volumes:
+  mysql-data:
+  tmp-data:
+  dockerd-data:
+  redis-data:
+  vscode-data:
+  vscode-insiders-data:
+
+networks:
+  default:
