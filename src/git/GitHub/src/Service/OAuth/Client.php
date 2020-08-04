@@ -6,6 +6,7 @@ namespace PCIT\GitHub\Service\OAuth;
 
 use Curl\Curl;
 use Exception;
+use PCIT\GPI\Service\OAuth\OAuthInterface;
 
 class Client implements OAuthInterface
 {
@@ -40,15 +41,16 @@ class Client implements OAuthInterface
             'repo_deployment',
             'public_repo',
             'repo:invite',
+            'security_events',
+            // 'admin:repo_hook',
+            // 'write:repo_hook',
+            'read:repo_hook',
             'admin:org',
             'write:org',
             'read:org',
             'admin:public_key',
             'write:public_key',
             'read:public_key',
-            'admin:repo_hook',
-            'write:repo_hook',
-            'read:repo_hook',
             'admin:org_hook',
             'gist',
             'notifications',
@@ -56,11 +58,16 @@ class Client implements OAuthInterface
             'read:user',
             'user:email',
             'user:follow',
-            'delete_repo',
+            // 'delete_repo',
             'write:discussion',
+            'read:discussion',
+            'write:packages',
+            'read:packages',
+            // 'delete:packages',
             'admin:gpg_key',
             'write:gpg_key',
             'read:gpg_key',
+            'workflow',
         ];
 
         $this->scope = $config['scope'] ?? implode(',', $all_scope);
@@ -76,9 +83,9 @@ class Client implements OAuthInterface
         $url = static::URL.http_build_query([
                 'client_id' => $this->clientId,
                 'redirect_uri' => $this->callbackUrl,
-                'scope' => $this->scope,
+                //'scope' => $this->scope,
                 'state' => $state,
-                'allow_signup' => 'true',
+                //'allow_signup' => 'true',
             ]);
 
         return $url;

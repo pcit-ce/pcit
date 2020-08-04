@@ -46,11 +46,11 @@ class IndexController
         }
 
         $result = JWTController::generate($git_type, $username, (int) $uid);
-        $api_token = $result['token'];
+        $pcit_api_token = $result['token'];
 
         setcookie(
             $git_type.'_api_token',
-            $api_token,
+            $pcit_api_token,
             time() + 24 * 60 * 60,
             '/',
             config('session.domain')

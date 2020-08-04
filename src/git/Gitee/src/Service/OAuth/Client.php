@@ -6,7 +6,7 @@ namespace PCIT\Gitee\Service\OAuth;
 
 use Curl\Curl;
 use PCIT\GitHub\Service\OAuth\Client as GitHubClient;
-use PCIT\GitHub\Service\OAuth\OAuthInterface;
+use PCIT\GPI\Service\OAuth\OAuthInterface;
 
 class Client extends GitHubClient implements OAuthInterface
 {

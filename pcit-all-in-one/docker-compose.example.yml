@@ -31,13 +31,14 @@ services:
       # - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
       # - ./daemon.json:/etc/docker/daemon.json:ro
       # - ./docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro
-      # - ./.env:/app/pcit/.env:ro
+      - ./.env:/app/pcit/.env:ro
 
       - vscode-data:/root/.vscode-server
       - vscode-insiders-data:/root/.vscode-server-insiders
 
       - ../app:/app/pcit/app
       - ../framework:/app/pcit/framework
+      - ../public:/app/pcit/public
       - ../src:/app/pcit/src
 
   smee-client-proxy-github:

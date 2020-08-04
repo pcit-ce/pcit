@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Coding\Service\OAuth;
 
 use Curl\Curl;
-use PCIT\GitHub\Service\OAuth\OAuthInterface;
+use PCIT\GPI\Service\OAuth\OAuthInterface;
 
 class Client implements OAuthInterface
 {

@@ -71,7 +71,7 @@ class IndexController
 
         if ('' === $url) {
             if ('github' === static::$git_type) {
-                throw new Exception('GitHub App not set, you can create new GitHub App by click https://'.config('app.host').'/api/github/app/new', 500);
+                throw new Exception('GitHub App not set, you can create new GitHub App by click '.config('app.host').'/api/github/app/new', 500);
             }
             throw new Exception(static::$git_type.' OAuth App not set', 500);
         }

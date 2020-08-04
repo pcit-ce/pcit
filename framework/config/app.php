@@ -8,6 +8,7 @@ return [
     'env' => env('APP_ENV', 'production'),
     'host' => env('CI_HOST', 'http://127.0.0.1:8080'),
     'timezone' => env('CI_TZ', 'PRC'),
+    'tz' => env('CI_TZ', 'PRC'),
     'alias' => [
         'Route' => PCIT\Framework\Support\Facades\Route::class,
         'Request' => PCIT\Framework\Support\Facades\Request::class,

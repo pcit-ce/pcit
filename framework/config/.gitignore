@@ -7,3 +7,10 @@
 !logging.php
 !database.php
 !cache.php
+!git.php
+!docker.php
+!ai.php
+!wechat.php
+!storage.php
+!hosts.php
+!email.php

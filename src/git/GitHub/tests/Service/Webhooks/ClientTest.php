@@ -35,7 +35,7 @@ class ClientTest extends TestCase
 
         $request_body = file_get_contents(__DIR__.'/../../webhooks/github/'.$event.'.json');
 
-        $secret = hash_hmac($algo, $request_body, env('CI_WEBHOOKS_TOKEN'));
+        $secret = hash_hmac($algo, $request_body, config('git.webhooks.token'));
 
         $request = Request::create('/', 'POST', [], [], [],
             [

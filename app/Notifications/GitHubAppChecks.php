@@ -89,7 +89,7 @@ class GitHubAppChecks
 
         $title_prefix = str_replace('_', ' ', $title_prefix);
 
-        $name = $name ?? (env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.$event_type.' '.$job_env);
+        $name = $name ?? (config('git.github.check_run.prefix').' / '.$event_type.' '.$job_env);
 
         $title = $title ?? $title_prefix.' #'.$build_key_id.'-'.$job_key_id;
 
@@ -156,7 +156,7 @@ class GitHubAppChecks
         $build_status = Build::getBuildStatusByBuildKeyId($build_key_id);
         $conclusion = self::buildStatus2conclusion($build_status);
 
-        $run_data->name = env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT').' / '.$event_type;
+        $run_data->name = config('git.github.check_run.prefix').' / '.$event_type;
         $run_data->details_url = config('app.host').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
         $run_data->external_id = $build_key_id;
         $conclusion = $run_data->conclusion = $conclusion;

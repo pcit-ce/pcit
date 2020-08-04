@@ -250,7 +250,7 @@ class Controller
 
         $rid = (int) Repo::getRid($project, $repo, 'coding');
 
-        $token = env('CI_WEBHOOKS_TOKEN');
+        $token = config('git.webhooks.token');
 
         return <<<EOF
 {
@@ -265,7 +265,7 @@ EOF;
     {
         $url = config('app.host').'/webhooks/gitee';
 
-        $token = env('CI_WEBHOOKS_TOKEN');
+        $token = config('git.webhooks.token');
 
         return <<<EOF
 {
@@ -285,7 +285,7 @@ EOF;
     {
         $url = config('app.host').'/webhooks/github';
 
-        $token = env('CI_WEBHOOKS_TOKEN');
+        $token = config('git.webhooks.token');
 
         return <<<EOF
 {

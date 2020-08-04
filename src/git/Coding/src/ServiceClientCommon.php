@@ -22,7 +22,7 @@ trait ServiceClientCommon
 
     public function getTeamName()
     {
-        return env('CI_CODING_TEAM');
+        return config('git.coding.oauth.team');
     }
 
     private function checkResultCode(string $result, bool $throw = false): void

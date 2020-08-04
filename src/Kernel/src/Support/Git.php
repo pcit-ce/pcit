@@ -59,7 +59,7 @@ class Git
 
                 break;
             case 'coding':
-                $team = env('CI_CODING_TEAM');
+                $team = config('git.coding.oauth.team');
                 $url = 'https://e.coding.net/'.$team.'/'.$username.'/'.$repo;
 
                 if ($ssh) {
@@ -200,7 +200,7 @@ class Git
                 break;
             case 'coding':
                 // 支持 Coding 企业版(私有部署)
-                $url = env('CI_CODING_HOST', null) ?? env('CI_CODING_TEAM').'.coding.net';
+                $url = config('git.coding.host') ?? config('git.coding.oauth.team').'.coding.net';
                 $url .= '/api';
                 break;
 

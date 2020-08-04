@@ -17,7 +17,7 @@ $app = new \PCIT\Framework\Foundation\Application(['base_path' => dirname(dirnam
 AliasLoader::load(config('app.alias'));
 
 // set timezone
-date_default_timezone_set(env('CI_TZ', 'PRC'));
+date_default_timezone_set(config('app.tz'));
 
 // set web error handler
 // don't enable on cli

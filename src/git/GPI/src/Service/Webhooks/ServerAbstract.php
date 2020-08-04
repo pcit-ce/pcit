@@ -32,11 +32,11 @@ abstract class ServerAbstract implements ServerInterface
 
     public function verify(string $signature_header): void
     {
-        if (env('CI_WEBHOOKS_DEBUG', false)) {
+        if (config('git.webhooks.debug')) {
             return;
         }
 
-        $secret = env('CI_WEBHOOKS_TOKEN', null);
+        $secret = config('git.webhooks.token');
 
         $signature = \Request::getHeader($signature_header);
 

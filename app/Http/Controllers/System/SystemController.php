@@ -25,7 +25,7 @@ class SystemController
         switch ($git_type) {
             case 'github':
                 //$url = 'https://github.com/settings/connections/applications/';
-                $url = 'https://github.com/settings/apps/'.env('CI_GITHUB_APP_NAME').'/installations';
+                $url = 'https://github.com/settings/apps/'.config('git.github.app.name').'/installations';
 
                 break;
         }
@@ -52,7 +52,7 @@ class SystemController
 
     public function getGitHubAppInstallationUrl($uid)
     {
-        $app_name = strtolower(env('CI_GITHUB_APP_NAME'));
+        $app_name = strtolower(config('git.github.app.name'));
 
         $url = "https://github.com/apps/{$app_name}/installations/new/permissions?suggested_target_id=".$uid;
 

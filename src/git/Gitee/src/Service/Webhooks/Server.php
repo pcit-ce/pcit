@@ -21,7 +21,7 @@ class Server extends ServerAbstract
 
     public function verify(string $signature_header): void
     {
-        if (env('CI_WEBHOOKS_TOKEN') === \Request::getHeader($signature_header)) {
+        if (config('git.webhooks.token') === \Request::getHeader($signature_header)) {
             return;
         }
 

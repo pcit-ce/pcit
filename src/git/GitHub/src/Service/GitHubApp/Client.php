@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Service\GitHubApp;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\Env;
 use PCIT\Framework\Support\JWT;
 
 /**
@@ -175,7 +174,7 @@ class Client
             return $jwt;
         }
 
-        $jwt = JWT::getJWT($private_key_path, (int) env('CI_GITHUB_APP_ID'));
+        $jwt = JWT::getJWT($private_key_path, (int) config('git.github.app.id'));
 
         \Cache::store()->set('pcit/github_app_jwt', $jwt, 8 * 60);
 
@@ -231,7 +230,7 @@ class Client
      */
     public function getInstallUrl(int $rid)
     {
-        return $url = 'https://github.com/apps/'.env('CI_GITHUB_APP_NAME').
+        return $url = 'https://github.com/apps/'.config('git.github.app.name').
             '/installations/new/permissions?suggested_target_id='.$rid;
     }
 
