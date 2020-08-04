@@ -7,7 +7,7 @@ namespace PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\Components\PullRequest\Base as PullRequestBase;
 use PCIT\GPI\Webhooks\Context\Components\PullRequest\Head as PullRequestHead;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 
 /**
  * @property int                                                                                                                                                                                  $installation_id

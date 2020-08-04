@@ -6,8 +6,8 @@ namespace PCIT\GPI\Webhooks\Handler;
 
 use App\Repo;
 use App\User;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Sender;
 
 /**
  * 每收到 webhooks 更新数据.

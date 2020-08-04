@@ -6,8 +6,8 @@ namespace App;
 
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Account;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 
 class User extends Model
 {

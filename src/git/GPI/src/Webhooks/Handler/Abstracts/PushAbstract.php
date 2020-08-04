@@ -51,7 +51,7 @@ abstract class PushAbstract implements PushInterface
         $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
             ->handle();
 
-        \Storage::put($git_type.'/events/'.$last_insert_id.'.json', $context->raw);
+        \Storage::put('pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json', $context->raw);
     }
 
     public function handleTag(TagContext $context, string $git_type): void
@@ -90,6 +90,6 @@ abstract class PushAbstract implements PushInterface
 
         Build::updateBuildStatus((int) $last_insert_id, 'pending');
 
-        \Storage::put($git_type.'/events/'.$last_insert_id.'.json', $context->raw);
+        \Storage::put('pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json', $context->raw);
     }
 }

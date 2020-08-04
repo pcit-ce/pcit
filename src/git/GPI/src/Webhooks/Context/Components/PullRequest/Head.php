@@ -6,7 +6,7 @@ namespace PCIT\GPI\Webhooks\Context\Components\PullRequest;
 
 use PCIT\GPI\Webhooks\Context\Components\Kernel;
 use PCIT\GPI\Webhooks\Context\Components\Repository;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 
 /**
  * @property string     $label

@@ -31,6 +31,10 @@
 
 ## v19.12
 
+### 2020/08/04
+
+* [ ] 不再需要 GitHub OAuth App，使用 GitHub App 的 OAuth 功能
+
 ### 2020/05/18
 
 * [ ] Coding.net 不支持通过 OAuth 获取的 Token 克隆仓库。

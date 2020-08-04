@@ -27,12 +27,12 @@ use WeChat\WeChat;
  * @property GitHub\Service\Activity\NotificationsClient     $activity_notifications
  * @property GitHub\Service\Activity\StarringClient          $activity_starring
  * @property GitHub\Service\Activity\WatchingClient          $activity_watching
- * @property GitHub\Service\Authorizations\Client            $authorizations
  * @property GitHub\Service\Data\Client                      $data
  * @property GitHub\Service\Deployment\Client                $deployment
  * @property GitHub\Service\Gist\Client                      $gist
  * @property GitHub\Service\Gist\CommentsClient              $gist_comments
- * @property GitHub\Service\GitHubApp\Client                 $github_apps_installations
+ * @property GitHub\Service\GitHubApp\Client                 $github_apps
+ * @property GitHub\Service\GitHubApp\InstallationsClient    $github_apps_installations
  * @property GitHub\Service\OAuth\Client                     $oauth
  * @property GitHub\Service\Issue\AssigneesClient            $issue_assignees
  * @property GitHub\Service\Issue\CommentsClient             $issue_comments
@@ -72,7 +72,6 @@ class PCIT extends Container
      */
     protected $providers = [
         Providers\ActivityProvider::class,
-        Providers\AuthorizationsProvider::class,
         Providers\ChecksProvider::class,
         // Providers\CurlProvider::class,
         Providers\DataProvider::class,
@@ -155,8 +154,7 @@ class PCIT extends Container
             $this['curl_config'] = [null, false,
                 [
                     'Authorization' => 'token '.$this['config']['github']['access_token'],
-                    'Accept' => 'application/vnd.github.machine-man-preview+json;
-                    application/vnd.github.speedy-preview+json',
+                    'Accept' => 'application/vnd.github.machine-man-preview+json,application/vnd.github.speedy-preview+json',
                     'Content-Type' => 'application/json',
                 ],
             ];

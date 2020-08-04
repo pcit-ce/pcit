@@ -104,6 +104,7 @@ class IndexController
             ],
             'github' => [
                 'app' => [
+                    'detail' => $ci_host.'/github/app',
                     'new' => $ci_host.'/github/app/new',
                     'callback' => $ci_host.'/github/app/new/callback',
                 ],

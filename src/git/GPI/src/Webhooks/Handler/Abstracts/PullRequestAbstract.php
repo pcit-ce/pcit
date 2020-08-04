@@ -63,7 +63,7 @@ abstract class PullRequestAbstract implements PullRequestInterface
         $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
             ->handle();
 
-        \Storage::put($git_type.'/events/'.$last_insert_id.'.json', $context->raw);
+        \Storage::put('pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json', $context->raw);
 
         // pustomize
         (new PustomizeHandler())->handle('PullRequest', $context);

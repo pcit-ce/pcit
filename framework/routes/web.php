@@ -258,4 +258,5 @@ Route::get('sse/client', 'Demo\SSE\SSEController@client');
 
 /* create github app */
 Route::get('api/github/app/new', 'GitHub\GitHubApp@new');
+Route::get('api/github/app', 'GitHub\Detail');
 Route::get('api/github/app/new/callback', 'GitHub\GitHubApp@callback');

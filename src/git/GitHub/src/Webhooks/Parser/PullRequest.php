@@ -8,8 +8,8 @@ use PCIT\Framework\Support\Date;
 use PCIT\GPI\Webhooks\Context\Components\PullRequest\Base as PullRequestBase;
 use PCIT\GPI\Webhooks\Context\Components\PullRequest\Head as PullRequestHead;
 use PCIT\GPI\Webhooks\Context\Components\Repository;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 use PCIT\GPI\Webhooks\Context\PullRequestContext;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 class PullRequest
 {

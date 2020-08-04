@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
+use PCIT\GPI\Webhooks\Context\Components\User\Account;
+use PCIT\GPI\Webhooks\Context\Components\User\Sender;
 use PCIT\GPI\Webhooks\Context\InstallationRepositoriesContext;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Account;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
 
 class InstallationRepositories
 {

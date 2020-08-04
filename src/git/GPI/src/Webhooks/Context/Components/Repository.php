@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Context\Components;
 
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 
 /**
  * @property string $default_branch

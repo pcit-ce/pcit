@@ -18,15 +18,9 @@ $ cd ~/lnmp
 
 编辑 `~/lnmp/pcit/conf/pcit.conf`
 
-## 新建 GitHub OAuth App
-
-在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 GitHub Oauth App
-
-部分重要信息填写如下：
-
-* `Authorization callback URL` OAuth 回调地址 https://ci.example.com:port/oauth/github
-
 ## 新建 GitHub App
+
+**在网页创建**
 
 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps/new) 新建 GitHub App
 
@@ -43,6 +37,22 @@ $ cd ~/lnmp
 例如该私钥文件名为 `pcit.2018-04-28.private-key.pem`
 
 我们需要将其改名为 `private.key`，之后放入到 `~/lnmp/pcit/key` 目录中
+
+**使用 PCIT API 创建**
+
+访问 `https://ci.example.com:port/api/github/app/new?webhook_url=https://smee.io/XXXX`
+
+URL 参数 **webhook_url** 是 webhook 地址，必须公网可以访问，或者使用 smee 代理本地地址。
+
+### 启用 GitHub App 的 OAuth 功能
+
+**Identifying and authorizing users**
+
+> User authorization callback URL
+
+填入回调地址，例如 `https://ci.example.com:port/oauth/github`
+
+勾选 **Request user authorization (OAuth) during installation**
 
 ## 填写关键信息
 

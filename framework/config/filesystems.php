@@ -21,6 +21,10 @@ return [
                 'connect_timeout' => 0,
             ],
         ],
+
+        'local' => [
+            'root' => '/tmp',
+        ],
     ],
 
     'bucket' => env('CI_S3_BUCKET', 'pcit'),

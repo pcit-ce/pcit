@@ -164,9 +164,9 @@ $ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git ~/lnmp
 $ cd ~/lnmp
 ```
 
-**1.** 在 GitHub [Settings > Developer settings > OAuth Apps](https://github.com/settings/developers) 注册一个 **GitHub Oauth App**
+**1.** 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 **GitHub App**
 
-**2.** 在 GitHub [Settings > Developer settings > GitHub Apps](https://github.com/settings/apps) 注册一个 **GitHub App**
+**2.** 启用 GitHub App 的 OAuth。 
 
 **3.** 准备证书文件，包括网站证书以及 GitHub App 的私钥证书
 

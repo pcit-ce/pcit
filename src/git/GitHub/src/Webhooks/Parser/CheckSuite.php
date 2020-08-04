@@ -8,10 +8,10 @@ use PCIT\Framework\Support\Date;
 use PCIT\GPI\Webhooks\Context\CheckSuiteContext;
 use PCIT\GPI\Webhooks\Context\Components\HeadCommit;
 use PCIT\GPI\Webhooks\Context\Components\Repository;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
+use PCIT\GPI\Webhooks\Context\Components\User\Author;
+use PCIT\GPI\Webhooks\Context\Components\User\Committer;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Sender;
 
 class CheckSuite
 {

@@ -99,7 +99,7 @@ class DB
             $result = $stmt->fetchAll();
             // $stmt->closeCursor();
         } catch (PDOException $e) {
-            throw new Exception($e->getMessage(), 500);
+            throw new Exception($e->getMessage().self::getDebugInfo(), 500);
         }
 
         if ($single) {
@@ -132,7 +132,7 @@ class DB
             self::setDebugInfo($stmt);
             $last = (int) $pdo->lastInsertId();
         } catch (PDOException $e) {
-            throw new Exception($e->getMessage(), 500);
+            throw new Exception($e->getMessage().self::getDebugInfo(), 500);
         }
 
         return $last;
@@ -177,7 +177,7 @@ class DB
             self::setDebugInfo($stmt);
             $count = $stmt->rowCount();
         } catch (PDOException $e) {
-            throw new Exception($e->getMessage(), 500);
+            throw new Exception($e->getMessage().self::getDebugInfo(), 500);
         }
 
         return $count;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GPI\Webhooks\Parser\UserBasicInfo;
+namespace PCIT\GPI\Webhooks\Context\Components\User;
 
 use PCIT\GPI\Webhooks\Context\Components\Kernel;
 

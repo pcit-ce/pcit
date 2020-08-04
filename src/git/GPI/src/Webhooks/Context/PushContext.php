@@ -8,10 +8,10 @@ use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\Components\HeadCommit;
 use PCIT\GPI\Webhooks\Context\Components\Pusher;
 use PCIT\GPI\Webhooks\Context\Components\Repository;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Sender;
+use PCIT\GPI\Webhooks\Context\Components\User\Author;
+use PCIT\GPI\Webhooks\Context\Components\User\Committer;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Sender;
 
 /**
  * @property string       $ref

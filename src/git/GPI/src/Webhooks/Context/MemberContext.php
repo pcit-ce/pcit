@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 
 /**
  * @property "added"|"removed"|"edited" $action

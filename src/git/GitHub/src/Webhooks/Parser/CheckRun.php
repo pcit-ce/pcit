@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\GPI\Webhooks\Context\CheckRunContext;
 use PCIT\GPI\Webhooks\Context\Components\Repository;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 
 class CheckRun
 {

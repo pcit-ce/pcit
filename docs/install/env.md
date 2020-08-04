@@ -19,9 +19,9 @@
 | `CI_GITEE_CLIENT_ID`      | String | Gitee 应用 ID                                              |
 | `CI_GITEE_CLIENT_SECRET`  | String | Gitee 应用 Secret                                          |
 | `CI_GITEE_CALLBACK_URL`   | String | Gitee 应用回调地址                                             |
-| `CI_GITHUB_CLIENT_ID`     | String | GitHub OAuth 应用 ID                                       |
-| `CI_GITHUB_CLIENT_SECRET` | String | GitHub OAuth 应用 Secret                                   |
-| `CI_GITHUB_CALLBACK_URL`  | String | GitHub OAuth 应用回调地址                                      |
+| `CI_GITHUB_CLIENT_ID`     | String | GitHub App 应用 ID                                       |
+| `CI_GITHUB_CLIENT_SECRET` | String | GitHub App 应用 Secret                                   |
+| `CI_GITHUB_CALLBACK_URL`  | String | GitHub App OAuth 应用回调地址                                      |
 | `CI_GITHUB_APP_NAME`      | String | GitHub App 应用名称                                          |
 | `CI_GITHUB_APP_ID`        | String | GitHub App ID                                            |
 | `CI_TZ`                   | String | 时区设置                                                     |

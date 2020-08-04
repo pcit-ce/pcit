@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Context\Components;
 
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Author;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Committer;
+use PCIT\GPI\Webhooks\Context\Components\User\Author;
+use PCIT\GPI\Webhooks\Context\Components\User\Committer;
 
 /**
  * @property string        $id

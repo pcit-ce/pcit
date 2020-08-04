@@ -6,8 +6,8 @@ namespace PCIT\GitHub\Webhooks\Parser;
 
 use PCIT\Framework\Support\Date;
 use PCIT\GPI\Webhooks\Context\Components\Repository;
+use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 use PCIT\GPI\Webhooks\Context\IssuesContext;
-use PCIT\GPI\Webhooks\Parser\UserBasicInfo\Owner;
 
 class Issues
 {

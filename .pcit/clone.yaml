@@ -12,6 +12,7 @@ clone:
       - "git.t.khs1994.com:192.168.199.100"
       - "git2.t.khs1994.com:192.168.199.100"
       - "git3.t.khs1994.com:${VAR}"
+    disable: false
 
 steps:
   script: echo exec script
