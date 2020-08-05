@@ -29,7 +29,11 @@ class Kernel
 
         // 引入路由文件
         try {
+            // if(explode('/',$request->server->get('REQUEST_URI'))[1] === 'api'){
+            //     require base_path().'framework/routes/api.php';
+            // }else{
             require base_path().'framework/routes/web.php';
+            // }
         } catch (Throwable $e) {
             if ($e instanceof SuccessException) {
                 $output = Route::getOutput();

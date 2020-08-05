@@ -105,11 +105,9 @@ abstract class Kernel extends Command
     private function check(): void
     {
         // GitHub App private key
-        $private_key_root = base_path().'/framework/storage/private_key';
-        $private_key = $private_key_root.'/private.key';
-        // $public_key = $private_key_root.'/public.key';
+        $private_key_path = config('git.github.app.private_key_path');
 
-        if (!file_exists($private_key)) {
+        if (!file_exists($private_key_path)) {
             echo "\n\n\n==> [error] GitHub App private key not found, please see framework/storage/private_key/README.md\n\n\n";
         }
     }

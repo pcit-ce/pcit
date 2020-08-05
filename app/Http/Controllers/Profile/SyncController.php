@@ -104,7 +104,7 @@ class SyncController
         DB::beginTransaction();
 
         if ('github' === $this->git_type) {
-            $result = $this->pcit->github_apps_installations->listUser();
+            $result = $this->pcit->github_apps_installations->listUser($this->access_token);
             $orgs = json_encode((json_decode($result))->installations);
         } else {
             $orgs = $this->pcit->user_basic_info->listOrgs();

@@ -44,7 +44,7 @@ class Config
             'wechat' => [
                 'app_id' => config('wechat.app.id'),
                 'app_secret' => config('wechat.app.secret'),
-                'token' => getenv('CI_WECHAT_TOKEN'),
+                'token' => config('wechat.app.token'),
                 'template_id' => config('wechat.template_id'),
                 'open_id' => config('wechat.user_openid'),
             ],

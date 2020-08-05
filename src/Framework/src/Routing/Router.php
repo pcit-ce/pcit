@@ -165,6 +165,10 @@ class Router
         //$url = $_SERVER['REQUEST_URI'];
         $url = app('request')->getPathInfo();
 
+        // if(explode('/',$url)[1] === 'api'){
+        //     $targetUrl = 'api/'.$targetUrl;
+        // }
+
         if ((bool) $queryString) {
             // 使用 ? 分隔 url
             $url = (explode('?', $url))[0];

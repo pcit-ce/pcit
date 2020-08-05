@@ -33,6 +33,7 @@ use WeChat\WeChat;
  * @property GitHub\Service\Gist\CommentsClient              $gist_comments
  * @property GitHub\Service\GitHubApp\Client                 $github_apps
  * @property GitHub\Service\GitHubApp\InstallationsClient    $github_apps_installations
+ * @property GitHub\Service\GitHubApp\AccessTokenClient      $github_apps_access_token
  * @property GitHub\Service\OAuth\Client                     $oauth
  * @property GitHub\Service\Issue\AssigneesClient            $issue_assignees
  * @property GitHub\Service\Issue\CommentsClient             $issue_comments

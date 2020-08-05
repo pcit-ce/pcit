@@ -6,7 +6,6 @@ namespace PCIT\GitHub\Service\GitHubApp;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\JWT;
 
 /**
  * Class Installations.
@@ -47,28 +46,28 @@ class InstallationsClient
 
     /**
      * List app installations accessible to the user access token.
-     *
-     * Token is OAuth token
      */
-    public function listUser()
+    public function listUser(string $oauthToken)
     {
-        return $this->curl->get($this->api_url.'/user/installations');
+        return $this->curl->get($this->api_url.'/user/installations', null, [
+            'Authorization' => 'token '.$oauthToken,
+            'Accept' => 'application/vnd.github.machine-man-preview+json',
+        ]);
     }
 
     /**
      * List repositories accessible to the user access token.
      *
-     * Token is OAuth token
-     *
      * @return mixed
      *
      * @throws \Exception
      */
-    public function listRepositoriesByInstallationId(int $installation_id)
+    public function listRepositoriesByInstallationId(string $oauthToken, int $installation_id)
     {
         $url = $this->api_url.'/user/installations/'.$installation_id.'/repositories';
 
         return $this->curl->get($url, null, [
+            'Authorization' => 'token '.$oauthToken,
             'Accept' => 'application/vnd.github.mercy-preview+json,application/vnd.github.machine-man-preview+json',
         ]);
     }
@@ -83,11 +82,18 @@ class InstallationsClient
      *
      * @throws \Exception
      */
-    public function add(int $installation_id, int $repository_id, string $method = 'put'): void
+    public function add(
+        string $personal_access_token,
+        int $installation_id,
+        int $repository_id,
+        string $method = 'put'): void
     {
         $url = $this->api_url.'/user/installations/'.$installation_id.'/repositories/'.$repository_id;
 
-        $this->curl->$method($url);
+        $this->curl->$method($url, null, [
+            'Authorization' => 'token '.$personal_access_token,
+            'Accept' => 'application/vnd.github.machine-man-preview+json',
+        ]);
 
         $http_return_code = $this->curl->getCode();
 
@@ -100,67 +106,14 @@ class InstallationsClient
 
     /**
      * Remove repository from installation.
-     * Token is personal access token.
      *
      * 204
      *
      * @throws \Exception
      */
-    public function remove(int $installation_id, int $repository_id): void
+    public function remove(string $personal_access_token, int $installation_id, int $repository_id): void
     {
-        $this->add($installation_id, $repository_id, 'delete');
-    }
-
-    /**
-     * @param string $private_key_path
-     *
-     * @return mixed
-     *
-     * @throws \Exception
-     */
-    public function getAccessToken(int $installation_id, string $private_key_path = null)
-    {
-        $private_key_path = $private_key_path ??
-            base_path().'framework/storage/private_key/private.key';
-
-        \Log::debug('Get GitHub app Access Token ...');
-
-        $redis = \Cache::store();
-
-        $access_token = $redis->get("github_app_{$installation_id}_access_token");
-
-        if ($access_token) {
-            \Log::debug('Get GitHub app Access Token from cache success');
-
-            return $access_token;
-        }
-
-        $url = $this->api_url.'/app/installations/'.$installation_id.'/access_tokens';
-
-        $access_token_json = $this->curl->post($url, null, [
-            'Authorization' => 'Bearer '.$this->getJWT($private_key_path),
-            'Accept' => 'application/vnd.github.machine-man-preview+json',
-        ]);
-
-        $access_token_obj = json_decode($access_token_json);
-
-        $http_return_code = $this->curl->getCode();
-
-        if (201 !== $http_return_code) {
-            \Log::debug('Http Return Code is not 201 '.$http_return_code);
-
-            \Cache::store()->delete('pcit/github_app_jwt');
-
-            throw new Exception('Get GitHub App AccessToken Error '.$access_token_json, $http_return_code);
-        }
-
-        $access_token = $access_token_obj->token;
-
-        $redis->set("github_app_{$installation_id}_access_token", $access_token, 58 * 60);
-
-        \Log::debug('Get GitHub app Access Token from github success');
-
-        return $access_token;
+        $this->add($personal_access_token, $installation_id, $repository_id, 'delete');
     }
 
     public function RevokeAccessToken(): void
@@ -168,26 +121,6 @@ class InstallationsClient
         $this->curl->delete($this->api_url.'/installation/token');
 
         \Cache::store()->set('pcit/github_app_jwt', '');
-    }
-
-    /**
-     * @return string
-     *
-     * @throws \Exception
-     */
-    public function getJWT(string $private_key_path)
-    {
-        $jwt = \Cache::store()->get('pcit/github_app_jwt');
-
-        if ($jwt) {
-            return $jwt;
-        }
-
-        $jwt = JWT::getJWT($private_key_path, (int) config('git.github.app.id'));
-
-        \Cache::store()->set('pcit/github_app_jwt', $jwt, 8 * 60);
-
-        return $jwt;
     }
 
     /**

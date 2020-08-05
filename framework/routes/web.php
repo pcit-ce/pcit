@@ -256,7 +256,10 @@ Route::get('sse/server', 'Demo\SSE\SSEController');
 Route::get('websocket/client', 'Demo\WebSocket\WebSocketController@client');
 Route::get('sse/client', 'Demo\SSE\SSEController@client');
 
-/* create github app */
+/* github app */
+// create github app
 Route::get('api/github/app/new', 'GitHub\GitHubApp@new');
-Route::get('api/github/app', 'GitHub\Detail');
 Route::get('api/github/app/new/callback', 'GitHub\GitHubApp@callback');
+
+// get github app detail
+Route::get('api/github/app', 'GitHub\Detail');

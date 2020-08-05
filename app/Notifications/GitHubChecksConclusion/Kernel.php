@@ -15,7 +15,7 @@ abstract class Kernel
     protected static $header = <<<'EOF'
 ## About PCIT (PCIT is CI TOOLKIT Written by PHP)
 
-**China First Support GitHub Checks API CI/CD System Powered By Docker and Tencent AI**
+**China First Support GitHub Checks API CI/CD System Powered By Container(Docker/Kubernetes)**
 
 **Author** @khs1994
 

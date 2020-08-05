@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'default' => env('CI_FILESYSTEM_DRIVER', 's3'),
+    'default' => env('CI_FILESYSTEM_DRIVER', 'local'),
 
     'disks' => [
         's3' => [

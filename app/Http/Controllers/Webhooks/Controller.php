@@ -167,6 +167,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
+        /** @var \PCIT\PCIT */
         $pcit = app('pcit')->setGitType(self::$gitType)
         ->setAccessToken($access_token);
 

@@ -25,7 +25,7 @@ class SystemController
         switch ($git_type) {
             case 'github':
                 //$url = 'https://github.com/settings/connections/applications/';
-                $url = 'https://github.com/settings/apps/'.config('git.github.app.name').'/installations';
+                $url = 'https://github.com/apps/'.config('git.github.app.name').'/installations/new';
 
                 break;
         }

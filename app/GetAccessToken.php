@@ -75,9 +75,9 @@ class GetAccessToken
                 throw new Exception('installation_id is error', 500);
             }
         }
-        $access_token = pcit()->github_apps_installations->getAccessToken(
+        $access_token = pcit()->github_apps_access_token->getAccessToken(
             (int) $installation_id,
-            base_path().'framework/storage/private_key/private.key'
+            config('git.github.app.private_key_path')
         );
 
         return $access_token;

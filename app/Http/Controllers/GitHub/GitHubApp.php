@@ -159,7 +159,7 @@ CI_WEBHOOKS_TOKEN=$result->webhook_secret
 $result->pem
 EOF;
 
-        file_put_contents(base_path().'framework/storage/private_key/'.$result->id.'.private.key', $result->pem);
+        file_put_contents(\dirname(config('git.github.app.private_key_path')).'/'.$result->id.'.private.key', $result->pem);
 
         return \Response::make($content, 200, [
             'Content-Type' => 'text/plain',

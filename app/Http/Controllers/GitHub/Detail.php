@@ -13,7 +13,7 @@ class Detail
 
         $private_key_path = config('git.github.app.private_key_path');
 
-        $jwt = $pcit->github_apps_installations->getJWT($private_key_path);
+        $jwt = $pcit->github_apps_access_token->getJWT($private_key_path);
 
         $result = $pcit->github_apps->getAppInfo($jwt);
 

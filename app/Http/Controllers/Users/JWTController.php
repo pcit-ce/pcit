@@ -57,7 +57,7 @@ class JWTController
     {
         $token = self::getToken();
 
-        $private_key_path = base_path().'framework/storage/private_key/private.key';
+        $private_key_path = config('git.github.app.private_key_path');
         // $public_key_path = base_path().'framework/storage/private_key/public.key';
         $public_key = self::getPublicKeyFromPrivateKey($private_key_path);
 
@@ -187,7 +187,7 @@ class JWTController
         // 验证通过 返回 jwt
         a:
         $token = JWT::encode(
-            base_path().'framework/storage/private_key/private.key',
+            config('git.github.app.private_key_path'),
             (string) $git_type,
             (string) $username,
             (int) $uid,

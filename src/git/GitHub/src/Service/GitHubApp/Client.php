@@ -108,11 +108,14 @@ class Client
      *
      * @throws \Exception
      */
-    public function findOrganizationInstallation(string $org_name)
+    public function findOrganizationInstallation(string $jwt, string $org_name)
     {
         $url = $this->api_url.'/orgs/'.$org_name.'/installation';
 
-        return $this->curl->get($url);
+        return $this->curl->get($url, null, [
+            'Authorization' => 'Bearer '.$jwt,
+            'Accept' => 'application/vnd.github.machine-man-preview+json',
+        ]);
     }
 
     /**
@@ -122,11 +125,14 @@ class Client
      *
      * @throws \Exception
      */
-    public function findRepositoryInstallation(string $username, string $repo)
+    public function findRepositoryInstallation(string $jwt, string $username, string $repo)
     {
         $url = $this->api_url.'/repos/'.$username.'/'.$repo.'/installation';
 
-        return $this->curl->get($url);
+        return $this->curl->get($url, null, [
+            'Authorization' => 'Bearer '.$jwt,
+            'Accept' => 'application/vnd.github.machine-man-preview+json',
+        ]);
     }
 
     /**
@@ -136,10 +142,13 @@ class Client
      *
      * @throws \Exception
      */
-    public function findUserInstallation(string $username)
+    public function findUserInstallation(string $jwt, string $username)
     {
         $url = $this->api_url.'/users/'.$username.'/installation';
 
-        return $this->curl->get($url);
+        return $this->curl->get($url, null, [
+            'Authorization' => 'Bearer '.$jwt,
+            'Accept' => 'application/vnd.github.machine-man-preview+json',
+        ]);
     }
 }
