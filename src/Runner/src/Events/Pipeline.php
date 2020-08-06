@@ -49,7 +49,7 @@ class Pipeline
      * @param              $pipeline
      * @param BuildData    $build
      * @param JobGenerator $jobGenerator
-     * @param array|null   $matrix_config ['k'=>'v']
+     * @param null|array   $matrix_config ['k'=>'v']
      *
      * @throws \Exception
      */
@@ -66,9 +66,9 @@ class Pipeline
     /**
      * @param $when
      *
-     * @return bool true: skip
-     *
      * @throws \Exception
+     *
+     * @return bool true: skip
      */
     public function checkWhen($when): bool
     {
@@ -129,11 +129,13 @@ class Pipeline
         ];
 
         $envHandler = new EnvHandler();
-        $pipelineEnv = $envHandler->handle($pipelineEnv, array_merge(
+        $pipelineEnv = $envHandler->handle(
+            $pipelineEnv,
+            array_merge(
             $step_system_env,
             $this->jobGenerator->system_env,
             $this->jobGenerator->system_job_env,
-            )
+        )
         );
 
         $preEnv = array_merge(
@@ -188,9 +190,10 @@ class Pipeline
 
         // custome github.com hosts
         if (env('CI_GITHUB_HOST')) {
-            $hosts = array_merge($hosts,
-            ['github.com:'.env('CI_GITHUB_HOST')]
-           );
+            $hosts = array_merge(
+                $hosts,
+                ['github.com:'.env('CI_GITHUB_HOST')]
+            );
         }
 
         foreach ($this->pipeline as $step => $pipelineContent) {
@@ -303,12 +306,14 @@ class Pipeline
     {
     }
 
-    public function storeCache(int $jobId,
-    string $step,
-    string $container_config,
-    bool $failure = false,
-    bool $success = false,
-    bool $changed = false): void
+    public function storeCache(
+        int $jobId,
+        string $step,
+        string $container_config,
+        bool $failure = false,
+        bool $success = false,
+        bool $changed = false
+    ): void
     {
         $cache = $this->cache;
 

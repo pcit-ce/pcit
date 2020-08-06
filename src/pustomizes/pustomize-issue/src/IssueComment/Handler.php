@@ -29,9 +29,9 @@ class Handler implements HandlerInterface
         }
 
         $this->pcit = new PCIT([], $context->git_type, GetAccessToken::byRid(
-                $context->rid,
-                $context->git_type
-            ));
+            $context->rid,
+            $context->git_type
+        ));
 
         if ('/translate-title' === $body) {
             $this->handleTitleTranslate();
@@ -62,6 +62,7 @@ class Handler implements HandlerInterface
     {
         if (Repo::checkAdmin((int) $this->context->rid, (int) $this->context->sender_uid)) {
             [$body, $merge_method] = $this->handleAutoMergeBodyAndMethod($body);
+
             try {
                 $this->merge($merge_method ?? 1);
 

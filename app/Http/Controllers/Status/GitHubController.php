@@ -26,9 +26,9 @@ class GitHubController
     /**
      * @param mixed ...$arg
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function list(...$arg)
     {
@@ -38,17 +38,18 @@ class GitHubController
     /**
      * @param string $accessToken
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public function create(string $repo_full_name,
-                           string $commit_sha,
-                           string $state,
-                           string $target_url,
-                           string $description,
-                           string $context,
-                           string $accessToken = null
+    public function create(
+        string $repo_full_name,
+        string $commit_sha,
+        string $state,
+        string $target_url,
+        string $description,
+        string $context,
+        string $accessToken = null
     ) {
         if (!$accessToken) {
             $accessToken = GetAccessToken::byRepoFullName($repo_full_name);
@@ -72,9 +73,9 @@ class GitHubController
     /**
      * @param mixed ...$arg
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listCombinedStatus(...$arg)
     {

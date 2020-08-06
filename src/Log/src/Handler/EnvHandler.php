@@ -31,10 +31,10 @@ class EnvHandler
                 $env_value = str_replace('%25', '%', $env_value);
 
                 $env[$env_key] = $env_value;
+
                 continue;
-            } else {
-                $new_log[] = $line_start.$line_content;
             }
+            $new_log[] = $line_start.$line_content;
         }
 
         return [implode("\n", $new_log), $env];

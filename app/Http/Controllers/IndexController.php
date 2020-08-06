@@ -253,7 +253,8 @@ class IndexController
     public function wechat(): void
     {
         \Response::redirect(
-            'https://user-images.githubusercontent.com/16733187/49062650-de41ea00-f24f-11e8-9f22-99b5cd3d0195.jpg');
+            'https://user-images.githubusercontent.com/16733187/49062650-de41ea00-f24f-11e8-9f22-99b5cd3d0195.jpg'
+        );
     }
 
     public function changelog(): void

@@ -13,9 +13,9 @@ class MilestonesClient
     /**
      * List milestones for a repository.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function list(string $repo_full_name)
     {
@@ -25,9 +25,9 @@ class MilestonesClient
     /**
      * Get a single milestone.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function get(string $repo_full_name, string $milestone_number)
     {
@@ -48,9 +48,15 @@ class MilestonesClient
      */
     public function create(string $repo_full_name, string $title, ?string $description, ?string $due_on, string $state = 'open'): void
     {
-        $this->curl->post($this->api_url.'/repos/'.$repo_full_name.'/milestones',
+        $this->curl->post(
+            $this->api_url.'/repos/'.$repo_full_name.'/milestones',
             json_encode(array_filter(compact(
-                'title', 'state', 'description', 'due_on'))));
+                'title',
+                'state',
+                'description',
+                'due_on'
+            )))
+        );
     }
 
     /**
@@ -63,8 +69,12 @@ class MilestonesClient
         $this->curl->patch(
             $this->api_url.'/repos/'.$repo_full_name.'/milestones/'.$milestone_number,
             json_encode(array_filter(compact(
-                'title', 'state', 'description', 'due_on'
-            ))));
+                'title',
+                'state',
+                'description',
+                'due_on'
+            )))
+        );
     }
 
     /**

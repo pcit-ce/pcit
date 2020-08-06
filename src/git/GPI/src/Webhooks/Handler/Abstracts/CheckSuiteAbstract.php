@@ -11,6 +11,7 @@ use PCIT\GPI\Webhooks\Handler\GetConfig;
 use PCIT\GPI\Webhooks\Handler\Skip;
 use PCIT\GPI\Webhooks\Handler\Subject;
 use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 abstract class CheckSuiteAbstract
 {
@@ -36,21 +37,61 @@ abstract class CheckSuiteAbstract
         $subject = new Subject();
 
         $subject->register(
-            new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, $sender, $git_type));
+            new UpdateUserInfo(
+                $owner,
+                (int) $installation_id,
+                (int) $rid,
+                $repo_full_name,
+                $default_branch,
+                $sender,
+                $git_type
+            )
+        );
 
-        $config_array = $subject->register(new GetConfig((int) $rid, $commit_id, $git_type))->handle()->config_array;
+        try {
+            $config_array = $subject->register(
+                new GetConfig((int) $rid, $commit_id, $git_type)
+            )->handle()->config_array;
 
-        $config = json_encode($config_array);
+            $config = json_encode($config_array);
+        } catch (ParseException $e) {
+            $config = $e->getMessage();
+            $build_status = 'misconfigured';
+        }
 
-        $last_insert_id = Build::insert('push', $branch, $compare, $commit_id,
-            $commit_message, $committer->name, $committer->email, $committer->username,
-            $author->name, $author->email, $author->username,
-            $rid, $event_time, $config, $private, $git_type);
+        $last_insert_id = Build::insert(
+            'push',
+            $branch,
+            $compare,
+            $commit_id,
+            $commit_message,
+            $committer->name,
+            $committer->email,
+            $committer->username,
+            $author->name,
+            $author->email,
+            $author->username,
+            $rid,
+            $event_time,
+            $config,
+            $private,
+            $git_type
+        );
 
-        $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
-            ->handle();
+        $subject->register(
+            new Skip($commit_message, (int) $last_insert_id, $branch, $config)
+        )->handle();
 
-        \Storage::put('pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json', $context->raw);
+        if ($build_status ?? false) {
+            Build::updateBuildStatus($last_insert_id, $build_status);
+
+            return;
+        }
+
+        \Storage::put(
+            'pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json',
+            $context->raw
+        );
     }
 
     public function handleTag(TagContext $context, string $git_type): void
@@ -74,21 +115,56 @@ abstract class CheckSuiteAbstract
         $subject = new Subject();
 
         $subject->register(
-            new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, $sender, $git_type));
-
-        $config_array = $subject->register(new GetConfig((int) $rid, $commit_id, $git_type))->handle()->config_array;
-
-        $config = json_encode($config_array);
-
-        $last_insert_id = Build::insertTag(
-            $branch, $tag, $commit_id, $commit_message,
-            $committer->name, $committer->email, $committer->username,
-            $author->name, $author->email, $author->username,
-            $rid, $event_time, $config, $private, $git_type
+            new UpdateUserInfo(
+                $owner,
+                (int) $installation_id,
+                (int) $rid,
+                $repo_full_name,
+                $default_branch,
+                $sender,
+                $git_type
+            )
         );
 
+        try {
+            $config_array = $subject->register(
+                new GetConfig((int) $rid, $commit_id, $git_type)
+            )->handle()->config_array;
+
+            $config = json_encode($config_array);
+        } catch (ParseException $e) {
+            $config = $e->getMessage();
+            $build_status = 'misconfigured';
+        }
+
+        $last_insert_id = Build::insertTag(
+            $branch,
+            $tag,
+            $commit_id,
+            $commit_message,
+            $committer->name,
+            $committer->email,
+            $committer->username,
+            $author->name,
+            $author->email,
+            $author->username,
+            $rid,
+            $event_time,
+            $config,
+            $private,
+            $git_type
+        );
+
+        if ($build_status ?? false) {
+            Build::updateBuildStatus($last_insert_id, $build_status);
+
+            return;
+        }
         Build::updateBuildStatus((int) $last_insert_id, 'pending');
 
-        \Storage::put('pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json', $context->raw);
+        \Storage::put(
+            'pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json',
+            $context->raw
+        );
     }
 }

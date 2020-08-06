@@ -47,13 +47,14 @@ pcit env get   VAR_ID
             'public',
             'p',
             InputOption::VALUE_NONE,
-            'Make new values public');
+            'Make new values public'
+        );
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -69,10 +70,10 @@ pcit env get   VAR_ID
                     $input,
                     'repo/'.$repo.'/env_vars',
                     null,
-                    true);
+                    true
+                );
 
                 break;
-
             case 'set':
                 list($name, $value) = $argument;
 
@@ -85,7 +86,9 @@ pcit env get   VAR_ID
                 $return = PCITCommand::HttpPost(
                     $input,
                     'repo/'.$repo.'/env_vars',
-                    $data, true, true
+                    $data,
+                    true,
+                    true
                 );
 
                 break;
@@ -99,7 +102,6 @@ pcit env get   VAR_ID
                 );
 
                 break;
-
             case 'get':
 
                 $return = PCITCommand::HttpGet(
@@ -110,7 +112,6 @@ pcit env get   VAR_ID
                 );
 
                 break;
-
             default:
 
                 throw new Exception('command not found', 404);

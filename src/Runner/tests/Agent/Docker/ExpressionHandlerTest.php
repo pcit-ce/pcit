@@ -13,10 +13,10 @@ class ExpressionHandlerTest extends TestCase
     {
         $string = '${{ steps.scripts.outputs }}--${{ steps.scripts.outputs.output }}--${{ steps.scripts.outputs.outputs }}';
         $result = (new ExpressionHandler())->handleOutput($string, [
-          'scripts' => [
-              'output' => 'value',
-          ],
-      ]);
+            'scripts' => [
+                'output' => 'value',
+            ],
+        ]);
 
         $this->assertEquals('{"output":"value"}--value--', $result);
     }

@@ -17,17 +17,15 @@ class SettingsController
      *
      * @param array $args
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function __invoke(...$args)
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
 
-        $result = Setting::list($rid, $git_type)[0] ?? [];
-
-        return $result;
+        return Setting::list($rid, $git_type)[0] ?? [];
     }
 
     /**
@@ -37,9 +35,9 @@ class SettingsController
      *
      * @param array $args
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function get(...$args)
     {
@@ -65,9 +63,9 @@ class SettingsController
      *
      * @param array $args
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public function update(...$args)
     {

@@ -25,9 +25,7 @@ class JWT
             'exp' => time() + 10 * 60,
         ];
 
-        $jwt = JWTService::encode($token, $privateKey, 'RS256');
-
-        return $jwt;
+        return JWTService::encode($token, $privateKey, 'RS256');
     }
 
     /**
@@ -65,8 +63,6 @@ class JWT
      */
     public static function decode(string $jwt, $publicKey)
     {
-        $obj = JWTService::decode($jwt, $publicKey, ['RS256']);
-
-        return $obj;
+        return JWTService::decode($jwt, $publicKey, ['RS256']);
     }
 }

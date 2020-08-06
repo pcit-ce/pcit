@@ -40,7 +40,8 @@ class LoginCommand extends Command
             'api-endpoint' => $api_endpoint
             ) = $input->getOptions();
 
-        $request = json_encode([
+        $request = json_encode(
+            [
                 'git-type' => $git_type,
                 'username' => $username,
                 'password' => $password,
@@ -73,7 +74,8 @@ class LoginCommand extends Command
             return 0;
         }
 
-        file_put_contents($file_name,
+        file_put_contents(
+            $file_name,
             json_encode(
                 [
                     'endpoints' => [
@@ -81,7 +83,8 @@ class LoginCommand extends Command
                             $git_type => $token,
                         ],
                     ],
-                ], JSON_PRETTY_PRINT
+                ],
+                JSON_PRETTY_PRINT
             )
         );
 

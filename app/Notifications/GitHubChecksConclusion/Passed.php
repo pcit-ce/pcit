@@ -7,9 +7,9 @@ namespace App\Notifications\GitHubChecksConclusion;
 class Passed extends Kernel
 {
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function markdown()
     {

@@ -47,11 +47,12 @@ class ValidateCommand extends Command
         }
 
         $finder = Finder::create()
-           ->in(realpath(getcwd().'/'.('.' === $pcit_file ? './' : $pcit_file)))
-           ->files()
-           ->ignoreDotFiles(false)
-           ->exclude(['vendor', 'node_modules'])
-           ->name('.pcit' === $pcit_file
+            ->in(realpath(getcwd().'/'.('.' === $pcit_file ? './' : $pcit_file)))
+            ->files()
+            ->ignoreDotFiles(false)
+            ->exclude(['vendor', 'node_modules'])
+            ->name(
+                '.pcit' === $pcit_file
                   ? ['*.yaml', '*.yml']
                   : ['.pcit.yml', '.pcit.yaml']
             );
@@ -77,33 +78,32 @@ class ValidateCommand extends Command
             $output->writeln("<info>==> The supplied $pcit_file validates against the schema.</info>");
 
             return 0;
-        } else {
-            $output->writeln("<error>==> The supplied $pcit_file does not validate.</error>");
-
-            if (!$input->getOption('table')) {
-                foreach ($validator->getErrors() as $error) {
-                    // echo sprintf("[%s] %s\n", $error['property'], $error['message']);
-                    $output->writeln(sprintf('<info>%s</info> <error>%s</error>', $error['property'], $error['message']));
-                }
-
-                return 1;
-            }
-            $table = new Table($output);
-            $table->setHeaders(['position', 'mesage']);
-            $table->setColumnMaxWidth(0, 11);
-            $rows = [];
-
-            foreach ($validator->getErrors() as $error) {
-                $rows[] = [$error['property'], $error['message']];
-                $rows[] = new TableSeparator();
-
-                // echo sprintf("[%s] %s\n", $error['property'], $error['message']);
-            }
-            $table->setRows(
-                $rows
-            );
-            $table->render();
         }
+        $output->writeln("<error>==> The supplied $pcit_file does not validate.</error>");
+
+        if (!$input->getOption('table')) {
+            foreach ($validator->getErrors() as $error) {
+                // echo sprintf("[%s] %s\n", $error['property'], $error['message']);
+                $output->writeln(sprintf('<info>%s</info> <error>%s</error>', $error['property'], $error['message']));
+            }
+
+            return 1;
+        }
+        $table = new Table($output);
+        $table->setHeaders(['position', 'mesage']);
+        $table->setColumnMaxWidth(0, 11);
+        $rows = [];
+
+        foreach ($validator->getErrors() as $error) {
+            $rows[] = [$error['property'], $error['message']];
+            $rows[] = new TableSeparator();
+
+            // echo sprintf("[%s] %s\n", $error['property'], $error['message']);
+        }
+        $table->setRows(
+            $rows
+        );
+        $table->render();
 
         return 1;
     }

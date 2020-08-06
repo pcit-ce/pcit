@@ -17,9 +17,9 @@ class User extends Model
      * @param string $git_type
      * @param int    $uid
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getUserInfo(?string $username, ?int $uid, $git_type = 'github')
     {
@@ -39,13 +39,15 @@ class User extends Model
      *
      * @throws \Exception
      */
-    public static function updateUserInfo($uid,
-                                          ?string $name = null,
-                                          string $username = null,
-                                          ?string $email = null,
-                                          ?string $pic = null,
-                                          ?bool $org = false,
-                                          string $git_type = 'github'): void
+    public static function updateUserInfo(
+        $uid,
+        ?string $name = null,
+        string $username = null,
+        ?string $email = null,
+        ?string $pic = null,
+        ?bool $org = false,
+        string $git_type = 'github'
+    ): void
     {
         if ($uid instanceof Owner) {
             $name = $uid->name;
@@ -146,9 +148,9 @@ EOF;
     }
 
     /**
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getOrgByAdmin(int $admin_uid, string $git_type = 'github')
     {
@@ -158,9 +160,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function exists(string $username, string $git_type = 'github')
     {
@@ -172,9 +174,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function delete(string $org_name, string $git_type = 'github')
     {
@@ -184,9 +186,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getUid(string $username, string $git_type = 'github')
     {
@@ -196,9 +198,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getUsername(int $uid, string $git_type)
     {
@@ -224,9 +226,9 @@ EOF;
     /**
      * @param string $username
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function getUserBasicInfo(?string $username, ?int $uid, string $git_type = 'github')
     {

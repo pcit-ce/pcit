@@ -92,13 +92,12 @@ abstract class Kernel extends Command
             }
 
             exit;
-        } else {
-            //主进程
-            //取得子进程结束状态
-            pcntl_wait($status, WUNTRACED);
-            if (pcntl_wifexited($status)) {
-                return;
-            }
+        }
+        //主进程
+        //取得子进程结束状态
+        pcntl_wait($status, WUNTRACED);
+        if (pcntl_wifexited($status)) {
+            return;
         }
     }
 

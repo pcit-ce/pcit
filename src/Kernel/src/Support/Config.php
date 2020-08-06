@@ -9,9 +9,9 @@ class Config
     /**
      * 配置项 生成数组.
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function config(array $config, string $git_type)
     {

@@ -16,9 +16,7 @@ class Suites
     private $api_url;
 
     private $header = [
-        'Accept' => 'application/vnd.github.machine-man-preview+json;
-        application/vnd.github.speedy-preview+json;
-        application/vnd.github.antiope-preview+json',
+        'Accept' => 'application/vnd.github.machine-man-preview+json,application/vnd.github.speedy-preview+json,application/vnd.github.antiope-preview+json',
     ];
 
     /**
@@ -34,9 +32,9 @@ class Suites
     /**
      * Get a single check suite.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getSingle(string $repo_full_name, int $check_suite_id)
     {
@@ -52,14 +50,16 @@ class Suites
      * @param int    $app_id
      * @param string $check_name
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public function listSpecificRef(string $repo_full_name,
-                                    string $ref,
-                                    int $app_id = null,
-                                    string $check_name = null)
+    public function listSpecificRef(
+        string $repo_full_name,
+        string $ref,
+        int $app_id = null,
+        string $check_name = null
+    )
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/commits/'.$ref.'/check-suites';
 
@@ -76,9 +76,9 @@ class Suites
     /**
      * Set preferences for check suites on a repository.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      *
      * @example
      * <pre>
@@ -107,9 +107,9 @@ class Suites
     /**
      * By default, check suites are automatically created when you create a check run.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function create(string $repo_full_name, string $head_branch, string $head_sha)
     {
@@ -128,9 +128,9 @@ class Suites
      *
      * Triggers GitHub to create a new check suite, without pushing new code to a repository.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function request(string $repo_full_name, int $check_suite_id)
     {

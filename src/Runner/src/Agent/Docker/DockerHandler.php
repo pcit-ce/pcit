@@ -80,7 +80,8 @@ class DockerHandler implements RunnerHandlerInterface
                 Cleanup::systemDelete((string) $job_id, true);
 
                 throw new PCITException($e->getMessage(), $e->getCode(), $e);
-            } elseif (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
+            }
+            if (CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS === $e->getMessage()) {
                 // job success
                 $this->after($job_id, 'success');
             } else {
@@ -107,15 +108,15 @@ class DockerHandler implements RunnerHandlerInterface
         \Log::emergency('🧰run toolkit container ...');
 
         $this->docker_container
-        ->setImage('pcit/toolkit')
-        ->setBinds([
-            'pcit_toolkit:/data',
-        ])
-        ->setLabels([
-            'com.khs1994.ci' => 'toolkit',
-        ])
-        ->create()
-        ->start(null);
+            ->setImage('pcit/toolkit')
+            ->setBinds([
+                'pcit_toolkit:/data',
+            ])
+            ->setLabels([
+                'com.khs1994.ci' => 'toolkit',
+            ])
+            ->create()
+            ->start(null);
     }
 
     /**
@@ -249,8 +250,8 @@ class DockerHandler implements RunnerHandlerInterface
         }
 
         $container_env = array_merge(
-           $env_handler->obj2array($container_env),
-           $this->env,
+            $env_handler->obj2array($container_env),
+            $this->env,
         );
 
         // env 值包含 \n 将每一行加入 mask 列表
@@ -284,7 +285,7 @@ class DockerHandler implements RunnerHandlerInterface
         $container_config = $this->handleArtifact($job_id, $container_config);
 
         \Log::emergency('🔄Run step container ...', ['job_id' => $job_id,
-        'container_config' => $container_config, ]);
+            'container_config' => $container_config, ]);
 
         $container_id = $this->docker_container
             ->setCreateJson($container_config)
@@ -296,7 +297,7 @@ class DockerHandler implements RunnerHandlerInterface
             'mask' => $mask_value_array,
             'output' => $output,
         ] = (new ContainerLog($job_id, $container_id, $step))
-        ->handle($this->mask_value_array);
+            ->handle($this->mask_value_array);
 
         \Log::emergency('☑step container success', ['job_id' => $job_id]);
 
@@ -337,18 +338,18 @@ class DockerHandler implements RunnerHandlerInterface
         $s3_dir_root = "$git_type/$repo_full_name/$job_id";
 
         $env = array_merge($preEnv, [
-                'INPUT_ENDPOINT='.env('CI_S3_ENDPOINT'),
-                'INPUT_ACCESS_KEY_ID='.env('CI_S3_ACCESS_KEY_ID'),
-                'INPUT_SECRET_ACCESS_KEY='.env('CI_S3_SECRET_ACCESS_KEY'),
-                'INPUT_BUCKET='.env('CI_S3_ARTIFACT_BUCKET', 'pcit-artifact'),
-                'INPUT_REGION='.env('CI_S3_REGION', 'us-east-1'),
-                'INPUT_USE_PATH_STYLE_ENDPOINT='.
-                (env('CI_S3_USE_PATH_STYLE_ENDPOINT', true) ? 'true' : 'false'),
-                'INPUT_ARTIFACT_NAME='.$name,
-                'INPUT_ARTIFACT_PATH='.$path,
-                'INPUT_UPLOAD_DIR='.$s3_dir_root,
-                // must latest key
-                'INPUT_ARTIFACT_DOWNLOAD=',
+            'INPUT_ENDPOINT='.env('CI_S3_ENDPOINT'),
+            'INPUT_ACCESS_KEY_ID='.env('CI_S3_ACCESS_KEY_ID'),
+            'INPUT_SECRET_ACCESS_KEY='.env('CI_S3_SECRET_ACCESS_KEY'),
+            'INPUT_BUCKET='.env('CI_S3_ARTIFACT_BUCKET', 'pcit-artifact'),
+            'INPUT_REGION='.env('CI_S3_REGION', 'us-east-1'),
+            'INPUT_USE_PATH_STYLE_ENDPOINT='.
+            (env('CI_S3_USE_PATH_STYLE_ENDPOINT', true) ? 'true' : 'false'),
+            'INPUT_ARTIFACT_NAME='.$name,
+            'INPUT_ARTIFACT_PATH='.$path,
+            'INPUT_UPLOAD_DIR='.$s3_dir_root,
+            // must latest key
+            'INPUT_ARTIFACT_DOWNLOAD=',
         ]);
 
         $container_config_object->Image = 'pcit/s3';
@@ -383,7 +384,8 @@ class DockerHandler implements RunnerHandlerInterface
         } catch (\Throwable $e) {
             \Log::emergency(
                 'upload or download cache error, please check s3(minio) server status',
-                ['message' => $e->getMessage(), 'code' => $e->getCode()]);
+                ['message' => $e->getMessage(), 'code' => $e->getCode()]
+            );
         }
     }
 

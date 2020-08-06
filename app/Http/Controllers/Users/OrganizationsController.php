@@ -25,9 +25,9 @@ class OrganizationsController
      *
      * /org/{git_type}/{organization_name}
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function find(string $git_type, string $org_name)
     {

@@ -28,9 +28,9 @@ class UserInfoController
      *
      * /user/{git_type}/{username}
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function find(string $git_type, string $username)
     {

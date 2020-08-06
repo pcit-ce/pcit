@@ -21,9 +21,9 @@ class AccessTokenClient
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function getJWT(string $private_key_path)
     {
@@ -41,9 +41,9 @@ class AccessTokenClient
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getAccessToken(int $installation_id, string $private_key_path)
     {

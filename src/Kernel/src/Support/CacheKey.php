@@ -88,6 +88,7 @@ class CacheKey
 
     /**
      * @param string type download | upload
+     * @param mixed $type
      *
      * @return string
      */

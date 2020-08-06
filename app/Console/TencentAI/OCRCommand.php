@@ -21,18 +21,20 @@ class OCRCommand extends Command
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('raw')) {
             $output->writeln(
                 json_encode(
-                        TencentAICommand::get()->ocr()->general(getcwd().'/'.$input->getArgument('image')
-                        ), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
-                    )
+                    TencentAICommand::get()->ocr()->general(
+                            getcwd().'/'.$input->getArgument('image')
+                        ),
+                    JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
+                )
             );
 
             return 0;

@@ -13,9 +13,9 @@ class EventsClient
     /**
      * List public events.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function public()
     {
@@ -25,9 +25,9 @@ class EventsClient
     /**
      * List repository events.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function repository(string $repo_full_name)
     {
@@ -37,9 +37,9 @@ class EventsClient
     /**
      * List issue events for a repository.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function issue(string $repo_full_name)
     {
@@ -49,9 +49,9 @@ class EventsClient
     /**
      * List public events for a network of repositories.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function network(string $repo_full_name)
     {
@@ -63,9 +63,9 @@ class EventsClient
      *
      * @param $org_name
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function publicOrganization($org_name)
     {
@@ -75,9 +75,9 @@ class EventsClient
     /**
      * List events for an organization.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function organization(string $username, string $org_name)
     {
@@ -87,9 +87,9 @@ class EventsClient
     /**
      * List events that a user has received.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function userReceived(string $username)
     {
@@ -99,9 +99,9 @@ class EventsClient
     /**
      * List public events that a user has received.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function publicUserReceived(string $username)
     {
@@ -111,9 +111,9 @@ class EventsClient
     /**
      * List events performed by a user.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function performedByUser(string $username)
     {
@@ -123,9 +123,9 @@ class EventsClient
     /**
      * List public events performed by a user.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function publicPerformedByUser(string $username)
     {

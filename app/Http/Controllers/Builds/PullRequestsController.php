@@ -13,9 +13,9 @@ class PullRequestsController
     /**
      * @param mixed ...$args
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function post(...$args)
     {
@@ -36,8 +36,10 @@ ORDER BY id DESC
 
 EOF;
 
-        $result = DB::select($sql, [
-               $git_type, CI::BUILD_EVENT_PR, $git_type, $repo_full_name, 'synchronize', 'opened',
+        $result = DB::select(
+            $sql,
+            [
+                $git_type, CI::BUILD_EVENT_PR, $git_type, $repo_full_name, 'synchronize', 'opened',
             ]
         );
 

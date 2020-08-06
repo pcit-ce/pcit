@@ -83,13 +83,15 @@ class Client
 
         $this->system_env = array_merge($this->system_env, $this->build->env);
 
-        \Log::emergency('⚙build property is ', [
-            'build_key_id' => $this->build->build_key_id,
-            'event_type' => $this->build->event_type,
-            'commit_id' => $this->build->commit_id,
-            'pull_request_id' => $this->build->pull_request_number,
-            'tag' => $this->build->tag,
-            'git_type' => $this->build->git_type, ]
+        \Log::emergency(
+            '⚙build property is ',
+            [
+                'build_key_id' => $this->build->build_key_id,
+                'event_type' => $this->build->event_type,
+                'commit_id' => $this->build->commit_id,
+                'pull_request_id' => $this->build->pull_request_number,
+                'tag' => $this->build->tag,
+                'git_type' => $this->build->git_type, ]
         );
 
         // 生成容器配置
@@ -122,8 +124,9 @@ class Client
 
         if ($networks->hosts ?? null) {
             $this->networks->hosts = $this->textHandler->handleArray(
-            $networks->hosts, $this->system_env
-        );
+                $networks->hosts,
+                $this->system_env
+            );
         }
 
         $this->image = null === $image ? null : $this->textHandler->handle($image, $this->system_env);
@@ -174,7 +177,9 @@ class Client
             // 用户点击重新构建 build，必须重新生成 job
             // 获取已有的 job_id
             $job_id = Job::getJobIDByBuildKeyIDAndEnv(
-                $this->build_id, json_encode($matrix_config));
+                $this->build_id,
+                json_encode($matrix_config)
+            );
 
             $this->handleJob($job_id, $matrix_config);
         }
@@ -194,7 +199,7 @@ class Client
     /**
      * 生成 job 缓存.
      *
-     * @param array|null $matrix_config ['k'=>'v','k2'=>'v2']
+     * @param null|array $matrix_config ['k'=>'v','k2'=>'v2']
      *
      * @throws \Exception
      */
@@ -233,8 +238,15 @@ class Client
             // pipeline
             ->register(new Pipeline($this->pipeline, $this->build, $this, $matrix_config))
             // cache
-            ->register(new Cache((int) $this->job_id, $build_key_id, $this->workdir, $gitType,
-                       $rid, $branch, $matrix_config, $this->cache,
+            ->register(new Cache(
+                (int) $this->job_id,
+                $build_key_id,
+                $this->workdir,
+                $gitType,
+                $rid,
+                $branch,
+                $matrix_config,
+                $this->cache,
                        // pull_request 事件不上传缓存
                        'pull_request' === $this->build->event_type
             ))
@@ -246,7 +258,7 @@ class Client
     public function changeJobToQueued(): void
     {
         (new Queued($this->job_id, $this->build->config, null, $this->language, 'Linux', $this->build->git_type))
-        ->handle();
+            ->handle();
 
         Job::updateBuildStatus($this->job_id, CI::GITHUB_CHECK_SUITE_STATUS_QUEUED);
     }

@@ -45,7 +45,10 @@ class GetConfig
         foreach ($configName as $file_name) {
             try {
                 return (new PCIT([], $git_type, $access_token))->repo_contents->getContents(
-                $repo_full_name, $file_name, $commit_id);
+                    $repo_full_name,
+                    $file_name,
+                    $commit_id
+                );
             } catch (\Throwable $e) {
                 continue;
             }
@@ -57,9 +60,9 @@ class GetConfig
     }
 
     /**
-     * @return mixed
+     * @throws \Exception|\Symfony\Component\Yaml\Exception\ParseException
      *
-     * @throws \Exception
+     * @return mixed
      */
     public function handle()
     {
@@ -72,9 +75,9 @@ class GetConfig
             'git_type' => $git_type, 'rid' => $rid, 'repo_full_name' => $repo_full_name, ]);
 
         $yaml_file_content = $this->downloadConfig([
-                '.pcit.yml',
-                '.pcit.yaml',
-                ]);
+            '.pcit.yml',
+            '.pcit.yaml',
+        ]);
 
         if ([] === $yaml_file_content) {
             return [];

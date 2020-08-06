@@ -61,7 +61,10 @@ class Agent extends Kernel
         $this->subject
             // TODO update build status in progress
             ->register(new UpdateBuildStatus(
-                (int) $job_id, (int) $build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS))
+                (int) $job_id,
+                (int) $build_key_id,
+                CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS
+            ))
             ->handle();
 
         try {
@@ -71,10 +74,12 @@ class Agent extends Kernel
                 'job_id' => $job_id,
                 'message' => $e->getMessage(),
                 'trace' => $e->__toString(),
-                ]);
+            ]);
 
             $this->handleJobFinished(
-                (int) $job_id, (int) $build_key_id, $e->getMessage()
+                (int) $job_id,
+                (int) $build_key_id,
+                $e->getMessage()
             );
         }
     }

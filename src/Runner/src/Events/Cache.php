@@ -30,24 +30,26 @@ class Cache
     /**
      * 一个 job 一个缓存.
      *
-     * @var array|null
+     * @var null|array
      */
     public $matrix;
 
     /**
      * Cache constructor.
      *
-     * @param string|array $cacheConfig
+     * @param array|string $cacheConfig
      */
-    public function __construct(int $jobId,
-                                int $build_key_id,
-                                string $workdir,
-                                string $gitType,
-                                int $rid,
-                                string $branch,
-                                ?array $matrix,
-                                $cacheConfig = null,
-                                bool $disableUpload = false)
+    public function __construct(
+        int $jobId,
+        int $build_key_id,
+        string $workdir,
+        string $gitType,
+        int $rid,
+        string $branch,
+        ?array $matrix,
+        $cacheConfig = null,
+        bool $disableUpload = false
+    )
     {
         $this->jobId = $jobId;
         $this->build_key_id = $build_key_id;
@@ -71,9 +73,7 @@ class Cache
         $matrix = md5(json_encode($matrix));
 
         // {git_type}_{rid}_{branch}-{matrix}
-        $prefix = sprintf('%s/%s/%s/%s', $this->gitType, $this->rid, $this->branch, $matrix);
-
-        return $prefix;
+        return sprintf('%s/%s/%s/%s', $this->gitType, $this->rid, $this->branch, $matrix);
     }
 
     /**

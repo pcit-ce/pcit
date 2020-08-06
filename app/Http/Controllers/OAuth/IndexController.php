@@ -15,7 +15,7 @@ use PCIT\PCIT;
 class IndexController
 {
     /**
-     * @var GitHubClient|CodingClient|GiteeClient
+     * @var CodingClient|GiteeClient|GitHubClient
      */
     protected static $oauth;
 
@@ -32,6 +32,8 @@ class IndexController
     protected $state = false;
 
     /**
+     * @param mixed $git_type
+     *
      * @throws \Exception
      */
     public function bootstrap($git_type): void
@@ -73,6 +75,7 @@ class IndexController
             if ('github' === static::$git_type) {
                 throw new Exception('GitHub App not set, you can create new GitHub App by click '.config('app.host').'/api/github/app/new', 500);
             }
+
             throw new Exception(static::$git_type.' OAuth App not set', 500);
         }
 

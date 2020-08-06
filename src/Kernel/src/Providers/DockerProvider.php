@@ -14,7 +14,8 @@ class DockerProvider implements ServiceProviderInterface
     {
         $pimple['docker'] = function () {
             if (env('CI_DOCKER_TLS_VERIFY', false)) {
-                return Docker::docker(Docker::createOptionArray(env('CI_DOCKER_HOST'),
+                return Docker::docker(Docker::createOptionArray(
+                    env('CI_DOCKER_HOST'),
                     true,
                     base_path().'framework/storage/private_key',
                     null,
@@ -24,7 +25,8 @@ class DockerProvider implements ServiceProviderInterface
                 ));
             }
 
-            return Docker::docker(Docker::createOptionArray(env('CI_DOCKER_HOST'),
+            return Docker::docker(Docker::createOptionArray(
+                env('CI_DOCKER_HOST'),
                 false,
                 null,
                 null,

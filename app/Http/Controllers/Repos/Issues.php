@@ -27,6 +27,10 @@ class Issues
         JWTController::checkByRepo($username, $repo);
 
         \PCIT\GitHub\Webhooks\Handler\Issues::translateTitle(
-            $username.'/'.$repo, (int) $issue_number, null, null);
+            $username.'/'.$repo,
+            (int) $issue_number,
+            null,
+            null
+        );
     }
 }

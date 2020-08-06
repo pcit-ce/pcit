@@ -37,12 +37,26 @@ abstract class PullRequestAbstract implements PullRequestInterface
 
         $subject = new Subject();
 
-        $subject->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type));
+        $subject->register(new UpdateUserInfo(
+            $owner,
+            (int) $installation_id,
+            (int) $rid,
+            $repo_full_name,
+            $default_branch,
+            null,
+            $git_type
+        ));
 
-        $config_array = $subject->register(new GetConfig($rid, $commit_id, $git_type))->handle()->config_array;
+        try {
+            $config_array = $subject->register(
+                new GetConfig($rid, $commit_id, $git_type)
+            )->handle()->config_array;
 
-        $config = json_encode($config_array);
-
+            $config = json_encode($config_array);
+        } catch (ParseException $e) {
+            $config = $e->getMessage();
+            $build_status = 'misconfigured';
+        }
         $last_insert_id = Build::insertPullRequest(
             $event_time,
             $action,
@@ -59,8 +73,14 @@ abstract class PullRequestAbstract implements PullRequestInterface
             $private,
             $git_type
         );
+        if ($build_status ?? false) {
+            Build::updateBuildStatus($last_insert_id, $build_status);
 
-        $subject->register(new Skip($commit_message, (int) $last_insert_id, $branch, $config))
+            return;
+        }
+        $subject->register(
+            new Skip($commit_message, (int) $last_insert_id, $branch, $config)
+        )
             ->handle();
 
         \Storage::put('pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json', $context->raw);

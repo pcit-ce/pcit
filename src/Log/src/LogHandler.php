@@ -76,7 +76,7 @@ class LogHandler
             'failure',
             'success',
             'changed',
-          ];
+        ];
 
         $steps = [];
 
@@ -112,8 +112,7 @@ class LogHandler
 
         // 获取 secret
         $secret_value_pattern = $this->getSecretPattern();
-        $log = preg_replace($secret_value_pattern, '***', $log);
 
-        return $log;
+        return preg_replace($secret_value_pattern, '***', $log);
     }
 }

@@ -16,7 +16,8 @@ class ChatCommand extends Command
     {
         $this->setName('chat');
 
-        $this->setDescription(<<<'EOF'
+        $this->setDescription(
+            <<<'EOF'
 The basic chat interface provides text-based basic chat capabilities that allow your application to quickly have machine chat capabilities with contextual semantic understanding.
 EOF
         );

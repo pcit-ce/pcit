@@ -45,9 +45,9 @@ class ActionHandler
         }
 
         \Log::info('this pipeline use actions', [
-          'repo' => $repo,
-          'path' => $path,
-          'ref' => $ref,
+            'repo' => $repo,
+            'path' => $path,
+            'ref' => $ref,
         ]);
 
         // git clone
@@ -74,8 +74,8 @@ class ActionHandler
         }
 
         return [
-          "$using $main",
-      ];
+            "$using $main",
+        ];
     }
 
     public function handleGit($step, $repo, $ref): void
@@ -105,22 +105,22 @@ class ActionHandler
     public function handleEnv($step, $workdir)
     {
         return [
-        'GITHUB_WORKSPACE='.$workdir,
-        'RUNNER_WORKSPACE'.$workdir,
-        'GITHUB_REF=',
-        'GITHUB_SHA='.$this->step->build->commit_id,
-        'RUNNER_OS=Linux',
-        'RUNNER_USER=',
-        'RUNNER_TEMP=/home/runner/work/_temp',
-        'GITHUB_REPOSITORY='.$this->step->build->repo_full_name,
-        'GITHUB_EVENT_NAME='.$this->step->build->event_type,
-        'GITHUB_WORKFLOW='.$step,
-        'GITHUB_ACTIONS=true',
-        'GITHUB_HEAD_REF=',
-        'GITHUB_BASE_REF=',
-        'GITHUB_ACTOR=',
-        'GITHUB_ACTION=run9',
-        'GITHUB_EVENT_PATH=/home/runner/work/_temp/_github_workflow/event.json',
-      ];
+            'GITHUB_WORKSPACE='.$workdir,
+            'RUNNER_WORKSPACE'.$workdir,
+            'GITHUB_REF=',
+            'GITHUB_SHA='.$this->step->build->commit_id,
+            'RUNNER_OS=Linux',
+            'RUNNER_USER=',
+            'RUNNER_TEMP=/home/runner/work/_temp',
+            'GITHUB_REPOSITORY='.$this->step->build->repo_full_name,
+            'GITHUB_EVENT_NAME='.$this->step->build->event_type,
+            'GITHUB_WORKFLOW='.$step,
+            'GITHUB_ACTIONS=true',
+            'GITHUB_HEAD_REF=',
+            'GITHUB_BASE_REF=',
+            'GITHUB_ACTOR=',
+            'GITHUB_ACTION=run9',
+            'GITHUB_EVENT_PATH=/home/runner/work/_temp/_github_workflow/event.json',
+        ];
     }
 }

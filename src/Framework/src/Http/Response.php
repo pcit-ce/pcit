@@ -34,14 +34,13 @@ class Response extends BaseResponse
     {
         $status = \in_array($status, self::HTTP_CODE) ? $status : 500;
 
-        $response = app()->make('response')->setContent($content)
-        ->setStatusCode($status)->setHeaders($headers);
-
-        return $response;
+        return app()->make('response')->setContent($content)
+            ->setStatusCode($status)->setHeaders($headers);
     }
 
     /**
      * @param array|string $content
+     * @param mixed        $json
      *
      * @return false|string
      */

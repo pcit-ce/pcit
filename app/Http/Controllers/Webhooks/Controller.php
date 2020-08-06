@@ -33,9 +33,9 @@ class Controller
     /**
      * 检查 AccessToken.
      *
-     * @return bool|null
-     *
      * @throws \Exception
+     *
+     * @return null|bool
      */
     private static function checkAccessToken()
     {
@@ -57,9 +57,9 @@ class Controller
      *
      * @param mixed ...$arg
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function list(...$arg)
     {
@@ -70,7 +70,7 @@ class Controller
         $access_token = self::checkAccessToken();
 
         $pcit = app(PCIT::class)->setGitType(static::$gitType)
-        ->setAccessToken($access_token);
+            ->setAccessToken($access_token);
 
         $json = $pcit->repo_webhooks->getWebhooks($raw, ...$arg);
 
@@ -87,9 +87,9 @@ class Controller
      *
      * @param mixed ...$arg
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function add(...$arg)
     {
@@ -116,7 +116,7 @@ class Controller
         $access_token = self::checkAccessToken();
 
         $pcit = app(PCIT::class)->setGitType(self::$gitType)
-        ->setAccessToken($access_token);
+            ->setAccessToken($access_token);
 
         $getWebhooksStatus = $pcit->repo_webhooks->getStatus($webhooksUrl, ...$arg);
 
@@ -137,12 +137,12 @@ class Controller
                 Repo::updateWebhookStatus(1, $gitType, $repo_full_name);
 
                 return ['code' => 200, 'message' => $e->getMessage()];
-            } else {
-                return [
-                    'code' => $e->getCode(),
-                    'message' => $e->getMessage(),
-                ];
             }
+
+            return [
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ];
         }
 
         return array_merge([
@@ -155,9 +155,9 @@ class Controller
      *
      * @param mixed ...$arg
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function delete(...$arg)
     {
@@ -169,7 +169,7 @@ class Controller
 
         /** @var \PCIT\PCIT */
         $pcit = app('pcit')->setGitType(self::$gitType)
-        ->setAccessToken($access_token);
+            ->setAccessToken($access_token);
 
         $repo_full_name = $username.'/'.$repo;
 
@@ -206,9 +206,9 @@ class Controller
      *
      * @param mixed ...$arg
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function activate(...$arg)
     {
@@ -230,9 +230,9 @@ class Controller
      *
      * @param array $arg
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function deactivate(...$arg)
     {

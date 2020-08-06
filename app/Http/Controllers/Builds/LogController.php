@@ -16,9 +16,9 @@ class LogController
      *
      * @param $job_id
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function __invoke($job_id)
     {
@@ -34,9 +34,7 @@ class LogController
     {
         $log = Job::getLog((int) $job_id);
 
-        $log_array = json_decode($log, true, 512, JSON_THROW_ON_ERROR);
-
-        return $log_array;
+        return json_decode($log, true, 512, JSON_THROW_ON_ERROR);
     }
 
     public function json($job_id)
@@ -143,6 +141,9 @@ class LogController
 
     /**
      * 重新运行 job 时删除 S3 中的 log.
+     *
+     * @param mixed $job_id
+     * @param mixed $build_id
      */
     public function deleteStoreInS3($job_id = 0, $build_id = 0): void
     {
@@ -163,10 +164,12 @@ class LogController
     {
         $s3_json_file = "logs/$job_id.json";
         $s3_raw_file = "logs/$job_id.txt";
+
         try {
             \Storage::delete($s3_json_file);
         } catch (\Throwable $e) {
         }
+
         try {
             \Storage::delete($s3_raw_file);
         } catch (\Throwable $e) {

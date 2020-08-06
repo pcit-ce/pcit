@@ -41,10 +41,10 @@ class Client extends GitHubClient implements OAuthInterface
         }
 
         $url = static::URL.http_build_query([
-                'client_id' => $this->clientId,
-                'redirect_uri' => $this->callbackUrl,
-                'response_type' => 'code',
-            ]);
+            'client_id' => $this->clientId,
+            'redirect_uri' => $this->callbackUrl,
+            'response_type' => 'code',
+        ]);
 
         return $url;
     }
@@ -52,12 +52,12 @@ class Client extends GitHubClient implements OAuthInterface
     public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {
         $url = static::POST_URL.http_build_query([
-                'code' => $code,
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'redirect_uri' => $this->callbackUrl,
-                'grant_type' => 'authorization_code',
-            ]);
+            'code' => $code,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'redirect_uri' => $this->callbackUrl,
+            'grant_type' => 'authorization_code',
+        ]);
 
         $json = $this->curl->post($url);
 
@@ -76,9 +76,9 @@ class Client extends GitHubClient implements OAuthInterface
     {
         // grant_type=refresh_token&refresh_token={refresh_token}
         $url = static::POST_URL.http_build_query([
-          'grant_type' => 'refresh_token',
-          'refresh_token' => $refreshToken,
-      ]);
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refreshToken,
+        ]);
 
         $json = $this->curl->post($url);
 
@@ -89,6 +89,8 @@ class Client extends GitHubClient implements OAuthInterface
 
     /**
      * 解析服务器返回的结果.
+     *
+     * @param mixed $json
      */
     public function parseTokenResult($json): array
     {

@@ -46,8 +46,10 @@ class Kernel
                     case 'array':
                         return \Response::json(
                             array_merge(
-                                $output, ['code' => $e->getCode()]
-                            ));
+                                $output,
+                                ['code' => $e->getCode()]
+                            )
+                        );
 
                         break;
                     case 'integer':
@@ -117,8 +119,6 @@ class Kernel
 
         // session_set_cookie_params());
 
-        $response = $this->sendRequestThroughRouter($request);
-
-        return $response;
+        return $this->sendRequestThroughRouter($request);
     }
 }

@@ -73,14 +73,12 @@ class Client implements OAuthInterface
             return '';
         }
 
-        $url = $this->url.http_build_query([
-                'client_id' => $this->clientId,
-                'redirect_uri' => $this->callbackUrl,
-                'response_type' => 'code',
-                'scope' => $this->scope,
-            ]);
-
-        return $url;
+        return $this->url.http_build_query([
+            'client_id' => $this->clientId,
+            'redirect_uri' => $this->callbackUrl,
+            'response_type' => 'code',
+            'scope' => $this->scope,
+        ]);
     }
 
     /**
@@ -88,13 +86,15 @@ class Client implements OAuthInterface
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {
-        $json = $this->curl->post($this->post_url.http_build_query([
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                    'grant_type' => 'authorization_code',
-                    'code' => $code,
-                ]
-            )
+        $json = $this->curl->post(
+            $this->post_url.http_build_query(
+            [
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+            ]
+        )
         );
 
         \Log::debug('Coding AccessToken Raw '.$json);
@@ -110,6 +110,8 @@ class Client implements OAuthInterface
 
     /**
      * 解析服务器返回的结果.
+     *
+     * @param mixed $json
      */
     public function parseTokenResult($json): array
     {

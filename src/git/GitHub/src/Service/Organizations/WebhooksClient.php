@@ -13,9 +13,9 @@ class WebhooksClient
     /**
      * List hooks.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function list(string $org_name)
     {
@@ -25,9 +25,9 @@ class WebhooksClient
     /**
      * Get single hook.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function get(string $org_name, int $hook_id)
     {
@@ -43,14 +43,16 @@ class WebhooksClient
      *
      * @throws \Exception
      */
-    public function create(string $org_name,
-                           string $hook_name,
-                           array $events,
-                           string $url,
-                           string $secret,
-                           string $content_type = 'json',
-                           string $insecure_ssl = '0',
-                           bool $active = true): void
+    public function create(
+        string $org_name,
+        string $hook_name,
+        array $events,
+        string $url,
+        string $secret,
+        string $content_type = 'json',
+        string $insecure_ssl = '0',
+        bool $active = true
+    ): void
     {
         $data = [
             'name' => $hook_name,
@@ -72,14 +74,16 @@ class WebhooksClient
      *
      * @throws \Exception
      */
-    public function edit(string $org_name,
-                         int $hook_id,
-                         array $events,
-                         string $url,
-                         string $secret,
-                         string $content_type = 'json',
-                         string $insecure_ssl = '0',
-                         bool $active = true): void
+    public function edit(
+        string $org_name,
+        int $hook_id,
+        array $events,
+        string $url,
+        string $secret,
+        string $content_type = 'json',
+        string $insecure_ssl = '0',
+        bool $active = true
+    ): void
     {
         $data = [
             'active' => $active,

@@ -23,7 +23,6 @@ class Push extends PushAbstract
         }
 
         return;
-
         $this->handlePush($context, 'github');
     }
 

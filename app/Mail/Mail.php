@@ -34,12 +34,14 @@ class Mail
      *
      * @throws \Exception
      */
-    public static function send(array $address,
-                                string $subject,
-                                string $body,
-                                bool $html = true,
-                                array $cc = [],
-                                array $bcc = []): void
+    public static function send(
+        array $address,
+        string $subject,
+        string $body,
+        bool $html = true,
+        array $cc = [],
+        array $bcc = []
+    ): void
     {
         self::$mail = app(PCIT::class)->mail;
 

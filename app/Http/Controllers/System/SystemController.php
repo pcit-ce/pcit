@@ -14,9 +14,9 @@ use PCIT\Support\Env;
 class SystemController
 {
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getOAuthClientId()
     {
@@ -64,8 +64,8 @@ class SystemController
         $url = 'https://github-trending-api.now.sh';
 
         return json_decode((new Curl())->get(
-                $url.'/repositories?language='.$language.'&since='.$since
-            ), true);
+            $url.'/repositories?language='.$language.'&since='.$since
+        ), true);
     }
 
     public function about()

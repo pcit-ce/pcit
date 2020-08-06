@@ -15,9 +15,9 @@ class MergingClient
      *
      * 201
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      *
      * @see https://developer.github.com/v3/repos/merging/#perform-a-merge
      */

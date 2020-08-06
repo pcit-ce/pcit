@@ -20,7 +20,9 @@ class InProgress extends Kernel
         // Job::updateBuildStatus($this->job_key_id, CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS);
 
         if ('github' === $this->git_type) {
-            GitHubAppChecks::send($this->job_key_id, null,
+            GitHubAppChecks::send(
+                $this->job_key_id,
+                null,
                 CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS,
                 time(),
                 null,

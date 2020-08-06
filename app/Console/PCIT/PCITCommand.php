@@ -84,9 +84,9 @@ class PCITCommand
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function getToken(InputInterface $input, bool $header = true)
     {
@@ -129,15 +129,17 @@ class PCITCommand
     /**
      * @param string $data
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public static function HttpGet(InputInterface $input,
-                                   string $entrypoint,
-                                   ?string $data,
-                                   bool $auth = false,
-                                   int $target_code = 200)
+    public static function HttpGet(
+        InputInterface $input,
+        string $entrypoint,
+        ?string $data,
+        bool $auth = false,
+        int $target_code = 200
+    )
     {
         $endpoints_url = $input->getOption('api-endpoint');
 
@@ -159,16 +161,18 @@ class PCITCommand
     /**
      * @param string $data
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public static function HttpPost(InputInterface $input,
-                                    string $entrypoint,
-                                    ?string $data,
-                                    bool $auth = false,
-                                    bool $json = false,
-                                    int $target_code = 200)
+    public static function HttpPost(
+        InputInterface $input,
+        string $entrypoint,
+        ?string $data,
+        bool $auth = false,
+        bool $json = false,
+        int $target_code = 200
+    )
     {
         $endpoints_url = $input->getOption('api-endpoint');
 
@@ -189,15 +193,17 @@ class PCITCommand
     /**
      * @param string $data
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public static function HttpDelete(InputInterface $input,
-                                      string $entrypoint,
-                                      ?string $data,
-                                      bool $auth = false,
-                                      int $target_code = 200)
+    public static function HttpDelete(
+        InputInterface $input,
+        string $entrypoint,
+        ?string $data,
+        bool $auth = false,
+        int $target_code = 200
+    )
     {
         $endpoints_url = $input->getOption('api-endpoint');
 
@@ -217,16 +223,18 @@ class PCITCommand
     /**
      * @param string $data
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public static function HttpPatch(InputInterface $input,
-                                     string $entrypoint,
-                                     ?string $data,
-                                     bool $auth = false,
-                                     bool $json = false,
-                                     int $target_code = 200)
+    public static function HttpPatch(
+        InputInterface $input,
+        string $entrypoint,
+        ?string $data,
+        bool $auth = false,
+        bool $json = false,
+        int $target_code = 200
+    )
     {
         $endpoints_url = $input->getOption('api-endpoint');
 
@@ -263,24 +271,22 @@ class PCITCommand
 
         if (preg_match('/@/', $system_result)) {
             $result_array = explode(':', $system_result);
-            $result = array_pop($result_array);
 
-            return $result;
+            return array_pop($result_array);
         }
 
         $result_array = explode('/', $system_result);
 
         $repo = array_pop($result_array);
         $username = array_pop($result_array);
-        $result = $username.'/'.$repo;
 
-        return $result;
+        return $username.'/'.$repo;
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function existsRepoOption(InputInterface $input)
     {

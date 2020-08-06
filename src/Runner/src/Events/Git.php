@@ -48,13 +48,13 @@ class Git
         $git_image = $git->image ?? 'pcit/git';
         $git_image = $textHandler->handle($git_image, $env);
 
-        unset($git->image);
-        unset($git->hosts);
+        unset($git->image, $git->hosts);
 
         $git_config = $envHandler->handle(
             (array) $git,
             $env,
-            'PLUGIN', true
+            'PLUGIN',
+            true
         );
 
         return [$git_config, $git_image, $hosts];
@@ -90,9 +90,10 @@ class Git
         }
 
         if (env('CI_GITHUB_HOST')) {
-            $hosts = array_merge($hosts,
-            ['github.com:'.env('CI_GITHUB_HOST')]
-        );
+            $hosts = array_merge(
+                $hosts,
+                ['github.com:'.env('CI_GITHUB_HOST')]
+            );
         }
 
         $git_url = GitSupport::getUrl($build->git_type, $build->repo_full_name);
@@ -172,7 +173,8 @@ class Git
         ?array $hosts,
         int $job_id,
         string $workdir,
-        array $binds = []): string
+        array $binds = []
+    ): string
     {
         /**
          * @var \Docker\Container\Client
@@ -183,19 +185,17 @@ class Git
             $binds = ["pcit_$job_id:$workdir"];
         }
 
-        $config = $docker_container
-        ->setEnv($git_env)
-        ->setLabels([
-            'com.khs1994.ci.git' => (string) $job_id,
-            'com.khs1994.ci' => (string) $job_id,
-        ])
-        ->setBinds($binds)
-        ->setExtraHosts($hosts ?? [])
-        ->setImage($git_image)
-        ->setWorkingDir($workdir)
-        ->setCreateJson(null)
-        ->getCreateJson();
-
-        return $config;
+        return $docker_container
+            ->setEnv($git_env)
+            ->setLabels([
+                'com.khs1994.ci.git' => (string) $job_id,
+                'com.khs1994.ci' => (string) $job_id,
+            ])
+            ->setBinds($binds)
+            ->setExtraHosts($hosts ?? [])
+            ->setImage($git_image)
+            ->setWorkingDir($workdir)
+            ->setCreateJson(null)
+            ->getCreateJson();
     }
 }

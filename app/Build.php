@@ -65,9 +65,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getStartAt(int $build_key_id)
     {
@@ -88,9 +88,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getStopAt(int $build_key_id)
     {
@@ -112,9 +112,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getGitType(int $build_key_id)
     {
@@ -124,9 +124,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function getRid(int $build_key_id)
     {
@@ -144,9 +144,9 @@ EOF;
     /**
      * @param string $status
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function updateBuildStatus(int $build_key_id, ?string $status)
     {
@@ -160,31 +160,31 @@ EOF;
     }
 
     /**
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function getBuildStatus(int $build_key_id)
     {
         $sql = 'SELECT build_status FROM builds WHERE id=?';
 
-        $result = DB::select($sql, [$build_key_id], true);
-
-        return $result;
+        return DB::select($sql, [$build_key_id], true);
     }
 
     /**
      * @param string $git_type
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
-    public static function updateBuildStatusByCommitId(string $build_status,
-                                                       int $rid,
-                                                       string $branch,
-                                                       string $commit_id,
-                                                       $git_type = 'github')
+    public static function updateBuildStatusByCommitId(
+        string $build_status,
+        int $rid,
+        string $branch,
+        string $commit_id,
+        $git_type = 'github'
+    )
     {
         $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND commit_id=?';
 
@@ -192,9 +192,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getLastBuildStatus(int $rid, string $branch)
     {
@@ -204,9 +204,9 @@ EOF;
     }
 
     /**
-     * @return bool
-     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public static function buildStatusIsChanged(int $rid, string $branch)
     {
@@ -224,9 +224,9 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getBranches(int $rid, $git_type = 'github')
     {
@@ -240,9 +240,9 @@ EOF;
      *
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
@@ -262,9 +262,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getConfig(int $build_key_id)
     {
@@ -280,9 +280,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getBuildStatusByBuildKeyId(int $build_key_id)
     {
@@ -294,9 +294,9 @@ EOF;
     /**
      * @param $build_key_id
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getBranch($build_key_id)
     {
@@ -310,15 +310,17 @@ EOF;
      *
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
-    public static function allByBranch(int $rid,
-                                       string $branch_name,
-                                       ?int $before,
-                                       ?int $limit,
-                                       $git_type = 'github')
+    public static function allByBranch(
+        int $rid,
+        string $branch_name,
+        ?int $before,
+        ?int $limit,
+        $git_type = 'github'
+    )
     {
         $before = 0 === $before ? null : $before;
 
@@ -347,16 +349,18 @@ EOF;
      * @param string $git_type
      * @param bool   $all
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
-    public static function allByRid(int $rid,
-                                    ?int $before,
-                                    ?int $limit,
-                                    bool $pr,
-                                    $all = false,
-                                    $git_type = 'github')
+    public static function allByRid(
+        int $rid,
+        ?int $before,
+        ?int $limit,
+        bool $pr,
+        $all = false,
+        $git_type = 'github'
+    )
     {
         $before = 0 === $before ? null : $before;
 
@@ -396,9 +400,9 @@ EOF;
      *
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function allByAdmin(int $uid, ?int $before, ?int $limit, $git_type = 'github')
     {
@@ -424,9 +428,9 @@ EOF;
     }
 
     /**
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getCommitterEmail(int $build_key_id)
     {
@@ -436,9 +440,9 @@ EOF;
     }
 
     /**
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getCommitterName(int $build_key_id)
     {
@@ -463,25 +467,27 @@ EOF;
      * @param $event_time
      * @param $config
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
-    public static function insertTag($branch,
-                                     $tag,
-                                     $commit_id,
-                                     $commit_message,
-                                     $committer_name,
-                                     $committer_email,
-                                     $committer_username,
-                                     $author_name,
-                                     $author_email,
-                                     $author_username,
-                                     $rid,
-                                     $event_time,
-                                     $config,
-                                     bool $private,
-                                     string $git_type = 'github')
+    public static function insertTag(
+        $branch,
+        $tag,
+        $commit_id,
+        $commit_message,
+        $committer_name,
+        $committer_email,
+        $committer_username,
+        $author_name,
+        $author_email,
+        $author_username,
+        $rid,
+        $event_time,
+        $config,
+        bool $private,
+        string $git_type = 'github'
+    )
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -495,15 +501,13 @@ rid,created_at,config,private
 ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
 EOF;
 
-        $last_insert_id = DB::insert($sql, [
+        return DB::insert($sql, [
             $git_type, 'tag', $branch, $tag,
             $commit_id, $commit_message,
             $committer_name, $committer_email, $committer_username,
             $author_name, $author_email, $author_username,
             $rid, $event_time, $config, $private ? 1 : 0,
         ]);
-
-        return $last_insert_id;
     }
 
     /**
@@ -524,27 +528,29 @@ EOF;
      * @param $config
      * @param $unique
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
-    public static function insert($event_type,
-                                  $branch,
-                                  $compare,
-                                  $commit_id,
-                                  $commit_message,
-                                  $committer_name,
-                                  $committer_email,
-                                  $committer_username,
-                                  $author_name,
-                                  $author_email,
-                                  $author_username,
-                                  $rid,
-                                  $event_time,
-                                  $config,
-                                  bool $private,
-                                  $git_type = 'github',
-                                  bool $unique = false)
+    public static function insert(
+        $event_type,
+        $branch,
+        $compare,
+        $commit_id,
+        $commit_message,
+        $committer_name,
+        $committer_email,
+        $committer_username,
+        $author_name,
+        $author_email,
+        $author_username,
+        $rid,
+        $event_time,
+        $config,
+        bool $private,
+        $git_type = 'github',
+        bool $unique = false
+    )
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -560,15 +566,13 @@ EOF;
 
         $unique_key = $unique ? time() : 0;
 
-        $last_insert_id = DB::insert($sql, [
+        return DB::insert($sql, [
             $git_type, $event_type, $branch, $compare,
             $commit_id, $commit_message,
             $committer_name, $committer_email, $committer_username,
             $author_name, $author_email, $author_username,
             $rid, $event_time, $config, $unique_key, true === $private ? 1 : 0,
         ]);
-
-        return $last_insert_id;
     }
 
     /**
@@ -576,9 +580,9 @@ EOF;
      * @param $rid
      * @param $created_at
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function insertPing($rid, $created_at, $git_type = 'github')
     {
@@ -610,24 +614,26 @@ EOF;
      * @param        $pull_request_source
      * @param string $git_type
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
-    public static function insertPullRequest($event_time,
-                                             string $action,
-                                             string $commit_id,
-                                             string $commit_message,
-                                             int $committer_uid,
-                                             string $committer_username,
-                                             $pull_request_number,
-                                             string $branch,
-                                             $rid,
-                                             string $config,
-                                             $internal,
-                                             $pull_request_source,
-                                             bool $private,
-                                             $git_type = 'github')
+    public static function insertPullRequest(
+        $event_time,
+        string $action,
+        string $commit_id,
+        string $commit_message,
+        int $committer_uid,
+        string $committer_username,
+        $pull_request_number,
+        string $branch,
+        $rid,
+        string $config,
+        $internal,
+        $pull_request_source,
+        bool $private,
+        $git_type = 'github'
+    )
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -641,24 +647,26 @@ branch,rid,config,internal,pull_request_source,private
 
 EOF;
 
-        $last_insert_id = DB::insert($sql, [
+        return DB::insert(
+            $sql,
+            [
                 $git_type, 'pull_request', $event_time, $action,
                 $commit_id, $commit_message, $pull_request_number,
                 $committer_uid, $committer_username,
                 $branch, $rid, $config, $internal, $pull_request_source, true === $private ? 1 : 0,
             ]
         );
-
-        return $last_insert_id;
     }
 
     /**
      * @throws \Exception
      */
-    public static function updateCheckSuiteId(int $rid,
-                                              string $commit_id,
-                                              int $check_suite_id,
-                                              string $git_type = 'github'): void
+    public static function updateCheckSuiteId(
+        int $rid,
+        string $commit_id,
+        int $check_suite_id,
+        string $git_type = 'github'
+    ): void
     {
         $sql = 'UPDATE builds SET check_suites_id=? WHERE rid=? AND commit_id=? AND git_type=? ';
 

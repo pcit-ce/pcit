@@ -20,8 +20,6 @@ class Migrate
         } else {
             var_dump(self::getSqlFileList());
         }
-
-        return;
     }
 
     /**
@@ -34,8 +32,6 @@ class Migrate
 
             self::migrateSqlFile(base_path().'framework/sql/'.$file);
         }
-
-        return;
     }
 
     /**
@@ -67,7 +63,7 @@ class Migrate
     {
         $sqlFileList = scandir(base_path().'framework/sql');
 
-        $sqlFileList = array_filter($sqlFileList, function ($k) {
+        return array_filter($sqlFileList, function ($k) {
             if (\in_array($k, ['.', '..'], true)) {
                 return false;
             }
@@ -77,8 +73,6 @@ class Migrate
 
             return 'sql' === $ext;
         });
-
-        return $sqlFileList;
     }
 
     /**

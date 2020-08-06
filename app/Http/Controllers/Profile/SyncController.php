@@ -37,7 +37,7 @@ class SyncController
         $this->access_token = GetAccessToken::getAccessTokenByUid((int) $this->uid, $this->git_type);
 
         $this->pcit = app(PCIT::class)->setGitType($this->git_type)
-        ->setAccessToken($this->access_token);
+            ->setAccessToken($this->access_token);
 
         if ('github' === $this->git_type) {
             // github 只获取用户组织，不获取用户仓库
@@ -216,7 +216,8 @@ class SyncController
 
                 $rid = $obj_repo->id;
 
-                Repo::updateRepoInfo((int) $rid,
+                Repo::updateRepoInfo(
+                    (int) $rid,
                     $repo_full_name,
                     $insert_admin,
                     $insert_collaborators,

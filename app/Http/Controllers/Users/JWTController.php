@@ -16,9 +16,9 @@ class JWTController
     /**
      * 从请求头获取 token.
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     private static function getToken()
     {
@@ -49,9 +49,9 @@ class JWTController
     }
 
     /**
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getUser(bool $returnGitTypeFirst = true)
     {
@@ -62,7 +62,9 @@ class JWTController
         $public_key = self::getPublicKeyFromPrivateKey($private_key_path);
 
         list('git_type' => $git_type, 'uid' => $uid, 'exp' => $exp) = (array) JWT::decode(
-            $token, $public_key);
+            $token,
+            $public_key
+        );
 
         if ($exp < time()) {
             throw new Exception('JWT Token timeout', 401);
@@ -78,9 +80,9 @@ class JWTController
     /**
      * 检查 token 是否有某构建的权限.
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function check(int $build_key_id)
     {
@@ -110,9 +112,9 @@ class JWTController
      *
      * Token 的 uid 是否在给定仓库的管理员列表中
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function checkByRepo(string $username, string $repo_name)
     {
@@ -137,9 +139,9 @@ class JWTController
      * @param string $username
      * @param int    $uid
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function generate(string $git_type = null, string $username = null, int $uid = null)
     {

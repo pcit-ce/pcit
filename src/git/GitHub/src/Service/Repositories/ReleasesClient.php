@@ -16,9 +16,9 @@ class ReleasesClient
     use ServiceClientCommon;
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function list(string $repo_full_name)
     {
@@ -33,9 +33,9 @@ class ReleasesClient
      * @param int    $release_id
      * @param string $tag_name
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function get(string $repo_full_name, ?int $release_id, ?string $tag_name)
     {
@@ -51,9 +51,9 @@ class ReleasesClient
     /**
      * Get the latest release.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function latest(string $repo_full_name)
     {
@@ -65,9 +65,9 @@ class ReleasesClient
     /**
      * Get a release by tag name.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getByTag(string $repo_full_name, string $tag_name)
     {
@@ -86,14 +86,16 @@ class ReleasesClient
      *
      * @throws \Exception
      */
-    public function create(string $repo_full_name,
-                           string $tag_name,
-                           string $target_commitish,
-                           string $name,
-                           string $body,
-                           bool $draft = false,
-                           bool $prerelease = false,
-                           $method = 'post'): void
+    public function create(
+        string $repo_full_name,
+        string $tag_name,
+        string $target_commitish,
+        string $name,
+        string $body,
+        bool $draft = false,
+        bool $prerelease = false,
+        $method = 'post'
+    ): void
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/releases';
 
@@ -118,14 +120,16 @@ class ReleasesClient
      *
      * @throws \Exception
      */
-    public function edit(string $repo_full_name,
-                         string $tag_name,
-                         string $target_commitish,
-                         string $name,
-                         string $body,
-                         bool $draft = false,
-                         bool $prerelease = false,
-                         $method = 'patch'): void
+    public function edit(
+        string $repo_full_name,
+        string $tag_name,
+        string $target_commitish,
+        string $name,
+        string $body,
+        bool $draft = false,
+        bool $prerelease = false,
+        $method = 'patch'
+    ): void
     {
         $this->create(...\func_get_args());
     }
@@ -155,9 +159,9 @@ class ReleasesClient
      * @param int    $release_id
      * @param string $tag_name
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listAssets(string $repo_full_name, ?int $release_id, ?string $tag_name)
     {
@@ -179,18 +183,20 @@ class ReleasesClient
      * @param int    $release_id
      * @param string $tag_name
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public function uploadAsset(string $repo_full_name,
-                                $file_content,
-                                ?int $release_id,
-                                ?string $tag_name,
-                                string $name,
-                                ?string $label,
-                                string $content_type = 'application/octet-stream',
-                                bool $replace = false)
+    public function uploadAsset(
+        string $repo_full_name,
+        $file_content,
+        ?int $release_id,
+        ?string $tag_name,
+        string $name,
+        ?string $label,
+        string $content_type = 'application/octet-stream',
+        bool $replace = false
+    )
     {
         if ($tag_name) {
             $release_id = json_decode($this->getByTag($repo_full_name, $tag_name))->id;
@@ -221,9 +227,9 @@ class ReleasesClient
     /**
      * Get a single release asset.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getAsset(string $repo_full_name, int $asset_id)
     {

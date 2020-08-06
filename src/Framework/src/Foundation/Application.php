@@ -36,7 +36,7 @@ class Application extends Container
      *
      * 传入 env, 判断是否与当前环境匹配
      *
-     * @param string|array|null $env
+     * @param null|array|string $env
      *
      * @return false|string
      */

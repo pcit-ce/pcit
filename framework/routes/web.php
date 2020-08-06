@@ -25,12 +25,12 @@ if (\App::environment('testing')) {
 
 // test end
 
-/* Dashboard */
+// Dashboard
 Route::get('{git_type}/dashboard', function () {
     return 'Coming Soon';
 });
 
-/* Admin */
+// Admin
 Route::get('admin', 'Admin\IndexController');
 
 Route::get('api', 'IndexController@api');
@@ -53,7 +53,7 @@ Route::get('plugins/metadata', 'Plugins\Metadata');
 Route::get('terms-of-service', 'IndexController@terms_of_service');
 Route::get('privacy-policy', 'IndexController@privacy_policy');
 
-/* OAuth login*/
+// OAuth login
 Route::get('oauth', 'Users\LoginController@index');
 
 Route::get('oauth/${git_type}/login', 'OAuth\IndexController@getLoginUrl');
@@ -62,7 +62,7 @@ Route::get('oauth/${git_type}', 'OAuth\IndexController@getAccessToken');
 
 Route::get('{git_type}/logout', 'Profile\LogOut');
 
-/*(Test-only)Admin webhooks: list create delete*/
+// (Test-only)Admin webhooks: list create delete
 Route::post('webhooks/{git_type}/{username}/{repo_name}/{id}/add', 'Webhooks\Controller@add');
 
 Route::get('webhooks/{git_type}/{username}/{repo_name}', 'Webhooks\Controller@list');
@@ -73,10 +73,10 @@ Route::post('webhooks/{git_type}/{username}/{repo_name}/activate', 'Webhooks\Con
 
 Route::delete('webhooks/{git_type}/{username}/{repo_name}/deactivate', 'Webhooks\Controller@deactivate');
 
-/*Webhooks server: receive git webhooks*/
+// Webhooks server: receive git webhooks
 Route::post('webhooks/${git_type}', 'Webhooks\Server\IndexController');
 
-/*Profile*/
+// Profile
 Route::get('profile/${git_type}/{username}', 'Profile\IndexController');
 
 // return information about an individual user.
@@ -89,15 +89,17 @@ Route::get('api/user/beta_features', 'Users\BetaFeatureController');
 Route::patch('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@enable');
 Route::delete('api/user/beta_feature/{beta_feature_id}', 'Users\BetaFeatureController@delete');
 
-/*Sync User info*/
+// Sync User info
 Route::post('api/user/sync', 'Profile\SyncController');
 
-/*Status*/
+// Status
 Route::get('status/github/{username}/{repo_name}/{ref}', 'Status\GithubController@list');
-Route::get('combined_status/github/{username}/{repo_name}/{commit_sha}',
-    'Status\GitHubController@listcombinedStatus');
+Route::get(
+    'combined_status/github/{username}/{repo_name}/{commit_sha}',
+    'Status\GitHubController@listcombinedStatus'
+);
 
-/**Repos**/
+// Repos
 // repo list
 Route::get('{git_type}/{username}', 'Builds\IndexController');
 
@@ -109,12 +111,12 @@ Route::get('api/repo/{git_type}/{username}/{repo_name}', 'Users\RepositoriesCont
 
 Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
 
-/* orgs */
+// orgs
 Route::get('api/orgs', 'Users\OrganizationsController');
 
 Route::get('api/org/{git_type}/{org_name}', 'Users\OrganizationsController@find');
 
-/* Builds */
+// Builds
 // repo
 Route::get('{git_type}/{username}/{repo_name}', 'Builds\IndexController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/build/current', 'Builds\BuildsController@repoCurrent');
@@ -187,11 +189,11 @@ Route::post('api/repo/{username}/{repo_name}/deactivate', 'Builds\ActiveControll
 Route::post('api/repo/{username}/{repo_name}/star', 'Repos\StarController');
 Route::post('api/repo/{username}/{repo_name}/unstar', 'Repos\StarController@unstar');
 
-/* Log */
+// Log
 Route::get('api/job/{job_id}/log', 'Builds\LogController');
 Route::delete('api/job/{job_id}/log', 'Builds\LogController@delete');
 
-/* ICO */
+// ICO
 Route::get('ico/canceled', 'Status\ShowStatusByICOController@canceled');
 Route::get('ico/errored', 'Status\ShowStatusByICOController@errored');
 Route::get('ico/failed', 'Status\ShowStatusByICOController@failed');
@@ -201,13 +203,13 @@ Route::get('ico/passed', 'Status\ShowStatusByICOController@passed');
 Route::get('ico/pending', 'Status\ShowStatusByICOController@pending');
 Route::get('ico/unknown', 'Status\ShowStatusByICOController@unknown');
 
-/* API Token */
+// API Token
 Route::post('api/user/token', 'Users\JWTController@generate');
 
 // wechat
 Route::match(['get', 'post'], 'wechat', 'WeChat\MessageServer');
 
-/* System */
+// System
 Route::get('api/ci/oauth_client_id', 'System\SystemController@getOAuthClientId');
 Route::get('api/ci/github_app_installation/{uid}', 'System\SystemController@getGitHubAppInstallationUrl');
 Route::get('api/ci/github_app_settings/{org_name}', 'System\SystemController@getGitHubAppSettingsUrl');
@@ -246,17 +248,19 @@ Route::get('validate', function () {
 Route::post('validate', 'Config\Validate');
 Route::post('api/validate', 'Config\Validate');
 
-/* Issues */
-Route::patch('api/repo/${username}/${repo_name}/issues/translate/${issue_number}',
-    'Repos\Issues@translate');
+// Issues
+Route::patch(
+    'api/repo/${username}/${repo_name}/issues/translate/${issue_number}',
+    'Repos\Issues@translate'
+);
 
-/* Demo */
+// Demo
 Route::get('websocket/server', 'Demo\WebSocket\WebSocketController');
 Route::get('sse/server', 'Demo\SSE\SSEController');
 Route::get('websocket/client', 'Demo\WebSocket\WebSocketController@client');
 Route::get('sse/client', 'Demo\SSE\SSEController@client');
 
-/* github app */
+// github app
 // create github app
 Route::get('api/github/app/new', 'GitHub\GitHubApp@new');
 Route::get('api/github/app/new/callback', 'GitHub\GitHubApp@callback');

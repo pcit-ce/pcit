@@ -39,8 +39,15 @@ class CheckSuite extends CheckSuiteAbstract
         $check_suite_id = $context->check_suite_id;
         $default_branch = $context->repository->default_branch;
 
-        (new Subject())
-            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch))
+        (new Subject())->register(
+            new UpdateUserInfo(
+                    $owner,
+                    (int) $installation_id,
+                    (int) $rid,
+                    $repo_full_name,
+                    $default_branch
+                )
+        )
             ->handle();
 
         if ('requested' === $action) {
@@ -52,6 +59,9 @@ class CheckSuite extends CheckSuiteAbstract
             return;
         }
 
-        // 'rerequested' === $action && Build::updateBuildStatusByCommitId('pending', (int) $rid, $branch, $commit_id);
+        // if ('rerequested' === $action) {
+        //     Build::updateBuildStatusByCommitId(
+        //         'pending', (int) $rid, $branch, $commit_id);
+        // }
     }
 }

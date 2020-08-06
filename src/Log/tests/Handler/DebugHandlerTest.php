@@ -26,10 +26,10 @@ EOF;
         $this->assertTrue(true);
 
         $this->assertEquals([
-           [
-               'file' => 'app.js',
-               'line' => 1,
-           ],
+            [
+                'file' => 'app.js',
+                'line' => 1,
+            ],
         ], $context);
     }
 }

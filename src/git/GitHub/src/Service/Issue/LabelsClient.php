@@ -18,9 +18,9 @@ class LabelsClient
     /**
      * List all labels for this repository.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function all(string $repo_full_name)
     {
@@ -32,9 +32,9 @@ class LabelsClient
     /**
      * Get a single label.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function find(string $repo_full_name, string $label_name)
     {
@@ -50,9 +50,9 @@ class LabelsClient
      *
      * @param string $name label name
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function create(string $repo_full_name, string $name, string $color, string $description)
     {
@@ -68,15 +68,17 @@ class LabelsClient
      *
      * @param string $label_name label name
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public function update(string $repo_full_name,
-                           string $label_current_name,
-                           string $name,
-                           string $color,
-                           string $description)
+    public function update(
+        string $repo_full_name,
+        string $label_current_name,
+        string $name,
+        string $color,
+        string $description
+    )
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/labels/'.$label_current_name;
 
@@ -88,9 +90,9 @@ class LabelsClient
      *
      * 204
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function delete(string $repo_full_name, string $label_name)
     {
@@ -102,9 +104,9 @@ class LabelsClient
     /**
      * List labels on an issue.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listLabelsOnIssue(string $repo_full_name, int $issue_number)
     {
@@ -116,9 +118,9 @@ class LabelsClient
     /**
      * Add labels to an issue.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function addLabelsOnIssue(string $repo_full_name, int $issue_number, array $label)
     {
@@ -130,9 +132,9 @@ class LabelsClient
     /**
      * Remove a label from an issue.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function removeLabelOnIssue(string $repo_full_name, int $issue_number, string $label_name)
     {
@@ -144,9 +146,9 @@ class LabelsClient
     /**
      * Replace all labels for an issue.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function replaceAllLabelsForIssue(string $repo_full_name, int $issue_number, array $labels = [])
     {
@@ -160,9 +162,9 @@ class LabelsClient
      *
      * 204
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function removeAllLabelsFromIssue(string $repo_full_name, int $issue_number)
     {
@@ -174,9 +176,9 @@ class LabelsClient
     /**
      * Get labels for every issue in a milestone.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getLabelsForEveryIssueInMilestone(string $repo_full_name, int $milestones_number)
     {

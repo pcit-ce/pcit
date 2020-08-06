@@ -23,6 +23,7 @@ class ExpressionHandler
                 $result = $outputs[$expression[1]][$expression[3]] ?? null;
 
                 $string = str_replace($k, $result, $string);
+
                 continue;
             }
 

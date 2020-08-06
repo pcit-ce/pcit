@@ -64,9 +64,7 @@ if (!function_exists('view')) {
     }
 }
 
-/*
- * https://github.com/igorw/retry
- */
+// https://github.com/igorw/retry
 if (!function_exists('retry')) {
     function retry(int $retries, callable $fn)
     {

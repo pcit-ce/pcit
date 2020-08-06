@@ -9,14 +9,13 @@ use PCIT\PCIT;
 class MessageServer
 {
     /**
-     * @return array|string|null
-     *
      * @throws \Exception
+     *
+     * @return null|array|string
      */
     public function __invoke(PCIT $pcit)
     {
-        return $pcit->wechat->server->pushHandler(function ($message) {
-            return null;
+        return $pcit->wechat->server->pushHandler(function ($message): void {
         })->register();
     }
 }

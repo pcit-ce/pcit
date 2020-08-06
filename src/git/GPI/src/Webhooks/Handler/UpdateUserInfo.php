@@ -40,13 +40,15 @@ class UpdateUserInfo
      *
      * @throws \Exception
      */
-    public function __construct(Owner $owner,
-                                ?int $installation_id,
-                                $rid,
-                                string $repo_full_name,
-                                ?string $default_branch,
-                                Sender $sender = null,
-                                string $git_type = 'github')
+    public function __construct(
+        Owner $owner,
+        ?int $installation_id,
+        $rid,
+        string $repo_full_name,
+        ?string $default_branch,
+        Sender $sender = null,
+        string $git_type = 'github'
+    )
     {
         $this->owner = $owner;
         $this->installation_id = $installation_id;

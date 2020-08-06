@@ -31,9 +31,9 @@ class InstallationsClient
     /**
      * List repositories accessible to the app installation.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listRepositories()
     {
@@ -58,9 +58,9 @@ class InstallationsClient
     /**
      * List repositories accessible to the user access token.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listRepositoriesByInstallationId(string $oauthToken, int $installation_id)
     {
@@ -78,15 +78,16 @@ class InstallationsClient
      *
      * 204
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function add(
         string $personal_access_token,
         int $installation_id,
         int $repository_id,
-        string $method = 'put'): void
+        string $method = 'put'
+    ): void
     {
         $url = $this->api_url.'/user/installations/'.$installation_id.'/repositories/'.$repository_id;
 
@@ -152,6 +153,8 @@ class InstallationsClient
 
     /**
      * @see https://developer.github.com/v3/apps/#create-a-content-attachment
+     *
+     * @param mixed $content_reference_id
      */
     public function createContentAttachment($content_reference_id, string $title, string $body)
     {

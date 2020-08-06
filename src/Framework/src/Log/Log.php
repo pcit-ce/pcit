@@ -10,9 +10,9 @@ use Monolog\Logger;
 class Log extends Logger
 {
     /**
-     * @return Logger
-     *
      * @throws \Exception
+     *
+     * @return Logger
      */
     public function __construct(string $name = 'pcit', string $log_path = null)
     {
@@ -117,8 +117,6 @@ class Log extends Logger
             $file = substr($file, \strlen(base_path()));
         }
 
-        $context = array_merge(compact('file', 'line'), $context);
-
-        return $context;
+        return array_merge(compact('file', 'line'), $context);
     }
 }

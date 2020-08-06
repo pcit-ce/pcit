@@ -30,10 +30,12 @@ class Core
      *
      * @param string $message warning issue message
      */
-    public function warning(string $message,
-                            string $file = null,
-                            int $line = null,
-                            int $col = null): void
+    public function warning(
+        string $message,
+        string $file = null,
+        int $line = null,
+        int $col = null
+    ): void
     {
         $message = $this->escapeData($message);
         if ($file && (null !== $line) && (null !== $col)) {
@@ -62,10 +64,12 @@ class Core
      *
      * @param string $message error issue message
      */
-    public function error(string $message,
-                          string $file = null,
-                          int $line = null,
-                          int $col = null): void
+    public function error(
+        string $message,
+        string $file = null,
+        int $line = null,
+        int $col = null
+    ): void
     {
         $message = $this->escapeData($message);
         if ($file && (null !== $line) && (null !== $col)) {

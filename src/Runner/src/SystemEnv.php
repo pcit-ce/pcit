@@ -57,7 +57,8 @@ class SystemEnv
         ];
 
         if ($this->build->pull_request_number) {
-            $system_env = array_merge($system_env,
+            $system_env = array_merge(
+                $system_env,
                 [
                     'PCIT_PULL_REQUEST=true',
                     'PCIT_PULL_REQUEST_BRANCH='.$this->build->branch,

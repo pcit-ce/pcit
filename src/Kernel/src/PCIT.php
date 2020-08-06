@@ -110,9 +110,11 @@ class PCIT extends Container
      *
      * @throws \Exception
      */
-    public function __construct(array $config = [],
-                                string $git_type = 'github',
-                                string $accessToken = null)
+    public function __construct(
+        array $config = [],
+        string $git_type = 'github',
+        string $accessToken = null
+    )
     {
         parent::__construct($config);
 
@@ -148,7 +150,9 @@ class PCIT extends Container
     {
         if ($accessToken) {
             $this->setConfig(
-            [$this['git_type'].'_access_token' => $accessToken], $this['git_type']);
+                [$this['git_type'].'_access_token' => $accessToken],
+                $this['git_type']
+            );
         }
 
         if ($this['config']['github']['access_token'] ?? false) {

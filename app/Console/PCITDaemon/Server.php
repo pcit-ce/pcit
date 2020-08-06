@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console\PCITDaemon;
 
 use App\Build;
-use App\Events\Build as BuildEvent;
 use App\Events\CheckAdmin;
+use App\Events\GetBuild;
 use Error;
 use Exception;
 use PCIT\Framework\Support\DB;
@@ -63,7 +63,7 @@ class Server extends Kernel
     public function handleBuild(): void
     {
         // get build info
-        $buildData = (new BuildEvent())->handle();
+        $buildData = (new GetBuild())->handle();
 
         try {
             $this->subject
@@ -73,13 +73,17 @@ class Server extends Kernel
         } catch (\Throwable $e) {
             // 出现异常，直接将 build 状态改为 取消
             Build::updateBuildStatus(
-                $buildData->build_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
+                $buildData->build_key_id,
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED
+            );
 
             return;
         }
 
         Build::updateBuildStatus(
-            $buildData->build_key_id, CI::GITHUB_CHECK_SUITE_STATUS_QUEUED);
+            $buildData->build_key_id,
+            CI::GITHUB_CHECK_SUITE_STATUS_QUEUED
+        );
 
         try {
             // 处理 build 生成 jobs

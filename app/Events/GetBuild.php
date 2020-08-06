@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Events;
 
-use App\Build as BuildDB;
+use App\Build;
 use App\Repo;
 use App\Setting;
 use PCIT\Exception\PCITException;
@@ -15,7 +15,7 @@ use PCIT\Support\CI;
 /**
  * 获取 build 数据.
  */
-class Build extends BuildData
+class GetBuild extends BuildData
 {
     /**
      * @throws PCITException
@@ -38,7 +38,7 @@ class Build extends BuildData
             $this->config, $this->internal, $this->private) = $result;
 
         if (!$this->config or !json_decode($this->config)) {
-            BuildDB::updateBuildStatus($buildId, 'misconfigured');
+            Build::updateBuildStatus($buildId, 'misconfigured');
 
             throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
         }

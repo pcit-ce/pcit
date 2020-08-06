@@ -19,8 +19,8 @@ class Metadata
         }
 
         $result = Finder::create()
-        ->in(base_path().'plugins')
-        ->name('metadata.json');
+            ->in(base_path().'plugins')
+            ->name('metadata.json');
 
         $arr = [];
 

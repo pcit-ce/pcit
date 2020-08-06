@@ -17,8 +17,7 @@ class ArrayHelper
     {
         $rows = [];
 
-        unset($options['include']);
-        unset($options['exclude']);
+        unset($options['include'], $options['exclude']);
 
         foreach ($options as $option => $items) {
             if (\count($rows) > 0) {

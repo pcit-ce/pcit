@@ -16,9 +16,9 @@ class Client
      *
      * @param string $since YYYY-MM-DDTHH:MM:SSZ
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      *
      * @see https://developer.github.com/v3/gists/#list-a-users-gists
      */
@@ -44,9 +44,9 @@ class Client
     /**
      * List starred gists.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function ListStarred(string $since = null)
     {
@@ -56,9 +56,9 @@ class Client
     /**
      * Get a single gist.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function find(string $gist_id)
     {
@@ -68,9 +68,9 @@ class Client
     /**
      * Get a specific revision of a gist.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getSpecificRevision(string $gist_id, string $sha)
     {
@@ -86,9 +86,11 @@ class Client
      *
      * @throws \Exception
      */
-    public function create(array $files,
-                           string $description,
-                           bool $public = true): void
+    public function create(
+        array $files,
+        string $description,
+        bool $public = true
+    ): void
     {
         $data = [
             'description' => $description,
@@ -117,9 +119,9 @@ class Client
     /**
      * List gist commits.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listCommits(string $gist_id)
     {
@@ -151,9 +153,9 @@ class Client
      *
      * 204
      *
-     * @return bool
-     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function isStarred(string $gist_id)
     {
@@ -187,9 +189,9 @@ class Client
     /**
      * List gist forks.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listFork(string $gist_id)
     {

@@ -24,10 +24,10 @@ class Router
 
     public $method = [];
 
-    public $output = null;
+    public $output;
 
     /**
-     * @param string|Closure $action
+     * @param Closure|string $action
      * @param mixed          ...$arg
      *
      * @throws \Exception
@@ -86,6 +86,10 @@ class Router
 
     /**
      * 获取方法参数列表.
+     *
+     * @param null|mixed $obj
+     * @param null|mixed $method
+     * @param mixed      $arg
      */
     private function getParameters($obj = null, $method = null, $arg = [])
     {
@@ -111,6 +115,7 @@ class Router
             if (strpos($reflection->getDocComment(), '@deprecated')) {
                 $this->obj[] = $obj;
                 $this->method[] = $method;
+
                 throw new Exception("$obj::$method is deprecated", 500);
             }
         }
@@ -204,8 +209,7 @@ class Router
                 }
 
                 foreach ($kArray as $k) {
-                    unset($targetUrlArray[$k]);
-                    unset($urlArray[$k]);
+                    unset($targetUrlArray[$k], $urlArray[$k]);
                 }
 
                 $targetUrlArray === $urlArray && $this->make($action, ...$array);

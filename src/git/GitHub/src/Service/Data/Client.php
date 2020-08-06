@@ -13,9 +13,9 @@ class Client
     /**
      * Get a blob.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getBlobs(string $repo_full_name, string $file_sha)
     {
@@ -44,9 +44,9 @@ class Client
     /**
      * Get a commit.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getCommits(string $repo_full_name, string $sha)
     {
@@ -58,18 +58,20 @@ class Client
      *
      * 201
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public function createCommit(string $repo_full_name,
-                                 string $commit_message,
-                                 string $tree,
-                                 array $parents,
-                                 string $committer_name,
-                                 string $committer_email,
-                                 string $date,
-                                 string $signature)
+    public function createCommit(
+        string $repo_full_name,
+        string $commit_message,
+        string $tree,
+        array $parents,
+        string $committer_name,
+        string $committer_email,
+        string $date,
+        string $signature
+    )
     {
         $data = [
             'message' => $commit_message,
@@ -94,9 +96,9 @@ class Client
     /**
      * Commit signature verification.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function commitSignatureVerification(string $repo_full_name, string $sha)
     {
@@ -109,9 +111,9 @@ class Client
      * @param string $repo_full_name repo full name
      * @param string $ref            heads/skunkworkz/featureA
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getRef(string $repo_full_name, string $ref)
     {
@@ -121,9 +123,9 @@ class Client
     /**
      * Get all references.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function allRef(string $repo_full_name, bool $tags = false)
     {
@@ -142,9 +144,9 @@ class Client
      * @param string $repo_full_name repo full name
      * @param string $ref            heads/master
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function createRef(string $repo_full_name, string $ref, string $sha)
     {
@@ -159,9 +161,9 @@ class Client
     /**
      * Update a reference.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function updateRef(string $repo_full_name, string $ref, string $sha, bool $force)
     {
@@ -197,9 +199,9 @@ class Client
      *
      * @param $tag_sha
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getTag(string $repo_full_name, $tag_sha)
     {
@@ -213,14 +215,16 @@ class Client
      *
      * @throws \Exception
      */
-    public function createTag(string $repo_full_name,
-                              string $tag_name,
-                              string $tag_message,
-                              string $object,
-                              string $type,
-                              ?string $committer_name,
-                              ?string $committer_email,
-                              ?string $date): void
+    public function createTag(
+        string $repo_full_name,
+        string $tag_name,
+        string $tag_message,
+        string $object,
+        string $type,
+        ?string $committer_name,
+        ?string $committer_email,
+        ?string $date
+    ): void
     {
         $data = [
             'tag' => $tag_name,
@@ -245,9 +249,9 @@ class Client
     /**
      * Tag signature verification.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function tagSignatureVerification(string $repo_full_name, string $tag_sha)
     {
@@ -257,9 +261,9 @@ class Client
     /**
      * Get a tree.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getTree(string $repo_full_name, string $tree_sha, bool $recursively = false)
     {
@@ -281,9 +285,11 @@ class Client
      *
      * @throws \Exception
      */
-    public function createTree(string $repo_full_name,
-                               $base_tree,
-                               array $tree): void
+    public function createTree(
+        string $repo_full_name,
+        $base_tree,
+        array $tree
+    ): void
     {
         $data = [
             'base_tree' => $base_tree,

@@ -15,9 +15,9 @@ class Client extends GitHubClient
     /**
      * @param string $username
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function getUserInfo(bool $raw = false, string $username = null)
     {
@@ -52,16 +52,15 @@ class Client extends GitHubClient
     /**
      * 这里指项目中的仓库，个人用户不包含仓库。
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getRepos(int $page = 1, bool $raw = false, string $username = null)
     {
         $url = $this->api_url.'/user/projects';
 
         return '[]';
-
         if ($username) {
             $url = $this->api_url.'/api/user/'.$username.'/projects/public';
         }

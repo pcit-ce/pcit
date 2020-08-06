@@ -10,9 +10,9 @@ use PCIT\Framework\Support\DB;
 class GetAccessToken
 {
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function byRid(int $rid, string $git_type = 'github')
     {
@@ -20,9 +20,9 @@ class GetAccessToken
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function byRepoFullName(?string $repo_full_name, ?int $rid = null, string $git_type = 'github')
     {
@@ -61,9 +61,9 @@ class GetAccessToken
     /**
      * @param $rid
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function getGitHubAppAccessToken($rid = null, string $repo_full_name = null, int $installation_id = null)
     {
@@ -75,20 +75,19 @@ class GetAccessToken
                 throw new Exception('installation_id is error', 500);
             }
         }
-        $access_token = pcit()->github_apps_access_token->getAccessToken(
+
+        return pcit()->github_apps_access_token->getAccessToken(
             (int) $installation_id,
             config('git.github.app.private_key_path')
         );
-
-        return $access_token;
     }
 
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getAccessTokenByUid(int $uid, $git_type = 'github')
     {

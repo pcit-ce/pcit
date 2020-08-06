@@ -26,13 +26,15 @@ class DockerHandlerTest extends TestCase
 
     public function test_handle_artifact_exclude(): void
     {
-        $result = (new DockerHandler())->handleArtifact(1, json_encode([
-          'Image' => 'pcit/xxx-artifact',
-          'Env' => [
-              'INPUT_NAME=dist',
-              'INPUT_PATH=dist',
-              ],
-          ])
+        $result = (new DockerHandler())->handleArtifact(
+            1,
+            json_encode([
+                'Image' => 'pcit/xxx-artifact',
+                'Env' => [
+                    'INPUT_NAME=dist',
+                    'INPUT_PATH=dist',
+                ],
+            ])
         );
 
         // var_dump($result);

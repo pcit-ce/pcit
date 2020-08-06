@@ -28,9 +28,9 @@ class RepositoriesController
      *
      * /repos/{git_type}/{username}
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function list(string $git_type, string $username)
     {
@@ -42,9 +42,9 @@ class RepositoriesController
      *
      * /repo/{git_type}/{username}/{repo.name}
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function find(string $git_type, string $username, string $repo_name)
     {

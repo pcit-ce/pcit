@@ -25,15 +25,17 @@ class Client
      * @param string $environment The name of the environment that was deployed to (e.g., <code>staging<code> or
      *                            <code>production<code>). Default: <code>none<code>
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function list(string $repo_full_name, string $sha, string $ref, string $task, string $environment)
     {
         $queryParameters = http_build_query(compact('sha', 'ref', 'task', 'environment'));
 
-        $url = implode('/', [
+        $url = implode(
+            '/',
+            [
                 $this->api_url, 'repos', $repo_full_name, 'deployments',
             ]
         );
@@ -44,13 +46,15 @@ class Client
     /**
      * Get a single deployment.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getSingleInfo(string $repo_full_name, string $id)
     {
-        $url = implode('/', [
+        $url = implode(
+            '/',
+            [
                 $this->api_url, 'repos', $repo_full_name, 'deployments', $id,
             ]
         );
@@ -63,22 +67,26 @@ class Client
      *
      * @throws \Exception
      */
-    public function create(string $repo_full_name,
-                           string $ref,
-                           string $task = 'deploy',
-                           bool $auto_merge = true,
-                           array $required_contexts = null,
-                           string $payload = null,
-                           string $environment = 'production',
-                           string $description = null,
-                           bool $transient_environment = null,
-                           bool $production_environment = null): void
+    public function create(
+        string $repo_full_name,
+        string $ref,
+        string $task = 'deploy',
+        bool $auto_merge = true,
+        array $required_contexts = null,
+        string $payload = null,
+        string $environment = 'production',
+        string $description = null,
+        bool $transient_environment = null,
+        bool $production_environment = null
+    ): void
     {
         $result = compact('ref', 'task', 'auto_merge', 'required_contexts', 'payload', 'environment', 'description', 'transient_environment', 'production_environment');
 
         $result = array_filter($result);
 
-        $url = implode('/', [
+        $url = implode(
+            '/',
+            [
                 $this->api_url, 'repos', $repo_full_name, 'deployments',
             ]
         );
@@ -89,13 +97,15 @@ class Client
     /**
      * List deployment statuses.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getStatus(string $repo_full_name, string $id)
     {
-        $url = implode('/', [
+        $url = implode(
+            '/',
+            [
                 $this->api_url, 'repos', $repo_full_name, 'deployments', $id, 'statuses',
             ]
         );
@@ -106,13 +116,15 @@ class Client
     /**
      * Get a single deployment status.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getSingleStatus(string $repo_full_name, string $id, string $statusId)
     {
-        $url = implode('/', [
+        $url = implode(
+            '/',
+            [
                 $this->api_url, 'repos', $repo_full_name, 'deployments', $id, 'statuses', $statusId,
             ]
         );
@@ -128,28 +140,31 @@ class Client
      * @param string $repo_full_name repo full name
      * @param string $state          error, failure,inactive,in_progress,queued,pending, or success
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
-    public function createStatus(string $repo_full_name,
-                                 string $id,
-                                 string $state,
-                                 string $log_url = null,
-                                 string $description = null,
-                                 string $environment = 'production',
-                                 string $environment_url = null,
-                                 bool $auto_inactive = true)
+    public function createStatus(
+        string $repo_full_name,
+        string $id,
+        string $state,
+        string $log_url = null,
+        string $description = null,
+        string $environment = 'production',
+        string $environment_url = null,
+        bool $auto_inactive = true
+    )
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/deployments/'.$id.'/statuses';
 
         $data = array_filter(
-            compact('state', 'log_url', 'description', 'environment', 'environment_url', 'auto_inactive'));
+            compact('state', 'log_url', 'description', 'environment', 'environment_url', 'auto_inactive')
+        );
 
-        return $this->curl->post($url, json_encode(array_filter($data)),
-            ['Accept' => 'application/vnd.github.flash-preview+json;
-            application/vnd.github.machine-man-preview+json;
-            application/vnd.github.speedy-preview+json;
-            application/vnd.github.ant-man-preview+json']);
+        return $this->curl->post(
+            $url,
+            json_encode(array_filter($data)),
+            ['Accept' => 'application/vnd.github.flash-preview+json,application/vnd.github.machine-man-preview+json,application/vnd.github.speedy-preview+json,application/vnd.github.ant-man-preview+json']
+        );
     }
 }

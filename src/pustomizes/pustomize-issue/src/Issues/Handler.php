@@ -27,7 +27,7 @@ class Handler implements HandlerInterface
 
         $accessToken = GetAccessToken::byRepoFullName($context->repo_full_name, null, $context->git_type);
 
-        /* @var \PCIT\PCIT $pcit */
+        // @var \PCIT\PCIT $pcit
         $this->pcit = new PCIT([], $context->git_type, $accessToken);
 
         $body = <<<EOF

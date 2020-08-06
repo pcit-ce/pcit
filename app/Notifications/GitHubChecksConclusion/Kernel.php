@@ -50,12 +50,14 @@ EOF;
      *
      * @throws \Exception
      */
-    public function __construct(int $job_key_id,
-                                string $config = null,
-                                string $build_log = null,
-                                string $language = null,
-                                string $os = null,
-                                $git_type = 'github')
+    public function __construct(
+        int $job_key_id,
+        string $config = null,
+        string $build_log = null,
+        string $language = null,
+        string $os = null,
+        $git_type = 'github'
+    )
     {
         $this->job_key_id = $job_key_id;
 
@@ -98,7 +100,8 @@ EOF;
             null,
             $this->markdown(),
             null,
-            null);
+            null
+        );
     }
 
     /**

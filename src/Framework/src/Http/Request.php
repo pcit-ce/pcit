@@ -48,7 +48,7 @@ class Request extends RequestBase
         }
 
         if (!$link) {
-            return null;
+            return;
         }
 
         $return_array = [];

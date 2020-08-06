@@ -29,9 +29,16 @@ class CacheTest extends TestCase
 
         $stub->method('getPrefix')->willReturn('gittype_rid_branch');
 
-        $cache = new Cache(1,
-            1, '', 'github', 1,
-            'master', ['PHP_VERSION' => '7.4.0'], json_decode($json)->cache);
+        $cache = new Cache(
+            1,
+            1,
+            '',
+            'github',
+            1,
+            'master',
+            ['PHP_VERSION' => '7.4.0'],
+            json_decode($json)->cache
+        );
 
         $cache->handle();
 

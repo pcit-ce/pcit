@@ -23,10 +23,12 @@ class Skip
     /**
      * Skip constructor.
      */
-    public function __construct(?string $commit_message,
-                                int $build_key_id,
-                                string $branch = null,
-                                string $config = null)
+    public function __construct(
+        ?string $commit_message,
+        int $build_key_id,
+        string $branch = null,
+        string $config = null
+    )
     {
         $this->commit_message = $commit_message;
         $this->build_key_id = $build_key_id;
@@ -55,7 +57,8 @@ class Skip
         // check commit message
         if (preg_match(
             '#(\[skip ci\])|(\[ci skip\])|(\[pcit skip\])|(\[skip pcit\])#i',
-            $this->commit_message)) {
+            $this->commit_message
+        )) {
             \Log::info($build_key_id.' is skip by commit message', []);
 
             $this->writeSkipToDB();

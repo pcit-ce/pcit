@@ -23,19 +23,20 @@ class Validate
         }
 
         $validator = new Validator();
-        $validator->validate($data,
-      (object) ['$ref' => 'file://'.realpath(base_path().'config/config_schema.json')]);
+        $validator->validate(
+            $data,
+            (object) ['$ref' => 'file://'.realpath(base_path().'config/config_schema.json')]
+        );
 
         if ($validator->isValid()) {
             return \Response::make('ok');
-        } else {
-            $message = [];
-
-            foreach ($validator->getErrors() as $error) {
-                $message[] = [$error['property'] => $error['message']];
-            }
-
-            return \Response::json($message);
         }
+        $message = [];
+
+        foreach ($validator->getErrors() as $error) {
+            $message[] = [$error['property'] => $error['message']];
+        }
+
+        return \Response::json($message);
     }
 }

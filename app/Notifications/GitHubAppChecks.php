@@ -23,28 +23,30 @@ class GitHubAppChecks
      * @param string     $conclusion
      * @param string     $summary
      * @param string     $text
-     * @param array|null $annotations  [$annotation, $annotation2]
-     * @param array|null $images       [$image, $image2]
-     * @param array|null $actions      [$action]
+     * @param null|array $annotations  [$annotation, $annotation2]
+     * @param null|array $images       [$image, $image2]
+     * @param null|array $actions      [$action]
      * @param bool       $force_create 默认情况下若 check_run_id 已存在，则更新此 check_run_id
      *                                 若设为 true 则新建一个 check_run ,适用于第三方服务完成状态展示
      *                                 或是没有过程，直接完成的构建
      *
      * @throws \Exception
      */
-    public static function send(int $job_key_id,
-                                string $name = null,
-                                string $status = null,
-                                int $started_at = null,
-                                int $completed_at = null,
-                                string $conclusion = null,
-                                string $title = null,
-                                string $summary = null,
-                                string $text = null,
-                                array $annotations = null,
-                                array $images = null,
-                                array $actions = null,
-                                bool $force_create = false): void
+    public static function send(
+        int $job_key_id,
+        string $name = null,
+        string $status = null,
+        int $started_at = null,
+        int $completed_at = null,
+        string $conclusion = null,
+        string $title = null,
+        string $summary = null,
+        string $text = null,
+        array $annotations = null,
+        array $images = null,
+        array $actions = null,
+        bool $force_create = false
+    ): void
     {
         \Log::info('Create GitHub App Check Run', ['job_key_id' => $job_key_id]);
 
@@ -100,8 +102,6 @@ class GitHubAppChecks
             (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
                 ->markdown();
 
-        // $check_run_id = Job::getCheckRunId((int) $job_key_id);
-
         $run_data = new RunData(
             $repo_full_name,
             $name,
@@ -120,13 +120,7 @@ class GitHubAppChecks
             $actions
         );
 
-        // $run_data->check_run_id = $check_run_id;
-
-        // if ($check_run_id and !$force_create) {
-        // $result = $pcit->check_run->update($run_data);
-        // } else {
         $result = $pcit->check_run->create($run_data);
-        // }
 
         $check_run_id = json_decode($result)->id ?? null;
 
@@ -158,7 +152,7 @@ class GitHubAppChecks
 
         $run_data->name = config('git.github.check_run.prefix').' / '.$event_type;
         $run_data->details_url = config('app.host').'/github/'.$repo_full_name.'/builds/'.$build_key_id;
-        $run_data->external_id = $build_key_id;
+        $run_data->external_id = (string) $build_key_id;
         $conclusion = $run_data->conclusion = $conclusion;
         $run_data->started_at = (int) Build::getStartAt($build_key_id);
         $run_data->completed_at = $conclusion ? (int) Build::getStopAt($build_key_id) : null;
@@ -168,22 +162,27 @@ class GitHubAppChecks
         ? CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS :
         CI::GITHUB_CHECK_SUITE_STATUS_COMPLETED;
         $run_data->title = 'Build #'.$build_key_id;
-        $run_data->summary = $summary;
-        $run_data->text = 'This is summary check run';
+        // $run_data->summary = $summary;
+        $run_data->text = 'This is summary check run.';
 
         $result = $pcit->check_run->create($run_data);
         // var_dump($result);
         $check_run_id = json_decode($result)->id ?? null;
 
         \Log::info('Create GitHub App Check Run, build status summary', compact(
-            'build_key_id', 'build_status', 'conclusion', 'status', 'check_run_id', 'commit_id'
+            'build_key_id',
+            'build_status',
+            'conclusion',
+            'status',
+            'check_run_id',
+            'commit_id'
         ));
     }
 
     public static function buildStatus2conclusion($status)
     {
         if (\in_array($status, ['queued', 'skip', 'misconfigured'])) {
-            return null;
+            return;
         }
 
         return $status;

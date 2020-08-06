@@ -23,9 +23,9 @@ class RequestsController
      *
      * @param array $args
      *
-     * @return array|int
-     *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public function __invoke(...$args)
     {
@@ -43,7 +43,13 @@ class RequestsController
         $rid = Repo::getRid($username, $repo_name, $git_type);
 
         $result = Build::allByRid(
-            (int) $rid, (int) $before, (int) $limit, true, true, $git_type);
+            (int) $rid,
+            (int) $before,
+            (int) $limit,
+            true,
+            true,
+            $git_type
+        );
 
         if ($result) {
             return $result;
@@ -82,7 +88,9 @@ class RequestsController
         list($rid) = JWTController::checkByRepo($username, $repo_name);
 
         $token = GetAccessToken::getGitHubAppAccessToken(
-            null, $username.'/'.$repo_name);
+            null,
+            $username.'/'.$repo_name
+        );
 
         $app = app(PCIT::class)->setGitType()->setAccessToken($token);
 
@@ -120,10 +128,25 @@ class RequestsController
             $config = json_encode($config_array);
         }
         // TODO: 判断是否为私有仓库
-        $last_insert_id = Build::insert('push', $branch, $compare, $commit_id,
-            $commit_message, $committer->name, $committer->email, $committer->name,
-            $author->name, $author->email, $author->name,
-            $rid, $event_time, $config, false, 'github', true);
+        $last_insert_id = Build::insert(
+            'push',
+            $branch,
+            $compare,
+            $commit_id,
+            $commit_message,
+            $committer->name,
+            $committer->email,
+            $committer->name,
+            $author->name,
+            $author->email,
+            $author->name,
+            $rid,
+            $event_time,
+            $config,
+            false,
+            'github',
+            true
+        );
 
         // trigger build 不检测是否跳过
         // 检查是否有配置文件 .pcit.yml
@@ -142,9 +165,9 @@ class RequestsController
      *
      * @param array $args
      *
-     * @return array|int
-     *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public function find(...$args)
     {

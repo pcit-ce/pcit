@@ -21,7 +21,8 @@ class Services
     private $jobGenerator;
 
     /**
-     * @param array|null $matrix_config ['k'=>'v']
+     * @param null|array $matrix_config ['k'=>'v']
+     * @param mixed      $service
      */
     public function __construct($service, int $job_id, JobGenerator $jobGenerator, ?array $matrix_config)
     {

@@ -19,9 +19,9 @@ class BranchesController
      *
      * @param mixed ...$args
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function __invoke(...$args)
     {
@@ -47,9 +47,9 @@ class BranchesController
      *
      * @param array $args
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function find(...$args)
     {

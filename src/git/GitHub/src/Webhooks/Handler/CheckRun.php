@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-use App\Events\Build;
+use App\Events\GetBuild;
 use App\Job;
 use PCIT\GPI\Webhooks\Handler\Abstracts\CheckRunAbstract;
 use PCIT\Runner\Client as JobGenerator;
@@ -44,7 +44,7 @@ class CheckRun extends CheckRunAbstract
         if ('rerequested' === $action) {
             $build_id = Job::getBuildKeyId((int) $external_id);
 
-            (new JobGenerator())->handle((new Build())->handle($build_id), (int) $external_id);
+            (new JobGenerator())->handle((new GetBuild())->handle($build_id), (int) $external_id);
 
             return;
         }

@@ -37,7 +37,12 @@ class ClientTest extends TestCase
 
         $secret = hash_hmac($algo, $request_body, config('git.webhooks.token'));
 
-        $request = Request::create('/', 'POST', [], [], [],
+        $request = Request::create(
+            '/',
+            'POST',
+            [],
+            [],
+            [],
             [
                 'HTTP_X-Github-Event' => $event,
                 'HTTP_X-Hub-Signature' => 'sha1='.$secret,

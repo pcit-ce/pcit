@@ -14,41 +14,37 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getRid(string $username, string $repo, $git_type = 'github')
     {
         $sql = 'SELECT rid FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
-        $id = DB::select($sql, [$git_type, $username, $repo], true);
-
-        return $id;
+        return DB::select($sql, [$git_type, $username, $repo], true);
     }
 
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getDefaultBranch(string $username, string $repo, $git_type = 'github')
     {
         $sql = 'SELECT default_branch FROM repo WHERE git_type=? AND repo_full_name=CONCAT_WS("/",?,?) ORDER BY id DESC LIMIT 1';
 
-        $default_branch = DB::select($sql, [$git_type, $username, $repo], true);
-
-        return $default_branch;
+        return DB::select($sql, [$git_type, $username, $repo], true);
     }
 
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getRepoFullName(int $rid, $git_type = 'github')
     {
@@ -60,9 +56,9 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getGitHubInstallationIdByRepoFullName(string $repo_full_name, $git_type = 'github')
     {
@@ -76,9 +72,9 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getGitHubInstallationIdByRid(int $rid, $git_type = 'github')
     {
@@ -90,9 +86,9 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getAdmin(int $rid, bool $collaborators = false, $git_type = 'github')
     {
@@ -108,9 +104,9 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function checkAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github')
     {
@@ -179,9 +175,9 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function allByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
@@ -199,9 +195,9 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function allByUsername(string $username, $git_type = 'github')
     {
@@ -254,9 +250,9 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function findByRepoFullName(string $username, string $repo_name, $git_type = 'github')
     {
@@ -268,9 +264,9 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getActiveByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
     {
@@ -288,9 +284,9 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function exists(int $rid, $git_type = 'github')
     {
@@ -304,12 +300,14 @@ EOF;
      *
      * @throws \Exception
      */
-    public static function updateRepoInfo(int $rid,
-                                          string $repo_full_name,
-                                          ?int $insert_admin,
-                                          ?int $insert_collaborators,
-                                          ?string $default_branch = 'master',
-                                          $git_type = 'github'): void
+    public static function updateRepoInfo(
+        int $rid,
+        string $repo_full_name,
+        ?int $insert_admin,
+        ?int $insert_collaborators,
+        ?string $default_branch = 'master',
+        $git_type = 'github'
+    ): void
     {
         if ($repo_key_id = self::exists($rid, $git_type)) {
             $sql = <<<'EOF'
@@ -356,9 +354,9 @@ EOF;
      *
      * @param $installation_id
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
@@ -373,9 +371,9 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function deleteByRid(int $rid, $git_type = 'github')
     {
@@ -385,9 +383,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function updateBuildActive(int $build_active, string $git_type, string $repo_full_name)
     {
@@ -404,9 +402,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function updateWebhookStatus(int $webhooks_status, string $git_type, string $repo_full_name)
     {
@@ -438,9 +436,9 @@ EOF;
     }
 
     /**
-     * @return bool
-     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public static function canBuild(string $repo_full_name, string $git_type)
     {

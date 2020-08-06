@@ -30,17 +30,19 @@ class TestCase extends BaseTestCase
      * @param array                $cookies    The request cookies ($_COOKIE)
      * @param array                $files      The request files ($_FILES)
      * @param array                $server     The server parameters ($_SERVER)
-     * @param string|resource|null $content    The raw body data
+     * @param null|resource|string $content    The raw body data
      *
      * @return static
      */
-    public function request(string $uri,
-                            string $method = 'GET',
-                            array $parameters = [],
-                            array $cookies = [],
-                            array $files = [],
-                            array $server = [],
-                            $content = null)
+    public function request(
+        string $uri,
+        string $method = 'GET',
+        array $parameters = [],
+        array $cookies = [],
+        array $files = [],
+        array $server = [],
+        $content = null
+    )
     {
         $request = Request::create($uri, $method, $parameters, $cookies, $files, $server, $content);
 
@@ -48,9 +50,7 @@ class TestCase extends BaseTestCase
 
         $kernel = $this->app->make(\App\Http\Kernel::class);
 
-        $response = $kernel->handle($request);
-
-        return $response;
+        return $kernel->handle($request);
     }
 
     public function get(string $uri, array $headers = [])

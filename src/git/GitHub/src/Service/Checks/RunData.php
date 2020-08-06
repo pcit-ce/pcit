@@ -18,51 +18,53 @@ class RunData
 
     public $status;
 
-    public $started_at = null;
+    public $started_at;
 
-    public $completed_at = null;
+    public $completed_at;
 
-    public $conclusion = null;
+    public $conclusion;
 
     /**
-     * @var string|null
+     * @var null|string
      *
      * PCIT - Branch
      */
-    public $title = null;
+    public $title;
 
     /**
-     * @var string|null
+     * @var null|string
      *
      * Build Event is Push Completed #126-339
      */
-    public $summary = null;
+    public $summary;
 
-    public $text = null;
+    public $text;
 
-    public $annotations = null;
+    public $annotations;
 
-    public $images = null;
+    public $images;
 
-    public $actions = null;
+    public $actions;
 
     public $check_run_id;
 
-    public function __construct(string $repo_full_name,
-                                string $name,
-                                string $commit_id,
-                                string $details_url,
-                                string $external_id,
-                                string $status,
-                                int $started_at = null,
-                                int $completed_at = null,
-                                string $conclusion = null,
-                                string $title = null,
-                                string $summary = null,
-                                string $text = null,
-                                array $annotations = null,
-                                array $images = null,
-                                array $actions = null)
+    public function __construct(
+        string $repo_full_name,
+        string $name,
+        string $commit_id,
+        string $details_url,
+        string $external_id,
+        string $status,
+        int $started_at = null,
+        int $completed_at = null,
+        string $conclusion = null,
+        string $title = null,
+        string $summary = null,
+        string $text = null,
+        array $annotations = null,
+        array $images = null,
+        array $actions = null
+    )
     {
         $this->repo_full_name = $repo_full_name;
         $this->name = $name;
@@ -96,19 +98,28 @@ class RunData
      *
      * @return array
      */
-    public static function createAnnotation(string $path,
-                                            int $start_line,
-                                            int $end_line,
-                                            int $start_column,
-                                            int $end_column,
-                                            string $annotation_level,
-                                            string $message,
-                                            string $title = null,
-                                            string $raw_details = null)
+    public static function createAnnotation(
+        string $path,
+        int $start_line,
+        int $end_line,
+        int $start_column,
+        int $end_column,
+        string $annotation_level,
+        string $message,
+        string $title = null,
+        string $raw_details = null
+    )
     {
-        return compact('path', 'start_line', 'end_line',
-            'start_column', 'end_column', 'annotation_level',
-            'message', 'title', 'raw_details'
+        return compact(
+            'path',
+            'start_line',
+            'end_line',
+            'start_column',
+            'end_column',
+            'annotation_level',
+            'message',
+            'title',
+            'raw_details'
         );
     }
 
@@ -133,9 +144,11 @@ class RunData
      *
      * @see https://developer.github.com/changes/2018-05-23-request-actions-on-checks/
      */
-    public static function createAction(string $label = 'Fix',
-                                        string $identifier = 'fix_errors',
-                                        string $description = 'Allow us to fix these errors for you')
+    public static function createAction(
+        string $label = 'Fix',
+        string $identifier = 'fix_errors',
+        string $description = 'Allow us to fix these errors for you'
+    )
     {
         return [
             'label' => $label,

@@ -31,10 +31,10 @@ class OutputHandler
                 $value = str_replace('%25', '%', $value);
 
                 $output[$key] = $value;
+
                 continue;
-            } else {
-                $new_log[] = $line_start.$line_content;
             }
+            $new_log[] = $line_start.$line_content;
         }
 
         return [implode("\n", $new_log), $output];

@@ -31,9 +31,7 @@ class BuildsController
         $limit = app('request')->query->get('limit');
         list($git_type, $uid) = JWTController::getUser();
 
-        $result = Build::allByAdmin((int) $uid, (int) $before, (int) $limit, $git_type);
-
-        return $result;
+        return Build::allByAdmin((int) $uid, (int) $before, (int) $limit, $git_type);
     }
 
     /**
@@ -46,9 +44,9 @@ class BuildsController
      *
      * @param mixed ...$args
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function listByRepo(...$args)
     {
@@ -86,16 +84,18 @@ class BuildsController
      *
      * @param mixed ...$args
      *
-     * @return array|int
-     *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public function repoCurrent(...$args)
     {
         list($git_type, $username, $repo_name) = $args;
 
         $build_key_id = Build::getCurrentBuildKeyId(
-            (int) Repo::getRid($username, $repo_name, $git_type), $git_type);
+            (int) Repo::getRid($username, $repo_name, $git_type),
+            $git_type
+        );
 
         return self::find($build_key_id);
     }
@@ -107,9 +107,9 @@ class BuildsController
      *
      * @param $build_id
      *
-     * @return array|int
-     *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public function find($build_id)
     {
@@ -171,6 +171,7 @@ class BuildsController
 
         if (!Build::getConfig($build_id)) {
             Build::updateBuildStatus($build_id, 'misconfigured');
+
             throw new Exception('.pcit.yml not found', 500);
         }
 

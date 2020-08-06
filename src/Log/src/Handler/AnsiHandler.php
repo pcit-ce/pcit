@@ -20,7 +20,7 @@ class AnsiHandler
         int $line_offset = 0,
         string $type = 'warning',
         string $color_header = '[33m'
-        ): array {
+    ): array {
         $new_log = [];
 
         $line_array = explode("\n", $log);

@@ -56,9 +56,9 @@ abstract class ServerAbstract implements ServerInterface
      *
      * @param $content
      *
-     * @return bool|int
-     *
      * @throws \Exception
+     *
+     * @return bool|int
      */
     public function pushCache(string $type, $content)
     {
@@ -68,9 +68,9 @@ abstract class ServerAbstract implements ServerInterface
     /**
      * 获取一条缓存数据.
      *
-     * @return string|false
-     *
      * @throws \Exception
+     *
+     * @return false|string
      */
     public function getCache()
     {
@@ -80,9 +80,9 @@ abstract class ServerAbstract implements ServerInterface
     /**
      * 回滚.
      *
-     * @return bool|int
-     *
      * @throws \Exception
+     *
+     * @return bool|int
      */
     public function rollback(string $content)
     {
@@ -92,9 +92,9 @@ abstract class ServerAbstract implements ServerInterface
     /**
      * 处理成功，存入成功队列.
      *
-     * @return bool|int
-     *
      * @throws \Exception
+     *
+     * @return bool|int
      */
     public function pushSuccessCache(string $content)
     {
@@ -112,9 +112,9 @@ abstract class ServerAbstract implements ServerInterface
     /**
      * 处理失败，插入失败队列.
      *
-     * @return bool|int
-     *
      * @throws \Exception
+     *
+     * @return bool|int
      */
     public function pushErrorCache(string $content)
     {

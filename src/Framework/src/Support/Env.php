@@ -17,7 +17,7 @@ class Env
      * '' null
      * null null
      *
-     * @return bool|string|null
+     * @return null|bool|string
      */
     public static function get(string $key, $default = null)
     {

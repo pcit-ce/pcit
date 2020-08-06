@@ -26,16 +26,18 @@ class WeChatClient
     /**
      * @return mixed
      */
-    public function sendTemplateMessage(string $code,
-                                        string $time,
-                                        string $event_type,
-                                        string $repo_name,
-                                        string $branch,
-                                        string $commit_message,
-                                        string $committer_username,
-                                        string $info,
-                                        string $url,
-                                        string $openId = null)
+    public function sendTemplateMessage(
+        string $code,
+        string $time,
+        string $event_type,
+        string $repo_name,
+        string $branch,
+        string $commit_message,
+        string $committer_username,
+        string $info,
+        string $url,
+        string $openId = null
+    )
     {
         $openId || $openId = $this->openId;
 

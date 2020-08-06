@@ -19,7 +19,8 @@ class CachesController
         $options = config('filesystems.disks.s3');
 
         $this->flysystem = new Filesystem(
-            new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));
+            new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket)
+        );
 
         // $this->flysystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
     }

@@ -30,10 +30,10 @@ class MaskHandler
                 $hide_value = str_replace('%25', '%', $hide_value);
 
                 $hide_value_array[] = $hide_value;
+
                 continue;
-            } else {
-                $new_log[] = $line_start.$line_content;
             }
+            $new_log[] = $line_start.$line_content;
         }
 
         $log = implode("\n", $new_log);
@@ -62,14 +62,11 @@ class MaskHandler
         // $log = str_replace("\n", '%0A', $log);
         // $log = str_replace("\r", '%0D', $log);
 
-        $log = preg_replace($hide_value_pattern, '***', $log);
-
+        return preg_replace($hide_value_pattern, '***', $log);
         // file_put_contents('1.txt', $log, FILE_APPEND);
 
         // $log = str_replace('%0A', "\n", $log);
         // $log = str_replace('%0D', "\r", $log);
         // $log = str_replace('%25', '%', $log);
-
-        return $log;
     }
 }

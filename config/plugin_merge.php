@@ -32,7 +32,9 @@ function write(array $json_schem, string $generate_to_file): void
 {
     // $json_schem['definitions']['image']['not']['enum']
     file_put_contents("./$generate_to_file", json_encode(
-        $json_schem, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL);
+        $json_schem,
+        JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+    ).PHP_EOL);
 }
 
 foreach ($plugins as $plugin) {

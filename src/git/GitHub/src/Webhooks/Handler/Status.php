@@ -9,9 +9,9 @@ use PCIT\Framework\Support\DB;
 class Status
 {
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function handle(string $webhooks_content)
     {
@@ -23,7 +23,9 @@ class Status
         ) VALUES(?,?);
 EOF;
 
-        return DB::insert($sql, [
+        return DB::insert(
+            $sql,
+            [
                 'github', __FUNCTION__,
             ]
         );

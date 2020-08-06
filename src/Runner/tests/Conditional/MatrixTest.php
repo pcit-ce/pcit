@@ -34,7 +34,8 @@ EOF;
         ];
 
         $conditional = BaseConstraint::arrayToObjectRecursive(
-            Yaml::parse($conditional_yaml));
+            Yaml::parse($conditional_yaml)
+        );
         $conditional = $conditional->when->matrix;
 
         $result = (new Matrix($conditional, $current))->handle();
@@ -66,7 +67,8 @@ EOF;
         ];
 
         $conditional = BaseConstraint::arrayToObjectRecursive(
-            Yaml::parse($conditional_yaml));
+            Yaml::parse($conditional_yaml)
+        );
         $conditional = $conditional->when->matrix;
 
         $result = (new Matrix($conditional, $current))->handle();
@@ -98,7 +100,8 @@ EOF;
         ];
 
         $conditional = BaseConstraint::arrayToObjectRecursive(
-            Yaml::parse($conditional_yaml));
+            Yaml::parse($conditional_yaml)
+        );
         $conditional = $conditional->when->matrix;
 
         $result = (new Matrix($conditional, $current))->handle();
@@ -126,7 +129,8 @@ EOF;
         ];
 
         $conditional = BaseConstraint::arrayToObjectRecursive(
-            Yaml::parse($conditional_yaml));
+            Yaml::parse($conditional_yaml)
+        );
         $conditional = $conditional->when->matrix;
 
         $result = (new Matrix($conditional, $current))->handle();

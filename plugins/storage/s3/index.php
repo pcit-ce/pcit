@@ -32,7 +32,8 @@ $options = [
 $bucket = getenv('INPUT_BUCKET') ?: 'pcit-caches';
 
 $flysystem = new Filesystem(
-    new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket));
+    new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket)
+);
 
 // handle artifact
 

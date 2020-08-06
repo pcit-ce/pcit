@@ -10,11 +10,11 @@ use Symfony\Component\Yaml\Yaml;
 class Image
 {
     /**
-     * @param string|null $language_type example: php
-     *
-     * @return string
+     * @param null|string $language_type example: php
      *
      * @throws PCITException
+     *
+     * @return string
      */
     public static function get(?string $language_type)
     {

@@ -18,9 +18,9 @@ class Setting extends Model
     /**
      * 返回某仓库的设置列表.
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function list(int $rid, string $git_type = 'github')
     {
@@ -40,9 +40,9 @@ EOF;
     /**
      * 返回某个设置的值
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function get(int $rid, string $setting_name, string $git_type = 'github')
     {
@@ -56,9 +56,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function update(int $rid, string $setting_name, string $setting_value, string $git_type = 'github')
     {

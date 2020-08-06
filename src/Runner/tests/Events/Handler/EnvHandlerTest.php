@@ -45,7 +45,7 @@ class EnvHandlerTest extends TestCase
 
         $result2 = (new EnvHandler())->array2obj([
             'k' => 'v=vv', 'k2' => 'a,b,c', 'k3' => '{"a": 1,"b": [a,b,c]}',
-            ]);
+        ]);
 
         $this->assertEquals($result2, $result1);
     }

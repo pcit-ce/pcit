@@ -43,9 +43,9 @@ class Model
     /**
      * 取得所有数据.
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function all()
     {
@@ -61,9 +61,9 @@ class Model
      *
      * @param int $table_primary_key_id
      *
-     * @return int|array
-     *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public static function find($table_primary_key_id)
     {
@@ -90,11 +90,11 @@ class Model
     /**
      * 通过主键查找数据，找不到则抛出异常.
      *
-     * @param int|array $table_primary_key_id
-     *
-     * @return array|int
+     * @param array|int $table_primary_key_id
      *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public static function findOrFail($table_primary_key_id)
     {
@@ -112,7 +112,7 @@ class Model
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public static function getTableName()
     {
@@ -120,7 +120,8 @@ class Model
 
         if (!$table) {
             $table = StringSupport::uncamelize(
-                \array_slice(explode('\\', static::class), -1, 1)[0].'s');
+                \array_slice(explode('\\', static::class), -1, 1)[0].'s'
+            );
         }
 
         return $table;
@@ -150,9 +151,9 @@ class Model
     }
 
     /**
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function getLastKeyId()
     {
@@ -162,7 +163,7 @@ class Model
     }
 
     /**
-     * @param int|array $primaryKeyValue 通过主键删除数据
+     * @param array|int $primaryKeyValue 通过主键删除数据
      */
     public static function destroy($primaryKeyValue): void
     {

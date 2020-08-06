@@ -25,10 +25,12 @@ class UpdateBuildStatus
 
     private $config;
 
-    public function __construct(int $job_key_id,
-                                ?int $build_key_id,
-                                string $build_status,
-                                $build_log = null)
+    public function __construct(
+        int $job_key_id,
+        ?int $build_key_id,
+        string $build_status,
+        $build_log = null
+    )
     {
         $this->job_key_id = $job_key_id;
 

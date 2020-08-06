@@ -40,7 +40,7 @@ class WebhooksHandler implements WebhooksHandlerInterface
 
             $build_key_id = (int) Build::getCurrentBuildKeyId(
                 (int) Repo::getRid(
-                ...explode('/', (string) $git_repo_full_name)
+                    ...explode('/', (string) $git_repo_full_name)
                 )
             );
 
@@ -66,7 +66,5 @@ class WebhooksHandler implements WebhooksHandlerInterface
                 true
             );
         }
-
-        return;
     }
 }

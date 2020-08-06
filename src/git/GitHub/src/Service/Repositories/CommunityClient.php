@@ -11,9 +11,9 @@ class CommunityClient
     use ServiceClientCommon;
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      *
      * @see https://developer.github.com/v3/repos/community/
      */
@@ -21,8 +21,6 @@ class CommunityClient
     {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/community/profile';
 
-        return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.machine-man-preview+json;
-        application/vnd.github.speedy-preview+json;
-        application/vnd.github.black-panther-preview+json']);
+        return $this->curl->get($url, [], ['Accept' => 'application/vnd.github.machine-man-preview+json,application/vnd.github.speedy-preview+json,application/vnd.github.black-panther-preview+json']);
     }
 }

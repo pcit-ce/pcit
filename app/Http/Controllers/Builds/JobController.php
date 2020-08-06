@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Build;
+use App\Events\GetBuild;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
 use PCIT\Framework\Support\DB;
@@ -17,9 +18,9 @@ class JobController
     /**
      * @param $build_key_id
      *
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function list($build_key_id)
     {
@@ -33,9 +34,9 @@ class JobController
      *
      * @param $job_id
      *
-     * @return array|int
-     *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public function find($job_id)
     {
@@ -151,7 +152,7 @@ class JobController
         $job_id = (int) $job_id;
         $buildId = Job::getBuildKeyId($job_id);
 
-        $build = (new \App\Events\Build())->handle($buildId);
+        $build = (new GetBuild())->handle($buildId);
 
         /**
          * @var \PCIT\PCIT

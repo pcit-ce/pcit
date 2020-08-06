@@ -10,6 +10,9 @@ services:
       - default
     volumes:
       - mysql-data:/var/lib/mysql
+    # security_opt:
+    #   - seccomp:unconfined
+    cap_add: [ SYS_NICE ]
 
   pcit:
     image: pcit/all-in-one

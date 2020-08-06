@@ -16,9 +16,9 @@ class EnvController
      *
      * @param array $args
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public function __invoke(...$args)
     {
@@ -51,9 +51,9 @@ class EnvController
      *
      * @param array $args
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function create(...$args)
     {
@@ -80,9 +80,9 @@ class EnvController
      *
      * @param array $args
      *
-     * @return array|int
-     *
      * @throws \Exception
+     *
+     * @return array|int
      */
     public function find(...$args)
     {
@@ -133,9 +133,9 @@ class EnvController
      *
      * @param array $args
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public function delete(...$args)
     {

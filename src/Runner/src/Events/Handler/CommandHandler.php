@@ -7,9 +7,9 @@ namespace PCIT\Runner\Events\Handler;
 class CommandHandler
 {
     /**
-     * @return ?string
-     *
      * @throws \Exception
+     *
+     * @return ?string
      */
     public static function parse(
         string $shell,
@@ -72,6 +72,7 @@ EOF;
             if ('\\' === substr($item, -1)) {
                 // $cmd .= $item;
                 $special_cmd .= trim($item, '\\');
+
                 continue;
             }
 

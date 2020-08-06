@@ -21,9 +21,9 @@ class HttpClient
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function post(string $url, string $data = null, array $header = [])
     {
@@ -52,9 +52,9 @@ class HttpClient
     /**
      * @param int $timeout
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function get(string $url, string $data = null, array $header = [], $timeout = 5)
     {
@@ -69,9 +69,9 @@ class HttpClient
     }
 
     /**
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public static function delete(string $url, array $header = [])
     {

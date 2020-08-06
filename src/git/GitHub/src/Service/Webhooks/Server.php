@@ -17,9 +17,9 @@ class Server extends ServerAbstract
     protected $git_type = 'github';
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public function server()
     {

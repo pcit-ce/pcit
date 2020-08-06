@@ -24,7 +24,7 @@ class Session
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function get(string $name)
     {
@@ -72,7 +72,7 @@ class Session
     /**
      * 取出之后删除原数据.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function pull(string $name)
     {
@@ -84,7 +84,5 @@ class Session
 
             return $result;
         }
-
-        return null;
     }
 }

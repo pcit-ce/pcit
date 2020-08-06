@@ -14,9 +14,9 @@ class Job extends Model
     public static $table = 'jobs';
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getLog(int $job_id)
     {
@@ -55,9 +55,9 @@ EOF;
     }
 
     /**
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getByBuildKeyID(int $build_key_id, bool $queued = false)
     {
@@ -73,9 +73,9 @@ EOF;
     }
 
     /**
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function allByBuildKeyID(int $build_key_id)
     {
@@ -98,9 +98,9 @@ EOF;
     }
 
     /**
-     * @return array
-     *
      * @throws \Exception
+     *
+     * @return array
      */
     public static function getJobIDByBuildKeyID(int $build_key_id)
     {
@@ -120,9 +120,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function getRid(int $job_id)
     {
@@ -154,9 +154,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getCreatedAt(int $job_id)
     {
@@ -180,9 +180,9 @@ EOF;
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getStartAt(int $job_id)
     {
@@ -202,9 +202,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function getFinishedAt(int $job_id)
     {
@@ -214,9 +214,9 @@ EOF;
     }
 
     /**
-     * @return array|string|null
-     *
      * @throws \Exception
+     *
+     * @return null|array|string
      */
     public static function getFinishedAtByBuildId(int $build_id)
     {
@@ -228,7 +228,7 @@ EOF;
             $state = $v['state'];
 
             if (\in_array($state, ['queued', 'pending', 'in_progress'])) {
-                return null;
+                return;
             }
         }
 
@@ -240,9 +240,9 @@ EOF;
     /**
      * @param string $status
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function updateBuildStatus(int $job_key_id, ?string $status)
     {
@@ -252,9 +252,9 @@ EOF;
     }
 
     /**
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function getBuildStatus(int $job_key_id)
     {
@@ -264,17 +264,15 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function getCheckRunId(int $build_key_id)
     {
         $sql = 'SELECT check_run_id FROM jobs WHERE id=? LIMIT 1';
 
-        $result = DB::select($sql, [$build_key_id], true);
-
-        return $result;
+        return DB::select($sql, [$build_key_id], true);
     }
 
     /**
@@ -284,15 +282,16 @@ EOF;
      */
     public static function updateCheckRunId(?int $check_run_id, int $build_key_id): void
     {
+        return;
         $sql = 'UPDATE jobs SET check_run_id=? WHERE id=?';
 
         DB::update($sql, [$check_run_id, $build_key_id]);
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getGitType(int $job_key_id)
     {
@@ -309,9 +308,9 @@ EOF;
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function getBuildKeyId(int $job_key_id)
     {
@@ -323,21 +322,21 @@ EOF;
     /**
      * 从 build 的所有 job 得出 build 的状态
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getBuildStatusByBuildKeyId(int $build_key_id)
     {
         $status = DB::select(
-            'SELECT state FROM jobs WHERE build_id=? GROUP BY state', [$build_key_id]);
+            'SELECT state FROM jobs WHERE build_id=? GROUP BY state',
+            [$build_key_id]
+        );
 
         if (1 === \count($status)) {
             $state = $status[0]['state'];
 
-            $state = 'pending' === $state ? 'queued' : $state;
-
-            return $state;
+            return 'pending' === $state ? 'queued' : $state;
         }
 
         // 有一个 error failure 均返回对应值
@@ -395,9 +394,9 @@ EOF;
     }
 
     /**
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function getQueuedJob()
     {

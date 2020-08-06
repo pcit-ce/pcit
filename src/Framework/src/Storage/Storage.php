@@ -36,14 +36,13 @@ class Storage
 
         if ('local' === $disk) {
             return $localAdapter;
-        } elseif ('s3' === $disk) {
+        }
+        if ('s3' === $disk) {
             $bucket = config('filesystems.bucket');
 
             $options = config('filesystems.disks.s3');
 
-            $s3Adapter = new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket);
-
-            return $s3Adapter;
+            return new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket);
         }
 
         return $localAdapter;

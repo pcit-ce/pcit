@@ -39,9 +39,9 @@ class Git
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getUrl(string $type, string $repo_full_name, bool $ssh = false)
     {
@@ -91,9 +91,9 @@ class Git
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getPullRequestUrl(string $type, string $repo_full_name, int $pull_id)
     {
@@ -106,7 +106,6 @@ class Git
                 $url = $base_url.'/pulls/'.$pull_id;
 
                 break;
-
             default:
                 $url = $base_url.'/pull/'.$pull_id;
         }
@@ -115,9 +114,9 @@ class Git
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getIssueUrl(string $type, string $repo_full_name, string $issue_id)
     {
@@ -130,7 +129,6 @@ class Git
                 $url = $base_url.'/topic/'.$issue_id;
 
                 break;
-
             default:
                 $url = $base_url.'/issues/'.$issue_id;
         }
@@ -139,9 +137,9 @@ class Git
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getCommitUrl(string $type, string $repo_full_name, string $commit_id)
     {
@@ -161,14 +159,16 @@ class Git
      * @param string $repo_full_name username/reponame
      * @param string $commit_id      branch_name commit_id
      *
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
-    private static function getRawUrl(string $type,
-                                     string $repo_full_name,
-                                     string $commit_id,
-                                     string $file_name)
+    private static function getRawUrl(
+        string $type,
+        string $repo_full_name,
+        string $commit_id,
+        string $file_name
+    )
     {
         self::checkGit($type);
 
@@ -185,9 +185,9 @@ class Git
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getApiUrl(string $git_type)
     {
@@ -202,18 +202,16 @@ class Git
                 // 支持 Coding 企业版(私有部署)
                 $url = config('git.coding.host') ?? config('git.coding.oauth.team').'.coding.net';
                 $url .= '/api';
-                break;
 
+                break;
             case 'gitee':
                 $url = 'gitee.com/api/v5';
 
                 break;
-
             case 'github':
                 $url = 'api.github.com';
 
                 break;
-
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -222,9 +220,9 @@ class Git
     }
 
     /**
-     * @return string
-     *
      * @throws \Exception
+     *
+     * @return string
      */
     public static function getClassName(string $git_type)
     {
@@ -235,7 +233,6 @@ class Git
                 $class_name = 'GitHub';
 
                 break;
-
             default:
                 $class_name = ucfirst($git_type);
         }

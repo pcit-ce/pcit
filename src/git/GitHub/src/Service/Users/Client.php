@@ -9,7 +9,7 @@ use Exception;
 
 class Client
 {
-    protected $api_url = null;
+    protected $api_url;
 
     /**
      * @var Curl
@@ -25,9 +25,9 @@ class Client
     /**
      * 获取当前登录用户或指定用户的基本信息.
      *
-     * @return array|mixed
-     *
      * @throws \Exception
+     *
+     * @return array|mixed
      */
     public function getUserInfo(bool $raw = false, string $username = null)
     {
@@ -56,9 +56,9 @@ class Client
     /**
      * 获取当前用户或指定用户名下所有的仓库列表（包括组织中的列表）.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getRepos(int $page = 1, bool $raw = false, string $username = null)
     {
@@ -68,17 +68,15 @@ class Client
             $url = $this->api_url.'/users/'.$username.'/repos?page='.$page;
         }
 
-        $output = $this->curl->get($url);
-
-        return $output;
+        return $this->curl->get($url);
     }
 
     /**
      * 获取用户名下组织列表.
      *
-     * @return mixed
-     *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function listOrgs()
     {

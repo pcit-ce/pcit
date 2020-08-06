@@ -81,12 +81,12 @@ class Client implements OAuthInterface
         }
 
         $url = static::URL.http_build_query([
-                'client_id' => $this->clientId,
-                'redirect_uri' => $this->callbackUrl,
-                //'scope' => $this->scope,
-                'state' => $state,
-                //'allow_signup' => 'true',
-            ]);
+            'client_id' => $this->clientId,
+            'redirect_uri' => $this->callbackUrl,
+            //'scope' => $this->scope,
+            'state' => $state,
+            //'allow_signup' => 'true',
+        ]);
 
         return $url;
     }
@@ -96,14 +96,15 @@ class Client implements OAuthInterface
      */
     public function getAccessToken(string $code, ?string $state, bool $json = true): array
     {
-        $url = static::POST_URL.http_build_query([
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                    'code' => $code,
-                    'redirect_uri' => $this->callbackUrl,
-                    'state' => $state,
-                ]
-            );
+        $url = static::POST_URL.http_build_query(
+            [
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'code' => $code,
+                'redirect_uri' => $this->callbackUrl,
+                'state' => $state,
+            ]
+        );
 
         true === $json && $this->curl->setHeader('Accept', 'application/json');
 

@@ -65,9 +65,9 @@ class Kernel
     /**
      * Create "repository", "branch", or "tag".
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public function create(string $webhooks_content, string $git_type)
     {
@@ -238,9 +238,9 @@ class Kernel
      * "assigned", "unassigned", "review_requested", "review_request_removed",
      * "labeled", "unlabeled", "opened", "synchronize", "edited", "closed", or "reopened"
      *
-     * @return array|void
-     *
      * @throws \Exception
+     *
+     * @return array|void
      */
     public function pull_request(string $webhooks_content, string $git_type)
     {

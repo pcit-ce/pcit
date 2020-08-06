@@ -12,9 +12,11 @@ class CacheManager implements Factory
     protected $stores = [];
 
     /**
-     * @return \PCIT\Framework\Contracts\Cache\Repository
+     * @param mixed $name
      *
      * @throws \Exception
+     *
+     * @return \PCIT\Framework\Contracts\Cache\Repository
      */
     public function store($name = 'redis')
     {

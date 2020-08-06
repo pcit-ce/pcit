@@ -19,9 +19,9 @@ class DB
     private static $debug;
 
     /**
-     * @return PDO
-     *
      * @throws \Exception
+     *
+     * @return PDO
      */
     public static function connection()
     {
@@ -44,7 +44,11 @@ class DB
                     // 当数据库不存在时，尝试新建数据库
                     try {
                         $dsn = sprintf(
-                            'mysql:host=%s;port=%s;dbname=%s', $mysql_host, $mysql_port, 'mysql');
+                            'mysql:host=%s;port=%s;dbname=%s',
+                            $mysql_host,
+                            $mysql_port,
+                            'mysql'
+                        );
                         $pdo = new PDO($dsn, $mysql_username, $mysql_password);
 
                         $pdo->exec('create database '.$mysql_dbname);
@@ -54,6 +58,7 @@ class DB
                         if (\PHP_SAPI === 'cli') {
                             die('[error] [PCIT] database not exists');
                         }
+
                         throw new Exception('database not exists', 500);
                     }
                 }
@@ -83,9 +88,9 @@ class DB
      *
      * @param array $data
      *
-     * @return array|string
-     *
      * @throws \Exception
+     *
+     * @return array|string
      */
     public static function select(string $sql, ?array $data, bool $single = false)
     {
@@ -118,9 +123,9 @@ class DB
     /**
      * 执行原生 INSERT 语句.
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function insert(string $sql, array $data = [])
     {
@@ -141,9 +146,9 @@ class DB
     /**
      * 执行原生 UPDATE 语句.
      *
-     * @return int 返回受影响的记录条数
-     *
      * @throws \Exception
+     *
+     * @return int 返回受影响的记录条数
      */
     public static function update(string $sql, array $data = [])
     {
@@ -153,9 +158,9 @@ class DB
     /**
      * 执行原生 DELETE 语句.
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function delete(string $sql, array $data = [])
     {
@@ -163,9 +168,9 @@ class DB
     }
 
     /**
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     private static function common(string $sql, array $data = [])
     {
@@ -186,9 +191,9 @@ class DB
     /**
      * 执行普通语句.
      *
-     * @return int
-     *
      * @throws \Exception
+     *
+     * @return int
      */
     public static function statement(string $sql)
     {
@@ -258,9 +263,9 @@ class DB
     }
 
     /**
-     * @return PDO
-     *
      * @throws \Exception
+     *
+     * @return PDO
      */
     public static function getPdo()
     {
