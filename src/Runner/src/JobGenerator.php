@@ -21,7 +21,7 @@ use PCIT\Support\CI;
  * 1. 由 build 生成 job
  * 2. 重新生成一个 job.
  */
-class Client
+class JobGenerator
 {
     /**
      * @var BuildData
@@ -74,8 +74,11 @@ class Client
      *
      * @throws \Exception
      */
-    public function handle(BuildData $build, int $job_id = 0): void
+    public function handle(?BuildData $build, int $job_id = 0): void
     {
+        if (!$build) {
+            return;
+        }
         $this->textHandler = new TextHandler();
 
         $this->build = $build;
@@ -155,8 +158,6 @@ class Client
         if (!$matrix) {
             \Log::emergency('1️⃣This build only include one job');
 
-            $job_id = (int) (Job::getJobIDByBuildKeyID($this->build_id)[0] ?? 0);
-
             $this->handleJob($job_id, null);
 
             return;
@@ -174,14 +175,7 @@ class Client
 
         // 矩阵构建循环
         foreach ($matrix as $k => $matrix_config) {
-            // 用户点击重新构建 build，必须重新生成 job
-            // 获取已有的 job_id
-            $job_id = Job::getJobIDByBuildKeyIDAndEnv(
-                $this->build_id,
-                json_encode($matrix_config)
-            );
-
-            $this->handleJob($job_id, $matrix_config);
+            $this->handleJob(0, $matrix_config);
         }
     }
 

@@ -154,6 +154,10 @@ class JobController
 
         $build = (new GetBuild())->handle($buildId);
 
+        if (!$build) {
+            return;
+        }
+
         /**
          * @var \PCIT\PCIT
          */

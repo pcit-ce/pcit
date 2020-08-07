@@ -54,6 +54,7 @@ frontend/package-lock.json
 /.dockerignore
 
 !/README.md
+!/CHANGELOG.md
 
 app/Http/Controllers/Test
 

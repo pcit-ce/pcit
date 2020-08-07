@@ -30,8 +30,7 @@ class UpdateBuildStatus
         ?int $build_key_id,
         string $build_status,
         $build_log = null
-    )
-    {
+    ) {
         $this->job_key_id = $job_key_id;
 
         $this->config = $config = Build::getConfig((int) $build_key_id) ?? '';
@@ -58,7 +57,7 @@ class UpdateBuildStatus
         switch ($this->build_status) {
             case 'inactive':
                 $this->build_status = 'inactive';
-                \App\Build::updateBuildStatus($job_key_id, 'skip');
+                \App\Build::updateBuildStatus($job_key_id, 'skipped');
 
                 break;
             case CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS:

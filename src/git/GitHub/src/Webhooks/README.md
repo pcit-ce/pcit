@@ -3,21 +3,18 @@
 * https://developer.github.com/webhooks/
 * https://developer.github.com/webhooks/event-payloads/
 
-## Handler
+## Server
 
-PCITDaemon 处理 Webhooks 数据，存储到数据库。
-
-```php
-$webhooksHandler = new \PCIT\GitHub\Webhooks\Handler\Kernel();
-
-// save data to db
-$webhooksHandler->ping($webhooks_content);
-```
+接收 Webhooks 数据
 
 ## Parser
 
 解析 Webhooks 数据
 
-## Server
+## Handler
 
-接收 Webhooks 数据
+触发 pustomize
+
+## pustomize
+
+自定义如何处理 webhooks

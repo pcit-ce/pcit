@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner;
 
-use PCIT\Runner\Client as JobGenerator;
-
 class SystemEnv
 {
     public $build;

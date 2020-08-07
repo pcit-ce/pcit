@@ -9,6 +9,8 @@ use App\Repo;
 use PCIT\GPI\Webhooks\Context\IssueCommentContext;
 use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\IssueComment\HandlerInterface;
+use PCIT\Subject;
+use PCIT\UpdateUserInfo;
 
 class Handler implements HandlerInterface
 {
@@ -21,6 +23,16 @@ class Handler implements HandlerInterface
     public function handle(IssueCommentContext $context): void
     {
         $this->context = $context;
+
+        $installation_id = $context->installation_id;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $owner = $context->owner;
+        $default_branch = $context->repository->default_branch;
+
+        (new Subject())
+            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
+            ->handle();
 
         $body = strtolower($context->body);
 

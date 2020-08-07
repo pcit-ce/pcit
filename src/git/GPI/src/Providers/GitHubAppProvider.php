@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Providers;
+namespace PCIT\GPI\Providers;
 
 use PCIT\GitHub\Service\GitHubApp\AccessTokenClient;
 use PCIT\GitHub\Service\GitHubApp\Client;

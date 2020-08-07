@@ -15,6 +15,6 @@ class PullRequest extends PullRequestAbstract
     {
         $context = PullRequestParser::handle($webhooks_content);
 
-        $this->handlePullRequest($context, $this->git_type);
+        $this->pustomize()($context, $this->git_type);
     }
 }

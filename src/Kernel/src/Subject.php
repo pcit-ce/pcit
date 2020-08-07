@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GPI\Webhooks\Handler;
+namespace PCIT;
 
 /**
  * 观察者模式 主题.
@@ -28,14 +28,20 @@ class Subject
      */
     public function handle()
     {
-        foreach ($this->observers as $obj) {
-            if ($obj instanceof GetConfig) {
-                $this->config_array = $obj->handle();
+        try {
+            foreach ($this->observers as $obj) {
+                if ($obj instanceof GetConfig) {
+                    $this->config_array = $obj->handle();
 
-                continue;
+                    continue;
+                }
+
+                $obj->handle();
             }
+        } catch (\Throwable $e) {
+            $this->observers = [];
 
-            $obj->handle();
+            throw $e;
         }
 
         $this->observers = [];

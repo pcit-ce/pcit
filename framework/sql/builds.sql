@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `builds`
   `event_type`          VARCHAR(20)  DEFAULT 'push'
     COMMENT 'push | tag | pr',
   `build_status`        VARCHAR(20)  DEFAULT 'pending'
-    COMMENT 'misconfigured | pending | queued | skip | inactive | GITHUB_CHECK_SUITE_CONCLUSION',
+    COMMENT 'misconfigured | pending | queued | | GITHUB_CHECK_SUITE_CONCLUSION',
   `branch`              VARCHAR(100) DEFAULT 'master',
   `tag`                 VARCHAR(100),
   `pull_request_title`  VARCHAR(100),

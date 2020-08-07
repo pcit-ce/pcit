@@ -7,9 +7,9 @@ namespace PCIT\Runner\Events;
 use App\GetAccessToken;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
-use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
+use PCIT\Runner\JobGenerator;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 use PCIT\Support\Git as GitSupport;
@@ -174,8 +174,7 @@ class Git
         int $job_id,
         string $workdir,
         array $binds = []
-    ): string
-    {
+    ): string {
         /**
          * @var \Docker\Container\Client
          */

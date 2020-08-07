@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Providers;
+namespace PCIT\GPI\Providers;
 
 use PCIT\GitHub\Service\Checks\Run;
 use PCIT\GitHub\Service\Checks\Suites;

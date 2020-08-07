@@ -8,6 +8,8 @@ use App\GetAccessToken;
 use PCIT\GPI\Webhooks\Context\IssuesContext;
 use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\Issues\HandlerInterface;
+use PCIT\Subject;
+use PCIT\UpdateUserInfo;
 
 class Handler implements HandlerInterface
 {
@@ -19,6 +21,20 @@ class Handler implements HandlerInterface
 
     public function handle(IssuesContext $context): void
     {
+        $installation_id = $context->installation_id;
+        $action = $context->action;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $issue_number = $context->issue_number;
+        $owner = $context->owner;
+        $default_branch = $context->repository->default_branch;
+
+        (new Subject())
+            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
+            ->handle();
+
+        \Log::info('issue #'.$issue_number.' '.$action);
+
         if (!\in_array($context->action, ['opened', 'open'])) {
             return;
         }

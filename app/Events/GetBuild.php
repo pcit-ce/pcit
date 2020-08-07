@@ -19,8 +19,10 @@ class GetBuild extends BuildData
 {
     /**
      * @throws PCITException
+     *
+     * @return null|self
      */
-    public function handle(int $buildId = 0): self
+    public function handle(int $buildId = 0)
     {
         $result = \App\Build::getData($buildId);
 
@@ -38,7 +40,7 @@ class GetBuild extends BuildData
             $this->config, $this->internal, $this->private) = $result;
 
         if (!$this->config or !json_decode($this->config)) {
-            Build::updateBuildStatus($buildId, 'misconfigured');
+            Build::updateBuildStatus((int) $build_key_id, 'skipped');
 
             throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
         }
@@ -51,15 +53,31 @@ class GetBuild extends BuildData
 
         $this->getRepoConfig();
 
-        if (!$this->build_pull_requests and CI::BUILD_EVENT_PR === $this->event_type) {
+        if ('0' === $this->build_pull_requests
+        and CI::BUILD_EVENT_PR === $this->event_type) {
             // don't build pr
+            \Log::info("Build #$build_key_id is skipped, because repo settings [build_pull_requests]");
+
+            Build::updateBuildStatus((int) $build_key_id, 'skipped');
+
+            return;
+        }
+
+        if ('0' === $this->build_pushes
+        and CI::BUILD_EVENT_PUSH === $this->event_type
+        and 0 === $buildId) {
+            // don't build push
+
+            \Log::info("Build #$build_key_id is skipped, because repo settings [build_pushes]");
+
+            Build::updateBuildStatus((int) $build_key_id, 'skipped');
+
+            return;
         }
 
         $this->config = JSON::beautiful($this->config);
 
         \Log::emergency('====== 🚩Get Build '.$this->build_key_id.' Data Start ======');
-
-        $this->getRepoConfig();
 
         $this->getEnv('0' === $this->internal);
 
@@ -75,11 +93,11 @@ class GetBuild extends BuildData
     {
         $result = Setting::list($this->rid, $this->git_type);
 
-        $this->build_pushes = $result['build_pushes'] ?? 1;
-        $this->build_pull_requests = $result['build_pull_requests'] ?? 1;
-        $this->maximum_number_of_builds = $result['maximum_number_of_builds'] ?? 1;
-        $this->auto_cancel_branch_builds = $result['auto_cancel_branch_builds'] ?? 1;
-        $this->auto_cancel_pull_request_builds = $result['auto_cancel_pull_request_builds'] ?? 1;
+        $this->build_pushes = $result['build_pushes'] ?? '1';
+        $this->build_pull_requests = $result['build_pull_requests'] ?? '1';
+        $this->maximum_number_of_builds = $result['maximum_number_of_builds'] ?? '1';
+        $this->auto_cancel_branch_builds = $result['auto_cancel_branch_builds'] ?? '0';
+        $this->auto_cancel_pull_request_builds = $result['auto_cancel_pull_request_builds'] ?? '0';
     }
 
     /**

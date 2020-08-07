@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GPI\Webhooks\Handler;
+namespace PCIT;
 
 use App\GetAccessToken;
 use App\Repo;
-use PCIT\PCIT;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -22,7 +21,7 @@ class GetConfig
 
     private $repo_full_name;
 
-    public function __construct(int $rid, string $commit_id, $git_type = 'github')
+    public function __construct(int $rid, string $commit_id, string $git_type = 'github')
     {
         $this->rid = $rid;
         $this->commit_id = $commit_id;
@@ -30,7 +29,7 @@ class GetConfig
         $this->repo_full_name = Repo::getRepoFullName($rid, $git_type);
     }
 
-    public function downloadConfig(array $configName = ['.pcit.yml'])
+    public function downloadConfig(array $configName = ['.pcit.yml']): string
     {
         $commit_id = $this->commit_id;
         $git_type = $this->git_type;
@@ -56,30 +55,32 @@ class GetConfig
             \Log::info("$git_type $repo_full_name $commit_id not include ".$file_name);
         }
 
-        return [];
+        return '';
     }
 
     /**
      * @throws \Exception|\Symfony\Component\Yaml\Exception\ParseException
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): array
     {
         $rid = $this->rid;
         $commit_id = $this->commit_id;
         $git_type = $this->git_type;
         $repo_full_name = $this->repo_full_name;
 
-        \Log::info('Parse repo id', [
-            'git_type' => $git_type, 'rid' => $rid, 'repo_full_name' => $repo_full_name, ]);
+        \Log::info('Get pcit config', compact(
+            'git_type',
+            'repo_full_name',
+            'rid',
+            'commit_id'
+        ));
 
         $yaml_file_content = $this->downloadConfig([
             '.pcit.yml',
             '.pcit.yaml',
         ]);
 
-        if ([] === $yaml_file_content) {
+        if ('' === $yaml_file_content) {
             return [];
         }
 
@@ -87,7 +88,7 @@ class GetConfig
         $config = Yaml::parse($yaml_file_content);
 
         if (!$config) {
-            \Log::info("$git_type $repo_full_name $commit_id .pcit.yml parse error", []);
+            \Log::info('.pcit.yml parse result is null', []);
 
             return [];
         }

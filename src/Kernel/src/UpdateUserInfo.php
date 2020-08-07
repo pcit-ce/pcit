@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GPI\Webhooks\Handler;
+namespace PCIT;
 
 use App\Repo;
 use App\User;
@@ -48,8 +48,7 @@ class UpdateUserInfo
         ?string $default_branch,
         Sender $sender = null,
         string $git_type = 'github'
-    )
-    {
+    ) {
         $this->owner = $owner;
         $this->installation_id = $installation_id;
         $this->rid = $rid;

@@ -46,8 +46,7 @@ class GitHubAppChecks
         array $images = null,
         array $actions = null,
         bool $force_create = false
-    ): void
-    {
+    ): void {
         \Log::info('Create GitHub App Check Run', ['job_key_id' => $job_key_id]);
 
         $job_env_vars = Job::getEnv($job_key_id);
@@ -181,7 +180,7 @@ class GitHubAppChecks
 
     public static function buildStatus2conclusion($status)
     {
-        if (\in_array($status, ['queued', 'skip', 'misconfigured'])) {
+        if (\in_array($status, ['queued', 'skip', 'misconfigured', 'skipped'])) {
             return;
         }
 

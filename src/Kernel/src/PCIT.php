@@ -55,7 +55,7 @@ use WeChat\WeChat;
  * @property PHPMailer                                       $mail
  * @property GitHub\Service\PullRequest\Client               $pull_request
  * @property GitHub\Service\Webhooks\Server                  $webhooks
- * @property \PCIT\Runner\Client                             $runner_job_generator
+ * @property \PCIT\Runner\JobGenerator                       $runner_job_generator
  * @property \PCIT\Runner\Agent\Docker\DockerHandler         $runner_agent_docker
  * @property \TencentAI\TencentAI                            $tencent_ai
  * @property GitHub\Service\Users\Client                     $user_basic_info
@@ -72,25 +72,25 @@ class PCIT extends Container
      * 服务提供器数组.
      */
     protected $providers = [
-        Providers\ActivityProvider::class,
-        Providers\ChecksProvider::class,
+        \PCIT\GPI\Providers\ActivityProvider::class,
+        \PCIT\GPI\Providers\ChecksProvider::class,
         // Providers\CurlProvider::class,
-        Providers\DataProvider::class,
-        Providers\DeploymentProvider::class,
+        \PCIT\GPI\Providers\DataProvider::class,
+        \PCIT\GPI\Providers\DeploymentProvider::class,
         Providers\DockerProvider::class,
-        Providers\GistProvider::class,
-        Providers\GitHubAppProvider::class,
-        Providers\IssueProvider::class,
-        Providers\MiscellaneousProvider::class,
-        Providers\OAuthProvider::class,
-        Providers\OrganizationsProvider::class,
+        \PCIT\GPI\Providers\GistProvider::class,
+        \PCIT\GPI\Providers\GitHubAppProvider::class,
+        \PCIT\GPI\Providers\IssueProvider::class,
+        \PCIT\GPI\Providers\MiscellaneousProvider::class,
+        \PCIT\GPI\Providers\OAuthProvider::class,
+        \PCIT\GPI\Providers\OrganizationsProvider::class,
         Providers\PHPMailerProvider::class,
-        Providers\PullRequestProvider::class,
-        Providers\RepositoriesProvider::class,
+        \PCIT\GPI\Providers\PullRequestProvider::class,
+        \PCIT\GPI\Providers\RepositoriesProvider::class,
         Providers\RunnerProvider::class,
         Providers\TencentAIProvider::class,
-        Providers\UserProvider::class,
-        Providers\WebhooksProvider::class,
+        \PCIT\GPI\Providers\UserProvider::class,
+        \PCIT\GPI\Providers\WebhooksProvider::class,
         Providers\WeChatProvider::class,
     ];
 
@@ -114,8 +114,7 @@ class PCIT extends Container
         array $config = [],
         string $git_type = 'github',
         string $accessToken = null
-    )
-    {
+    ) {
         parent::__construct($config);
 
         set_time_limit(0);

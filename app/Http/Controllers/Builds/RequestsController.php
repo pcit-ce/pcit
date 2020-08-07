@@ -9,9 +9,9 @@ use App\GetAccessToken;
 use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
-use PCIT\GPI\Webhooks\Handler\GetConfig;
-use PCIT\GPI\Webhooks\Handler\Subject;
+use PCIT\GetConfig;
 use PCIT\PCIT;
+use PCIT\Subject;
 use Symfony\Component\Yaml\Yaml;
 
 class RequestsController
@@ -123,9 +123,13 @@ class RequestsController
         if ($config) {
             $config = json_encode(Yaml::parse($config));
         } else {
-            $subject = new Subject();
-            $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
-            $config = json_encode($config_array);
+            try {
+                $subject = new Subject();
+                $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
+                $config = json_encode($config_array);
+            } catch (\Throwable $e) {
+                $config = '[]';
+            }
         }
         // TODO: 判断是否为私有仓库
         $last_insert_id = Build::insert(

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Coding\Webhooks\Handler;
 
 use PCIT\Coding\Webhooks\Parser\Push as PushParser;
+use PCIT\DisableHandler;
 use PCIT\GPI\Webhooks\Context\TagContext;
 use PCIT\GPI\Webhooks\Handler\Abstracts\PushAbstract;
-use PCIT\GPI\Webhooks\Handler\DisableHandler;
 
 class Push extends PushAbstract
 {

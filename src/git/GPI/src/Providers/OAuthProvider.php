@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Providers;
+namespace PCIT\GPI\Providers;
 
 use Curl\Curl;
 use Pimple\Container;

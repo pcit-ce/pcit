@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Gitee\Webhooks\Handler;
 
 use PCIT\Gitee\Webhooks\Parser\Push as PushParser;
-use PCIT\GPI\Webhooks\Context\TagContext;
 use PCIT\GPI\Webhooks\Handler\Abstracts\PushAbstract;
-use PCIT\GPI\Webhooks\Handler\DisableHandler;
 
 class Push extends PushAbstract
 {
@@ -17,19 +15,6 @@ class Push extends PushAbstract
     {
         $context = PushParser::handle($webhooks_content);
 
-        DisableHandler::handle($context->repo_full_name, $this->git_type);
-
-        if ($context->tag ?? null) {
-            $this->tag($context);
-
-            return;
-        }
-
-        $this->handlePush($context, $this->git_type);
-    }
-
-    public function tag(TagContext $context): void
-    {
-        $this->handleTag($context, $this->git_type);
+        $this->pustomize($context, $this->git_type);
     }
 }

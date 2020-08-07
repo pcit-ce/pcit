@@ -72,6 +72,13 @@ EOF;
         return DB::select($sql, [$build_key_id]);
     }
 
+    public static function deleteByBuildKeyId(int $build_key_id): void
+    {
+        $sql = 'DELETE FROM jobs WHERE build_id=?';
+
+        DB::delete($sql, [$build_key_id]);
+    }
+
     /**
      * @throws \Exception
      *
@@ -354,7 +361,11 @@ EOF;
             }
 
             if ('skip' === $state['state']) {
-                return 'skip';
+                return 'skipped';
+            }
+
+            if ('skipped' === $state['state']) {
+                return 'skipped';
             }
         }
 

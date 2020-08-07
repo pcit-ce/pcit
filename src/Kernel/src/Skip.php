@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\GPI\Webhooks\Handler;
+namespace PCIT;
 
 use App\Build;
 use PCIT\Runner\Conditional\Branch;
@@ -28,8 +28,7 @@ class Skip
         int $build_key_id,
         string $branch = null,
         string $config = null
-    )
-    {
+    ) {
         $this->commit_message = $commit_message;
         $this->build_key_id = $build_key_id;
         $this->branch = $branch;
@@ -49,7 +48,7 @@ class Skip
         if (null === $this->config || '[]' === $this->config) {
             \Log::info($build_key_id.' skip, because config is empty', []);
 
-            $this->writeSkipToDB(true);
+            $this->writeSkipToDB();
 
             return;
         }
@@ -80,19 +79,8 @@ class Skip
         Build::updateBuildStatus($this->build_key_id, 'pending');
     }
 
-    /**
-     * @param bool $noConfig
-     *
-     * @throws \Exception
-     */
-    private function writeSkipToDB($noConfig = false): void
+    private function writeSkipToDB(): void
     {
-        if ($noConfig) {
-            Build::updateBuildStatus($this->build_key_id, 'misconfigured');
-
-            return;
-        }
-
-        Build::updateBuildStatus($this->build_key_id, 'skip');
+        Build::updateBuildStatus($this->build_key_id, 'skipped');
     }
 }

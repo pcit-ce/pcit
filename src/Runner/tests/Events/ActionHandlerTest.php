@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Tests\Events;
 
-use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Events\ActionHandler;
 use PCIT\Runner\Events\Pipeline;
+use PCIT\Runner\JobGenerator;
 use PHPUnit\Framework\TestCase;
 
 class ActionHandlerTest extends TestCase

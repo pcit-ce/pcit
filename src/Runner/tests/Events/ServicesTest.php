@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PCIT\Runner\Tests\Events;
 
 use JsonSchema\Constraints\BaseConstraint;
-use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Events\Services;
+use PCIT\Runner\JobGenerator;
 use PCIT\Support\CacheKey;
 use Symfony\Component\Yaml\Yaml;
 use Tests\TestCase;

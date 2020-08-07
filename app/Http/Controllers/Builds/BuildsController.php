@@ -165,24 +165,21 @@ class BuildsController
         $build_id = (int) $build_id;
         JWTController::check($build_id);
 
-        if ('misconfigured' === Build::getBuildStatus($build_id)) {
-            throw new Exception('.pcit.yml not found', 500);
-        }
+        $build_status = Build::getBuildStatus($build_id);
 
-        if (!Build::getConfig($build_id)) {
-            Build::updateBuildStatus($build_id, 'misconfigured');
-
-            throw new Exception('.pcit.yml not found', 500);
+        if ('misconfigured' === $build_status
+        or 'skipped' === $build_status
+        or 'skip' === $build_status
+        ) {
+            throw new Exception('this build .pcit.yml not found or misconfigured', 500);
         }
 
         // 删除 s3 中的log
-        (new LogController())->deleteStoreInS3(null, $build_id);
-        Build::updateBuildStatus($build_id, 'pending');
-        Build::updateStartAt($build_id, null);
-        $this->updateJobStatus($build_id, 'queued');
-        // 更新 build 状态
-        Build::updateFinishedAt($build_id);
+        // (new LogController())->deleteStoreInS3(null, $build_id);
+        // delete pre job
+        Job::deleteByBuildKeyId($build_id);
         Build::deleteLog($build_id);
+        Build::updateBuildStatus($build_id, 'pending');
     }
 
     /**

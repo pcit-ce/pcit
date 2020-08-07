@@ -65,6 +65,10 @@ class Server extends Kernel
         // get build info
         $buildData = (new GetBuild())->handle();
 
+        if (!$buildData) {
+            return;
+        }
+
         try {
             $this->subject
                 // check ci root

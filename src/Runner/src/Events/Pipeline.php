@@ -8,7 +8,6 @@ use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\CIDefault\Commands;
 use PCIT\Runner\CIDefault\Image;
-use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Conditional\Branch;
 use PCIT\Runner\Conditional\Event;
 use PCIT\Runner\Conditional\Matrix;
@@ -20,6 +19,7 @@ use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Runner\Events\Handler\PluginHandler;
 use PCIT\Runner\Events\Handler\ShellHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
+use PCIT\Runner\JobGenerator;
 use PCIT\Support\CacheKey;
 
 class Pipeline
@@ -132,10 +132,10 @@ class Pipeline
         $pipelineEnv = $envHandler->handle(
             $pipelineEnv,
             array_merge(
-            $step_system_env,
-            $this->jobGenerator->system_env,
-            $this->jobGenerator->system_job_env,
-        )
+                $step_system_env,
+                $this->jobGenerator->system_env,
+                $this->jobGenerator->system_job_env,
+            )
         );
 
         $preEnv = array_merge(
@@ -313,8 +313,7 @@ class Pipeline
         bool $failure = false,
         bool $success = false,
         bool $changed = false
-    ): void
-    {
+    ): void {
         $cache = $this->cache;
 
         $is_status = false;

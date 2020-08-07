@@ -14,6 +14,6 @@ class Issues extends IssuesAbstract
     {
         $issuesContext = \PCIT\GitHub\Webhooks\Parser\Issues::handle($webhooks_content);
 
-        $this->handleIssues($issuesContext, $this->git_type);
+        $this->pustomize($issuesContext, $this->git_type);
     }
 }

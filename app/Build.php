@@ -184,8 +184,7 @@ EOF;
         string $branch,
         string $commit_id,
         $git_type = 'github'
-    )
-    {
+    ) {
         $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND commit_id=?';
 
         return DB::update($sql, [$build_status, $git_type, $rid, $commit_id]);
@@ -247,7 +246,7 @@ EOF;
     public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
     {
         $sql = <<<'EOF'
-SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?) AND event_type NOT IN (?)
+SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?,?) AND event_type NOT IN (?)
 ORDER BY id DESC LIMIT 1
 EOF;
 
@@ -255,6 +254,7 @@ EOF;
             $git_type, $rid,
             // 'pending',
             'skip',
+            'skipped',
             'inactive',
             'misconfigured',
             CI::BUILD_EVENT_PR,
@@ -320,8 +320,7 @@ EOF;
         ?int $before,
         ?int $limit,
         $git_type = 'github'
-    )
-    {
+    ) {
         $before = 0 === $before ? null : $before;
 
         $before = $before ?? self::getLastKeyId();
@@ -360,8 +359,7 @@ EOF;
         bool $pr,
         $all = false,
         $git_type = 'github'
-    )
-    {
+    ) {
         $before = 0 === $before ? null : $before;
 
         $before = $before ?? self::getLastKeyId();
@@ -372,14 +370,15 @@ EOF;
 
         $limit = $limit <= 25 ? $limit : 25;
 
-        $exclude = $all ? 'null' : 'skip';
+        $skip = $all ? 'null' : 'skip';
+        $skipped = $all ? 'null' : 'skipped';
         $misconfigured = $all ? 'null' : 'misconfigured';
 
         $sql = <<<EOF
 SELECT id,branch,commit_id,tag,commit_message,compare,
 committer_name,committer_username,build_status,event_type,pull_request_number,created_at,finished_at
 FROM builds WHERE
-id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?) AND build_status NOT IN('$exclude','$misconfigured')
+id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?) AND build_status NOT IN('$skip','$misconfigured','$skipped')
 ORDER BY id DESC LIMIT $limit
 EOF;
         if ($all) {
@@ -487,8 +486,7 @@ EOF;
         $config,
         bool $private,
         string $git_type = 'github'
-    )
-    {
+    ) {
         $sql = <<<'EOF'
 INSERT INTO builds(
 
@@ -550,8 +548,7 @@ EOF;
         bool $private,
         $git_type = 'github',
         bool $unique = false
-    )
-    {
+    ) {
         $sql = <<<'EOF'
 INSERT INTO builds(
 
@@ -633,8 +630,7 @@ EOF;
         $pull_request_source,
         bool $private,
         $git_type = 'github'
-    )
-    {
+    ) {
         $sql = <<<'EOF'
 INSERT INTO builds(
 
@@ -666,8 +662,7 @@ EOF;
         string $commit_id,
         int $check_suite_id,
         string $git_type = 'github'
-    ): void
-    {
+    ): void {
         $sql = 'UPDATE builds SET check_suites_id=? WHERE rid=? AND commit_id=? AND git_type=? ';
 
         DB::update($sql, [

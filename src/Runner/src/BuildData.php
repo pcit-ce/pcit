@@ -47,25 +47,25 @@ abstract class BuildData
      */
     public $env;
 
-    /**
-     * 是否为内部 pr.
-     *
-     * @var 0|1
-     */
+    /** @var "0"|"1" 是否为内部 pr. */
     public $internal;
 
-    // @var "0" | "1" 是否为私有仓库
+    /** @var "0"|"1" 是否为私有仓库 */
     public $private;
 
     // repo config
 
+    /** @var "0"|"1" */
     public $build_pushes;
 
+    /** @var "0"|"1" */
     public $build_pull_requests;
 
     public $maximum_number_of_builds;
 
+    /** @var "0"|"1" */
     public $auto_cancel_branch_builds;
 
+    /** @var "0"|"1" */
     public $auto_cancel_pull_request_builds;
 }

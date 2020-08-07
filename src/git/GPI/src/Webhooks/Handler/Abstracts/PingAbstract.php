@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Handler\Abstracts;
 
 use PCIT\GPI\Webhooks\Handler\Interfaces\PingInterface;
+use PCIT\GPI\Webhooks\PustomizeHandler;
 
-class PingAbstract implements PingInterface
+abstract class PingAbstract implements PingInterface
 {
     /**
+     * @param mixed $context
+     *
      * @throws \Exception
      */
-    public function handle(string $webhooks_content): void
+    public function pustomize($context, string $git_type): void
     {
-        \Log::info('receive ping event');
+        $context->git_type = $git_type;
+
+        (new PustomizeHandler())->handle('ping', $context);
     }
 }

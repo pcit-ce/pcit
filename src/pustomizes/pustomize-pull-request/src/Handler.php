@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace PCIT\Pustomize\PullRequest;
 
+use App\Build;
 use App\GetAccessToken;
+use PCIT\GetConfig;
 use PCIT\GPI\Webhooks\Context\PullRequestContext;
 use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\PullRequest\HandlerInterface;
+use PCIT\Subject;
+use PCIT\UpdateUserInfo;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class Handler implements HandlerInterface
 {
@@ -16,7 +21,80 @@ class Handler implements HandlerInterface
 
     public function handle(PullRequestContext $context): void
     {
+        if (!\in_array($context->action, ['opened', 'synchronize'])) {
+            return;
+        }
+
         $this->context = $context;
+
+        $git_type = $context->git_type;
+        $installation_id = $context->installation_id;
+        $action = $context->action;
+        $rid = $context->rid;
+        $repo_full_name = $context->repo_full_name;
+        $commit_id = $context->commit_id;
+        $event_time = $context->event_time;
+        $commit_message = $context->commit_message;
+        $committer_username = $context->committer_username;
+        $committer_uid = $context->committer_uid;
+        $pull_request_number = $context->pull_request_number;
+        $branch = $context->branch;
+        $internal = $context->internal;
+        $pull_request_source = $context->pull_request_source;
+        $owner = $context->owner;
+        $default_branch = $context->repository->default_branch;
+        $private = $context->private;
+
+        $subject = new Subject();
+
+        $subject->register(new UpdateUserInfo(
+            $owner,
+            (int) $installation_id,
+            (int) $rid,
+            $repo_full_name,
+            $default_branch,
+            null,
+            $git_type
+        ));
+
+        try {
+            $config_array = $subject->register(
+                new GetConfig($rid, $commit_id, $git_type)
+            )->handle()->config_array;
+
+            $config = json_encode($config_array);
+        } catch (ParseException $e) {
+            $config = $e->getMessage();
+            $build_status = 'misconfigured';
+        }
+
+        $last_insert_id = Build::insertPullRequest(
+            $event_time,
+            $action,
+            $commit_id,
+            $commit_message,
+            (int) $committer_uid,
+            $committer_username,
+            $pull_request_number,
+            $branch,
+            $rid,
+            $config,
+            $internal,
+            $pull_request_source,
+            $private,
+            $git_type
+        );
+        if ($build_status ?? false) {
+            Build::updateBuildStatus($last_insert_id, $build_status);
+
+            return;
+        }
+        $subject->register(
+            new Skip($commit_message, (int) $last_insert_id, $branch, $config)
+        )
+            ->handle();
+
+        \Storage::put('pcit/events/'.$git_type.'/'.$last_insert_id.'/event.json', $context->raw);
 
         if (!\in_array($context->action, ['opened', 'open'])) {
             return;

@@ -6,7 +6,7 @@ namespace PCIT\Providers;
 
 use PCIT\Runner\Agent\Docker\DockerHandler;
 use PCIT\Runner\Agent\Exec\ExecHandler;
-use PCIT\Runner\Client as JobGenerator;
+use PCIT\Runner\JobGenerator;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

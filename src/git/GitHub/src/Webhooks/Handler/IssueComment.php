@@ -14,6 +14,6 @@ class IssueComment extends IssueCommentAbstract
     {
         $context = \PCIT\GitHub\Webhooks\Parser\IssueComment::handle($webhooks_content);
 
-        $this->handleIssueComment($context, $this->git_type);
+        $this->pustomize($context, $this->git_type);
     }
 }

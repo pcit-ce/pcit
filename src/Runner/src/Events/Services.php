@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use PCIT\PCIT;
-use PCIT\Runner\Client as JobGenerator;
 use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
+use PCIT\Runner\JobGenerator;
 use PCIT\Support\CacheKey;
 
 class Services

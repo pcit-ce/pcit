@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Handler;
 
-use PCIT\GPI\Webhooks\Handler\Subject;
-use PCIT\GPI\Webhooks\Handler\UpdateUserInfo;
+use PCIT\Subject;
+use PCIT\UpdateUserInfo;
 
 class Delete
 {
