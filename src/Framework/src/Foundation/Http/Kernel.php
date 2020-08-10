@@ -4,12 +4,53 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Foundation\Http;
 
+use ReflectionClass;
 use Route;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Throwable;
 
 class Kernel
 {
+    private function sendRequestThroughRouterByAttributes(): void
+    {
+        $classes = require base_path().'vendor/composer/autoload_classmap.php';
+
+        $controllers = [];
+
+        foreach ($classes as $class => $path) {
+            if (str_starts_with($class, 'App\\Http\\Controllers')) {
+                $controllers[] = $class;
+            }
+        }
+
+        foreach ($controllers as $controller) {
+            $class = new ReflectionClass($controller);
+
+            $methods = $class->getMethods();
+
+            foreach ($methods as $method) {
+                $attrs = $method->getAttributes();
+                foreach ($attrs as $attr) {
+                    // $attr->newInstance();
+                    $controller_name = substr(
+                        $class->getName(),
+                        \strlen('App\\Http\Controllers\\')
+                    );
+
+                    $controller_method = null;
+                    if ('__invoke' !== $method->getName()) {
+                        $controller_method = '@'.$method->getName();
+                    }
+
+                    (new ReflectionClass($attr->getName()))->newInstance(...[
+                        ...$attr->getArguments(),
+                        $controller_name.$controller_method,
+                    ]);
+                }
+            }
+        }
+    }
+
     private function sendRequestThroughRouter($request)
     {
         $debug = config('app.debug');
@@ -32,6 +73,9 @@ class Kernel
             // if(explode('/',$request->server->get('REQUEST_URI'))[1] === 'api'){
             //     require base_path().'framework/routes/api.php';
             // }else{
+
+            $this->sendRequestThroughRouterByAttributes();
+
             require base_path().'framework/routes/web.php';
             // }
         } catch (Throwable $e) {

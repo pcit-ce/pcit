@@ -13,14 +13,13 @@ class SettingsController
     /**
      * Returns a list of the settings for that repository.
      *
-     * /repo/{repository.slug}/settings
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get','api/repo/{repository.slug}/settings')
     public function __invoke(...$args)
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
@@ -31,14 +30,13 @@ class SettingsController
     /**
      * Returns a single setting.
      *
-     * /repo/{repository.slug}/setting/{setting.name}
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get','api/repo/{repository.slug}/setting/{setting.name}')
     public function get(...$args)
     {
         list($username, $repo_name, $setting_name) = $args;
@@ -50,10 +48,6 @@ class SettingsController
 
     /**
      * Updates a single setting.
-     *
-     * patch
-     *
-     * /repo/{repository.slug}/setting/{setting.name}
      *
      * <pre>
      * ['setting.value'=>true]
@@ -67,6 +61,7 @@ class SettingsController
      *
      * @return int
      */
+    @@\Route('patch','api/repo/{repository.slug}/setting/{setting.name}')
     public function update(...$args)
     {
         $request = app('request');

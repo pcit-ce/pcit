@@ -101,7 +101,7 @@ Route::get(
 
 // Repos
 // repo list
-Route::get('{git_type}/{username}', 'Builds\IndexController');
+// Route::get('{git_type}/{username}', 'Builds\IndexController');
 
 Route::get('api/repos', 'Users\RepositoriesController');
 
@@ -109,7 +109,7 @@ Route::get('api/repos/{git_type}/{username}', 'Users\RepositoriesController@list
 
 Route::get('api/repo/{git_type}/{username}/{repo_name}', 'Users\RepositoriesController@find'); // 列出某仓库详情
 
-Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
+// Route::get('api/user/{git_type}/{username}/active', 'Builds\ActiveController');
 
 // orgs
 Route::get('api/orgs', 'Users\OrganizationsController');
@@ -118,24 +118,24 @@ Route::get('api/org/{git_type}/{org_name}', 'Users\OrganizationsController@find'
 
 // Builds
 // repo
-Route::get('{git_type}/{username}/{repo_name}', 'Builds\IndexController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/build/current', 'Builds\BuildsController@repoCurrent');
+// Route::get('{git_type}/{username}/{repo_name}', 'Builds\IndexController');
+// Route::get('api/repo/{git_type}/{username}/{repo_name}/build/current', 'Builds\BuildsController@repoCurrent');
 
-Route::get('{git_type}/{username}/{repo_name}/branches', 'Builds\IndexController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/branches', 'Builds\BranchesController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}', 'Builds\BranchesController@find');
+// Route::get('{git_type}/{username}/{repo_name}/branches', 'Builds\IndexController');
+// Route::get('api/repo/{git_type}/{username}/{repo_name}/branches', 'Builds\BranchesController');
+// Route::get('api/repo/{git_type}/{username}/{repo_name}/branch/{branch_name}', 'Builds\BranchesController@find');
 
-Route::get('{git_type}/{username}/{repo_name}/builds', 'Builds\IndexController');
-Route::get('api/repo/{git_type}/{username}/{repo_name}/builds', 'Builds\BuildsController@listByRepo');
+// Route::get('{git_type}/{username}/{repo_name}/builds', 'Builds\IndexController');
+// Route::get('api/repo/{git_type}/{username}/{repo_name}/builds', 'Builds\BuildsController@listByRepo');
 
-Route::get('{git_type}/{username}/{repo_name}/builds/{build_id}', 'Builds\IndexController');
+// Route::get('{git_type}/{username}/{repo_name}/builds/{build_id}', 'Builds\IndexController');
 Route::get('api/builds', 'Builds\BuildsController');
 Route::get('api/build/{build_id}', 'Builds\BuildsController@find');
 Route::post('api/build/{build_id}/cancel', 'Builds\BuildsController@cancel');
 Route::post('api/build/{build_id}/restart', 'Builds\BuildsController@restart');
 
 // job
-Route::get('{git_type}/{username}/{repo_name}/jobs/{job_id}', 'Builds\IndexController');
+// Route::get('{git_type}/{username}/{repo_name}/jobs/{job_id}', 'Builds\IndexController');
 // job artifact
 Route::get('api/{git_type}/{username}/{repo_name}/artifacts', 'Builds\Artifact@listByRepo');
 Route::get('api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts', 'Builds\Artifact@listByJob');
@@ -149,7 +149,7 @@ Route::get('api/job/{job_id}', 'Builds\JobController@find');
 Route::post('api/job/{job_id}/cancel', 'Builds\JobController@cancel');
 Route::post('api/job/{job_id}/restart', 'Builds\JobController@restart');
 
-Route::get('{git_type}/{username}/{repo_name}/pull_requests', 'Builds\IndexController');
+// Route::get('{git_type}/{username}/{repo_name}/pull_requests', 'Builds\IndexController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/pull_requests', 'Builds\PullRequestsController@post');
 
 Route::get('api/repo/{username}/{repo_name}/env_vars', 'Builds\EnvController');
@@ -158,17 +158,17 @@ Route::get('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvCo
 Route::patch('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@update');
 Route::delete('api/repo/{username}/{repo_name}/env_var/{env_var_id}', 'Builds\EnvController@delete');
 
-Route::get('{git_type}/{username}/{repo_name}/settings', 'Builds\IndexController');
+// Route::get('{git_type}/{username}/{repo_name}/settings', 'Builds\IndexController');
 Route::get('api/repo/{username}/{repo_name}/settings', 'Builds\SettingsController');
 Route::get('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@get');
 Route::patch('api/repo/{username}/{repo_name}/setting/{setting_name}', 'Builds\SettingsController@update');
 
-Route::get('{git_type}/{username}/{repo_name}/requests', 'Builds\IndexController');
+// Route::get('{git_type}/{username}/{repo_name}/requests', 'Builds\IndexController');
 Route::get('api/repo/{git_type}/{username}/{repo_name}/requests', 'Builds\RequestsController');
 Route::post('api/repo/{username}/{repo_name}/requests', 'Builds\RequestsController@create');
 Route::get('api/repo/{username}/{repo_name}/request/{requests_id}', 'Builds\RequestsController@find');
 
-Route::get('{git_type}/{username}/{repo_name}/caches', 'Builds\IndexController');
+// Route::get('{git_type}/{username}/{repo_name}/caches', 'Builds\IndexController');
 Route::get('api/repo/{username}/{repo_name}/caches', 'Builds\CachesController');
 Route::delete('api/repo/{username}/{repo_name}/caches', 'Builds\CachesController@delete');
 Route::delete('api/repo/{username}/{repo_name}/caches/{branch}', 'Builds\CachesController@delete');

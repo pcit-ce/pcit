@@ -12,6 +12,11 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('cache')
     ->exclude('vendor')
     ->exclude('node_modules')
+
+    // remove when support attribute
+    ->exclude('app/Http/Controllers')
+    ->notPath('src/Framework/src/Support/Facades/Route.php')
+
     // ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
     ->in(__DIR__)
     ->ignoreVCS(true);

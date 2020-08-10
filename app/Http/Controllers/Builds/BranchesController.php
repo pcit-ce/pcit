@@ -15,14 +15,13 @@ class BranchesController
      *
      * Return a list of branches a repository has on Git.
      *
-     * /repo/{git_type}/{repository.slug}/branches
-     *
      * @param mixed ...$args
      *
      * @throws \Exception
      *
      * @return array
      */
+    @@\Route('get','api/repo/{git_type}/{username}/{repo_name}/branches')
     public function __invoke(...$args)
     {
         list($git_type, $username, $repo) = $args;
@@ -43,14 +42,13 @@ class BranchesController
     /**
      *  Return information about an individual branch.
      *
-     * /repo/{repository.slug}/branch/{branch.name}
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get','api/repo/{git_type}/{username}/{repo_name}/branch/{branch.name}')
     public function find(...$args)
     {
         $request = app('request');

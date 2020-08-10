@@ -12,14 +12,13 @@ class EnvController
     /**
      * Returns a list of environment variables for an individual repository.
      *
-     * /repo/{repository.slug}/env_vars
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get','api/repo/{repository.slug}/env_vars')
     public function __invoke(...$args)
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
@@ -41,13 +40,9 @@ class EnvController
     /**
      * Creates an environment variable for an individual repository.
      *
-     * post
-     *
      * <pre>
      * { "env_var.name": "FOO", "env_var.value": "bar", "env_var.public": false }
      * </pre>
-     *
-     * /repo/{repository.slug}/env_vars
      *
      * @param array $args
      *
@@ -55,6 +50,7 @@ class EnvController
      *
      * @return string
      */
+    @@\Route('post','api/repo/{repository.slug}/env_vars')
     public function create(...$args)
     {
         $request = app('request');
@@ -76,14 +72,13 @@ class EnvController
     /**
      * Returns a single environment variable.
      *
-     * /repo/{repository.slug}/env_var/{env_var.id}
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return array|int
      */
+    @@\Route('get','api/repo/{repository.slug}/env_var/{env_var.id}')
     public function find(...$args)
     {
         list($username, $repo_name, $env_var_id) = $args;
@@ -102,12 +97,11 @@ class EnvController
      * { "env_var.value": "bar", "env_var.public": false }
      * </pre>
      *
-     * /repo/{repository.slug}/env_var/{env_var.id}
-     *
      * @param array $args
      *
      * @throws \Exception
      */
+    @@\Route('patch','api/repo/{repository.slug}/env_var/{env_var.id}')
     public function update(...$args): void
     {
         $request = app('request');
@@ -129,14 +123,13 @@ class EnvController
      *
      * delete
      *
-     * /repo/{repository.slug}/env_var/{env_var.id}
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return int
      */
+    @@\Route('delete','api/repo/{repository.slug}/env_var/{env_var.id}')
     public function delete(...$args)
     {
         list($username, $repo_name, $env_var_id) = $args;

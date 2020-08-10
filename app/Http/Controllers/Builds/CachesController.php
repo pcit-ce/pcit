@@ -28,12 +28,11 @@ class CachesController
     /**
      * Returns all the caches for a repository.
      *
-     * /repo/{repository.slug}/caches
-     *
      * @param array $args
      *
      * @throws \Exception
      */
+    @@\Route('get','api/repo/{repository.slug}/caches')
     public function __invoke(...$args)
     {
         list($username, $repo_name) = $args;
@@ -63,15 +62,12 @@ class CachesController
     /**
      * Deletes caches for a repository.
      *
-     * delete
-     *
-     * /repo/{repository.slug}/caches
-     * /repo/{repository.slug}/caches/{branch}
-     *
      * @param array $args
      *
      * @throws \Exception
      */
+    @@\Route('delete','api/repo/{repository.slug}/caches')
+    @@\Route('delete','api/repo/{repository.slug}/caches/{branch}')
     public function delete(...$args)
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);

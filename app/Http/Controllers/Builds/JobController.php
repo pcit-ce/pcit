@@ -28,16 +28,13 @@ class JobController
     }
 
     /**
-     * GET.
-     *
-     * /job/{job.id}
-     *
      * @param $job_id
      *
      * @throws \Exception
      *
      * @return array|int
      */
+    @@\Route('get','api/job/{job.id}')
     public function find($job_id)
     {
         $job = Job::find((int) $job_id);
@@ -103,14 +100,11 @@ class JobController
     }
 
     /**
-     * POST.
-     *
-     * /job/{job.id}/cancel
-     *
      * @param $job_id
      *
      * @throws \Exception
      */
+    @@\Route('post','api/job/{job.id}/cancel')
     public function cancel($job_id): void
     {
         $job_id = (int) $job_id;
@@ -139,14 +133,11 @@ class JobController
     }
 
     /**
-     * POST.
-     *
-     * /job/{job.id}/restart
-     *
      * @param $job_id
      *
      * @throws \Exception
      */
+    @@\Route('POST','api/job/{job.id}/restart')
     public function restart($job_id): void
     {
         $job_id = (int) $job_id;

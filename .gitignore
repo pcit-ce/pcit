@@ -54,3 +54,5 @@ miniprogram
 *.phar
 
 .psalm
+
+/*.test.php

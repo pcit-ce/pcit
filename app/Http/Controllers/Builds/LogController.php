@@ -12,14 +12,13 @@ class LogController
     /**
      * Returns a single log.
      *
-     * /job/{job_id}/log
-     *
      * @param $job_id
      *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get','api/job/{job_id}/log')
     public function __invoke($job_id)
     {
         // return json
@@ -113,14 +112,11 @@ class LogController
     /**
      * Removes the contents of a log. It gets replace with the message: Log removed at 2017-02-13 16:00:00 UTC.
      *
-     * Delete
-     *
-     * /job/{job_id}/log
-     *
      * @param $job_id
      *
      * @throws \Exception
      */
+    @@\Route('delete','api/job/{job_id}/log')
     public function delete($job_id)
     {
         JWTController::check(Job::getBuildKeyId((int) $job_id));

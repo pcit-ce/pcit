@@ -22,5 +22,11 @@
   "editor.renderWhitespace": "all",
   "php.validate.enable": false,
   "php.suggest.basic": false,
-  "intelephense.diagnostics.enable": false
+  "intelephense.diagnostics.enable": false,
+  "psalm.phpExecutablePath": "C:\\php-pre\\php.exe",
+  "intelephense.environment.phpVersion": "8.0.0beta1",
+  "php-docblocker.author": {
+    "name": "pcit",
+    "email": "ci@khs1994.com"
+  }
 }

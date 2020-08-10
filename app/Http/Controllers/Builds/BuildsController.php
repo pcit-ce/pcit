@@ -19,10 +19,9 @@ class BuildsController
      *
      * Returns a list of builds for the current user. The result is paginated.
      *
-     * /builds
-     *
      * @throws \Exception
      */
+    @@\Route('get','api/builds')
     public function __invoke()
     {
         // $before = (int) $_GET['before'] ?? null;
@@ -40,14 +39,13 @@ class BuildsController
      * This returns a list of builds for an individual repository. The result is paginated. Each request will return 25
      * results.
      *
-     * /repo/{git_type}/{username}/{repo.name}/builds
-     *
      * @param mixed ...$args
      *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get','api/repo/{git_type}/{username}/{repo.name}/builds')
     public function listByRepo(...$args)
     {
         $request = app('request');
@@ -78,16 +76,13 @@ class BuildsController
     }
 
     /**
-     * GET.
-     *
-     * /repo/{git_type}/{username}/{repo.name}/build/current
-     *
      * @param mixed ...$args
      *
      * @throws \Exception
      *
      * @return array|int
      */
+    @@\Route('get','api/repo/{git_type}/{username}/{repo.name}/build/current')
     public function repoCurrent(...$args)
     {
         list($git_type, $username, $repo_name) = $args;
@@ -103,14 +98,13 @@ class BuildsController
     /**
      * Returns a single build.
      *
-     * /build/{build.id}
-     *
      * @param $build_id
      *
      * @throws \Exception
      *
      * @return array|int
      */
+    @@\Route('get','api/build/{build.id}')
     public function find($build_id)
     {
         // APITokenController::check((int) $build_id);
@@ -128,12 +122,11 @@ class BuildsController
     /**
      * This cancels a currently running build. It will set the build and associated jobs to "state": "canceled".
      *
-     * /build/{build.id}/cancel
-     *
      * @param $build_id
      *
      * @throws \Exception
      */
+    @@\Route('get','api/build/{build.id}/cancel')
     public function cancel($build_id): void
     {
         $build_id = (int) $build_id;
@@ -154,12 +147,11 @@ class BuildsController
     /**
      * Restarts a build that has completed or been canceled.
      *
-     * /build/{build.id}/restart
-     *
      * @param $build_id
      *
      * @throws \Exception
      */
+    @@\Route('get','api/build/{build.id}/restart')
     public function restart($build_id): void
     {
         $build_id = (int) $build_id;

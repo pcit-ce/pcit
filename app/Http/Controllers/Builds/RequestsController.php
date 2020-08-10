@@ -19,14 +19,13 @@ class RequestsController
     /**
      * Return a list of requests belonging to a repository.
      *
-     * /repo/{repository.slug}/requests
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return array|int
      */
+    @@\Route('get','api/repo/{repository.slug}/requests')
     public function __invoke(...$args)
     {
         $request = app('request');
@@ -61,10 +60,6 @@ class RequestsController
     /**
      * Create a request for an individual repository, triggering a build to run on CI.
      *
-     * post
-     *
-     * /repo/{repository.slug}/requests
-     *
      * <pre>
      *
      * {
@@ -81,6 +76,7 @@ class RequestsController
      *
      * @throws \Exception
      */
+    @@\Route('post','api/repo/{repository.slug}/requests')
     public function create(...$args)
     {
         list($username, $repo_name) = $args;
@@ -165,14 +161,13 @@ class RequestsController
     /**
      * Get single request details.
      *
-     * /repo/{repository.slug}/request/{request.id}
-     *
      * @param array $args
      *
      * @throws \Exception
      *
      * @return array|int
      */
+    @@\Route('get','api/repo/{repository.slug}/request/{request.id}')
     public function find(...$args)
     {
         list($username, $repo_name, $request_id) = $args;

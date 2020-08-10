@@ -3,7 +3,9 @@
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 
-ARG PHP_VERSION=7.4.8
+# ARG PHP_VERSION=7.4.8
+# ARG PHP_VERSION=8.0.0beta1
+ARG PHP_VERSION=nightly
 ARG NODE_VERSION=14.4.0
 ARG USERNAME=khs1994
 
@@ -36,11 +38,12 @@ FROM ${USERNAME}/php:7.4.8-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
+COPY app /app/pcit/app/
 
 RUN --mount=type=cache,target=/tmp/composer/cache,id=composer_cache cd /app/pcit \
       set -x \
       && composer install --no-dev \
-      && rm -rf src
+      && rm -rf src app
 
 # 整合项目
 FROM ${USERNAME}/php:${PHP_VERSION}-cli-alpine as dump
@@ -118,7 +121,7 @@ CMD ["up"]
 # CMD ["server"]
 
 # ==> nginx unit
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:7.4.8-unit-alpine as unit
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-unit-alpine as unit
 
 ARG S6_VERSION=2.0.0.1
 
@@ -162,7 +165,7 @@ CMD ["up"]
 # ==> nginx unit + dockerd + pcitd (all in one)
 FROM --platform=$TARGETPLATFORM docker:dind as all-in-one
 
-COPY --from=khs1994/php:7.4.8-unit-alpine /usr/local/ /usr/local
+COPY --from=khs1994/php:nightly-unit-alpine /usr/local/ /usr/local
 
 COPY --from=redis:6.0.6-alpine /usr/local/bin /usr/local/bin/
 
@@ -209,6 +212,8 @@ RUN set -x \
     && rm -rf /tmp/s6-overlay.tar.gz \
 # https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
     && ln -s /init /s6-init
+
+COPY --from=khs1994/php:nightly-composer-alpine /usr/bin/composer /usr/bin/composer
 
 COPY .docker/unit/docker-entrypoint.sh /
 
