@@ -90,8 +90,7 @@ class Client
         array $files,
         string $description,
         bool $public = true
-    ): void
-    {
+    ): void {
         $data = [
             'description' => $description,
             'public' => $public,

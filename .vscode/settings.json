@@ -1,14 +1,14 @@
 {
   "yaml.schemas": {
-    "config/config_schema.json": [
+    "config/config.schema.json": [
       ".pcit.yaml",
       ".pcit.yml",
       ".pcit/**.yaml",
       ".pcit/**.yml"
     ],
-    // "http://json.schemastore.org/drone": [
-    //  ".drone.yml"
-    // ],
+    "http://json.schemastore.org/drone": [
+      ".drone.yml"
+    ],
     "http://json.schemastore.org/travis": ".travis.yml"
   },
   "json.schemas": [
@@ -17,8 +17,21 @@
         "plugins/**/metadata.json"
       ],
       "url": "/config/plugin.schema.json"
+    },
+    {
+      "fileMatch": [
+        "composer.json"
+      ],
+      "url": "https://json.schemastore.org/composer"
+    },
+    {
+      "fileMatch": [
+        "renovate.json"
+      ],
+      "url": "https://docs.renovatebot.com/renovate-schema.json"
     }
   ],
+  "json.schemaDownload.enable": true,
   "editor.renderWhitespace": "all",
   "php.validate.enable": false,
   "php.suggest.basic": false,

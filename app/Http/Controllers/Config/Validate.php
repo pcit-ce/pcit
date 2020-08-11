@@ -11,6 +11,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class Validate
 {
+    @@\Route('post', 'validate')
+    @@\Route('post', 'api/validate')
     public function __invoke(Request $request)
     {
         /** @var string */
@@ -25,7 +27,7 @@ class Validate
         $validator = new Validator();
         $validator->validate(
             $data,
-            (object) ['$ref' => 'file://'.realpath(base_path().'config/config_schema.json')]
+            (object) ['$ref' => 'file://'.realpath(base_path().'config/config.schema.json')]
         );
 
         if ($validator->isValid()) {

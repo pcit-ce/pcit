@@ -168,8 +168,7 @@ class Git
         string $repo_full_name,
         string $commit_id,
         string $file_name
-    )
-    {
+    ) {
         self::checkGit($type);
 
         switch ($type) {

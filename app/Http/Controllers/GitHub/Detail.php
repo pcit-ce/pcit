@@ -6,6 +6,7 @@ namespace App\Http\Controllers\GitHub;
 
 class Detail
 {
+    @@\Route('get', 'api/github/app')
     public function __invoke()
     {
         /** @var \PCIT\PCIT */

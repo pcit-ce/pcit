@@ -59,8 +59,7 @@ class Suites
         string $ref,
         int $app_id = null,
         string $check_name = null
-    )
-    {
+    ) {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/commits/'.$ref.'/check-suites';
 
         $data = [

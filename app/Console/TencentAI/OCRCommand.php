@@ -31,8 +31,8 @@ class OCRCommand extends Command
             $output->writeln(
                 json_encode(
                     TencentAICommand::get()->ocr()->general(
-                            getcwd().'/'.$input->getArgument('image')
-                        ),
+                        getcwd().'/'.$input->getArgument('image')
+                    ),
                     JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
                 )
             );

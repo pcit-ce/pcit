@@ -143,6 +143,7 @@ class JWTController
      *
      * @return string
      */
+    @@\Route('post', 'api/user/token')
     public static function generate(string $git_type = null, string $username = null, int $uid = null)
     {
         if ($git_type) {

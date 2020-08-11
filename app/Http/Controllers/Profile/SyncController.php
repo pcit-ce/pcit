@@ -30,6 +30,7 @@ class SyncController
     /**
      * @throws \Exception
      */
+    @@\Route('post','api/user/sync')
     public function __invoke()
     {
         list($this->git_type, $this->uid) = JwtController::getUser();

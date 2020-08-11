@@ -12,7 +12,7 @@ EOF;
     exit;
 }
 
-$json_schem = json_decode(file_get_contents('./config_schema.json'), true);
+$json_schem = json_decode(file_get_contents('./config.schema.json'), true);
 
 $plugins = $json_schem['definitions']['plugins']['oneOf'];
 

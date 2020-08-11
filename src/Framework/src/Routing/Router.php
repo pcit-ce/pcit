@@ -85,6 +85,35 @@ class Router
     }
 
     /**
+     * @param \ReflectionFunction|\ReflectionMethod $reflection
+     */
+    private function isDeprecated($reflection): void
+    {
+        // 是否废弃
+        if ($reflection->isDeprecated()) {
+            echo '已废弃';
+        }
+
+        $attrs = $reflection->getAttributes();
+
+        foreach ($attrs as $attr) {
+            if (\PCIT\Framework\Attributes\Deprecated::class === $attr->getName()) {
+                throw new \Exception('deprecated by attributes', 403);
+            }
+        }
+
+        // 通过检查注释，查看是否被废弃.
+        if ($reflection->getDocComment()) {
+            if (strpos($reflection->getDocComment(), '@deprecated')) {
+                //$this->obj[] = $reflection->getDeclaringClass();
+                //$this->method[] = $reflection->getName();
+
+                throw new Exception('deprecated by phpdoc', 403);
+            }
+        }
+    }
+
+    /**
      * 获取方法参数列表.
      *
      * @param null|mixed $obj
@@ -100,25 +129,13 @@ class Router
             return [];
         }
 
+        // 是否废弃
+        $this->isDeprecated($reflection);
+
         // 获取方法的参数列表
         $method_parameters = $reflection->getParameters();
 
         // var_dump($method_parameters);
-
-        // 是否废弃
-        if ($reflection->isDeprecated()) {
-            echo '已废弃';
-        }
-
-        // 通过检查注释，查看是否被废弃.
-        if ($reflection->getDocComment()) {
-            if (strpos($reflection->getDocComment(), '@deprecated')) {
-                $this->obj[] = $obj;
-                $this->method[] = $method;
-
-                throw new Exception("$obj::$method is deprecated", 500);
-            }
-        }
 
         $args = [];
 

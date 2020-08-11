@@ -21,7 +21,7 @@ class BuildsController
      *
      * @throws \Exception
      */
-    @@\Route('get','api/builds')
+    @@\Route('get', 'api/builds')
     public function __invoke()
     {
         // $before = (int) $_GET['before'] ?? null;
@@ -45,7 +45,7 @@ class BuildsController
      *
      * @return array|string
      */
-    @@\Route('get','api/repo/{git_type}/{username}/{repo.name}/builds')
+    @@\Route('get', 'api/repo/{git_type}/{username}/{repo.name}/builds')
     public function listByRepo(...$args)
     {
         $request = app('request');
@@ -82,7 +82,7 @@ class BuildsController
      *
      * @return array|int
      */
-    @@\Route('get','api/repo/{git_type}/{username}/{repo.name}/build/current')
+    @@\Route('get', 'api/repo/{git_type}/{username}/{repo.name}/build/current')
     public function repoCurrent(...$args)
     {
         list($git_type, $username, $repo_name) = $args;
@@ -104,7 +104,7 @@ class BuildsController
      *
      * @return array|int
      */
-    @@\Route('get','api/build/{build.id}')
+    @@\Route('get', 'api/build/{build.id}')
     public function find($build_id)
     {
         // APITokenController::check((int) $build_id);
@@ -126,7 +126,7 @@ class BuildsController
      *
      * @throws \Exception
      */
-    @@\Route('get','api/build/{build.id}/cancel')
+    @@\Route('post', 'api/build/{build.id}/cancel')
     public function cancel($build_id): void
     {
         $build_id = (int) $build_id;
@@ -151,7 +151,7 @@ class BuildsController
      *
      * @throws \Exception
      */
-    @@\Route('get','api/build/{build.id}/restart')
+    @@\Route('post', 'api/build/{build.id}/restart')
     public function restart($build_id): void
     {
         $build_id = (int) $build_id;

@@ -46,8 +46,7 @@ class CommentsClient extends ClientCommon
         string $repo_full_name,
         $issue_number,
         string $body
-    )
-    {
+    ) {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number.'/comments';
 
         $output = $this->curl->post($url, json_encode(compact('body')));

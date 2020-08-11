@@ -52,8 +52,7 @@ class WebhooksClient
         string $content_type = 'json',
         string $insecure_ssl = '0',
         bool $active = true
-    ): void
-    {
+    ): void {
         $data = [
             'name' => $hook_name,
             'active' => $active,
@@ -83,8 +82,7 @@ class WebhooksClient
         string $content_type = 'json',
         string $insecure_ssl = '0',
         bool $active = true
-    ): void
-    {
+    ): void {
         $data = [
             'active' => $active,
             'events' => $events,

@@ -49,8 +49,7 @@ class Cache
         ?array $matrix,
         $cacheConfig = null,
         bool $disableUpload = false
-    )
-    {
+    ) {
         $this->jobId = $jobId;
         $this->build_key_id = $build_key_id;
         $this->workdir = $workdir;

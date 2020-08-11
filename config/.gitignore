@@ -1,6 +1,6 @@
 /*
 !.gitignore
-!config_schema.json
+!config.schema.json
 !json.schemastore.org.json
 !plugin_merge.php
 !plugin.schema.json

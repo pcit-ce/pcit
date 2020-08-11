@@ -57,8 +57,7 @@ EOF;
         string $language = null,
         string $os = null,
         $git_type = 'github'
-    )
-    {
+    ) {
         $this->job_key_id = $job_key_id;
 
         $this->config = JSON::beautiful($config);

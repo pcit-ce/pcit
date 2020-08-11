@@ -10,14 +10,11 @@ namespace App\Http\Controllers\Users;
 class BetaFeatureController
 {
     /**
-     * GET.
-     *
-     * /user/beta_features
-     *
      * Return a list of beta features available to a user.
      *
      * @throws \Exception
      */
+    @@\Route('get', 'api/user/beta_features')
     public function __invoke(): void
     {
         JWTController::getUser();
@@ -26,16 +23,13 @@ class BetaFeatureController
     /**
      * update a user's beta_feature.
      *
-     * patch
-     *
      * <pre>
      * {"beta_feature.enabled":true}
      * <pre>
      *
-     * /user/beta_feature/{beta_feature_id}
-     *
      * @throws \Exception
      */
+    @@\Route('patch', 'api/user/beta_feature/{beta_feature_id}')
     public function enable(): void
     {
         JWTController::getUser();
@@ -44,14 +38,12 @@ class BetaFeatureController
     /**
      * delete a user's beta feature.
      *
-     * delete
-     *
-     * /user/beta_feature/{beta_feature_id}
      *
      * @param array $args
      *
      * @throws \Exception
      */
+    @@\Route('delete','api/user/beta_feature/{beta_feature_id}')
     public function delete(...$args): void
     {
         JWTController::getUser();

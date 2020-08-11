@@ -78,8 +78,7 @@ class LabelsClient
         string $name,
         string $color,
         string $description
-    )
-    {
+    ) {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/labels/'.$label_current_name;
 
         return $this->curl->post($url, json_encode(compact('name', 'color', 'description')));

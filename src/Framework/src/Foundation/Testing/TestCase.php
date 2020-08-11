@@ -42,8 +42,7 @@ class TestCase extends BaseTestCase
         array $files = [],
         array $server = [],
         $content = null
-    )
-    {
+    ) {
         $request = Request::create($uri, $method, $parameters, $cookies, $files, $server, $content);
 
         $request->overrideGlobals();

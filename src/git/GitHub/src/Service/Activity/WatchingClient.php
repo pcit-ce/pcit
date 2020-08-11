@@ -63,11 +63,11 @@ class WatchingClient
     {
         return $this->curl->put(
             $this->api_url.'/repos/'.$repo_full_name.'/subscription?'.http_build_query(
-            [
-                'subscribed' => $subscribed,
-                'ignored' => $ignored,
-            ]
-        )
+                [
+                    'subscribed' => $subscribed,
+                    'ignored' => $ignored,
+                ]
+            )
         );
     }
 

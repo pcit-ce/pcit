@@ -23,7 +23,7 @@ class Dotenv
         }
 
         if ($env_file) {
-            $dotenv = \Dotenv\Dotenv::createImmutable(base_path(), $env_file)->load();
+            $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(base_path(), $env_file)->load();
 
             // $dotenv ->required('CI_HOST');
         }

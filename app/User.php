@@ -47,8 +47,7 @@ class User extends Model
         ?string $pic = null,
         ?bool $org = false,
         string $git_type = 'github'
-    ): void
-    {
+    ): void {
         if ($uid instanceof Owner) {
             $name = $uid->name;
             $username = $uid->username;

@@ -41,8 +41,7 @@ class Mail
         bool $html = true,
         array $cc = [],
         array $bcc = []
-    ): void
-    {
+    ): void {
         self::$mail = app(PCIT::class)->mail;
 
         try {

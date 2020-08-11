@@ -8,6 +8,7 @@ use Symfony\Component\Finder\Finder;
 
 class Metadata
 {
+    @@\Route('get', 'plugins/metadata')
     public function __invoke()
     {
         $plugin_metadata_path = base_path().'config/plugin.metadata.json';

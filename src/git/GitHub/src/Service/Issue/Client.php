@@ -92,8 +92,7 @@ class Client extends ClientCommon implements ClientInterface
         int $milestone,
         array $labels = null,
         array $assignees = null
-    ): void
-    {
+    ): void {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues';
 
         $this->curl->post($url, json_encode(array_filter(compact(
@@ -132,8 +131,7 @@ class Client extends ClientCommon implements ClientInterface
         int $milestone = null,
         array $labels = null,
         array $assignees = null
-    ): void
-    {
+    ): void {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/issues/'.$issue_number;
 
         $this->curl->patch($url, json_encode(array_filter(compact(

@@ -14,6 +14,8 @@ class ShowStatusController
      *
      * @throws \Exception
      */
+    @@\Route('get', '{git_type}/{username}/{repo_name}/status')
+    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/status')
     public function __invoke(...$arg)
     {
         $request = app('request');
@@ -56,6 +58,7 @@ class ShowStatusController
      *
      * @return string
      */
+    @@\Route('get', '{git_type}/{username}/{repo_name}/getstatus')
     public function getStatus(...$arg)
     {
         list($git_type, $username, $repo) = $arg;

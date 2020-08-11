@@ -88,13 +88,13 @@ class Client implements OAuthInterface
     {
         $json = $this->curl->post(
             $this->post_url.http_build_query(
-            [
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'grant_type' => 'authorization_code',
-                'code' => $code,
-            ]
-        )
+                [
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'grant_type' => 'authorization_code',
+                    'code' => $code,
+                ]
+            )
         );
 
         \Log::debug('Coding AccessToken Raw '.$json);

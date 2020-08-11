@@ -24,6 +24,7 @@ class IndexController
      *
      * @throws \Exception
      */
+    @@\Route('get', 'profile/{git_type}/{username}')
     public function __invoke(string $git_type, string $username): void
     {
         $username_from_web = $username;

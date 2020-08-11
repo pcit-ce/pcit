@@ -14,14 +14,11 @@ class StarController
     /**
      * star a repository based on the currently logged in user.
      *
-     * post
-     *
-     * /repo/{repository.slug}/star
-     *
      * @param array $args
      *
      * @throws \Exception
      */
+    @@\Route('post', 'api/repo/{username}/{repo_name}/star')
     public function __invoke(...$args): void
     {
         list($username, $repo_name) = $args;
@@ -29,12 +26,9 @@ class StarController
         JWTController::checkByRepo(...$args);
     }
 
+    @@\Route('post', 'api/repo/{username}/{repo_name}/unstar')
     /**
      * unstar a repository based on the currently logged in user.
-     *
-     * post
-     *
-     * /repo/{repository.slug}/unstar
      *
      * @param array $args
      *

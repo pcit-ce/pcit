@@ -35,8 +35,7 @@ class Core
         string $file = null,
         int $line = null,
         int $col = null
-    ): void
-    {
+    ): void {
         $message = $this->escapeData($message);
         if ($file && (null !== $line) && (null !== $col)) {
             echo "::warning file=$file,line=$line,col=$col::$message"."\n";
@@ -69,8 +68,7 @@ class Core
         string $file = null,
         int $line = null,
         int $col = null
-    ): void
-    {
+    ): void {
         $message = $this->escapeData($message);
         if ($file && (null !== $line) && (null !== $col)) {
             echo "::error file=$file,line=$line,col=$col::$message"."\n";

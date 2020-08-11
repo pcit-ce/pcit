@@ -20,7 +20,7 @@ class ActiveController
     /**
      * This will activate a repository, allowing its tests to be run on PCIT.
      */
-    @@\Route('post','api/repo/{repository.slug}/activate')
+    @@\Route('post', 'api/repo/{username}/{repo_name}/activate')
     public function activate(...$args): void
     {
         list($username, $repo) = $args;
@@ -29,7 +29,7 @@ class ActiveController
     /**
      * This will deactivate a repository, preventing any tests.
      */
-    @@\Route(method: 'post','api/repo/{repository.slug}/deactivate')
+    @@\Route('post', 'api/repo/{username}/{repo_name}/deactivate')
     public function deactivate(...$args): void
     {
         list($username, $repo) = $args;

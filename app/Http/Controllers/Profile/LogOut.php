@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Profile;
  */
 class LogOut
 {
+    @@\Route('get', '{git_type}/logout')
     public function __invoke(...$args): void
     {
         list($git_type) = $args;

@@ -8,6 +8,7 @@ use PCIT\Framework\Support\HttpClient;
 
 class GitHubApp
 {
+    @@\Route('get', 'api/github/app/new')
     public function new(): string
     {
         $webhook_url = \Request::get('webhook_url', null);
@@ -129,6 +130,7 @@ input.value = '$manifest_json_string'
 EOF;
     }
 
+    @@\Route('get', 'api/github/app/new/callback')
     public function callback()
     {
         $code = \Request::get('code');

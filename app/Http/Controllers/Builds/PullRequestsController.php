@@ -17,6 +17,7 @@ class PullRequestsController
      *
      * @return array
      */
+    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/pull_requests')
     public function post(...$args)
     {
         list($git_type, $username, $repo) = $args;

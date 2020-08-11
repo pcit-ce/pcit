@@ -43,8 +43,7 @@ class Client
         string $base = null,
         string $sort = null,
         string $direction = null
-    )
-    {
+    ) {
         $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, 'pulls']);
 
         $data = [
@@ -88,8 +87,7 @@ class Client
         string $base,
         string $body = null,
         bool $maintainer_can_modify = true
-    )
-    {
+    ) {
         $url = $this->api_url.implode('/', ['/repos', $username, $repo_name, '/pulls']);
 
         $data = [
@@ -128,8 +126,7 @@ class Client
         string $base,
         string $body = null,
         bool $maintainer_can_modify = true
-    )
-    {
+    ) {
         $this->is_update = true;
         $output = $this->create(...\func_get_args());
         $this->is_update = false;
@@ -205,8 +202,7 @@ class Client
         ?string $commit_message = null,
         ?string $sha = null,
         int $merge_method = 1
-    )
-    {
+    ) {
         switch ($merge_method) {
             case 1:
                 $merge_method = 'merge';
@@ -342,10 +338,10 @@ class Client
         $this->curl->put(
             $this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/reviews/'.$review_id.'/dismissals',
             json_encode(
-            [
-                'message' => $message,
-            ]
-        )
+                [
+                    'message' => $message,
+                ]
+            )
         );
     }
 
@@ -365,12 +361,12 @@ class Client
     {
         return $this->curl->get(
             $this->api_url.'/repos/'.$repo_full_name.'/pulls/'.$pull_number.'/comments?'.http_build_query(
-            [
-                'sort' => $sort,
-                'direction' => $direction,
-                'since' => $since,
-            ]
-        )
+                [
+                    'sort' => $sort,
+                    'direction' => $direction,
+                    'since' => $since,
+                ]
+            )
         );
     }
 
@@ -389,12 +385,12 @@ class Client
     {
         return $this->curl->get(
             $this->api_url.'/repos/'.$repo_full_name.'/pulls/comments?'.http_build_query(
-            [
-                'sort' => $sort,
-                'direction' => $direction,
-                'since' => $since,
-            ]
-        )
+                [
+                    'sort' => $sort,
+                    'direction' => $direction,
+                    'since' => $since,
+                ]
+            )
         );
     }
 
@@ -423,8 +419,7 @@ class Client
         string $path,
         string $position,
         ?int $in_reply_to
-    ): void
-    {
+    ): void {
         $data = [
             'body' => $body,
             'commit_id' => $commit_id,

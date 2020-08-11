@@ -307,8 +307,7 @@ EOF;
         ?int $insert_collaborators,
         ?string $default_branch = 'master',
         $git_type = 'github'
-    ): void
-    {
+    ): void {
         if ($repo_key_id = self::exists($rid, $git_type)) {
             $sql = <<<'EOF'
 UPDATE repo SET

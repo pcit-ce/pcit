@@ -1,6 +1,6 @@
 {
     "title": "JSON schema for configuring PCIT CI/CD",
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "https://ci.khs1994.com",
     "$comment": "https://docs.ci.khs1994.com/usage/",
     "description": "see https://docs.ci.khs1994.com/usage/",

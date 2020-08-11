@@ -130,11 +130,10 @@ class Run
     public function listSpecificRef(
         string $repo_full_name,
         string $ref,
-        string $check_name,
-        string $status,
-        string $filter
-    )
-    {
+        ?string $check_name = null,
+        ?string $status = null,
+        ?string $filter = null
+    ) {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/commits/'.$ref.'/check-runs';
 
         $data = [
@@ -164,11 +163,10 @@ class Run
     public function listCheckSuite(
         string $repo_full_name,
         int $id,
-        string $check_name,
-        string $status,
-        string $filter
-    )
-    {
+        ?string $check_name = null,
+        ?string $status = null,
+        ?string $filter = null
+    ) {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/check-suites/'.$id.'/check-rus';
 
         $data = [

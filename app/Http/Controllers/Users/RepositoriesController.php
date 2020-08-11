@@ -12,10 +12,9 @@ class RepositoriesController
     /**
      * This returns a list of repositories the current user has access to.
      *
-     * /repos
-     *
      * @throws \Exception
      */
+    @@\Route('get', 'api/repos')
     public function __invoke()
     {
         list($uid, $git_type) = JWTController::getUser(false);
@@ -26,12 +25,11 @@ class RepositoriesController
     /**
      * This returns a list of repositories an owner has access to.
      *
-     * /repos/{git_type}/{username}
-     *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get', 'api/repos/{git_type}/{username}')
     public function list(string $git_type, string $username)
     {
         return Repo::allByUsername($username, $git_type);
@@ -40,12 +38,11 @@ class RepositoriesController
     /**
      * This returns an individual repository.
      *
-     * /repo/{git_type}/{username}/{repo.name}
-     *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}')
     public function find(string $git_type, string $username, string $repo_name)
     {
         return Repo::findByRepoFullName($username, $repo_name, $git_type)[0] ?? [];

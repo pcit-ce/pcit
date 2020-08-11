@@ -7,5 +7,5 @@
         ".pcit/**.yaml",
         ".pcit/**.yml"
     ],
-    "url": "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json"
+    "url": "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json"
 }

@@ -24,8 +24,7 @@ class CommitsClient
         string $author,
         string $since,
         string $until
-    )
-    {
+    ) {
         $data = [
             'sha' => $sha,
             'path' => $path,

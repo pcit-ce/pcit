@@ -31,6 +31,10 @@ class Kernel
             foreach ($methods as $method) {
                 $attrs = $method->getAttributes();
                 foreach ($attrs as $attr) {
+                    if ('Route' !== $attr->getName()) {
+                        continue;
+                    }
+
                     // $attr->newInstance();
                     $controller_name = substr(
                         $class->getName(),

@@ -87,8 +87,7 @@ class InstallationsClient
         int $installation_id,
         int $repository_id,
         string $method = 'put'
-    ): void
-    {
+    ): void {
         $url = $this->api_url.'/user/installations/'.$installation_id.'/repositories/'.$repository_id;
 
         $this->curl->$method($url, null, [

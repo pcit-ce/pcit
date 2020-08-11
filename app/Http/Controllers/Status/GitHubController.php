@@ -18,9 +18,10 @@ class GitHubController
      */
     public function __construct()
     {
+        /** @var \PCIT\PCIT */
         $pcit = app(PCIT::class);
 
-        self::$status = $pcit->repo_status;
+        self::$status = $pcit->check_run;
     }
 
     /**
@@ -28,57 +29,12 @@ class GitHubController
      *
      * @throws \Exception
      *
-     * @return mixed
      */
-    public function list(...$arg)
+    @@\Route('get', 'api/status/github/{username}/{repo_name}/{ref}')
+    public function list($username,$repo_name,$ref)
     {
-        return json_decode(self::$status->list(...$arg), true);
-    }
+        $repo_full_name = $username.'/'.$repo_name;
 
-    /**
-     * @param string $accessToken
-     *
-     * @throws \Exception
-     *
-     * @return mixed
-     */
-    public function create(
-        string $repo_full_name,
-        string $commit_sha,
-        string $state,
-        string $target_url,
-        string $description,
-        string $context,
-        string $accessToken = null
-    ) {
-        if (!$accessToken) {
-            $accessToken = GetAccessToken::byRepoFullName($repo_full_name);
-        }
-
-        list($username, $repo) = explode('/', $repo_full_name);
-
-        $pcit = app(PCIT::class)->setAccessToken($accessToken);
-
-        return $pcit->repo_status->create(
-            $username,
-            $repo,
-            $commit_sha,
-            $state,
-            $target_url,
-            $description,
-            $context
-        );
-    }
-
-    /**
-     * @param mixed ...$arg
-     *
-     * @throws \Exception
-     *
-     * @return mixed
-     */
-    public function listCombinedStatus(...$arg)
-    {
-        return self::$status->listCombinedStatus(...$arg);
+        return \Response::json(self::$status->listSpecificRef($repo_full_name,$ref),true);
     }
 }

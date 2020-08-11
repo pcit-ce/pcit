@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 class IndexController
 {
+    @@\Route('get', 'admin')
     public function __invoke()
     {
         $app_host = config('app.host');

@@ -3,6 +3,13 @@
 # @see http://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
 
+x-8.0.0beta1-job: &8.0.0beta1-job
+  jobs:
+    - PHP_VERSION: 8.0.0beta1
+      NGINX_VERSION: 1.15.8
+      REDIS_VERSION: 6.0.2
+      MYSQL_VERSION: 5.7.29
+
 # 不支持变量
 language: php
 
@@ -157,25 +164,17 @@ steps:
   sami:
     image: khs1994/sami
     if:
+      << : *8.0.0beta1-job
       status: success
-      jobs:
-        - PHP_VERSION: 8.0.0beta1
-          NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 6.0.2
-          MYSQL_VERSION: 5.7.29
     run:
       - sami update .sami.php
 
   gitee_pages:
     image: pcit/pages
     if:
+      << : *8.0.0beta1-job
       status: success
       event: ["push"]
-      jobs:
-        - PHP_VERSION: 8.0.0beta1
-          NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 6.0.2
-          MYSQL_VERSION: 5.7.29
     with:
       keep_history: true
       target_branch: gh-pages
@@ -215,13 +214,9 @@ steps:
   s3:
     image: pcit/s3
     if:
+      << : *8.0.0beta1-job
       status: success
       event: ["push"]
-      jobs:
-        - PHP_VERSION: 8.0.0beta1
-          NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 6.0.2
-          MYSQL_VERSION: 5.7.29
     with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
@@ -238,13 +233,9 @@ steps:
     # 暂不支持 download artifact
     image: pcit/upload-artifact
     if:
+      << : *8.0.0beta1-job
       status: success
       event: ["push"]
-      jobs:
-        - PHP_VERSION: 8.0.0beta1
-          NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 6.0.2
-          MYSQL_VERSION: 5.7.29
     with:
       path: phar_dist
       name: pcit-nightly
@@ -252,13 +243,9 @@ steps:
   github-releases:
     image: pcit/github-release
     if:
+      << : *8.0.0beta1-job
       status: success
       event: push
-      jobs:
-        - PHP_VERSION: 8.0.0beta1
-          NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 6.0.2
-          MYSQL_VERSION: 5.7.29
     with:
       token: ${GITHUB_TOKEN}
       # files: pcit.phar
@@ -336,14 +323,10 @@ steps:
       # - cp openapi/openapi.yaml /opt/data.txt
       - sh /my_shell/api_doc_release.sh
     if:
+      << : *8.0.0beta1-job
       status: success
       event: push
       branch: master
-      jobs:
-        - PHP_VERSION: 8.0.0beta1
-          NGINX_VERSION: 1.15.8
-          REDIS_VERSION: 6.0.2
-          MYSQL_VERSION: 5.7.29
 
   use_pcit_toolkit:
     run: |

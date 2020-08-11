@@ -23,9 +23,7 @@ class Owner extends Kernel
 
     public $org;
 
-    /**
-     * @var "User"|"Organization"
-     */
+    /** @var "User"|"Organization" */
     public $type;
 
     public function __construct($repository_owner, bool $org = false)

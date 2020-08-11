@@ -9,12 +9,16 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('/build')
+    ->exclude('.idea')
+    ->exclude('.psalm')
+    ->exclude('/frontend')
     ->exclude('cache')
     ->exclude('vendor')
     ->exclude('node_modules')
 
     // remove when support attribute
     ->exclude('app/Http/Controllers')
+    ->exclude('src/Framework/src/Attributes')
     ->notPath('src/Framework/src/Support/Facades/Route.php')
 
     // ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
@@ -53,6 +57,7 @@ return PhpCsFixer\Config::create()
       'heredoc_to_nowdoc'=> false,
       'ordered_class_elements' => false,
       'simple_to_complex_string_variable' => false,
+      'phpdoc_to_comment' => false,
     ])
     ->setCacheFile(__DIR__.'/.php_cs.cache')
     ->setFinder($finder)

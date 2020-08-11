@@ -68,8 +68,7 @@ class ContentsClient implements ContentsClientInterface
         ?string $branch,
         ?string $committer_name,
         ?string $committer_email
-    )
-    {
+    ) {
         $data = [
             'message' => $commit_message,
             'content' => $content,
@@ -112,8 +111,7 @@ class ContentsClient implements ContentsClientInterface
         ?string $branch,
         ?string $committer_name,
         ?string $committer_email
-    )
-    {
+    ) {
         $data = [
             'message' => $commit_message,
             'content' => $content,
@@ -154,8 +152,7 @@ class ContentsClient implements ContentsClientInterface
         ?string $branch,
         string $committer_name,
         string $committer_email
-    )
-    {
+    ) {
         $data = [
             'message' => $commit_message,
             'sha' => $sha,

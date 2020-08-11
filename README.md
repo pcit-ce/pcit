@@ -119,7 +119,7 @@ services:
 ```diff
 {
 +  "yaml.schemas": {
-+    "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json": [
++    "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json": [
 +      ".pcit.yaml",
 +      ".pcit.yml",
 +      ".pcit/**.yaml",

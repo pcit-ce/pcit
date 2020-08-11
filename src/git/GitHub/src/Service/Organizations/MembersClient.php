@@ -196,8 +196,7 @@ class MembersClient
         ?string $email,
         string $role = 'direct_member',
         array $team_ids = null
-    ): void
-    {
+    ): void {
         $data = [
             'invitee_id' => $invitee_id,
             'email' => $email,

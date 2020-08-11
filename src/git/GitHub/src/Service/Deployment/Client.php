@@ -78,8 +78,7 @@ class Client
         string $description = null,
         bool $transient_environment = null,
         bool $production_environment = null
-    ): void
-    {
+    ): void {
         $result = compact('ref', 'task', 'auto_merge', 'required_contexts', 'payload', 'environment', 'description', 'transient_environment', 'production_environment');
 
         $result = array_filter($result);
@@ -153,8 +152,7 @@ class Client
         string $environment = 'production',
         string $environment_url = null,
         bool $auto_inactive = true
-    )
-    {
+    ) {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/deployments/'.$id.'/statuses';
 
         $data = array_filter(

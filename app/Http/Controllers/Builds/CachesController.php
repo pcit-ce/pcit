@@ -32,7 +32,7 @@ class CachesController
      *
      * @throws \Exception
      */
-    @@\Route('get','api/repo/{repository.slug}/caches')
+    @@\Route('get', 'api/repo/{username}/{repo_name}/caches')
     public function __invoke(...$args)
     {
         list($username, $repo_name) = $args;
@@ -66,8 +66,8 @@ class CachesController
      *
      * @throws \Exception
      */
-    @@\Route('delete','api/repo/{repository.slug}/caches')
-    @@\Route('delete','api/repo/{repository.slug}/caches/{branch}')
+    @@\Route('delete', 'api/repo/{username}/{repo_name}/caches')
+    @@\Route('delete', 'api/repo/{username}/{repo_name}/caches/{branch}')
     public function delete(...$args)
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);

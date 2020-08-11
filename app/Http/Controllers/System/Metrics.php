@@ -6,6 +6,7 @@ namespace App\Http\Controllers\System;
 
 class Metrics
 {
+    @@\Route('get', 'api/metrics')
     public function __invoke()
     {
         $content = '# builds

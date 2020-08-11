@@ -37,8 +37,7 @@ class WeChatClient
         string $info,
         string $url,
         string $openId = null
-    )
-    {
+    ) {
         $openId || $openId = $this->openId;
 
         /**

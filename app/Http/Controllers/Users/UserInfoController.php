@@ -16,6 +16,7 @@ class UserInfoController
      *
      * @throws \Exception
      */
+    @@\Route('get', 'api/user')
     public function __invoke()
     {
         list($uid, $git_type) = JWTController::getUser(false);
@@ -26,12 +27,11 @@ class UserInfoController
     /**
      * 获取某个用户的信息.
      *
-     * /user/{git_type}/{username}
-     *
      * @throws \Exception
      *
      * @return array|string
      */
+    @@\Route('get', 'api/user/{git_type}/{username}')
     public function find(string $git_type, string $username)
     {
         try {

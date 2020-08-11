@@ -71,8 +71,7 @@ class Client
         string $committer_email,
         string $date,
         string $signature
-    )
-    {
+    ) {
         $data = [
             'message' => $commit_message,
             'parents' => $parents,
@@ -224,8 +223,7 @@ class Client
         ?string $committer_name,
         ?string $committer_email,
         ?string $date
-    ): void
-    {
+    ): void {
         $data = [
             'tag' => $tag_name,
             'message' => $tag_message,
@@ -289,8 +287,7 @@ class Client
         string $repo_full_name,
         $base_tree,
         array $tree
-    ): void
-    {
+    ): void {
         $data = [
             'base_tree' => $base_tree,
             'tree' => $tree,

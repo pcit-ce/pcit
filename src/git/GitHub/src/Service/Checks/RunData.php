@@ -64,8 +64,7 @@ class RunData
         array $annotations = null,
         array $images = null,
         array $actions = null
-    )
-    {
+    ) {
         $this->repo_full_name = $repo_full_name;
         $this->name = $name;
         $this->commit_id = $commit_id;
@@ -108,8 +107,7 @@ class RunData
         string $message,
         string $title = null,
         string $raw_details = null
-    )
-    {
+    ) {
         return compact(
             'path',
             'start_line',
@@ -148,8 +146,7 @@ class RunData
         string $label = 'Fix',
         string $identifier = 'fix_errors',
         string $description = 'Allow us to fix these errors for you'
-    )
-    {
+    ) {
         return [
             'label' => $label,
             'identifier' => $identifier,

@@ -95,8 +95,7 @@ class ReleasesClient
         bool $draft = false,
         bool $prerelease = false,
         $method = 'post'
-    ): void
-    {
+    ): void {
         $url = $this->api_url.'/repos/'.$repo_full_name.'/releases';
 
         $data = [
@@ -129,8 +128,7 @@ class ReleasesClient
         bool $draft = false,
         bool $prerelease = false,
         $method = 'patch'
-    ): void
-    {
+    ): void {
         $this->create(...\func_get_args());
     }
 
@@ -196,8 +194,7 @@ class ReleasesClient
         ?string $label,
         string $content_type = 'application/octet-stream',
         bool $replace = false
-    )
-    {
+    ) {
         if ($tag_name) {
             $release_id = json_decode($this->getByTag($repo_full_name, $tag_name))->id;
         }

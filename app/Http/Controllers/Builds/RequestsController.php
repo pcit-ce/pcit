@@ -25,7 +25,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@\Route('get','api/repo/{repository.slug}/requests')
+    @@\Route('get', 'api/repo/{username}/{repo_name}/requests')
     public function __invoke(...$args)
     {
         $request = app('request');
@@ -76,7 +76,7 @@ class RequestsController
      *
      * @throws \Exception
      */
-    @@\Route('post','api/repo/{repository.slug}/requests')
+    @@\Route('post', 'api/repo/{username}/{repo_name}/requests')
     public function create(...$args)
     {
         list($username, $repo_name) = $args;
@@ -167,7 +167,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@\Route('get','api/repo/{repository.slug}/request/{request.id}')
+    @@\Route('get', 'api/repo/{username}/{repo_name}/request/{request.id}')
     public function find(...$args)
     {
         list($username, $repo_name, $request_id) = $args;
