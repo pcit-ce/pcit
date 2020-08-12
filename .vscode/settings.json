@@ -38,6 +38,14 @@
   "intelephense.diagnostics.enable": false,
   "psalm.phpExecutablePath": "C:\\php-pre\\php.exe",
   "intelephense.environment.phpVersion": "8.0.0beta1",
+  "intelephense.stubs": [
+    "PDO",
+    "redis",
+    "curl",
+    "iconv",
+    "json",
+    "pdo_mysql"
+  ],
   "php-docblocker.author": {
     "name": "pcit",
     "email": "ci@khs1994.com"

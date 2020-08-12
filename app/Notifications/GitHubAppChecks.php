@@ -65,7 +65,8 @@ class GitHubAppChecks
 
         $access_token = GetAccessToken::getGitHubAppAccessToken($rid);
 
-        $pcit = app(PCIT::class)->setGitType('github')->setAccessToken($access_token);
+        /** @var \PCIT\GPI\GPI */
+        $pcit = app(PCIT::class)->git('github', $access_token);
 
         $output_array = Build::find((int) $build_key_id);
 

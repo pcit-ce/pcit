@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Runner\Events;
 
 use App\GetAccessToken;
+use PCIT\GPI\Support\Git as GitSupport;
 use PCIT\PCIT;
 use PCIT\Runner\BuildData;
 use PCIT\Runner\Events\Handler\EnvHandler;
@@ -12,7 +13,6 @@ use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Runner\JobGenerator;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
-use PCIT\Support\Git as GitSupport;
 
 class Git
 {
@@ -164,7 +164,7 @@ class Git
     {
         \Log::info('📥Handle clone git', json_decode($config, true));
 
-        \Cache::store()->set(CacheKey::cloneKey($job_id), $config);
+        \Cache::set(CacheKey::cloneKey($job_id), $config);
     }
 
     public function generateDocker(

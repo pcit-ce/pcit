@@ -113,7 +113,7 @@ class Services
 
             \Log::info('🌐Handle service '.$service_name, json_decode($container_config, true));
 
-            \Cache::store()->hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
+            \Cache::hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
         }
     }
 }

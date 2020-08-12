@@ -102,6 +102,7 @@
     "ext-iconv": "*",
     "ext-json": "*",
     "ext-redis": "*",
+    "ext-pdo_mysql": "*",
     "doctrine/cache": "^1.6",
     "filp/whoops": "^2.3",
     "firebase/php-jwt": "^5.0",
@@ -178,6 +179,7 @@
     "fmt": "php-cs-fixer fix",
     "fmt:debug": "php-cs-fixer -vvv fix",
     "psalm": "psalm",
+    "all-in-one": "echo docker-compose -f pcit-all-in-one/docker-compose.yml up",
     "compile:dump": [
       "cp -r -f src/Framework/ vendor/pcit/framework",
       "cp -r -f src/Kernel/ vendor/pcit/kernel",

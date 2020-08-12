@@ -42,7 +42,7 @@ class CacheTest extends TestCase
 
         $cache->handle();
 
-        $this->cache = \Cache::store()->get(CacheKey::cacheKey(1));
+        $this->cache = \Cache::get(CacheKey::cacheKey(1));
     }
 
     /**

@@ -6,22 +6,14 @@ namespace PCIT;
 
 use Curl\Curl;
 use Docker\Docker;
+use PCIT\Gitee\Gitee;
+use PCIT\GitHub\GitHub;
 use PCIT\Support\Config;
-use PCIT\Support\Git;
 use PHPMailer\PHPMailer\PHPMailer;
 use Pimple\Container;
-use Pimple\Exception\UnknownIdentifierException;
 use WeChat\WeChat;
 
 /**
- * 核心方法 注入类（依赖），之后通过调用属性或方法，获取类.
- *
- * $container->register();
- *
- * $container['a'] = new A();
- *
- * $a = $container['a'];
- *
  * @property GitHub\Service\Activity\EventsClient            $activity_events
  * @property GitHub\Service\Activity\FeedsClient             $activity_feeds
  * @property GitHub\Service\Activity\NotificationsClient     $activity_notifications
@@ -52,12 +44,8 @@ use WeChat\WeChat;
  * @property GitHub\Service\Repositories\ReleasesClient      $repo_releases
  * @property GitHub\Service\Repositories\StatusClient        $repo_status
  * @property GitHub\Service\Repositories\WebhooksClient      $repo_webhooks
- * @property PHPMailer                                       $mail
  * @property GitHub\Service\PullRequest\Client               $pull_request
  * @property GitHub\Service\Webhooks\Server                  $webhooks
- * @property \PCIT\Runner\JobGenerator                       $runner_job_generator
- * @property \PCIT\Runner\Agent\Docker\DockerHandler         $runner_agent_docker
- * @property \TencentAI\TencentAI                            $tencent_ai
  * @property GitHub\Service\Users\Client                     $user_basic_info
  * @property GitHub\Service\Checks\Run                       $check_run
  * @property GitHub\Service\Checks\Suites                    $check_suites
@@ -65,41 +53,27 @@ use WeChat\WeChat;
  * @property Docker                                          $docker
  * @property WeChat                                          $wechat
  * @property Service\Kernel\WeChat\Template\WeChatClient     $wechat_template_message
+ * @property PHPMailer                                       $mail
+ * @property \PCIT\Runner\JobGenerator                       $runner_job_generator
+ * @property \PCIT\Runner\Agent\Docker\DockerHandler         $runner_agent_docker
+ * @property \TencentAI\TencentAI                            $tencent_ai
  */
 class PCIT extends Container
 {
-    /**
-     * 服务提供器数组.
-     */
+    /** @var array */
+    private $gits;
+
     protected $providers = [
-        \PCIT\GPI\Providers\ActivityProvider::class,
-        \PCIT\GPI\Providers\ChecksProvider::class,
         // Providers\CurlProvider::class,
-        \PCIT\GPI\Providers\DataProvider::class,
-        \PCIT\GPI\Providers\DeploymentProvider::class,
-        Providers\DockerProvider::class,
-        \PCIT\GPI\Providers\GistProvider::class,
-        \PCIT\GPI\Providers\GitHubAppProvider::class,
-        \PCIT\GPI\Providers\IssueProvider::class,
-        \PCIT\GPI\Providers\MiscellaneousProvider::class,
-        \PCIT\GPI\Providers\OAuthProvider::class,
-        \PCIT\GPI\Providers\OrganizationsProvider::class,
         Providers\PHPMailerProvider::class,
-        \PCIT\GPI\Providers\PullRequestProvider::class,
-        \PCIT\GPI\Providers\RepositoriesProvider::class,
+        Providers\DockerProvider::class,
         Providers\RunnerProvider::class,
         Providers\TencentAIProvider::class,
-        \PCIT\GPI\Providers\UserProvider::class,
-        \PCIT\GPI\Providers\WebhooksProvider::class,
         Providers\WeChatProvider::class,
     ];
 
-    /**
-     * 注册服务提供器.
-     */
     private function registerProviders(): void
     {
-        // 取得服务提供器数组.
         foreach ($this->providers as $provider) {
             $this->register(new $provider());
         }
@@ -110,118 +84,70 @@ class PCIT extends Container
      *
      * @throws \Exception
      */
-    public function __construct(
-        array $config = [],
-        string $git_type = 'github',
-        string $accessToken = null
-    ) {
-        parent::__construct($config);
+    public function __construct()
+    {
+        $this['config'] = [
+            'tencent_ai' => [
+                'app_id' => config('ai.tencent.app.id'),
+                'app_key' => config('ai.tencent.app.key'),
+            ],
+            'wechat' => [
+                'app_id' => config('wechat.app.id'),
+                'app_secret' => config('wechat.app.secret'),
+                'token' => config('wechat.app.token'),
+                'template_id' => config('wechat.template_id'),
+                'open_id' => config('wechat.user_openid'),
+            ],
+        ];
 
         set_time_limit(0);
 
         $this['curl_timeout'] = $this->curl_timeout = 60 * 5;
 
-        $this->setGitType($git_type);
+        $curl = new Curl();
+        $curl->setTimeout($this['curl_timeout']);
 
-        $this->setConfig($config, $git_type);
-
-        $this->setAccessToken($accessToken);
+        $this['curl'] = $curl;
 
         // 注册服务提供器
         $this->registerProviders();
     }
 
-    public function setConfig($config, $git_type): void
-    {
-        $this['config'] = Config::config($config, $git_type);
-    }
-
-    public function setGitType($git_type = 'github')
-    {
-        $this['git_type'] = $this->git_type = $git_type;
-
-        $this['class_name'] = $this->class_name = Git::getClassName($git_type);
-
-        return $this;
-    }
-
-    public function setAccessToken(?string $accessToken = null)
-    {
-        if ($accessToken) {
-            $this->setConfig(
-                [$this['git_type'].'_access_token' => $accessToken],
-                $this['git_type']
-            );
-        }
-
-        if ($this['config']['github']['access_token'] ?? false) {
-            $this['curl_config'] = [null, false,
-                [
-                    'Authorization' => 'token '.$this['config']['github']['access_token'],
-                    'Accept' => 'application/vnd.github.machine-man-preview+json,application/vnd.github.speedy-preview+json',
-                    'Content-Type' => 'application/json',
-                ],
-            ];
-        } elseif ($this['config']['gitee']['access_token'] ?? false) {
-            $this['curl_config'] = [null, false,
-                [
-                    'Authorization' => 'token '.$this['config']['gitee']['access_token'],
-                ],
-            ];
-        } elseif ($this['config']['coding']['access_token'] ?? false) {
-            $this['curl_config'] = [
-                null, false,
-                [
-                    'x-coding-token' => 'access_token '.$this['config']['coding']['access_token'],
-                ],
-            ];
-        } else {
-            $this['curl_config'] = [];
-        }
-
-        $curl = new Curl(...$this['curl_config']);
-        $curl->setTimeout($this['curl_timeout']);
-
-        $this['curl'] = $curl;
-
-        return $this;
-    }
-
-    /**
-     * 通过调用属性，获取对象
-     *
-     * @param $name
-     *
-     * @throws \Exception
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        // $example->调用不存在属性时
-        if (isset($this[$name])) {
-            return $this[$name];
-        }
-
-        throw new UnknownIdentifierException($name);
-    }
-
-    /**
-     * 通过调用方法，获取对象
-     *
-     * @param $name
-     * @param $arguments
-     *
-     * @throws \Exception
-     *
-     * @return mixed
-     */
-    public function __call($name, $arguments)
+    public function __get(string $name)
     {
         if (isset($this[$name])) {
             return $this[$name];
         }
 
-        throw new UnknownIdentifierException($name);
+        return $this->git()->$name;
+    }
+
+    public function __call(string $method, array $arguments)
+    {
+        if (isset($this[$method])) {
+            return $this[$method];
+        }
+
+        return $this->git()->$method();
+    }
+
+    /**
+     * @return \PCIT\GPI\GPI
+     */
+    public function git(?string $name = null, ?string $access_token = null)
+    {
+        $name = $name ?: 'github';
+
+        if ((!$access_token) and ($git = $this->gits[$name] ?? false)) {
+            return $git;
+        }
+
+        if ('github' === $name) {
+            $git = new GitHub($this['tencent_ai'], $access_token);
+        } elseif ('gitee' === $name) {
+            $git = new Gitee($this['tencent_ai'], $access_token);
+        }
+
+        return $this->gits[$name] = $git;
     }
 }

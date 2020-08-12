@@ -12,8 +12,6 @@ class UserInfoController
     /**
      * 获取当前登录用户信息.
      *
-     * /user
-     *
      * @throws \Exception
      */
     @@\Route('get', 'api/user')

@@ -28,7 +28,7 @@ EOF;
 
         (new Services($services, 1, new JobGenerator(), []))->handle();
 
-        $result = \Cache::store()->hget(CacheKey::serviceHashKey(1), 'mysql');
+        $result = \Cache::hget(CacheKey::serviceHashKey(1), 'mysql');
 
         // var_dump($result);
 
@@ -51,7 +51,7 @@ EOF;
 
         (new Services($services, 1, new jobGenerator(), []))->handle();
 
-        $result = \Cache::store()->hget(CacheKey::serviceHashKey(1), 'mysql');
+        $result = \Cache::hget(CacheKey::serviceHashKey(1), 'mysql');
 
         $this->assertNull(json_decode($result)->Entrypoint);
     }
@@ -74,7 +74,7 @@ EOF;
 
         (new Services($services, 1, $jobGenerator, ['K2' => 'v2']))->handle();
 
-        $result = \Cache::store()->hget(CacheKey::serviceHashKey(1), 'mysql');
+        $result = \Cache::hget(CacheKey::serviceHashKey(1), 'mysql');
 
         // var_dump($result);
 

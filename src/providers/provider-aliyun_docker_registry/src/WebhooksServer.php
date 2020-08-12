@@ -23,6 +23,6 @@ class WebhooksServer implements WebhooksServerInterface
         // $content = file_get_contents('php://input');
         $content = $request->getContent();
 
-        \Cache::store()->lpush('/pcit/webhooks', json_encode(['aliyun_docker_registry', 'push', $content]));
+        \Cache::lpush('/pcit/webhooks', json_encode(['aliyun_docker_registry', 'push', $content]));
     }
 }

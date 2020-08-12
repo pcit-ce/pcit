@@ -7,7 +7,7 @@ namespace PCIT\Framework\Routing;
 use Closure;
 use Exception;
 use PCIT\Framework\Foundation\Http\SuccessException;
-use PCIT\Support\Git;
+use PCIT\GPI\Support\Git;
 use Throwable;
 
 /**

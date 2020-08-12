@@ -76,7 +76,7 @@ class GetAccessToken
             }
         }
 
-        return pcit()->github_apps_access_token->getAccessToken(
+        return \PCIT::github_apps_access_token()->getAccessToken(
             (int) $installation_id,
             config('git.github.app.private_key_path')
         );
@@ -92,6 +92,18 @@ class GetAccessToken
     public static function getAccessTokenByUid(int $uid, $git_type = 'github')
     {
         $sql = 'SELECT access_token FROM user WHERE git_type=? AND uid=? LIMIT 1';
+
+        return DB::select($sql, [$git_type, $uid], true);
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @return string
+     */
+    public static function getRefreshTokenByUid(int $uid, string $git_type = 'github')
+    {
+        $sql = 'SELECT refresh_token FROM user WHERE git_type=? AND uid=? LIMIT 1';
 
         return DB::select($sql, [$git_type, $uid], true);
     }

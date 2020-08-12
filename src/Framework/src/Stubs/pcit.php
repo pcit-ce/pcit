@@ -36,3 +36,7 @@ class Log extends \PCIT\Framework\Support\Facades\Log
 class Storage extends \PCIT\Framework\Support\Facades\Storage
 {
 }
+
+class PCIT extends \PCIT\Support\Facades\PCIT
+{
+}

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Support;
+namespace PCIT\GPI\Support;
 
 use Exception;
 

@@ -17,7 +17,7 @@ use PCIT\PCIT;
 class SyncController
 {
     /**
-     * @var PCIT
+     * @var \PCIT\GPI\GPI
      */
     private $pcit;
 
@@ -37,8 +37,7 @@ class SyncController
 
         $this->access_token = GetAccessToken::getAccessTokenByUid((int) $this->uid, $this->git_type);
 
-        $this->pcit = app(PCIT::class)->setGitType($this->git_type)
-            ->setAccessToken($this->access_token);
+        $this->pcit = app(PCIT::class)->git($this->git_type,$this->access_token);
 
         if ('github' === $this->git_type) {
             // github 只获取用户组织，不获取用户仓库

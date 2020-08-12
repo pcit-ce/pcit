@@ -10,8 +10,8 @@ class CacheTest extends TestCase
 {
     public function test(): void
     {
-        \Cache::store()->set('key', 'value');
+        \Cache::set('key', 'value');
 
-        $this->assertEquals('value', \Cache::store()->get('key'));
+        $this->assertEquals('value', \Cache::get('key'));
     }
 }

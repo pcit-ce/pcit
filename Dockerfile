@@ -38,10 +38,10 @@ FROM ${USERNAME}/php:7.4.8-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/
-COPY app /app/pcit/app/
 
 RUN --mount=type=cache,target=/tmp/composer/cache,id=composer_cache cd /app/pcit \
       set -x \
+      && composer config -g --unset repos.packagist \
       && composer install --no-dev \
       && rm -rf src app
 

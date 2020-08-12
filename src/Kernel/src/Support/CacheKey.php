@@ -51,22 +51,19 @@ class CacheKey
 
     public static function pipelineDumpListKey(int $jobId, string $type = 'pipeline')
     {
-        $cache = \Cache::store();
         $sourceKey = 'pcit/'.$type.'/list/'.$jobId;
 
-        return $cache->dump($sourceKey);
+        return \Cache::dump($sourceKey);
     }
 
     public static function pipelineListCopyKey(int $jobId, string $type = 'pipeline', string $prefix = null)
     {
-        $cache = \Cache::store();
-
         $copyKey = 'pcit/'.$type.'/list_copy_'.$prefix.'/'.$jobId;
-        $cache->del($copyKey);
+        \Cache::del($copyKey);
 
         $dump = self::pipelineDumpListKey($jobId, $type);
 
-        $cache->restore($copyKey, 0, $dump);
+        \Cache::restore($copyKey, 0, $dump);
 
         return $copyKey;
     }
@@ -104,12 +101,8 @@ class CacheKey
      */
     public static function flush(int $jobId): void
     {
-        $cache = \Cache::store();
+        $keys = \Cache::keys('pcit/*/'.$jobId);
 
-        $result = $cache->keys('pcit/*/'.$jobId);
-
-        foreach ($result as $key) {
-            $cache->del($key);
-        }
+        \Cache::del($keys);
     }
 }

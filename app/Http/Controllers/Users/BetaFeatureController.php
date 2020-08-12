@@ -38,7 +38,6 @@ class BetaFeatureController
     /**
      * delete a user's beta feature.
      *
-     *
      * @param array $args
      *
      * @throws \Exception

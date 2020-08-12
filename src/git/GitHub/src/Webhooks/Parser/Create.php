@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Webhooks\Parser;
 
-use PCIT\Framework\Cache\Repository;
+use PCIT\GPI\Webhooks\Context\Components\Repository;
 use PCIT\GPI\Webhooks\Context\Components\User\Owner;
 use PCIT\GPI\Webhooks\Context\CreateContext;
 

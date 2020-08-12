@@ -22,8 +22,6 @@ class OrganizationsController
     /**
      * Returns an individual organization.
      *
-     * /org/{git_type}/{organization_name}
-     *
      * @throws \Exception
      *
      * @return mixed

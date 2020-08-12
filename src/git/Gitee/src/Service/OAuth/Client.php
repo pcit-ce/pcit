@@ -49,7 +49,7 @@ class Client extends GitHubClient implements OAuthInterface
         return $url;
     }
 
-    public function getAccessToken(string $code, ?string $state, bool $raw = false): array
+    public function getAccessToken(string $code, ?string $state, bool $raw = false)
     {
         $url = static::POST_URL.http_build_query([
             'code' => $code,
@@ -59,20 +59,16 @@ class Client extends GitHubClient implements OAuthInterface
             'grant_type' => 'authorization_code',
         ]);
 
-        $json = $this->curl->post($url);
-
-        \Log::debug('Gitee AccessToken Raw '.$json);
-
-        // {"access_token":"52b","token_type":"bearer","expires_in":86400,"refresh_token":"c31e9","scope":"user_info projects pull_requests issues notes keys hook groups gists","created_at":1523757514}
-
-        if (true === $raw) {
-            return $json;
-        }
-
-        return $result = $this->parseTokenResult($json);
+        return $this->requestAccessToken($url, $raw);
+        // {
+        //    "access_token":"52b","token_type":"bearer","expires_in":86400,
+        //    "refresh_token":"c31e9",
+        //    "scope":"user_info projects pull_requests issues notes keys
+        //             hook groups gists","created_at":1523757514
+        // }
     }
 
-    public function getTokenByRefreshToken($refreshToken): array
+    public function getAccessTokenByRefreshToken(string $refreshToken, bool $raw = false)
     {
         // grant_type=refresh_token&refresh_token={refresh_token}
         $url = static::POST_URL.http_build_query([
@@ -80,9 +76,18 @@ class Client extends GitHubClient implements OAuthInterface
             'refresh_token' => $refreshToken,
         ]);
 
+        return $this->requestAccessToken($url, $raw);
+    }
+
+    public function requestAccessToken(string $url, bool $raw = false)
+    {
         $json = $this->curl->post($url);
 
-        \Log::debug('Gitee RefreshAccessToken Raw '.$json);
+        if (true === $raw) {
+            return $json;
+        }
+
+        \Log::debug('Gitee AccessToken Raw '.$json);
 
         return $this->parseTokenResult($json);
     }

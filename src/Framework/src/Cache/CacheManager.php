@@ -12,14 +12,14 @@ class CacheManager implements Factory
     protected $stores = [];
 
     /**
-     * @param mixed $name
-     *
      * @throws \Exception
      *
      * @return \PCIT\Framework\Contracts\Cache\Repository
      */
-    public function store($name = 'redis')
+    public function store(?string $name = null)
     {
+        $name = $name ?: config('cache.default');
+
         if ($store = $this->stores[$name] ?? false) {
             return $store;
         }

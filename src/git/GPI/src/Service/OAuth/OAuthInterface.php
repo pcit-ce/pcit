@@ -12,5 +12,7 @@ interface OAuthInterface
 
     public function getLoginUrl(?string $state): string;
 
-    public function getAccessToken(string $code, ?string $state, bool $raw = false): array;
+    public function getAccessToken(string $code, ?string $state, bool $raw = false);
+
+    public function getAccessTokenByRefreshToken(string $refresh_token, bool $raw = false);
 }

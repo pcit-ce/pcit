@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
-use PCIT\Framework\Support\DB;
 use PCIT\Support\CI;
-use PCIT\Support\Git;
+use PCIT\GPI\Support\Git;
+use PCIT\Framework\Support\DB;
 
 class PullRequestsController
 {
@@ -14,11 +14,9 @@ class PullRequestsController
      * @param mixed ...$args
      *
      * @throws \Exception
-     *
-     * @return array
      */
     @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/pull_requests')
-    public function post(...$args)
+    public function post(...$args):array
     {
         list($git_type, $username, $repo) = $args;
 

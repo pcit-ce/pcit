@@ -58,7 +58,7 @@ class Healthz
     public function docker(bool $returnBool = false)
     {
         try {
-            app('pcit')->docker->system->ping();
+            \PCIT::docker()->system->ping();
 
             return $this->ok($returnBool);
         } catch (\Throwable $e) {

@@ -6,25 +6,47 @@ namespace PCIT\Framework\Foundation\Http;
 
 use ReflectionClass;
 use Route;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Throwable;
 
 class Kernel
 {
-    private function sendRequestThroughRouterByAttributes(): void
+    private function getControllers(): array
     {
-        $classes = require base_path().'vendor/composer/autoload_classmap.php';
+        $cache_path = base_path().'framework/storage/controllers.cache.php';
 
-        $controllers = [];
+        if (file_exists($cache_path)) {
+            $controllers = require $cache_path;
 
-        foreach ($classes as $class => $path) {
-            if (str_starts_with($class, 'App\\Http\\Controllers')) {
-                $controllers[] = $class;
+            if ($controllers) {
+                return $controllers;
             }
         }
 
+        $controllers = [];
+
+        $finder = Finder::create()
+            ->in(base_path().'app/Http/Controllers')
+            ->name('*.php')
+            ->files();
+
+        foreach ($finder as $item) {
+            $controller = explode('.', $item->getRelativePathname())[0];
+            $controllers[] = str_replace('/', '\\', $controller);
+        }
+
+        file_put_contents($cache_path, '<?php return '.json_encode($controllers).';');
+
+        return $controllers;
+    }
+
+    private function sendRequestThroughRouterByAttributes(): void
+    {
+        $controllers = $this->getControllers();
+
         foreach ($controllers as $controller) {
-            $class = new ReflectionClass($controller);
+            $class = new ReflectionClass('\\App\\Http\Controllers\\'.$controller);
 
             $methods = $class->getMethods();
 
@@ -36,10 +58,6 @@ class Kernel
                     }
 
                     // $attr->newInstance();
-                    $controller_name = substr(
-                        $class->getName(),
-                        \strlen('App\\Http\Controllers\\')
-                    );
 
                     $controller_method = null;
                     if ('__invoke' !== $method->getName()) {
@@ -48,7 +66,7 @@ class Kernel
 
                     (new ReflectionClass($attr->getName()))->newInstance(...[
                         ...$attr->getArguments(),
-                        $controller_name.$controller_method,
+                        $controller.$controller_method,
                     ]);
                 }
             }

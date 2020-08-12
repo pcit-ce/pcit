@@ -8,8 +8,8 @@ use App\Build;
 use App\GetAccessToken;
 use PCIT\GetConfig;
 use PCIT\GPI\Webhooks\Context\PullRequestContext;
-use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\PullRequest\HandlerInterface;
+use PCIT\Skip;
 use PCIT\Subject;
 use PCIT\UpdateUserInfo;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -21,6 +21,7 @@ class Handler implements HandlerInterface
 
     public function handle(PullRequestContext $context): void
     {
+        return;
         if (!\in_array($context->action, ['opened', 'synchronize'])) {
             return;
         }
@@ -118,7 +119,9 @@ EOF;
 
     private function sendComment(string $comment_body): void
     {
-        (new PCIT([$this->context->git_type.'_access_token' => GetAccessToken::byRid($this->context->rid, $this->context->git_type)]))
+        $access_token = GetAccessToken::byRid($this->context->rid, $this->context->git_type);
+
+        \PCIT::git($this->context->git_type, $access_token)
             ->issue_comments
             ->create(
                 $this->context->repo_full_name,

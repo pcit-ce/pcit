@@ -92,9 +92,30 @@ class Client implements OAuthInterface
     }
 
     /**
-     * @throws \Exception
+     * @return array<string>|string
      */
-    public function getAccessToken(string $code, ?string $state, bool $json = true): array
+    public function getAccessTokenByRefreshToken(string $refresh_token, bool $raw = false)
+    {
+        $url = static::POST_URL.http_build_query(
+            [
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $refresh_token,
+            ]
+        );
+
+        return $this->requestAccessToken($url, $raw);
+    }
+
+    /**
+     * expires_in 8 hours.
+     *
+     * @throws \Exception
+     *
+     * @return array<string>|string
+     */
+    public function getAccessToken(string $code, ?string $state, bool $raw = false)
     {
         $url = static::POST_URL.http_build_query(
             [
@@ -106,9 +127,17 @@ class Client implements OAuthInterface
             ]
         );
 
-        true === $json && $this->curl->setHeader('Accept', 'application/json');
+        return $this->requestAccessToken($url, $raw);
+    }
 
-        true !== $json && $this->curl->setHeader('Accept', 'application/xml');
+    /**
+     * @return array<string>|string
+     */
+    public function requestAccessToken(string $url, bool $raw = false)
+    {
+        $this->curl->setHeader('Accept', 'application/json');
+
+        //$this->curl->setHeader('Accept', 'application/xml');
 
         $accessToken = $this->curl->post($url);
 
@@ -116,10 +145,17 @@ class Client implements OAuthInterface
 
         // {"access_token":"47bb","token_type":"bearer","scope":"admin:gpg_key,admin:org"}
 
-        true === $json && $accessToken = json_decode($accessToken)->access_token ?? false;
+        if (true === $raw) {
+            return $accessToken;
+        }
+
+        $result_obj = json_decode($accessToken);
+        $accessToken = $result_obj->access_token ?? false;
+        // expires_in 6 months.
+        $refresh_token = $result_obj->refresh_token ?? false;
 
         if ($accessToken) {
-            return [$accessToken, ''];
+            return [$accessToken, $refresh_token];
         }
 
         throw new Exception('access_token not fount');

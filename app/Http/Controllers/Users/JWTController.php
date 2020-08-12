@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use App\Build;
 use App\Repo;
+use App\Build;
 use Curl\Curl;
 use Exception;
+use PCIT\GPI\Support\Git;
 use PCIT\Framework\Support\JWT;
-use PCIT\Support\Git;
 
 class JWTController
 {
@@ -17,10 +17,8 @@ class JWTController
      * 从请求头获取 token.
      *
      * @throws \Exception
-     *
-     * @return string
      */
-    private static function getToken()
+    private static function getToken():string
     {
         $token = \Request::getHeader('Authorization');
 
@@ -50,10 +48,8 @@ class JWTController
 
     /**
      * @throws \Exception
-     *
-     * @return array
      */
-    public static function getUser(bool $returnGitTypeFirst = true)
+    public static function getUser(bool $returnGitTypeFirst = true):array
     {
         $token = self::getToken();
 
@@ -67,7 +63,7 @@ class JWTController
         );
 
         if ($exp < time()) {
-            throw new Exception('JWT Token timeout', 401);
+            throw new Exception('JWT Token outdated', 401);
         }
 
         if (!$returnGitTypeFirst) {
@@ -81,10 +77,8 @@ class JWTController
      * 检查 token 是否有某构建的权限.
      *
      * @throws \Exception
-     *
-     * @return array
      */
-    public static function check(int $build_key_id)
+    public static function check(int $build_key_id):array
     {
         list($git_type, $uid) = self::getUser();
 
@@ -113,10 +107,8 @@ class JWTController
      * Token 的 uid 是否在给定仓库的管理员列表中
      *
      * @throws \Exception
-     *
-     * @return array
      */
-    public static function checkByRepo(string $username, string $repo_name)
+    public static function checkByRepo(string $username, string $repo_name):array
     {
         list($git_type, $uid) = self::getUser();
 
@@ -136,15 +128,13 @@ class JWTController
     /**
      * 生成 API Token.
      *
-     * @param string $username
-     * @param int    $uid
-     *
      * @throws \Exception
-     *
-     * @return string
      */
     @@\Route('post', 'api/user/token')
-    public static function generate(string $git_type = null, string $username = null, int $uid = null)
+    public static function generate(
+        string $git_type = null,
+        string $username = null,
+        int $uid = null):array
     {
         if ($git_type) {
             goto a;
@@ -170,18 +160,17 @@ class JWTController
             throw new Exception('Requires authentication', 401);
         }
 
-        $curl = new Curl();
+        /** @var \PCIT\PCIT */
+        $pcit = app('pcit');
 
-        $curl->setHtpasswd((string) $username, (string) $password);
+        $result = $pcit->git($git_type, $password)
+        ->user_basic_info
+        ->getUserInfo();
 
-        $git_obj = json_decode($curl->get('https://api.github.com/user'));
+        //$curl->setHtpasswd((string) $username, (string) $password);
 
-        if (200 !== $curl->getCode()) {
-            throw new Exception('Requires authentication, maybe username or password not incorrect', 401);
-        }
-
-        $uid = $git_obj->id;
-        $git_username = $git_obj->login;
+        $uid = $result['uid'];
+        $git_username = $result['name'];
 
         if ($git_username !== $username) {
             throw new Exception('Requires authentication', 401);

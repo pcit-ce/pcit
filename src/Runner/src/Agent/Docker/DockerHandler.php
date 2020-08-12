@@ -371,7 +371,7 @@ class DockerHandler implements RunnerHandlerInterface
     {
         $type = $download ? 'download' : 'upload';
 
-        $containerConfig = \Cache::store()->get(CacheKey::cacheKey($job_id, $type));
+        $containerConfig = \Cache::get(CacheKey::cacheKey($job_id, $type));
 
         if (!$containerConfig) {
             \Log::emergency('🟡cache container config not found');
@@ -458,7 +458,7 @@ class DockerHandler implements RunnerHandlerInterface
     {
         \Log::emergency('🌐Run job services container ...', ['job_id' => $job_id]);
 
-        $container_configs = \Cache::store()->hgetall(CacheKey::serviceHashKey($job_id));
+        $container_configs = \Cache::hgetall(CacheKey::serviceHashKey($job_id));
 
         foreach ($container_configs as $service => $container_config) {
             $container_id = $this->docker_container

@@ -25,7 +25,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/requests')
+    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/requests')
     public function __invoke(...$args)
     {
         $request = app('request');
@@ -76,19 +76,17 @@ class RequestsController
      *
      * @throws \Exception
      */
-    @@\Route('post', 'api/repo/{username}/{repo_name}/requests')
+    @@\Route('post', 'api/repo/{git_type}/{username}/{repo_name}/requests')
     public function create(...$args)
     {
         list($username, $repo_name) = $args;
 
-        list($rid) = JWTController::checkByRepo($username, $repo_name);
+        list($rid,$git_type) = JWTController::checkByRepo($username, $repo_name);
 
-        $token = GetAccessToken::getGitHubAppAccessToken(
-            null,
-            $username.'/'.$repo_name
-        );
+        $token = GetAccessToken::byRid($rid,$git_type);
 
-        $app = app(PCIT::class)->setGitType()->setAccessToken($token);
+        /** @var \PCIT\GPI\GPI */
+        $pcit = app(PCIT::class)->git($git_type,$token);
 
         // $body = file_get_contents('php://input');
 
@@ -99,7 +97,7 @@ class RequestsController
         $config = $body_obj->request->config ?? '';
         $branch = $body_obj->request->branch ?? 'master';
 
-        $result = $app->repo_branches->get($username, $repo_name, $branch);
+        $result = $pcit->repo_branches->get($username, $repo_name, $branch);
 
         $result = json_decode($result);
 
@@ -167,7 +165,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/request/{request.id}')
+    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/request/{request.id}')
     public function find(...$args)
     {
         list($username, $repo_name, $request_id) = $args;

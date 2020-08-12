@@ -23,7 +23,7 @@ class IndexController
         }
 
         /** @var \PCIT\PCIT */
-        $pcit = app(PCIT::class)->setGitType($gitType);
+        $pcit = app(PCIT::class)->git($gitType);
 
         $result = $pcit->webhooks->server();
 

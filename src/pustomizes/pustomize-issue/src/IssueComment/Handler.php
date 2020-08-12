@@ -7,7 +7,6 @@ namespace PCIT\Pustomize\IssueComment;
 use App\GetAccessToken;
 use App\Repo;
 use PCIT\GPI\Webhooks\Context\IssueCommentContext;
-use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\IssueComment\HandlerInterface;
 use PCIT\Subject;
 use PCIT\UpdateUserInfo;
@@ -17,7 +16,7 @@ class Handler implements HandlerInterface
     /** @var IssueCommentContext */
     public $context;
 
-    /** @var \PCIT\PCIT */
+    /** @var \PCIT\GPI\GPI */
     public $pcit;
 
     public function handle(IssueCommentContext $context): void
@@ -40,10 +39,12 @@ class Handler implements HandlerInterface
             return;
         }
 
-        $this->pcit = new PCIT([], $context->git_type, GetAccessToken::byRid(
+        $access_token = GetAccessToken::byRid(
             $context->rid,
             $context->git_type
-        ));
+        );
+
+        $this->pcit = \PCIT::git($git_type, $access_token);
 
         if ('/translate-title' === $body) {
             $this->handleTitleTranslate();

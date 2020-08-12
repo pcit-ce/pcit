@@ -18,6 +18,7 @@ return [
         'Log' => PCIT\Framework\Support\Facades\Log::class,
         'App' => PCIT\Framework\Support\Facades\App::class,
         'Storage' => PCIT\Framework\Support\Facades\Storage::class,
+        'PCIT' => PCIT\Support\Facades\PCIT::class,
     ],
     'providers' => [
         PCIT\Framework\Routing\RoutingServiceProvider::class,
@@ -28,6 +29,8 @@ return [
         PCIT\Framework\Storage\StorageServiceProvider::class,
 
         App\Providers\AppServiceProvider::class,
+
+        PCIT\PCITServiceProvider::class,
     ],
     'cache' => [
         'driver' => 'redis',

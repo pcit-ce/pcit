@@ -27,7 +27,7 @@ class Client
      *
      * @throws \Exception
      *
-     * @return array|mixed
+     * @return array|string
      */
     public function getUserInfo(bool $raw = false, string $username = null)
     {
@@ -38,6 +38,10 @@ class Client
         }
 
         $json = $this->curl->get($url);
+
+        if (200 !== $this->curl->getCode()) {
+            throw new \Exception($json, $this->curl->getCode());
+        }
 
         if ($raw) {
             return $json;

@@ -42,7 +42,7 @@ class LoginCommand extends Command
 
         $request = json_encode(
             [
-                'git-type' => $git_type,
+                'git_type' => $git_type,
                 'username' => $username,
                 'password' => $password,
             ]

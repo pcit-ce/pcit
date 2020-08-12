@@ -18,17 +18,13 @@ class GitHubController
      */
     public function __construct()
     {
-        /** @var \PCIT\PCIT */
-        $pcit = app(PCIT::class);
-
-        self::$status = $pcit->check_run;
+        self::$status = \PCIT::check_run;
     }
 
     /**
      * @param mixed ...$arg
      *
      * @throws \Exception
-     *
      */
     @@\Route('get', 'api/status/github/{username}/{repo_name}/{ref}')
     public function list($username,$repo_name,$ref)

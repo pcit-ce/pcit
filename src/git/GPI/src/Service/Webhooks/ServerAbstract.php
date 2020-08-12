@@ -62,7 +62,7 @@ abstract class ServerAbstract implements ServerInterface
      */
     public function pushCache(string $type, $content)
     {
-        return \Cache::store()->lpush($this->cache_key, json_encode([$this->git_type, $type, $content]));
+        return \Cache::lpush($this->cache_key, json_encode([$this->git_type, $type, $content]));
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class ServerAbstract implements ServerInterface
      */
     public function getCache()
     {
-        return \Cache::store()->rPop($this->cache_key);
+        return \Cache::rPop($this->cache_key);
     }
 
     /**
@@ -86,7 +86,7 @@ abstract class ServerAbstract implements ServerInterface
      */
     public function rollback(string $content)
     {
-        return \Cache::store()->lPush($this->cache_key, $content);
+        return \Cache::lPush($this->cache_key, $content);
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class ServerAbstract implements ServerInterface
      */
     public function pushSuccessCache(string $content)
     {
-        return \Cache::store()->lPush($this->cache_key.'_success', $content);
+        return \Cache::lPush($this->cache_key.'_success', $content);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class ServerAbstract implements ServerInterface
      */
     public function pushErrorCache(string $content)
     {
-        return \Cache::store()->lPush($this->cache_key.'_error', $content);
+        return \Cache::lPush($this->cache_key.'_error', $content);
     }
 
     /**

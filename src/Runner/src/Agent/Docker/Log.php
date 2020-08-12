@@ -44,7 +44,7 @@ class Log
     {
         \Log::emergency('🗑Drop prev job '.$job_id.' logs', []);
 
-        \Cache::store()->del(CacheKey::logHashKey($job_id));
+        \Cache::del(CacheKey::logHashKey($job_id));
     }
 
     /**

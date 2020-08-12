@@ -38,7 +38,7 @@ class IndexController
      */
     public function bootstrap($git_type): void
     {
-        $pcit = app(PCIT::class)->setGitType($git_type);
+        $pcit = app(PCIT::class)->git($git_type);
 
         static::$oauth = $pcit->oauth;
         static::$git_type = $git_type;
@@ -57,7 +57,8 @@ class IndexController
          *
          * OAuth login -> get access_token and expire from Session | expire one day
          */
-        if (\Session::get($git_type.'.access_token') and \Session::get($git_type.'.expire') > time()) {
+        if (\Session::get($git_type.'.access_token')
+        and \Session::get($git_type.'.expire') > time()) {
             $username_from_session = \Session::get($git_type.'.username');
 
             // 重定向到个人主页
@@ -127,7 +128,7 @@ class IndexController
 
             $accessToken && \Session::put($git_type.'.access_token', $accessToken);
 
-            $pcit = app(PCIT::class)->setGitType($git_type)->setAccessToken($accessToken);
+            $pcit = app(PCIT::class)->git($git_type, $accessToken);
 
             $userInfoArray = $pcit->user_basic_info->getUserInfo();
         } catch (Error $e) {
@@ -155,11 +156,10 @@ class IndexController
 
     /**
      * @param $refreshToken
-     * @param $gitType
      *
      * @throws \Exception
      */
-    public function handleRefreshToken(int $uid, $refreshToken, $gitType): void
+    public function handleRefreshToken(int $uid, $refreshToken, string $gitType): void
     {
         if (!$refreshToken) {
             return;

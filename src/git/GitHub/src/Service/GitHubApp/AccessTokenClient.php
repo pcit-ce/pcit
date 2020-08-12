@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Service\GitHubApp;
 
 use Curl\Curl;
 use Exception;
-use PCIT\Framework\Support\JWT;
+use Firebase\JWT\JWT;
 
 class AccessTokenClient
 {
@@ -20,32 +20,45 @@ class AccessTokenClient
         $this->api_url = $api_url;
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
-    public function getJWT(string $private_key_path)
+    public function encodeJWT(string $private_key_path, int $github_app_id): string
     {
-        $jwt = \Cache::store()->get('pcit/github_app_jwt');
+        $privateKey = file_get_contents($private_key_path);
+
+        $token = [
+            'iss' => $github_app_id,
+            'iat' => time(),
+            'exp' => time() + 10 * 60,
+        ];
+
+        return JWT::encode($token, $privateKey, 'RS256');
+    }
+
+    /**
+     * GitHub App 由 JWT(expire 10mins) 获取 Token(expire 60mins).
+     *
+     * https://developer.github.com/apps/building-github-apps/authentication-options-for-github-apps/#authenticating-as-a-github-app
+     *
+     * @throws \Exception
+     */
+    public function getJWT(string $private_key_path): string
+    {
+        $jwt = \Cache::get('pcit/github_app_jwt');
 
         if ($jwt) {
             return $jwt;
         }
 
-        $jwt = JWT::getJWT($private_key_path, (int) config('git.github.app.id'));
+        $jwt = $this->encodeJWT($private_key_path, (int) config('git.github.app.id'));
 
-        \Cache::store()->set('pcit/github_app_jwt', $jwt, 8 * 60);
+        \Cache::set('pcit/github_app_jwt', $jwt, 8 * 60);
 
         return $jwt;
     }
 
     /**
      * @throws \Exception
-     *
-     * @return mixed
      */
-    public function getAccessToken(int $installation_id, string $private_key_path)
+    public function getAccessToken(int $installation_id, string $private_key_path): string
     {
         \Log::debug('Get GitHub app Access Token ...');
 
@@ -73,7 +86,7 @@ class AccessTokenClient
         if (201 !== $http_return_code) {
             \Log::debug('Http Return Code is not 201 '.$http_return_code);
 
-            \Cache::store()->delete('pcit/github_app_jwt');
+            \Cache::delete('pcit/github_app_jwt');
 
             throw new Exception('Get GitHub App AccessToken Error '.$access_token_json, $http_return_code);
         }

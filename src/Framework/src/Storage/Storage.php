@@ -6,54 +6,44 @@ namespace PCIT\Framework\Storage;
 
 use Etime\Flysystem\Plugin\AWS_S3 as AWS_S3_Plugin;
 use League\Flysystem\Adapter\Local as LocalAdapter;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 
 class Storage
 {
-    public $flysystem;
+    /** @var array */
+    public $filesystem;
 
-    public function __construct()
+    public function disk(?string $name = null): FilesystemInterface
     {
-        $adapter = $this->getAdapter();
+        $name = $name ?: config('filesystems.default');
 
-        $this->flysystem = new Filesystem($adapter);
-
-        $this->addPlugin();
-    }
-
-    public function __call($method, $args)
-    {
-        return $this->flysystem->$method(...$args);
-    }
-
-    public function getAdapter(): AdapterInterface
-    {
-        $disk = config('filesystems.default');
-
-        $localAdapter = new LocalAdapter('/tmp');
-
-        if ('local' === $disk) {
-            return $localAdapter;
+        if ($filesystem = $this->filesystem[$name] ?? false) {
+            return $filesystem;
         }
-        if ('s3' === $disk) {
+
+        if ('local' === $name) {
+            $adapter = new LocalAdapter('/tmp');
+        } elseif ('s3' === $name) {
             $bucket = config('filesystems.bucket');
 
             $options = config('filesystems.disks.s3');
 
-            return new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket);
+            $adapter = new AwsS3Adapter(new \Aws\S3\S3Client($options), $bucket);
         }
 
-        return $localAdapter;
+        $filesystem = new Filesystem($adapter);
+
+        if ('s3' === $name) {
+            $filesystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
+        }
+
+        return $this->filesystem[$name] = $filesystem;
     }
 
-    public function addPlugin(): void
+    public function __call(string $method, array $args)
     {
-        $disk = config('filesystems.default');
-
-        if ('s3' === $disk) {
-            $this->flysystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
-        }
+        return $this->disk()->$method(...$args);
     }
 }

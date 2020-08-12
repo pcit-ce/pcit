@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Handler;
 
-use PCIT\Support\Git;
+use PCIT\GPI\Support\Git;
 
 /**
  * @see https://developer.github.com/webhooks/event-payloads/

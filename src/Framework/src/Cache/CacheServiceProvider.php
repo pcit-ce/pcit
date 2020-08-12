@@ -18,7 +18,7 @@ class CacheServiceProvider extends ServiceProvider
         };
 
         $pimple['cache.store'] = function ($app) {
-            return $app['cache']->store(config('cache.default'));
+            return $app['cache']->store();
         };
 
         $pimple[Repository::class] = $pimple['cache.store'];

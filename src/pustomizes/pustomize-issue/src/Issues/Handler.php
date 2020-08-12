@@ -6,7 +6,6 @@ namespace PCIT\Pustomize\Issues;
 
 use App\GetAccessToken;
 use PCIT\GPI\Webhooks\Context\IssuesContext;
-use PCIT\PCIT;
 use PCIT\Pustomize\Interfaces\Issues\HandlerInterface;
 use PCIT\Subject;
 use PCIT\UpdateUserInfo;
@@ -16,11 +15,12 @@ class Handler implements HandlerInterface
     /** @var IssuesContext */
     public $context;
 
-    /** @var \PCIT\PCIT */
+    /** @var \PCIT\GPI\GPI */
     public $pcit;
 
     public function handle(IssuesContext $context): void
     {
+        $git_type = $context->git_type;
         $installation_id = $context->installation_id;
         $action = $context->action;
         $rid = $context->rid;
@@ -43,8 +43,7 @@ class Handler implements HandlerInterface
 
         $accessToken = GetAccessToken::byRepoFullName($context->repo_full_name, null, $context->git_type);
 
-        // @var \PCIT\PCIT $pcit
-        $this->pcit = new PCIT([], $context->git_type, $accessToken);
+        $this->pcit = \PCIT::git($git_type, $accessToken);
 
         $body = <<<EOF
 You can writing some word in a comment to trigger action:

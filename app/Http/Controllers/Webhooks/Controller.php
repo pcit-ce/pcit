@@ -69,8 +69,8 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $pcit = app(PCIT::class)->setGitType(static::$gitType)
-            ->setAccessToken($access_token);
+        /** @var \PCIT\GPI\GPI */
+        $pcit = app(PCIT::class)->git(static::$gitType,$access_token);
 
         $json = $pcit->repo_webhooks->getWebhooks($raw, ...$arg);
 
@@ -115,8 +115,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $pcit = app(PCIT::class)->setGitType(self::$gitType)
-            ->setAccessToken($access_token);
+        $pcit = \PCIT::git(self::$gitType,$access_token);
 
         $getWebhooksStatus = $pcit->repo_webhooks->getStatus($webhooksUrl, ...$arg);
 
@@ -168,8 +167,7 @@ class Controller
         $access_token = self::checkAccessToken();
 
         /** @var \PCIT\PCIT */
-        $pcit = app('pcit')->setGitType(self::$gitType)
-            ->setAccessToken($access_token);
+        $pcit = app('pcit')->git(self::$gitType,$access_token);
 
         $repo_full_name = $username.'/'.$repo;
 
@@ -198,7 +196,7 @@ class Controller
         Repo::updateBuildActive($status, $gitType, $repoFullName);
         0 === $status && Repo::updateWebhookStatus($status, $gitType, $repoFullName);
 
-        \Cache::store()->hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
+        \Cache::hSet($gitType.'_'.$uid.'_repo_admin', $repoFullName, $status);
     }
 
     /**

@@ -7,6 +7,7 @@ namespace PCIT\Framework\Foundation;
 use PCIT\Framework\Dotenv\Dotenv;
 use PCIT\Framework\Support\Env;
 use Pimple\Container;
+use Pimple\Exception\UnknownIdentifierException;
 
 class Application extends Container
 {
@@ -179,5 +180,14 @@ class Application extends Container
         }
 
         return parent::offsetGet($id);
+    }
+
+    public function __get(string $name)
+    {
+        if (isset($this[$name])) {
+            return $this[$name];
+        }
+
+        throw new UnknownIdentifierException($name);
     }
 }

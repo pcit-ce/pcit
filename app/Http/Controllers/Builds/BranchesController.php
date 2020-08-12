@@ -18,11 +18,9 @@ class BranchesController
      * @param mixed ...$args
      *
      * @throws \Exception
-     *
-     * @return array
      */
     @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/branches')
-    public function __invoke(...$args)
+    public function __invoke(...$args):array
     {
         list($git_type, $username, $repo) = $args;
 

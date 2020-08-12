@@ -120,7 +120,7 @@ class InstallationsClient
     {
         $this->curl->delete($this->api_url.'/installation/token');
 
-        \Cache::store()->set('pcit/github_app_jwt', '');
+        \Cache::set('pcit/github_app_jwt', '');
     }
 
     /**
