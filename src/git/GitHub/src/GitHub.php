@@ -6,7 +6,6 @@ namespace PCIT\GitHub;
 
 use Curl\Curl;
 use PCIT\GPI\GPI;
-use PCIT\GPI\Support\Git;
 use TencentAI\TencentAI;
 
 class GitHub extends GPI
@@ -20,19 +19,16 @@ class GitHub extends GPI
         }
 
         $this['config'] = [
-            'git_type' => $git_type = strtolower($this->class_name),
-            'api_url' => Git::getAPIUrl($git_type),
-            'github' => [
-                'client_id' => config('git.github.oauth.client_id'),
-                'client_secret' => config('git.github.oauth.client_secret'),
-                'callback_url' => config('git.github.oauth.callback_url'),
-                'access_token' => $access_token,
-            ],
+            'api_url' => config('git.github.api_url'),
+            'client_id' => config('git.github.oauth.client_id'),
+            'client_secret' => config('git.github.oauth.client_secret'),
+            'callback_url' => config('git.github.oauth.callback_url'),
+            'access_token' => $access_token,
         ];
 
         $this['curl_config'] = $access_token ? [null, false,
             [
-                'Authorization' => 'token '.$this['config']['github']['access_token'],
+                'Authorization' => 'token '.$this['config']['access_token'],
                 'Accept' => 'application/vnd.github.machine-man-preview+json,application/vnd.github.speedy-preview+json',
                 'Content-Type' => 'application/json',
             ],

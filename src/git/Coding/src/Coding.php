@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PCIT\Gitee;
+namespace PCIT\Coding;
 
 use Curl\Curl;
 use PCIT\GPI\GPI;
 use TencentAI\TencentAI;
 
-class Gitee extends GPI
+class Coding extends GPI
 {
-    public $class_name = 'Gitee';
+    public $class_name = 'Coding';
 
     public function __construct(TencentAI $tencent_ai, ?string $access_token = null)
     {
@@ -19,16 +19,17 @@ class Gitee extends GPI
         }
 
         $this['config'] = [
-            'api_url' => config('git.gitee.api_url'),
-            'client_id' => config('git.gitee.oauth.client_id'),
-            'client_secret' => config('git.gitee.oauth.client_secret'),
-            'callback_url' => config('git.gitee.oauth.callback_url'),
+            'api_url' => config('git.coding.api_url'),
+            'client_id' => config('git.coding.oauth.client_id'),
+            'client_secret' => config('git.coding.oauth.client_secret'),
+            'callback_url' => config('git.coding.oauth.callback_url'),
             'access_token' => $access_token,
+            'team' => config('git.coding.oauth.team'),
         ];
 
         $this['curl_config'] = $access_token ? [null, false,
             [
-                'Authorization' => 'token '.$this['config']['access_token'],
+                'x-coding-token' => 'access_token '.$this['config']['access_token'],
             ],
         ] : [];
 

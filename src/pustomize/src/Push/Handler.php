@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Pustomize\Push;
 
 use App\Build;
+use PCIT\DisableHandler;
 use PCIT\GetConfig;
 use PCIT\GPI\Webhooks\Context\PushContext;
 use PCIT\GPI\Webhooks\Context\TagContext;
@@ -23,10 +24,15 @@ class Handler
             $this->handleTag($context);
 
             return;
-        } // push 事件只处理 tag
+        }
 
-        return;
         $git_type = $context->git_type;
+
+        if ('github' === $git_type) {
+            \Log::info('Handle GitHub push by check_suite');
+
+            return;
+        }
 
         if ('github' !== $git_type) {
             DisableHandler::handle($context->repo_full_name, $this->git_type);

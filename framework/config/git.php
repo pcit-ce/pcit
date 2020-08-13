@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 return [
+    'default' => 'github',
+
     'github' => [
         'app' => [
             'name' => env('CI_GITHUB_APP_NAME'),
@@ -17,6 +19,7 @@ return [
             'client_secret' => env('CI_GITHUB_CLIENT_SECRET'),
             'callback_url' => env('CI_GITHUB_CALLBACK_URL'),
         ],
+        'api_url' => 'https://api.github.com',
     ],
 
     'gitee' => [
@@ -25,6 +28,7 @@ return [
             'client_secret' => env('CI_GITEE_CLIENT_SECRET'),
             'callback_url' => env('CI_GITEE_CALLBACK_URL'),
         ],
+        'api_url' => 'https://gitee.com/api/v5',
     ],
 
     'coding' => [
@@ -35,6 +39,8 @@ return [
             'team' => env('CI_CODING_TEAM'),
         ],
         'host' => env('CI_CODING_HOST', null),
+        'class_name' => 'Coding',
+        'api_url' => 'https://'.env('CI_CODING_TEAM').'.coding.net',
     ],
 
     'webhooks' => [

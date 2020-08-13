@@ -188,41 +188,6 @@ class Git
      *
      * @return string
      */
-    public static function getApiUrl(string $git_type)
-    {
-        self::checkGit($git_type);
-
-        switch ($git_type) {
-            case 'aliyun':
-                $url = '';
-
-                break;
-            case 'coding':
-                // 支持 Coding 企业版(私有部署)
-                $url = config('git.coding.host') ?? config('git.coding.oauth.team').'.coding.net';
-                $url .= '/api';
-
-                break;
-            case 'gitee':
-                $url = 'gitee.com/api/v5';
-
-                break;
-            case 'github':
-                $url = 'api.github.com';
-
-                break;
-            default:
-                throw new Exception('Not Support', 500);
-        }
-
-        return 'https://'.$url;
-    }
-
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
     public static function getClassName(string $git_type)
     {
         self::checkGit($git_type);

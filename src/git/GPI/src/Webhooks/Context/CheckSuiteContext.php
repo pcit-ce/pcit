@@ -37,6 +37,7 @@ use PCIT\GPI\Webhooks\Context\Components\User\Sender;
  * @property Author                                $author
  * @property Committer                             $committer
  * @property Owner                                 $owner
+ * @property object                                $check_suite
  */
 class CheckSuiteContext extends Context
 {

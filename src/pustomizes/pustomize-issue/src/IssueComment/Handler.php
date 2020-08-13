@@ -23,6 +23,7 @@ class Handler implements HandlerInterface
     {
         $this->context = $context;
 
+        $git_type = $context->git_type;
         $installation_id = $context->installation_id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;

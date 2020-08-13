@@ -146,6 +146,16 @@ class PCIT extends Container
             $git = new GitHub($this['tencent_ai'], $access_token);
         } elseif ('gitee' === $name) {
             $git = new Gitee($this['tencent_ai'], $access_token);
+        } else {
+            try {
+                $class_name = config('git.'.$name.'.class_name');
+
+                $git_class_name = 'PCIT\\'.$class_name.'\\'.$class_name;
+
+                $git = new $git_class_name($this['tencent_ai'], $access_token);
+            } catch (\Throwable $e) {
+                throw new \Exception('can\'t find '.$name.' git providers or init meet error');
+            }
         }
 
         return $this->gits[$name] = $git;

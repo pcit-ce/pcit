@@ -21,10 +21,10 @@ class Client extends GitHubClient
      */
     public function getUserInfo(bool $raw = false, string $username = null)
     {
-        $url = $this->api_url.'/account/current_user';
+        $url = $this->api_url.'/api/current_user';
 
         if ($username) {
-            $url = $this->api_url.'/account/key'.$username;
+            $url = $this->api_url.'/api/key'.$username;
         }
 
         $json = $this->curl->get($url.'?'.$this->getAccessTokenUrlParameter());

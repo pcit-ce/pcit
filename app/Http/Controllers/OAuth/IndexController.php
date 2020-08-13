@@ -49,7 +49,7 @@ class IndexController
     /**
      * 获取登录的 URL.
      */
-    @@\Route('get', 'oauth/${git_type}/login')
+    @@\Route('get', 'oauth/{git_type}/login')
     public function getLoginUrl(string $git_type): void
     {
         /*

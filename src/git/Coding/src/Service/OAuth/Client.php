@@ -81,6 +81,10 @@ class Client implements OAuthInterface
         ]);
     }
 
+    public function getAccessTokenByRefreshToken(string $refresh_token, bool $raw = false): void
+    {
+    }
+
     /**
      * @throws \Exception
      */

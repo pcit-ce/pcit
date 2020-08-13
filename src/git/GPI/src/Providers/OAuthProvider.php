@@ -16,9 +16,8 @@ class OAuthProvider implements ServiceProviderInterface
 
         $pimple['oauth'] = function ($app) use ($curl) {
             $class = 'PCIT\\'.$app->class_name.'\Service\OAuth\Client';
-            $git_type = $app->git_type;
 
-            return new $class($app['config'][$git_type], $curl);
+            return new $class($app['config'], $curl);
         };
     }
 }
