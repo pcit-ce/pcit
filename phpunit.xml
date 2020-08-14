@@ -29,5 +29,6 @@
     </groups>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="CI_TENCENT_AI_APP_KEY" value="mock"/>
     </php>
 </phpunit>

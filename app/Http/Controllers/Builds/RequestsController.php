@@ -76,7 +76,7 @@ class RequestsController
      *
      * @throws \Exception
      */
-    @@\Route('post', 'api/repo/{git_type}/{username}/{repo_name}/requests')
+    @@\Route('post', 'api/repo/{username}/{repo_name}/requests')
     public function create(...$args)
     {
         list($username, $repo_name) = $args;
@@ -122,6 +122,7 @@ class RequestsController
                 $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
                 $config = json_encode($config_array);
             } catch (\Throwable $e) {
+                // throw new \Exception($e->getMessage());
                 $config = '[]';
             }
         }
@@ -165,7 +166,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/request/{request.id}')
+    @@\Route('get', 'api/repo/{username}/{repo_name}/request/{request.id}')
     public function find(...$args)
     {
         list($username, $repo_name, $request_id) = $args;

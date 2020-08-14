@@ -34,7 +34,7 @@ auto_cancel_pull_request_builds
 FROM settings WHERE git_type=? AND rid=?
 EOF;
 
-        return DB::select($sql, [$git_type, $rid])[0];
+        return DB::select($sql, [$git_type, $rid])[0] ?? [];
     }
 
     /**

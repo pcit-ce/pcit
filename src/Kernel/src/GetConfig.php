@@ -43,16 +43,16 @@ class GetConfig
 
         foreach ($configName as $file_name) {
             try {
-                return (new PCIT([], $git_type, $access_token))->repo_contents->getContents(
+                return \PCIT::git($git_type, $access_token)->repo_contents->getContents(
                     $repo_full_name,
                     $file_name,
                     $commit_id
                 );
             } catch (\Throwable $e) {
+                \Log::info("$git_type $repo_full_name $commit_id not include ".$file_name);
+
                 continue;
             }
-
-            \Log::info("$git_type $repo_full_name $commit_id not include ".$file_name);
         }
 
         return '';

@@ -36,7 +36,7 @@ class Handler implements HandlerInterface
         $git_type = $context->git_type;
 
         if ('github' === $git_type and $context->internal) {
-            \Log::info('handle GitHub internal pull_request by check_suite');
+            \Log::info('Handle GitHub internal pull_request by check_suite');
 
             return;
         }
