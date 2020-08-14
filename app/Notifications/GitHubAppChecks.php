@@ -127,8 +127,6 @@ class GitHubAppChecks
         $log_message = 'Create GitHub App Check run error';
 
         if ($check_run_id) {
-            Job::updateCheckRunId(json_decode($result)->id ?? null, $job_key_id);
-
             $log_message = 'Create GitHub App Check Run success';
 
             $result = $check_run_id;

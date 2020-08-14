@@ -146,6 +146,13 @@ EOF;
         throw new Exception('', 404);
     }
 
+    public static function isPrivate(int $job_id)
+    {
+        $sql = 'SELECT builds.private FROM jobs RIGHT JOIN builds ON jobs.build_id=builds.id WHERE jobs.id=? LIMIT 1';
+
+        return DB::select($sql, [$job_id], true);
+    }
+
     /**
      * 事件创建时间.
      *
@@ -268,31 +275,6 @@ EOF;
         $sql = 'SELECT state FROM jobs WHERE id=?';
 
         return DB::select($sql, [$job_key_id])[0]['state'] ?? '';
-    }
-
-    /**
-     * @throws \Exception
-     *
-     * @return int
-     */
-    public static function getCheckRunId(int $build_key_id)
-    {
-        $sql = 'SELECT check_run_id FROM jobs WHERE id=? LIMIT 1';
-
-        return DB::select($sql, [$build_key_id], true);
-    }
-
-    /**
-     * @param int $check_run_id
-     *
-     * @throws \Exception
-     */
-    public static function updateCheckRunId(?int $check_run_id, int $build_key_id): void
-    {
-        return;
-        $sql = 'UPDATE jobs SET check_run_id=? WHERE id=?';
-
-        DB::update($sql, [$check_run_id, $build_key_id]);
     }
 
     /**

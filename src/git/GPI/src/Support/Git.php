@@ -43,10 +43,13 @@ class Git
      *
      * @return string
      */
-    public static function getUrl(string $type, string $repo_full_name, bool $ssh = false)
+    public static function getUrl(string $type, ?string $repo_full_name = null, bool $ssh = false)
     {
-        list($username, $repo) = explode('/', $repo_full_name);
-
+        $username = null;
+        $repo = null;
+        if ($repo_full_name) {
+            list($username, $repo) = explode('/', $repo_full_name);
+        }
         self::checkGit($type);
 
         switch ($type) {

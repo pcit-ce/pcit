@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace PCIT\Runner\Agent\Docker;
 
 use App\Build;
+use App\GetAccessToken;
 use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
 use PCIT\Exception\PCITException;
+use PCIT\GPI\Support\Git;
 use PCIT\PCIT;
 use PCIT\Runner\Agent\Docker\Log as ContainerLog;
 use PCIT\Runner\Agent\Interfaces\RunnerHandlerInterface;
@@ -42,6 +44,12 @@ class DockerHandler implements RunnerHandlerInterface
 
     private $expressionHandler;
 
+    private $token;
+
+    private $git_type;
+
+    private $private;
+
     /**
      * RunContainer constructor.
      *
@@ -63,6 +71,16 @@ class DockerHandler implements RunnerHandlerInterface
     public function handle(int $job_id): void
     {
         \Log::emergency("🟢Run job $job_id step containers...", ['job_id' => $job_id]);
+
+        $rid = Job::getRid($job_id);
+
+        $this->git_type = $git_type = Job::getGitType($job_id);
+
+        $this->token = GetAccessToken::byRid((int) $rid, $git_type);
+
+        $this->private = Job::isPrivate($job_id);
+
+        $this->mask_value_array[] = $this->token;
 
         try {
             // 运行 toolkit 容器
@@ -193,6 +211,29 @@ class DockerHandler implements RunnerHandlerInterface
 
         $retry = (int) env('CI_GIT_CLONE_STEP_RETRY', 1);
 
+        $insert_auth = [];
+
+        $git_url = Git::getUrl($this->git_type);
+        ['host' => $git_host ] = parse_url($git_url);
+
+        if ('1' === $this->private) {
+            $insert_auth[] = 'DRONE_NETRC_MACHINE='.$git_host;
+            $insert_auth[] = 'DRONE_NETRC_USERNAME=pcit';
+            $insert_auth[] = 'DRONE_NETRC_PASSWORD='.$this->token;
+            if ('gitee' === $this->git_type) {
+                $insert_auth[] = 'DRONE_NETRC_USERNAME=oauth2';
+            }
+        }
+
+        if ('coding' === $this->git_type) {
+            $git_username = '';
+            $token = '';
+            $insert_auth[] = 'DRONE_NETRC_USERNAME='.$git_username;
+            $insert_auth[] = 'DRONE_NETRC_PASSWORD='.$token;
+        }
+
+        $git_container_config = $this->insertGivenEnv($git_container_config, $insert_auth);
+
         retry($retry, function () use ($job_id,$git_container_config): void {
             $this->runStep($job_id, $git_container_config, 'clone');
         });
@@ -235,6 +276,30 @@ class DockerHandler implements RunnerHandlerInterface
     }
 
     /**
+     * @param array $insertEnv ["k=v","k2=v2"]
+     */
+    public function insertGivenEnv(string $container_config, array $insertEnv = []): string
+    {
+        if ([] === $insertEnv) {
+            return $container_config;
+        }
+
+        $env_handler = new EnvHandler();
+
+        $container_env = json_decode($container_config)->Env;
+
+        $container_env = array_merge(
+            $env_handler->obj2array($container_env),
+            $insertEnv
+        );
+
+        $container_config = json_decode($container_config);
+        $container_config->Env = $container_env;
+
+        return json_encode($container_config);
+    }
+
+    /**
      * 将在 step 中设置的 env 注入到接下来的容器配置中.
      */
     public function insertEnv(string $container_config): string
@@ -252,6 +317,10 @@ class DockerHandler implements RunnerHandlerInterface
         $container_env = array_merge(
             $env_handler->obj2array($container_env),
             $this->env,
+            [
+                // "PCIT_TOKEN=".$this->token,
+                'PCIT_GIT='.$this->git_type,
+            ]
         );
 
         // env 值包含 \n 将每一行加入 mask 列表
@@ -333,9 +402,8 @@ class DockerHandler implements RunnerHandlerInterface
         $name = (new EnvHandler())->array2obj($preEnv)['INPUT_NAME'];
         $path = (new EnvHandler())->array2obj($preEnv)['INPUT_PATH'];
 
-        $git_type = Job::getGitType($job_id);
         $repo_full_name = Job::getRepoFullName($job_id);
-        $s3_dir_root = "$git_type/$repo_full_name/$job_id";
+        $s3_dir_root = $this->git_type."/$repo_full_name/$job_id";
 
         $env = array_merge($preEnv, [
             'INPUT_ENDPOINT='.env('CI_S3_ENDPOINT'),
