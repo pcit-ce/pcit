@@ -81,8 +81,31 @@ class Client implements OAuthInterface
         ]);
     }
 
-    public function getAccessTokenByRefreshToken(string $refresh_token, bool $raw = false): void
+    /**
+     * @return string|string[]
+     */
+    public function getAccessTokenByRefreshToken(string $refresh_token, bool $raw = false)
     {
+        $json = $this->curl->post(
+            $this->post_url.http_build_query(
+                [
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $refresh_token,
+                ]
+            )
+        );
+
+        \Log::debug('Coding AccessToken Raw '.$json);
+
+        if (true === $raw) {
+            return $json;
+        }
+
+        // {"access_token":"f2d0","refresh_token":"45924","expires_in":"692804"}
+
+        return $this->parseTokenResult($json);
     }
 
     /**
