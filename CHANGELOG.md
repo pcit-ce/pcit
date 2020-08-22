@@ -31,6 +31,10 @@
 
 ## v19.12
 
+### 2020/08/21
+
+* [ ] `Agent` 通过 [JSON-RPC](http://wiki.geekdream.com/Specification/json-rpc_2.0.html) 与 `Server` 通信
+
 ### 2020/08/04
 
 * [x] 不再需要 GitHub OAuth App，使用 GitHub App 的 OAuth 功能

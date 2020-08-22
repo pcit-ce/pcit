@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Agent\Docker;
 
-use App\Build;
-use App\GetAccessToken;
-use App\Job;
 use Docker\Container\Client as Container;
 use Docker\Network\Client as Network;
 use PCIT\Exception\PCITException;
@@ -15,6 +12,10 @@ use PCIT\PCIT;
 use PCIT\Runner\Agent\Docker\Log as ContainerLog;
 use PCIT\Runner\Agent\Interfaces\RunnerHandlerInterface;
 use PCIT\Runner\Events\Handler\EnvHandler;
+use PCIT\Runner\RPC\Build;
+use PCIT\Runner\RPC\Cache;
+use PCIT\Runner\RPC\GetAccessToken;
+use PCIT\Runner\RPC\Job;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 
@@ -31,8 +32,6 @@ class DockerHandler implements RunnerHandlerInterface
     private $docker_network;
 
     private $job_id;
-
-    private $cache;
 
     private $env = [];
 
@@ -60,7 +59,6 @@ class DockerHandler implements RunnerHandlerInterface
         $docker = app(PCIT::class)->docker;
         $this->docker_container = $docker->container;
         $this->docker_network = $docker->network;
-        $this->cache = \Cache::store();
         $this->expressionHandler = new ExpressionHandler();
     }
 
@@ -199,7 +197,7 @@ class DockerHandler implements RunnerHandlerInterface
 
     public function gitClone(): void
     {
-        $git_container_config = $this->cache->get(CacheKey::cloneKey($this->job_id));
+        $git_container_config = Cache::get(CacheKey::cloneKey($this->job_id));
 
         if (!$git_container_config) {
             \Log::emergency('❌git clone container config not found, maybe disabled');
@@ -242,18 +240,17 @@ class DockerHandler implements RunnerHandlerInterface
     public function handleSteps(): void
     {
         $job_id = $this->job_id;
-        $cache = $this->cache;
         // 复制原始 key
         $copyKey = CacheKey::pipelineListCopyKey($job_id, 'pipeline', 'runner');
 
         while (1) {
-            $step = $cache->rpop($copyKey);
+            $step = Cache::rpop($copyKey);
 
             if (!$step) {
                 break;
             }
 
-            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id), $step);
+            $container_config = Cache::hget(CacheKey::pipelineHashKey($job_id), $step);
 
             if (!\is_string($container_config)) {
                 \Log::emergency('❌Container config empty', []);
@@ -272,7 +269,7 @@ class DockerHandler implements RunnerHandlerInterface
             }
         }
 
-        $cache->del($copyKey);
+        Cache::del($copyKey);
     }
 
     /**
@@ -439,7 +436,7 @@ class DockerHandler implements RunnerHandlerInterface
     {
         $type = $download ? 'download' : 'upload';
 
-        $containerConfig = \Cache::get(CacheKey::cacheKey($job_id, $type));
+        $containerConfig = Cache::get(CacheKey::cacheKey($job_id, $type));
 
         if (!$containerConfig) {
             \Log::emergency('🟡cache container config not found');
@@ -486,20 +483,18 @@ class DockerHandler implements RunnerHandlerInterface
             return;
         }
 
-        $cache = $this->cache;
-
         // 复制 key
 
         $copyKey = CacheKey::pipelineListCopyKey($job_id, $status, 'runner');
 
         while (1) {
-            $step = $cache->rpop($copyKey);
+            $step = Cache::rpop($copyKey);
 
             if (!$step) {
                 break;
             }
 
-            $container_config = $cache->hget(CacheKey::pipelineHashKey($job_id, $status), $step);
+            $container_config = Cache::hget(CacheKey::pipelineHashKey($job_id, $status), $step);
 
             try {
                 $this->runStep($job_id, $container_config, $step);
@@ -512,7 +507,7 @@ class DockerHandler implements RunnerHandlerInterface
             $this->after($job_id, 'changed');
         }
 
-        $cache->del($copyKey);
+        Cache::del($copyKey);
 
         \Log::emergency('🟢job after step finished', ['status' => $status]);
     }
@@ -526,7 +521,7 @@ class DockerHandler implements RunnerHandlerInterface
     {
         \Log::emergency('🌐Run job services container ...', ['job_id' => $job_id]);
 
-        $container_configs = \Cache::hgetall(CacheKey::serviceHashKey($job_id));
+        $container_configs = Cache::hgetall(CacheKey::serviceHashKey($job_id));
 
         foreach ($container_configs as $service => $container_config) {
             $container_id = $this->docker_container

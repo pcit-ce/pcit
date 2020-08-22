@@ -6,7 +6,10 @@ namespace PCIT\Framework\Routing;
 
 use Closure;
 use Exception;
-use PCIT\Framework\Foundation\Http\SuccessException;
+use PCIT\Framework\Http\Request;
+use PCIT\Framework\Http\Response;
+use PCIT\Framework\Routing\Exceptions\SkipThisRouteException;
+use PCIT\Framework\Routing\Exceptions\SuccessHandleRouteException;
 use PCIT\GPI\Support\Git;
 use Throwable;
 
@@ -24,7 +27,7 @@ class Router
 
     public $method = [];
 
-    public $output;
+    public $response;
 
     /**
      * @param Closure|string $action
@@ -35,10 +38,11 @@ class Router
     private function make($action, ...$arg): void
     {
         if ($action instanceof Closure) {
+            // 闭包
             $arg = $this->getParameters(null, $action, $arg);
-            $this->output = \call_user_func($action, ...$arg);
+            $this->response = \call_user_func($action, ...$arg);
 
-            throw new SuccessException();
+            throw new SuccessHandleRouteException();
         }
 
         $array = explode('@', $action);
@@ -56,32 +60,44 @@ class Router
             return;
         }
 
-        // 获取方法参数
-        $args = $this->getParameters($obj, $method, $arg);
+        $rc = new \ReflectionClass($obj);
+
         // 获取类构造函数参数
-        $construct_args = $this->getParameters($obj, '__construct');
+        $construct_args = $this->getParameters($rc->getName(), '__construct');
 
         // var_dump($args);
         // var_dump($construct_args);
 
-        $instance = new $obj(...$construct_args);
+        // 构造函数
+        $instance = $rc->newInstanceArgs($construct_args);
 
         try {
-            $response = '__invoke' === $method ?
-                $instance(...$args) : $instance->$method(...$args);
+            $rm = new \ReflectionMethod($instance, $method);
 
-            $this->output = $response;
-        } catch (\Throwable $e) {
+            // 获取方法参数
+            $args = $this->getParameters($rc->getName(), $rm->getName(), $arg);
+
+            $this->response = $rm->invokeArgs($instance, $args);
+        } catch (\ReflectionException $e) {
             // 捕获类方法不存在错误
+            throw new Exception($e->getMessage(), 404, $e);
+        } catch (SuccessHandleRouteException $e) {
+            // 请求成功
+            throw $e;
+        } catch (\Throwable $e) {
+            // 捕获异常
             $code = $e->getCode();
 
-            0 === $code && $code = 500;
+            if (Response::$statusTexts[(int) $code] ?? false) {
+            } else {
+                $code = 500;
+            }
 
             throw new Exception($e->getMessage(), (int) $code, $e);
         }
 
         // 处理完毕，退出
-        throw new SuccessException();
+        throw new SuccessHandleRouteException();
     }
 
     /**
@@ -114,13 +130,44 @@ class Router
     }
 
     /**
+     * @param \ReflectionFunction|\ReflectionMethod $reflection
+     */
+    public function handleMiddleware($reflection): void
+    {
+        $attrs = $reflection->getAttributes();
+
+        foreach ($attrs as $attr) {
+            // var_dump($attr->getName());
+            // continue;
+            if (\PCIT\Framework\Attributes\Middleware::class === $attr->getName()) {
+                $result = $attr->newInstance()
+                    ->middleware->handle(
+                        app(Request::class),
+                        function (Request $request) {
+                            return $request;
+                        },
+                        null
+                    );
+
+                if ($result instanceof Request) {
+                    return;
+                }
+
+                $this->response = $result;
+
+                throw new SuccessHandleRouteException();
+            }
+        }
+    }
+
+    /**
      * 获取方法参数列表.
      *
      * @param null|mixed $obj
      * @param null|mixed $method
      * @param mixed      $arg
      */
-    private function getParameters($obj = null, $method = null, $arg = [])
+    private function getParameters($obj = null, $method = null, $arg = []): array
     {
         try {
             $reflection = $obj ?
@@ -131,6 +178,8 @@ class Router
 
         // 是否废弃
         $this->isDeprecated($reflection);
+
+        $this->handleMiddleware($reflection);
 
         // 获取方法的参数列表
         $method_parameters = $reflection->getParameters();
@@ -144,7 +193,7 @@ class Router
             // 获取参数类型
             $parameter_class = null;
 
-            if ($parameter->getType()) {
+            if ($parameter->hasType()) {
                 $parameter_class = $parameter->getType()->getName();
             }
 
@@ -155,16 +204,20 @@ class Router
                 break;
             }
 
-            if ($parameter_class and class_exists($parameter_class)) {
+            if ($parameter_class and !$parameter->getType()->isBuiltin()) {
+                // 不是内置类
                 try {
                     $args[$key] = app($parameter_class);
                 } catch (Throwable $e) {
+                    // 未注入到容器中
                     // 参数提示为类，获取构造函数参数
                     $construct_args = $this->getParameters($parameter_class, '__construct');
-                    $args[$key] = new $parameter_class(...$construct_args);
+                    $args[$key] = (new \ReflectionClass($parameter_class))
+                        ->newInstanceArgs($construct_args);
                 }
             } else {
                 // 参数类型不是类型实例
+                // 参数类型是内置类型
                 $args[$key] = array_shift($arg);
             }
         }
@@ -206,7 +259,7 @@ class Router
         $array = [];
 
         if ([] === $offset) {
-            if ($targetUrl === $url) {// 传统 url
+            if ($targetUrl === $url) { // 传统 url
                 $this->make($action);
             } else {
                 return;
@@ -250,31 +303,35 @@ class Router
      */
     public function __call($name, $arg): void
     {
-        if ('match' === $name) {
-            $methods = $arg[0];
+        try {
+            if ('match' === $name) {
+                $methods = $arg[0];
 
-            array_shift($arg);
+                array_shift($arg);
 
-            if (\is_string($methods)) {
+                if (\is_string($methods)) {
+                    return;
+                }
+
+                foreach ($methods as $key) {
+                    if ($this->checkMethod($key)) {
+                        $this->handle(...$arg);
+
+                        return;
+                    }
+                }
+
                 return;
             }
 
-            foreach ($methods as $key) {
-                if ($this->checkMethod($key)) {
-                    $this->handle(...$arg);
-
-                    return;
-                }
+            if ('any' !== $name && !$this->checkMethod($name)) {
+                return;
             }
 
+            $this->handle(...$arg);
+        } catch (SkipThisRouteException $e) {
             return;
         }
-
-        if ('any' !== $name && !$this->checkMethod($name)) {
-            return;
-        }
-
-        $this->handle(...$arg);
     }
 
     public function __get($name)
@@ -292,8 +349,8 @@ class Router
         return $this->obj;
     }
 
-    public function getOutput()
+    public function getResponse()
     {
-        return $this->output;
+        return $this->response;
     }
 }

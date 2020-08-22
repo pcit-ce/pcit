@@ -14,6 +14,7 @@ use PCIT\Log\Handler\OutputHandler;
 use PCIT\Log\Handler\WarningHandler;
 use PCIT\PCIT;
 use PCIT\Runner\Events\Handler\EnvHandler;
+use PCIT\Runner\RPC\Cache;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 
@@ -25,14 +26,11 @@ class Log
 
     private $step;
 
-    private $cache;
-
     public function __construct(int $job_id, string $container_id, string $step = null)
     {
         $this->job_id = $job_id;
         $this->container_id = $container_id;
         $this->step = $step;
-        $this->cache = \Cache::store();
     }
 
     /**
@@ -44,7 +42,7 @@ class Log
     {
         \Log::emergency('🗑Drop prev job '.$job_id.' logs', []);
 
-        \Cache::del(CacheKey::logHashKey($job_id));
+        Cache::del(CacheKey::logHashKey($job_id));
     }
 
     /**
@@ -178,9 +176,7 @@ class Log
 
     public function storeLog(string $container_log, int $exitCode, string $finishedAt): void
     {
-        $cache = $this->cache;
-
-        $cache->hset(
+        Cache::hset(
             CacheKey::logHashKey($this->job_id),
             $this->step,
             $container_log."\n".substr($finishedAt, 0, 20).'000000000Z'.' ::exit-code::'.$exitCode

@@ -143,7 +143,7 @@
     "khs1994/phar-builder": "20.04.11",
     "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^5.0",
-    "vimeo/psalm": "3.x-dev"
+    "vimeo/psalm": "^3"
   },
   "config": {
     "optimize-autoloader": true,
@@ -180,6 +180,7 @@
     "fmt:debug": "php-cs-fixer -vvv fix",
     "psalm": "psalm",
     "all-in-one": "echo docker-compose -f pcit-all-in-one/docker-compose.yml up",
+    "openapi:ui": "redoc-cli bundle ./openapi/openapi.yaml",
     "compile:dump": [
       "cp -r -f src/Framework/ vendor/pcit/framework",
       "cp -r -f src/Kernel/ vendor/pcit/kernel",

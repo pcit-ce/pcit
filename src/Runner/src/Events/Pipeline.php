@@ -20,6 +20,7 @@ use PCIT\Runner\Events\Handler\PluginHandler;
 use PCIT\Runner\Events\Handler\ShellHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Runner\JobGenerator;
+use PCIT\Runner\RPC\Cache;
 use PCIT\Support\CacheKey;
 
 class Pipeline
@@ -36,8 +37,6 @@ class Pipeline
      * @var JobGenerator
      */
     public $jobGenerator;
-
-    private $cache;
 
     private $language;
 
@@ -59,7 +58,6 @@ class Pipeline
         $this->matrix_config = $matrix_config;
         $this->build = $build;
         $this->jobGenerator = $jobGenerator;
-        $this->cache = \Cache::store();
         $this->pluginHandler = new PluginHandler();
     }
 
@@ -314,33 +312,31 @@ class Pipeline
         bool $success = false,
         bool $changed = false
     ): void {
-        $cache = $this->cache;
-
         $is_status = false;
 
         if ($failure) {
             $is_status = true;
-            $cache->lpush(CacheKey::pipelineListKey($jobId, 'failure'), $step);
-            $cache->hset(CacheKey::pipelineHashKey($jobId, 'failure'), $step, $container_config);
+            Cache::lpush(CacheKey::pipelineListKey($jobId, 'failure'), $step);
+            Cache::hset(CacheKey::pipelineHashKey($jobId, 'failure'), $step, $container_config);
         }
 
         if ($success) {
             $is_status = true;
-            $cache->lpush(CacheKey::pipelineListKey($jobId, 'success'), $step);
-            $cache->hset(CacheKey::pipelineHashKey($jobId, 'success'), $step, $container_config);
+            Cache::lpush(CacheKey::pipelineListKey($jobId, 'success'), $step);
+            Cache::hset(CacheKey::pipelineHashKey($jobId, 'success'), $step, $container_config);
         }
 
         if ($changed) {
             $is_status = true;
-            $cache->lpush(CacheKey::pipelineListKey($jobId, 'changed'), $step);
-            $cache->hset(CacheKey::pipelineHashKey($jobId, 'changed'), $step, $container_config);
+            Cache::lpush(CacheKey::pipelineListKey($jobId, 'changed'), $step);
+            Cache::hset(CacheKey::pipelineHashKey($jobId, 'changed'), $step, $container_config);
         }
 
         if (true === $is_status) {
             return;
         }
 
-        $cache->lpush(CacheKey::pipelineListKey($jobId), $step);
-        $cache->hset(CacheKey::pipelineHashKey($jobId), $step, $container_config);
+        Cache::lpush(CacheKey::pipelineListKey($jobId), $step);
+        Cache::hset(CacheKey::pipelineHashKey($jobId), $step, $container_config);
     }
 }

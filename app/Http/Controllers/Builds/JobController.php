@@ -36,6 +36,7 @@ class JobController
      * @return array|int
      */
     @@\Route('get', 'api/job/{job.id}')
+    // @@Query(["sse"])
     public function find($job_id)
     {
         $job = Job::find((int) $job_id);

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Builds;
 
+use PCIT\Framework\Attributes\Middleware;
+
 class IndexController
 {
     @@\Route('get', '{git_type}/{username}')
+    @@Middleware('Logout')
     @@\Route('get', '{git_type}/{username}/{repo_name}')
     @@\Route('get', '{git_type}/{username}/{repo_name}/branches')
     @@\Route('get', '{git_type}/{username}/{repo_name}/builds')

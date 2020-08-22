@@ -10,6 +10,7 @@ use PCIT\Runner\BuildData;
 use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Runner\JobGenerator;
+use PCIT\Runner\RPC\Cache;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 
@@ -139,7 +140,7 @@ class Git
     {
         \Log::info('📥Handle clone git', json_decode($config, true));
 
-        \Cache::set(CacheKey::cloneKey($job_id), $config);
+        Cache::set(CacheKey::cloneKey($job_id), $config);
     }
 
     public function generateDocker(

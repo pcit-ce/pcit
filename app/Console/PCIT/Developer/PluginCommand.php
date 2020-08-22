@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\PCIT;
+namespace App\Console\PCIT\Developer;
 
 use App\Http\Controllers\Plugins\Metadata as PluginMetadate;
 use Symfony\Component\Console\Command\Command;
@@ -13,7 +13,7 @@ class PluginCommand extends Command
 {
     protected function configure(): void
     {
-        $this->setName('plugin');
+        $this->setName('developer:plugin');
 
         $this->setDescription('generate plugin metadata json file');
     }

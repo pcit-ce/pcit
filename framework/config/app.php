@@ -7,6 +7,9 @@ return [
     'debug' => env('CI_DEBUG', false),
     'env' => env('APP_ENV', 'production'),
     'host' => env('CI_HOST', 'http://127.0.0.1:8080'),
+
+    'rpc_host' => env('CI_RPC_HOST', 'http://127.0.0.1:80'),
+
     'timezone' => env('CI_TZ', 'PRC'),
     'tz' => env('CI_TZ', 'PRC'),
     'alias' => [

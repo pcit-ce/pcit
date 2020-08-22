@@ -2,7 +2,7 @@
 
 namespace PCIT\Framework\Attributes;
 
-@@Attribute
+@@\Attribute(\Attribute::TARGET_METHOD)
 class Deprecated {
     public function __construct(){
 

@@ -2,4 +2,4 @@
 
 cd /app/pcit
 
-exec /app/pcit/bin/pcitd ${PCITD_CMD:-up}
+exec /app/pcit/bin/pcitd ${PCITD_CMD:-server}

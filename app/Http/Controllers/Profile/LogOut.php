@@ -10,10 +10,8 @@ namespace App\Http\Controllers\Profile;
 class LogOut
 {
     @@\Route('get', '{git_type}/logout')
-    public function __invoke(...$args): void
+    public function __invoke($git_type): void
     {
-        list($git_type) = $args;
-
         \Session::pull($git_type.'.access_token');
 
         setcookie(

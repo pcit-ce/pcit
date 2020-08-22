@@ -8,6 +8,7 @@ use PCIT\PCIT;
 use PCIT\Runner\Events\Handler\EnvHandler;
 use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Runner\JobGenerator;
+use PCIT\Runner\RPC\Cache;
 use PCIT\Support\CacheKey;
 
 class Services
@@ -113,7 +114,7 @@ class Services
 
             \Log::info('🌐Handle service '.$service_name, json_decode($container_config, true));
 
-            \Cache::hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
+            Cache::hset(CacheKey::serviceHashKey($this->job_id), $service_name, $container_config);
         }
     }
 }

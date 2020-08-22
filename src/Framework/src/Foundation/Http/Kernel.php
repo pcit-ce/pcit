@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Foundation\Http;
 
+use PCIT\Framework\Routing\Exceptions\SuccessHandleRouteException;
 use ReflectionClass;
 use Route;
 use Symfony\Component\Finder\Finder;
@@ -101,8 +102,8 @@ class Kernel
             require base_path().'framework/routes/web.php';
             // }
         } catch (Throwable $e) {
-            if ($e instanceof SuccessException) {
-                $output = Route::getOutput();
+            if ($e instanceof SuccessHandleRouteException) {
+                $output = Route::getResponse();
 
                 if ($output instanceof HttpFoundationResponse) {
                     return $output;

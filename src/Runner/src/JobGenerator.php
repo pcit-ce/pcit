@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\Runner;
 
-use App\Job;
 use App\Notifications\GitHubChecksConclusion\Queued;
 use Exception;
 use PCIT\Framework\Support\Subject;
@@ -14,6 +13,7 @@ use PCIT\Runner\Events\Handler\TextHandler;
 use PCIT\Runner\Events\Matrix;
 use PCIT\Runner\Events\Pipeline;
 use PCIT\Runner\Events\Services;
+use PCIT\Runner\RPC\Job;
 use PCIT\Support\CacheKey;
 use PCIT\Support\CI;
 

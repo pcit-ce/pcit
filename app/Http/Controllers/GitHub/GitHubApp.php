@@ -9,6 +9,7 @@ use PCIT\Framework\Support\HttpClient;
 class GitHubApp
 {
     @@\Route('get', 'api/github/app/new')
+    // @@Query(["webhook_url"])
     public function new(): string
     {
         $webhook_url = \Request::get('webhook_url', null);
@@ -131,6 +132,7 @@ EOF;
     }
 
     @@\Route('get', 'api/github/app/new/callback')
+    // @@Query(["code"])
     public function callback()
     {
         $code = \Request::get('code');

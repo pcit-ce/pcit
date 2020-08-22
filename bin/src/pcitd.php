@@ -8,6 +8,15 @@ use App\Console\PCITDaemon\Commands\ServerCommand;
 use App\Console\PCITDaemon\Commands\UpCommand;
 use Symfony\Component\Console\Application;
 
+foreach ($argv as $item) {
+    if ('agent' === $item) {
+        putenv('CI_CACHE_DRIVE=none');
+        putenv('CI_DATABASE_DRIVE=none');
+
+        break;
+    }
+}
+
 require __DIR__.'/../../vendor/autoload.php';
 
 $app = require __DIR__.'/../../framework/bootstrap/app.php';

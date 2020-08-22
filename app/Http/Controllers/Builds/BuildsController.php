@@ -11,6 +11,7 @@ use App\Repo;
 use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Support\CI;
+use PCIT\Framework\Attributes\OpenAPI;
 
 class BuildsController
 {
@@ -22,6 +23,24 @@ class BuildsController
      * @throws \Exception
      */
     @@\Route('get', 'api/builds')
+    @@OpenAPI([
+        "tags" => '',
+        "description" => '',
+        "summary" => '',
+        "operationId" => '',
+        "responses" => [
+            "200" => [
+                "description" => '',
+                "content" => [
+                    "application/json" => [
+                        "schema" => [
+                            "builds"=>"Build::allByAdmin"
+                            ]
+                    ]
+                ]
+            ]
+        ]
+    ])
     public function __invoke()
     {
         // $before = (int) $_GET['before'] ?? null;

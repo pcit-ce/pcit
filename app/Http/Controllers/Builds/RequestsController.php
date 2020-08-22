@@ -154,6 +154,8 @@ class RequestsController
 
         Build::updateBuildStatus((int) $last_insert_id, $status);
 
+        \Log::info('build '.$last_insert_id.' is '.$status);
+
         return ['build_id' => $last_insert_id];
     }
 

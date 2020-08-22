@@ -7,6 +7,7 @@ namespace PCIT\Runner\Events;
 use Docker\Container\Client as DockerContainer;
 use PCIT\PCIT;
 use PCIT\Runner\Events\Handler\EnvHandler;
+use PCIT\Runner\RPC\Cache as CacheRPC;
 use PCIT\Support\CacheKey;
 
 class Cache
@@ -114,7 +115,7 @@ class Cache
 
         \Log::info('🔽Handle cache downloader', json_decode($container_config, true));
 
-        \Cache::set(CacheKey::cacheKey($this->jobId, 'download'), $container_config);
+        CacheRPC::set(CacheKey::cacheKey($this->jobId, 'download'), $container_config);
 
         array_pop($env);
 
@@ -126,7 +127,7 @@ class Cache
 
         \Log::info('🔼Handle cache uploader', json_decode($container_config, true));
 
-        \Cache::set(CacheKey::cacheKey($this->jobId, 'upload'), $container_config);
+        CacheRPC::set(CacheKey::cacheKey($this->jobId, 'upload'), $container_config);
     }
 
     private function getContainerConfig(DockerContainer $dockerContainer, ?array $env): string

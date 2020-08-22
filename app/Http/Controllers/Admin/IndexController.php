@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use PCIT\Framework\Http\Request;
+
 class IndexController
 {
     @@\Route('get', 'admin')
@@ -17,5 +19,11 @@ upload already exists GitHub App private key
 EOF;
 
         return \Response::make($content, 200, ['Content-Type' => 'text/plain']);
+    }
+
+    @@\Route('get','admin/beta')
+    @@\PCIT\Framework\Attributes\Middleware('Beta')
+    public function beta(Request $request){
+        return '//TODO';
     }
 }

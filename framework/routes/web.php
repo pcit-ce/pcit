@@ -60,7 +60,8 @@ Route::get('{git_type}/dashboard', function () {
 
 // Route::get('oauth/${git_type}', 'OAuth\IndexController@getAccessToken');
 
-// Route::get('{git_type}/logout', 'Profile\LogOut');
+// logout?git_type=github
+// Route::get('logout', 'Profile\LogOut');
 
 // (Test-only)Admin webhooks: list create delete
 Route::post('webhooks/{git_type}/{username}/{repo_name}/{id}/add', 'Webhooks\Controller@add');

@@ -80,3 +80,10 @@ if (!function_exists('retry')) {
         }
     }
 }
+
+if (!function_exists('xdebug_is_enabled')) {
+    function xdebug_is_enabled(): bool
+    {
+        return true;
+    }
+}

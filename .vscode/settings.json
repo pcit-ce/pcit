@@ -44,7 +44,8 @@
     "curl",
     "iconv",
     "json",
-    "pdo_mysql"
+    "pdo_mysql",
+    "Core"
   ],
   "php-docblocker.author": {
     "name": "pcit",

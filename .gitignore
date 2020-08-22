@@ -56,3 +56,5 @@ miniprogram
 .psalm
 
 /*.test.php
+
+redoc-static.html

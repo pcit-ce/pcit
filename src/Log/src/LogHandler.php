@@ -6,6 +6,7 @@ namespace PCIT\Log;
 
 use App\Build;
 use App\Job;
+use PCIT\Runner\RPC\Cache;
 use PCIT\Support\CacheKey;
 
 /**
@@ -17,15 +18,11 @@ class LogHandler
 
     private $build_id;
 
-    public $cache;
-
     public function __construct(int $jobId)
     {
         $this->jobId = $jobId;
 
         $this->build_id = Job::getBuildKeyId($jobId);
-
-        $this->cache = \Cache::store();
     }
 
     /**
@@ -83,7 +80,7 @@ class LogHandler
         foreach ($types as $type) {
             $cacheKey = CacheKey::pipelineListKey($this->jobId, $type);
 
-            $step = array_reverse($this->cache->lrange($cacheKey, 0, -1));
+            $step = array_reverse(Cache::lrange($cacheKey, 0, -1));
 
             // $steps = [...$steps, ...$step];
             $steps = array_merge($steps, $step);
@@ -99,10 +96,8 @@ class LogHandler
     {
         \Log::emergency('📃Handle step log', ['jobId' => $this->jobId, 'step' => $pipeline]);
 
-        $cache = $this->cache;
-
         // 日志美化
-        $log = $cache->hGet(CacheKey::logHashKey($this->jobId), $pipeline);
+        $log = Cache::hGet(CacheKey::logHashKey($this->jobId), $pipeline);
 
         if (!$log) {
             \Log::warning('📕Step Log empty, skip', ['jobId' => $this->jobId, 'step' => $pipeline]);

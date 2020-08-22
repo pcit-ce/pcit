@@ -21,6 +21,7 @@ if [ "${CI_DAEMON_ENABLED}" = 'false' ];then
   # kill $UNIT_PID
 
   echo > /etc/services.d/pcitd/down
+  echo > /etc/services.d/pcitd-agent/down
 
   # exec unitd --no-daemon --user root --group root --log /var/log/nginx-unit/nginx-unit.log
 fi
@@ -42,5 +43,11 @@ if ! [ -x /usr/local/bin/redis-server ];then
 fi
 
 export PCITD_CMD=$@
+
+if [ "${PCITD_CMD}" = 'up' ];then
+  export PCITD_CMD=server
+else
+  echo > /etc/services.d/pcitd-agent/down
+fi
 
 exec s6-svscan -t0 /etc/services.d

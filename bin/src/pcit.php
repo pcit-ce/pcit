@@ -12,23 +12,35 @@ $app = require __DIR__.'/../../framework/bootstrap/app.php';
 
 $cli = new Application('PCIT CLI', 'v19.12');
 
-$fh = opendir(base_path().'app/Console/PCIT/Repo');
+function getCommandFromDir($cli, $dir)
+{
+    $fh = opendir(base_path().'app/Console/PCIT/'.$dir);
 
-while ($file = readdir($fh)) {
-    if ('.' === $file or '..' === $file) {
-        continue;
+    while ($file = readdir($fh)) {
+        if ('.' === $file or '..' === $file) {
+            continue;
+        }
+
+        $class = '\App\Console\PCIT\\'.$dir.'\\'.rtrim($file, '.php');
+
+        $cli->add(new $class());
     }
 
-    $class = '\App\Console\PCIT\Repo\\'.rtrim($file, '.php');
-
-    $cli->add(new $class());
+    return $cli;
 }
+
+$cli = getCommandFromDir($cli, 'Repo');
+$cli = getCommandFromDir($cli, 'Developer');
 
 $fh = opendir(base_path().'app/Console/PCIT');
 
 if ($fh) {
     while (false !== ($file = readdir($fh))) {
         if ('.' === $file or '..' === $file or 'PCITCommand.php' === $file or 'Repo' === $file) {
+            continue;
+        }
+
+        if (is_dir(base_path().'app/Console/PCIT'.'/'.$file)) {
             continue;
         }
 

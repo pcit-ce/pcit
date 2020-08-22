@@ -57,7 +57,7 @@ RUN set -x \
       && rm -rf /app/pcit/frontend \
       && rm -rf /app/pcit/.docker \
       \
-      && /app/pcit/bin/pcit plugin \
+      && /app/pcit/bin/pcit developer:plugin \
       && rm -rf /app/pcit/plugins
 
 # ==> pcit
