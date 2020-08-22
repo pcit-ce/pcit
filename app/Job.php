@@ -51,7 +51,7 @@ INSERT INTO jobs(id,allow_failure,state,created_at,build_id)
 values(null,?,?,?,?)
 EOF;
 
-        return DB::insert($sql, [0, 'queued', time(), $build_id]);
+        return DB::insert($sql, [0, 'pending', time(), $build_id]);
     }
 
     /**

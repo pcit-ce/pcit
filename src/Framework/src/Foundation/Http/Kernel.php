@@ -74,6 +74,38 @@ class Kernel
         }
     }
 
+    public function convertToResponse($response)
+    {
+        if ($response instanceof HttpFoundationResponse) {
+            return $response;
+        }
+
+        switch (\gettype($response)) {
+            case 'array':
+                return \Response::json(
+                    array_merge(
+                        $response,
+                        ['code' => 200]
+                    )
+                );
+
+            case 'integer':
+               if ('testing' === config('app.env')) {
+                   return $response;
+               }
+
+                return \Response::make((string) $response);
+            case 'string':
+                if ('testing' === config('app.env')) {
+                    return $response;
+                }
+
+                return \Response::make($response);
+        }
+
+        return \Response::make();
+    }
+
     private function sendRequestThroughRouter($request)
     {
         $debug = config('app.debug');
@@ -103,60 +135,28 @@ class Kernel
             // }
         } catch (Throwable $e) {
             if ($e instanceof SuccessHandleRouteException) {
-                $output = Route::getResponse();
+                $response = Route::getResponse();
 
-                if ($output instanceof HttpFoundationResponse) {
-                    return $output;
-                }
+                return $this->convertToResponse($response);
+            }
 
-                switch (\gettype($output)) {
-                    case 'array':
-                        return \Response::json(
-                            array_merge(
-                                $output,
-                                ['code' => $e->getCode()]
-                            )
-                        );
+            $code = (int) $e->getCode();
 
-                        break;
-                    case 'integer':
-                       if ('testing' === config('app.env')) {
-                           return $output;
-                       }
-
-                        return \Response::make((string) $output);
-
-                        break;
-                    case 'string':
-                        if ('testing' === config('app.env')) {
-                            return $output;
-                        }
-
-                        return \Response::make($output);
-
-                        break;
-                }
-
-                return \Response::make();
+            if (HttpFoundationResponse::$statusTexts[$code] ?? false) {
+            } else {
+                $code = 500;
             }
 
             // 出现错误
-            method_exists($e, 'report') && $e->report($e);
-            method_exists($e, 'render') && $e->render($request, $e);
+            if (method_exists($e, 'report')) {
+                $e->report();
+            }
 
-            $previousErr = $e->getPrevious();
-            // var_dump($previousErr);
+            if (method_exists($e, 'render')) {
+                return $this->convertToResponse($e->render($request));
+            }
 
-            $errDetails['trace'] = $previousErr ? $previousErr->getTrace() : $e->getTrace();
-
-            return \Response::json(array_filter([
-                'code' => $e->getCode() ?: 500,
-                'message' => $e->getMessage() ?: 'ERROR',
-                'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
-                'file' => $debug ? ($previousErr ? $previousErr->getFile() : $e->getFile()) : null,
-                'line' => $debug ? ($previousErr ? $previousErr->getLine() : $e->getLine()) : null,
-                'details' => $debug ? $errDetails : null,
-            ]));
+            return (new \App\Exceptions\Handler())->render($request, $e);
         }
 
         // 路由控制器填写错误

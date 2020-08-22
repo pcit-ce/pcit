@@ -7,7 +7,6 @@ namespace PCIT\Framework\Routing;
 use Closure;
 use Exception;
 use PCIT\Framework\Http\Request;
-use PCIT\Framework\Http\Response;
 use PCIT\Framework\Routing\Exceptions\SkipThisRouteException;
 use PCIT\Framework\Routing\Exceptions\SuccessHandleRouteException;
 use PCIT\GPI\Support\Git;
@@ -86,14 +85,7 @@ class Router
             throw $e;
         } catch (\Throwable $e) {
             // 捕获异常
-            $code = $e->getCode();
-
-            if (Response::$statusTexts[(int) $code] ?? false) {
-            } else {
-                $code = 500;
-            }
-
-            throw new Exception($e->getMessage(), (int) $code, $e);
+            throw $e;
         }
 
         // 处理完毕，退出

@@ -208,8 +208,6 @@ class JobGenerator
 
         Job::updateEnv($job_id, json_encode($matrix_config));
 
-        $this->changeJobToQueued();
-
         $build_key_id = (int) $this->build->build_key_id;
 
         $gitType = $this->build->git_type;
@@ -247,6 +245,8 @@ class JobGenerator
             ->handle();
 
         \Log::emergency('===== Generate Job Success =====', ['job_id' => $this->job_id]);
+
+        $this->changeJobToQueued();
     }
 
     public function changeJobToQueued(): void

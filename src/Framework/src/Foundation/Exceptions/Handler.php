@@ -20,6 +20,17 @@ abstract class Handler extends \Exception
      */
     public function render($request, \Throwable $exception)
     {
-        return [];
+        $debug = config('app.debug');
+
+        $errDetails['trace'] = $exception->getTrace();
+
+        return \Response::json(array_filter([
+            'code' => $exception->getCode() ?: 500,
+            'message' => $exception->getMessage() ?: 'ERROR',
+            'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
+            'file' => $debug ? $exception->getFile() : null,
+            'line' => $debug ? $exception->getLine() : null,
+            'details' => $debug ? $errDetails : null,
+        ]));
     }
 }
