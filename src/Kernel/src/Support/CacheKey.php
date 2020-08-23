@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PCIT\Support;
 
+use PCIT\Runner\RPC\Cache;
+
 class CacheKey
 {
     /*
@@ -49,23 +51,17 @@ class CacheKey
         return 'pcit/'.$type.'/list/'.$jobId;
     }
 
-    public static function pipelineDumpListKey(int $jobId, string $type = 'pipeline')
+    private static function pipelineDumpListKey(int $jobId, string $type = 'pipeline')
     {
-        $sourceKey = 'pcit/'.$type.'/list/'.$jobId;
-
-        return \Cache::dump($sourceKey);
+        return 'pcit/'.$type.'/list/'.$jobId;
     }
 
     public static function pipelineListCopyKey(int $jobId, string $type = 'pipeline', string $prefix = null)
     {
+        $sourceKey = 'pcit/'.$type.'/list/'.$jobId;
         $copyKey = 'pcit/'.$type.'/list_copy_'.$prefix.'/'.$jobId;
-        \Cache::del($copyKey);
 
-        $dump = self::pipelineDumpListKey($jobId, $type);
-
-        \Cache::restore($copyKey, 0, $dump);
-
-        return $copyKey;
+        return Cache::copyListKey($sourceKey, $copyKey);
     }
 
     public static function serviceHashKey(int $jobId)
@@ -101,8 +97,8 @@ class CacheKey
      */
     public static function flush(int $jobId): void
     {
-        $keys = \Cache::keys('pcit/*/'.$jobId);
+        $keys = Cache::keys('pcit/*/'.$jobId);
 
-        \Cache::del($keys);
+        Cache::del($keys);
     }
 }

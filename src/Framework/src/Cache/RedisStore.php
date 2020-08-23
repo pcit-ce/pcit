@@ -29,4 +29,11 @@ class RedisStore implements Store
     {
         return $this->redis->$method(...$arguments);
     }
+
+    public function copyListKey($source, $target): string
+    {
+        \Cache::restore($target, 0, \Cache::dump($source));
+
+        return $target;
+    }
 }

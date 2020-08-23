@@ -3,9 +3,9 @@
 # @see http://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
 
-x-8.0.0beta1-job: &8.0.0beta1-job
+x-8.0.0beta2-job: &8.0.0beta2-job
   jobs:
-    - PHP_VERSION: 8.0.0beta1
+    - PHP_VERSION: 8.0.0beta2
       NGINX_VERSION: 1.15.8
       REDIS_VERSION: 6.0.2
       MYSQL_VERSION: 5.7.29
@@ -165,7 +165,7 @@ steps:
   sami:
     image: khs1994/sami
     if:
-      << : *8.0.0beta1-job
+      << : *8.0.0beta2-job
       status: success
     run:
       - sami update .sami.php
@@ -173,7 +173,7 @@ steps:
   gitee_pages:
     image: pcit/pages
     if:
-      << : *8.0.0beta1-job
+      << : *8.0.0beta2-job
       status: success
       event: ["push"]
     with:
@@ -215,7 +215,7 @@ steps:
   s3:
     image: pcit/s3
     if:
-      << : *8.0.0beta1-job
+      << : *8.0.0beta2-job
       status: success
       event: ["push"]
     with:
@@ -234,7 +234,7 @@ steps:
     # 暂不支持 download artifact
     image: pcit/upload-artifact
     if:
-      << : *8.0.0beta1-job
+      << : *8.0.0beta2-job
       status: success
       event: ["push"]
     with:
@@ -244,7 +244,7 @@ steps:
   github-releases:
     image: pcit/github-release
     if:
-      << : *8.0.0beta1-job
+      << : *8.0.0beta2-job
       status: success
       event: push
     with:
@@ -324,7 +324,7 @@ steps:
       # - cp openapi/openapi.yaml /opt/data.txt
       - sh /my_shell/api_doc_release.sh
     if:
-      << : *8.0.0beta1-job
+      << : *8.0.0beta2-job
       status: success
       event: push
       branch: master
@@ -382,7 +382,7 @@ jobs:
     # - 7.4.8
     # - 7.3.20
     - nightly
-    - 8.0.0beta1
+    - 8.0.0beta2
     - 7.2.32
     # - 7.1.26
   NGINX_VERSION:
@@ -404,7 +404,7 @@ jobs:
     MYSQL_VERSION: 5.7.29
   # 向以上 jobs 矩阵添加新的 job
   include:
-  - PHP_VERSION: 8.0.0beta1
+  - PHP_VERSION: 8.0.0beta2
     MYSQL_VERSION: 8.0.20
     REDIS_VERSION: 6.0.2
     NEW_ENV: new_env
@@ -448,4 +448,4 @@ networks:
 # 指定构建步骤的默认镜像
 # 若使用变量，请在 settings 页面将变量设为 public,否则 pull_request 将不能运行
 # 如果只在 push 触发，则无需设为 public
-image: khs1994/php:8.0.0beta1-composer-alpine
+image: khs1994/php:8.0.0beta2-composer-alpine
