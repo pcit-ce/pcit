@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Status;
 
-use Error;
-
 /**
  * 获取状态小图标.
  *
@@ -20,19 +18,22 @@ class ShowStatusByICOController
     /**
      * @throws \Exception
      */
-    public function __call(string $k, array $v)
+    public function __call(string $status, array $param)
     {
-        try {
-            $file = __DIR__.'/../../../../public/ico/'.$k.'.svg';
+        var_dump($param);
+        exit;
+        $svg = 'public/ico/unknown.svg';
 
-            if (file_exists($file)) {
-                $svg = file_get_contents($file);
+        try {
+            $file = 'public/ico/' . $status . '.svg';
+
+            if (file_exists(base_path($file))) {
+                $svg = $file;
             }
-        } catch (Error $e) {
-            $svg = file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg');
+        } catch (\Throwable $e) {
         }
 
-        return \Response::make($svg, 200, [
+        return \Response::file(base_path($svg), [
             'content-type' => 'image/svg+xml;charset=utf-8',
             'Cache-Control' => 'max-age=300',
             // header('Cache-Control: max-age=100');

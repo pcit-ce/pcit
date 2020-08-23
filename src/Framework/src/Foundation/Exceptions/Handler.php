@@ -11,6 +11,11 @@ abstract class Handler extends \Exception
      */
     public function report(\Throwable $exception): void
     {
+        $jsonMessage = $this->generateJsonMessage($exception, true);
+
+        $jsonMessage['details']['trace'] = $jsonMessage['details']['trace'][0];
+
+        \Log::emergency('Response error', $jsonMessage);
     }
 
     /**
@@ -22,15 +27,21 @@ abstract class Handler extends \Exception
     {
         $debug = config('app.debug');
 
-        $errDetails['trace'] = $exception->getTrace();
+        return \Response::json($this->generateJsonMessage($exception, $debug));
+    }
 
-        return \Response::json(array_filter([
+    public function generateJsonMessage(\Throwable $exception, bool $debug = false): array
+    {
+        $errDetails['trace'] = $debug ? $exception->getTrace()
+            : 'please enable debug mode see more';
+
+        return array_filter([
             'code' => $exception->getCode() ?: 500,
             'message' => $exception->getMessage() ?: 'ERROR',
             'documentation_url' => 'https://github.com/pcit-ce/pcit/tree/master/docs/api',
             'file' => $debug ? $exception->getFile() : null,
             'line' => $debug ? $exception->getLine() : null,
             'details' => $debug ? $errDetails : null,
-        ]));
+        ]);
     }
 }

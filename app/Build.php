@@ -197,7 +197,7 @@ EOF;
      */
     public static function getLastBuildStatus(int $rid, string $branch)
     {
-        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip") ORDER BY id DESC LIMIT 1';
+        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip","skipped") ORDER BY id DESC LIMIT 1';
 
         return DB::select($sql, [$rid, $branch], true);
     }
@@ -209,7 +209,7 @@ EOF;
      */
     public static function buildStatusIsChanged(int $rid, string $branch)
     {
-        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip") ORDER BY id DESC LIMIT 2';
+        $sql = 'SELECT build_status FROM builds WHERE rid=? AND branch=? AND build_status NOT IN ("skip","skipped") ORDER BY id DESC LIMIT 2';
 
         $result = DB::select($sql, [$rid, $branch]);
 
@@ -335,7 +335,7 @@ EOF;
 SELECT id,branch,commit_id,tag,commit_message,
 compare,committer_name,committer_username,build_status,event_type
 FROM builds WHERE
-id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip')
+id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND build_status NOT IN('skip','skipped')
  ORDER BY id DESC LIMIT $limit;
 EOF;
 
@@ -420,7 +420,7 @@ SELECT id,branch,commit_id,tag,commit_message,compare,
 committer_name,committer_username,build_status,event_type,pull_request_number
 FROM builds
 WHERE id<=$before AND rid IN (select rid FROM repo WHERE JSON_CONTAINS(repo_admin,?) )
-AND git_type=? AND event_type IN(?,?) AND build_status NOT IN('skip') ORDER BY id DESC LIMIT $limit;
+AND git_type=? AND event_type IN(?,?) AND build_status NOT IN('skip','skipped') ORDER BY id DESC LIMIT $limit;
 EOF;
 
         return DB::select($sql, ["\"$uid\"", $git_type, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);

@@ -38,7 +38,7 @@ if (!function_exists('config')) {
 
         array_shift($array);
 
-        $config = require base_path().'framework/config/'.$file.'.php';
+        $config = require base_path('framework/config/'.$file.'.php');
 
         foreach ($array as $key) {
             $config = $config[$key];
@@ -49,16 +49,16 @@ if (!function_exists('config')) {
 }
 
 if (!function_exists('base_path')) {
-    function base_path()
+    function base_path(string $path = '')
     {
-        return app('base_path').DIRECTORY_SEPARATOR;
+        return app()->basePath($path);
     }
 }
 
 if (!function_exists('view')) {
     function view($path): void
     {
-        include base_path().'public/'.$path;
+        include base_path('public/'.$path);
 
         exit;
     }

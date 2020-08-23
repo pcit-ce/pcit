@@ -105,7 +105,7 @@ EOF;
 
     public function changelog()
     {
-        $data = file_get_contents(base_path().'CHANGELOG.md');
+        $data = file_get_contents(base_path('CHANGELOG.md'));
 
         return compact('data');
     }

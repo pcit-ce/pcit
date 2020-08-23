@@ -15,7 +15,7 @@ class Kernel
 {
     private function getControllers(): array
     {
-        $cache_path = base_path().'framework/storage/controllers.cache.php';
+        $cache_path = base_path('framework/storage/controllers.cache.php');
 
         if (file_exists($cache_path)) {
             $controllers = require $cache_path;
@@ -28,7 +28,7 @@ class Kernel
         $controllers = [];
 
         $finder = Finder::create()
-            ->in(base_path().'app/Http/Controllers')
+            ->in(base_path('app/Http/Controllers'))
             ->name('*.php')
             ->files();
 
@@ -126,12 +126,12 @@ class Kernel
         // 引入路由文件
         try {
             // if(explode('/',$request->server->get('REQUEST_URI'))[1] === 'api'){
-            //     require base_path().'framework/routes/api.php';
+            //     require base_path('framework/routes/api.php');
             // }else{
 
             $this->sendRequestThroughRouterByAttributes();
 
-            require base_path().'framework/routes/web.php';
+            require base_path('framework/routes/web.php');
             // }
         } catch (Throwable $e) {
             if ($e instanceof SuccessHandleRouteException) {
@@ -147,16 +147,20 @@ class Kernel
                 $code = 500;
             }
 
+            $exceptionHandler = new \App\Exceptions\Handler();
+
             // 出现错误
             if (method_exists($e, 'report')) {
                 $e->report();
+            } else {
+                $exceptionHandler->report($e);
             }
 
             if (method_exists($e, 'render')) {
                 return $this->convertToResponse($e->render($request));
             }
 
-            return (new \App\Exceptions\Handler())->render($request, $e);
+            return $exceptionHandler->render($request, $e);
         }
 
         // 路由控制器填写错误

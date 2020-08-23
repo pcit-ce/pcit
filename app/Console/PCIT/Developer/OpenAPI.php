@@ -19,7 +19,7 @@ class OpenAPI extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $controllers = require base_path().'framework/storage/controllers.cache.php';
+        $controllers = require base_path('framework/storage/controllers.cache.php');
 
         foreach ($controllers as $controller) {
             $rc = new ReflectionClass('App\\Http\\Controllers\\'.$controller);

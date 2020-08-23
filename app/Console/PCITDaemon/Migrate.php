@@ -16,7 +16,7 @@ class Migrate
     public static function migrate(string $sql_file): void
     {
         if (\in_array($sql_file, self::getSqlFileList(), true)) {
-            self::migrateSqlFile(base_path().'framework/sql/'.$sql_file);
+            self::migrateSqlFile(base_path('framework/sql/'.$sql_file));
         } else {
             var_dump(self::getSqlFileList());
         }
@@ -30,7 +30,7 @@ class Migrate
         foreach (self::getSqlFileList() as $file) {
             echo "\n\n==> Migrate $file ...\n\n";
 
-            self::migrateSqlFile(base_path().'framework/sql/'.$file);
+            self::migrateSqlFile(base_path('framework/sql/'.$file));
         }
     }
 
@@ -61,14 +61,14 @@ class Migrate
      */
     private static function getSqlFileList()
     {
-        $sqlFileList = scandir(base_path().'framework/sql');
+        $sqlFileList = scandir(base_path('framework/sql'));
 
         return array_filter($sqlFileList, function ($k) {
             if (\in_array($k, ['.', '..'], true)) {
                 return false;
             }
 
-            $spl = new \SplFileInfo(base_path().'framework/sql/'.$k);
+            $spl = new \SplFileInfo(base_path('framework/sql/'.$k));
             $ext = $spl->getExtension();
 
             return 'sql' === $ext;

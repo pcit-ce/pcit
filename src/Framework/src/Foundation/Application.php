@@ -13,19 +13,20 @@ class Application extends Container
 {
     public static $instance;
 
-    public $basePath;
+    public string $basePath;
 
-    public $serviceProviders;
+    /** @var string[] */
+    public array $serviceProviders;
 
-    public $environment;
+    public ?string $environment = null;
 
-    public $environmentPath;
+    public ?string $environmentPath = null;
 
-    public $environmentFile;
+    public ?string $environmentFile = null;
 
-    public $resolve = [];
+    public array $resolve = [];
 
-    public $resolves = [];
+    public array $resolves = [];
 
     /**
      * @var bool
@@ -63,7 +64,7 @@ class Application extends Container
         $env_file = Dotenv::load($app_env);
 
         $this->environmentFile = $env_file;
-        $this->environmentPath = $this->basePath.\DIRECTORY_SEPARATOR.$this->environmentFile;
+        $this->environmentPath = $this->basePath($this->environmentFile);
         $this->environment = config('app.env');
     }
 
@@ -83,6 +84,11 @@ class Application extends Container
         $this->registerProviders();
 
         $this->isDebug = (bool) config('app.debug');
+    }
+
+    public function basePath(string $path = ''): string
+    {
+        return $this['base_path'].\DIRECTORY_SEPARATOR.$path;
     }
 
     public function registerProviders(): void

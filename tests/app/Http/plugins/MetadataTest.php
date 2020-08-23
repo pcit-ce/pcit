@@ -10,7 +10,7 @@ class MetadataTest extends TestCase
     {
         $response = $this->get('plugins/metadata');
 
-        file_put_contents(base_path().'config/plugin.metadta.json', $response->getContent());
+        file_put_contents(base_path('config/plugin.metadta.json'), $response->getContent());
 
         $this->assertTrue(true);
     }

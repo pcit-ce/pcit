@@ -15,7 +15,7 @@ class GitTest extends TestCase
     public function test(): void
     {
         $git = BaseConstraint::arrayToObjectRecursive(
-            Yaml::parseFile(base_path().'.pcit/clone.yaml')['clone']['git']
+            Yaml::parseFile(base_path('.pcit/clone.yaml'))['clone']['git']
         );
 
         $VAR = 'value';

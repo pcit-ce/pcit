@@ -27,7 +27,7 @@ class Validate
         $validator = new Validator();
         $validator->validate(
             $data,
-            (object) ['$ref' => 'file://'.realpath(base_path().'config/config.schema.json')]
+            (object) ['$ref' => 'file://'.realpath(base_path('config/config.schema.json'))]
         );
 
         if ($validator->isValid()) {

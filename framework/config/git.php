@@ -9,7 +9,7 @@ return [
         'app' => [
             'name' => env('CI_GITHUB_APP_NAME'),
             'id' => env('CI_GITHUB_APP_ID'),
-            'private_key_path' => base_path().'framework/storage/private_key/private.key',
+            'private_key_path' => base_path('framework/storage/private_key/private.key'),
         ],
         'check_run' => [
             'prefix' => env('CI_GITHUB_CHECK_RUN_PREFIX', 'PCIT'),

@@ -49,11 +49,11 @@ namespace PCIT\Framework\Support\Facades;
  * @method static bool pExpireAt(string $key, int $timestamp)
  * @method static string[] keys(string $pattern)
  * @method static string[] getKeys(string $pattern)
- * @method static int dbSize()
- * @method static bool auth(string $password)
- * @method static int type(string $key)
+ * @method static int      dbSize()
+ * @method static bool     auth(string $password)
+ * @method static int      type(string $key)
  * @method static string|false dump(string $key)
- * @method static bool restore(string $key, int $ttl, string $value)
+ * @method static bool         restore(string $key, int $ttl, string $value)
  *
  * @see https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/Redis.php
  */

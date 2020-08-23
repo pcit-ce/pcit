@@ -12,7 +12,7 @@ class OpenAPI
     @@\Route('get', 'api/openapi/v3')
     public function __invoke(Request $request)
     {
-        $yaml = file_get_contents(base_path().'/openapi/openapi.yaml');
+        $yaml = file_get_contents(base_path('/openapi/openapi.yaml'));
 
         $is_coding = $request->get('coding');
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\OAuth;
 
 use App\User;
-use Error;
 use Exception;
 use PCIT\Coding\Service\OAuth\Client as CodingClient;
 use PCIT\Gitee\Service\OAuth\Client as GiteeClient;
@@ -131,7 +130,7 @@ class IndexController
             $pcit = app(PCIT::class)->git($git_type, $accessToken);
 
             $userInfoArray = $pcit->user_basic_info->getUserInfo();
-        } catch (Error $e) {
+        } catch (\Throwable $e) {
             throw new Exception($e->getMessage(), 500);
         }
 

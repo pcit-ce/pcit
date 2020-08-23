@@ -40,7 +40,7 @@ class ValidateCommand extends Command
             return 1;
         }
 
-        $this->json_schema = json_decode(file_get_contents(base_path().'config/config.schema.json'));
+        $this->json_schema = json_decode(file_get_contents(base_path('config/config.schema.json')));
 
         if (is_file($pcit_file)) {
             return $this->validate($input, $output, getcwd().'/'.$pcit_file);
@@ -71,7 +71,7 @@ class ValidateCommand extends Command
         $data = BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml));
 
         $validator = new Validator();
-        // $json_schema = ['$ref' => 'file://'.realpath(base_path().'config/config.schema.json')];
+        // $json_schema = ['$ref' => 'file://'.realpath(base_path('config/config.schema.json'))];
         $validator->validate($data, $this->json_schema);
 
         if ($validator->isValid()) {

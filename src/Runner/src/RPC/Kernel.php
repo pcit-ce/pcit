@@ -18,7 +18,7 @@ class Kernel
         $class = explode('\\', static::class)[3];
 
         $json_rpc = [
-            'jsonrpc' => 2,
+            'jsonrpc' => '2.0',
             'id' => 1,
             'method' => static::NAMESPACE.'\\'.$class.'::'.$name,
             'params' => $arguments,

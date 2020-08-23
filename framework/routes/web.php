@@ -235,7 +235,7 @@ Route::get('api/ci/github_trending/{language}/{since}', 'System\SystemController
 // Route::get('api/openapi/v3', 'System\OpenAPI');
 
 Route::get('api/config/schema.json', function () {
-    return Response::json(file_get_contents(base_path().'config/config.schema.json'), true);
+    return Response::file(base_path('config/config.schema.json'));
 });
 
 Route::get('validate', function () {

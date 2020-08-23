@@ -103,6 +103,7 @@
     "ext-json": "*",
     "ext-redis": "*",
     "ext-pdo_mysql": "*",
+    "ext-date": "*",
     "doctrine/cache": "^1.6",
     "filp/whoops": "^2.3",
     "firebase/php-jwt": "^5.0",

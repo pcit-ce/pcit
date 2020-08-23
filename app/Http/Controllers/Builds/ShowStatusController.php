@@ -18,6 +18,7 @@ class ShowStatusController
     @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/status')
     public function __invoke(...$arg)
     {
+        /** @var \PCIT\Framework\Http\Request */
         $request = app('request');
         // $branch = $_GET['branch'] ?? null;
         $branch = $request->query->get('branch');
@@ -35,22 +36,28 @@ class ShowStatusController
         $status = Build::getLastBuildStatus((int) $rid, $branch);
 
         $svg = null === $status ?
-            file_get_contents(__DIR__.'/../../../../public/ico/unknown.svg')
-        : file_get_contents(__DIR__.'/../../../../public/ico/'.$status.'.svg');
+            'public/ico/unknown.svg'
+            : 'public/ico/'.$status.'.svg';
 
-        $ts = gmdate('D, d M Y H:i:s', time() + 300).' GMT';
+        //$ts = gmdate('D, d M Y H:i:s', time() + 300).' GMT';
         // ini_set('expose_php', 'Off');
 
-        header_remove('x-powered-by');
+        //header_remove('x-powered-by');
 
-        return  \Response::make($svg, 200, [
-            'Expires' => $ts,
-            'Content-Type' => 'image/svg+xml;charset=utf-8',
-            'Cache-Control' => 'max-age=300,public',
-            'X-Powered-By' => 'pcit https://ci.khs1994.com',
+        $response = \Response::file(base_path($svg),[
+            'X-Powered-By' => 'PCIT https://ci.khs1994.com',
             'X-PCIT-Author' => 'https://khs1994.com',
-            // no-cache
+            'Content-Type' => 'image/svg+xml;charset=utf-8',
         ]);
+
+        $expires = (new \DateTime())
+        ->setTimestamp(time() + 300);
+
+        return $response->setExpires($expires) // 'Expires' => $ts
+        ->setCache([
+            "max_age" => 300,
+            "public" => true,
+        ]); // 'Cache-Control' => 'max-age=300,public'
     }
 
     /**

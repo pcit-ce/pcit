@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Webhooks;
 
 use App\Repo;
-use Error;
 use Exception;
 use PCIT\PCIT;
 use PCIT\Support\CI;
@@ -101,8 +100,8 @@ class Controller
 
         try {
             $data = self::$method(...$arg);
-        } catch (Exception | Error $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
+        } catch (Exception | \Throwable $e) {
+            throw new Exception($e->getMessage(), (int)$e->getCode());
         }
 
         $dataObj = json_decode($data);

@@ -54,7 +54,7 @@ class JWTController
         $token = self::getToken();
 
         $private_key_path = config('git.github.app.private_key_path');
-        // $public_key_path = base_path().'framework/storage/private_key/public.key';
+        // $public_key_path = base_path('framework/storage/private_key/public.key');
         $public_key = self::getPublicKeyFromPrivateKey($private_key_path);
 
         list('git_type' => $git_type, 'uid' => $uid, 'exp' => $exp) = (array) JWT::decode(

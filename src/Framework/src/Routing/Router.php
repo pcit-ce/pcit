@@ -13,12 +13,12 @@ use PCIT\GPI\Support\Git;
 use Throwable;
 
 /**
- * @method get(string $url, Closure|string $action)
- * @method post(string $url, Closure|string $action)
- * @method put(string $url, Closure|string $action)
- * @method patch(string $url, Closure|string $action)
- * @method delete(string $url, Closure|string $action)
- * @method options(string $url, Closure|string $action)
+ * @method void get(string $url, Closure|string $action)
+ * @method void post(string $url, Closure|string $action)
+ * @method void put(string $url, Closure|string $action)
+ * @method void patch(string $url, Closure|string $action)
+ * @method void delete(string $url, Closure|string $action)
+ * @method void options(string $url, Closure|string $action)
  */
 class Router
 {
@@ -29,8 +29,8 @@ class Router
     public $response;
 
     /**
-     * @param Closure|string $action
-     * @param mixed          ...$arg
+     * @param Closure|string $action e.g. 'Controller@method'
+     * @param mixed          ...$arg e.g. 'user/{id}' 'user/1' => [1]
      *
      * @throws \Exception
      */
@@ -71,14 +71,25 @@ class Router
         $instance = $rc->newInstanceArgs($construct_args);
 
         try {
-            $rm = new \ReflectionMethod($instance, $method);
+            if ($rc->hasMethod($method)) {
+                $rm = new \ReflectionMethod($instance, $method);
 
-            // 获取方法参数
-            $args = $this->getParameters($rc->getName(), $rm->getName(), $arg);
+                // 获取方法参数
+                $args = $this->getParameters($rc->getName(), $rm->getName(), $arg);
 
-            $this->response = $rm->invokeArgs($instance, $args);
+                $this->response = $rm->invokeArgs($instance, $args);
+            } elseif ($rc->hasMethod('__call')) {
+                // 方法不存在，尝试调用 __call
+                $rm = new \ReflectionMethod($instance, '__call');
+
+                $this->response = $rm->invokeArgs($instance, [
+                    $method, $arg,
+                ]);
+            } else {
+                // 方法 以及 __call 方法均不存在
+                throw new \Exception('Controller '.$action.'not Found', 404);
+            }
         } catch (\ReflectionException $e) {
-            // 捕获类方法不存在错误
             throw new Exception($e->getMessage(), 404, $e);
         } catch (SuccessHandleRouteException $e) {
             // 请求成功
@@ -218,19 +229,21 @@ class Router
     }
 
     /**
-     * @param $targetUrl route 定义的 URL
+     * @param string $targetUrl route 定义的 URL
      * @param $action
      *
      * @throws \Exception
      */
-    private function handle($targetUrl, $action): void
+    private function handle(string $targetUrl, $action): void
     {
         // ?a=1&b=2
         // $queryString = $_SERVER['QUERY_STRING'];
-        $queryString = app('request')->query->all();
+        /** @var \PCIT\Framework\Http\Request */
+        $request = app('request');
+        $queryString = $request->query->all();
 
         //$url = $_SERVER['REQUEST_URI'];
-        $url = app('request')->getPathInfo();
+        $url = $request->getPathInfo();
 
         // if(explode('/',$url)[1] === 'api'){
         //     $targetUrl = 'api/'.$targetUrl;
@@ -288,12 +301,12 @@ class Router
     }
 
     /**
-     * @param $name
-     * @param $arg
+     * @param string $name e.g. get
+     * @param array  $arg  e.g. 'path/{id}' 'Controller@method'
      *
      * @throws \Exception
      */
-    public function __call($name, $arg): void
+    public function __call(string $name, array $arg): void
     {
         try {
             if ('match' === $name) {

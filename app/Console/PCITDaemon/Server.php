@@ -7,8 +7,6 @@ namespace App\Console\PCITDaemon;
 use App\Build;
 use App\Events\CheckAdmin;
 use App\Events\GetBuild;
-use Error;
-use Exception;
 use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\HttpClient;
 use PCIT\Framework\Support\StringSupport;
@@ -153,7 +151,7 @@ class Server extends Kernel
             try {
                 $webhooksHandler->$event_type($json, $git_type);
                 \Log::info('[ '.$event_type.' ] webhooks handle success', compact('git_type'));
-            } catch (Error | Exception $e) {
+            } catch (\Throwable $e) {
                 \Log::error('[ '.$event_type.' ] webhooks handle error', [$e->__toString()]);
                 $webhooks->pushErrorCache($json_raw);
             }

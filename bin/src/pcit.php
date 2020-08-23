@@ -14,7 +14,7 @@ $cli = new Application('PCIT CLI', 'v19.12');
 
 function getCommandFromDir($cli, $dir)
 {
-    $fh = opendir(base_path().'app/Console/PCIT/'.$dir);
+    $fh = opendir(base_path('app/Console/PCIT/'.$dir));
 
     while ($file = readdir($fh)) {
         if ('.' === $file or '..' === $file) {
@@ -32,7 +32,7 @@ function getCommandFromDir($cli, $dir)
 $cli = getCommandFromDir($cli, 'Repo');
 $cli = getCommandFromDir($cli, 'Developer');
 
-$fh = opendir(base_path().'app/Console/PCIT');
+$fh = opendir(base_path('app/Console/PCIT'));
 
 if ($fh) {
     while (false !== ($file = readdir($fh))) {
@@ -40,7 +40,7 @@ if ($fh) {
             continue;
         }
 
-        if (is_dir(base_path().'app/Console/PCIT'.'/'.$file)) {
+        if (is_dir(base_path('app/Console/PCIT'.'/'.$file))) {
             continue;
         }
 

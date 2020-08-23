@@ -17,7 +17,7 @@ class DockerProvider implements ServiceProviderInterface
                 return Docker::docker(Docker::createOptionArray(
                     env('CI_DOCKER_HOST'),
                     true,
-                    base_path().'framework/storage/private_key',
+                    base_path('framework/storage/private_key'),
                     null,
                     null,
                     null,
