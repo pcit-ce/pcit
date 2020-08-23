@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Builds;
 
 use App\Http\Controllers\Users\JWTController;
+use PCIT\Framework\Attributes\Route;
 
 class CronController
 {
@@ -15,7 +16,7 @@ class CronController
      *
      * @throws \Exception
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/crons')
+    @@Route('get', 'api/repo/{username}/{repo_name}/crons')
     public function __invoke(...$args): void
     {
         list($username, $repo_name) = $args;
@@ -28,7 +29,7 @@ class CronController
      *
      * @param $cron_id
      */
-    @@\Route('get', 'api/cron/{cron.id}')
+    @@Route('get', 'api/cron/{cron.id}')
     public function find($cron_id): void
     {
     }
@@ -38,7 +39,7 @@ class CronController
      *
      * @param $cron_id
      */
-    @@\Route('delete', 'api/cron/{cron.id}')
+    @@Route('delete', 'api/cron/{cron.id}')
     public function delete($cron_id): void
     {
     }
@@ -50,7 +51,7 @@ class CronController
      *
      * @throws \Exception
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/branch/{branch.name}/cron')
+    @@Route('get', 'api/repo/{username}/{repo_name}/branch/{branch.name}/cron')
     public function findByBranch(...$args): void
     {
         list($username, $repo_name, $branch) = $args;
@@ -65,7 +66,7 @@ class CronController
      *
      * @throws \Exception
      */
-    @@\Route('post', 'api/repo/{username}/{repo_name}/branch/{branch.name}/cron')
+    @@Route('post', 'api/repo/{username}/{repo_name}/branch/{branch.name}/cron')
     public function createByBranch(...$args): void
     {
         list($username, $repo_name, $branch) = $args;

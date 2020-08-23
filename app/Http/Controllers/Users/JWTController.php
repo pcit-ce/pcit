@@ -10,6 +10,7 @@ use Curl\Curl;
 use Exception;
 use PCIT\GPI\Support\Git;
 use PCIT\Framework\Support\JWT;
+use PCIT\Framework\Attributes\Route;
 
 class JWTController
 {
@@ -130,7 +131,7 @@ class JWTController
      *
      * @throws \Exception
      */
-    @@\Route('post', 'api/user/token')
+    @@Route('post', 'api/user/token')
     public static function generate(
         string $git_type = null,
         string $username = null,

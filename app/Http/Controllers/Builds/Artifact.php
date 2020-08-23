@@ -9,6 +9,7 @@ use App\Job;
 use Etime\Flysystem\Plugin\AWS_S3 as AWS_S3_Plugin;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
+use PCIT\Framework\Attributes\Route;
 
 class Artifact
 {
@@ -27,7 +28,7 @@ class Artifact
         $this->flysystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
     }
 
-    @@\Route('get', 'api/{git_type}/{username}/{repo_name}/artifacts')
+    @@Route('get', 'api/{git_type}/{username}/{repo_name}/artifacts')
     public function listByRepo(...$args)
     {
         [$git_type,$user,$repo] = $args;
@@ -39,7 +40,7 @@ class Artifact
         return $this->flysystem->listContents($path, true);
     }
 
-    @@\Route('get', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts')
+    @@Route('get', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts')
     public function listByJob(...$args)
     {
         [$git_type,$user,$repo,$job_id] = $args;
@@ -51,7 +52,7 @@ class Artifact
         return $this->flysystem->listContents($path);
     }
 
-    @@\Route('get', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}')
+    @@Route('get', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}')
     public function __invoke(...$args)
     {
         [$git_type,$user,$repo,$job_id,$file_name] = $args;
@@ -61,7 +62,7 @@ class Artifact
         return $this->flysystem->getMetadata($path);
     }
 
-    @@\Route('get', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}/{format}')
+    @@Route('get', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}/{format}')
     public function download(...$args)
     {
         [$git_type,$user,$repo,$job_id,$file_name,$format] = $args;
@@ -79,7 +80,7 @@ class Artifact
         }
     }
 
-    @@\Route('delete', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}')
+    @@Route('delete', 'api/{git_type}/{username}/{repo_name}/jobs/{job_id}/artifacts/{file_name}')
     public function delete(...$args)
     {
         [$git_type,$user,$repo,$job_id,$file_name] = $args;

@@ -19,7 +19,7 @@ $finder = PhpCsFixer\Finder::create()
     // remove when support attribute
     ->exclude('app/Http/Controllers')
     ->exclude('src/Framework/src/Attributes')
-    ->notPath('src/Framework/src/Support/Facades/Route.php')
+    ->exclude('framework/storage')
 
     // ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
     ->in(__DIR__)

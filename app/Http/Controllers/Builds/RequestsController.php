@@ -13,6 +13,7 @@ use PCIT\GetConfig;
 use PCIT\PCIT;
 use PCIT\Subject;
 use Symfony\Component\Yaml\Yaml;
+use PCIT\Framework\Attributes\Route;
 
 class RequestsController
 {
@@ -25,7 +26,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}/requests')
+    @@Route('get', 'api/repo/{git_type}/{username}/{repo_name}/requests')
     public function __invoke(...$args)
     {
         $request = app('request');
@@ -76,7 +77,7 @@ class RequestsController
      *
      * @throws \Exception
      */
-    @@\Route('post', 'api/repo/{username}/{repo_name}/requests')
+    @@Route('post', 'api/repo/{username}/{repo_name}/requests')
     public function create(...$args)
     {
         list($username, $repo_name) = $args;
@@ -168,7 +169,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/request/{request.id}')
+    @@Route('get', 'api/repo/{username}/{repo_name}/request/{request.id}')
     public function find(...$args)
     {
         list($username, $repo_name, $request_id) = $args;

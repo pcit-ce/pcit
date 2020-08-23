@@ -6,10 +6,11 @@ namespace App\Http\Controllers\Webhooks\Server;
 
 use PCIT\Framework\Support\StringSupport;
 use PCIT\PCIT;
+use PCIT\Framework\Attributes\Route;
 
 class IndexController
 {
-    @@\Route('post','webhooks/${git_type}')
+    @@Route('post','webhooks/${git_type}')
     public function __invoke($gitType)
     {
         // custom_provider

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Builds;
 
 use App\Env;
 use App\Http\Controllers\Users\JWTController;
+use PCIT\Framework\Attributes\Route;
 
 class EnvController
 {
@@ -18,7 +19,7 @@ class EnvController
      *
      * @return array|string
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/env_vars')
+    @@Route('get', 'api/repo/{username}/{repo_name}/env_vars')
     public function __invoke(...$args)
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
@@ -50,7 +51,7 @@ class EnvController
      *
      * @return string
      */
-    @@\Route('post', 'api/repo/{username}/{repo_name}/env_vars')
+    @@Route('post', 'api/repo/{username}/{repo_name}/env_vars')
     public function create(...$args)
     {
         $request = app('request');
@@ -78,7 +79,7 @@ class EnvController
      *
      * @return array|int
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')
+    @@Route('get', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')
     public function find(...$args)
     {
         list($username, $repo_name, $env_var_id) = $args;
@@ -101,7 +102,7 @@ class EnvController
      *
      * @throws \Exception
      */
-    @@\Route('patch', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')
+    @@Route('patch', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')
     public function update(...$args): void
     {
         $request = app('request');
@@ -129,7 +130,7 @@ class EnvController
      *
      * @return int
      */
-    @@\Route('delete', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')
+    @@Route('delete', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')
     public function delete(...$args)
     {
         list($username, $repo_name, $env_var_id) = $args;

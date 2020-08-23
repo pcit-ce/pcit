@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Repo;
 use App\User;
+use PCIT\Framework\Attributes\Route;
 
 class RepositoriesController
 {
@@ -14,7 +15,7 @@ class RepositoriesController
      *
      * @throws \Exception
      */
-    @@\Route('get', 'api/repos')
+    @@Route('get', 'api/repos')
     public function __invoke()
     {
         list($uid, $git_type) = JWTController::getUser(false);
@@ -29,7 +30,7 @@ class RepositoriesController
      *
      * @return array|string
      */
-    @@\Route('get', 'api/repos/{git_type}/{username}')
+    @@Route('get', 'api/repos/{git_type}/{username}')
     public function list(string $git_type, string $username)
     {
         return Repo::allByUsername($username, $git_type);
@@ -42,7 +43,7 @@ class RepositoriesController
      *
      * @return array|string
      */
-    @@\Route('get', 'api/repo/{git_type}/{username}/{repo_name}')
+    @@Route('get', 'api/repo/{git_type}/{username}/{repo_name}')
     public function find(string $git_type, string $username, string $repo_name)
     {
         return Repo::findByRepoFullName($username, $repo_name, $git_type)[0] ?? [];

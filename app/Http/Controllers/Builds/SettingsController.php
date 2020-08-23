@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Builds;
 use App\Http\Controllers\Users\JWTController;
 use App\Setting;
 use Exception;
+use PCIT\Framework\Attributes\Route;
 
 class SettingsController
 {
@@ -19,7 +20,7 @@ class SettingsController
      *
      * @return array|string
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/settings')
+    @@Route('get', 'api/repo/{username}/{repo_name}/settings')
     public function __invoke(...$args)
     {
         list($rid, $git_type, $uid) = JWTController::checkByRepo(...$args);
@@ -36,7 +37,7 @@ class SettingsController
      *
      * @return array|string
      */
-    @@\Route('get', 'api/repo/{username}/{repo_name}/setting/{setting.name}')
+    @@Route('get', 'api/repo/{username}/{repo_name}/setting/{setting.name}')
     public function get(...$args)
     {
         list($username, $repo_name, $setting_name) = $args;
@@ -61,7 +62,7 @@ class SettingsController
      *
      * @return int
      */
-    @@\Route('patch', 'api/repo/{username}/{repo_name}/setting/{setting.name}')
+    @@Route('patch', 'api/repo/{username}/{repo_name}/setting/{setting.name}')
     public function update(...$args)
     {
         $request = app('request');

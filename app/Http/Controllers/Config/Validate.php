@@ -8,11 +8,12 @@ use JsonSchema\Constraints\BaseConstraint;
 use JsonSchema\Validator;
 use PCIT\Framework\Http\Request;
 use Symfony\Component\Yaml\Yaml;
+use PCIT\Framework\Attributes\Route;
 
 class Validate
 {
-    @@\Route('post', 'validate')
-    @@\Route('post', 'api/validate')
+    @@Route('post', 'validate')
+    @@Route('post', 'api/validate')
     public function __invoke(Request $request)
     {
         /** @var string */

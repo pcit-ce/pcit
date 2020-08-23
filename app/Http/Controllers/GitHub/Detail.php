@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\GitHub;
 
+use PCIT\Framework\Attributes\Route;
+
 class Detail
 {
-    @@\Route('get', 'api/github/app')
+    @@Route('get', 'api/github/app')
     public function __invoke()
     {
         $private_key_path = config('git.github.app.private_key_path');

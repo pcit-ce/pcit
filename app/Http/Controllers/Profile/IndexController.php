@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Users\JWTController;
 use App\User;
+use PCIT\Framework\Attributes\Route;
 
 /**
  * 个人中心.
@@ -24,7 +25,7 @@ class IndexController
      *
      * @throws \Exception
      */
-    @@\Route('get', 'profile/{git_type}/{username}')
+    @@Route('get', 'profile/{git_type}/{username}')
     public function __invoke(string $git_type, string $username): void
     {
         $username_from_web = $username;

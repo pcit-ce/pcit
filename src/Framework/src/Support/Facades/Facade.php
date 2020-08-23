@@ -8,7 +8,7 @@ abstract class Facade
 {
     abstract protected static function getFacadeAccessor();
 
-    public static function __callStatic($name, $args)
+    public static function __callStatic(string $name, array $args)
     {
         $instance = static::getFacadeAccessor();
 

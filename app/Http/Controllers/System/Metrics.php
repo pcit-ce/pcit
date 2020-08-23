@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\System;
 
+use PCIT\Framework\Attributes\Route;
+
 class Metrics
 {
-    @@\Route('get', 'api/metrics')
+    @@Route('get', 'api/metrics')
     public function __invoke()
     {
         $content = '# builds

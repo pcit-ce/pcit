@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Profile;
 
+use PCIT\Framework\Attributes\Route;
+
 /**
  * 注销
  */
 class LogOut
 {
-    @@\Route('get', '{git_type}/logout')
+    @@Route('get', '{git_type}/logout')
     public function __invoke($git_type): void
     {
         \Session::pull($git_type.'.access_token');

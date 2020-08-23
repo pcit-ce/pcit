@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\GitHub;
 
 use PCIT\Framework\Support\HttpClient;
+use PCIT\Framework\Attributes\Route;
 
 class GitHubApp
 {
-    @@\Route('get', 'api/github/app/new')
+    @@Route('get', 'api/github/app/new')
     // @@Query(["webhook_url"])
     public function new(): string
     {
@@ -131,7 +132,7 @@ input.value = '$manifest_json_string'
 EOF;
     }
 
-    @@\Route('get', 'api/github/app/new/callback')
+    @@Route('get', 'api/github/app/new/callback')
     // @@Query(["code"])
     public function callback()
     {

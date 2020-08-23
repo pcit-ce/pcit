@@ -35,6 +35,7 @@ class Storage
 
         $filesystem = new Filesystem($adapter);
 
+        // 添加插件
         if ('s3' === $name) {
             $filesystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
         }

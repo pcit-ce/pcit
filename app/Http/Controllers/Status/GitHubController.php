@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Status;
 use App\GetAccessToken;
 use PCIT\PCIT;
 
+use PCIT\Framework\Attributes\Route;
+
 class GitHubController
 {
     private static $status;
@@ -26,7 +28,7 @@ class GitHubController
      *
      * @throws \Exception
      */
-    @@\Route('get', 'api/status/github/{username}/{repo_name}/{ref}')
+    @@Route('get', 'api/status/github/{username}/{repo_name}/{ref}')
     public function list($username,$repo_name,$ref)
     {
         $repo_full_name = $username.'/'.$repo_name;

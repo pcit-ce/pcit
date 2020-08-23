@@ -2,7 +2,7 @@
 
 namespace PCIT\Framework\Attributes;
 
-@@\Attribute
+@@\Attribute(\Attribute::IS_REPEATABLE)
 class Middleware
 {
     public function __construct($middleware)

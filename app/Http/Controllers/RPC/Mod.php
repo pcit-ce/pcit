@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\RPC;
 
+use PCIT\Framework\Attributes\Route;
+
 /**
  * @see http://wiki.geekdream.com/Specification/json-rpc_2.0.html
  */
 class Mod
 {
-    @@\Route('post','rpc')
+    @@Route('post','rpc')
     public function __invoke()
     {
         $content = \Request::getContent();

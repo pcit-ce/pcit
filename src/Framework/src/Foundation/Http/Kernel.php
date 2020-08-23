@@ -54,7 +54,7 @@ class Kernel
             foreach ($methods as $method) {
                 $attrs = $method->getAttributes();
                 foreach ($attrs as $attr) {
-                    if ('Route' !== $attr->getName()) {
+                    if (\PCIT\Framework\Attributes\Route::class !== $attr->getName()) {
                         continue;
                     }
 
