@@ -22,7 +22,7 @@ class InitCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->write('Please exec <info>pcitinit</info> command');
+        $output->writeln('Please exec <info>pcitinit</info> command');
 
         return 0;
     }

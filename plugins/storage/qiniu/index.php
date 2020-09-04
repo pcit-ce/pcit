@@ -33,7 +33,7 @@ try {
     // obj
     if (is_object(json_decode($input_files))) {
         foreach (json_decode($input_files, true) as $file => $label) {
-            $result = $flysystem->write($label, file_get_contents($file));
+            $result = $flysystem->writeln($label, file_get_contents($file));
 
             $core->debug("Upload [ $file ] TO [ $label ]");
             $core->debug((string) $result);
@@ -43,7 +43,7 @@ try {
         $files = explode(',', $input_files);
 
         foreach ($files as $file) {
-            $result = $flysystem->write($file, file_get_contents($file));
+            $result = $flysystem->writeln($file, file_get_contents($file));
 
             $core->debug("Upload [ $file ] TO [ $file ]");
             $core->debug((string) $result);

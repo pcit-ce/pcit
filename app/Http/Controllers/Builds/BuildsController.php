@@ -24,24 +24,24 @@ class BuildsController
      * @throws \Exception
      */
     #[Route('get', 'api/builds')]
-    #[OpenAPI([
-        "tags" => '',
-        "description" => '',
-        "summary" => '',
-        "operationId" => '',
-        "responses" => [
-            "200" => [
-                "description" => '',
-                "content" => [
-                    "application/json" => [
-                        "schema" => [
-                            "builds"=>"Build::allByAdmin"
-                            ]
-                    ]
-                ]
-            ]
-        ]
-    ])]
+    // [OpenAPI([
+    //     "tags" => '',
+    //     "description" => '',
+    //     "summary" => '',
+    //     "operationId" => '',
+    //     "responses" => [
+    //         "200" => [
+    //             "description" => '',
+    //             "content" => [
+    //                 "application/json" => [
+    //                     "schema" => [
+    //                         "builds"=>"Build::allByAdmin"
+    //                         ]
+    //                 ]
+    //             ]
+    //         ]
+    //     ]
+    // ])]
     public function __invoke()
     {
         // $before = (int) $_GET['before'] ?? null;

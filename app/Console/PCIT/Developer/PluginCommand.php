@@ -22,7 +22,7 @@ class PluginCommand extends Command
     {
         (new PluginMetadate())();
 
-        $output->write('<info>generate plugin metadata json file success</info>');
+        $output->writeln('<info>generate plugin metadata json file success</info>');
 
         return 0;
     }

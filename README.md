@@ -106,6 +106,8 @@ steps:
 
   after_success:
     image: bash
+    if:
+      status: success
     run:
       - echo "build is success"
 

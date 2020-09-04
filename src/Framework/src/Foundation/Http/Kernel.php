@@ -90,20 +90,14 @@ class Kernel
                 );
 
             case 'integer':
-               if ('testing' === config('app.env')) {
-                   return $response;
-               }
-
+                return \Response::make((string) $response);
+            case 'float':
                 return \Response::make((string) $response);
             case 'string':
-                if ('testing' === config('app.env')) {
-                    return $response;
-                }
-
-                return \Response::make($response);
+                return \Response::make((string) $response);
         }
 
-        return \Response::make();
+        return \Response::make($response);
     }
 
     private function sendRequestThroughRouter($request)

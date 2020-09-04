@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
+/**
+ * @method ResponseHeaderBag headers()
+ */
 class Response extends BaseResponse
 {
     const HTTP_CODE = [
@@ -61,7 +64,7 @@ class Response extends BaseResponse
         return new JsonResponse(
             $content,
             $code ?? 200,
-            $this->getHeaders()->all(),
+            $this->headers()->all(),
             $json
         );
     }
@@ -92,9 +95,9 @@ class Response extends BaseResponse
         return new StreamedResponse($callback, $status, $headers);
     }
 
-    public function getHeaders(): ResponseHeaderBag
+    public function __call(string $method, array $args)
     {
-        return $this->headers;
+        return $this->$method;
     }
 
     /**

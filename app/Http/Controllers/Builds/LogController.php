@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Builds;
 use App\Http\Controllers\Users\JWTController;
 use App\Job;
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Http\Request;
 
 class LogController
 {
@@ -20,10 +21,10 @@ class LogController
      * @return array|string
      */
     #[Route('get', 'api/job/{job_id}/log')]
-    public function __invoke($job_id)
+    public function __invoke(Request $request, $job_id)
     {
         // return json
-        if (\in_array('application/json', \Request::getAcceptableContentTypes())) {
+        if (\in_array('application/json', $request->getAcceptableContentTypes())) {
             return $this->json($job_id);
         }
 

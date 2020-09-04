@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GitHub\Tests\Service\Webhooks;
 
-use PCIT\Framework\Http\Request;
 use PCIT\PCIT;
 use Tests\TestCase;
 
@@ -37,7 +36,7 @@ class ClientTest extends TestCase
 
         $secret = hash_hmac($algo, $request_body, config('git.webhooks.token'));
 
-        $request = Request::create(
+        $response = $this->request(
             '/',
             'POST',
             [],
@@ -51,13 +50,7 @@ class ClientTest extends TestCase
             $request_body
         );
 
-        $request->overrideGlobals();
-
-        $this->app->singleton('request', $request);
-
-        $result = $this->pcit->webhooks->server();
-
-        $this->assertStringMatchesFormat('%s', (string) $result);
+        $this->assertStringMatchesFormat('%s', (string) $response->getContent());
     }
 
     /**

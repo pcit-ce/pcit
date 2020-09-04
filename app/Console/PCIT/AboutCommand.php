@@ -18,7 +18,7 @@ class AboutCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->write('<info>PCIT - Test, Build & Deploy Code</info>
+        $output->writeln('<info>PCIT - Test, Build & Deploy Code</info>
 
 <comment>PCIT is a CI/CD system based Docker and TencentAI.
 

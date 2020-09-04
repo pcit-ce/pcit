@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Demo\SSE;
 
+use PCIT\Framework\Http\Request;
+
 class SSEController
 {
-    public function __invoke(): void
+    public function __invoke(Request $request): void
     {
         header('X-Accel-Buffering: no');
         header('Content-Type: text/event-stream');
@@ -15,7 +17,7 @@ class SSEController
         ob_end_clean();
 
         // 获取请求头 Last-Event-ID: N
-        $id = \Request::getHeader('Last-Event-Id', 0);
+        $id = $request->headers()->get('Last-Event-Id', 0);
 
         while (1) {
             $id = ++$id;

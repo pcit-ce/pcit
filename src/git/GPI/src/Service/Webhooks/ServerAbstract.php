@@ -17,7 +17,7 @@ abstract class ServerAbstract implements ServerInterface
 
     public function getEventType(string $event_header): string
     {
-        $event_type = explode(' ', \Request::getHeader($event_header))[0] ?? 'undefined';
+        $event_type = explode(' ', \Request::headers()->get($event_header))[0] ?? 'undefined';
 
         return strtolower($event_type);
     }
@@ -38,7 +38,7 @@ abstract class ServerAbstract implements ServerInterface
 
         $secret = config('git.webhooks.token');
 
-        $signature = \Request::getHeader($signature_header);
+        $signature = \Request::headers()->get($signature_header);
 
         list($algo, $client_hash) = explode('=', $signature, 2);
 

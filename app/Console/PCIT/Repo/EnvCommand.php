@@ -118,13 +118,13 @@ pcit env get   VAR_ID
         }
 
         if ('list' !== $input->getArgument('type')) {
-            $output->write('<info>Success</info>');
+            $output->writeln('<info>Success</info>');
 
             return 0;
         }
 
         if ($input->getOption('raw')) {
-            $output->write($return);
+            $output->writeln($return);
 
             return 0;
         }
@@ -138,7 +138,7 @@ pcit env get   VAR_ID
         }
 
         if (!($row ?? null)) {
-            $output->write('<info>env not set</info>');
+            $output->writeln('<info>env not set</info>');
 
             return 0;
         }

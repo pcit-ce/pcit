@@ -92,6 +92,8 @@ steps:
     - ./vendor/bin/phpunit
 
   after_success:
+    if:
+      status: success
     run:
       - echo "Build is success"
 ```

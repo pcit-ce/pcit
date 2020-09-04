@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers\GitHub;
 
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Http\Request;
 use PCIT\Framework\Support\HttpClient;
 
 class GitHubApp
 {
     #[Route('get', 'api/github/app/new')]
     // #[Query(["webhook_url"])]
-    public function new(): string
+    public function new(Request $request): string
     {
-        $webhook_url = \Request::get('webhook_url', null);
+        $webhook_url = $request->get('webhook_url', null);
         if (!$webhook_url) {
             throw new \Exception('please set webhook_url, e.g. '.config('app.host').'/api/github/app/new?webhook_url=https://smee.io/XXXXXXXXXXXXXXX', 500);
         }
@@ -134,9 +135,9 @@ EOF;
 
     #[Route('get', 'api/github/app/new/callback')]
     // #[Query(["code"])]
-    public function callback()
+    public function callback(Request $request)
     {
-        $code = \Request::get('code');
+        $code = $request->get('code');
 
         $response = HttpClient::post(
             "https://api.github.com/app-manifests/$code/conversions"

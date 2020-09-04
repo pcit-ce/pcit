@@ -9,6 +9,7 @@ use App\Events\GetBuild;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Http\Request;
 use PCIT\Framework\Support\DB;
 use PCIT\Log\LogHandler;
 use PCIT\Support\CI;
@@ -37,10 +38,10 @@ class JobController
      */
     #[Route('get', 'api/job/{job.id}')]
     // #[Query(["sse"])]
-    public function find($job_id)
+    public function find(Request $request, $job_id)
     {
         $job = Job::find((int) $job_id);
-        $sse = \Request::get('sse');
+        $sse = $request->get('sse');
 
         if ($sse) {
             $logHandler = new LogHandler((int) $job_id);

@@ -4,36 +4,31 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Http;
 
+use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request as RequestBase;
 
+/**
+ * @method InputBag  cookies()
+ * @method HeaderBag headers()
+ */
 class Request extends RequestBase
 {
-    public function getAllHeaders()
+    // if (!\function_exists('getallheaders')) {
+    //     $headers = [];
+
+    //     foreach ($_SERVER as $name => $value) {
+    //         if ('HTTP_' === substr($name, 0, 5)) {
+    //             $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+    //         }
+    //     }
+
+    //     return $headers;
+    // }
+
+    public function __call(string $method, array $args)
     {
-        if (!\function_exists('getallheaders')) {
-            $headers = [];
-
-            foreach ($_SERVER as $name => $value) {
-                if ('HTTP_' === substr($name, 0, 5)) {
-                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-                }
-            }
-
-            return $headers;
-        }
-
-        return getallheaders();
-    }
-
-    public function getHeader($header = null, $default = null)
-    {
-        $headers = $this->getAllHeaders();
-
-        if ($header) {
-            return $headers["$header"] ?? $default;
-        }
-
-        return $headers;
+        return $this->$method;
     }
 
     /**
@@ -42,7 +37,7 @@ class Request extends RequestBase
     public function parseLink(string $link = null)
     {
         if (!$link) {
-            $link = $this->getHeader('Link');
+            $link = $this->headers()->get('Link');
         } else {
             $link = explode('Link:', $link)[1] ?? null;
         }

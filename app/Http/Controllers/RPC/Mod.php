@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\RPC;
 
+use App\RPC\Handler as RPC;
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Http\Request;
 
 /**
  * @see http://wiki.geekdream.com/Specification/json-rpc_2.0.html
@@ -12,33 +14,21 @@ use PCIT\Framework\Attributes\Route;
 class Mod
 {
     #[Route('post','rpc')]
-    public function __invoke()
+    public function __invoke(Request $request, RPC $rpc)
     {
-        $content = \Request::getContent();
+        $content = $request->getContent();
 
-        $json_obj = json_decode($content);
+        $token = $request->headers()->get('Authorization');
 
-        $class_and_method = $json_obj->method;
-        $params = $json_obj->params;
-
-        [$class, $method] = explode('::', $class_and_method);
-
-        if ('\Cache' === $class) {
-            $result = $class::$method(...$params);
-        } else {
-            $rf = new \ReflectionMethod(...explode('::', $class_and_method));
-            $result = $rf->invokeArgs(null, $params);
+        if ($token !== 'token '.config('rpc.secret') || 'token ' === $token) {
+            return [
+                'error' => [
+                    'code' => 401,
+                    'message' => 'miss Authorization header, please set CI_RPC_SECRET env',
+                ],
+            ];
         }
 
-        $jsonrpc = '2.0';
-        $id = $json_obj->id;
-
-        $error = [
-            'code' => '',
-            'message' => '',
-            'data' => '',
-        ];
-
-        return compact('jsonrpc', 'result', 'id');
+        return $rpc->handle($content);
     }
 }

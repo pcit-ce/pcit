@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Webhooks;
 
 use App\Repo;
 use Exception;
+use PCIT\Framework\Http\Request;
 use PCIT\PCIT;
 use PCIT\Support\CI;
 
@@ -36,9 +37,9 @@ class Controller
      *
      * @return null|bool
      */
-    private static function checkAccessToken()
+    private static function checkAccessToken(Request $request)
     {
-        $header = \Request::getHeader('Authorization') ?? '';
+        $header = $request->headers()->get('Authorization') ?? '';
 
         $access_token = (explode(' ', $header))[1]
             ?? \Session::get(self::$gitType.'.access_token')

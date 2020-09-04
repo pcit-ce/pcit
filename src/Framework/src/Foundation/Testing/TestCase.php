@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PCIT\Framework\Foundation\Testing;
 
 use PCIT\Framework\Http\Request;
+use PCIT\Framework\Http\Response;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
@@ -32,7 +33,7 @@ class TestCase extends BaseTestCase
      * @param array                $server     The server parameters ($_SERVER)
      * @param null|resource|string $content    The raw body data
      *
-     * @return static
+     * @return Response
      */
     public function request(
         string $uri,
@@ -49,6 +50,7 @@ class TestCase extends BaseTestCase
 
         $kernel = $this->app->make(\App\Http\Kernel::class);
 
+        /** @var \PCIT\Framework\Http\Response */
         return $kernel->handle($request);
     }
 

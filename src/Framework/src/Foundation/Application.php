@@ -86,8 +86,10 @@ class Application extends Container
         $this->isDebug = (bool) config('app.debug');
     }
 
-    public function basePath(string $path = ''): string
+    public function basePath(?string $path = ''): string
     {
+        $path = null === $path ? '' : $path;
+
         return $this['base_path'].\DIRECTORY_SEPARATOR.$path;
     }
 
@@ -107,6 +109,11 @@ class Application extends Container
     }
 
     // 绑定单例
+    // 每次返回同一实例
+
+    /**
+     * @param null|\Closure|string $concrete
+     */
     public function singleton(string $abstract, $concrete = null): void
     {
         if (null === $concrete) {
@@ -115,7 +122,7 @@ class Application extends Container
 
         $closure = $concrete;
 
-        if (\is_string($concrete)) {
+        if (!($closure instanceof \Closure)) {
             $closure = function ($app) use ($concrete) {
                 return new $concrete();
             };
@@ -125,7 +132,12 @@ class Application extends Container
     }
 
     // 简单绑定
-    public function bind(string $abstract, $concrete): void
+    // 每次返回全新的实例
+
+    /**
+     * @param null|\Closure|string $concrete
+     */
+    public function bind(string $abstract, $concrete = null): void
     {
         if (null === $concrete) {
             $concrete = $abstract;
@@ -133,7 +145,7 @@ class Application extends Container
 
         $closure = $concrete;
 
-        if (\is_string($concrete)) {
+        if (!($closure instanceof \Closure)) {
             $closure = function ($app) use ($concrete) {
                 return new $concrete();
             };
@@ -145,7 +157,7 @@ class Application extends Container
     // 绑定实例
     public function instance($abstract, $instance): void
     {
-        if (\is_string($instance)) {
+        if (\is_string($instance) and class_exists($instance)) {
             $instance = new $instance();
         }
 

@@ -8,7 +8,7 @@ trait CreatesApplication
 {
     public function createApplication()
     {
-        putenv('APP_ENV=testing');
+        // putenv('APP_ENV=testing');
 
         $app = require __DIR__.'/../framework/bootstrap/app.php';
 

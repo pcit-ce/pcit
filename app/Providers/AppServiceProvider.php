@@ -11,5 +11,6 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(Container $pimple): void
     {
+        $this->app->singleton('a', '1');
     }
 }

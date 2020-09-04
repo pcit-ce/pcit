@@ -39,7 +39,7 @@ class LogoutCommand extends Command
 
             $output->writeln('<info>Successfully logged out!</info>');
         } else {
-            $output->write('<error>This User Not Found</error>>');
+            $output->writeln('<error>This User Not Found</error>>');
         }
 
         return 0;

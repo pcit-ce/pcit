@@ -20,7 +20,7 @@ class JWTController
      */
     private static function getToken(): string
     {
-        $token = \Request::getHeader('Authorization');
+        $token = \Request::headers()->get('Authorization');
 
         if (!$token || 'token undefined' === $token) {
             throw new Exception('Requires authentication', 401);
@@ -135,8 +135,7 @@ class JWTController
         string $git_type = null,
         string $username = null,
         int $uid = null
-    ): array
-    {
+    ): array {
         if ($git_type) {
             goto a;
         }

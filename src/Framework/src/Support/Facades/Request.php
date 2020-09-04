@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Support\Facades;
 
+use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\InputBag;
+
 /**
  * @method static get($key, $default = null)
  * @method static getSession()
@@ -50,6 +53,8 @@ namespace PCIT\Framework\Support\Facades;
  * @method static getAcceptableContentTypes()
  * @method static isXmlHttpRequest()
  * @method static isFromTrustedProxy()
+ * @method static InputBag cookies()
+ * @method static HeaderBag headers()
  */
 class Request extends Facade
 {

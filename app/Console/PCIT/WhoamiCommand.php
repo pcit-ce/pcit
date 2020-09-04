@@ -30,7 +30,7 @@ class WhoamiCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->write(PCITCommand::HttpGet($input, 'user', null, true));
+        $output->writeln(PCITCommand::HttpGet($input, 'user', null, true));
 
         return 0;
     }

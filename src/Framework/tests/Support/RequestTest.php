@@ -23,13 +23,13 @@ class RequestTest extends TestCase
     {
         $response = $this->request('/testing');
 
-        $this->assertEquals(1, $response);
+        $this->assertEquals('1', $response->getContent());
     }
 
     public function test2(): void
     {
         $response = $this->request('/testing/100');
 
-        $this->assertEquals(100, $response);
+        $this->assertEquals('100', $response->getContent());
     }
 }

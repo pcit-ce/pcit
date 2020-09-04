@@ -55,14 +55,14 @@ class SettingsCommand extends Command
 
         if (null === $key) {
             // key 参数不存在，返回设置列表
-            return $output->write(
+            return $output->writeln(
                 PCITCommand::HttpGet($input, 'repo/'.$repo.'/settings', null, true)
             );
         }
 
         if (null === $set_value) {
             // 指定 key 但没有 --set，返回设置值
-            return $output->write(
+            return $output->writeln(
                 PCITCommand::HttpGet($input, 'repo/'.$repo.'/setting/'.$key, null, true)
             );
         }
@@ -75,7 +75,7 @@ class SettingsCommand extends Command
             'setting.'.$key => $set_value,
         ]);
 
-        $output->write(
+        $output->writeln(
             PCITCommand::HttpPatch($input, 'repo/'.$repo.'/setting/'.$key, $data, true, true)
         );
 

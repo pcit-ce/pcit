@@ -10,6 +10,7 @@ use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Http\Request;
 use PCIT\GetConfig;
 use PCIT\PCIT;
 use PCIT\Subject;
@@ -78,7 +79,7 @@ class RequestsController
      * @throws \Exception
      */
     #[Route('post', 'api/repo/{username}/{repo_name}/requests')]
-    public function create(...$args)
+    public function create(Request $request, ...$args)
     {
         list($username, $repo_name) = $args;
 
@@ -91,7 +92,7 @@ class RequestsController
 
         // $body = file_get_contents('php://input');
 
-        $body = \Request::getContent();
+        $body = $request->getContent();
 
         $body_obj = json_decode($body);
 

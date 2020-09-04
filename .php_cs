@@ -21,6 +21,7 @@ $finder = PhpCsFixer\Finder::create()
     //->exclude('src/Framework/src/Attributes')
 
     ->exclude('framework/storage')
+    ->exclude('app/Http/Controllers/Test')
 
     // ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
     ->in(__DIR__)
