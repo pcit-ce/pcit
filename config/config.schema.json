@@ -1444,6 +1444,25 @@
                 }
             },
             "properties": {
+                "apiVersion": {
+                    "type": "string",
+                    "enum": [
+                        "config.ci.khs1994.com/v1alpha1",
+                        "config.ci.khs1994.com/v1alpha2",
+                        "config.ci.khs1994.com/v1alpha3",
+                        "config.ci.khs1994.com/v1beta1",
+                        "config.ci.khs1994.com/v1beta2",
+                        "config.ci.khs1994.com/v1beta3",
+                        "config.ci.khs1994.com/v1",
+                        "config.ci.khs1994.com/v2alpha1"
+                    ]
+                },
+                "kind": {
+                    "type": "string",
+                    "enum": [
+                        "PcitConfig"
+                    ]
+                },
                 "language": {
                     "type": "string",
                     "enum": [

@@ -1,0 +1,7 @@
+version: v3000000
+
+steps:
+  script:
+    image: alpine
+    if:
+      status3: failure

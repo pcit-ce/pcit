@@ -92,6 +92,17 @@ class Server extends Kernel
             $this->pcit->runner_job_generator->handle($buildData);
         } catch (\Throwable $e) {
             \Log::emergency($e->__toString(), ['message' => $e->getMessage(), 'code' => $e->getCode()]);
+
+            if (method_exists($e, 'report')) {
+                $e->report();
+
+                return;
+            }
+
+            Build::updateBuildStatus(
+                $buildData->build_key_id,
+                CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED
+            );
         }
     }
 

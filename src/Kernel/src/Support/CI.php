@@ -6,6 +6,8 @@ namespace PCIT\Support;
 
 class CI
 {
+    const CONFIG_MISCONFIGURED = 'misconfigured';
+
     const BUILD_ACTIVATE = 1;
 
     const BUILD_DEACTIVATE = 0;

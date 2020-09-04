@@ -3,6 +3,9 @@
 # @see http://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
 
+kind: PcitConfig
+apiVersion: config.ci.khs1994.com/v1alpha1
+
 x-8.0.0beta3-job: &8.0.0beta3-job
   jobs:
     - PHP_VERSION: 8.0.0beta3
@@ -82,7 +85,7 @@ steps:
       # - sleep 30
       - /opt/pcit/toolkit/pcit-wait-for-it mysql:3306 -- echo 'mysql is run'
       - /opt/pcit/toolkit/pcit-wait-for-it redis:6379 -- echo 'redis is run'
-      - composer test
+      - vendor/bin/phpunit
     if: # 不支持变量
       # platform: linux/amd64
       # platform: [ linux/*, windows/amd64 ]

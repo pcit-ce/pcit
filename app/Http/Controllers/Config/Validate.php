@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Config;
 
 use JsonSchema\Constraints\BaseConstraint;
-use JsonSchema\Validator;
+use PCIT\Config\Validator as ConfigValidator;
 use PCIT\Framework\Attributes\Route;
 use PCIT\Framework\Http\Request;
 use Symfony\Component\Yaml\Yaml;
@@ -14,7 +14,7 @@ class Validate
 {
     #[Route('post', 'validate')]
     #[Route('post', 'api/validate')]
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, ConfigValidator $validator)
     {
         /** @var string */
         $pcit_config = $request->getContent();
@@ -25,21 +25,16 @@ class Validate
             $data = BaseConstraint::arrayToObjectRecursive(Yaml::parse($pcit_config));
         }
 
-        $validator = new Validator();
-        $validator->validate(
-            $data,
-            (object) ['$ref' => 'file://'.realpath(base_path('config/config.schema.json'))]
-        );
+        $result = $validator->validate($data);
 
-        if ($validator->isValid()) {
-            return \Response::make('ok');
-        }
-        $message = [];
-
-        foreach ($validator->getErrors() as $error) {
-            $message[] = [$error['property'] => $error['message']];
+        if ([] === $result) {
+            return \Response::make('');
         }
 
-        return \Response::json($message);
+        $response = \Response::json($result);
+
+        $response->setStatusCode(400);
+
+        return $response;
     }
 }

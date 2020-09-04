@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PCIT\Runner;
 
+use App\Exceptions\ConfigException;
 use App\Notifications\GitHubChecksConclusion\Queued;
 use Exception;
+use PCIT\Config\Validator as PcitConfigValidator;
 use PCIT\Framework\Support\Subject;
 use PCIT\Runner\Events\Cache;
 use PCIT\Runner\Events\Git;
@@ -114,6 +116,17 @@ class JobGenerator
 
         // 解析 .pcit.y(a)ml.
         $yaml_obj = json_decode($this->build->config);
+
+        // 验证
+
+        $result = (new PcitConfigValidator())->validate($yaml_obj);
+
+        if ([] !== $result) {
+            $e = new ConfigException(CI::CONFIG_MISCONFIGURED);
+            $e->build_key_id = $this->build_id;
+
+            throw $e;
+        }
 
         $this->language = $language = $yaml_obj->language ?? 'php';
         $this->git = $git = $yaml_obj->clone->git ?? null;

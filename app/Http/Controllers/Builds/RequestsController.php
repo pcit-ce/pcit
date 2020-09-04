@@ -9,6 +9,8 @@ use App\GetAccessToken;
 use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
+use JsonSchema\Constraints\BaseConstraint;
+use PCIT\Config\Validator;
 use PCIT\Framework\Attributes\Route;
 use PCIT\Framework\Http\Request;
 use PCIT\GetConfig;
@@ -79,7 +81,7 @@ class RequestsController
      * @throws \Exception
      */
     #[Route('post', 'api/repo/{username}/{repo_name}/requests')]
-    public function create(Request $request, ...$args)
+    public function create(Request $request, Validator $validator, ...$args)
     {
         list($username, $repo_name) = $args;
 
@@ -117,7 +119,20 @@ class RequestsController
         $event_time = time();
 
         if ($config) {
-            $config = json_encode(Yaml::parse($config));
+            $config_array = Yaml::parse($config);
+
+            $config = json_encode($config_array);
+
+            $result = $validator->validate(
+                BaseConstraint::arrayToObjectRecursive($config_array)
+            );
+
+            if ([] !== $result) {
+                $response = \Response::json($result);
+                $response->setStatusCode(400);
+
+                return $response;
+            }
         } else {
             try {
                 $subject = new Subject();

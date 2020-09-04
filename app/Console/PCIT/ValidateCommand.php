@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\PCIT;
 
 use JsonSchema\Constraints\BaseConstraint;
-use JsonSchema\Validator;
+use PCIT\Config\Validator as ConfigValidator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -18,9 +18,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class ValidateCommand extends Command
 {
-    /** @var object */
-    public $json_schema;
-
     public function configure(): void
     {
         $this->setName('validate');
@@ -39,8 +36,6 @@ class ValidateCommand extends Command
 
             return 1;
         }
-
-        $this->json_schema = json_decode(file_get_contents(base_path('config/config.schema.json')));
 
         if (is_file($pcit_file)) {
             return $this->validate($input, $output, getcwd().'/'.$pcit_file);
@@ -70,19 +65,18 @@ class ValidateCommand extends Command
 
         $data = BaseConstraint::arrayToObjectRecursive(Yaml::parse($yaml));
 
-        $validator = new Validator();
-        // $json_schema = ['$ref' => 'file://'.realpath(base_path('config/config.schema.json'))];
-        $validator->validate($data, $this->json_schema);
+        $result = (new ConfigValidator())->validate($data);
 
-        if ($validator->isValid()) {
+        if ([] === $result) {
             $output->writeln("<info>==> The supplied $pcit_file validates against the schema.</info>");
 
             return 0;
         }
+
         $output->writeln("<error>==> The supplied $pcit_file does not validate.</error>");
 
         if (!$input->getOption('table')) {
-            foreach ($validator->getErrors() as $error) {
+            foreach ($result as $error) {
                 // echo sprintf("[%s] %s\n", $error['property'], $error['message']);
                 $output->writeln(sprintf('<info>%s</info> <error>%s</error>', $error['property'], $error['message']));
             }
@@ -94,12 +88,15 @@ class ValidateCommand extends Command
         $table->setColumnMaxWidth(0, 11);
         $rows = [];
 
-        foreach ($validator->getErrors() as $error) {
+        foreach ($result as $error) {
             $rows[] = [$error['property'], $error['message']];
             $rows[] = new TableSeparator();
 
             // echo sprintf("[%s] %s\n", $error['property'], $error['message']);
         }
+
+        unset($rows[\count($rows) - 1]);
+
         $table->setRows(
             $rows
         );
