@@ -20,7 +20,7 @@ class ValidatorTest extends TestCase
         $this->assertNotEquals([], $result);
     }
 
-    public function toObj($path)
+    public function toObj(string $path)
     {
         return BaseConstraint::arrayToObjectRecursive(Yaml::parse(
             file_get_contents($path)

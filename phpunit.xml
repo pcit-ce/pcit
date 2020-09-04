@@ -28,7 +28,7 @@
     </exclude>
   </groups>
   <php>
-    <env name="APP_ENV" value="testing"/>
-    <env name="CI_TENCENT_AI_APP_KEY" value="mock"/>
+    <env name="APP_ENV" value="testing" force="true"/>
+    <env name="CI_TENCENT_AI_APP_KEY" value="mock" force="true"/>
   </php>
 </phpunit>
