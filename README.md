@@ -216,11 +216,8 @@ $ ./lnmp-docker pcit-up
 
 ### 待拆分
 
-* [API 组件](https://github.com/pcit-ce/api)
-* [缓存后端驱动](https://github.com/pcit-ce/cache)
-* [YML 转化为 PCIT 脚本](https://github.com/pcit-ce/yml)
-* [日志处理组件](https://github.com/pcit-ce/logs)
-* [任务执行组件 Runner](https://github.com/pcit-ce/runner)
+* [日志处理组件](https://github.com/pcit-ce/kernel-log)
+* [任务执行组件 Runner](https://github.com/pcit-ce/kernel-runner)
 
 ### 已拆分
 
@@ -244,7 +241,7 @@ $ ./lnmp-docker pcit-up
 
 ## 国内友商
 
-* [PHP 实现 piplin.com](http://piplin.com/)
+* [PHP 实现 piplin.com](https://github.com/Piplin/Piplin)
 * [JAVA 实现 flow.ci](https://flow.ci)
 
 ## GitHub 上的其他 CI/CD 项目

@@ -123,18 +123,9 @@ CMD ["up"]
 # ==> nginx unit
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-unit-alpine as unit
 
-ARG S6_VERSION=2.0.0.1
-
-ARG TARGETARCH
-
-RUN set -x \
-    && if [ "${TARGETARCH}" = 'arm64' ];then TARGETARCH=aarch64; fi \
-    && if [ "${TARGETARCH}" = 'arm32' ];then TARGETARCH=arm; fi \
-    && curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${TARGETARCH}.tar.gz -o /tmp/s6-overlay.tar.gz \
-    && tar -zxvf /tmp/s6-overlay.tar.gz -C / \
-#    && tar -zxvf /tmp/s6-overlay.tar.gz -C / --exclude='./bin' \
-#    && tar -zxvf /tmp/s6-overlay.tar.gz -C /usr ./bin \
-    && rm -rf /tmp/s6-overlay.tar.gz \
+RUN --mount=type=bind,from=khs1994/s6:2.0.0.1,source=/,target=/tmp/s6 \
+    set -x \
+    && tar -zxvf /tmp/s6/s6-overlay.tar.gz -C / \
 # https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
     && ln -s /init /s6-init
 
@@ -198,18 +189,9 @@ RUN set -x \
     \
     && redis-server -v
 
-ARG S6_VERSION=2.0.0.1
-
-ARG TARGETARCH
-
-RUN set -x \
-    && if [ "${TARGETARCH}" = 'arm64' ];then TARGETARCH=aarch64; fi \
-    && if [ "${TARGETARCH}" = 'arm32' ];then TARGETARCH=arm; fi \
-    && curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${TARGETARCH}.tar.gz -o /tmp/s6-overlay.tar.gz \
-    && tar -zxvf /tmp/s6-overlay.tar.gz -C / \
-#    && tar -zxvf /tmp/s6-overlay.tar.gz -C / --exclude='./bin' \
-#    && tar -zxvf /tmp/s6-overlay.tar.gz -C /usr ./bin \
-    && rm -rf /tmp/s6-overlay.tar.gz \
+RUN --mount=type=bind,from=khs1994/s6:2.0.0.1,source=/,target=/tmp/s6 \
+    set -x \
+    && tar -zxvf /tmp/s6/s6-overlay.tar.gz -C / \
 # https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
     && ln -s /init /s6-init
 

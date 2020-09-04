@@ -8,11 +8,10 @@ use App\Build;
 use App\Events\GetBuild;
 use App\Job;
 use App\Notifications\GitHubChecksConclusion\Cancelled;
+use PCIT\Framework\Attributes\Route;
 use PCIT\Framework\Support\DB;
 use PCIT\Log\LogHandler;
-use PCIT\PCIT;
 use PCIT\Support\CI;
-use PCIT\Framework\Attributes\Route;
 
 class JobController
 {
@@ -23,7 +22,7 @@ class JobController
      *
      * @return array
      */
-    @@Route('get', 'api/jobs')
+    #[Route('get', 'api/jobs')]
     public function list($build_key_id)
     {
         return Job::getByBuildKeyID((int) $build_key_id);
@@ -36,8 +35,8 @@ class JobController
      *
      * @return array|int
      */
-    @@Route('get', 'api/job/{job.id}')
-    // @@Query(["sse"])
+    #[Route('get', 'api/job/{job.id}')]
+    // #[Query(["sse"])]
     public function find($job_id)
     {
         $job = Job::find((int) $job_id);
@@ -107,7 +106,7 @@ class JobController
      *
      * @throws \Exception
      */
-    @@Route('post', 'api/job/{job.id}/cancel')
+    #[Route('post', 'api/job/{job.id}/cancel')]
     public function cancel($job_id): void
     {
         $job_id = (int) $job_id;
@@ -140,7 +139,7 @@ class JobController
      *
      * @throws \Exception
      */
-    @@Route('post', 'api/job/{job.id}/restart')
+    #[Route('post', 'api/job/{job.id}/restart')]
     public function restart($job_id): void
     {
         $job_id = (int) $job_id;

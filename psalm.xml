@@ -34,6 +34,7 @@
     </issueHandlers>
 
     <stubs>
-        <file name="src/Framework/src/Stubs/pcit.php"/>
+        <file name="src/Framework/Stubs/Core.php"/>
+        <file name="src/Framework/Stubs/pcit.php"/>
     </stubs>
 </psalm>

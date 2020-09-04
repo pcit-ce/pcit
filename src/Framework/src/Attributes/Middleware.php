@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PCIT\Framework\Attributes;
 
-@@\Attribute(\Attribute::IS_REPEATABLE)
+#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_METHOD)]
 class Middleware
 {
     public function __construct($middleware)
     {
-        $middleware_class = 'App\\Http\\Middleware\\' . $middleware;
+        $middleware_class = 'App\\Http\\Middleware\\'.$middleware;
 
         $rc = new \ReflectionClass($middleware_class);
 
         $this->middleware = $rc->newInstanceArgs($this->getParameters($rc->getName()));
     }
 
-    public function getParameters($obj, $method = '__construct'):array
+    public function getParameters($obj, $method = '__construct'): array
     {
         try {
             $rm = new \ReflectionMethod($obj, $method);

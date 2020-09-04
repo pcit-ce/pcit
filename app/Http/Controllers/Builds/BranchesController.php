@@ -20,8 +20,8 @@ class BranchesController
      *
      * @throws \Exception
      */
-    @@Route('get', 'api/repo/{git_type}/{username}/{repo_name}/branches')
-    public function __invoke(...$args):array
+    #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/branches')]
+    public function __invoke(...$args): array
     {
         list($git_type, $username, $repo) = $args;
 
@@ -47,7 +47,7 @@ class BranchesController
      *
      * @return array|string
      */
-    @@Route('get', 'api/repo/{git_type}/{username}/{repo_name}/branch/{branch.name}')
+    #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/branch/{branch.name}')]
     public function find(...$args)
     {
         $request = app('request');

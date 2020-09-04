@@ -8,7 +8,7 @@ use PCIT\Framework\Attributes\Route;
 
 class Metrics
 {
-    @@Route('get', 'api/metrics')
+    #[Route('get', 'api/metrics')]
     public function __invoke()
     {
         $content = '# builds

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Users;
 
-use App\Repo;
 use App\Build;
-use Curl\Curl;
+use App\Repo;
 use Exception;
-use PCIT\GPI\Support\Git;
-use PCIT\Framework\Support\JWT;
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Support\JWT;
+use PCIT\GPI\Support\Git;
 
 class JWTController
 {
@@ -19,7 +18,7 @@ class JWTController
      *
      * @throws \Exception
      */
-    private static function getToken():string
+    private static function getToken(): string
     {
         $token = \Request::getHeader('Authorization');
 
@@ -50,7 +49,7 @@ class JWTController
     /**
      * @throws \Exception
      */
-    public static function getUser(bool $returnGitTypeFirst = true):array
+    public static function getUser(bool $returnGitTypeFirst = true): array
     {
         $token = self::getToken();
 
@@ -79,7 +78,7 @@ class JWTController
      *
      * @throws \Exception
      */
-    public static function check(int $build_key_id):array
+    public static function check(int $build_key_id): array
     {
         list($git_type, $uid) = self::getUser();
 
@@ -109,7 +108,7 @@ class JWTController
      *
      * @throws \Exception
      */
-    public static function checkByRepo(string $username, string $repo_name):array
+    public static function checkByRepo(string $username, string $repo_name): array
     {
         list($git_type, $uid) = self::getUser();
 
@@ -131,11 +130,12 @@ class JWTController
      *
      * @throws \Exception
      */
-    @@Route('post', 'api/user/token')
+    #[Route('post', 'api/user/token')]
     public static function generate(
         string $git_type = null,
         string $username = null,
-        int $uid = null):array
+        int $uid = null
+    ): array
     {
         if ($git_type) {
             goto a;
@@ -165,8 +165,8 @@ class JWTController
         $pcit = app('pcit');
 
         $result = $pcit->git($git_type, $password)
-        ->user_basic_info
-        ->getUserInfo();
+            ->user_basic_info
+            ->getUserInfo();
 
         //$curl->setHtpasswd((string) $username, (string) $password);
 

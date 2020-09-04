@@ -8,7 +8,7 @@ use PCIT\Framework\Attributes\Route;
 
 class IndexController
 {
-    @@Route('get', 'about')
+    #[Route('get', 'about')]
     public function about(): array
     {
         return [
@@ -17,13 +17,13 @@ class IndexController
         ];
     }
 
-    @@Route('get', 'blog')
+    #[Route('get', 'blog')]
     public function blog(): void
     {
         \Response::redirect('https://khs1994.github.io/categories/CI/PCIT/');
     }
 
-    @@Route('get', 'api')
+    #[Route('get', 'api')]
     public function api()
     {
         $ci_host = config('app.host').'/api';
@@ -123,19 +123,19 @@ class IndexController
         return $array;
     }
 
-    @@Route('get', 'docs')
+    #[Route('get', 'docs')]
     public function docs(): void
     {
         \Response::redirect('https://github.com/pcit-ce/pcit/tree/master/docs');
     }
 
-    @@Route('get', 'plugins')
+    #[Route('get', 'plugins')]
     public function plugins(): void
     {
         \Response::redirect('https://docs.ci.khs1994.com/plugins/');
     }
 
-    @@Route('get', 'sitemap')
+    #[Route('get', 'sitemap')]
     public function sitemap()
     {
         $host = config('app.host');
@@ -248,19 +248,19 @@ class IndexController
         ];
     }
 
-    @@Route('get', 'status')
+    #[Route('get', 'status')]
     public function status(): void
     {
         \Response::redirect('https://status.khs1994.com');
     }
 
-    @@Route('get', 'team')
+    #[Route('get', 'team')]
     public function team(): void
     {
         \Response::redirect('https://github.com/pcit-ce/pcit/graphs/contributors');
     }
 
-    @@Route('get', 'wechat')
+    #[Route('get', 'wechat')]
     public function wechat(): void
     {
         \Response::redirect(
@@ -268,84 +268,88 @@ class IndexController
         );
     }
 
-    @@Route('get', 'changelog')
+    #[Route('get', 'changelog')]
     public function changelog(): void
     {
         \Response::redirect('https://github.com/pcit-ce/pcit/blob/master/CHANGELOG.md');
     }
 
-    @@Route('get', 'donate')
+    #[Route('get', 'donate')]
     public function donate(): void
     {
         \Response::redirect('https://zan.khs1994.com');
     }
 
-    @@Route('get', 'issues')
+    #[Route('get', 'issues')]
     public function issues(): void
     {
         \Response::redirect('https://github.com/pcit-ce/pcit/issues');
     }
 
-    @@Route('get', 'support')
+    #[Route('get', 'support')]
     public function support(): void
     {
         $this->issues();
     }
 
-    @@Route('get', 'ce')
+    #[Route('get', 'ce')]
     public function ce(): void
     {
         \Response::redirect('https://docs.ci.khs1994.com/install/ce.html');
     }
 
-    @@Route('get', 'ee')
+    #[Route('get', 'ee')]
     public function ee(): void
     {
         \Response::redirect('https://docs.ci.khs1994.com/install/ee.html');
     }
 
-    @@Route('get', 'why')
+    #[Route('get', 'why')]
     public function why(): void
     {
         \Response::redirect('https://docs.ci.khs1994.com/why.html');
     }
 
-    @@Route('get', 'privacy-policy')
+    #[Route('get', 'privacy-policy')]
     public function privacy_policy(): void
     {
         \Response::redirect('https://docs.ci.khs1994.com/privacy-policy.html');
     }
 
-    @@Route('get', 'terms-of-service')
+    #[Route('get', 'terms-of-service')]
     public function terms_of_service(): void
     {
         \Response::redirect('https://docs.ci.khs1994.com/terms-of-service.html');
     }
 
-    @@Route('get', 'security')
+    #[Route('get', 'security')]
     public function security(): void
     {
         \Response::redirect('https://docs.ci.khs1994.com/usage/security.html');
     }
 
-    @@Route('get', 'api/v1')
+    #[Route('get', 'api/v1')]
+
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @deprecated
      */
-    public function v1(){
+    public function v1()
+    {
         return [];
     }
 
-    @@Route('get', 'api/v1.1')
-    @@\PCIT\Framework\Attributes\Deprecated
-    public function v1_1(){
+    #[Route('get', 'api/v1.1')]
+    #[\PCIT\Framework\Attributes\Deprecated]
+    public function v1_1()
+    {
         return [];
     }
 
-    @@Route('get', 'api/v1.2')
-    public function v1_2(){
+    #[Route('get', 'api/v1.2')]
+    public function v1_2()
+    {
         return [];
     }
 }

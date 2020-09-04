@@ -17,8 +17,9 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('node_modules')
 
     // remove when support attribute
-    ->exclude('app/Http/Controllers')
-    ->exclude('src/Framework/src/Attributes')
+    ->notPath('app/Http/Controllers/Builds/BuildsController.php')
+    //->exclude('src/Framework/src/Attributes')
+
     ->exclude('framework/storage')
 
     // ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
@@ -58,6 +59,7 @@ return PhpCsFixer\Config::create()
       'ordered_class_elements' => false,
       'simple_to_complex_string_variable' => false,
       'phpdoc_to_comment' => false,
+      'single_line_comment_style' => false,
     ])
     ->setCacheFile(__DIR__.'/.php_cs.cache')
     ->setFinder($finder)

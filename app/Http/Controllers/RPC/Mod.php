@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\RPC;
 
 use PCIT\Framework\Attributes\Route;
@@ -9,7 +11,7 @@ use PCIT\Framework\Attributes\Route;
  */
 class Mod
 {
-    @@Route('post','rpc')
+    #[Route('post','rpc')]
     public function __invoke()
     {
         $content = \Request::getContent();
@@ -21,7 +23,7 @@ class Mod
 
         [$class, $method] = explode('::', $class_and_method);
 
-        if ($class === '\Cache') {
+        if ('\Cache' === $class) {
             $result = $class::$method(...$params);
         } else {
             $rf = new \ReflectionMethod(...explode('::', $class_and_method));
@@ -32,9 +34,9 @@ class Mod
         $id = $json_obj->id;
 
         $error = [
-            "code" => '',
-            "message" => '',
-            "data" => ""
+            'code' => '',
+            'message' => '',
+            'data' => '',
         ];
 
         return compact('jsonrpc', 'result', 'id');

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\GitHub;
 
-use PCIT\Framework\Support\HttpClient;
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Support\HttpClient;
 
 class GitHubApp
 {
-    @@Route('get', 'api/github/app/new')
-    // @@Query(["webhook_url"])
+    #[Route('get', 'api/github/app/new')]
+    // #[Query(["webhook_url"])]
     public function new(): string
     {
         $webhook_url = \Request::get('webhook_url', null);
@@ -132,8 +132,8 @@ input.value = '$manifest_json_string'
 EOF;
     }
 
-    @@Route('get', 'api/github/app/new/callback')
-    // @@Query(["code"])
+    #[Route('get', 'api/github/app/new/callback')]
+    // #[Query(["code"])]
     public function callback()
     {
         $code = \Request::get('code');

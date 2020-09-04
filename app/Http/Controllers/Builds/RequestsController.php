@@ -9,11 +9,11 @@ use App\GetAccessToken;
 use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use Exception;
+use PCIT\Framework\Attributes\Route;
 use PCIT\GetConfig;
 use PCIT\PCIT;
 use PCIT\Subject;
 use Symfony\Component\Yaml\Yaml;
-use PCIT\Framework\Attributes\Route;
 
 class RequestsController
 {
@@ -26,7 +26,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@Route('get', 'api/repo/{git_type}/{username}/{repo_name}/requests')
+    #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/requests')]
     public function __invoke(...$args)
     {
         $request = app('request');
@@ -77,17 +77,17 @@ class RequestsController
      *
      * @throws \Exception
      */
-    @@Route('post', 'api/repo/{username}/{repo_name}/requests')
+    #[Route('post', 'api/repo/{username}/{repo_name}/requests')]
     public function create(...$args)
     {
         list($username, $repo_name) = $args;
 
-        list($rid,$git_type) = JWTController::checkByRepo($username, $repo_name);
+        list($rid, $git_type) = JWTController::checkByRepo($username, $repo_name);
 
-        $token = GetAccessToken::byRid($rid,$git_type);
+        $token = GetAccessToken::byRid($rid, $git_type);
 
         /** @var \PCIT\GPI\GPI */
-        $pcit = app(PCIT::class)->git($git_type,$token);
+        $pcit = app(PCIT::class)->git($git_type, $token);
 
         // $body = file_get_contents('php://input');
 
@@ -169,7 +169,7 @@ class RequestsController
      *
      * @return array|int
      */
-    @@Route('get', 'api/repo/{username}/{repo_name}/request/{request.id}')
+    #[Route('get', 'api/repo/{username}/{repo_name}/request/{request.id}')]
     public function find(...$args)
     {
         list($username, $repo_name, $request_id) = $args;

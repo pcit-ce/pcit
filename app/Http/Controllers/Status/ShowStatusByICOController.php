@@ -25,7 +25,7 @@ class ShowStatusByICOController
         $svg = 'public/ico/unknown.svg';
 
         try {
-            $file = 'public/ico/' . $status . '.svg';
+            $file = 'public/ico/'.$status.'.svg';
 
             if (file_exists(base_path($file))) {
                 $svg = $file;

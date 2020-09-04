@@ -14,7 +14,7 @@ class OrganizationsController
      *
      * @throws \Exception
      */
-    @@Route('get', 'api/orgs')
+    #[Route('get', 'api/orgs')]
     public function __invoke()
     {
         return User::getOrgByAdmin(...JWTController::getUser(false));
@@ -27,7 +27,7 @@ class OrganizationsController
      *
      * @return mixed
      */
-    @@Route('get', 'api/org/{git_type}/{organization_name}')
+    #[Route('get', 'api/org/{git_type}/{organization_name}')]
     public function find(string $git_type, string $org_name)
     {
         return User::getUserInfo($org_name, null, $git_type)[0] ?? [];

@@ -19,7 +19,7 @@ class LogController
      *
      * @return array|string
      */
-    @@Route('get', 'api/job/{job_id}/log')
+    #[Route('get', 'api/job/{job_id}/log')]
     public function __invoke($job_id)
     {
         // return json
@@ -117,7 +117,7 @@ class LogController
      *
      * @throws \Exception
      */
-    @@Route('delete', 'api/job/{job_id}/log')
+    #[Route('delete', 'api/job/{job_id}/log')]
     public function delete($job_id)
     {
         JWTController::check(Job::getBuildKeyId((int) $job_id));

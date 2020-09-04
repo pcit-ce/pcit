@@ -15,7 +15,7 @@ class UserInfoController
      *
      * @throws \Exception
      */
-    @@Route('get', 'api/user')
+    #[Route('get', 'api/user')]
     public function __invoke()
     {
         list($uid, $git_type) = JWTController::getUser(false);
@@ -30,7 +30,7 @@ class UserInfoController
      *
      * @return array|string
      */
-    @@Route('get', 'api/user/{git_type}/{username}')
+    #[Route('get', 'api/user/{git_type}/{username}')]
     public function find(string $git_type, string $username)
     {
         try {

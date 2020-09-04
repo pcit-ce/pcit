@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\System;
 
-use PCIT\Framework\Support\DB;
 use PCIT\Framework\Attributes\Route;
+use PCIT\Framework\Support\DB;
 
 class Healthz
 {
-    @@Route('get', 'api/healthz')
-    @@Route('get', 'api/readyz')
-    @@Route('get', 'api/livez')
+    #[Route('get', 'api/healthz')]
+    #[Route('get', 'api/readyz')]
+    #[Route('get', 'api/livez')]
     public function __invoke()
     {
         $cache_result = $this->cache(true);
@@ -25,9 +25,9 @@ class Healthz
         return $this->fail();
     }
 
-    @@Route('get', 'api/healthz/cache')
-    @@Route('get', 'api/readyz/cache')
-    @@Route('get', 'api/livez/cache')
+    #[Route('get', 'api/healthz/cache')]
+    #[Route('get', 'api/readyz/cache')]
+    #[Route('get', 'api/livez/cache')]
     public function cache(bool $returnBool = false)
     {
         try {
@@ -39,9 +39,9 @@ class Healthz
         }
     }
 
-    @@Route('get', 'api/healthz/database')
-    @@Route('get', 'api/readyz/database')
-    @@Route('get', 'api/livez/database')
+    #[Route('get', 'api/healthz/database')]
+    #[Route('get', 'api/readyz/database')]
+    #[Route('get', 'api/livez/database')]
     public function database(bool $returnBool = false)
     {
         try {
@@ -53,9 +53,9 @@ class Healthz
         }
     }
 
-    @@Route('get', 'api/healthz/docker')
-    @@Route('get', 'api/readyz/docker')
-    @@Route('get', 'api/livez/docker')
+    #[Route('get', 'api/healthz/docker')]
+    #[Route('get', 'api/readyz/docker')]
+    #[Route('get', 'api/livez/docker')]
     public function docker(bool $returnBool = false)
     {
         try {

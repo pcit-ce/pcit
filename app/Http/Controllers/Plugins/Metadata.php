@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Plugins;
 
-use Symfony\Component\Finder\Finder;
 use PCIT\Framework\Attributes\Route;
+use Symfony\Component\Finder\Finder;
 
 class Metadata
 {
-    @@Route('get', 'plugins/metadata')
+    #[Route('get', 'plugins/metadata')]
     public function __invoke()
     {
         $plugin_metadata_path = base_path('config/plugin.metadata.json');

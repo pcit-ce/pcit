@@ -7,10 +7,10 @@ namespace App\Http\Controllers\OAuth;
 use App\User;
 use Exception;
 use PCIT\Coding\Service\OAuth\Client as CodingClient;
+use PCIT\Framework\Attributes\Route;
 use PCIT\Gitee\Service\OAuth\Client as GiteeClient;
 use PCIT\GitHub\Service\OAuth\Client as GitHubClient;
 use PCIT\PCIT;
-use PCIT\Framework\Attributes\Route;
 
 class IndexController
 {
@@ -49,7 +49,7 @@ class IndexController
     /**
      * 获取登录的 URL.
      */
-    @@Route('get', 'oauth/{git_type}/login')
+    #[Route('get', 'oauth/{git_type}/login')]
     public function getLoginUrl(string $git_type): void
     {
         /*
@@ -92,7 +92,7 @@ class IndexController
      *
      * @throws \Exception
      */
-    @@Route('get', 'oauth/${git_type}')
+    #[Route('get', 'oauth/${git_type}')]
     public function getAccessToken(string $git_type): void
     {
         $this->bootstrap($git_type);

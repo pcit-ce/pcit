@@ -10,7 +10,7 @@ use Redis;
 
 class RedisStore implements Store
 {
-    private $redis;
+    public $redis;
 
     public function __construct(Redis $redis)
     {

@@ -69,7 +69,7 @@ class Controller
         $access_token = self::checkAccessToken();
 
         /** @var \PCIT\GPI\GPI */
-        $pcit = app(PCIT::class)->git(static::$gitType,$access_token);
+        $pcit = app(PCIT::class)->git(static::$gitType, $access_token);
 
         $json = $pcit->repo_webhooks->getWebhooks($raw, ...$arg);
 
@@ -101,7 +101,7 @@ class Controller
         try {
             $data = self::$method(...$arg);
         } catch (Exception | \Throwable $e) {
-            throw new Exception($e->getMessage(), (int)$e->getCode());
+            throw new Exception($e->getMessage(), (int) $e->getCode());
         }
 
         $dataObj = json_decode($data);
@@ -114,7 +114,7 @@ class Controller
 
         $access_token = self::checkAccessToken();
 
-        $pcit = \PCIT::git(self::$gitType,$access_token);
+        $pcit = \PCIT::git(self::$gitType, $access_token);
 
         $getWebhooksStatus = $pcit->repo_webhooks->getStatus($webhooksUrl, ...$arg);
 
@@ -166,7 +166,7 @@ class Controller
         $access_token = self::checkAccessToken();
 
         /** @var \PCIT\PCIT */
-        $pcit = app('pcit')->git(self::$gitType,$access_token);
+        $pcit = app('pcit')->git(self::$gitType, $access_token);
 
         $repo_full_name = $username.'/'.$repo;
 

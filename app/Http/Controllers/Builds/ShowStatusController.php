@@ -15,8 +15,8 @@ class ShowStatusController
      *
      * @throws \Exception
      */
-    @@Route('get', '{git_type}/{username}/{repo_name}/status')
-    @@Route('get', 'api/repo/{git_type}/{username}/{repo_name}/status')
+    #[Route('get', '{git_type}/{username}/{repo_name}/status')]
+    #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/status')]
     public function __invoke(...$arg)
     {
         /** @var \PCIT\Framework\Http\Request */
@@ -45,20 +45,20 @@ class ShowStatusController
 
         //header_remove('x-powered-by');
 
-        $response = \Response::file(base_path($svg),[
+        $response = \Response::file(base_path($svg), [
             'X-Powered-By' => 'PCIT https://ci.khs1994.com',
             'X-PCIT-Author' => 'https://khs1994.com',
             'Content-Type' => 'image/svg+xml;charset=utf-8',
         ]);
 
         $expires = (new \DateTime())
-        ->setTimestamp(time() + 300);
+            ->setTimestamp(time() + 300);
 
         return $response->setExpires($expires) // 'Expires' => $ts
-        ->setCache([
-            "max_age" => 300,
-            "public" => true,
-        ]); // 'Cache-Control' => 'max-age=300,public'
+            ->setCache([
+                'max_age' => 300,
+                'public' => true,
+            ]); // 'Cache-Control' => 'max-age=300,public'
     }
 
     /**
@@ -66,7 +66,7 @@ class ShowStatusController
      *
      * @return string
      */
-    @@Route('get', '{git_type}/{username}/{repo_name}/getstatus')
+    #[Route('get', '{git_type}/{username}/{repo_name}/getstatus')]
     public function getStatus(...$arg)
     {
         list($git_type, $username, $repo) = $arg;

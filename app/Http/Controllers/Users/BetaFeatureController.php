@@ -16,7 +16,7 @@ class BetaFeatureController
      *
      * @throws \Exception
      */
-    @@Route('get', 'api/user/beta_features')
+    #[Route('get', 'api/user/beta_features')]
     public function __invoke(): void
     {
         JWTController::getUser();
@@ -31,7 +31,7 @@ class BetaFeatureController
      *
      * @throws \Exception
      */
-    @@Route('patch', 'api/user/beta_feature/{beta_feature_id}')
+    #[Route('patch', 'api/user/beta_feature/{beta_feature_id}')]
     public function enable(): void
     {
         JWTController::getUser();
@@ -44,7 +44,7 @@ class BetaFeatureController
      *
      * @throws \Exception
      */
-    @@Route('delete','api/user/beta_feature/{beta_feature_id}')
+    #[Route('delete','api/user/beta_feature/{beta_feature_id}')]
     public function delete(...$args): void
     {
         JWTController::getUser();

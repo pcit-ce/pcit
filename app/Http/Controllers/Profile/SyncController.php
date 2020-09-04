@@ -8,9 +8,9 @@ use App\GetAccessToken;
 use App\Http\Controllers\Users\JWTController;
 use App\Repo;
 use App\User;
+use PCIT\Framework\Attributes\Route;
 use PCIT\Framework\Support\DB;
 use PCIT\PCIT;
-use PCIT\Framework\Attributes\Route;
 
 /**
  * 同步用户数据.
@@ -31,14 +31,14 @@ class SyncController
     /**
      * @throws \Exception
      */
-    @@Route('post','api/user/sync')
+    #[Route('post','api/user/sync')]
     public function __invoke()
     {
         list($this->git_type, $this->uid) = JwtController::getUser();
 
         $this->access_token = GetAccessToken::getAccessTokenByUid((int) $this->uid, $this->git_type);
 
-        $this->pcit = app(PCIT::class)->git($this->git_type,$this->access_token);
+        $this->pcit = app(PCIT::class)->git($this->git_type, $this->access_token);
 
         if ('github' === $this->git_type) {
             // github 只获取用户组织，不获取用户仓库

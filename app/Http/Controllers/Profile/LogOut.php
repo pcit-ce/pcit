@@ -11,7 +11,7 @@ use PCIT\Framework\Attributes\Route;
  */
 class LogOut
 {
-    @@Route('get', '{git_type}/logout')
+    #[Route('get', '{git_type}/logout')]
     public function __invoke($git_type): void
     {
         \Session::pull($git_type.'.access_token');
