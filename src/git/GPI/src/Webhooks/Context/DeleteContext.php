@@ -10,8 +10,9 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 /**
  * A Git branch or tag is deleted.
  *
- * @property int    $rid
- * @property string $repo_full_name
+ * @property int            $rid
+ * @property string         $repo_full_name
+ * @property "branch"|"tag" $ref_type
  */
 class DeleteContext extends Context
 {
@@ -21,7 +22,6 @@ class DeleteContext extends Context
      */
     public string $ref;
 
-    /** "branch"|"tag" */
     public string $ref_type;
 
     use ContextTrait;

@@ -1416,6 +1416,11 @@
                         },
                         "read_only": {
                             "$ref": "#/definitions/read_only"
+                        },
+                        "timeout": {
+                            "type": "integer",
+                            "description": "timeout sec, e.g. 60",
+                            "default": 3600
                         }
                     },
                     "additionalProperties": false
@@ -1601,6 +1606,11 @@
                     "type": "string",
                     "$comment": "https://docs.ci.khs1994.com/usage/image.html",
                     "description": "set step default image, see https://docs.ci.khs1994.com/usage/image.html"
+                },
+                "timeout": {
+                    "type": "integer",
+                    "description": "step timeout sec, e.g. 60",
+                    "default": 3600
                 }
             },
             "additionalProperties": false

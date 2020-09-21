@@ -66,6 +66,8 @@ class JobGenerator
 
     public $networks;
 
+    public $timeout;
+
     /**
      * @var TextHandler
      */
@@ -118,7 +120,6 @@ class JobGenerator
         $yaml_obj = json_decode($this->build->config);
 
         // 验证
-
         $result = (new PcitConfigValidator())->validate($yaml_obj);
 
         if ([] !== $result) {
@@ -137,6 +138,7 @@ class JobGenerator
         $matrix = $yaml_obj->jobs ?? $yaml_obj->matrix ?? null;
         $image = $yaml_obj->image ?? null;
         $this->networks = $networks = $yaml_obj->networks ?? null;
+        $this->timeout = $yaml_obj->timeout ?? null;
 
         if ($networks->hosts ?? null) {
             $this->networks->hosts = $this->textHandler->handleArray(

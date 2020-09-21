@@ -18,6 +18,6 @@ abstract class PingAbstract extends Handler implements PingInterface
     {
         $context->git_type = $git_type;
 
-        $this->callPustomize('ping', $context);
+        $this->callPustomize('Ping', $context);
     }
 }

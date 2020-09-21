@@ -7,9 +7,11 @@ namespace PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
+/**
+ * @property "deleted" $action
+ */
 class Meta extends Context
 {
-    /*@var "deleted" */
     public string $action;
 
     public int $hook_id;

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Context;
 
+use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
-class ProjectCardContext
+class ProjectCardContext extends Context
 {
     /**
      * The changes to the project card if the action was `edited` or `converted`.

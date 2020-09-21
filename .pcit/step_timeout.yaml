@@ -1,0 +1,12 @@
+steps:
+  script:
+    run: sleep 10 ; echo 'done'
+    timeout: 12
+    # timeout: 5
+
+clone:
+  git:
+    disable: true
+
+timeout: 5
+# timeout: 12

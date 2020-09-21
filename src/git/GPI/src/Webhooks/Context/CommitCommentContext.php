@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace pcit\GPI\Webhooks\Context;
 
+use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\Components\CommitComment;
 use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
-class CommitCommentContext
+/**
+ * @property "created" $action
+ */
+class CommitCommentContext extends Context
 {
-    /** @var "created" */
     public $action;
 
     public CommitComment $comment;

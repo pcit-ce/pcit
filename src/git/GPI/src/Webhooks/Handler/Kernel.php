@@ -22,30 +22,12 @@ class Kernel
         return 'PCIT\\'.Git::getClassName($git_type).'\\Webhooks\Handler\\';
     }
 
-    /**
-     * Action.
-     *
-     * created updated rerequested
-     *
-     * @throws \Exception
-     */
     public function check_run(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'CheckRun';
         $this->callHandler($class, $webhooks_content);
     }
 
-    /**
-     * Action.
-     *
-     * completed
-     *
-     * requested 用户推送分支，github post webhooks
-     *
-     * rerequested 用户点击了重新运行按钮
-     *
-     * @throws \Exception
-     */
     public function check_suite(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'CheckSuite';
@@ -62,20 +44,10 @@ class Kernel
         $this->callHandler($class, $webhooks_content);
     }
 
-    /**
-     * Create "repository", "branch", or "tag".
-     *
-     * @throws \Exception
-     */
     public function create(string $webhooks_content, string $git_type): void
     {
     }
 
-    /**
-     * Delete tag or branch.
-     *
-     * @throws \Exception
-     */
     public function delete(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'Delete';
@@ -106,47 +78,18 @@ class Kernel
     {
     }
 
-    /**
-     * Any time a GitHub App is installed or uninstalled.
-     *
-     * action:
-     *
-     * created 用户点击安装按钮
-     *
-     * deleted 用户卸载了 GitHub Apps
-     *
-     * @see
-     *
-     * @throws \Exception
-     */
     public function installation(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'Installation';
         $this->callHandler($class, $webhooks_content);
     }
 
-    /**
-     * Any time a repository is added or removed from an installation.
-     *
-     * action:
-     *
-     * added 用户增加仓库
-     *
-     * removed 移除仓库
-     *
-     * @throws \Exception
-     */
     public function installation_repositories(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'InstallationRepositories';
         $this->callHandler($class, $webhooks_content);
     }
 
-    /**
-     * "created", "edited", or "deleted".
-     *
-     * @throws \Exception
-     */
     public function issue_comment(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'IssueComment';
@@ -154,9 +97,6 @@ class Kernel
         $this->callHandler($class, $webhooks_content);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function issues(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'Issues';
@@ -171,11 +111,6 @@ class Kernel
     {
     }
 
-    /**
-     * action `added` `deleted` `edited` `removed`.
-     *
-     * @throws \Exception
-     */
     public function member(string $webhooks_content, string $git_type): void
     {
     }
@@ -231,17 +166,7 @@ class Kernel
     {
     }
 
-    /**
-     * Action.
-     *
-     * "assigned", "unassigned", "review_requested", "review_request_removed",
-     * "labeled", "unlabeled", "opened", "synchronize", "edited", "closed", or "reopened"
-     *
-     * @throws \Exception
-     *
-     * @return array|void
-     */
-    public function pull_request(string $webhooks_content, string $git_type)
+    public function pull_request(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'PullRequest';
         $this->callHandler($class, $webhooks_content);
@@ -255,13 +180,6 @@ class Kernel
     {
     }
 
-    /**
-     * push.
-     *
-     * 1. 首次推送到新分支，head_commit 为空
-     *
-     * @throws \Exception
-     */
     public function push(string $webhooks_content, string $git_type): void
     {
         $class = $this->getNamespace($git_type).'Push';
@@ -312,14 +230,6 @@ class Kernel
 
     public function team_add(string $webhooks_content, string $git_type): void
     {
-        $obj = json_decode($webhooks_content);
-
-        $repository = $obj->repository;
-
-        $rid = $repository->id;
-        $username = $repository->owner->name;
-
-        $installation_id = $obj->installation->id ?? null;
     }
 
     public function watch(string $webhooks_content, string $git_type): void

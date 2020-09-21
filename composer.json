@@ -115,7 +115,7 @@
     "league/flysystem-aws-s3-v3": "^1.0",
     "monolog/monolog": "^2.0.2",
     "netresearch/jsonmapper": "^3.0",
-    "nunomaduro/collision": "^4.1",
+    "nunomaduro/collision": "^5.0.2",
     "pcit/framework": "19.12-dev",
     "pcit/git-coding": "19.12-dev",
     "pcit/git-gitee": "19.12-dev",

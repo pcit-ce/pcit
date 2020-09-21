@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       target: pcit
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.4.8}
+        - PHP_VERSION=${PHP_VERSION:-8.0.0beta4}
         - NODE_VERSION=${NODE_VERSION:-14.8.0}
         - NODE_REGISTRY=https://registry.npm.taobao.org
 

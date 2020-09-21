@@ -31,13 +31,17 @@
 
 ## v19.12
 
+### 2020/09/21
+
+* [ ] 新增 `timeout` 指令
+
 ### 2020/09/04
 
 * [ ] 版本化 API
 
 ### 2020/08/21
 
-* [ ] `Agent` 通过 [JSON-RPC](http://wiki.geekdream.com/Specification/json-rpc_2.0.html) 与 `Server` 通信
+* [x] `Agent` 通过 [JSON-RPC](http://wiki.geekdream.com/Specification/json-rpc_2.0.html) 与 `Server` 通信
 
 ### 2020/08/04
 

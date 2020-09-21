@@ -209,6 +209,7 @@ class Pipeline
             $settings = (array) $settings;
             $when = $pipelineContent->if ?? null;
             $read_only = $pipelineContent->read_only ?? false;
+            $timeout = $pipelineContent->timeout ?? $this->jobGenerator->timeout ?? null;
 
             // 预处理 env
             $preEnv = $this->handleEnv($env, $step);
@@ -257,7 +258,7 @@ class Pipeline
             $env = array_merge(["CI_SCRIPT=$ci_script"], $preEnv);
             \Log::info(json_encode($env), []);
 
-            [$entrypoint,$cmd] = (new ShellHandler())->handle($shell, $commands);
+            [$entrypoint,$cmd] = (new ShellHandler())->handle($shell, $commands, $timeout);
 
             $container_config = $docker_container
                 ->setEnv($env)

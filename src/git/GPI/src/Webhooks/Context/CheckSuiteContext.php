@@ -30,7 +30,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  * @property int                                   $event_time
  * @property Author                                $author
  * @property Committer                             $committer
- * @property object                                $check_suite
  */
 class CheckSuiteContext extends Context
 {

@@ -6,9 +6,9 @@ namespace PCIT\Runner\Events\Handler;
 
 class ShellHandler
 {
-    public function handle(string $shell = 'sh', ?array $commands = []): array
+    public function handle(string $shell = 'sh', ?array $commands = [], ?int $timeout = null): array
     {
-        $timeout = env('CI_STEP_TIMEOUT', 21600);
+        $timeout = $timeout ?? env('CI_STEP_TIMEOUT', 21600);
 
         $cmd = null;
 
