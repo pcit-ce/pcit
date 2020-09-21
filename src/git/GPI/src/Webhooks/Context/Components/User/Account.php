@@ -4,21 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Context\Components\User;
 
-use PCIT\GPI\Webhooks\Context\Components\Kernel;
-
-/**
- * @property string                $login      username
- * @property int                   $id
- * @property string                $avatar_url
- * @property 'User'|'Organization' $type
- * @property bool                  $org
- */
-class Account extends Kernel
+class Account extends User
 {
-    public function __construct($obj, bool $org = false)
-    {
-        $this->org = $org;
-
-        parent::__construct($obj);
-    }
 }

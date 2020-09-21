@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Handler\Abstracts;
 
+use PCIT\GPI\Webhooks\Handler\Handler;
 use PCIT\GPI\Webhooks\Handler\Interfaces\PingInterface;
-use PCIT\GPI\Webhooks\PustomizeHandler;
 
-abstract class PingAbstract implements PingInterface
+abstract class PingAbstract extends Handler implements PingInterface
 {
     /**
      * @param mixed $context
@@ -18,6 +18,6 @@ abstract class PingAbstract implements PingInterface
     {
         $context->git_type = $git_type;
 
-        (new PustomizeHandler())->handle('ping', $context);
+        $this->callPustomize('ping', $context);
     }
 }

@@ -18,6 +18,6 @@ namespace PCIT\GPI\Webhooks\Context\Components;
  * @property string $avatar_url
  * @property string $description
  */
-class Organization extends Kernel
+class Organization
 {
 }

@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Context;
 
-use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Context\Components\User\Owner;
-
 /**
- * @property int            $installation_id
- * @property int            $rid
- * @property string         $repo_full_name
- * @property "branch"|"tag" $ref_type
- * @property Owner          $owner
+ * A Git branch or tag is created.
+ *
+ * @property string $master_branch
+ * @property string $description
  */
-class CreateContext extends Context
+class CreateContext extends DeleteContext
 {
 }

@@ -12,8 +12,8 @@ use PCIT\GPI\Webhooks\Context\Components\User\Owner;
  * @property string $name
  * @property string $full_name
  * @property bool   $private
- * @property Owner  $owner
  */
-class Repository extends Kernel
+class Repository
 {
+    public Owner $owner;
 }

@@ -25,6 +25,8 @@ services:
       - 8080:80
     networks:
       - default
+    tmpfs:
+      - /var/run
     volumes:
       - tmp-data:/tmp
       - dockerd-data:/var/lib/docker

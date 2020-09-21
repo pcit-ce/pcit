@@ -6,6 +6,7 @@ namespace PCIT\Pustomize\Installation;
 
 use App\Repo;
 use App\User;
+use PCIT\GPI\Webhooks\Context\Components\InstallationRepositories;
 use PCIT\GPI\Webhooks\Context\InstallationContext;
 
 class Handler
@@ -21,7 +22,7 @@ class Handler
      */
     public function handle(InstallationContext $context): void
     {
-        $installation_id = $context->installation_id;
+        $installation_id = $context->installation->id;
         $action = $context->action;
         $repositories = $context->repositories;
         $sender = $context->sender;
@@ -48,6 +49,8 @@ class Handler
 
     /**
      * 用户首次安装了 GitHub App.
+     *
+     * @param InstallationRepositories[] $repositories
      *
      * @throws \Exception
      */

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Handler\Interfaces;
 
-interface IssueCommentInterface
+interface IssueCommentInterface extends HandlerInterface
 {
-    public function handle(string $webhooks_content): void;
 }

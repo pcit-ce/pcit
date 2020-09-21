@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Context\Components\User\Owner;
+use PCIT\GPI\Webhooks\Context\Components\Issue;
+use PCIT\GPI\Webhooks\Context\Components\IssueComment;
+use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
- * @property int                          $installation_id
  * @property int                          $rid
  * @property string                       $repo_full_name
  * @property string                       $sender_username
@@ -20,10 +21,19 @@ use PCIT\GPI\Webhooks\Context\Components\User\Owner;
  * @property string                       $body
  * @property int                          $created_at
  * @property int                          $updated_at
- * @property Owner                        $owner
  * @property "created"|"edited"|"deleted" $action
  * @property bool                         $is_pull_request
  */
 class IssueCommentContext extends Context
 {
+    public Issue $issue;
+
+    public IssueComment $comment;
+
+    /**
+     * The changes to the comment if the action was `edited`.
+     */
+    public $changes;
+
+    use ContextTrait;
 }

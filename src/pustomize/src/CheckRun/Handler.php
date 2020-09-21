@@ -17,7 +17,7 @@ class Handler
             return;
         }
 
-        $installation_id = $context->installation_id;
+        $installation_id = $context->installation->id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
         $action = $context->action;

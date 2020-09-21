@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Context\Components\User\Owner;
+use PCIT\GPI\Webhooks\Context\Components\CheckRun;
+use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
- * @property int                                                    $installation_id
  * @property int                                                    $rid
  * @property string                                                 $repo_full_name
  * @property "created"|"completed"|"rerequested"|"requested_action" $action
@@ -16,9 +16,11 @@ use PCIT\GPI\Webhooks\Context\Components\User\Owner;
  * @property string                                                 $commit_id
  * @property int                                                    $check_suite_id
  * @property int                                                    $check_run_id
- * @property int                                                    $external_id
- * @property Owner                                                  $owner
+ * @property string                                                 $external_id
  */
 class CheckRunContext extends Context
 {
+    public CheckRun $check_run;
+
+    use ContextTrait;
 }

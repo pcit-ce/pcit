@@ -131,7 +131,7 @@ class Kernel
             if ($e instanceof SuccessHandleRouteException) {
                 $response = Route::getResponse();
 
-                return $this->convertToResponse($response);
+                return $this->convertToResponse($response)->prepare($request);
             }
 
             $code = (int) $e->getCode();

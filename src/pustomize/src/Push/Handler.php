@@ -38,7 +38,7 @@ class Handler
             DisableHandler::handle($context->repo_full_name, $this->git_type);
         }
 
-        $installation_id = $context->installation_id;
+        $installation_id = $context->installation->id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
         $branch = $context->branch;
@@ -121,7 +121,7 @@ class Handler
         }
 
         $git_type = $context->git_type;
-        $installation_id = $context->installation_id;
+        $installation_id = $context->installation->id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
         $branch = $context->branch;

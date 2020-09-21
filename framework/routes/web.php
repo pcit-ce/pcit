@@ -7,7 +7,7 @@ Route::get('test1/{id}', function ($id) {
     return $id;
 });
 
-Route::get('test3', 'Test\TestController@test3');
+Route::get('test3', [\App\Http\Controllers\Test\TestController::class, 'test3']);
 
 Route::get('test4', 'Test\TestController@notExistsMethod');
 
@@ -204,7 +204,7 @@ Route::get('ico/unknown', 'Status\ShowStatusByICOController@unknown');
 // Route::post('api/user/token', 'Users\JWTController@generate');
 
 // wechat
-Route::match(['get', 'post'], 'wechat', 'WeChat\MessageServer');
+Route::match(['get', 'post'], 'wechat', [\App\Http\Controllers\WeChat\MessageServer::class]);
 
 // System
 Route::get('api/ci/oauth_client_id', 'System\SystemController@getOAuthClientId');

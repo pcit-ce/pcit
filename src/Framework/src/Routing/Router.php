@@ -13,12 +13,12 @@ use PCIT\GPI\Support\Git;
 use Throwable;
 
 /**
- * @method void get(string $url, Closure|string $action)
- * @method void post(string $url, Closure|string $action)
- * @method void put(string $url, Closure|string $action)
- * @method void patch(string $url, Closure|string $action)
- * @method void delete(string $url, Closure|string $action)
- * @method void options(string $url, Closure|string $action)
+ * @method void get(string $url, array|callable|string $action)
+ * @method void post(string $url, array|callable|string $action)
+ * @method void put(string $url, array|callable|string $action)
+ * @method void patch(string $url, array|callable|string $action)
+ * @method void delete(string $url, array|callable|string $action)
+ * @method void options(string $url, array|callable|string $action)
  */
 class Router
 {
@@ -29,8 +29,11 @@ class Router
     public $response;
 
     /**
-     * @param Closure|string $action e.g. 'Controller@method'
-     * @param mixed          ...$arg e.g. 'user/{id}' 'user/1' => [1]
+     * @param array|callable|string $action e.g.
+     *                                      'Controller@method'
+     *                                      [\App\Http\Controllers\Controller::class,'method']
+     *                                      fn() => 1
+     * @param mixed                 ...$arg e.g. 'user/{id}' => 'user/1' => result [1]
      *
      * @throws \Exception
      */
@@ -39,17 +42,24 @@ class Router
         if ($action instanceof Closure) {
             // 闭包
             $arg = $this->getParameters(null, $action, $arg);
-            $this->response = \call_user_func($action, ...$arg);
+            $this->response = \call_user_func_array($action, $arg);
 
             throw new SuccessHandleRouteException();
         }
 
-        $array = explode('@', $action);
+        if (\is_array($action)) {
+            $array = $action;
 
-        $obj = 'App\\Http\\Controllers'.'\\'.$array[0];
+            $obj = $array[0];
+        } else {
+            $array = explode('@', $action);
 
+            $obj = 'App\\Http\\Controllers'.'\\'.$array[0];
+        }
         // 没有 @ 说明是 __invoke() 方法
         $method = $array[1] ?? '__invoke';
+
+        $action = $obj.'@'.$method;
 
         if (!class_exists($obj)) {
             // 类不存在，返回
@@ -62,7 +72,7 @@ class Router
         $rc = new \ReflectionClass($obj);
 
         // 获取类构造函数参数
-        $construct_args = $this->getParameters($rc->getName(), '__construct');
+        $construct_args = $this->getParameters($rc->getName());
 
         // var_dump($args);
         // var_dump($construct_args);
@@ -166,15 +176,15 @@ class Router
     /**
      * 获取方法参数列表.
      *
-     * @param null|mixed $obj
-     * @param null|mixed $method
-     * @param mixed      $arg
+     * @param null|mixed|object   $obj
+     * @param null|Closure|string $method
+     * @param mixed               $arg
      */
-    private function getParameters($obj = null, $method = null, $arg = []): array
+    public function getParameters($obj = null, $method = null, $arg = []): array
     {
         try {
             $reflection = $obj ?
-                new \ReflectionMethod($obj, $method) : new \ReflectionFunction($method);
+                new \ReflectionMethod($obj, $method ?? '__construct') : new \ReflectionFunction($method);
         } catch (Throwable $e) {
             return [];
         }
@@ -210,11 +220,12 @@ class Router
             if ($parameter_class and !$parameter->getType()->isBuiltin()) {
                 // 不是内置类
                 try {
+                    // 首先尝试从容器中解析
                     $args[$key] = app($parameter_class);
                 } catch (Throwable $e) {
                     // 未注入到容器中
                     // 参数提示为类，获取构造函数参数
-                    $construct_args = $this->getParameters($parameter_class, '__construct');
+                    $construct_args = $this->getParameters($parameter_class);
                     $args[$key] = (new \ReflectionClass($parameter_class))
                         ->newInstanceArgs($construct_args);
                 }
@@ -229,8 +240,8 @@ class Router
     }
 
     /**
-     * @param string $targetUrl route 定义的 URL
-     * @param $action
+     * @param string                $targetUrl route 定义的 URL
+     * @param array|\Closure|string $action
      *
      * @throws \Exception
      */

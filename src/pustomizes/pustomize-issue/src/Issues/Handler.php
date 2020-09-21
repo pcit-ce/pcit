@@ -21,7 +21,7 @@ class Handler implements HandlerInterface
     public function handle(IssuesContext $context): void
     {
         $git_type = $context->git_type;
-        $installation_id = $context->installation_id;
+        $installation_id = $context->installation->id;
         $action = $context->action;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;

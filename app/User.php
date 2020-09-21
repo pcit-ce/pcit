@@ -8,6 +8,7 @@ use PCIT\Framework\Support\DB;
 use PCIT\Framework\Support\Model;
 use PCIT\GPI\Webhooks\Context\Components\User\Account;
 use PCIT\GPI\Webhooks\Context\Components\User\Owner;
+use PCIT\GPI\Webhooks\Context\Components\User\User as GitUser;
 
 class User extends Model
 {
@@ -33,9 +34,9 @@ class User extends Model
     }
 
     /**
-     * @param int|Owner $uid
-     * @param string    $name
-     * @param string    $username
+     * @param GitUser|int $uid
+     * @param string      $name
+     * @param string      $username
      *
      * @throws \Exception
      */

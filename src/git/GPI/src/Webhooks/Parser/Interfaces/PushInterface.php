@@ -14,5 +14,5 @@ interface PushInterface
      */
     public static function handle(string $webhooks_content): Context;
 
-    public static function tag($tag, string $webhooks_content): TagContext;
+    public static function tag(string $tag, string $webhooks_content): TagContext;
 }

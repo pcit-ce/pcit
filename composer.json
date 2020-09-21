@@ -99,11 +99,11 @@
     "php": "^7.3.0",
     "ext-PDO": "*",
     "ext-curl": "*",
+    "ext-date": "*",
     "ext-iconv": "*",
     "ext-json": "*",
-    "ext-redis": "*",
     "ext-pdo_mysql": "*",
-    "ext-date": "*",
+    "ext-redis": "*",
     "doctrine/cache": "^1.6",
     "filp/whoops": "^2.3",
     "firebase/php-jwt": "^5.0",
@@ -114,6 +114,7 @@
     "khs1994/wechat": "dev-master",
     "league/flysystem-aws-s3-v3": "^1.0",
     "monolog/monolog": "^2.0.2",
+    "netresearch/jsonmapper": "^3.0",
     "nunomaduro/collision": "^4.1",
     "pcit/framework": "19.12-dev",
     "pcit/git-coding": "19.12-dev",
@@ -138,7 +139,8 @@
     "pimple/pimple": "~3.0",
     "sistemi-etime/flysystem-plugin-aws-s3-v3": "^1.0",
     "symfony/finder": "^5.0",
-    "vlucas/phpdotenv": "^5.0"
+    "vlucas/phpdotenv": "^5.0",
+    "khs1994/advanced-json-rpc": "3.1.2"
   },
   "require-dev": {
     "khs1994/phar-builder": "20.04.11",

@@ -20,7 +20,7 @@ class ExpressionHandler
             $expression = explode('.', trim(trim(substr($k, 3), '}')));
 
             if ('steps' === $expression[0] && 'outputs' === $expression[2] && ($expression[3] ?? false)) {
-                $result = $outputs[$expression[1]][$expression[3]] ?? null;
+                $result = $outputs[$expression[1]][$expression[3]] ?? '';
 
                 $string = str_replace($k, $result, $string);
 
@@ -28,7 +28,7 @@ class ExpressionHandler
             }
 
             if ('steps' === $expression[0] && 'outputs' === $expression[2]) {
-                $result = json_encode($outputs[$expression[1]] ?? null);
+                $result = json_encode($outputs[$expression[1]] ?? '');
             }
 
             $string = str_replace($k, $result, $string);

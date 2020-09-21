@@ -46,10 +46,12 @@
     "json",
     "pdo_mysql",
     "Core",
-    "date"
+    "date",
+    "standard"
   ],
   "php-docblocker.author": {
     "name": "pcit",
     "email": "ci@khs1994.com"
-  }
+  },
+  "phpunit.files": "**/{test,tests,Test,Tests}/**/*Test.php"
 }

@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
-use PCIT\GPI\Webhooks\Context\Components\User\Account;
-use PCIT\GPI\Webhooks\Context\Components\User\Sender;
+use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
- * @property int               $installation_id
+ * Activity related to repositories being added to a GitHub App installation.
+ *
  * @property "added"|"removed" $action
- * @property array             $repositories
- * @property Sender            $sender
- * @property Account           $account
  */
 class InstallationRepositoriesContext extends Context
 {
+    public string $repository_selection;
+    /** @var \PCIT\GPI\Webhooks\Context\Components\InstallationRepositories[] */
+    public $repositories_added;
+    /** @var \PCIT\GPI\Webhooks\Context\Components\InstallationRepositories[] */
+    public $repositories_removed;
+
+    use ContextTrait;
 }

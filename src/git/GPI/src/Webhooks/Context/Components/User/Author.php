@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace PCIT\GPI\Webhooks\Context\Components\User;
 
+/** @property string $username */
 class Author
 {
-    /** @var string */
-    public $name;
+    public string $name;
 
-    /** @var string */
-    public $username;
+    public string $email;
 
-    /** @var string */
-    public $email;
-
-    public function __construct($author)
+    public function __get(string $name)
     {
-        $this->name = $author->name;
-        $this->email = $author->email;
-        $this->username = $author->username ?? '';
+        if ('username' === $name) {
+            return $this->$name ?? '';
+        }
     }
 }

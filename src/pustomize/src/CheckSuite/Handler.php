@@ -29,13 +29,14 @@ class Handler
 
         if ('requested' === $context->action) {
             if ($context->check_suite->pull_requests) {
+                // check suite 只能触发内部 PR
                 $this->handlePullRequest($context);
 
                 return;
             }
         }
 
-        $installation_id = $context->installation_id;
+        $installation_id = $context->installation->id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
         $branch = $context->branch;
@@ -114,7 +115,7 @@ class Handler
     public function handlePullRequest(CheckSuiteContext $context): void
     {
         $git_type = $context->git_type;
-        $installation_id = $context->installation_id;
+        $installation_id = $context->installation->id;
         $action = $context->action;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
