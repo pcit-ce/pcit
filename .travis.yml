@@ -75,9 +75,10 @@ jobs:
       script:
         - composer install -q
         # - composer update -q
-        - vendor/bin/phpunit --coverage-clover=coverage.xml
+        - vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
       after_success:
-        - bash <(curl -s https://codecov.io/bash)
+        - bash <(curl -s https://codecov.io/bash) -f build/logs/clover.xml
+        - rm -rf build/logs
         - ./sami update .sami.php
       deploy:
         provider: pages

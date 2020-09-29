@@ -97,6 +97,7 @@ class Log
 
                 continue;
             }
+            $docker_container->kill($this->container_id);
             // 容器停止，获取日志
             $container_log = $docker_container->logs(
                 $this->container_id,

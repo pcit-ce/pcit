@@ -144,6 +144,7 @@
   },
   "require-dev": {
     "khs1994/phar-builder": "20.04.11",
+    "phploc/phploc": "^7.0",
     "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^5.0",
     "vimeo/psalm": "^3"
@@ -175,7 +176,7 @@
   },
   "scripts": {
     "test": "phpunit",
-    "test:codecov": "phpunit --coverage-clover=coverage.xml",
+    "test:codecov": "phpunit --coverage-clover=build/logs/clover.xml",
     "minio:server": "echo minio server $HOME/minio",
     "git:archive": "git archive -o latest.zip HEAD",
     "frpc": "echo frpc -c ~\\frpc.ini",
@@ -183,7 +184,10 @@
     "fmt:debug": "php-cs-fixer -vvv fix",
     "psalm": "psalm",
     "all-in-one": "echo docker-compose -f pcit-all-in-one/docker-compose.yml up",
-    "openapi:ui": "redoc-cli bundle ./openapi/openapi.yaml",
+    "openapi:ui": "npx redoc-cli bundle ./openapi/openapi.yaml",
+    "phploc": "phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml app arc",
+    "phpdox": "phpdox -f phpdox.xml",
+    "phpdox:coding:ci": "/root/.config/composer/vendor/bin/phpdox -f phpdox.xml",
     "compile:dump": [
       "cp -r -f src/Framework/ vendor/pcit/framework",
       "cp -r -f src/Kernel/ vendor/pcit/kernel",

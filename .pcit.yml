@@ -117,7 +117,7 @@ steps:
       #   export XDEBUG_MODE=coverage
       - /opt/pcit/toolkit/pcit-wait-for-it mysql:3306 -- echo 'mysql is run'
       - /opt/pcit/toolkit/pcit-wait-for-it redis:6379 -- echo 'redis is run'
-      - vendor/bin/phpunit --coverage-clover=coverage.xml
+      - vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
     if:
       status: success
 
@@ -302,7 +302,11 @@ steps:
     run:
       # - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID} -K
       # -K           Remove color from the output
-      - bash <(curl -s https://codecov.io/bash) -e PHP_VERSION,PCIT_OS_NAME -n PCIT-${PCIT_JOB_ID}
+      - |
+        bash <(curl -s https://codecov.io/bash) \
+        -e PHP_VERSION,PCIT_OS_NAME \
+        -n PCIT-${PCIT_JOB_ID} \
+        -f build/logs/clover.xml
 
   after_success:
     if:
