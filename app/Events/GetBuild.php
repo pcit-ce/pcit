@@ -86,9 +86,6 @@ class GetBuild extends BuildData
         return $this;
     }
 
-    /**
-     * @throws \Exception
-     */
     private function getRepoConfig(): void
     {
         $result = Setting::list($this->rid, $this->git_type);
@@ -105,8 +102,6 @@ class GetBuild extends BuildData
      *
      * public true:           只获取公开的 secret
      *        false(default): 获取所有的 secret
-     *
-     * @throws \Exception
      */
     public function getEnv(bool $public = false): void
     {

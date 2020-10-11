@@ -29,8 +29,6 @@ class StatusClient
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $username, string $repo, string $ref)
@@ -46,8 +44,6 @@ class StatusClient
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function create(
@@ -90,8 +86,6 @@ class StatusClient
      * @param $username
      * @param $repo
      * @param $ref
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

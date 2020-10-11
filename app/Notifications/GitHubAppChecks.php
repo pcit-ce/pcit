@@ -29,8 +29,6 @@ class GitHubAppChecks
      * @param bool       $force_create 默认情况下若 check_run_id 已存在，则更新此 check_run_id
      *                                 若设为 true 则新建一个 check_run ,适用于第三方服务完成状态展示
      *                                 或是没有过程，直接完成的构建
-     *
-     * @throws \Exception
      */
     public static function send(
         int $job_key_id,

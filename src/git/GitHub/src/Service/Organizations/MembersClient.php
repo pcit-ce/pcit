@@ -17,8 +17,6 @@ class MembersClient
      * @param string $filter   2fa_disabled or all
      * @param string $role     admin or member or all
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $org_name, string $filter = 'all', string $role = 'all')
@@ -31,8 +29,6 @@ class MembersClient
 
     /**
      * Check membership.
-     *
-     * @throws \Exception
      *
      * @return bool
      */
@@ -53,8 +49,6 @@ class MembersClient
      * Remove a member.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function remove(string $org_name, string $username): void
     {
@@ -63,8 +57,6 @@ class MembersClient
 
     /**
      * Public members list.
-     *
-     * @throws \Exception
      */
     public function listPublic(string $org_name): void
     {
@@ -75,8 +67,6 @@ class MembersClient
      * Check public membership.
      *
      * 204
-     *
-     * @throws \Exception
      *
      * @return bool
      */
@@ -97,8 +87,6 @@ class MembersClient
      * Publicize a user's membership.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function publicizeUserMembership(string $org_name, string $username): void
     {
@@ -107,8 +95,6 @@ class MembersClient
 
     /**
      * Conceal a user's membership.
-     *
-     * @throws \Exception
      */
     public function concealUserMembership(string $org_name, string $username): void
     {
@@ -117,8 +103,6 @@ class MembersClient
 
     /**
      * Get organization membership.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -132,8 +116,6 @@ class MembersClient
      *
      * @param string $username username
      * @param string $role     admin or member
-     *
-     * @throws \Exception
      */
     public function updateMembership(string $org_name, string $username, string $role = 'member'): void
     {
@@ -146,8 +128,6 @@ class MembersClient
      * Remove organization membership.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function removeMembership(string $org_name, string $username): void
     {
@@ -156,8 +136,6 @@ class MembersClient
 
     /**
      * List organization invitation teams.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -168,8 +146,6 @@ class MembersClient
 
     /**
      * List pending organization invitations.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -187,8 +163,6 @@ class MembersClient
      * @param string   $email
      * @param string   $role       admin or direct_member billing_manager
      * @param array    $team_ids
-     *
-     * @throws \Exception
      */
     public function createInvitation(
         string $org_name,
@@ -212,8 +186,6 @@ class MembersClient
      *
      * @param string $state active or pending
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listYourMemberships(string $state = null)
@@ -227,8 +199,6 @@ class MembersClient
 
     /**
      * Get your organization membership.
-     *
-     * @throws \Exception
      */
     public function getYourMembership(string $org_name): void
     {
@@ -237,8 +207,6 @@ class MembersClient
 
     /**
      * Edit your organization membership.
-     *
-     * @throws \Exception
      */
     public function editYourMembership(string $org_name): void
     {
@@ -252,8 +220,6 @@ class MembersClient
      *
      * @param string $org_name org name
      * @param string $filter   all or 2fa_disabled
-     *
-     * @throws \Exception
      */
     public function listOutsideCollaborators(string $org_name, string $filter = 'all'): void
     {
@@ -268,8 +234,6 @@ class MembersClient
      * Remove outside collaborator.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function removeOutsideCollaborators(string $org_name, string $username): void
     {
@@ -280,8 +244,6 @@ class MembersClient
      * Convert member to outside collaborator.
      *
      * 204
-     *
-     * @throws \Exception
      *
      * @see https://developer.github.com/v3/orgs/outside_collaborators/#convert-member-to-outside-collaborator
      */

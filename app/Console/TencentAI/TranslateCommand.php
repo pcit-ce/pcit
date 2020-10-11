@@ -27,8 +27,6 @@ EOF
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public function execute(InputInterface $input, OutputInterface $output)

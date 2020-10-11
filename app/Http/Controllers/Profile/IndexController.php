@@ -22,8 +22,6 @@ class IndexController
      * 个人中心 profile.
      *
      * @param mixed ...$args
-     *
-     * @throws \Exception
      */
     #[Route('get', 'profile/{git_type}/{username}')]
     public function __invoke(string $git_type, string $username): void

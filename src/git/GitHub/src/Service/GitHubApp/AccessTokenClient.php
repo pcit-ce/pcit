@@ -37,8 +37,6 @@ class AccessTokenClient
      * GitHub App 由 JWT(expire 10mins) 获取 Token(expire 60mins).
      *
      * https://developer.github.com/apps/building-github-apps/authentication-options-for-github-apps/#authenticating-as-a-github-app
-     *
-     * @throws \Exception
      */
     public function getJWT(string $private_key_path): string
     {
@@ -55,9 +53,6 @@ class AccessTokenClient
         return $jwt;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getAccessToken(int $installation_id, string $private_key_path): string
     {
         \Log::debug('Get GitHub app Access Token ...');

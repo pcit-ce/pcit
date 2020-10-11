@@ -26,8 +26,6 @@ class CollaboratorsClient
     /**
      * List collaborators.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $repo_full_name)
@@ -39,8 +37,6 @@ class CollaboratorsClient
 
     /**
      * Check if a user is a collaborator.
-     *
-     * @throws \Exception
      *
      * @return bool
      */
@@ -68,8 +64,6 @@ class CollaboratorsClient
      *
      * @param string $repo_full_name Repository name
      * @param string $level          admin write read none
-     *
-     * @throws \Exception
      *
      * @return bool
      */

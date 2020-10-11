@@ -33,9 +33,6 @@ class Server extends Kernel
         parent::__construct();
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         try {
@@ -55,9 +52,6 @@ class Server extends Kernel
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handleBuild(): void
     {
         // get build info
@@ -120,8 +114,6 @@ class Server extends Kernel
 
     /**
      * 从缓存中拿出 webhooks 数据，存入数据库中.
-     *
-     * @throws \Exception
      */
     private function handleWebhooks(): void
     {

@@ -40,9 +40,6 @@ class UpdateBuildStatus
         $this->build_log = $build_log;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         $job_key_id = $this->job_key_id;

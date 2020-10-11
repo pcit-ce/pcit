@@ -19,8 +19,6 @@ class DB
     private static $debug;
 
     /**
-     * @throws \Exception
-     *
      * @return PDO
      */
     public static function connection()
@@ -88,8 +86,6 @@ class DB
      *
      * @param array $data
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     public static function select(string $sql, ?array $data, bool $single = false)
@@ -123,8 +119,6 @@ class DB
     /**
      * 执行原生 INSERT 语句.
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function insert(string $sql, array $data = [])
@@ -146,8 +140,6 @@ class DB
     /**
      * 执行原生 UPDATE 语句.
      *
-     * @throws \Exception
-     *
      * @return int 返回受影响的记录条数
      */
     public static function update(string $sql, array $data = [])
@@ -158,8 +150,6 @@ class DB
     /**
      * 执行原生 DELETE 语句.
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function delete(string $sql, array $data = [])
@@ -168,8 +158,6 @@ class DB
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     private static function common(string $sql, array $data = [])
@@ -191,8 +179,6 @@ class DB
     /**
      * 执行普通语句.
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function statement(string $sql)
@@ -200,9 +186,6 @@ class DB
         return self::connection()->exec($sql);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function beginTransaction(): void
     {
         try {
@@ -212,9 +195,6 @@ class DB
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function transaction(Closure $callback): void
     {
         self::beginTransaction();
@@ -222,9 +202,6 @@ class DB
         self::commit();
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function commit(): void
     {
         try {
@@ -234,9 +211,6 @@ class DB
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function rollback(): void
     {
         self::connection()->rollBack();
@@ -263,8 +237,6 @@ class DB
     }
 
     /**
-     * @throws \Exception
-     *
      * @return PDO
      */
     public static function getPdo()

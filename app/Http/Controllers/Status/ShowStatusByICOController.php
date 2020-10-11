@@ -15,9 +15,6 @@ namespace App\Http\Controllers\Status;
  */
 class ShowStatusByICOController
 {
-    /**
-     * @throws \Exception
-     */
     public function __call(string $status, array $param)
     {
         var_dump($param);

@@ -10,8 +10,6 @@ class ClientTest extends TestCase
 {
     /**
      * @group dont-test
-     *
-     * @throws \Exception
      */
     public function test_getAccessToken(): void
     {

@@ -16,8 +16,6 @@ class ReleasesClient
     use ServiceClientCommon;
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $repo_full_name)
@@ -32,8 +30,6 @@ class ReleasesClient
      *
      * @param int    $release_id
      * @param string $tag_name
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -51,8 +47,6 @@ class ReleasesClient
     /**
      * Get the latest release.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function latest(string $repo_full_name)
@@ -64,8 +58,6 @@ class ReleasesClient
 
     /**
      * Get a release by tag name.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -83,8 +75,6 @@ class ReleasesClient
      *                                 Can be any branch or commit SHA. Unused if the Git tag already exists. Default:
      *                                 the repository's default branch (usually master)
      * @param string $method
-     *
-     * @throws \Exception
      */
     public function create(
         string $repo_full_name,
@@ -116,8 +106,6 @@ class ReleasesClient
      * Edit a release.
      *
      * @param string $method
-     *
-     * @throws \Exception
      */
     public function edit(
         string $repo_full_name,
@@ -137,8 +125,6 @@ class ReleasesClient
      *
      * @param int    $release_id
      * @param string $tag_name
-     *
-     * @throws \Exception
      */
     public function delete(string $repo_full_name, ?int $release_id, ?string $tag_name): void
     {
@@ -156,8 +142,6 @@ class ReleasesClient
      *
      * @param int    $release_id
      * @param string $tag_name
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -180,8 +164,6 @@ class ReleasesClient
      * @param        $file_content
      * @param int    $release_id
      * @param string $tag_name
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -224,8 +206,6 @@ class ReleasesClient
     /**
      * Get a single release asset.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getAsset(string $repo_full_name, int $asset_id)
@@ -237,8 +217,6 @@ class ReleasesClient
 
     /**
      * Edit a release asset.
-     *
-     * @throws \Exception
      */
     public function editAsset(string $repo_full_name, string $name, string $label, int $asset_id): void
     {
@@ -256,8 +234,6 @@ class ReleasesClient
      * Delete a release asset.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function deleteAsset(string $repo_full_name, int $asset_id): void
     {

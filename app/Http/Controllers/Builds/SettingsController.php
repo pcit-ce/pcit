@@ -16,8 +16,6 @@ class SettingsController
      *
      * @param array $args
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     #[Route('get', 'api/repo/{username}/{repo_name}/settings')]
@@ -32,8 +30,6 @@ class SettingsController
      * Returns a single setting.
      *
      * @param array $args
-     *
-     * @throws \Exception
      *
      * @return array|string
      */
@@ -57,8 +53,6 @@ class SettingsController
      * </pre>
      *
      * @param array $args
-     *
-     * @throws \Exception
      *
      * @return int
      */

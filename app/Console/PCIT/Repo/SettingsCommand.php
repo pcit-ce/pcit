@@ -41,8 +41,6 @@ class SettingsCommand extends Command
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)

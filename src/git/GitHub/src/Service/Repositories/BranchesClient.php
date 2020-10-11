@@ -17,8 +17,6 @@ class BranchesClient
     /**
      * @see https://developer.github.com/v3/repos/branches/#get-branch
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function get(string $username, string $repo_name, string $branch)

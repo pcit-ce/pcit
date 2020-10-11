@@ -59,7 +59,7 @@ class GetConfig
     }
 
     /**
-     * @throws \Exception|\Symfony\Component\Yaml\Exception\ParseException
+     * |\Symfony\Component\Yaml\Exception\ParseException.
      */
     public function handle(): array
     {

@@ -11,8 +11,6 @@ abstract class PingAbstract extends Handler implements PingInterface
 {
     /**
      * @param mixed $context
-     *
-     * @throws \Exception
      */
     public function pustomize($context, string $git_type): void
     {

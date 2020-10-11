@@ -46,8 +46,6 @@ class Handler
      * 用户在设置页面移除了仓库.
      *
      * @param IRC[] $repositories
-     *
-     * @throws \Exception
      */
     private function removed(array $repositories): void
     {

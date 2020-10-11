@@ -61,8 +61,6 @@ class Git
     }
 
     /**
-     * @throws \Exception
-     *
      * @see https://github.com/drone-plugins/drone-git
      */
     public function handle(): void
@@ -97,6 +95,10 @@ class Git
         }
 
         $git_url = GitSupport::getUrl($build->git_type, $build->repo_full_name);
+
+        if ($github_mirror = env('CI_GITHUB_MIRROR')) {
+            $git_url = str_replace('github.com', $github_mirror, $git_url);
+        }
 
         switch ($build->event_type) {
             case CI::BUILD_EVENT_PUSH:

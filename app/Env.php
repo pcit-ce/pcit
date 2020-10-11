@@ -15,8 +15,6 @@ class Env extends Model
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return array
      */
     public static function list(int $rid, $git_type = 'github')
@@ -28,8 +26,6 @@ class Env extends Model
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      *
      * @return int
      */
@@ -43,8 +39,6 @@ class Env extends Model
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function update(int $id, int $rid, string $value, bool $public, $git_type = 'github')
@@ -57,8 +51,6 @@ class Env extends Model
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function delete(int $id, int $rid, $git_type = 'github')
@@ -70,8 +62,6 @@ class Env extends Model
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      *
      * @return string
      */

@@ -16,8 +16,6 @@ class InstallationRepositories extends InstallationRepositoriesAbstract
      * added 用户增加仓库
      *
      * removed 移除仓库
-     *
-     * @throws \Exception
      */
     public function handle(string $webhooks_content): void
     {

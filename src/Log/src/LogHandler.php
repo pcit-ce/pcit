@@ -25,9 +25,6 @@ class LogHandler
         $this->build_id = Job::getBuildKeyId($jobId);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         $logs = [];

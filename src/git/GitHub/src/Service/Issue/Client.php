@@ -42,8 +42,6 @@ class Client extends ClientCommon implements ClientInterface
     /**
      * List all issues assigned to the authenticated user across all visible repositories including owned repositories,
      * member repositories, and organization repositories:.
-     *
-     * @throws \Exception
      */
     public function list()
     {
@@ -66,8 +64,6 @@ class Client extends ClientCommon implements ClientInterface
      *
      * @param mixed $issue_number
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getSingle(string $repo_full_name, $issue_number)
@@ -82,8 +78,6 @@ class Client extends ClientCommon implements ClientInterface
      *
      * @param array $labels
      * @param array $assignees
-     *
-     * @throws \Exception
      */
     public function create(
         string $repo_full_name,
@@ -119,8 +113,6 @@ class Client extends ClientCommon implements ClientInterface
      * @param mixed  $issue_number
      *
      * @see https://developer.github.com/v3/issues/#edit-an-issue
-     *
-     * @throws \Exception
      */
     public function edit(
         string $repo_full_name,
@@ -154,8 +146,6 @@ class Client extends ClientCommon implements ClientInterface
      * @param string $lock_reason  The reason for locking the issue or pull request conversation. Lock will fail if
      *                             you don't use one of these reasons: off-topic too heated resolved spam
      * @param mixed  $issue_number
-     *
-     * @throws \Exception
      */
     public function lock(string $repo_full_name, $issue_number, string $lock_reason = null): void
     {
@@ -186,8 +176,6 @@ class Client extends ClientCommon implements ClientInterface
      * Unlock an issue.
      *
      * @param mixed $issue_number
-     *
-     * @throws \Exception
      */
     public function unlock(string $repo_full_name, $issue_number): void
     {
@@ -200,8 +188,6 @@ class Client extends ClientCommon implements ClientInterface
 
     /**
      * @param mixed $issue_number
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -219,8 +205,6 @@ class Client extends ClientCommon implements ClientInterface
      * @param $rid
      * @param $repo_full_name
      * @param $issue_number
-     *
-     * @throws \Exception
      */
     public function translateTitle(
         string $repo_full_name,

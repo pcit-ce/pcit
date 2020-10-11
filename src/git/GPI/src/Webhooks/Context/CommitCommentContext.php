@@ -13,8 +13,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  */
 class CommitCommentContext extends Context
 {
-    public $action;
-
     public CommitComment $comment;
 
     use ContextTrait;

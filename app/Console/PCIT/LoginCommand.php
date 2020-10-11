@@ -28,9 +28,6 @@ class LoginCommand extends Command
         $this->addOption(...PCITCommand::getAPIEndpointOptionArray());
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         list(

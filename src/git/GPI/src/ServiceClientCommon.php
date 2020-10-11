@@ -21,8 +21,6 @@ trait ServiceClientCommon
 
     /**
      * @param $line
-     *
-     * @throws \Exception
      */
     public function successOrFailure(int $http_code, bool $throw = false): void
     {

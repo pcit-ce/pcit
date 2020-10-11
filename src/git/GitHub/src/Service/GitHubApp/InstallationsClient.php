@@ -31,8 +31,6 @@ class InstallationsClient
     /**
      * List repositories accessible to the app installation.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listRepositories()
@@ -58,8 +56,6 @@ class InstallationsClient
     /**
      * List repositories accessible to the user access token.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listRepositoriesByInstallationId(string $oauthToken, int $installation_id)
@@ -77,8 +73,6 @@ class InstallationsClient
      * Token is personal access token.
      *
      * 204
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -108,8 +102,6 @@ class InstallationsClient
      * Remove repository from installation.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function remove(string $personal_access_token, int $installation_id, int $repository_id): void
     {

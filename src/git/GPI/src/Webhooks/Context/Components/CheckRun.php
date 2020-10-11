@@ -19,8 +19,7 @@ class CheckRun
     /** @var PullRequests[] */
     public $pull_requests;
 
-    /** CheckSuite|null */
-    public $check_suite;
+    public ?CheckSuite $check_suite;
 
     public string $external_id;
 }

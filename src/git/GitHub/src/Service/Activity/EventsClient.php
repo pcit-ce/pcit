@@ -13,8 +13,6 @@ class EventsClient
     /**
      * List public events.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function public()
@@ -24,8 +22,6 @@ class EventsClient
 
     /**
      * List repository events.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -37,8 +33,6 @@ class EventsClient
     /**
      * List issue events for a repository.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function issue(string $repo_full_name)
@@ -48,8 +42,6 @@ class EventsClient
 
     /**
      * List public events for a network of repositories.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -63,8 +55,6 @@ class EventsClient
      *
      * @param $org_name
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function publicOrganization($org_name)
@@ -74,8 +64,6 @@ class EventsClient
 
     /**
      * List events for an organization.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -87,8 +75,6 @@ class EventsClient
     /**
      * List events that a user has received.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function userReceived(string $username)
@@ -98,8 +84,6 @@ class EventsClient
 
     /**
      * List public events that a user has received.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -111,8 +95,6 @@ class EventsClient
     /**
      * List events performed by a user.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function performedByUser(string $username)
@@ -122,8 +104,6 @@ class EventsClient
 
     /**
      * List public events performed by a user.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

@@ -12,8 +12,6 @@ class EnvHandler
      * @param string $prefix       key prefix
      * @param bool   $replace      replace '-' with '_' on key
      *
-     * @throws \Exception
-     *
      * @return array ['k=v']
      */
     public function handle($env_with_var, $env, string $prefix = '', bool $replace = false): array

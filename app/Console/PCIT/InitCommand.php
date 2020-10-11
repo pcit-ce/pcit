@@ -17,9 +17,6 @@ class InitCommand extends Command
         $this->setDescription('Generates a .pcit.yml');
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Please exec <info>pcitinit</info> command');

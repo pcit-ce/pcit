@@ -9,8 +9,6 @@ use PCIT\PCIT;
 class MessageServer
 {
     /**
-     * @throws \Exception
-     *
      * @return null|array|string
      */
     public function __invoke(PCIT $pcit)

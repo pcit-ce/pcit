@@ -75,8 +75,6 @@ class JobGenerator
 
     /**
      * @param int $job_id 处理 job 重新构建
-     *
-     * @throws \Exception
      */
     public function handle(?BuildData $build, int $job_id = 0): void
     {
@@ -107,8 +105,6 @@ class JobGenerator
 
     /**
      * 生成 config.
-     *
-     * @throws \Exception
      */
     private function config(int $job_id = 0): void
     {
@@ -209,8 +205,6 @@ class JobGenerator
      * 生成 job 缓存.
      *
      * @param null|array $matrix_config ['k'=>'v','k2'=>'v2']
-     *
-     * @throws \Exception
      */
     private function handleJob(int $job_id, ?array $matrix_config): void
     {

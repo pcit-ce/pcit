@@ -37,8 +37,6 @@ class Skip
 
     /**
      * 检查 commit 信息跳过构建. branch 匹配构建.
-     *
-     * @throws \Exception
      */
     public function handle(): void
     {

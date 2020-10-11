@@ -13,8 +13,6 @@ class Client
     /**
      * Get a blob.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getBlobs(string $repo_full_name, string $file_sha)
@@ -30,8 +28,6 @@ class Client
      * @param string $repo_full_name repo full name
      * @param string $content        the new blob's content
      * @param string $encoding       utf-8 or base64
-     *
-     * @throws \Exception
      */
     public function createBlobs(string $repo_full_name, string $content, string $encoding = 'utf-8'): void
     {
@@ -44,8 +40,6 @@ class Client
     /**
      * Get a commit.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getCommits(string $repo_full_name, string $sha)
@@ -57,8 +51,6 @@ class Client
      * Create a commit.
      *
      * 201
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -95,8 +87,6 @@ class Client
     /**
      * Commit signature verification.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function commitSignatureVerification(string $repo_full_name, string $sha)
@@ -110,8 +100,6 @@ class Client
      * @param string $repo_full_name repo full name
      * @param string $ref            heads/skunkworkz/featureA
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getRef(string $repo_full_name, string $ref)
@@ -121,8 +109,6 @@ class Client
 
     /**
      * Get all references.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -143,8 +129,6 @@ class Client
      * @param string $repo_full_name repo full name
      * @param string $ref            heads/master
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function createRef(string $repo_full_name, string $ref, string $sha)
@@ -159,8 +143,6 @@ class Client
 
     /**
      * Update a reference.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -183,8 +165,6 @@ class Client
      *
      * @param string $repo_full_name repo full name
      * @param string $ref            heads/feature-a tags/v1.0
-     *
-     * @throws \Exception
      */
     public function deleteRef(string $repo_full_name, string $ref): void
     {
@@ -198,8 +178,6 @@ class Client
      *
      * @param $tag_sha
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getTag(string $repo_full_name, $tag_sha)
@@ -211,8 +189,6 @@ class Client
      * Create a tag object.
      *
      * 201
-     *
-     * @throws \Exception
      */
     public function createTag(
         string $repo_full_name,
@@ -247,8 +223,6 @@ class Client
     /**
      * Tag signature verification.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function tagSignatureVerification(string $repo_full_name, string $tag_sha)
@@ -258,8 +232,6 @@ class Client
 
     /**
      * Get a tree.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -280,8 +252,6 @@ class Client
      * @param string $repo_full_name repo full name
      * @param        $base_tree
      * @param array  $tree           [['path'='file.name','mode'=>'100644','type'=>'blob','sha'=>$sha]]
-     *
-     * @throws \Exception
      */
     public function createTree(
         string $repo_full_name,

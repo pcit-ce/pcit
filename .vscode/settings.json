@@ -54,5 +54,7 @@
     "name": "pcit",
     "email": "ci@khs1994.com"
   },
-  "phpunit.files": "**/{test,tests,Test,Tests}/**/*Test.php"
+  "phpunit.files": "**/{test,tests,Test,Tests}/**/*Test.php",
+  "phpunit.trace.server": "verbose",
+  "psalm.unusedVariableDetection": true
 }

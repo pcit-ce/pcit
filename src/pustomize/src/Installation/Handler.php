@@ -17,8 +17,6 @@ class Handler
      * deleted 用户卸载了 GitHub Apps
      *
      * @param mixed $context
-     *
-     * @throws \Exception
      */
     public function handle(InstallationContext $context): void
     {
@@ -51,8 +49,6 @@ class Handler
      * 用户首次安装了 GitHub App.
      *
      * @param InstallationRepositories[] $repositories
-     *
-     * @throws \Exception
      */
     public function create(array $repositories, int $sender_uid): void
     {
@@ -68,8 +64,6 @@ class Handler
 
     /**
      * 用户卸载了 GitHub App.
-     *
-     * @throws \Exception
      */
     public function delete(int $installation_id, string $username): void
     {

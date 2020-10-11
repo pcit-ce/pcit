@@ -18,8 +18,6 @@ class User extends Model
      * @param string $git_type
      * @param int    $uid
      *
-     * @throws \Exception
-     *
      * @return array
      */
     public static function getUserInfo(?string $username, ?int $uid, $git_type = 'github')
@@ -37,8 +35,6 @@ class User extends Model
      * @param GitUser|int $uid
      * @param string      $name
      * @param string      $username
-     *
-     * @throws \Exception
      */
     public static function updateUserInfo(
         $uid,
@@ -102,9 +98,6 @@ class User extends Model
         DB::insert($sql, [$git_type, $uid, $name, $username, $email, $pic, $type]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function updateAccessToken(int $uid, string $access_token, string $git_type = 'github'): void
     {
         $sql = 'UPDATE user SET access_token=? WHERE git_type=? AND uid=?';
@@ -112,9 +105,6 @@ class User extends Model
         DB::insert($sql, [$access_token, $git_type, $uid]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function updateRefreshToken(int $uid, string $refresh_token, string $git_type = 'github'): void
     {
         $sql = 'UPDATE user SET refresh_token=? WHERE git_type=? AND uid=?';
@@ -124,8 +114,6 @@ class User extends Model
 
     /**
      * @param $admin_uid
-     *
-     * @throws \Exception
      */
     public static function setOrgAdmin(int $org_id, int $admin_uid, string $git_type = 'github'): void
     {
@@ -148,8 +136,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array
      */
     public static function getOrgByAdmin(int $admin_uid, string $git_type = 'github')
@@ -160,8 +146,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public static function exists(string $username, string $git_type = 'github')
@@ -174,8 +158,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public static function delete(string $org_name, string $git_type = 'github')
@@ -186,8 +168,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getUid(string $username, string $git_type = 'github')
@@ -198,8 +178,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getUsername(int $uid, string $git_type)
@@ -209,9 +187,6 @@ EOF;
         return DB::select($sql, [$git_type, $uid], true);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function updateInstallationId(int $installation_id, string $username, string $git_type = 'github'): void
     {
         if (self::exists($username, $git_type)) {
@@ -225,8 +200,6 @@ EOF;
 
     /**
      * @param string $username
-     *
-     * @throws \Exception
      *
      * @return array|string
      */

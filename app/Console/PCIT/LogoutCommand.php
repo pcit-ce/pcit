@@ -21,9 +21,6 @@ class LogoutCommand extends Command
         $this->addOption(...PCITCommand::getAPIEndpointOptionArray());
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $file_name = PCITCommand::getConfigFileName();

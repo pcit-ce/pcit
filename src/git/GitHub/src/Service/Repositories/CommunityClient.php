@@ -11,8 +11,6 @@ class CommunityClient
     use ServiceClientCommon;
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      *
      * @see https://developer.github.com/v3/repos/community/

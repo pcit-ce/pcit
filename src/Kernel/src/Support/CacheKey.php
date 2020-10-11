@@ -92,8 +92,6 @@ class CacheKey
 
     /**
      * 删除某个 job 所用到的缓存.
-     *
-     * @throws \Exception
      */
     public static function flush(int $jobId): void
     {

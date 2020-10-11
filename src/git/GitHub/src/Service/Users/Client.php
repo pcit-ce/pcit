@@ -25,8 +25,6 @@ class Client
     /**
      * 获取当前登录用户或指定用户的基本信息.
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     public function getUserInfo(bool $raw = false, string $username = null)
@@ -60,8 +58,6 @@ class Client
     /**
      * 获取当前用户或指定用户名下所有的仓库列表（包括组织中的列表）.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getRepos(int $page = 1, bool $raw = false, string $username = null)
@@ -77,8 +73,6 @@ class Client
 
     /**
      * 获取用户名下组织列表.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

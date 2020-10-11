@@ -37,8 +37,6 @@ class UpdateUserInfo
      * UpdateUserInfo constructor.
      *
      * @param $rid
-     *
-     * @throws \Exception
      */
     public function __construct(
         Owner $owner,
@@ -61,9 +59,6 @@ class UpdateUserInfo
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         $git_type = $this->git_type;

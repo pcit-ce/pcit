@@ -51,8 +51,6 @@ class DockerHandler implements RunnerHandlerInterface
 
     /**
      * RunContainer constructor.
-     *
-     * @throws \Exception
      */
     public function __construct()
     {
@@ -64,7 +62,6 @@ class DockerHandler implements RunnerHandlerInterface
 
     /**
      * @throws PCITException
-     * @throws \Exception
      */
     public function handle(int $job_id): void
     {
@@ -137,8 +134,6 @@ class DockerHandler implements RunnerHandlerInterface
 
     /**
      * 判断 job 类型.
-     *
-     * @throws \Exception
      */
     private function handleJob(int $job_id): void
     {
@@ -341,8 +336,6 @@ class DockerHandler implements RunnerHandlerInterface
 
     /**
      * 执行 step.
-     *
-     * @throws \Exception
      */
     public function runStep(int $job_id, string $container_config, string $step): void
     {
@@ -429,8 +422,6 @@ class DockerHandler implements RunnerHandlerInterface
 
     /**
      * @param $job_id
-     *
-     * @throws \Exception
      */
     public function runCacheContainer(int $job_id, bool $download = true): void
     {
@@ -454,9 +445,6 @@ class DockerHandler implements RunnerHandlerInterface
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     private function changed(int $job_id): void
     {
         // TODO 获取上一次 build 的状况
@@ -471,8 +459,6 @@ class DockerHandler implements RunnerHandlerInterface
      * 运行 成功或失败之后的任务
      *
      * @param $status
-     *
-     * @throws \Exception
      */
     private function after(int $job_id, $status): void
     {
@@ -514,8 +500,6 @@ class DockerHandler implements RunnerHandlerInterface
 
     /**
      * 运行依赖的外部服务
-     *
-     * @throws \Exception
      */
     private function runService(int $job_id): void
     {

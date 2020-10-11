@@ -10,8 +10,6 @@ use Monolog\Logger;
 class Log extends Logger
 {
     /**
-     * @throws \Exception
-     *
      * @return Logger
      */
     public function __construct(string $name = 'pcit', string $log_path = null)

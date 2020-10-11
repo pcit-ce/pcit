@@ -84,8 +84,6 @@ class PCITCommand
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public static function getToken(InputInterface $input, bool $header = true)
@@ -129,8 +127,6 @@ class PCITCommand
     /**
      * @param string $data
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public static function HttpGet(
@@ -159,8 +155,6 @@ class PCITCommand
 
     /**
      * @param string $data
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -191,8 +185,6 @@ class PCITCommand
     /**
      * @param string $data
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public static function HttpDelete(
@@ -219,8 +211,6 @@ class PCITCommand
 
     /**
      * @param string $data
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -280,8 +270,6 @@ class PCITCommand
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public static function existsRepoOption(InputInterface $input)

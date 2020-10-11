@@ -24,9 +24,6 @@ abstract class Kernel extends Command
         $this->setDescription('Run PCIT Daemon');
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // 数据库迁移 server only
@@ -76,9 +73,6 @@ abstract class Kernel extends Command
         return 0;
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function process_execute(): void
     {
         //创建子进程

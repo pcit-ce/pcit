@@ -10,9 +10,6 @@ use PCIT\Support\CI;
 
 class Cancelled extends Kernel
 {
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         if ('github' !== $this->git_type) {

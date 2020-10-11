@@ -35,8 +35,6 @@ class Services
 
     /**
      * 运行服务.
-     *
-     * @throws \Exception
      */
     public function handle(): void
     {

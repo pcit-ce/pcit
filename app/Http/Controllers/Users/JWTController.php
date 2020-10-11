@@ -15,8 +15,6 @@ class JWTController
 {
     /**
      * 从请求头获取 token.
-     *
-     * @throws \Exception
      */
     private static function getToken(): string
     {
@@ -46,9 +44,6 @@ class JWTController
         return openssl_get_publickey($result['key']);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function getUser(bool $returnGitTypeFirst = true): array
     {
         $token = self::getToken();
@@ -75,8 +70,6 @@ class JWTController
 
     /**
      * 检查 token 是否有某构建的权限.
-     *
-     * @throws \Exception
      */
     public static function check(int $build_key_id): array
     {
@@ -105,8 +98,6 @@ class JWTController
      * 检查 Token 是否有某仓库的权限.
      *
      * Token 的 uid 是否在给定仓库的管理员列表中
-     *
-     * @throws \Exception
      */
     public static function checkByRepo(string $username, string $repo_name): array
     {
@@ -127,8 +118,6 @@ class JWTController
 
     /**
      * 生成 API Token.
-     *
-     * @throws \Exception
      */
     #[Route('post', 'api/user/token')]
     public static function generate(

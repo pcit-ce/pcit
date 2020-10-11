@@ -33,8 +33,6 @@ abstract class Context implements ContextInterface
     /** @var bool 是否为私有仓库 */
     public $private;
 
-    public string $action;
-
     public JsonMapper $json_mapper;
 
     public bool $org;

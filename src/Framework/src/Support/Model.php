@@ -43,8 +43,6 @@ class Model
     /**
      * 取得所有数据.
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     public static function all()
@@ -60,8 +58,6 @@ class Model
      * 通过主键查找数据.
      *
      * @param int $table_primary_key_id
-     *
-     * @throws \Exception
      *
      * @return array|int
      */
@@ -91,8 +87,6 @@ class Model
      * 通过主键查找数据，找不到则抛出异常.
      *
      * @param array|int $table_primary_key_id
-     *
-     * @throws \Exception
      *
      * @return array|int
      */
@@ -127,9 +121,6 @@ class Model
         return $table;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function save(): void
     {
         $table = self::getTableName();
@@ -151,8 +142,6 @@ class Model
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array|string
      */
     public static function getLastKeyId()

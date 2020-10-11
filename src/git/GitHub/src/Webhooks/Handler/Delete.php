@@ -8,9 +8,6 @@ use PCIT\GPI\Webhooks\Handler\Abstracts\DeleteAbstract;
 
 class Delete extends DeleteAbstract
 {
-    /**
-     * @throws \Exception
-     */
     public function handle(string $webhooks_content): void
     {
         $context = \PCIT\GitHub\Webhooks\Parser\Delete::handle($webhooks_content);

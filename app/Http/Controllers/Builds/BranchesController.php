@@ -17,8 +17,6 @@ class BranchesController
      * Return a list of branches a repository has on Git.
      *
      * @param mixed ...$args
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/branches')]
     public function __invoke(...$args): array
@@ -42,8 +40,6 @@ class BranchesController
      *  Return information about an individual branch.
      *
      * @param array $args
-     *
-     * @throws \Exception
      *
      * @return array|string
      */

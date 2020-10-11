@@ -10,9 +10,6 @@ use PCIT\Support\CI;
 
 class InProgress extends Kernel
 {
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         Job::updateStartAt($this->job_key_id, time());

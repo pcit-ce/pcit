@@ -13,8 +13,6 @@ class CommitsClient
     /**
      * List commits on a repository.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(
@@ -41,8 +39,6 @@ class CommitsClient
     /**
      * Get a single commit.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function get(string $repo_full_name, string $sha)
@@ -54,8 +50,6 @@ class CommitsClient
 
     /**
      * Get the SHA-1 of a commit reference.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -69,8 +63,6 @@ class CommitsClient
     /**
      * Compare two commits.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function compare(string $repo_full_name, string $base, string $head)
@@ -82,8 +74,6 @@ class CommitsClient
 
     /**
      * Commit signature verification.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

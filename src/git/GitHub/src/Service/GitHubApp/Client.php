@@ -37,8 +37,6 @@ class Client
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getAppInfo(string $jwt)
@@ -104,8 +102,6 @@ class Client
     /**
      * Find organization installation.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function findOrganizationInstallation(string $jwt, string $org_name)
@@ -121,8 +117,6 @@ class Client
     /**
      * Find repository installation.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function findRepositoryInstallation(string $jwt, string $username, string $repo)
@@ -137,8 +131,6 @@ class Client
 
     /**
      * Find user installation.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

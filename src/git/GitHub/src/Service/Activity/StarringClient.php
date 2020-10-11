@@ -13,8 +13,6 @@ class StarringClient
     /**
      * List Stargazers.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $repo_full_name)
@@ -27,8 +25,6 @@ class StarringClient
      *
      * @param string $username  created or updated
      * @param string $direction asc or desc
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -50,8 +46,6 @@ class StarringClient
      * Check if you are starring a repository.
      *
      * 204 404
-     *
-     * @throws \Exception
      *
      * @return bool
      */
@@ -76,8 +70,6 @@ class StarringClient
      * Star a repository.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function star(string $repo_full_name): void
     {
@@ -88,8 +80,6 @@ class StarringClient
      * Unstar a repository.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function unstar(string $repo_full_name): void
     {

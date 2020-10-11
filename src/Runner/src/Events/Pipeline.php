@@ -49,8 +49,6 @@ class Pipeline
      * @param BuildData    $build
      * @param JobGenerator $jobGenerator
      * @param null|array   $matrix_config ['k'=>'v']
-     *
-     * @throws \Exception
      */
     public function __construct($pipeline, ?BuildData $build, ?JobGenerator $jobGenerator, ?array $matrix_config)
     {
@@ -63,8 +61,6 @@ class Pipeline
 
     /**
      * @param $when
-     *
-     * @throws \Exception
      *
      * @return bool true: skip
      */
@@ -171,9 +167,6 @@ class Pipeline
         return \is_string($commands) ? [$commands] : $commands;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         /**

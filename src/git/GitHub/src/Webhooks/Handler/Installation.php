@@ -14,8 +14,6 @@ class Installation extends InstallationAbstract
      * created 用户点击安装按钮(首次).
      *
      * deleted 用户卸载了 GitHub Apps
-     *
-     * @throws \Exception
      */
     public function handle(string $webhooks_content): void
     {

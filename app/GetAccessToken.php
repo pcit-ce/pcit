@@ -10,8 +10,6 @@ use PCIT\Framework\Support\DB;
 class GetAccessToken
 {
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function byRid(int $rid, string $git_type = 'github')
@@ -20,8 +18,6 @@ class GetAccessToken
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function byRepoFullName(?string $repo_full_name, ?int $rid = null, string $git_type = 'github')
@@ -61,8 +57,6 @@ class GetAccessToken
     /**
      * @param $rid
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public static function getGitHubAppAccessToken($rid = null, string $repo_full_name = null, int $installation_id = null)
@@ -85,8 +79,6 @@ class GetAccessToken
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getAccessTokenByUid(int $uid, $git_type = 'github')
@@ -97,8 +89,6 @@ class GetAccessToken
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getRefreshTokenByUid(int $uid, string $git_type = 'github')

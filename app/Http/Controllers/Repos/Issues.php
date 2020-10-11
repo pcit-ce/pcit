@@ -17,8 +17,6 @@ class Issues
      * /repo/{username}/{repo.name}/issues/translate/{issue.number}
      *
      * @param mixed ...$args
-     *
-     * @throws \Exception
      */
     public function translate(...$args): void
     {

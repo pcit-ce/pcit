@@ -9,9 +9,6 @@ namespace App\Console\PCITDaemon;
  */
 class Up extends Kernel
 {
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         (new Server())->handle();

@@ -10,8 +10,6 @@ class Migrate
 {
     /**
      * @param $sql_file
-     *
-     * @throws \Exception
      */
     public static function migrate(string $sql_file): void
     {
@@ -22,9 +20,6 @@ class Migrate
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function all(): void
     {
         foreach (self::getSqlFileList() as $file) {
@@ -75,9 +70,6 @@ class Migrate
         });
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function cleanup()
     {
         return DB::statement('DROP DATABASE pcit; CREATE DATABASE pcit');

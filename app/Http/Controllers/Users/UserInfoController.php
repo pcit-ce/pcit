@@ -12,8 +12,6 @@ class UserInfoController
 {
     /**
      * 获取当前登录用户信息.
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/user')]
     public function __invoke()
@@ -25,8 +23,6 @@ class UserInfoController
 
     /**
      * 获取某个用户的信息.
-     *
-     * @throws \Exception
      *
      * @return array|string
      */

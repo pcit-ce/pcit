@@ -10,6 +10,7 @@ use PCIT\GPI\Webhooks\Context\Components\IssueComment;
 use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
+ * @property "created"|"edited"|"deleted" $action
  * @property int                          $rid
  * @property string                       $repo_full_name
  * @property string                       $sender_username
@@ -21,7 +22,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  * @property string                       $body
  * @property int                          $created_at
  * @property int                          $updated_at
- * @property "created"|"edited"|"deleted" $action
  * @property bool                         $is_pull_request
  */
 class IssueCommentContext extends Context

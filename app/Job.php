@@ -14,8 +14,6 @@ class Job extends Model
     public static $table = 'jobs';
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getLog(int $job_id)
@@ -30,9 +28,6 @@ class Job extends Model
         DB::update('UPDATE jobs SET build_log=null WHERE id=?', [$job_id]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function updateLog(int $job_id, string $build_log): void
     {
         $sql = 'UPDATE jobs SET build_log=? WHERE id=?';
@@ -40,9 +35,6 @@ class Job extends Model
         DB::update($sql, [$build_log, $job_id]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function create(int $build_id): int
     {
         $sql = <<<'EOF'
@@ -55,8 +47,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array
      */
     public static function getByBuildKeyID(int $build_key_id, bool $queued = false)
@@ -80,8 +70,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array|string
      */
     public static function allByBuildKeyID(int $build_key_id)
@@ -96,6 +84,8 @@ EOF;
             // 获取状态
             $state = $jobs[$i]['state'];
 
+            $jobs[$i]['build_log'] = [];
+
             if (\in_array($state, [CI::GITHUB_CHECK_SUITE_STATUS_QUEUED])) {
                 // $jobs[$i]['build_log'] = '{"running":"running"}';
             }
@@ -105,8 +95,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array
      */
     public static function getJobIDByBuildKeyID(int $build_key_id)
@@ -127,8 +115,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public static function getRid(int $job_id)
@@ -157,8 +143,6 @@ EOF;
      * 事件创建时间.
      *
      * @param int $time
-     *
-     * @throws \Exception
      */
     public static function updateCreatedAt(int $job_id, ?int $time): void
     {
@@ -168,8 +152,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getCreatedAt(int $job_id)
@@ -183,8 +165,6 @@ EOF;
      * 容器运行开始时间.
      *
      * @param int $time
-     *
-     * @throws \Exception
      */
     public static function updateStartAt(int $job_id, ?int $time): void
     {
@@ -194,8 +174,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getStartAt(int $job_id)
@@ -205,9 +183,6 @@ EOF;
         return DB::select($sql, [$job_id], true);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function updateFinishedAt(int $job_id, ?int $time): void
     {
         $sql = 'UPDATE jobs SET finished_at=? WHERE id=?';
@@ -216,8 +191,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public static function getFinishedAt(int $job_id)
@@ -228,8 +201,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return null|array|string
      */
     public static function getFinishedAtByBuildId(int $build_id)
@@ -254,8 +225,6 @@ EOF;
     /**
      * @param string $status
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function updateBuildStatus(int $job_key_id, ?string $status)
@@ -266,8 +235,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array|string
      */
     public static function getBuildStatus(int $job_key_id)
@@ -278,8 +245,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getGitType(int $job_key_id)
@@ -297,8 +262,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public static function getBuildKeyId(int $job_key_id)
@@ -310,8 +273,6 @@ EOF;
 
     /**
      * 从 build 的所有 job 得出 build 的状态
-     *
-     * @throws \Exception
      *
      * @return string
      */
@@ -354,17 +315,11 @@ EOF;
         return 'queued';
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function updateEnv(int $job_id, string $env): void
     {
         DB::update('UPDATE jobs set env_vars=? WHERE id=?', [$env, $job_id]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function getEnv(int $job_id): ?array
     {
         $result = DB::select('SELECT env_vars FROM jobs WHERE id=?', [$job_id], true);
@@ -376,9 +331,6 @@ EOF;
         return json_decode($result, true);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function getJobIDByBuildKeyIDAndEnv(int $buildId, string $env): int
     {
         $sql = 'SELECT id FROM jobs WHERE build_id=? AND env_vars=?';
@@ -387,8 +339,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array|string
      */
     public static function getQueuedJob()

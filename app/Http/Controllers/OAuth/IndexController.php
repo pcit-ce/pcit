@@ -33,8 +33,6 @@ class IndexController
 
     /**
      * @param mixed $git_type
-     *
-     * @throws \Exception
      */
     public function bootstrap($git_type): void
     {
@@ -89,8 +87,6 @@ class IndexController
 
     /**
      * 服务器重定向页面.
-     *
-     * @throws \Exception
      */
     #[Route('get', 'oauth/${git_type}')]
     public function getAccessToken(string $git_type): void
@@ -107,9 +103,6 @@ class IndexController
         $this->getAccessTokenCommon(null);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getAccessTokenCommon(?string $state): void
     {
         $git_type = static::$git_type;
@@ -156,8 +149,6 @@ class IndexController
 
     /**
      * @param $refreshToken
-     *
-     * @throws \Exception
      */
     public function handleRefreshToken(int $uid, $refreshToken, string $gitType): void
     {

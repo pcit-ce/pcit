@@ -25,8 +25,6 @@ class RequestsController
      *
      * @param array $args
      *
-     * @throws \Exception
-     *
      * @return array|int
      */
     #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/requests')]
@@ -77,8 +75,6 @@ class RequestsController
      * <pre>
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('post', 'api/repo/{username}/{repo_name}/requests')]
     public function create(Request $request, Validator $validator, ...$args)
@@ -180,8 +176,6 @@ class RequestsController
      * Get single request details.
      *
      * @param array $args
-     *
-     * @throws \Exception
      *
      * @return array|int
      */

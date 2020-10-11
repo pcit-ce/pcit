@@ -15,8 +15,6 @@ class Client extends GitHubClient
     /**
      * @param string $username
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     public function getUserInfo(bool $raw = false, string $username = null)
@@ -51,8 +49,6 @@ class Client extends GitHubClient
 
     /**
      * 这里指项目中的仓库，个人用户不包含仓库。
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

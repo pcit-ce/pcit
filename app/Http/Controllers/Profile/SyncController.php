@@ -28,9 +28,6 @@ class SyncController
 
     private $access_token;
 
-    /**
-     * @throws \Exception
-     */
     #[Route('post','api/user/sync')]
     public function __invoke()
     {
@@ -61,8 +58,6 @@ class SyncController
 
     /**
      * sync user basic info.
-     *
-     * @throws \Exception
      */
     private function updateBasicInfo(): void
     {
@@ -77,8 +72,6 @@ class SyncController
 
     /**
      * Sync user repos.
-     *
-     * @throws \Exception
      */
     private function getRepo(): void
     {
@@ -97,8 +90,6 @@ class SyncController
 
     /**
      * Sync orgs.
-     *
-     * @throws \Exception
      */
     private function getOrgs(): void
     {
@@ -157,8 +148,6 @@ class SyncController
 
     /**
      * Sync orgs repos.
-     *
-     * @throws \Exception
      */
     private function getOrgsRepo(string $org_name): void
     {
@@ -177,8 +166,6 @@ class SyncController
 
     /**
      * parse repo json output.
-     *
-     * @throws \Exception
      */
     private function parseRepo(string $json): void
     {

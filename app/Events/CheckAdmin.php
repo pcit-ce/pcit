@@ -24,7 +24,6 @@ class CheckAdmin
 
     /**
      * @throws PCITException
-     * @throws \Exception
      */
     public function handle(): void
     {

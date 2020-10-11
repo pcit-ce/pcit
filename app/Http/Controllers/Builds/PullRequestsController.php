@@ -13,8 +13,6 @@ class PullRequestsController
 {
     /**
      * @param mixed ...$args
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/pull_requests')]
     public function post(...$args): array

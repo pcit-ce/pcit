@@ -16,8 +16,6 @@ class CheckSuite extends CheckSuiteAbstract
      * requested: when new code is pushed to the app's repository
      *
      * rerequested: re-run the entire check suite
-     *
-     * @throws \Exception
      */
     public function handle(string $webhooks_content): void
     {

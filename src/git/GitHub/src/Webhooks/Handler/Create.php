@@ -10,8 +10,6 @@ class Create extends CreateAbstract
 {
     /**
      * Create "repository", "branch", or "tag".
-     *
-     * @throws \Exception
      */
     public function handle(string $webhooks_content): void
     {

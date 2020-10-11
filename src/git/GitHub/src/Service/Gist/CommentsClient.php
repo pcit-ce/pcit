@@ -13,8 +13,6 @@ class CommentsClient
     /**
      * List comments on a gist.
      *
-     * @throws \Exception
-     *
      * @return mixed
      *
      * @see https://developer.github.com/v3/gists/comments/#list-comments-on-a-gist
@@ -26,8 +24,6 @@ class CommentsClient
 
     /**
      * Get a single comment.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -41,8 +37,6 @@ class CommentsClient
      *
      * 201
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function create(string $gist_id, string $body, string $method = 'post')
@@ -52,8 +46,6 @@ class CommentsClient
 
     /**
      * Edit a comment.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -66,8 +58,6 @@ class CommentsClient
      * Delete a comment.
      *
      * 204
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

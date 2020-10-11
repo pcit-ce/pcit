@@ -31,8 +31,6 @@ class Mail
      * @param array $address address and name
      * @param array $cc      address and name
      * @param array $bcc     address and name
-     *
-     * @throws \Exception
      */
     public static function send(
         array $address,

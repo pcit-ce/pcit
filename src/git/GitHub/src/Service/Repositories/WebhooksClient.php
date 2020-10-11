@@ -25,8 +25,6 @@ class WebhooksClient implements WebhooksClientInterface
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getWebhooks(bool $raw, string $username, string $repo)
@@ -50,8 +48,6 @@ class WebhooksClient implements WebhooksClientInterface
 
     /**
      * 查看 webhooks 是否已经添加（根据 url 判断）.
-     *
-     * @throws \Exception
      *
      * @return 0|1
      */
@@ -82,8 +78,6 @@ class WebhooksClient implements WebhooksClientInterface
     /**
      * @param $data
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function setWebhooks($data, string $username, string $repo, ?string $id = null)
@@ -110,8 +104,6 @@ class WebhooksClient implements WebhooksClientInterface
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function unsetWebhooks(string $username, string $repo, string $id)

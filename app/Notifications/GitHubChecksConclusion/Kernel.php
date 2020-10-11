@@ -47,8 +47,6 @@ EOF;
      * @param string $config
      * @param string $language
      * @param string $git_type
-     *
-     * @throws \Exception
      */
     public function __construct(
         int $job_key_id,
@@ -75,9 +73,6 @@ EOF;
         $this->git_type = $git_type;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         if ('github' !== $this->git_type) {

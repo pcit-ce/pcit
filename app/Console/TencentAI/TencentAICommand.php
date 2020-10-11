@@ -9,8 +9,6 @@ use PCIT\PCIT;
 class TencentAICommand
 {
     /**
-     * @throws \Exception
-     *
      * @return \TencentAI\TencentAI
      */
     public static function get()

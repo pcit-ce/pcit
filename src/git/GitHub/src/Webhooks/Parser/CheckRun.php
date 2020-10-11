@@ -8,9 +8,6 @@ use PCIT\GPI\Webhooks\Context\CheckRunContext;
 
 class CheckRun
 {
-    /**
-     * @throws \Exception
-     */
     public static function handle(string $webhooks_content): CheckRunContext
     {
         $context = new CheckRunContext([], $webhooks_content);

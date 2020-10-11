@@ -9,9 +9,6 @@ use Tests\TestCase;
 
 class TagTest extends TestCase
 {
-    /**
-     * @throws \Exception
-     */
     public function test(): void
     {
         $result = (new Tag('^[0-9.]+$', '1.2.0'))->handle(true);

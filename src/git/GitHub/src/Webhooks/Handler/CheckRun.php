@@ -14,8 +14,6 @@ class CheckRun extends CheckRunAbstract
      * created updated rerequested requested_action.
      *
      * rerequested 用户点击了重新运行(Re-run)按钮
-     *
-     * @throws \Exception
      */
     public function handle(string $webhooks_content): void
     {

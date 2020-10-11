@@ -81,8 +81,6 @@ class PCIT extends Container
 
     /**
      * PCIT constructor.
-     *
-     * @throws \Exception
      */
     public function __construct()
     {

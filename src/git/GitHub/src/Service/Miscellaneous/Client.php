@@ -13,8 +13,6 @@ class Client
     /**
      * List all codes of conduct.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listAllCodesOfConduct()
@@ -25,8 +23,6 @@ class Client
     /**
      * Get an individual code of conduct.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getCodeOfConduct(string $key)
@@ -35,8 +31,6 @@ class Client
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getRepositoryCodeOfConduct(string $repo_full_name)
@@ -46,8 +40,6 @@ class Client
 
     /**
      * Get the contents of a repository's code of conduct.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -60,8 +52,6 @@ class Client
      * Emojis.
      *
      * Lists all the emojis available to use on GitHub.
-     *
-     * @throws \Exception
      *
      * @return mixed
      *
@@ -76,8 +66,6 @@ class Client
      * Listing available templates.
      *
      * @see https://developer.github.com/v3/gitignore/
-     *
-     * @throws \Exception
      */
     public function listGitignore()
     {
@@ -86,8 +74,6 @@ class Client
 
     /**
      * Get a single template.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -99,8 +85,6 @@ class Client
     /**
      * List all licenses.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listLicenses()
@@ -111,8 +95,6 @@ class Client
     /**
      * Get an individual license.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getLicense(string $name = 'mit')
@@ -122,8 +104,6 @@ class Client
 
     /**
      * Get the contents of a repository's license.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -137,8 +117,6 @@ class Client
      *
      * @param string $mode    markdown or gfm
      * @param string $context gfm only
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -156,8 +134,6 @@ class Client
     /**
      * Render a Markdown document in raw mode.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function RenderMarkdownRaw(string $content, string $content_type = 'text/plain')
@@ -167,8 +143,6 @@ class Client
 
     /**
      * meta.
-     *
-     * @throws \Exception
      *
      * @return mixed
      *
@@ -181,8 +155,6 @@ class Client
 
     /**
      * Get your current rate limit status.
-     *
-     * @throws \Exception
      *
      * @return mixed
      *

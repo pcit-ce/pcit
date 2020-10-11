@@ -13,9 +13,6 @@ use PCIT\PCIT;
 
 class Handler implements HandlerInterface
 {
-    /**
-     * @throws \Exception
-     */
     public static function send(int $build_key_id, string $info): void
     {
         $pcit = new PCIT();

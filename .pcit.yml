@@ -172,8 +172,11 @@ steps:
         k2: v2
 
   php-cs-fixer:
-    image: khs1994/php-cs-fixer
+    image: khs1994/php:php-cs-fixer
     run: php-cs-fixer fix
+    if:
+      status:
+        - success
 
   # psalm: composer run psalm || true
 
@@ -263,7 +266,7 @@ steps:
     if:
       << : *8.0.0rc1-job
       status: success
-      event: push
+      event: tag
     with:
       token: ${GITHUB_TOKEN}
       # files: pcit.phar

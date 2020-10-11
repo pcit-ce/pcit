@@ -12,8 +12,6 @@ class CacheManager implements Factory
     protected $stores = [];
 
     /**
-     * @throws \Exception
-     *
      * @return \PCIT\Framework\Contracts\Cache\Repository
      */
     public function store(?string $name = null)

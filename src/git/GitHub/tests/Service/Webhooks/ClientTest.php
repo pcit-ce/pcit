@@ -14,9 +14,6 @@ class ClientTest extends TestCase
      */
     public $pcit;
 
-    /**
-     * @throws \Exception
-     */
     public function setUp(): void
     {
         $this->pcit = app('pcit');
@@ -25,8 +22,6 @@ class ClientTest extends TestCase
 
     /**
      * @param $event
-     *
-     * @throws \Exception
      */
     public function common($event): void
     {
@@ -53,9 +48,6 @@ class ClientTest extends TestCase
         $this->assertStringMatchesFormat('%s', (string) $response->getContent());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testPush(): void
     {
         $event = 'push';

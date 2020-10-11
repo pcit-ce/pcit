@@ -21,9 +21,6 @@ class SystemEnv
         $this->jobGenerator = $jobGenerator;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle()
     {
         $ci_host = env('CI_HOST');

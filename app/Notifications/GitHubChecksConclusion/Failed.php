@@ -10,9 +10,6 @@ use PCIT\Support\CI;
 
 class Failed extends Kernel
 {
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         if ('github' !== $this->git_type) {
@@ -33,9 +30,6 @@ class Failed extends Kernel
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     public function errored(): void
     {
         if ('github' !== $this->git_type) {

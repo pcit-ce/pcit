@@ -111,8 +111,6 @@ class Client implements OAuthInterface
     /**
      * expires_in 8 hours.
      *
-     * @throws \Exception
-     *
      * @return array<string>|string
      */
     public function getAccessToken(string $code, ?string $state, bool $raw = false)

@@ -16,8 +16,6 @@ class LogController
      *
      * @param $job_id
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     #[Route('get', 'api/job/{job_id}/log')]
@@ -115,8 +113,6 @@ class LogController
      * Removes the contents of a log. It gets replace with the message: Log removed at 2017-02-13 16:00:00 UTC.
      *
      * @param $job_id
-     *
-     * @throws \Exception
      */
     #[Route('delete', 'api/job/{job_id}/log')]
     public function delete($job_id)

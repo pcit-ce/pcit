@@ -27,9 +27,6 @@ EOF
         $this->addArgument('session', null, 'Session ID (unique within application)', '0');
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $args = array_values($input->getArguments());

@@ -12,8 +12,6 @@ class GitHubController
 
     /**
      * GitHubController constructor.
-     *
-     * @throws \Exception
      */
     public function __construct()
     {
@@ -25,8 +23,6 @@ class GitHubController
      * @param mixed $username
      * @param mixed $repo_name
      * @param mixed $ref
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/status/github/{username}/{repo_name}/{ref}')]
     public function list($username, $repo_name, $ref)

@@ -38,8 +38,6 @@ class CommentsClient extends ClientCommon
      *
      * @param mixed $issue_number
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function create(
@@ -59,8 +57,6 @@ class CommentsClient extends ClientCommon
     /**
      * List comments on an issue.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $repo_full_name, int $issue_number)
@@ -72,8 +68,6 @@ class CommentsClient extends ClientCommon
 
     /**
      * List comments in a repository.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -87,8 +81,6 @@ class CommentsClient extends ClientCommon
     /**
      * Get a single comment.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getSingle(string $repo_full_name, int $comment_id)
@@ -100,8 +92,6 @@ class CommentsClient extends ClientCommon
 
     /**
      * Edit a comment.
-     *
-     * @throws \Exception
      */
     public function edit(string $repo_full_name, int $comment_id, string $body): void
     {
@@ -116,8 +106,6 @@ class CommentsClient extends ClientCommon
      * Delete a comment.
      *
      * 204.
-     *
-     * @throws \Exception
      */
     public function delete(string $repo_full_name, int $comment_id): void
     {

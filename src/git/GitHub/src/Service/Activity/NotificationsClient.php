@@ -13,8 +13,6 @@ class NotificationsClient
     /**
      * List your notifications.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(bool $all, bool $participating, string $since, string $before)
@@ -31,8 +29,6 @@ class NotificationsClient
 
     /**
      * List your notifications in a repository.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -55,8 +51,6 @@ class NotificationsClient
      *
      * @param string $last_read_at ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function markAsRead(string $last_read_at)
@@ -69,8 +63,6 @@ class NotificationsClient
      *
      * @param string $last_read_at ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function markAsReadInRepository(string $repo_full_name, string $last_read_at)
@@ -80,8 +72,6 @@ class NotificationsClient
 
     /**
      * View a single thread.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -95,8 +85,6 @@ class NotificationsClient
      *
      * 205
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function markThreadAsRead(int $thread_id)
@@ -107,8 +95,6 @@ class NotificationsClient
     /**
      * Get a thread subscription.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getThreadSubscription(int $thread_id)
@@ -118,8 +104,6 @@ class NotificationsClient
 
     /**
      * Set a thread subscription.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -132,8 +116,6 @@ class NotificationsClient
      * Delete a thread subscription.
      *
      * 204
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

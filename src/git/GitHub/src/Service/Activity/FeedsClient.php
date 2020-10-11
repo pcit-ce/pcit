@@ -13,8 +13,6 @@ class FeedsClient
     /**
      * List feeds.
      *
-     * @throws \Exception
-     *
      * @return mixed
      *
      * @see https://developer.github.com/v3/activity/feeds/#list-feeds

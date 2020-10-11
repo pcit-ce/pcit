@@ -14,8 +14,6 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getRid(string $username, string $repo, $git_type = 'github')
@@ -27,8 +25,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      *
      * @return string
      */
@@ -42,8 +38,6 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getRepoFullName(int $rid, $git_type = 'github')
@@ -55,8 +49,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      *
      * @return string
      */
@@ -72,8 +64,6 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return string
      */
     public static function getGitHubInstallationIdByRid(int $rid, $git_type = 'github')
@@ -85,8 +75,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      *
      * @return string
      */
@@ -104,8 +92,6 @@ class Repo extends Model
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return array
      */
     public static function checkAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github')
@@ -121,8 +107,6 @@ class Repo extends Model
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      */
     public static function updateAdmin(int $rid, int $uid, $git_type = 'github', bool $collaborators = false): void
     {
@@ -151,8 +135,6 @@ EOF;
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      */
     public static function deleteAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github'): void
     {
@@ -175,8 +157,6 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return array
      */
     public static function allByAdmin(int $uid, bool $collaborators = false, $git_type = 'github')
@@ -194,8 +174,6 @@ EOF;
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      *
      * @return array
      */
@@ -250,8 +228,6 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return array
      */
     public static function findByRepoFullName(string $username, string $repo_name, $git_type = 'github')
@@ -263,8 +239,6 @@ EOF;
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      *
      * @return array
      */
@@ -284,8 +258,6 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return string
      */
     public static function exists(int $rid, $git_type = 'github')
@@ -297,8 +269,6 @@ EOF;
 
     /**
      * @param string $git_type
-     *
-     * @throws \Exception
      */
     public static function updateRepoInfo(
         int $rid,
@@ -353,8 +323,6 @@ EOF;
      *
      * @param $installation_id
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
@@ -370,8 +338,6 @@ EOF;
     /**
      * @param string $git_type
      *
-     * @throws \Exception
-     *
      * @return int
      */
     public static function deleteByRid(int $rid, $git_type = 'github')
@@ -382,8 +348,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public static function updateBuildActive(int $build_active, string $git_type, string $repo_full_name)
@@ -401,8 +365,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return int
      */
     public static function updateWebhookStatus(int $webhooks_status, string $git_type, string $repo_full_name)
@@ -412,9 +374,6 @@ EOF;
         return DB::update($sql, [$webhooks_status, $git_type, $repo_full_name]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function active(string $repo_full_name, string $git_type = 'gitee'): void
     {
         DB::beginTransaction();
@@ -423,9 +382,6 @@ EOF;
         DB::commit();
     }
 
-    /**
-     * @throws \Exception
-     */
     public static function deactive(string $repo_full_name, string $git_type = 'gitee'): void
     {
         DB::beginTransaction();
@@ -435,8 +391,6 @@ EOF;
     }
 
     /**
-     * @throws \Exception
-     *
      * @return bool
      */
     public static function canBuild(string $repo_full_name, string $git_type)

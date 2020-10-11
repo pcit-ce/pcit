@@ -9,9 +9,6 @@ use Tests\TestCase;
 
 class BranchTest extends TestCase
 {
-    /**
-     * @throws \Exception
-     */
     public function test(): void
     {
         $result = (new Branch('master', 'master'))->handle(true);
@@ -24,9 +21,6 @@ class BranchTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testInclude(): void
     {
         $obj = json_decode('{"include":"master"}');

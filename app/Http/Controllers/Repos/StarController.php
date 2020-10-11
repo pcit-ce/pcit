@@ -16,8 +16,6 @@ class StarController
      * star a repository based on the currently logged in user.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('post', 'api/repo/{username}/{repo_name}/star')]
     public function __invoke(...$args): void
@@ -31,8 +29,6 @@ class StarController
      * unstar a repository based on the currently logged in user.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('post', 'api/repo/{username}/{repo_name}/unstar')]
     public function unStar(...$args): void

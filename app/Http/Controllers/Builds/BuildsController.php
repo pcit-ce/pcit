@@ -21,7 +21,7 @@ class BuildsController
      *
      * Returns a list of builds for the current user. The result is paginated.
      *
-     * @throws \Exception
+     *
      */
     #[Route('get', 'api/builds')]
     // [OpenAPI([
@@ -61,7 +61,7 @@ class BuildsController
      *
      * @param mixed ...$args
      *
-     * @throws \Exception
+     *
      *
      * @return array|string
      */
@@ -98,7 +98,7 @@ class BuildsController
     /**
      * @param mixed ...$args
      *
-     * @throws \Exception
+     *
      *
      * @return array|int
      */
@@ -120,7 +120,7 @@ class BuildsController
      *
      * @param $build_id
      *
-     * @throws \Exception
+     *
      *
      * @return array|int
      */
@@ -144,7 +144,7 @@ class BuildsController
      *
      * @param $build_id
      *
-     * @throws \Exception
+     *
      */
     #[Route('post', 'api/build/{build.id}/cancel')]
     public function cancel($build_id): void
@@ -161,7 +161,7 @@ class BuildsController
 
         $this->updateJobStatus($build_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
 
-        Build::updateFinishedAt($build_id);
+        Build::updateFinishedAt($build_id,false,true);
     }
 
     /**
@@ -169,7 +169,7 @@ class BuildsController
      *
      * @param $build_id
      *
-     * @throws \Exception
+     *
      */
     #[Route('post', 'api/build/{build.id}/restart')]
     public function restart($build_id): void
@@ -192,12 +192,13 @@ class BuildsController
         Job::deleteByBuildKeyId($build_id);
         Build::deleteLog($build_id);
         Build::updateBuildStatus($build_id, 'pending');
+        Build::updateFinishedAt($build_id,true);
     }
 
     /**
      * 更新 build 的状态同时更新 job 的状态
      *
-     * @throws \Exception
+     *
      */
     private function updateJobStatus(int $build_id, string $status): void
     {

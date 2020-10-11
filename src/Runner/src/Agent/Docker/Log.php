@@ -35,8 +35,6 @@ class Log
 
     /**
      * @param $job_id
-     *
-     * @throws \Exception
      */
     public static function drop(int $job_id): void
     {
@@ -46,8 +44,6 @@ class Log
     }
 
     /**
-     * @throws \Exception
-     *
      * @return array<array>
      */
     public function handle(array $mask_value_array = []): array
@@ -97,7 +93,7 @@ class Log
 
                 continue;
             }
-            $docker_container->kill($this->container_id);
+            // $docker_container->kill($this->container_id);
             // 容器停止，获取日志
             $container_log = $docker_container->logs(
                 $this->container_id,

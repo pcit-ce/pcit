@@ -9,9 +9,6 @@ use Tests\TestCase;
 
 class PlatformTest extends TestCase
 {
-    /**
-     * @throws \Exception
-     */
     public function test(): void
     {
         $result = (new Platform('linux/*', 'linux/amd64'))->handle(true);
@@ -21,9 +18,6 @@ class PlatformTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testArray(): void
     {
         $result = (new Platform(['linux/*'], 'linux/amd64'))->handle(true);

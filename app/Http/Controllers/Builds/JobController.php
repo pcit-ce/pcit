@@ -19,8 +19,6 @@ class JobController
     /**
      * @param $build_key_id
      *
-     * @throws \Exception
-     *
      * @return array
      */
     #[Route('get', 'api/jobs')]
@@ -31,8 +29,6 @@ class JobController
 
     /**
      * @param $job_id
-     *
-     * @throws \Exception
      *
      * @return array|int
      */
@@ -104,8 +100,6 @@ class JobController
 
     /**
      * @param $job_id
-     *
-     * @throws \Exception
      */
     #[Route('post', 'api/job/{job.id}/cancel')]
     public function cancel($job_id): void
@@ -118,12 +112,11 @@ class JobController
             fastcgi_finish_request();
         }
 
-        $this->updateBuildStatus((int) $job_id);
+        $this->updateBuildStatus($job_id);
+        $build_key_id = Job::getBuildKeyId($job_id);
+        Build::updateFinishedAt($build_key_id, false, true);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handleCancel(int $job_id): void
     {
         DB::beginTransaction();
@@ -137,8 +130,6 @@ class JobController
 
     /**
      * @param $job_id
-     *
-     * @throws \Exception
      */
     #[Route('post', 'api/job/{job.id}/restart')]
     public function restart($job_id): void
@@ -159,6 +150,7 @@ class JobController
         Job::updateBuildStatus($job_id, 'queued');
 
         $this->updateBuildStatus($job_id);
+        Build::updateFinishedAt($buildId, true);
         Job::updateFinishedAt($job_id, 0);
         Job::updateStartAt($job_id, 0);
         Job::deleteLog($job_id);
@@ -166,8 +158,6 @@ class JobController
 
     /**
      * 更新 job 的状态，同时更新 build 的状态
-     *
-     * @throws \Exception
      */
     private function updateBuildStatus(int $job_id): void
     {

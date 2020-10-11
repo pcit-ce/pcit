@@ -13,8 +13,6 @@ class Date
      *
      * @param mixed $timestamp
      *
-     * @throws \Exception
-     *
      * @return null|array|false|int PRC timestamp
      */
     public static function parse($timestamp, bool $returnArray = false)

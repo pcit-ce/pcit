@@ -9,8 +9,6 @@ class PluginHandler
     /**
      * @param $settings ['k'=>'v']
      * @param $env      SystemEnv ['k=v']
-     *
-     * @throws \Exception
      */
     public function handleSettings($settings, $env): array
     {

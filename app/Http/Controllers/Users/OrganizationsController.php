@@ -11,8 +11,6 @@ class OrganizationsController
 {
     /**
      * Returns a list of organizations the current user is a member of.
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/orgs')]
     public function __invoke()
@@ -22,8 +20,6 @@ class OrganizationsController
 
     /**
      * Returns an individual organization.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

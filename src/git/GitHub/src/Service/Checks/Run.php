@@ -33,8 +33,6 @@ class Run
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function create(RunData $run_data)
@@ -74,8 +72,6 @@ class Run
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function update(RunData $run_data)
@@ -123,8 +119,6 @@ class Run
      * @param string $filter     Filters check runs by their completed_at timestamp. Can be one of latest (returning
      *                           the most recent check runs) or all. Default: latest
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listSpecificRef(
@@ -156,8 +150,6 @@ class Run
      * @param string $filter     Filters check runs by their completed_at timestamp. Can be one of latest (returning
      *                           the most recent check runs) or all. Default: latest
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listCheckSuite(
@@ -183,8 +175,6 @@ class Run
     /**
      * Get a single check run.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getSingle(string $repo_full_name, int $check_run_id)
@@ -196,8 +186,6 @@ class Run
 
     /**
      * List annotations for a check run.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

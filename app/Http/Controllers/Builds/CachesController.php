@@ -30,8 +30,6 @@ class CachesController
      * Returns all the caches for a repository.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/repo/{username}/{repo_name}/caches')]
     public function __invoke(...$args)
@@ -64,8 +62,6 @@ class CachesController
      * Deletes caches for a repository.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('delete', 'api/repo/{username}/{repo_name}/caches')]
     #[Route('delete', 'api/repo/{username}/{repo_name}/caches/{branch}')]

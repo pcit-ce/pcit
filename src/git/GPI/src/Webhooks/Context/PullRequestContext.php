@@ -11,6 +11,7 @@ use PCIT\GPI\Webhooks\Context\Components\PullRequest\Head as PullRequestHead;
 use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
+ * @property "assigned"|"unassigned"|"review_requested"|"review_request_removed"|"ready_for_review"|"labeled"|"unlabeled"|"opened"|"synchronize"|"edited"|"closed"|"reopened"|"locked"|"unlocked" $action
  * @property int                                                                                                                                                                                  $rid
  * @property string                                                                                                                                                                               $repo_full_name
  * @property int                                                                                                                                                                                  $event_time
@@ -24,7 +25,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  * @property PullRequestHead                                                                                                                                                                      $pullRequestHead
  * @property PullRequestBase                                                                                                                                                                      $pullRequestBase
  * @property string                                                                                                                                                                               $pull_request_source
- * @property "assigned"|"unassigned"|"review_requested"|"review_request_removed"|"ready_for_review"|"labeled"|"unlabeled"|"opened"|"synchronize"|"edited"|"closed"|"reopened"|"locked"|"unlocked" $action
  */
 class PullRequestContext extends Context
 {

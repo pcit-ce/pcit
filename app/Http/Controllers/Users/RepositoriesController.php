@@ -12,8 +12,6 @@ class RepositoriesController
 {
     /**
      * This returns a list of repositories the current user has access to.
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/repos')]
     public function __invoke()
@@ -26,8 +24,6 @@ class RepositoriesController
     /**
      * This returns a list of repositories an owner has access to.
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     #[Route('get', 'api/repos/{git_type}/{username}')]
@@ -38,8 +34,6 @@ class RepositoriesController
 
     /**
      * This returns an individual repository.
-     *
-     * @throws \Exception
      *
      * @return array|string
      */

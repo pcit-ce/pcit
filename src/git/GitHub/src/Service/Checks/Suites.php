@@ -32,8 +32,6 @@ class Suites
     /**
      * Get a single check suite.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getSingle(string $repo_full_name, int $check_suite_id)
@@ -49,8 +47,6 @@ class Suites
      * @param string $ref        Required. The ref can be a SHA, branch name, or a tag name.
      * @param int    $app_id
      * @param string $check_name
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -74,8 +70,6 @@ class Suites
 
     /**
      * Set preferences for check suites on a repository.
-     *
-     * @throws \Exception
      *
      * @return mixed
      *
@@ -106,8 +100,6 @@ class Suites
     /**
      * By default, check suites are automatically created when you create a check run.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function create(string $repo_full_name, string $head_branch, string $head_sha)
@@ -126,8 +118,6 @@ class Suites
      * Rerequest check suite.
      *
      * Triggers GitHub to create a new check suite, without pushing new code to a repository.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

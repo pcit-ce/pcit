@@ -14,8 +14,6 @@ use PCIT\Support\Env;
 class SystemController
 {
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getOAuthClientId()

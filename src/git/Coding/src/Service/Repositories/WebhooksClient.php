@@ -13,8 +13,6 @@ class WebhooksClient implements WebhooksClientInterface
     use ServiceClientCommon;
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getWebhooks(bool $raw, string $username, string $project)
@@ -42,8 +40,6 @@ class WebhooksClient implements WebhooksClientInterface
 
     /**
      * @param $data
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -75,8 +71,6 @@ class WebhooksClient implements WebhooksClientInterface
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function unsetWebhooks(string $username, string $repo, string $id)

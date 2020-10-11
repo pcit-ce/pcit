@@ -19,8 +19,6 @@ abstract class Kernel
     /**
      * @param bool $reg conditional is reg
      *
-     * @throws \Exception
-     *
      * @return bool true 不跳过
      */
     public function handle(bool $reg = false): bool

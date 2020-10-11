@@ -9,6 +9,7 @@ use PCIT\GPI\Webhooks\Context\Components\Issue;
 use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
+ * @property "assigned"|"unassigned"|"labeled"|"unlabeled"|"opened"|"closed"|"reopened"|"edited"|"milestoned"|"demilestoned"|"deleted"|"pinned"|"unpinned"|"locked"|"unlocked"|"transferred" $action
  * @property int                                                                                                                                                                             $rid
  * @property string                                                                                                                                                                          $repo_full_name
  * @property int                                                                                                                                                                             $issue_id
@@ -25,7 +26,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  * @property int                                                                                                                                                                             $created_at
  * @property int                                                                                                                                                                             $updated_at
  * @property int                                                                                                                                                                             $closed_at
- * @property "assigned"|"unassigned"|"labeled"|"unlabeled"|"opened"|"closed"|"reopened"|"edited"|"milestoned"|"demilestoned"|"deleted"|"pinned"|"unpinned"|"locked"|"unlocked"|"transferred" $action
  */
 class IssuesContext extends Context
 {

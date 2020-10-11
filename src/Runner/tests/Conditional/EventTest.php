@@ -9,9 +9,6 @@ use Tests\TestCase;
 
 class EventTest extends TestCase
 {
-    /**
-     * @throws \Exception
-     */
     public function test(): void
     {
         $result = (new Event('push', 'push'))->handle();

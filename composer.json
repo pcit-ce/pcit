@@ -138,7 +138,7 @@
     "phpmailer/phpmailer": "^6.0",
     "pimple/pimple": "~3.0",
     "sistemi-etime/flysystem-plugin-aws-s3-v3": "^1.0",
-    "symfony/finder": "^5.0",
+    "symfony/finder": "^5.2",
     "vlucas/phpdotenv": "^5.0",
     "khs1994/advanced-json-rpc": "3.1.2"
   },
@@ -146,7 +146,7 @@
     "khs1994/phar-builder": "20.04.11",
     "phploc/phploc": "^7.0",
     "phpunit/phpunit": "^9.0",
-    "symfony/var-dumper": "^5.0",
+    "symfony/var-dumper": "^5.2",
     "vimeo/psalm": "^3"
   },
   "config": {

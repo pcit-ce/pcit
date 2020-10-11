@@ -13,8 +13,6 @@ class WebhooksClient
     /**
      * List hooks.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $org_name)
@@ -24,8 +22,6 @@ class WebhooksClient
 
     /**
      * Get single hook.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -40,8 +36,6 @@ class WebhooksClient
      * 201
      *
      * @param string $content_type json or form
-     *
-     * @throws \Exception
      */
     public function create(
         string $org_name,
@@ -70,8 +64,6 @@ class WebhooksClient
 
     /**
      * Edit a hook.
-     *
-     * @throws \Exception
      */
     public function edit(
         string $org_name,
@@ -101,8 +93,6 @@ class WebhooksClient
      * Ping a hook.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function ping(string $org_name, int $hook_id): void
     {
@@ -111,8 +101,6 @@ class WebhooksClient
 
     /**
      * Delete a hook.
-     *
-     * @throws \Exception
      */
     public function delete(string $org_name, string $hook_id): void
     {

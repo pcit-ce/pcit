@@ -6,6 +6,7 @@ namespace PCIT\GPI\Webhooks\Context;
 
 use PCIT\GPI\Webhooks\Context;
 use PCIT\GPI\Webhooks\Context\Components\ContentReference;
+use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 class ContentReferenceContext extends Context
 {

@@ -33,8 +33,6 @@ class Controller
     /**
      * 检查 AccessToken.
      *
-     * @throws \Exception
-     *
      * @return null|bool
      */
     private static function checkAccessToken(Request $request)
@@ -56,8 +54,6 @@ class Controller
      * 获取 Webhooks 列表.
      *
      * @param mixed ...$arg
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -86,8 +82,6 @@ class Controller
      * 增加 Webhooks，增加之前必须先判断是否已存在，GitHub 除外.
      *
      * @param mixed ...$arg
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -154,8 +148,6 @@ class Controller
      *
      * @param mixed ...$arg
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public static function delete(...$arg)
@@ -182,8 +174,6 @@ class Controller
      * 设置 Webhooks 状态缓存.
      *
      * @param mixed ...$arg
-     *
-     * @throws \Exception
      */
     private static function setBuildStatusCache(int $status = 0, ...$arg): void
     {
@@ -203,8 +193,6 @@ class Controller
      * 开启构建.
      *
      * @param mixed ...$arg
-     *
-     * @throws \Exception
      *
      * @return array
      */
@@ -227,8 +215,6 @@ class Controller
      * 禁用构建，暂时不主动删除 Webhooks.
      *
      * @param array $arg
-     *
-     * @throws \Exception
      *
      * @return array
      */

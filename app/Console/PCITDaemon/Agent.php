@@ -29,9 +29,6 @@ class Agent extends Kernel
         parent::__construct();
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         \Log::debug('🐳Docker connect ...');

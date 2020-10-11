@@ -13,8 +13,6 @@ class MilestonesClient
     /**
      * List milestones for a repository.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $repo_full_name)
@@ -24,8 +22,6 @@ class MilestonesClient
 
     /**
      * Get a single milestone.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -43,8 +39,6 @@ class MilestonesClient
      * @param string $state          open or closed
      * @param string $description
      * @param string $due_on
-     *
-     * @throws \Exception
      */
     public function create(string $repo_full_name, string $title, ?string $description, ?string $due_on, string $state = 'open'): void
     {
@@ -61,8 +55,6 @@ class MilestonesClient
 
     /**
      * Update a milestone.
-     *
-     * @throws \Exception
      */
     public function update(string $repo_full_name, int $milestone_number, string $title, ?string $description, ?string $due_on, string $state = 'open'): void
     {
@@ -81,8 +73,6 @@ class MilestonesClient
      * Delete a milestone.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function delete(string $repo_full_name, int $milestone_number): void
     {

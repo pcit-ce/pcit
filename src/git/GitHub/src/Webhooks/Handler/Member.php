@@ -10,8 +10,6 @@ class Member extends MemberAbstract
 {
     /**
      * `added` `deleted` `edited` `removed`.
-     *
-     * @throws \Exception
      */
     public function handle(string $webhooks_content): void
     {

@@ -23,9 +23,6 @@ class Subject
         return $this;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle()
     {
         try {

@@ -17,17 +17,8 @@ class Handler
             return;
         }
 
-        $installation_id = $context->installation->id;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
         $action = $context->action;
-        $commit_id = $context->commit_id;
         $external_id = $context->external_id;
-        $check_suite_id = $context->check_suite_id;
-        $check_run_id = $context->check_run_id;
-        $branch = $context->branch;
-        $owner = $context->owner;
-        $default_branch = $context->repository->default_branch;
 
         // 用户点击了某一 run 的 Re-run
         if ('rerequested' === $action) {

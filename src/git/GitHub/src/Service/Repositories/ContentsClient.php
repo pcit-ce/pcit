@@ -15,8 +15,6 @@ class ContentsClient implements ContentsClientInterface
     /**
      * Get the README.
      *
-     * @throws \Exception
-     *
      * @return mixed
      *
      * @aee https://developer.github.com/v3/repos/contents/#get-the-readme
@@ -28,8 +26,6 @@ class ContentsClient implements ContentsClientInterface
 
     /**
      * Get contents.
-     *
-     * @throws \Exception
      */
     public function getContents(string $repo_full_name, string $path, string $ref, bool $raw = true): string
     {
@@ -55,8 +51,6 @@ class ContentsClient implements ContentsClientInterface
      * @param string $branch
      * @param string $committer_name
      * @param string $committer_email
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -98,8 +92,6 @@ class ContentsClient implements ContentsClientInterface
      * @param string $committer_name
      * @param string $committer_email
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function updateFile(
@@ -140,8 +132,6 @@ class ContentsClient implements ContentsClientInterface
      *
      * @param string $branch
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function deleteFile(
@@ -179,8 +169,6 @@ class ContentsClient implements ContentsClientInterface
      * Get archive link.
      *
      * @param string $archive_format tarball or zipball
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

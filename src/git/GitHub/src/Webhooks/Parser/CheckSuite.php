@@ -8,9 +8,6 @@ use PCIT\GPI\Webhooks\Context\CheckSuiteContext;
 
 class CheckSuite
 {
-    /**
-     * @throws \Exception
-     */
     public static function handle(string $webhooks_content): CheckSuiteContext
     {
         $context = new CheckSuiteContext([], $webhooks_content);

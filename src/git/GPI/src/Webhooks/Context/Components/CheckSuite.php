@@ -16,9 +16,9 @@ class CheckSuite
 
     public ?string $conclusion;
 
-    public $before;
+    public string $before;
 
-    public $after;
+    public string $after;
 
     /** @var PullRequests[] */
     public $pull_requests;

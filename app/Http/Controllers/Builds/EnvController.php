@@ -15,8 +15,6 @@ class EnvController
      *
      * @param array $args
      *
-     * @throws \Exception
-     *
      * @return array|string
      */
     #[Route('get', 'api/repo/{username}/{repo_name}/env_vars')]
@@ -47,8 +45,6 @@ class EnvController
      *
      * @param array $args
      *
-     * @throws \Exception
-     *
      * @return string
      */
     #[Route('post', 'api/repo/{username}/{repo_name}/env_vars')]
@@ -75,8 +71,6 @@ class EnvController
      *
      * @param array $args
      *
-     * @throws \Exception
-     *
      * @return array|int
      */
     #[Route('get', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')]
@@ -99,8 +93,6 @@ class EnvController
      * </pre>
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('patch', 'api/repo/{username}/{repo_name}/env_var/{env_var.id}')]
     public function update(...$args): void
@@ -125,8 +117,6 @@ class EnvController
      * delete
      *
      * @param array $args
-     *
-     * @throws \Exception
      *
      * @return int
      */

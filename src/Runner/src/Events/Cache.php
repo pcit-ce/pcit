@@ -62,9 +62,6 @@ class Cache
         $this->disableUpload = $disableUpload;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getPrefix(): string
     {
         $matrix = $this->matrix ?? [];
@@ -76,9 +73,6 @@ class Cache
         return sprintf('%s/%s/%s/%s', $this->gitType, $this->rid, $this->branch, $matrix);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function handle(): void
     {
         if (!$this->cache) {

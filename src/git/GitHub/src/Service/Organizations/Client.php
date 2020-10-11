@@ -14,8 +14,6 @@ class Client
     /**
      * 获取组织的基本信息.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getBasicInfo(string $org_name)
@@ -27,8 +25,6 @@ class Client
 
     /**
      * Edit an organization.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -51,8 +47,6 @@ class Client
      * @param int    $per_page
      * @param string $sort
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listRepo(string $org_name, int $page = 1, string $type = null, int $per_page = null, string $sort = null)
@@ -72,8 +66,6 @@ class Client
 
     /**
      * Check whether a user is blocked from an organization.
-     *
-     * @throws \Exception
      *
      * @return bool
      */
@@ -101,8 +93,6 @@ class Client
      *
      * 204
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function blockUser(string $org_name, string $username)
@@ -117,8 +107,6 @@ class Client
      *
      * 204
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function unblockUser(string $org_name, string $username)
@@ -129,8 +117,6 @@ class Client
     }
 
     /**
-     * @throws \Exception
-     *
      * @return bool
      */
     public function exists(string $org_name)

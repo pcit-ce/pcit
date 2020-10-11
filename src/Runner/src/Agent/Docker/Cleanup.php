@@ -14,8 +14,6 @@ class Cleanup
      *
      * @param string $id           services => only cleanup services
      * @param bool   $service_only only cleanup service container
-     *
-     * @throws \Exception
      */
     public static function systemDelete(?string $id, bool $last = false, bool $service_only = false): void
     {
@@ -69,9 +67,6 @@ class Cleanup
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     private static function deleteContainerByLabel(Container $container, string $label): void
     {
         $output = $container->list(true, null, false, ['label' => $label]);

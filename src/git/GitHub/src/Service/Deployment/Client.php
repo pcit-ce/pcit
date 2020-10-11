@@ -25,8 +25,6 @@ class Client
      * @param string $environment The name of the environment that was deployed to (e.g., <code>staging<code> or
      *                            <code>production<code>). Default: <code>none<code>
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $repo_full_name, string $sha, string $ref, string $task, string $environment)
@@ -46,8 +44,6 @@ class Client
     /**
      * Get a single deployment.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getSingleInfo(string $repo_full_name, string $id)
@@ -64,8 +60,6 @@ class Client
 
     /**
      * Create a deployment.
-     *
-     * @throws \Exception
      */
     public function create(
         string $repo_full_name,
@@ -96,8 +90,6 @@ class Client
     /**
      * List deployment statuses.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getStatus(string $repo_full_name, string $id)
@@ -114,8 +106,6 @@ class Client
 
     /**
      * Get a single deployment status.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -138,8 +128,6 @@ class Client
      *
      * @param string $repo_full_name repo full name
      * @param string $state          error, failure,inactive,in_progress,queued,pending, or success
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

@@ -12,8 +12,6 @@ class ShowStatusController
 {
     /**
      * @param mixed ...$arg
-     *
-     * @throws \Exception
      */
     #[Route('get', '{git_type}/{username}/{repo_name}/status')]
     #[Route('get', 'api/repo/{git_type}/{username}/{repo_name}/status')]

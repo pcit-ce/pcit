@@ -108,9 +108,6 @@ class Client implements OAuthInterface
         return $this->parseTokenResult($json);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getAccessToken(string $code, ?string $state, bool $raw = false): array
     {
         $json = $this->curl->post(

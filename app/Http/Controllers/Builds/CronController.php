@@ -13,8 +13,6 @@ class CronController
      * Returns a list of crons for an individual repository.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/repo/{username}/{repo_name}/crons')]
     public function __invoke(...$args): void
@@ -48,8 +46,6 @@ class CronController
      * Returns the cron set for the specified branch for the specified repository.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/repo/{username}/{repo_name}/branch/{branch.name}/cron')]
     public function findByBranch(...$args): void
@@ -63,8 +59,6 @@ class CronController
      * This creates a cron on the specified branch for the specified repository.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('post', 'api/repo/{username}/{repo_name}/branch/{branch.name}/cron')]
     public function createByBranch(...$args): void

@@ -16,9 +16,6 @@ class CacheTest extends TestCase
 
     public $cache;
 
-    /**
-     * @throws \Exception
-     */
     public function common(): void
     {
         $result = Yaml::parse($this->yaml);
@@ -45,9 +42,6 @@ class CacheTest extends TestCase
         $this->cache = \Cache::get(CacheKey::cacheKey(1));
     }
 
-    /**
-     * @throws \Exception
-     */
     public function test_single_array(): void
     {
         DB::close();
@@ -64,9 +58,6 @@ EOF;
         $this->assertEquals('INPUT_CACHE=dir', json_decode($this->cache)->Env[6]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function test_array(): void
     {
         DB::close();
@@ -84,9 +75,6 @@ EOF;
         $this->assertEquals('INPUT_CACHE=dir,dir2', json_decode($this->cache)->Env[6]);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function test_string(): void
     {
         DB::close();

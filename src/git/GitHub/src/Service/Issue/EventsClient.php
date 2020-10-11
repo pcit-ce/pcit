@@ -18,8 +18,6 @@ class EventsClient
     /**
      * List events for an issue.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listForIssue(string $repo_full_name, int $issue_number)
@@ -30,8 +28,6 @@ class EventsClient
     /**
      * List events for a repository.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function listForRepository(string $repo_full_name)
@@ -41,8 +37,6 @@ class EventsClient
 
     /**
      * Get a single event.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */

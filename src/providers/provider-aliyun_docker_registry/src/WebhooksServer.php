@@ -11,9 +11,6 @@ use PCIT\Provider\Interfaces\WebhooksServerInterface;
  */
 class WebhooksServer implements WebhooksServerInterface
 {
-    /**
-     * @throws \Exception
-     */
     public function server(): void
     {
         \Log::info('receive aliyun_docker_registry webhooks');

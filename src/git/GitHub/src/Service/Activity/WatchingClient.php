@@ -13,8 +13,6 @@ class WatchingClient
     /**
      * List watchers.
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function list(string $repo_full_name)
@@ -24,8 +22,6 @@ class WatchingClient
 
     /**
      * List repositories being watched.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -43,8 +39,6 @@ class WatchingClient
      *
      * 检查是否 watching repo
      *
-     * @throws \Exception
-     *
      * @return mixed
      */
     public function getRepositorySubscription(string $repo_full_name)
@@ -54,8 +48,6 @@ class WatchingClient
 
     /**
      * Set a Repository Subscription.
-     *
-     * @throws \Exception
      *
      * @return mixed
      */
@@ -75,8 +67,6 @@ class WatchingClient
      * Delete a Repository Subscription.
      *
      * 204
-     *
-     * @throws \Exception
      */
     public function deleteRepositorySubscription(string $repo_full_name): void
     {

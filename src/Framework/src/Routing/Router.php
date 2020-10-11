@@ -34,8 +34,6 @@ class Router
      *                                      [\App\Http\Controllers\Controller::class,'method']
      *                                      fn() => 1
      * @param mixed                 ...$arg e.g. 'user/{id}' => 'user/1' => result [1]
-     *
-     * @throws \Exception
      */
     private function make($action, ...$arg): void
     {
@@ -299,8 +297,6 @@ class Router
     /**
      * @param string                $targetUrl route 定义的 URL
      * @param array|\Closure|string $action
-     *
-     * @throws \Exception
      */
     private function handle(string $targetUrl, $action): void
     {
@@ -371,8 +367,6 @@ class Router
     /**
      * @param string $name e.g. get
      * @param array  $arg  e.g. 'path/{id}' 'Controller@method'
-     *
-     * @throws \Exception
      */
     public function __call(string $name, array $arg): void
     {

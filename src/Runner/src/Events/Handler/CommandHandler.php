@@ -7,8 +7,6 @@ namespace PCIT\Runner\Events\Handler;
 class CommandHandler
 {
     /**
-     * @throws \Exception
-     *
      * @return ?string
      */
     public static function parse(

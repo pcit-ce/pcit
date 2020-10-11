@@ -13,8 +13,6 @@ class BetaFeatureController
 {
     /**
      * Return a list of beta features available to a user.
-     *
-     * @throws \Exception
      */
     #[Route('get', 'api/user/beta_features')]
     public function __invoke(): void
@@ -28,8 +26,6 @@ class BetaFeatureController
      * <pre>
      * {"beta_feature.enabled":true}
      * <pre>
-     *
-     * @throws \Exception
      */
     #[Route('patch', 'api/user/beta_feature/{beta_feature_id}')]
     public function enable(): void
@@ -41,8 +37,6 @@ class BetaFeatureController
      * delete a user's beta feature.
      *
      * @param array $args
-     *
-     * @throws \Exception
      */
     #[Route('delete','api/user/beta_feature/{beta_feature_id}')]
     public function delete(...$args): void
