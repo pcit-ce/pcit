@@ -22,6 +22,7 @@ RUN --mount=type=cache,target=/root/.npm,id=npm_cache cd /app/pcit/frontend \
       # && npm install --registry=${NODE_REGISTRY} --production
       && npm install --registry=${NODE_REGISTRY}
 
+COPY ./frontend/tsconfig.json /app/pcit/frontend/
 COPY ./frontend/webpack.config.js /app/pcit/frontend/
 COPY ./frontend/images /app/pcit/frontend/images
 COPY ./frontend/js /app/pcit/frontend/js
