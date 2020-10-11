@@ -193,7 +193,7 @@ PCIT API 使用标准 HTTP 响应码（Status Code）来表示 API 请求。
 
 在极少数情况下，我们需要针对某些接口做一些破坏性的修改，为了尽量避免破坏向后兼容性，我们通过修改接口版本号来实现多版本共存，不去破坏上一版本的接口参数及逻辑，以新版本接口的形式提供同一接口不同请求或返回形式。
 
-例如，`/api/v1/builds` 升级后将变成 `/api/v2/builds`
+请通过 `Accept: application/vnd.pcit.v1alpha1+json` 请求头请求不同的 API 版本。
 
 # 字段类型
 

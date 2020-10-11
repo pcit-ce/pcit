@@ -37,7 +37,7 @@
 
 ### 2020/09/04
 
-* [ ] 版本化 API
+* [x] 版本化 API `Accept: application/vnd.pcit.v1alpha1+json`
 
 ### 2020/08/21
 

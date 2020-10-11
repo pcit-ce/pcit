@@ -42,6 +42,7 @@ class Router
         if ($action instanceof Closure) {
             // 闭包
             $arg = $this->getParameters(null, $action, $arg);
+            $this->matchVersion(null, $action);
             $this->response = \call_user_func_array($action, $arg);
 
             throw new SuccessHandleRouteException();
@@ -69,6 +70,7 @@ class Router
             return;
         }
 
+        $this->matchVersion($obj, $method);
         $rc = new \ReflectionClass($obj);
 
         // 获取类构造函数参数
@@ -237,6 +239,61 @@ class Router
         }
 
         return $args;
+    }
+
+    public function matchVersion($obj, $method): void
+    {
+        $reflection = $obj ?
+            new \ReflectionMethod($obj, $method ?? '__construct') : new \ReflectionFunction($method);
+
+        $attrs = $reflection->getAttributes();
+
+        $accept = \Request::headers()->get('Accept');
+
+        if (!$accept) {
+            return;
+        }
+
+        $attrExists = false;
+        $versionHeader = false;
+
+        foreach ($attrs as $attr) {
+            if (\PCIT\Framework\Attributes\APIVersion::class === $attr->getName()) {
+                $attrExists = true;
+
+                foreach (explode(',', $accept) as $item) {
+                    if (preg_match('/^(application\/vnd.pcit.v).*.(\+json$)/', $item)) {
+                        $versionHeader = true;
+                    }
+                    if (
+                        'application/vnd.pcit.'.$attr->getArguments()[0].'+json'
+                        === $item
+                    ) {
+                        // 版本匹配
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (!$attrExists) {
+            return;
+        }
+
+        if ($attrExists and $versionHeader) {
+            throw new SkipThisRouteException();
+        }
+
+        if (!$versionHeader) {
+        }
+
+        // 版本属性
+        // 版本请求头
+
+        // attr + header    next
+        // !attr + header   skip
+        // !attr + !header  skip
+        // attr + !header
     }
 
     /**

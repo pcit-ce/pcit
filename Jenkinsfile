@@ -6,6 +6,10 @@ pipeline{
     stages{
          stage('checkout') {
          steps {
+         sh '''
+         env
+         '''
+
          checkout([
           $class: 'GitSCM',
           branches: [[name: env.GIT_BUILD_REF]],
@@ -65,7 +69,7 @@ pipeline{
                 -e CI_MYSQL_PASSWORD=test \
                 -e CI_MYSQL_DATABASE=test \
                 -e CI_WEBHOOKS_TOKEN=pcit \
-                khs1994/php:8.0.0beta4-composer-alpine \
+                khs1994/php:8.0.0rc1-composer-alpine \
                 sh -ecx ' \
                 echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \
                 && echo "xdebug.mode=coverage" >> ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \
@@ -130,8 +134,8 @@ pipeline{
                     // sh '''
                     // docker run -i --rm \
                     // -v $PWD:/app \
-                    // khs1994/sami \
-                    // sami update .sami.php
+                    // khs1994/php:sami \
+                    // update .sami.php
                     // '''
 
                     // codingHtmlReport(

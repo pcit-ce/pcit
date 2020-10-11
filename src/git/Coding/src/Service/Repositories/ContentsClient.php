@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PCIT\cODING\Service\Repositories;
+namespace PCIT\Coding\Service\Repositories;
 
 use PCIT\Coding\ServiceClientCommon;
 use PCIT\GPI\Service\Repositories\ContentsClientInterface;

@@ -74,7 +74,7 @@ class Kernel
         }
     }
 
-    public function convertToResponse($response)
+    public function convertToResponse($response): HttpFoundationResponse
     {
         if ($response instanceof HttpFoundationResponse) {
             return $response;

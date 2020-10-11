@@ -328,28 +328,37 @@ class IndexController
         \Response::redirect('https://docs.ci.khs1994.com/usage/security.html');
     }
 
-    #[Route('get', 'api/v1')]
+    #[\PCIT\Framework\Attributes\Deprecated]
+    #[Route('get', 'api/_test')]
+    #[\PCIT\Framework\Attributes\APIVersion('v0')]
+    public function v0()
+    {
+        return __METHOD__;
+    }
 
-    /**
-     * Undocumented function.
-     *
-     * @deprecated
-     */
+    #[Route('get', 'api/_test')]
+    #[\PCIT\Framework\Attributes\APIVersion('v1alpha1')]
+    // api/v1alpha1
+    // api/v1beta1
+    // api/v1
+    // api/v2alpha1
+    // ...
+    public function v1alpha1()
+    {
+        return __METHOD__;
+    }
+
+    #[Route('get', 'api/_test')]
+    #[\PCIT\Framework\Attributes\APIVersion('v1beta1')]
+    public function v1beta1()
+    {
+        return __METHOD__;
+    }
+
+    #[Route('get', 'api/_test')]
+    #[\PCIT\Framework\Attributes\APIVersion('v1')]
     public function v1()
     {
-        return [];
-    }
-
-    #[Route('get', 'api/v1.1')]
-    #[\PCIT\Framework\Attributes\Deprecated]
-    public function v1_1()
-    {
-        return [];
-    }
-
-    #[Route('get', 'api/v1.2')]
-    public function v1_2()
-    {
-        return [];
+        return __METHOD__;
     }
 }

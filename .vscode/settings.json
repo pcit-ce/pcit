@@ -37,7 +37,7 @@
   "php.suggest.basic": false,
   "intelephense.diagnostics.enable": false,
   "psalm.phpExecutablePath": "C:\\php-pre\\php.exe",
-  "intelephense.environment.phpVersion": "8.0.0beta4",
+  "intelephense.environment.phpVersion": "8.0.0rc1",
   "intelephense.stubs": [
     "PDO",
     "redis",
@@ -47,7 +47,8 @@
     "pdo_mysql",
     "Core",
     "date",
-    "standard"
+    "standard",
+    "pcre"
   ],
   "php-docblocker.author": {
     "name": "pcit",
