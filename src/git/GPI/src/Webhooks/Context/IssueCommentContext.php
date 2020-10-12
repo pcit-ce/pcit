@@ -11,8 +11,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
  * @property "created"|"edited"|"deleted" $action
- * @property int                          $rid
- * @property string                       $repo_full_name
  * @property string                       $sender_username
  * @property int                          $sender_uid
  * @property string                       $sender_pic

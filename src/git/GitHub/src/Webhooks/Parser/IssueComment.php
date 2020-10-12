@@ -54,8 +54,6 @@ class IssueComment
 
         $repository = $issueCommentContext->repository;
 
-        $issueCommentContext->rid = $repository->id;
-        $issueCommentContext->repo_full_name = $repository->full_name;
         $issueCommentContext->sender_username = $sender_username;
         $issueCommentContext->sender_uid = $sender_uid;
         $issueCommentContext->sender_pic = $sender_pic;

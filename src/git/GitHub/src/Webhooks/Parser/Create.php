@@ -10,12 +10,6 @@ class Create
 {
     public static function handle(string $webhooks_content): CreateContext
     {
-        $context = new CreateContext([], $webhooks_content);
-        $repository = $context->repository;
-
-        $context->rid = $repository->id;
-        $context->repo_full_name = $repository->full_name;
-
-        return $context;
+        return new CreateContext([], $webhooks_content);
     }
 }

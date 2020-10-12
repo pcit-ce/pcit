@@ -38,8 +38,6 @@ class Issues
 
         $repository = $issuesContext->repository;
 
-        $issuesContext->rid = $repository->id;
-        $issuesContext->repo_full_name = $repository->full_name;
         $issuesContext->sender_username = $sender_username;
         $issuesContext->sender_uid = $sender_uid;
         $issuesContext->sender_pic = $sender_pic;

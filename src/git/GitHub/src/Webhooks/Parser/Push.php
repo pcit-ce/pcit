@@ -39,8 +39,6 @@ class Push extends PushAbstract
 
         $repository = $pushContext->repository;
 
-        $pushContext->rid = $repository->id;
-        $pushContext->repo_full_name = $repository->full_name;
         $pushContext->branch = $branch;
         $pushContext->commit_id = $head_commit->id;
         $pushContext->commit_message = $head_commit->message;

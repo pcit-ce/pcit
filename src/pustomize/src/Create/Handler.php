@@ -12,26 +12,28 @@ class Handler
 {
     public function handle(CreateContext $context): void
     {
+        $repository = $context->repository;
+
         $installation_id = $context->installation->id;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $ref_type = $context->ref_type;
         $owner = $context->owner;
-        $default_branch = $context->repository->default_branch;
+        $default_branch = $repository->default_branch;
         $git_type = $context->git_type;
 
         (new Subject())
             ->register(
                 new UpdateUserInfo(
-                $owner,
-                (int) $installation_id,
-                (int) $rid,
-                $repo_full_name,
-                $default_branch,
-                null,
-                $context->repository->private ?? false,
-                $git_type
-            )
+                    $owner,
+                    (int) $installation_id,
+                    (int) $rid,
+                    $repo_full_name,
+                    $default_branch,
+                    null,
+                    $repository->private ?? false,
+                    $git_type
+                )
             )
             ->handle();
 

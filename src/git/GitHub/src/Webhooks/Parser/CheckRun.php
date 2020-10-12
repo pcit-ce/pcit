@@ -18,8 +18,6 @@ class CheckRun
         $check_suite = $check_run->check_suite;
         $repository = $context->repository;
 
-        $context->rid = $repository->id;
-        $context->repo_full_name = $repository->full_name;
         $context->branch = $check_suite->head_branch;
         $context->commit_id = $check_run->head_sha;
         $context->check_suite_id = $check_suite->id;

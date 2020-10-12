@@ -12,8 +12,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  * Activity related to repository collaborators.
  *
  * @property "added"|"removed"|"edited" $action
- * @property int                        $rid
- * @property string                     $repo_full_name
  * @property int                        $member_uid
  * @property string                     $member_username
  * @property string                     $member_pic

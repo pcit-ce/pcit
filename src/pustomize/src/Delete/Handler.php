@@ -13,9 +13,10 @@ class Handler
     public function handle(DeleteContext $context): void
     {
         $repository = $context->repository;
+
         $installation_id = $context->installation->id;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $ref_type = $context->ref_type;
         $owner = $context->owner;
         $ref = $context->ref;
@@ -25,15 +26,15 @@ class Handler
         (new Subject())
             ->register(
                 new UpdateUserInfo(
-                $owner,
-                (int) $installation_id,
-                (int) $rid,
-                $repo_full_name,
-                $default_branch,
-                null,
-                $repository->private ?? false,
-                $git_type
-            )
+                    $owner,
+                    (int) $installation_id,
+                    (int) $rid,
+                    $repo_full_name,
+                    $default_branch,
+                    null,
+                    $repository->private ?? false,
+                    $git_type
+                )
             )
             ->handle();
 

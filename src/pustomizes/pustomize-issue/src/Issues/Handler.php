@@ -20,22 +20,28 @@ class Handler implements HandlerInterface
 
     public function handle(IssuesContext $context): void
     {
+        $repository = $context->repository;
+
         $git_type = $context->git_type;
         $installation_id = $context->installation->id;
         $action = $context->action;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $issue_number = $context->issue_number;
         $owner = $context->owner;
-        $default_branch = $context->repository->default_branch;
+        $default_branch = $repository->default_branch;
 
         (new Subject())
             ->register(new UpdateUserInfo(
-                $owner, (int) $installation_id, (int) $rid,
-                $repo_full_name, $default_branch, null,
-                $context->repository->private ??false
+                $owner,
+                (int) $installation_id,
+                (int) $rid,
+                $repo_full_name,
+                $default_branch,
+                null,
+                $repository->private ?? false,
                 $git_type
-                ))
+            ))
             ->handle();
 
         \Log::info('issue #'.$issue_number.' '.$action);
@@ -46,7 +52,11 @@ class Handler implements HandlerInterface
 
         $this->context = $context;
 
-        $accessToken = GetAccessToken::byRepoFullName($context->repo_full_name, null, $context->git_type);
+        $accessToken = GetAccessToken::byRepoFullName(
+            $context->repository->full_name,
+            null,
+            $context->git_type
+        );
 
         $this->pcit = \PCIT::git($git_type, $accessToken);
 
@@ -63,7 +73,7 @@ EOF;
     public function createIssueComment(string $body): void
     {
         $this->pcit->issue_comments->create(
-            $this->context->repo_full_name,
+            $this->context->repository->full_name,
             $this->context->issue_number,
             $body
         );
@@ -72,9 +82,9 @@ EOF;
     public function translateTitle(): void
     {
         $this->pcit->issue->translateTitle(
-            $this->context->repo_full_name,
+            $this->context->repository->full_name,
             $this->context->issue_number,
-            (int) $this->context->rid,
+            (int) $this->context->repository->id,
             $this->context->title,
         );
     }

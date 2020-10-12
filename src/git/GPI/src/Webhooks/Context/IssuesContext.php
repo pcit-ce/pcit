@@ -10,8 +10,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
 
 /**
  * @property "assigned"|"unassigned"|"labeled"|"unlabeled"|"opened"|"closed"|"reopened"|"edited"|"milestoned"|"demilestoned"|"deleted"|"pinned"|"unpinned"|"locked"|"unlocked"|"transferred" $action
- * @property int                                                                                                                                                                             $rid
- * @property string                                                                                                                                                                          $repo_full_name
  * @property int                                                                                                                                                                             $issue_id
  * @property int|string                                                                                                                                                                      $issue_number
  * @property string                                                                                                                                                                          $title

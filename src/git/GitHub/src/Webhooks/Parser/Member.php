@@ -27,8 +27,6 @@ class Member
         $repository = $memberContext->repository;
         \Log::info("$action ".$repository->id." $member_uid", []);
 
-        $memberContext->rid = $repository->id;
-        $memberContext->repo_full_name = $repository->full_name;
         $memberContext->member_uid = $member_uid;
         $memberContext->member_username = $member_username;
         $memberContext->member_pic = $member_pic;

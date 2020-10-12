@@ -108,7 +108,7 @@ class Repo extends Model
     /**
      * @param string $git_type
      */
-    public static function updateAdmin(int $rid, int $uid, $git_type = 'github', bool $collaborators = false): void
+    public static function updateAdmin(int $rid, int $uid, bool $collaborators = false, $git_type = 'github'): void
     {
         $type = 'repo_admin';
 

@@ -41,8 +41,8 @@ class Handler
         $repository = $context->repository;
 
         $installation_id = $context->installation->id;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $branch = $context->branch;
         $commit_id = $context->commit_id;
         $commit_message = $context->commit_message;
@@ -127,8 +127,8 @@ class Handler
 
         $git_type = $context->git_type;
         $installation_id = $context->installation->id;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $branch = $context->branch;
         $tag = $context->tag;
         $commit_id = $context->commit_id;

@@ -36,9 +36,11 @@ class Handler
             }
         }
 
+        $repository = $context->repository;
+
         $installation_id = $context->installation->id;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $branch = $context->branch;
         $commit_id = $context->commit_id;
         $commit_message = $context->commit_message;
@@ -53,8 +55,6 @@ class Handler
 
         // user table not include user info
         $subject = new Subject();
-
-        $repository = $context->repository;
 
         $subject->register(
             new UpdateUserInfo(
@@ -117,11 +117,13 @@ class Handler
 
     public function handlePullRequest(CheckSuiteContext $context): void
     {
+        $repository = $context->repository;
+
         $git_type = $context->git_type;
         $installation_id = $context->installation->id;
         $action = $context->action;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $commit_id = $context->commit_id;
         $event_time = $context->event_time;
         $commit_message = $context->commit_message;

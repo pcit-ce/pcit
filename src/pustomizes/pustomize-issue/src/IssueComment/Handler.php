@@ -27,23 +27,23 @@ class Handler implements HandlerInterface
 
         $git_type = $context->git_type;
         $installation_id = $context->installation->id;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $owner = $context->owner;
         $default_branch = $repository->default_branch;
 
         (new Subject())
             ->register(
                 new UpdateUserInfo(
-                $owner,
-                (int) $installation_id,
-                (int) $rid,
-                $repo_full_name,
-                $default_branch,
-                null,
-                $repository->private ?? false,
-                $git_type
-            )
+                    $owner,
+                    (int) $installation_id,
+                    (int) $rid,
+                    $repo_full_name,
+                    $default_branch,
+                    null,
+                    $repository->private ?? false,
+                    $git_type
+                )
             )
             ->handle();
 
@@ -54,7 +54,7 @@ class Handler implements HandlerInterface
         }
 
         $access_token = GetAccessToken::byRid(
-            $context->rid,
+            $rid,
             $context->git_type
         );
 
@@ -78,7 +78,7 @@ class Handler implements HandlerInterface
     public function handleTitleTranslate(): void
     {
         $this->pcit->issue->translateTitle(
-            $this->context->repo_full_name,
+            $this->context->repository->full_name,
             (int) $this->context->issue_number,
             null,
             null
@@ -87,7 +87,7 @@ class Handler implements HandlerInterface
 
     public function handleAutoMerge(string $body): void
     {
-        if (Repo::checkAdmin((int) $this->context->rid, (int) $this->context->sender_uid)) {
+        if (Repo::checkAdmin((int) $this->context->repository->id, (int) $this->context->sender_uid)) {
             [$body, $merge_method] = $this->handleAutoMergeBodyAndMethod($body);
 
             try {
@@ -107,7 +107,7 @@ class Handler implements HandlerInterface
     public function createComment(string $body): void
     {
         $this->pcit->issue_comments->create(
-            $this->context->repo_full_name,
+            $this->context->repository->full_name,
             (int) $this->context->issue_number,
             $body
         );
@@ -154,7 +154,7 @@ EOF;
     {
         \Log::info('merge pull_request by pcit auto');
 
-        $repo_array = explode('/', $this->context->repo_full_name);
+        $repo_array = explode('/', $this->context->repository->full_name);
 
         $this->pcit->pull_request
             ->merge(

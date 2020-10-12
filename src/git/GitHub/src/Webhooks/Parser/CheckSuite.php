@@ -18,8 +18,6 @@ class CheckSuite
         $head_commit = $check_suite->head_commit;
         $repository = $context->repository;
 
-        $context->rid = $repository->id;
-        $context->repo_full_name = $repository->full_name;
         $context->branch = $check_suite->head_branch;
         $context->commit_id = $check_suite->head_sha;
         $context->commit_message = $head_commit->message;

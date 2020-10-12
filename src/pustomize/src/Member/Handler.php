@@ -11,9 +11,10 @@ class Handler
 {
     public function handle(MemberContext $context): void
     {
+        $repository = $context->repository;
         $action = $context->action;
-        $rid = $context->rid;
-        $repo_full_name = $context->repo_full_name;
+        $rid = $repository->id;
+        $repo_full_name = $repository->full_name;
         $member_uid = $context->member_uid;
         $git_type = $context->git_type;
 

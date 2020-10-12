@@ -22,8 +22,6 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  * @property string                                $base_ref
  * @property string                                $compare
  * @property HeadCommit                            $head_commit
- * @property int                                   $rid
- * @property string                                $repo_full_name
  * @property string                                $branch
  * @property string                                $commit_id
  * @property string                                $commit_message

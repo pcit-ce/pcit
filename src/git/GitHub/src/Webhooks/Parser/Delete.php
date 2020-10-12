@@ -12,12 +12,6 @@ class Delete
     {
         \Log::info('Receive event', ['type' => 'delete']);
 
-        $context = new DeleteContext([], $webhooks_content);
-        $repository = $context->repository;
-
-        $context->rid = $repository->id;
-        $context->repo_full_name = $repository->full_name;
-
-        return $context;
+        return new DeleteContext([], $webhooks_content);
     }
 }
