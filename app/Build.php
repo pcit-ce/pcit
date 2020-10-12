@@ -22,7 +22,7 @@ pull_request_number,tag,config,internal,private
 
 FROM
 
-builds WHERE build_status=? AND event_type IN (?,?,?) AND config !='[]' ORDER BY id ASC LIMIT 1;
+builds WHERE build_status=? AND event_type IN (?,?,?,?) AND config !='[]' ORDER BY id ASC LIMIT 1;
 EOF;
         $queryByBuildId = <<<EOF
 SELECT
@@ -43,6 +43,7 @@ EOF;
                 CI::BUILD_EVENT_PUSH,
                 CI::BUILD_EVENT_TAG,
                 CI::BUILD_EVENT_PR,
+                CI::BUILD_EVENT_MANUALLY,
             ]);
         }
 
@@ -94,7 +95,8 @@ EOF;
 
     public static function updateFinishedAt(int $buildId, bool $unset = false, bool $now = false): void
     {
-        $finished_at = $now ? time() : ($unset ? 0 : Job::getFinishedAtByBuildId($buildId));
+        $finished_at = $now ? time()
+        : ($unset ? 0 : Job::getFinishedAtByBuildId($buildId));
 
         $sql = 'UPDATE builds set finished_at=? WHERE id=?';
 
@@ -303,7 +305,9 @@ id<=$before AND git_type=? AND rid=? AND branch=? AND event_type IN(?,?) AND bui
  ORDER BY id DESC LIMIT $limit;
 EOF;
 
-        return DB::select($sql, [$git_type, $rid, $branch_name, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG]);
+        return DB::select($sql, [
+            $git_type, $rid, $branch_name, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG,
+        ]);
     }
 
     /**
@@ -340,20 +344,32 @@ EOF;
 SELECT id,branch,commit_id,tag,commit_message,compare,
 committer_name,committer_username,build_status,event_type,pull_request_number,created_at,finished_at
 FROM builds WHERE
-id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?) AND build_status NOT IN('$skip','$misconfigured','$skipped')
+id<=$before AND git_type=? AND rid=? AND event_type IN(?,?,?,?) AND build_status NOT IN('$skip','$misconfigured','$skipped')
 ORDER BY id DESC LIMIT $limit
 EOF;
         if ($all) {
             return DB::select($sql, [
-                $git_type, $rid, CI::BUILD_EVENT_PR, CI::BUILD_EVENT_PUSH, CI::BUILD_EVENT_TAG,
+                $git_type, $rid,
+                CI::BUILD_EVENT_PR,
+                CI::BUILD_EVENT_PUSH,
+                CI::BUILD_EVENT_TAG,
+                CI::BUILD_EVENT_MANUALLY,
             ]);
         }
 
         if ($pr) {
-            return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_PR, null, null]);
+            return DB::select($sql, [
+                $git_type, $rid, CI::BUILD_EVENT_PR, null, null, null,
+            ]);
         }
 
-        return DB::select($sql, [$git_type, $rid, CI::BUILD_EVENT_TAG, CI::BUILD_EVENT_PUSH, null]);
+        return DB::select($sql, [
+            $git_type, $rid,
+            CI::BUILD_EVENT_TAG,
+            CI::BUILD_EVENT_PUSH,
+            CI::BUILD_EVENT_MANUALLY,
+            null,
+        ]);
     }
 
     /**

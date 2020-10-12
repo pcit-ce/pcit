@@ -13,6 +13,12 @@ class RepositoriesProvider implements ServiceProviderInterface
     {
         $namespace = 'PCIT\\Service\\Repositories\\';
 
+        $pimple['repo'] = function ($app) use ($namespace) {
+            $class = 'PCIT\\'.$app->class_name.'\Service\Repositories\Client';
+
+            return new $class($app['curl'], $app['config']['api_url']);
+        };
+
         $pimple['repo_branches'] = function ($app) use ($namespace) {
             $class = 'PCIT\\'.$app->class_name.'\Service\Repositories\BranchesClient';
 

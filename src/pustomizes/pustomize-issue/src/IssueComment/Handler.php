@@ -23,15 +23,28 @@ class Handler implements HandlerInterface
     {
         $this->context = $context;
 
+        $repository = $context->repository;
+
         $git_type = $context->git_type;
         $installation_id = $context->installation->id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
         $owner = $context->owner;
-        $default_branch = $context->repository->default_branch;
+        $default_branch = $repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
+            ->register(
+                new UpdateUserInfo(
+                $owner,
+                (int) $installation_id,
+                (int) $rid,
+                $repo_full_name,
+                $default_branch,
+                null,
+                $repository->private ?? false,
+                $git_type
+            )
+            )
             ->handle();
 
         $body = strtolower($context->body);

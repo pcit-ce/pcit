@@ -41,6 +41,8 @@ class Handler implements HandlerInterface
             return;
         }
 
+        $repository = $context->repository;
+
         $installation_id = $context->installation->id;
         $action = $context->action;
         $rid = $context->rid;
@@ -55,7 +57,7 @@ class Handler implements HandlerInterface
         $internal = $context->internal;
         $pull_request_source = $context->pull_request_source;
         $owner = $context->owner;
-        $default_branch = $context->repository->default_branch;
+        $default_branch = $repository->default_branch;
         $private = $context->private;
 
         $subject = new Subject();
@@ -67,6 +69,7 @@ class Handler implements HandlerInterface
             $repo_full_name,
             $default_branch,
             null,
+            $repository->private ?? false,
             $git_type
         ));
 

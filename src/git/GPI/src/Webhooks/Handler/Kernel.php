@@ -192,6 +192,8 @@ class Kernel
 
     public function repository_dispatch(string $webhooks_content, string $git_type): void
     {
+        $class = $this->getNamespace($git_type).'RepositoryDispatch';
+        $this->callHandler($class, $webhooks_content);
     }
 
     public function repository(string $webhooks_content, string $git_type): void

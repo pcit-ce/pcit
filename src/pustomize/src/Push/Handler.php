@@ -38,6 +38,8 @@ class Handler
             DisableHandler::handle($context->repo_full_name, $this->git_type);
         }
 
+        $repository = $context->repository;
+
         $installation_id = $context->installation->id;
         $rid = $context->rid;
         $repo_full_name = $context->repo_full_name;
@@ -51,7 +53,7 @@ class Handler
         $owner = $context->owner;
         $sender = $context->sender;
         $private = $context->private;
-        $default_branch = $context->repository->default_branch;
+        $default_branch = $repository->default_branch;
 
         // user table not include user info
         $subject = new Subject();
@@ -64,6 +66,7 @@ class Handler
                 $repo_full_name,
                 $default_branch,
                 $sender,
+                $repository->private ?? false,
                 $git_type
             )
         );
@@ -120,6 +123,8 @@ class Handler
             return;
         }
 
+        $repository = $context->repository;
+
         $git_type = $context->git_type;
         $installation_id = $context->installation->id;
         $rid = $context->rid;
@@ -134,7 +139,7 @@ class Handler
         $owner = $context->owner;
         $sender = $context->sender;
         $private = $context->private;
-        $default_branch = $context->repository->default_branch;
+        $default_branch = $repository->default_branch;
 
         $subject = new Subject();
 
@@ -146,6 +151,7 @@ class Handler
                 $repo_full_name,
                 $default_branch,
                 $sender,
+                $repository->private ?? false,
                 $git_type
             )
         );

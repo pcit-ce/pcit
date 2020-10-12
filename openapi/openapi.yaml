@@ -686,6 +686,7 @@ paths:
                     last_sync: "1577893114"
                     secrets: null
                     auto_merge: null
+                    private: "0"
   "/repo/{username}/{repo.name}/activate":
     post:
       tags:

@@ -8,9 +8,9 @@ use Curl\Curl;
 
 trait ServiceClientCommon
 {
-    protected $curl;
+    protected Curl $curl;
 
-    protected $api_url;
+    protected string $api_url;
 
     public function __construct(Curl $curl, string $api_url)
     {

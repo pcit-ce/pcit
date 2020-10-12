@@ -37,8 +37,16 @@ class Handler
             $rid = $k->id;
 
             $repo_full_name = $k->full_name;
+            $private = $k->private;
 
-            Repo::updateRepoInfo((int) $rid, $repo_full_name, $sender_uid, null);
+            Repo::updateRepoInfo(
+                (int) $rid,
+                $repo_full_name,
+                $sender_uid,
+                null,
+                null,
+                $private,
+            );
         }
     }
 

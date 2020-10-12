@@ -276,18 +276,21 @@ EOF;
         ?int $insert_admin,
         ?int $insert_collaborators,
         ?string $default_branch = 'master',
+        bool $private = false,
         $git_type = 'github'
     ): void {
+        $private = $private ? 1 : 0;
+
         if ($repo_key_id = self::exists($rid, $git_type)) {
             $sql = <<<'EOF'
 UPDATE repo SET
 
-git_type=?,rid=?,repo_full_name=?,last_sync=?
+git_type=?,rid=?,repo_full_name=?,last_sync=?,private=?
 
 WHERE id=?;
 EOF;
             DB::update($sql, [
-                $git_type, $rid, $repo_full_name, time(), $repo_key_id,
+                $git_type, $rid, $repo_full_name, time(), $private, $repo_key_id,
             ]);
 
             goto a;
@@ -296,13 +299,13 @@ EOF;
         $sql = <<<'EOF'
 INSERT INTO repo(
 id,git_type, rid, repo_full_name,default_branch,
-last_sync
-) VALUES(null,?,?,?,?,?)
+last_sync,private
+) VALUES(null,?,?,?,?,?,?)
 EOF;
 
         DB::insert($sql, [
             $git_type, $rid, $repo_full_name,
-            $default_branch, time(),
+            $default_branch, time(), $private,
         ]);
 
         a:
@@ -327,6 +330,7 @@ EOF;
      */
     public static function deleteByInstallationId(int $installation_id, string $git_type = 'github')
     {
+        return 0;
         $sql = <<<'EOF'
             DELETE repo FROM repo LEFT JOIN user ON repo.repo_full_name LIKE CONCAT(user.username,"/%")
             where user.installation_id = ?

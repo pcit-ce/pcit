@@ -14,6 +14,8 @@ class CI
 
     const BUILD_EVENT_PUSH = 'push';
 
+    const BUILD_EVENT_MANUALLY = 'manually';
+
     const BUILD_EVENT_TAG = 'tag';
 
     const BUILD_EVENT_PR = 'pull_request';

@@ -30,7 +30,12 @@ class Handler implements HandlerInterface
         $default_branch = $context->repository->default_branch;
 
         (new Subject())
-            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
+            ->register(new UpdateUserInfo(
+                $owner, (int) $installation_id, (int) $rid,
+                $repo_full_name, $default_branch, null,
+                $context->repository->private ??false
+                $git_type
+                ))
             ->handle();
 
         \Log::info('issue #'.$issue_number.' '.$action);

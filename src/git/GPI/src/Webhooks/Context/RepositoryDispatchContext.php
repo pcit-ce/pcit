@@ -13,7 +13,5 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  */
 class RepositoryDispatchContext extends Context
 {
-    public $client_payload;
-
     // use ContextTrait;
 }

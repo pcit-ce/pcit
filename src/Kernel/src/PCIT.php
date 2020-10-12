@@ -35,6 +35,7 @@ use WeChat\WeChat;
  * @property GitHub\Service\Issue\MilestonesClient           $issue_milestones
  * @property GitHub\Service\Miscellaneous\Client             $miscellaneous
  * @property GitHub\Service\Organizations\Client             $orgs
+ * @property GitHub\Service\Repositories\Client              $repo
  * @property GitHub\Service\Repositories\BranchesClient      $repo_branches
  * @property GitHub\Service\Repositories\CollaboratorsClient $repo_collaborators
  * @property GitHub\Service\Repositories\CommitsClient       $repo_commits

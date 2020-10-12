@@ -29,6 +29,7 @@ use Pimple\Exception\UnknownIdentifierException;
  * @property \PCIT\GitHub\Service\Issue\MilestonesClient           $issue_milestones
  * @property \PCIT\GitHub\Service\Miscellaneous\Client             $miscellaneous
  * @property \PCIT\GitHub\Service\Organizations\Client             $orgs
+ * @property \PCIT\GitHub\Service\Repositories\Client              $repo
  * @property \PCIT\GitHub\Service\Repositories\BranchesClient      $repo_branches
  * @property \PCIT\GitHub\Service\Repositories\CollaboratorsClient $repo_collaborators
  * @property \PCIT\GitHub\Service\Repositories\CommitsClient       $repo_commits

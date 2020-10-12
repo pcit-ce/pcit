@@ -33,6 +33,8 @@ class UpdateUserInfo
 
     private $git_type;
 
+    private bool $private;
+
     /**
      * UpdateUserInfo constructor.
      *
@@ -45,6 +47,7 @@ class UpdateUserInfo
         string $repo_full_name,
         ?string $default_branch,
         Sender $sender = null,
+        bool $private = false,
         string $git_type = 'github'
     ) {
         $this->owner = $owner;
@@ -52,6 +55,7 @@ class UpdateUserInfo
         $this->rid = $rid;
         $this->repo_full_name = $repo_full_name;
         $this->sender_uid = $sender->uid ?? null;
+        $this->private = $private;
         $this->git_type = $git_type;
 
         if ($sender) {
@@ -64,7 +68,15 @@ class UpdateUserInfo
         $git_type = $this->git_type;
         $default_branch = $this->default_branch;
         User::updateUserInfo($this->owner, null, null, null, null, null, $git_type);
-        Repo::updateRepoInfo($this->rid, $this->repo_full_name, $this->sender_uid, null, $default_branch, $git_type);
+        Repo::updateRepoInfo(
+            $this->rid,
+            $this->repo_full_name,
+            $this->sender_uid,
+            null,
+            $default_branch,
+            $this->private,
+            $git_type
+        );
 
         if ('github' === $git_type) {
             User::updateInstallationId($this->installation_id, $this->owner->username);

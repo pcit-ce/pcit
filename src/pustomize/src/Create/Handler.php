@@ -21,7 +21,18 @@ class Handler
         $git_type = $context->git_type;
 
         (new Subject())
-            ->register(new UpdateUserInfo($owner, (int) $installation_id, (int) $rid, $repo_full_name, $default_branch, null, $git_type))
+            ->register(
+                new UpdateUserInfo(
+                $owner,
+                (int) $installation_id,
+                (int) $rid,
+                $repo_full_name,
+                $default_branch,
+                null,
+                $context->repository->private ?? false,
+                $git_type
+            )
+            )
             ->handle();
 
         if ('branch' === $ref_type) {

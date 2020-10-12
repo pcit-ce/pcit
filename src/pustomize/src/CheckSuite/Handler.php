@@ -54,6 +54,8 @@ class Handler
         // user table not include user info
         $subject = new Subject();
 
+        $repository = $context->repository;
+
         $subject->register(
             new UpdateUserInfo(
                 $owner,
@@ -62,6 +64,7 @@ class Handler
                 $repo_full_name,
                 $default_branch,
                 $sender,
+                $repository->private ?? false,
                 $git_type
             )
         );
@@ -136,6 +139,8 @@ class Handler
 
         $subject = new Subject();
 
+        $repository = $context->repository;
+
         $subject->register(new UpdateUserInfo(
             $owner,
             (int) $installation_id,
@@ -143,6 +148,7 @@ class Handler
             $repo_full_name,
             $default_branch,
             null,
+            $repository->private ?? false,
             $git_type
         ));
 

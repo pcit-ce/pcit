@@ -6,7 +6,7 @@ namespace PCIT\GitHub\Service;
 
 use PCIT\GPI\ServiceClientCommon;
 
-class ClientCommon
+abstract class ClientCommon
 {
     use ServiceClientCommon;
 }

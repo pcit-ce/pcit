@@ -13,9 +13,7 @@ use JsonSchema\Constraints\BaseConstraint;
 use PCIT\Config\Validator;
 use PCIT\Framework\Attributes\Route;
 use PCIT\Framework\Http\Request;
-use PCIT\GetConfig;
 use PCIT\PCIT;
-use PCIT\Subject;
 use Symfony\Component\Yaml\Yaml;
 
 class RequestsController
@@ -97,27 +95,12 @@ class RequestsController
         $config = $body_obj->request->config ?? '';
         $branch = $body_obj->request->branch ?? 'master';
 
-        $result = $pcit->repo_branches->get($username, $repo_name, $branch);
-
-        $result = json_decode($result);
-
-        $compare = null;
-        $commit = $result->commit ?? null;
-
-        if (!$commit) {
-            throw new \Exception('git repo empty, please commit to git repo', 404);
-        }
-
-        $commit_id = $commit->sha;
-        $commit_message = $commit->commit->message;
-        $committer = $commit->commit->committer;
-        $author = $commit->commit->author;
-        $event_time = time();
-
         if ($config) {
             $config_array = Yaml::parse($config);
 
             $config = json_encode($config_array);
+
+            $validator = new Validator();
 
             $result = $validator->validate(
                 BaseConstraint::arrayToObjectRecursive($config_array)
@@ -129,47 +112,12 @@ class RequestsController
 
                 return $response;
             }
-        } else {
-            try {
-                $subject = new Subject();
-                $config_array = $subject->register(new GetConfig((int) $rid, $commit_id))->handle()->config_array;
-                $config = json_encode($config_array);
-            } catch (\Throwable $e) {
-                // throw new \Exception($e->getMessage());
-                $config = '[]';
-            }
         }
-        // TODO: 判断是否为私有仓库
-        $last_insert_id = Build::insert(
-            'push',
-            $branch,
-            $compare,
-            $commit_id,
-            $commit_message,
-            $committer->name,
-            $committer->email,
-            $committer->name,
-            $author->name,
-            $author->email,
-            $author->name,
-            $rid,
-            $event_time,
-            $config,
-            false,
-            'github',
-            true
-        );
 
-        // trigger build 不检测是否跳过
-        // 检查是否有配置文件 .pcit.yml
-
-        $status = '[]' === $config ? 'misconfigured' : 'pending';
-
-        Build::updateBuildStatus((int) $last_insert_id, $status);
-
-        \Log::info('build '.$last_insert_id.' is '.$status);
-
-        return ['build_id' => $last_insert_id];
+        $pcit->repo->createDispatchEvent($username, $repo_name, 'pcit', compact(
+            'branch',
+            'config',
+        ));
     }
 
     /**
