@@ -11,16 +11,6 @@ use TencentAI\TencentAI;
 
 class Client extends ClientCommon implements ClientInterface
 {
-    /**
-     * @var Curl
-     */
-    protected $curl;
-
-    /**
-     * @var string
-     */
-    protected $api_url;
-
     private $header = [
         'Accept' => 'application/vnd.github.machine-man-preview+json,application/vnd.github.speedy-preview+json,application/vnd.github.symmetra-preview+json',
     ];

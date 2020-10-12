@@ -311,11 +311,11 @@ EOF;
         a:
 
         if ($insert_admin) {
-            self::updateAdmin($rid, $insert_admin, $git_type);
+            self::updateAdmin($rid, $insert_admin, false, $git_type);
         }
 
         if ($insert_collaborators) {
-            self::updateAdmin($rid, $insert_collaborators, $git_type, true);
+            self::updateAdmin($rid, $insert_collaborators, true, $git_type);
         }
     }
 

@@ -11,13 +11,6 @@ use PCIT\GitHub\Service\ClientCommon;
 class CommentsClient extends ClientCommon
 {
     /**
-     * @var Curl
-     */
-    protected $curl;
-
-    protected $api_url;
-
-    /**
      * @var \TencentAI\TencentAI
      */
     private $tencent_ai;
