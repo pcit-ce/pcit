@@ -6,9 +6,6 @@ namespace PCIT\Runner\Events\Handler;
 
 class CommandHandler
 {
-    /**
-     * @return ?string
-     */
     public static function parse(
         string $shell,
         string $step,
@@ -41,7 +38,7 @@ EOF;
                 $content .= self::prepend($command);
             }
         } else {
-            $content = $commands[0];
+            $content = implode("\n", $commands);
         }
 
         if ($raw) {

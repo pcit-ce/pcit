@@ -1,35 +1,109 @@
 steps:
-  bash_shell:
+  bash:
     image: bash
     shell: bash
     run: |
       echo 1
-      echo 2
 
-  sh_shell:
+      if [ -z "$a" ];then \
+        echo 1; \
+      else \
+        echo 2; \
+      fi
+
+  bash_mul_run:
+    image: bash
+    shell: bash
+    run:
+    - |
+      echo 1
+
+    - |
+      if [ -z "$a" ];then \
+        echo 1; \
+      else \
+        echo 2; \
+      fi
+
+  bash_custom: &bash_custom
+    image: bash
+    shell: bash +e
+    run: |
+      not-exists-cmd
+
+      echo 1
+
+  sh:
     image: alpine
     shell: sh
     run: |
       echo 1
-      echo 2
 
-  python_shell:
+      if [ -z "$a" ];then
+        echo 1
+      else
+        echo 2
+      fi
+
+  sh_mul_run:
+    image: alpine
+    shell: sh
+    run:
+    - |
+      echo 1
+
+    - |
+      if [ -z "$a" ];then
+        echo 1
+      else
+        echo 2
+      fi
+
+  sh_custom:
+    << : *bash_custom
+    image: alpine
+    shell: sh +e
+
+  python:
     image: python:3.8-alpine
     shell: python
     run: |
       import os
       print(os.environ['PATH'])
 
-  pwsh_shell:
-    image: mcr.microsoft.com/powershell:preview-alpine-3.11
+  python_mul_run:
+    image: python:3.8-alpine
+    shell: python
+    run:
+    - |
+      import os
+      print(os.environ['PATH'])
+    - |
+      print(1)
+
+  pwsh:
+    # image: mcr.microsoft.com/powershell:preview-alpine-3.11
     # image: mcr.azk8s.cn/powershell:preview-alpine-3.11
+    image: ccr.ccs.tencentyun.com/khs1994/powershell:preview-alpine-3.11
     shell: pwsh
     run: |
       pwd
       write-host 1
       write-host 2
 
-  node_shell:
+  pwsh_mul_run:
+    # image: mcr.microsoft.com/powershell:preview-alpine-3.11
+    # image: mcr.azk8s.cn/powershell:preview-alpine-3.11
+    image: ccr.ccs.tencentyun.com/khs1994/powershell:preview-alpine-3.11
+    shell: pwsh
+    run:
+    - |
+      pwd
+    - |
+      write-host 1
+      write-host 2
+
+  node:
     image: node:alpine
     shell: node
     run: |
@@ -40,7 +114,16 @@ steps:
       console.log(`::set-output name=os_arch::${os.arch()}`)
       console.log(`::set-output name=KKK::%0D %0A %25 : , !`)
 
-  deno_shell:
+  node_mul_run:
+    image: node:alpine
+    shell: node
+    run:
+    - |
+      console.log(1)
+    - |
+      console.log(2)
+
+  deno:
     image: pcit/deno
     shell: deno
     run: |
@@ -49,11 +132,36 @@ steps:
 
       Deno.version
 
-      Deno.env.get('OS_ARCH')
-      Deno.env.get('KKK')
+  deno_custom:
+    image: pcit/deno
+    shell: deno run --allow-net --allow-env - https://api.github.com -A --a 1 a b 3
+    run:
+    - |
+      let r = await fetch(Deno.args[0]).then((res) => {
+        return res.json();
+      });
+
+      console.log(r);
+    - |
+      console.log(Deno.args)
+    - |
+      console.log(Deno.env.get('OS_ARCH'))
+      console.log(Deno.env.get('KKK'))
     env:
-      - OS_ARCH=${{steps.node_shell.outputs.os_arch}}
-      - KKK=${{steps.node_shell.outputs.KKK}}
+      - OS_ARCH=${{steps.node.outputs.os_arch}}
+      - KKK=${{steps.node.outputs.KKK}}
+
+  deno_default_error:
+    image: pcit/deno
+    shell: deno
+    run: |
+      let r = await fetch("https://api.github.com").then((res) => {
+        return res.json();
+      });
+
+      console.log(r);
+    if:
+      status: success
 
 clone:
   git:

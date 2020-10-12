@@ -183,7 +183,7 @@ steps:
   validate: ./bin/pcit validate
 
   sami:
-    image: khs1994/php:sami
+    image: lrew/php:sami
     if:
       << : *8.0.0rc1-job
       status: success
@@ -403,7 +403,7 @@ services:
 # 不支持变量
 jobs:
   PHP_VERSION:
-    # - 7.4.8
+    # - 7.4.11
     # - 7.3.20
     - nightly
     - 8.0.0rc1

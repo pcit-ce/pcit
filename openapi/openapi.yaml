@@ -230,7 +230,7 @@ paths:
     get:
       tags:
         - Builds
-      description: This returns a single build.
+      description: This returns a single build. result jobs.[index].build_log is always [].
       summary: find single build
       operationId: get-single-build
       parameters:
@@ -296,32 +296,7 @@ paths:
                         updated_at: null
                         deleted_at: null
                         build_id: "100"
-                        build_log: >-
-                          {"clone":"2019-12-29T13:58:58.902387600Z + git
-                          init\n2019-12-29T13:58:58.922934900Z Initialized empty
-                          Git repository in
-                          \/pcit-plugins\/pcit-github-release\/.git\/\n2019-12-29T13:58:58.922967400Z
-                          + git remote add origin
-                          https:\/\/github.com\/pcit-plugins\/pcit-github-release\n2019-12-29T13:58:58.938822500Z
-                          + git fetch --no-tags origin
-                          +refs\/heads\/master:\n2019-12-29T13:59:03.221357300Z
-                          From
-                          https:\/\/github.com\/pcit-plugins\/pcit-github-release\n2019-12-29T13:59:03.221376300Z
-                          * branch            master     ->
-                          FETCH_HEAD\n2019-12-29T13:59:03.227303300Z  * [new
-                          branch]      master     ->
-                          origin\/master\n2019-12-29T13:59:03.247332400Z + git
-                          reset --hard -q
-                          e66c9b3cdabb4572339d430f1ee33ae22a93a976\n2019-12-29T13:59:03.252979000Z
-                          + git submodule update --init
-                          --recursive","github_release":"2019-12-29T13:59:09.247502400Z
-                          Release nightly not
-                          found\n2019-12-29T13:59:10.092373700Z Successfully
-                          created nightly
-                          release\n2019-12-29T13:59:12.088994500Z Successfully
-                          uploaded Dockerfile
-                          artifact\n2019-12-29T13:59:12.821705700Z Successfully
-                          uploaded docker-entrypoint.sh artifact"}
+                        build_log: []
                         check_run_id: "366809624"
                         config: null
                         env_vars: "null"

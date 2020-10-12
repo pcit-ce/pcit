@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PCIT\Runner\Events\Handler;
 
+/**
+ * @see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
+ */
 class ShellHandler
 {
     public function handle(string $shell = 'sh', ?array $commands = [], ?int $timeout = null): array
@@ -12,31 +15,35 @@ class ShellHandler
 
         $cmd = null;
 
-        if ('bash' === $shell || 'sh' === $shell) {
-            $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' '.$shell.' -e'] : null;
+        if ('bash' === $shell) {
+            $shell = 'bash --noprofile --norc -eo pipefail';
+        }
+
+        if ('sh' === $shell) {
+            $shell = 'sh -e';
         }
 
         if ('python' === $shell) {
-            $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' python'] : null;
         }
 
         if ('pwsh' === $shell) {
-            $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' pwsh -Command -'] : null;
+            $shell = 'pwsh -Command -';
         }
 
         if ('node' === $shell) {
-            $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' node -'] : null;
+            $shell = 'node -';
         }
 
         if ('deno' === $shell) {
-            $cmd = $commands ? ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' deno'] : null;
+            $shell = 'deno run -';
         }
 
-        // 有 commands 指令则改为 ['/bin/sh', '-c'], 否则为默认值
-        // shell 在以上范围, entrypoint 为 [...], 否则为 null
-        $entrypoint = $cmd ? ['/bin/sh', '-c'] : null;
+        if ($shell) {
+            $cmd = $commands ?
+            ['echo $CI_SCRIPT | base64 -d | timeout '.$timeout.' '.$shell] : null;
+        }
 
-        // shell 不在以上范围或未指定 run 指令，entrypoint cmd 均设为 null，使用镜像的默认值
+        $entrypoint = $cmd ? ['/bin/sh', '-ec'] : null;
 
         return [$entrypoint, $cmd];
     }

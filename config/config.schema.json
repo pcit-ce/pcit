@@ -1390,13 +1390,21 @@
                         "shell": {
                             "type": "string",
                             "description": "see https://docs.ci.khs1994.com/usage/steps.html#_5-shell",
-                            "enum": [
-                                "bash",
-                                "sh",
-                                "pwsh",
-                                "node",
-                                "deno",
-                                "python"
+                            "default": "sh",
+                            "anyOf": [
+                                {
+                                    "enum": [
+                                        "bash",
+                                        "sh",
+                                        "pwsh",
+                                        "node",
+                                        "deno",
+                                        "python"
+                                    ]
+                                },
+                                {
+                                    "$comment": ""
+                                }
                             ]
                         },
                         "env": {

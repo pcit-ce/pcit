@@ -9,9 +9,56 @@ steps:
   script3:
     run: ['echo array']
 
-  # script4:
-  #   run:
-  #     k: v
+  scripts5: >
+    if [ -z "$a" ];then
+      echo 0
+    else
+      echo 1
+    fi
+
+  scripts6: >-
+    if [ -z "$a" ];then
+      echo 0
+    else
+      echo 1
+    fi
+
+  scripts7: |
+    if [ -z "$a" ];then
+      echo 0
+    else
+      echo 1
+    fi
+
+  scripts8: |-
+    if [ -z "$a" ];then
+      echo 0
+    else
+      echo 1
+    fi
+
+  scripts9: |-
+    if [ -z "$a" ];then \
+      echo 0 ; \
+    else \
+      echo 1 ; \
+    fi
+
+  scripts10: |
+    if [ -z "$a" ];then \
+      echo 0 ; \
+    else \
+      echo 1 ; \
+    fi
+
+  scripts11:
+    run:
+    - |-
+      if [ -z "$a" ];then \
+        echo 1 ; \
+      else \
+        echo 2 ; \
+      fi
 
 clone:
   git:

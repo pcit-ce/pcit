@@ -209,6 +209,12 @@ class DockerHandler implements RunnerHandlerInterface
         $git_url = Git::getUrl($this->git_type);
         ['host' => $git_host ] = parse_url($git_url);
 
+        if ($github_mirror = env('CI_GITHUB_MIRROR')) {
+            $git_host = str_replace('github.com', $github_mirror, $git_host);
+        }
+
+        // var_dump($this->private);
+
         if ('1' === $this->private) {
             $insert_auth[] = 'DRONE_NETRC_MACHINE='.$git_host;
             $insert_auth[] = 'DRONE_NETRC_USERNAME=pcit';
