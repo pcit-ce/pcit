@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:experimental
-FROM khs1994/php:7.4.8-composer-alpine as composer
+FROM khs1994/php:7.4.11-composer-alpine as composer
 
 COPY composer.json /srv/pcit/plugin/s3/
 
 RUN --mount=type=cache,target=/tmp/composer/cache,id=composer_cache \
     composer --working-dir=/srv/pcit/plugin/s3 install --no-dev
 
-FROM khs1994/php:7.4.8-cli-alpine
+FROM khs1994/php:7.4.11-cli-alpine
 
 RUN apk add --no-cache zstd
 

@@ -3,10 +3,10 @@
 # @see https://laravel-news.com/multi-stage-docker-builds-for-laravel
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 
-# ARG PHP_VERSION=7.4.8
+# ARG PHP_VERSION=7.4.11
 # ARG PHP_VERSION=8.0.0beta1
 ARG PHP_VERSION=nightly
-ARG NODE_VERSION=14.8.0
+ARG NODE_VERSION=14.13.1
 ARG USERNAME=khs1994
 
 # 前端构建
@@ -24,6 +24,7 @@ RUN --mount=type=cache,target=/root/.npm,id=npm_cache cd /app/pcit/frontend \
 
 COPY ./frontend/tsconfig.json /app/pcit/frontend/
 COPY ./frontend/webpack.config.js /app/pcit/frontend/
+COPY ./frontend/tsconfig.js /app/pcit/frontend/
 COPY ./frontend/images /app/pcit/frontend/images
 COPY ./frontend/js /app/pcit/frontend/js
 COPY ./frontend/html /app/pcit/frontend/html
@@ -35,7 +36,7 @@ RUN set -x \
       && npm run build
 
 # 安装 composer 依赖
-FROM ${USERNAME}/php:7.4.8-composer-alpine as composer
+FROM ${USERNAME}/php:7.4.11-composer-alpine as composer
 
 COPY composer.json /app/pcit/
 COPY src /app/pcit/src/

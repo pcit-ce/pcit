@@ -1,8 +1,8 @@
 image:
   php: khs1994/php:7.4.10-composer-alpine
-  node_js: node:14.8.0-alpine
-  js: node:14.8.0-alpine
-  node: node:14.8.0-alpine
+  node_js: node:14.13.1-alpine
+  js: node:14.13.1-alpine
+  node: node:14.13.1-alpine
   bash: bash
   sh: alpine:3.12
   go: golang:1.15-alpine

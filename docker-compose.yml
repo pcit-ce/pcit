@@ -10,7 +10,7 @@ services:
       target: pcit
       args:
         - PHP_VERSION=${PHP_VERSION:-8.0.0rc1}
-        - NODE_VERSION=${NODE_VERSION:-14.8.0}
+        - NODE_VERSION=${NODE_VERSION:-14.13.1}
         - NODE_REGISTRY=https://registry.npm.taobao.org
 
   all:

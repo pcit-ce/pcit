@@ -3,7 +3,7 @@ FROM alpine as downloader
 RUN set -x \
     && apk add --no-cache curl unzip
 
-ARG DENO_VERSION=1.3.1
+ARG DENO_VERSION=1.4.6
 
 ENV DENO_VERSION=${DENO_VERSION}
 
