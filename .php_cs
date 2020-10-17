@@ -62,7 +62,7 @@ return PhpCsFixer\Config::create()
       'phpdoc_to_comment' => false,
       'single_line_comment_style' => false,
     ])
-    ->setCacheFile(__DIR__.'/.php_cs.cache')
+    ->setCacheFile(__DIR__.'/cache/php_cs')
     ->setFinder($finder)
     ->setRiskyAllowed(true)
 ;

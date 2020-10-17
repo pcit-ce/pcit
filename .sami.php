@@ -27,7 +27,10 @@ $iterator = Finder::create()
 //     ->addFromTags('18.*.*')// add tag
 //     ->add('master', 'master branch'); // add branch
 
-return new Sami($iterator);
+return new Sami($iterator,[
+    'build_dir' => __DIR__.'/build/sami',
+    'cache_dir' => __DIR__.'/cache/sami',
+]);
 
 // return new Sami($iterator, [
 //         'versions' => $versions,

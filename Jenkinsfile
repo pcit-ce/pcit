@@ -141,7 +141,7 @@ pipeline{
                     // codingHtmlReport(
                     //     name: 'sami',
                     //     tag: 'sami',
-                    //     path: 'build',
+                    //     path: 'build/sami',
                     //     des: 'sami',
                     //     entryFile: 'index.html'
                     // )

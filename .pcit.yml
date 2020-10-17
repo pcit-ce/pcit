@@ -41,8 +41,6 @@ workspace: # or workdir
 # 不支持变量
 cache:
   - cache
-  - .php_cs.cache
-  - .psalm
   # - vendor
 
 # 构建步骤
@@ -200,7 +198,7 @@ steps:
       keep_history: true
       target_branch: gh-pages
       git_url: gitee.com/pcit-ce/sami-docs
-      local_dir: build
+      local_dir: build/sami
       email: ${EMAIL}
       username: khs1994
       git_token: ${GITEE_TOKEN}

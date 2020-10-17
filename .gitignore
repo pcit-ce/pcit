@@ -8,10 +8,6 @@
 vendor
 composer.lock
 
-# PHP-CS-Fixer
-
-.php_cs.cache
-
 # python
 
 __pycache__
