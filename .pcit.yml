@@ -93,7 +93,7 @@ steps:
       # status: changed
       # status: [ failure, success, changed ]
 
-      event: [push, pull_request, tag]
+      event: [push, pull_request, tag, repository_dispatch]
 
       # branch: master
       # branch: prefix/*
@@ -183,7 +183,7 @@ steps:
   validate: ./bin/pcit validate
 
   sami:
-    image: lrew/php:sami
+    image: khs1994/php:sami
     if:
       << : *8.0.0rc1-job
       status: success
@@ -195,7 +195,7 @@ steps:
     if:
       << : *8.0.0rc1-job
       status: success
-      event: ["push"]
+      event: ["push", "repository_dispatch"]
     with:
       keep_history: true
       target_branch: gh-pages
@@ -237,7 +237,7 @@ steps:
     if:
       << : *8.0.0rc1-job
       status: success
-      event: ["push"]
+      event: ["push", "repository_dispatch"]
     with:
       region: ${S3_REGION}
       access_key_id: ${S3_ACCESS_KEY_ID}
@@ -256,7 +256,7 @@ steps:
     if:
       << : *8.0.0rc1-job
       status: success
-      event: ["push"]
+      event: ["push", "repository_dispatch"]
     with:
       path: phar_dist
       name: pcit-nightly
@@ -350,7 +350,7 @@ steps:
     if:
       << : *8.0.0rc1-job
       status: success
-      event: push
+      event: [ push, repository_dispatch ]
       branch: master
 
   use_pcit_toolkit:

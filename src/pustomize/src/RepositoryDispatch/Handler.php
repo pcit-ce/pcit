@@ -83,7 +83,7 @@ class Handler
         }
         // TODO: 判断是否为私有仓库
         $last_insert_id = Build::insert(
-            CI::BUILD_EVENT_MANUALLY,
+            CI::BUILD_EVENT_REPOSITORY_DISPATCH,
             $branch,
             $compare,
             $commit_id,

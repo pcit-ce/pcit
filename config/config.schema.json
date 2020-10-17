@@ -1060,7 +1060,8 @@
                 "push",
                 "pull_request",
                 "tag",
-                "cron"
+                "cron",
+                "repository_dispatch"
             ]
         },
         "if_include": {

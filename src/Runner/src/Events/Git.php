@@ -101,7 +101,7 @@ class Git
         }
 
         switch ($build->event_type) {
-            case CI::BUILD_EVENT_PUSH || CI::BUILD_EVENT_MANUALLY:
+            case CI::BUILD_EVENT_PUSH || CI::BUILD_EVENT_REPOSITORY_DISPATCH:
                 $git_env = array_merge([
                     'DRONE_REMOTE_URL='.$git_url,
                     'DRONE_WORKSPACE='.$jobGenerator->workdir,

@@ -14,7 +14,7 @@ class CI
 
     const BUILD_EVENT_PUSH = 'push';
 
-    const BUILD_EVENT_MANUALLY = 'manually';
+    const BUILD_EVENT_REPOSITORY_DISPATCH = 'repository_dispatch';
 
     const BUILD_EVENT_TAG = 'tag';
 

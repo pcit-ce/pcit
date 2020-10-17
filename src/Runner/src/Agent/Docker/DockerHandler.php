@@ -213,7 +213,7 @@ class DockerHandler implements RunnerHandlerInterface
             $git_host = str_replace('github.com', $github_mirror, $git_host);
         }
 
-        var_dump($this->private);
+        // var_dump($this->private);
 
         if ('1' === $this->private) {
             $insert_auth[] = 'DRONE_NETRC_MACHINE='.$git_host;

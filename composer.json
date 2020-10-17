@@ -143,7 +143,7 @@
     "khs1994/advanced-json-rpc": "3.1.2"
   },
   "require-dev": {
-    "khs1994/phar-builder": "20.04.11",
+    "khs1994/phar-builder": "20.10.15",
     "phploc/phploc": "^7.0",
     "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^5.2",

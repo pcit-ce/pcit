@@ -43,7 +43,7 @@ EOF;
                 CI::BUILD_EVENT_PUSH,
                 CI::BUILD_EVENT_TAG,
                 CI::BUILD_EVENT_PR,
-                CI::BUILD_EVENT_MANUALLY,
+                CI::BUILD_EVENT_REPOSITORY_DISPATCH,
             ]);
         }
 
@@ -353,7 +353,7 @@ EOF;
                 CI::BUILD_EVENT_PR,
                 CI::BUILD_EVENT_PUSH,
                 CI::BUILD_EVENT_TAG,
-                CI::BUILD_EVENT_MANUALLY,
+                CI::BUILD_EVENT_REPOSITORY_DISPATCH,
             ]);
         }
 
@@ -367,7 +367,7 @@ EOF;
             $git_type, $rid,
             CI::BUILD_EVENT_TAG,
             CI::BUILD_EVENT_PUSH,
-            CI::BUILD_EVENT_MANUALLY,
+            CI::BUILD_EVENT_REPOSITORY_DISPATCH,
             null,
         ]);
     }
