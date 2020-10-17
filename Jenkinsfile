@@ -69,7 +69,7 @@ pipeline{
                 -e CI_MYSQL_PASSWORD=test \
                 -e CI_MYSQL_DATABASE=test \
                 -e CI_WEBHOOKS_TOKEN=pcit \
-                khs1994/php:8.0.0rc1-composer-alpine \
+                khs1994/php:8.0.0RC2-composer-alpine \
                 sh -ecx ' \
                 echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \
                 && echo "xdebug.mode=coverage" >> ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \
