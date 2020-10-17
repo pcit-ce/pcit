@@ -15,7 +15,10 @@ class Validator
         $validator = new JsonSchemaValidator();
         $validator->validate(
             $data,
-            (object) ['$ref' => 'file://'.realpath(base_path('config/config.schema.json'))]
+            (object) [
+                '$ref' => ('' === \Phar::running(false) ?
+                'file://' : '').base_path('config/config.schema.json'),
+            ]
         );
 
         if ($validator->isValid()) {
