@@ -52,6 +52,10 @@ steps:
 
   platform: uname -a
 
+  lint:
+  # - find ./ -name "*.php" -print0 | xargs -0 -n1 php -l
+  - git diff --name-only
+
   install:
     image: khs1994/php:7.4.9-composer-alpine
     run:
@@ -60,6 +64,16 @@ steps:
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer
       - /opt/pcit/toolkit/pcit-retry -t 2 --sleep 15 -- composer install --ansi --ignore-platform-reqs
       # - composer update
+      - mkdir -p cache build
+      - |
+        { \
+          echo '<center style="font-size: 50px;">'; \
+          echo '<a href="coverage" target="_blank">coverage</a>'; \
+          echo '<a href="phpdox/html/" target="_blank">phpdox</a>'; \
+          echo '<a href="sami" target="_blank">sami</a>'; \
+          echo '<a href="//gitee.com/pcit-ce/sami-docs" target="_blank">source</a>'; \
+          echo '</center>'; \
+        } | tee build/index.html
 
   script: &script
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
@@ -115,9 +129,51 @@ steps:
       #   export XDEBUG_MODE=coverage
       - /opt/pcit/toolkit/pcit-wait-for-it mysql:3306 -- echo 'mysql is run'
       - /opt/pcit/toolkit/pcit-wait-for-it redis:6379 -- echo 'redis is run'
-      - vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
+      - |
+        vendor/bin/phpunit --coverage-clover=build/logs/clover.xml \
+          --coverage-html build/coverage \
+          --coverage-xml build/coverage-xml \
+          --coverage-cache cache/coverage \
+          --log-junit build/logs/junit.xml
     if:
       status: success
+
+  phpmd:
+    image: khs1994/php:phpmd
+    if:
+      << : *8.0.0rc-job
+      status: success
+    run: composer run phpmd
+
+  phpcpd:
+    image: khs1994/php:phpcpd
+    if:
+      << : *8.0.0rc-job
+      status: success
+    run: composer run phpcpd
+
+  phploc:
+    image: khs1994/php:phploc
+    if:
+      << : *8.0.0rc-job
+      status: success
+    run: composer run phploc
+
+  phpdox:
+    image: khs1994/php:phpdox
+    if:
+      << : *8.0.0rc-job
+      status: success
+    run:
+    - composer run phpdox
+
+  sami:
+    image: khs1994/php:sami
+    if:
+      << : *8.0.0rc-job
+      status: success
+    run:
+      - composer run sami
 
   windows_only:
     image: bash
@@ -180,14 +236,6 @@ steps:
 
   validate: ./bin/pcit validate
 
-  sami:
-    image: khs1994/php:sami
-    if:
-      << : *8.0.0rc-job
-      status: success
-    run:
-      - sami update .sami.php
-
   gitee_pages:
     image: pcit/pages
     if:
@@ -198,7 +246,8 @@ steps:
       keep_history: true
       target_branch: gh-pages
       git_url: gitee.com/pcit-ce/sami-docs
-      local_dir: build/sami
+      # local_dir: build/sami
+      local_dir: build
       email: ${EMAIL}
       username: khs1994
       git_token: ${GITEE_TOKEN}

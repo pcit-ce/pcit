@@ -40,7 +40,7 @@ pipeline{
         }
         // stage("PHPLint") {
         //     steps{
-        //         sh 'find app src -name "*.php" -print0 | xargs -0 -n1 php -l'
+        //         sh 'find ./ -name "*.php" -print0 | xargs -0 -n1 php -l'
         //     }
         // }
         stage("script"){
@@ -49,7 +49,7 @@ pipeline{
                 docker run -i --rm \
                 -v $PWD:/app \
                 -v /tmp/.composer/cache:/tmp/composer/cache \
-                khs1994/php:7.4.10-composer-alpine \
+                pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:7.4.11-composer-alpine \
                 sh -ecx ' \
                 composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu.edu.cn \
                 && composer install
@@ -69,7 +69,7 @@ pipeline{
                 -e CI_MYSQL_PASSWORD=test \
                 -e CI_MYSQL_DATABASE=test \
                 -e CI_WEBHOOKS_TOKEN=pcit \
-                khs1994/php:8.0.0RC2-composer-alpine \
+                pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:8.0.0RC2-composer-alpine \
                 sh -ecx ' \
                 echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \
                 && echo "xdebug.mode=coverage" >> ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \
@@ -77,8 +77,7 @@ pipeline{
                 --coverage-html build/coverage \
                 --coverage-xml build/coverage-xml \
                 --coverage-cache cache/coverage \
-                --log-junit build/logs/junit.xml \
-                && composer run phploc
+                --log-junit build/logs/junit.xml
                 '
                 '''
             }
@@ -112,12 +111,44 @@ pipeline{
                         // entryFile: 'index.html'
                     )
 
-                    // phpdox
-                    sh '''
-                    composer global require theseer/phpdox
+                    // phpmd
 
-                    # composer run phpdox
-                    composer run phpdox:coding:ci
+                    sh '''
+                    docker run -i --rm \
+                    -v $PWD:/app \
+                    --entrypoint=composer \
+                    pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:phpmd \
+                    run phpmd || true
+                    '''
+
+                    // phpcpd
+
+                    sh '''
+                    docker run -i --rm \
+                    -v $PWD:/app \
+                    --entrypoint=composer \
+                    pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:phpcpd \
+                    run phpcpd
+                    '''
+
+                    // phploc
+
+                    sh '''
+                    docker run -i --rm \
+                    -v $PWD:/app \
+                    --entrypoint=composer \
+                    pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:phploc \
+                    run phploc
+                    '''
+
+                    // phpdox
+
+                    sh '''
+                    docker run -i --rm \
+                    -v $PWD:/app \
+                    --entrypoint=composer \
+                    pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:phpdox \
+                    run phpdox
                     '''
 
                     codingHtmlReport(
@@ -129,22 +160,22 @@ pipeline{
                     )
 
                     // sami
-                    sh 'rm -rf build'
 
-                    // sh '''
-                    // docker run -i --rm \
-                    // -v $PWD:/app \
-                    // khs1994/php:sami \
-                    // update .sami.php
-                    // '''
+                    sh '''
+                    docker run -i --rm \
+                    -v $PWD:/app \
+                    --entrypoint=composer \
+                    pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:sami \
+                    run sami
+                    '''
 
-                    // codingHtmlReport(
-                    //     name: 'sami',
-                    //     tag: 'sami',
-                    //     path: 'build/sami',
-                    //     des: 'sami',
-                    //     entryFile: 'index.html'
-                    // )
+                    codingHtmlReport(
+                        name: 'sami',
+                        tag: 'sami',
+                        path: 'build/sami',
+                        des: 'sami',
+                        entryFile: 'index.html'
+                    )
                 }
                 failure{
                     echo "========A execution failed========"

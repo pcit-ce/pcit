@@ -103,11 +103,9 @@
                 -->
 
                 <!-- PHPMessDetector -->
-                <!--
                 <source type="pmd">
-                    <file name="pmd.xml" />
+                    <file name="logs/pmd.xml" />
                 </source>
-                -->
 
                 <source type="phpunit">
                     <coverage path="coverage-xml" />
