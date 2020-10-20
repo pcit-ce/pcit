@@ -1,3 +1,5 @@
-#!/usr/bin/execlineb -S0
+#!/bin/sh
+
+set -x
 
 s6-svscanctl -t /etc/services.d

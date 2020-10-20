@@ -1,3 +1,5 @@
 #!/bin/sh
 
+set -x
+
 rm -rf $(find /etc/services.d -name 'event')

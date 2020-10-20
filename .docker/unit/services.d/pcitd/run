@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 cd /app/pcit
 
 exec /app/pcit/bin/pcitd ${PCITD_CMD:-server}

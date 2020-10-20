@@ -1,7 +1,9 @@
 #!/bin/sh
 
+set -x
+
 rm -rf /var/run/docker.pid
 
 dockerSocket='unix:///var/run/docker.sock'
 
-/usr/local/bin/dind dockerd --host="$dockerSocket" --host=tcp://127.0.0.1:2375
+exec /usr/local/bin/dind dockerd --host="$dockerSocket" --host=tcp://127.0.0.1:2375

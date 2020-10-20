@@ -1,3 +1,8 @@
 #!/bin/sh
 
+set -x
+
+mkdir -p /var/log/unit
+chown nobody:nogroup /var/log/unit
+
 exec unitd --no-daemon --user root --group root --log /var/log/nginx-unit/nginx-unit.log

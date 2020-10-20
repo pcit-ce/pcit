@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 cd /data
 
-/usr/local/bin/redis-server /usr/local/etc/redis/redis.conf
+exec /usr/local/bin/redis-server /usr/local/etc/redis/redis.conf

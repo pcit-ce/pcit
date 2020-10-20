@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -x
+
+exec logutil-service /var/log/unit

@@ -128,7 +128,7 @@ pipeline{
                     -v $PWD:/app \
                     --entrypoint=composer \
                     pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:phpcpd \
-                    run phpcpd
+                    run phpcpd || true
                     '''
 
                     // phploc

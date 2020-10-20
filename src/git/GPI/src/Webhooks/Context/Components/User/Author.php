@@ -9,7 +9,7 @@ class Author
 {
     public string $name;
 
-    public string $email;
+    public ?string $email;
 
     public function __get(string $name)
     {
