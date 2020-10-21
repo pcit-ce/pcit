@@ -146,7 +146,7 @@
     "khs1994/phar-builder": "20.10.15",
     "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^5.2",
-    "vimeo/psalm": "^3"
+    "vimeo/psalm": "^4.0.1"
   },
   "config": {
     "optimize-autoloader": true,
