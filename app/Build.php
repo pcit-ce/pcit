@@ -156,8 +156,6 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     *
      * @return int
      */
     public static function updateBuildStatusByCommitId(
@@ -165,7 +163,7 @@ EOF;
         int $rid,
         string $branch,
         string $commit_id,
-        $git_type = 'github'
+        string $git_type = 'github'
     ) {
         $sql = 'UPDATE builds SET build_status=? WHERE git_type=? AND rid=? AND commit_id=?';
 
@@ -199,11 +197,9 @@ EOF;
     }
 
     /**
-     * @param string $git_type
-     *
      * @return array
      */
-    public static function getBranches(int $rid, $git_type = 'github')
+    public static function getBranches(int $rid, string $git_type = 'github')
     {
         $sql = 'SELECT DISTINCT branch FROM builds WHERE git_type=? AND rid=?';
 
@@ -213,11 +209,9 @@ EOF;
     /**
      * 某仓库最新的一次构建 ID PR 除外.
      *
-     * @param string $git_type
-     *
      * @return string
      */
-    public static function getCurrentBuildKeyId(int $rid, $git_type = 'github')
+    public static function getCurrentBuildKeyId(int $rid, string $git_type = 'github')
     {
         $sql = <<<'EOF'
 SELECT id FROM builds WHERE git_type=? AND rid=? AND build_status NOT IN (?,?,?,?) AND event_type NOT IN (?)
@@ -261,9 +255,7 @@ EOF;
         return DB::select($sql, [$build_key_id], true);
     }
 
-    /**
-     * @param $build_key_id
-     *
+    /*
      * @return string
      */
     public static function getBranch($build_key_id)
@@ -276,8 +268,6 @@ EOF;
     /**
      * 某分支的构建列表.
      *
-     * @param string $git_type
-     *
      * @return array
      */
     public static function allByBranch(
@@ -285,7 +275,7 @@ EOF;
         string $branch_name,
         ?int $before,
         ?int $limit,
-        $git_type = 'github'
+        string $git_type = 'github'
     ) {
         $before = 0 === $before ? null : $before;
 
@@ -313,9 +303,6 @@ EOF;
     /**
      * 某仓库的构建列表.
      *
-     * @param string $git_type
-     * @param bool   $all
-     *
      * @return array
      */
     public static function allByRid(
@@ -323,8 +310,8 @@ EOF;
         ?int $before,
         ?int $limit,
         bool $pr,
-        $all = false,
-        $git_type = 'github'
+        bool $all = false,
+        string $git_type = 'github'
     ) {
         $before = 0 === $before ? null : $before;
 
@@ -375,11 +362,9 @@ EOF;
     /**
      * 某用户的构建列表.
      *
-     * @param string $git_type
-     *
      * @return array
      */
-    public static function allByAdmin(int $uid, ?int $before, ?int $limit, $git_type = 'github')
+    public static function allByAdmin(int $uid, ?int $before, ?int $limit, string $git_type = 'github')
     {
         $before = 0 === $before ? null : $before;
 
@@ -422,22 +407,7 @@ EOF;
         return DB::select($sql, [$build_key_id]);
     }
 
-    /**
-     * @param $git_type
-     * @param $branch
-     * @param $tag
-     * @param $commit_id
-     * @param $commit_message
-     * @param $committer_name
-     * @param $committer_email
-     * @param $committer_username
-     * @param $author_name
-     * @param $author_email
-     * @param $author_username
-     * @param $rid
-     * @param $event_time
-     * @param $config
-     *
+    /*
      * @return int
      */
     public static function insertTag(
@@ -479,22 +449,21 @@ EOF;
     }
 
     /**
-     * @param $git_type
-     * @param $event_type
-     * @param $branch
-     * @param $compare
-     * @param $commit_id
-     * @param $commit_message
-     * @param $committer_name
-     * @param $committer_email
-     * @param $committer_username
-     * @param $author_name
-     * @param $author_email
-     * @param $author_username
-     * @param $rid
-     * @param $event_time
-     * @param $config
-     * @param $unique
+     * @param mixed $event_type
+     * @param mixed $branch
+     * @param mixed $compare
+     * @param mixed $commit_id
+     * @param mixed $commit_message
+     * @param mixed $committer_name
+     * @param mixed $committer_email
+     * @param mixed $committer_username
+     * @param mixed $author_name
+     * @param mixed $author_email
+     * @param mixed $author_username
+     * @param mixed $rid
+     * @param mixed $event_time
+     * @param mixed $config
+     * @param mixed $git_type
      *
      * @return int
      */
@@ -514,7 +483,7 @@ EOF;
         $event_time,
         $config,
         bool $private,
-        $git_type = 'github',
+        string $git_type = 'github',
         bool $unique = false
     ) {
         $sql = <<<'EOF'
@@ -541,13 +510,12 @@ EOF;
     }
 
     /**
-     * @param $git_type
-     * @param $rid
-     * @param $created_at
+     * @param mixed $rid
+     * @param mixed $created_at
      *
      * @return int
      */
-    public static function insertPing($rid, $created_at, $git_type = 'github')
+    public static function insertPing($rid, $created_at, string $git_type = 'github')
     {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -564,18 +532,10 @@ EOF;
     }
 
     /**
-     * @param        $event_time
-     * @param        $action
-     * @param        $commit_id
-     * @param        $commit_message
-     * @param        $committer_username
-     * @param        $pull_request_number
-     * @param        $branch
-     * @param        $rid
-     * @param        $config
-     * @param        $internal
-     * @param        $pull_request_source
-     * @param string $git_type
+     * @param mixed $event_time
+     * @param mixed $pull_request_number
+     * @param mixed $rid
+     * @param mixed $pull_request_source
      *
      * @return int
      */
@@ -590,10 +550,10 @@ EOF;
         string $branch,
         $rid,
         string $config,
-        $internal,
+        bool $internal,
         $pull_request_source,
         bool $private,
-        $git_type = 'github'
+        string $git_type = 'github'
     ) {
         $sql = <<<'EOF'
 INSERT INTO builds(
@@ -613,7 +573,7 @@ EOF;
                 $git_type, 'pull_request', $event_time, $action,
                 $commit_id, $commit_message, $pull_request_number,
                 $committer_uid, $committer_username,
-                $branch, $rid, $config, $internal, $pull_request_source, true === $private ? 1 : 0,
+                $branch, $rid, $config, (int) $internal, $pull_request_source, true === $private ? 1 : 0,
             ]
         );
     }

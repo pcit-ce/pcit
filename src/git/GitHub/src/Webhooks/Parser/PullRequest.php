@@ -38,7 +38,7 @@ class PullRequest
 
         // 检查内外部 PR
 
-        $internal = ($head->repo->id === $base->repo->id) ? 1 : 0;
+        $internal = $head->repo->id === $base->repo->id;
 
         $pull_request_source = $head->repo->full_name;
 

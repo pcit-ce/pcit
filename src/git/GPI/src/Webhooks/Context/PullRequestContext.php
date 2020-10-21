@@ -21,7 +21,7 @@ use PCIT\GPI\Webhooks\Context\Traits\ContextTrait;
  * @property string                                                                                                                                                                               $committer_uid
  * @property string                                                                                                                                                                               $pull_request_number
  * @property string                                                                                                                                                                               $branch
- * @property 0|1                                                                                                                                                                                  $internal
+ * @property bool                                                                                                                                                                                 $internal
  * @property PullRequestHead                                                                                                                                                                      $pullRequestHead
  * @property PullRequestBase                                                                                                                                                                      $pullRequestBase
  * @property string                                                                                                                                                                               $pull_request_source

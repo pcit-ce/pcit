@@ -18,7 +18,8 @@
                     "script": "index.php",
                     "index": "index.php"
                 }
-            }
+            },
+            "processes": 3
         }
     },
     "routes": [

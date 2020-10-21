@@ -29,7 +29,7 @@ class Handler
         $git_type = $context->git_type;
 
         if ('github' === $git_type) {
-            \Log::info('Handle GitHub push by check_suite');
+            \Log::info('Handle GitHub push by check_suite, skip');
 
             return;
         }
