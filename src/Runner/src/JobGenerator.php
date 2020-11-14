@@ -66,6 +66,8 @@ class JobGenerator
 
     public $networks;
 
+    public $hosts;
+
     public $timeout;
 
     /**
@@ -134,18 +136,19 @@ class JobGenerator
         $matrix = $yaml_obj->jobs ?? $yaml_obj->matrix ?? null;
         $image = $yaml_obj->image ?? null;
         $this->networks = $networks = $yaml_obj->networks ?? null;
+        $this->hosts = $hosts = $yaml_obj->hosts ?? null;
         $this->timeout = $yaml_obj->timeout ?? null;
 
-        if ($networks->hosts ?? null) {
-            $this->networks->hosts = $this->textHandler->handleArray(
-                $networks->hosts,
+        if ($hosts ?? null) {
+            $this->hosts = $this->textHandler->handleArray(
+                $hosts,
                 $this->system_env
             );
         }
 
         $this->image = null === $image ? null : $this->textHandler->handle($image, $this->system_env);
 
-        \Log::info('💻.pcit.yml set network hosts: ', $this->networks->hosts ?? []);
+        \Log::info('💻.pcit.yml set hosts: ', $this->hosts ?? []);
         \Log::info('🐳.pcit.yml set default image: ', [$this->image]);
 
         //项目根目录

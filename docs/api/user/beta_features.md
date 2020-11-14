@@ -21,7 +21,7 @@ This will update a user's beta_feature.
 ```bash
 $ curl -X PATCH \
     -H "Content-Type: application/json" \
-    -H "PCIT-API-Version: 3" \
+    -H "Accept: application/vnd.pcit.v1alpha1+json" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{"beta_feature.enabled":true}' \
     https://ci.khs1994.com/api/user/khs1994/{beta_feature.id}

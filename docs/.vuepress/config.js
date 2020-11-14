@@ -54,6 +54,7 @@ module.exports = {
         'cache',
         'branches',
         'image',
+        'hosts',
         'networks',
         'system',
         'platform',

@@ -42,7 +42,7 @@ class Git
         );
 
         $hosts = $git->hosts ?? [];
-        $hosts = array_merge($hosts, $this->jobGenerator->networks->hosts ?? []);
+        $hosts = array_merge($hosts, $this->jobGenerator->hosts ?? []);
         $hosts = $textHandler->handleArray($hosts, $env);
 
         $git_image = $git->image ?? 'pcit/git';

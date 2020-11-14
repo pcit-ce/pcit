@@ -177,7 +177,7 @@ class Pipeline
         $jobId = $this->jobGenerator->job_id;
         $workdir = $this->jobGenerator->workdir;
         $this->language = $language = $this->jobGenerator->language ?? 'php';
-        $hosts = $this->jobGenerator->networks->hosts ?? [];
+        $hosts = $this->jobGenerator->hosts ?? [];
 
         // custome github.com hosts
         if (env('CI_GITHUB_HOST')) {

@@ -87,16 +87,18 @@
       "url": "./src/pustomizes/pustomize-pull-request"
     }
   ],
-  "authors": [{
-    "name": "khs1994",
-    "email": "khs1994@khs1994.com",
-    "homepage": "https://khs1994.com"
-  }],
+  "authors": [
+    {
+      "name": "khs1994",
+      "email": "khs1994@khs1994.com",
+      "homepage": "https://khs1994.com"
+    }
+  ],
   "support": {
     "issues": "https://github.com/pcit-ce/pcit/issues"
   },
   "require": {
-    "php": "^7.3.0",
+    "php": ">=7.3.0",
     "ext-PDO": "*",
     "ext-curl": "*",
     "ext-date": "*",
@@ -108,6 +110,7 @@
     "filp/whoops": "^2.3",
     "firebase/php-jwt": "^5.0",
     "justinrainbow/json-schema": "^5.2",
+    "khs1994/advanced-json-rpc": "3.1.2",
     "khs1994/curl": "~18.06.0",
     "khs1994/docker": "18.06.06",
     "khs1994/tencent-ai": "~18.06.0",
@@ -139,18 +142,19 @@
     "pimple/pimple": "~3.0",
     "sistemi-etime/flysystem-plugin-aws-s3-v3": "^1.0",
     "symfony/finder": "^5.2",
-    "vlucas/phpdotenv": "^5.0",
-    "khs1994/advanced-json-rpc": "3.1.2"
+    "vlucas/phpdotenv": "^5.0"
   },
   "require-dev": {
     "khs1994/phar-builder": "20.10.15",
     "phpunit/phpunit": "^9.0",
     "symfony/var-dumper": "^5.2",
+    "sensiolabs/security-checker": "^6.0",
     "vimeo/psalm": "^4.0.1"
   },
   "config": {
     "optimize-autoloader": true,
-    "sort-packages": true
+    "sort-packages": true,
+    "platform-check": false
   },
   "suggest": {
     "ext-xdebug": "*",
@@ -190,6 +194,13 @@
     "phploc": "phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml app src tests",
     "phpdox": "phpdox -f phpdox.xml",
     "phpdox:coding:ci": "/root/.config/composer/vendor/bin/phpdox -f phpdox.xml",
+    "security-checker": "security-checker security:check composer.lock",
+    "post-install-cmd": [
+      "composer run security-checker"
+    ],
+    "post-update-cmd": [
+      "composer run security-checker"
+    ],
     "compile:dump": [
       "cp -r -f src/Framework/ vendor/pcit/framework",
       "cp -r -f src/Kernel/ vendor/pcit/kernel",
@@ -215,7 +226,7 @@
     "compile:pcitd": "phar-builder.php package --name=pcitd --output=./ --entry-point=bin/src/pcitd.php --bz2 --included framework,bin,config"
   },
   "bin": [
-     "bin/src/pcit",
-     "bin/src/pcitd"
+    "bin/src/pcit",
+    "bin/src/pcitd"
   ]
 }

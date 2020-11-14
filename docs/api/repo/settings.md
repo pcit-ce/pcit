@@ -31,7 +31,7 @@ This updates a single setting.
 ```bash
 $ curl -X PATCH \
     -H "Content-Type: application/json" \
-    -H "PCIT-API-Version: 3" \
+    -H "Accept: application/vnd.pcit.v1alpha1+json" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "setting.value": true }' \
     https://ci.khs1994.com/api/repo/pcit-ce/pcit/setting/{setting.name}

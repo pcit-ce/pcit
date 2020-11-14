@@ -57,7 +57,7 @@ This creates a cron on the specified branch for the specified repository. Conten
 ```bash
 $ curl -X POST \
     -H "Content-Type: application/json" \
-    -H "PCIT-API-Version: 3" \
+    -H "Accept: application/vnd.pcit.v1alpha1+json" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "cron.interval": "monthly" }' \
     https://ci.khs1994.com/api/repo/pcit-ce/pcit/branch/master/cron

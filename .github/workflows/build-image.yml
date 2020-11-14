@@ -12,7 +12,6 @@ jobs:
       || contains( github.ref, 'refs/tags/')
       || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: docker-practice/actions-setup-docker@master
       - uses: azure/docker-login@v1
         with:
           # login-server: contoso.azurecr.io
@@ -21,6 +20,7 @@ jobs:
         if: |
           github.event_name == 'push'
           || github.event_name == 'workflow_dispatch'
+      - uses: docker-practice/actions-setup-docker@master
       - uses: actions/checkout@main
         with:
           fetch-depth: 1

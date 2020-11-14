@@ -60,6 +60,16 @@ steps:
         echo 2 ; \
       fi
 
+  script12:
+    run: |
+      ls \
+      -la
+
+  script13:
+    run: >
+      ls
+      -la
+
 clone:
   git:
     disable: true

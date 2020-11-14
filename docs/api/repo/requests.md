@@ -21,7 +21,7 @@ This will create a request for an individual repository, triggering a build to r
 ```bash
 $ curl -X POST \
     -H "Content-Type: application/json" \
-    -H "PCIT-API-Version: 3" \
+    -H "Accept: application/vnd.pcit.v1alpha1+json" \
     -H "Authorization: token xxxxxxxxxxxx" \
     -d '{ "request": {
         "message": "Override the commit message: this is an api request", "branch": "master" }}'\

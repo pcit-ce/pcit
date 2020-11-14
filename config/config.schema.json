@@ -1600,16 +1600,16 @@
                     "$comment": "https://docs.ci.khs1994.com/usage/branches.html",
                     "description": "which branches trigger job, see https://docs.ci.khs1994.com/usage/branches.html"
                 },
+                "hosts": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "description": "setting step container hosts, see https://docs.ci.khs1994.com/usage/hosts.html"
+                },
                 "networks": {
-                    "type": "object",
+                    "type": "array",
                     "$comment": "https://docs.ci.khs1994.com/usage/networks.html",
                     "description": "setting step container network, see https://docs.ci.khs1994.com/usage/networks.html",
-                    "properties": {
-                        "hosts": {
-                            "$ref": "#/definitions/hosts"
-                        }
-                    },
-                    "additionalProperties": false
+                    "uniqueItems": true
                 },
                 "image": {
                     "type": "string",

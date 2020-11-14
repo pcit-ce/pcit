@@ -101,6 +101,6 @@
 
 ### 2019/01/07
 
-* [x] 支持全局 `hosts`，通过新的 `networks` 指令进行设置
+* [x] 支持全局 `hosts`，通过新的 `hosts` 指令进行设置
 * [x] 支持简化的 `services` 指令
 * [x] 使用 `BuildKit` 构建 Docker 镜像
