@@ -49,7 +49,7 @@ pipeline{
                 docker run -i --rm \
                 -v $PWD:/app \
                 -v /tmp/.composer/cache:/tmp/composer/cache \
-                pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:7.4.11-composer-alpine \
+                pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:7.4.12-composer-alpine \
                 sh -ecx ' \
                 composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu.edu.cn \
                 && composer install
@@ -69,7 +69,7 @@ pipeline{
                 -e CI_MYSQL_PASSWORD=test \
                 -e CI_MYSQL_DATABASE=test \
                 -e CI_WEBHOOKS_TOKEN=pcit \
-                pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:8.0.0RC2-composer-alpine \
+                pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:8.0.0RC3-composer-alpine \
                 sh -ecx ' \
                 echo "zend_extension=xdebug" > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \
                 && echo "xdebug.mode=coverage" >> ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini \

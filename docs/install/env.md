@@ -26,7 +26,7 @@
 | `CI_GITHUB_APP_ID`        | String | GitHub App ID                                            |
 | `CI_TZ`                   | String | 时区设置                                                     |
 | `CI_WEBHOOKS_TOKEN`       | String | Webhooks Secert (仅 GitHub)                               |
-| `CI_WEBHOOKS_DEBUG`       | Bool   | Webhooks 是否开启 Debug，若开启系统将不验证 Secret                     |
+| `CI_WEBHOOKS_DEBUG`       | Bool   | Webhooks 是否开启 Debug，若开启系统将不验证 Webhooks Secret                     |
 | `CI_WECHAT_APP_ID`        | String | 微信公众平台 APP_ID                                            |
 | `CI_WECHAT_APP_SECRET`    | String | 微信公众平台 APP_SECRET，若调用已存在的微信公众平台 access_token，请自行与相关人员对接。 |
 | `CI_WECHAT_TOKEN`         | String | 微信公众平台消息服务器 Token，仅支持 443 端口                             |
@@ -36,8 +36,8 @@
 | `CI_DOCKER_TLS_VERIFY`    | Bool   | Docker 主机是否已启用 TLS                                       |
 | `CI_TENCENT_AI_APPID`     | String | Tencent AI 应用 APPID (自行到 ai.qq.com 注册)                   |
 | `CI_TENCENT_AI_APPKEY`    | String | Tencent AI 应用 APPKEY                                     |
-| `CI_GITHUB_TEST_USERNAME` | String | 在测试系统中使用的 GitHub 用户名及密码                                  |
-| `CI_GITHUB_TEST_PASSWORD` | String |                                                          |
+| `CI_GITHUB_TEST_USERNAME` | String | 在测试时使用的 GitHub 用户名及                                   |
+| `CI_GITHUB_TEST_PASSWORD` | String | 在测试时使用的 GitHub 密码                                   |
 | `CI_EMAIL_HOST`           | String | 电子邮件服务器地址                                                |
 | `CI_EMAIL_USERNAME`       | String |                                                          |
 | `CI_EMAIL_PASSWORD`       | String |                                                          |

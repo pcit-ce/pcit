@@ -58,7 +58,7 @@ steps:
 
 ## 4. `pull`
 
-每次构建时，无论 Docker Image 是否存在总是拉取镜像，可以使用 `pull: true` 指令(默认为 `false`)。
+如果你想在每次构建时，无论 Docker Image 是否存在总是拉取镜像，可以使用 `pull: true` 指令(默认为 `false`)。
 
 ```yaml
 steps:

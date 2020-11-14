@@ -27,8 +27,11 @@ steps:
   php:
     image: khs1994/php-fpm:7.4.6-alpine
     ...
+```
 
-  php2:
+```yaml
+steps:
+  php:
     image: khs1994/php-fpn:7.3.18-alpine
     ...
 ```

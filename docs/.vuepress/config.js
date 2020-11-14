@@ -56,7 +56,6 @@ module.exports = {
         'image',
         'hosts',
         'networks',
-        'system',
         'platform',
         'skip',
         'system_env',
