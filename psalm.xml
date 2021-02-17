@@ -11,7 +11,7 @@
     findUnusedVariablesAndParams="true"
     findUnusedCode="true"
     cacheDirectory="cache/psalm"
-    phpVersion="8.0.0rc3"
+    phpVersion="8.0.2"
     useDocblockTypes="true"
     useDocblockPropertyTypes="true"
     allowStringToStandInForClass="true"

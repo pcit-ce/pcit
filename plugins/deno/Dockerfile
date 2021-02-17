@@ -3,7 +3,7 @@ FROM alpine as downloader
 RUN set -x \
     && apk add --no-cache curl unzip
 
-ARG DENO_VERSION=1.5.2
+ARG DENO_VERSION=1.7.4
 
 ENV DENO_VERSION=${DENO_VERSION}
 
@@ -13,7 +13,7 @@ RUN set -x \
     && rm -rf /tmp/deno.zip \
     && chmod +x /usr/local/bin/deno
 
-FROM frolvlad/alpine-glibc:alpine-3.12_glibc-2.31
+FROM frolvlad/alpine-glibc:alpine-3.13_glibc-2.32
 
 COPY --from=downloader /usr/local/bin/deno /usr/local/bin/deno
 

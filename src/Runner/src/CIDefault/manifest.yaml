@@ -1,11 +1,11 @@
 image:
-  php: khs1994/php:7.4.12-composer-alpine
-  node_js: node:15.2.0-alpine
-  js: node:15.2.0-alpine
-  node: node:15.2.0-alpine
+  php: khs1994/php:8.0.2-composer-alpine
+  node_js: node:15.5.0-alpine
+  js: node:15.5.0-alpine
+  node: node:15.5.0-alpine
   bash: bash
-  sh: alpine:3.12
-  go: golang:1.15.5-alpine
-  golang: golang:1.15.5-alpine
+  sh: alpine:3.13
+  go: golang:1.16.0-alpine
+  golang: golang:1.16.0-alpine
   deno: pcit/deno
   python: python:3.9.0-alpine

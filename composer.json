@@ -98,7 +98,7 @@
     "issues": "https://github.com/pcit-ce/pcit/issues"
   },
   "require": {
-    "php": ">=8.0.2",
+    "php": ">=8.0.0",
     "ext-PDO": "*",
     "ext-curl": "*",
     "ext-date": "*",
