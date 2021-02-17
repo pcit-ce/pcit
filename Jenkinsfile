@@ -159,21 +159,21 @@ pipeline{
                         entryFile: 'index.html'
                     )
 
-                    // sami
+                    // doctum
 
                     sh '''
                     docker run -i --rm \
                     -v $PWD:/app \
                     --entrypoint=composer \
-                    pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:sami \
-                    run sami
+                    pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php:doctum \
+                    run doctum
                     '''
 
                     codingHtmlReport(
-                        name: 'sami',
-                        tag: 'sami',
-                        path: 'build/sami',
-                        des: 'sami',
+                        name: 'doctum',
+                        tag: 'doctum',
+                        path: 'build/doctum',
+                        des: 'doctum',
                         entryFile: 'index.html'
                     )
                 }

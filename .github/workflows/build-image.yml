@@ -17,6 +17,11 @@ jobs:
           # login-server: contoso.azurecr.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: azure/docker-login@v1
+        with:
+          login-server: pcit-docker.pkg.coding.net
+          username: ${{ secrets.CODING_DOCKER_USERNAME }}
+          password: ${{ secrets.CODING_DOCKER_PASSWORD }}
         if: |
           github.event_name == 'push'
           || github.event_name == 'workflow_dispatch'
@@ -45,6 +50,7 @@ jobs:
             -t pcit/pcitd:${TAG} \
             -t pcit/server \
             -t pcit/server:${TAG} \
+            -t pcit-docker.pkg.coding.net/pcit/pcit/pcit \
             --build-arg VCS_REF=$VCS_REF \
             --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
@@ -55,6 +61,7 @@ jobs:
             -t pcit/pcit:${TAG}-cli \
             -t pcit/cli \
             -t pcit/cli:${TAG} \
+            -t pcit-docker.pkg.coding.net/pcit/pcit/pcit:cli \
             --build-arg VCS_REF=$VCS_REF \
             --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
@@ -65,6 +72,7 @@ jobs:
             -t pcit/pcit:${TAG}-fpm \
             -t pcit/fpm \
             -t pcit/fpm:${TAG} \
+            -t pcit-docker.pkg.coding.net/pcit/pcit/pcit:fpm \
             --build-arg VCS_REF=$VCS_REF \
             --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
@@ -75,6 +83,7 @@ jobs:
             -t pcit/pcit:${TAG}-unit \
             -t pcit/unit \
             -t pcit/unit:${TAG} \
+            -t pcit-docker.pkg.coding.net/pcit/pcit/pcit:unit \
             --build-arg VCS_REF=$VCS_REF \
             --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
@@ -87,6 +96,7 @@ jobs:
             -t pcit/pcit:${TAG}-all-in-one \
             -t pcit/all-in-one \
             -t pcit/all-in-one:${TAG} \
+            -t pcit-docker.pkg.coding.net/pcit/pcit/pcit:all-in-one \
             --build-arg VCS_REF=$VCS_REF \
             --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \
@@ -99,6 +109,7 @@ jobs:
             -t pcit/pcit:${TAG}-frontend \
             -t pcit/frontend \
             -t pcit/frontend:${TAG} \
+            -t pcit-docker.pkg.coding.net/pcit/pcit/pcit:frontend \
             --build-arg VCS_REF=$VCS_REF \
             --build-arg UI_VCS_REF=$UI_VCS_REF \
             --platform ${PLATFORM} \

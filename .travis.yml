@@ -69,8 +69,8 @@ jobs:
   include:
     - stage: test
       install:
-        - curl -fsSL http://get.sensiolabs.org/sami.phar -o sami
-        - chmod +x sami
+        - curl -fsSL https://doctum.long-term.support/releases/latest/doctum.phar -o doctum
+        - chmod +x doctum
         - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
       script:
         - composer install -q
@@ -79,7 +79,7 @@ jobs:
       after_success:
         - bash <(curl -s https://codecov.io/bash) -f build/logs/clover.xml
         - rm -rf build/logs
-        - ./sami update .sami.php
+        - ./doctum update .doctum.php
       deploy:
         provider: pages
         skip-cleanup: true

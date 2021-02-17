@@ -162,7 +162,7 @@ class Pipeline
             break;
         }
 
-        $commands = $pipelineContent->run ?? Commands::get($this->language, $pipeline);
+        $commands = $pipelineContent->run ?? [];
 
         return \is_string($commands) ? [$commands] : $commands;
     }

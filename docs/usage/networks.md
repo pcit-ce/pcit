@@ -2,8 +2,6 @@
 
 该指令用来配置网络。
 
-## 自定义 hosts
-
 ```yaml
 steps:
   ping:

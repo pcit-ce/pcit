@@ -1261,7 +1261,7 @@
                     ]
                 },
                 "event": {
-                    "description": "string or array, one of \npush \npull_request \ntag \ncron",
+                    "description": "string or array, one of \npush \npull_request \ntag \ncron \nrepository_dispatch",
                     "oneOf": [
                         {
                             "type": "string",
@@ -1610,6 +1610,11 @@
                     "$comment": "https://docs.ci.khs1994.com/usage/networks.html",
                     "description": "setting step container network, see https://docs.ci.khs1994.com/usage/networks.html",
                     "uniqueItems": true
+                },
+                "hostname": {
+                    "type": "string",
+                    "$comment": "https://docs.ci.khs1994.com/usage/hostname.html",
+                    "description": "setting step container hostname, see https://docs.ci.khs1994.com/usage/hostname.html"
                 },
                 "image": {
                     "type": "string",

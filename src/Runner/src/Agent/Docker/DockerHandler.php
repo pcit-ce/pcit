@@ -233,7 +233,7 @@ class DockerHandler implements RunnerHandlerInterface
 
         $git_container_config = $this->insertGivenEnv($git_container_config, $insert_auth);
 
-        retry($retry, function () use ($job_id,$git_container_config): void {
+        retry($retry, function () use ($job_id, $git_container_config): void {
             $this->runStep($job_id, $git_container_config, 'clone');
         });
     }

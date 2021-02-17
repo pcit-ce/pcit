@@ -9,12 +9,3 @@ image:
   golang: golang:1.15.5-alpine
   deno: pcit/deno
   python: python:3.9.0-alpine
-
-run:
-  php:
-    sami: ['sami update .sami.php']
-    install: ['composer install']
-    script: ['composer test']
-  node_js:
-    install: ['npm install']
-    script: ['npm test']

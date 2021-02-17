@@ -70,12 +70,12 @@ steps:
           echo '<center style="font-size: 50px;">'; \
           echo '<a href="coverage" target="_blank">coverage</a>'; \
           echo '<a href="phpdox/html/" target="_blank">phpdox</a>'; \
-          echo '<a href="sami" target="_blank">sami</a>'; \
+          echo '<a href="doctum" target="_blank">doctum</a>'; \
           echo '<a href="//gitee.com/pcit-ce/sami-docs" target="_blank">source</a>'; \
           echo '</center>'; \
         } | tee build/index.html
 
-  security-checker: composer run security-checker
+  # security-checker: composer run security-checker
 
   script: &script
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
@@ -169,13 +169,13 @@ steps:
     run:
     - composer run phpdox
 
-  sami:
-    image: khs1994/php:sami
+  doctum:
+    image: khs1994/php:doctum
     if:
       << : *8.0.0rc-job
       status: success
     run:
-      - composer run sami
+      - composer run doctum
 
   windows_only:
     image: bash
@@ -534,3 +534,5 @@ image: khs1994/php:8.0.0RC3-composer-alpine
 
 networks:
 - host
+
+hostname: t

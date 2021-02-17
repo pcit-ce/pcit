@@ -48,7 +48,7 @@ frontend/package-lock.json
 /.gitattributes
 /.gitignore
 /.php_cs
-/.sami.php
+/.doctum.php
 /.styleci.yml
 /.travis.yml
 /.dockerignore

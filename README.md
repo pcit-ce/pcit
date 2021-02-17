@@ -240,6 +240,7 @@ $ ./lnmp-docker pcit-up
 * [Travis CI](https://travis-ci.com)
 * [Drone CI](https://drone.io)
 * [Minio](https://github.com/minio/minio)
+* [FastGit](https://github.com/FastGitORG)
 
 ## 国内友商
 

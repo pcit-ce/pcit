@@ -36,7 +36,7 @@
 | `CI_DOCKER_TLS_VERIFY`    | Bool   | Docker 主机是否已启用 TLS                                       |
 | `CI_TENCENT_AI_APPID`     | String | Tencent AI 应用 APPID (自行到 ai.qq.com 注册)                   |
 | `CI_TENCENT_AI_APPKEY`    | String | Tencent AI 应用 APPKEY                                     |
-| `CI_GITHUB_TEST_USERNAME` | String | 在测试时使用的 GitHub 用户名及                                   |
+| `CI_GITHUB_TEST_USERNAME` | String | 在测试时使用的 GitHub 用户名                                   |
 | `CI_GITHUB_TEST_PASSWORD` | String | 在测试时使用的 GitHub 密码                                   |
 | `CI_EMAIL_HOST`           | String | 电子邮件服务器地址                                                |
 | `CI_EMAIL_USERNAME`       | String |                                                          |
