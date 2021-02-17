@@ -14,7 +14,7 @@ class CoreTest extends TestCase
      */
     public $core;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->core = new Core();
     }

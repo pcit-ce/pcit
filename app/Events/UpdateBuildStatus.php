@@ -57,11 +57,13 @@ class UpdateBuildStatus
                 \App\Build::updateBuildStatus($job_key_id, 'skipped');
 
                 break;
+
             case CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_STATUS_IN_PROGRESS;
                 $is_github && (new InProgress($job_key_id, $config, $build_log))->handle();
 
                 break;
+
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_FAILURE);
@@ -69,6 +71,7 @@ class UpdateBuildStatus
                 $is_github && (new Failed($job_key_id, $config, $build_log))->handle();
 
                 break;
+
             case CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
@@ -76,6 +79,7 @@ class UpdateBuildStatus
                 $is_github && (new Passed($job_key_id, $config, $build_log))->handle();
 
                 break;
+
             default:
                 $this->build_status = CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED;
                 Job::updateBuildStatus($job_key_id, CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);

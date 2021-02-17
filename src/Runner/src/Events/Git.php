@@ -111,6 +111,7 @@ class Git
                 ], $git_config);
 
                 break;
+
             case CI::BUILD_EVENT_PR:
                 $git_env = array_merge([
                     'DRONE_REMOTE_URL='.$git_url,
@@ -121,7 +122,8 @@ class Git
                 ], $git_config);
 
                 break;
-            case  CI::BUILD_EVENT_TAG:
+
+            case CI::BUILD_EVENT_TAG:
                 $git_env = array_merge([
                     'DRONE_REMOTE_URL='.$git_url,
                     'DRONE_WORKSPACE='.$jobGenerator->workdir,

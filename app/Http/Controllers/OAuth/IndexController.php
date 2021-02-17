@@ -56,7 +56,7 @@ class IndexController
          * OAuth login -> get access_token and expire from Session | expire one day
          */
         if (\Session::get($git_type.'.access_token')
-        and \Session::get($git_type.'.expire') > time()) {
+        && \Session::get($git_type.'.expire') > time()) {
             $username_from_session = \Session::get($git_type.'.username');
 
             // 重定向到个人主页

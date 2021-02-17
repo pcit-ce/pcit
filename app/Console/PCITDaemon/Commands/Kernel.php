@@ -48,7 +48,7 @@ abstract class Kernel extends Command
 
         $this->check();
 
-        if (PHP_OS === 'Linux') {
+        if (\PHP_OS === 'Linux') {
             // http://www.laruence.com/2009/06/11/930.html
 
             while (1) {

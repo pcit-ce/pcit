@@ -17,7 +17,7 @@ class Cleanup
      */
     public static function systemDelete(?string $id, bool $last = false, bool $service_only = false): void
     {
-        if (null === $id and !$service_only) {
+        if (null === $id && !$service_only) {
             return;
         }
 

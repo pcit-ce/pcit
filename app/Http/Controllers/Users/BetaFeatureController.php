@@ -38,7 +38,7 @@ class BetaFeatureController
      *
      * @param array $args
      */
-    #[Route('delete','api/user/beta_feature/{beta_feature_id}')]
+    #[Route('delete', 'api/user/beta_feature/{beta_feature_id}')]
     public function delete(...$args): void
     {
         JWTController::getUser();

@@ -54,7 +54,7 @@ class DB
                         return self::connection();
                     } catch (PDOException $e) {
                         if (\PHP_SAPI === 'cli') {
-                            die('[error] [PCIT] database not exists');
+                            exit('[error] [PCIT] database not exists');
                         }
 
                         throw new Exception('database not exists', 500);
@@ -65,7 +65,7 @@ class DB
 
                 if (2002 === $e->getCode()) {
                     if (\PHP_SAPI === 'cli') {
-                        die('[error] PCIT can\'t connect DB Server'."\n");
+                        exit('[error] PCIT can\'t connect DB Server'."\n");
                     }
                 }
 

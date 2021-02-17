@@ -18,6 +18,7 @@ class ShowStatusByICOController
     public function __call(string $status, array $param)
     {
         var_dump($param);
+
         exit;
         $svg = 'public/ico/unknown.svg';
 

@@ -33,6 +33,7 @@ class JobController
      * @return array|int
      */
     #[Route('get', 'api/job/{job.id}')]
+
     // #[Query(["sse"])]
     public function find(Request $request, $job_id)
     {

@@ -8,6 +8,6 @@ class Exec
 {
     public function exec(string $command): void
     {
-        echo '[36m[command]'.$command.'[0m'.PHP_EOL;
+        echo '[36m[command]'.$command.'[0m'.\PHP_EOL;
     }
 }

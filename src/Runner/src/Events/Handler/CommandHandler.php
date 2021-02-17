@@ -17,7 +17,7 @@ class CommandHandler
             return null;
         }
 
-        if ('sh' === $shell or 'bash' === $shell) {
+        if ('sh' === $shell || 'bash' === $shell) {
             $content = '';
 
             $content .= <<<EOF

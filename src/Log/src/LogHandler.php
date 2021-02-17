@@ -39,7 +39,7 @@ class LogHandler
         }
 
         $logs = array_filter($logs);
-        $logs = json_encode($logs, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+        $logs = json_encode($logs, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE);
 
         Job::updateLog($this->jobId, $logs);
     }
@@ -84,7 +84,7 @@ class LogHandler
         }
 
         array_unshift($steps, 'clone', 'cache_download');
-        array_push($steps, 'cache_upload');
+        $steps[] = 'cache_upload';
 
         return $steps;
     }

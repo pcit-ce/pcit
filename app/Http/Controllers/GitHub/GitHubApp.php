@@ -11,6 +11,7 @@ use PCIT\Framework\Support\HttpClient;
 class GitHubApp
 {
     #[Route('get', 'api/github/app/new')]
+
     // #[Query(["webhook_url"])]
     public function new(Request $request): string
     {
@@ -134,6 +135,7 @@ EOF;
     }
 
     #[Route('get', 'api/github/app/new/callback')]
+
     // #[Query(["code"])]
     public function callback(Request $request)
     {

@@ -12,7 +12,7 @@ class TestCase extends BaseTestCase
 {
     public $app;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         if (!$this->app) {
             $this->app = $this->createApplication();

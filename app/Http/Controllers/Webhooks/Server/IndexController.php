@@ -10,7 +10,7 @@ use PCIT\PCIT;
 
 class IndexController
 {
-    #[Route('post','webhooks/${git_type}')]
+    #[Route('post', 'webhooks/${git_type}')]
     public function __invoke($gitType)
     {
         // custom_provider

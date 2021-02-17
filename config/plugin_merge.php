@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-if (in_array($argv[1] ?? '-h', ['help', '-h', '--help']) or 0 === $argc) {
+if (in_array($argv[1] ?? '-h', ['help', '-h', '--help']) || 0 === $argc) {
     echo <<<EOF
 
 Usage:
@@ -33,8 +33,8 @@ function write(array $json_schem, string $generate_to_file): void
     // $json_schem['definitions']['image']['not']['enum']
     file_put_contents("./$generate_to_file", json_encode(
         $json_schem,
-        JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
-    ).PHP_EOL);
+        \JSON_UNESCAPED_SLASHES | \JSON_PRETTY_PRINT
+    ).\PHP_EOL);
 }
 
 foreach ($plugins as $plugin) {
@@ -56,7 +56,7 @@ foreach ($plugins as $plugin) {
         $plugins[$i]['properties']['pull'] = ['$ref' => '#/definitions/pull'];
         $plugins[$i]['properties']['privileged'] = ['$ref' => '#/definitions/privileged'];
 
-        echo 'plugin found, update'.PHP_EOL;
+        echo 'plugin found, update'.\PHP_EOL;
         $json_schem['definitions']['plugins']['oneOf'] = $plugins;
         write($json_schem, $generate_to_file);
 
@@ -64,7 +64,7 @@ foreach ($plugins as $plugin) {
     }
 }
 
-echo 'not found, insert'.PHP_EOL;
+echo 'not found, insert'.\PHP_EOL;
 
 $plugin = [
     'type' => 'object',

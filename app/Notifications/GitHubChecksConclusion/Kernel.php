@@ -65,7 +65,7 @@ EOF;
 
         $this->language = $language ?? 'PHP';
 
-        $this->os = $os ?? PHP_OS;
+        $this->os = $os ?? \PHP_OS;
 
         $this->build_log = $build_log ?? Job::getLog((int) $this->job_key_id) ??
             'This repo not include .pcit.yml file or build log is empty, please see https://docs.ci.khs1994.com/usage/';

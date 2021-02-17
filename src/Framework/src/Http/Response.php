@@ -77,6 +77,7 @@ class Response extends BaseResponse
     public function redirect(string $url): void
     {
         header('Location: '.$url);
+
         exit;
     }
 

@@ -13,6 +13,6 @@ class ExecTest extends TestCase
     {
         (new Exec())->exec('ls');
 
-        $this->expectOutputString('[36m[command]'.'ls'.'[0m'.PHP_EOL);
+        $this->expectOutputString('[36m[command]'.'ls'.'[0m'.\PHP_EOL);
     }
 }

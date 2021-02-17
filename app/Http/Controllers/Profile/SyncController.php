@@ -28,7 +28,7 @@ class SyncController
 
     private $access_token;
 
-    #[Route('post','api/user/sync')]
+    #[Route('post', 'api/user/sync')]
     public function __invoke()
     {
         list($this->git_type, $this->uid) = JwtController::getUser();

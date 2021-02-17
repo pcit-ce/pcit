@@ -18,7 +18,7 @@ class Healthz
         $database_result = $this->database(true);
         $docker_result = $this->docker(true);
 
-        if ($cache_result and $database_result and $docker_result) {
+        if ($cache_result && $database_result && $docker_result) {
             return $this->ok();
         }
 

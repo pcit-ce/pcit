@@ -76,6 +76,7 @@ if (!function_exists('retry')) {
                 throw new \Exception($e->getMessage(), 0, $e);
             }
             --$retries;
+
             goto beginning;
         }
     }

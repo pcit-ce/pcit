@@ -166,7 +166,8 @@ class Core
     public function setFailed(string $message): void
     {
         $message = $this->escapeData($message);
-        die('::error::'.$message);
+
+        exit('::error::'.$message);
     }
 
     /**

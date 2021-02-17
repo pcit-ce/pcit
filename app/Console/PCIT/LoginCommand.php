@@ -53,7 +53,7 @@ class LoginCommand extends Command
 
         $http_return_code = $curl->getCode();
 
-        if (200 !== $http_return_code or !$token) {
+        if (200 !== $http_return_code || !$token) {
             throw new Exception('Incorrect username or password or git-type', $http_return_code);
         }
 
@@ -64,7 +64,7 @@ class LoginCommand extends Command
 
             $tokenContent['endpoints'][$api_endpoint][$git_type] = $token;
 
-            file_put_contents($file_name, json_encode($tokenContent, JSON_PRETTY_PRINT));
+            file_put_contents($file_name, json_encode($tokenContent, \JSON_PRETTY_PRINT));
 
             $output->writeln('<info>Login Success</info>');
 
@@ -81,7 +81,7 @@ class LoginCommand extends Command
                         ],
                     ],
                 ],
-                JSON_PRETTY_PRINT
+                \JSON_PRETTY_PRINT
             )
         );
 

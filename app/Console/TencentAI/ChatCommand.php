@@ -35,7 +35,7 @@ EOF
 
         $output_array = TencentAICommand::get()->nlp()->chat(...$args);
 
-        $output->writeln(json_encode($output_array, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        $output->writeln(json_encode($output_array, \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT));
 
         return 0;
     }

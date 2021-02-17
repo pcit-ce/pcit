@@ -11,7 +11,7 @@ if ('cli' === \PHP_SAPI) {
 }
 
 // get app
-$app = new \PCIT\Framework\Foundation\Application(['base_path' => dirname(dirname(__DIR__))]);
+$app = new \PCIT\Framework\Foundation\Application(['base_path' => dirname(__DIR__, 2)]);
 
 // class alias
 AliasLoader::load(config('app.alias'));

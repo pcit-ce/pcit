@@ -23,6 +23,7 @@ class IndexController
     public function __invoke(...$arg): void
     {
         view('builds/index.html');
+
         exit;
     }
 }

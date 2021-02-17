@@ -72,6 +72,7 @@ pcit env get   VAR_ID
                 );
 
                 break;
+
             case 'set':
                 list($name, $value) = $argument;
 
@@ -90,8 +91,8 @@ pcit env get   VAR_ID
                 );
 
                 break;
-            case 'unset':
 
+            case 'unset':
                 $return = PCITCommand::HttpDelete(
                     $input,
                     'repo/'.$repo.'/env_var/'.$argument[0],
@@ -100,8 +101,8 @@ pcit env get   VAR_ID
                 );
 
                 break;
-            case 'get':
 
+            case 'get':
                 $return = PCITCommand::HttpGet(
                     $input,
                     'repo/'.$repo.'/env_var/'.$argument[0],
@@ -110,8 +111,8 @@ pcit env get   VAR_ID
                 );
 
                 break;
-            default:
 
+            default:
                 throw new Exception('command not found', 404);
         }
 

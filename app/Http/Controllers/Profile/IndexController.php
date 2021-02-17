@@ -33,7 +33,7 @@ class IndexController
         $pic = \Session::get($git_type.'.pic');
         $email = \Session::get($git_type.'.email');
 
-        if (null === $username or null === $access_token) {
+        if (null === $username || null === $access_token) {
             \Response::redirect(config('app.host').'/login');
 
             exit;

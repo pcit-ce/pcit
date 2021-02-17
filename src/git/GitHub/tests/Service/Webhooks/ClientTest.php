@@ -14,7 +14,7 @@ class ClientTest extends TestCase
      */
     public $pcit;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->pcit = app('pcit');
         parent::setUp();

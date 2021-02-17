@@ -219,7 +219,7 @@ EOF;
                 }
             }
 
-            array_push($repos, $result);
+            $repos[] = $result;
         }
 
         return $repos;
@@ -403,7 +403,7 @@ EOF;
 
         $result = DB::select($sql, [$repo_full_name, $git_type]);
 
-        if (1 === $result[0]['webhooks_status'] and 1 === $result[0]['build_activate']) {
+        if (1 === $result[0]['webhooks_status'] && 1 === $result[0]['build_activate']) {
             return true;
         }
 

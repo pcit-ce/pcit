@@ -24,7 +24,7 @@ class Env
         try {
             $value = getenv($key);
 
-            if (false === $value or '' === $value) {
+            if (false === $value || '' === $value) {
                 $value = $default;
             }
 

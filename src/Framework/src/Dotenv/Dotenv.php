@@ -17,7 +17,7 @@ class Dotenv
 
         $env_file = file_exists(base_path($env_file)) ? $env_file : null;
 
-        if ('testing' === $app_env and '.env' === $env_file) {
+        if ('testing' === $app_env && '.env' === $env_file) {
             // testing don't load .env, onlyload .env.testing
             $env_file = null;
         }

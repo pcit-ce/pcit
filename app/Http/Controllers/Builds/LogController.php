@@ -33,7 +33,7 @@ class LogController
     {
         $log = Job::getLog((int) $job_id);
 
-        return json_decode($log, true, 512, JSON_THROW_ON_ERROR);
+        return json_decode($log, true, 512, \JSON_THROW_ON_ERROR);
     }
 
     public function json($job_id)

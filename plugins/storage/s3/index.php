@@ -129,7 +129,7 @@ $local_dir = getenv('INPUT_LOCAL_DIR');
 $upload_dir = getenv('INPUT_UPLOAD_DIR');
 
 // upload_dir 为空
-$upload_dir = $upload_dir ? $upload_dir : $local_dir;
+$upload_dir = $upload_dir ?: $local_dir;
 
 if (!($local_dir && $upload_dir)) {
     exit;

@@ -32,7 +32,7 @@ class LogoutCommand extends Command
 
             unset($tokenContent['endpoints'][$api_endpoint][$git_type]);
 
-            file_put_contents($file_name, json_encode($tokenContent, JSON_PRETTY_PRINT));
+            file_put_contents($file_name, json_encode($tokenContent, \JSON_PRETTY_PRINT));
 
             $output->writeln('<info>Successfully logged out!</info>');
         } else {

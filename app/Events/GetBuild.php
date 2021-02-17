@@ -39,7 +39,7 @@ class GetBuild extends BuildData
             $this->tag,
             $this->config, $this->internal, $this->private) = $result;
 
-        if (!$this->config or !json_decode($this->config)) {
+        if (!$this->config || !json_decode($this->config)) {
             Build::updateBuildStatus((int) $build_key_id, 'skipped');
 
             throw new PCITException(CI::GITHUB_CHECK_SUITE_CONCLUSION_SUCCESS);
@@ -54,7 +54,7 @@ class GetBuild extends BuildData
         $this->getRepoConfig();
 
         if ('0' === $this->build_pull_requests
-        and CI::BUILD_EVENT_PR === $this->event_type) {
+        && CI::BUILD_EVENT_PR === $this->event_type) {
             // don't build pr
             \Log::info("Build #$build_key_id is skipped, because repo settings [build_pull_requests]");
 
@@ -64,8 +64,8 @@ class GetBuild extends BuildData
         }
 
         if ('0' === $this->build_pushes
-        and CI::BUILD_EVENT_PUSH === $this->event_type
-        and 0 === $buildId) {
+        && CI::BUILD_EVENT_PUSH === $this->event_type
+        && 0 === $buildId) {
             // don't build push
 
             \Log::info("Build #$build_key_id is skipped, because repo settings [build_pushes]");

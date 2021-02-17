@@ -110,7 +110,7 @@ class JobGenerator
      */
     private function config(int $job_id = 0): void
     {
-        if (!$this->build->repo_full_name or !$this->build->config) {
+        if (!$this->build->repo_full_name || !$this->build->config) {
             throw new Exception(CI::GITHUB_CHECK_SUITE_CONCLUSION_CANCELLED);
         }
 

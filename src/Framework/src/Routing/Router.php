@@ -217,7 +217,7 @@ class Router
                 break;
             }
 
-            if ($parameter_class and !$parameter->getType()->isBuiltin()) {
+            if ($parameter_class && !$parameter->getType()->isBuiltin()) {
                 // 不是内置类
                 try {
                     // 首先尝试从容器中解析
@@ -278,7 +278,7 @@ class Router
             return;
         }
 
-        if ($attrExists and $versionHeader) {
+        if ($attrExists && $versionHeader) {
             throw new SkipThisRouteException();
         }
 

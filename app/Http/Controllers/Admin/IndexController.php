@@ -22,7 +22,7 @@ EOF;
         return \Response::make($content, 200, ['Content-Type' => 'text/plain']);
     }
 
-    #[Route('get','admin/beta')]
+    #[Route('get', 'admin/beta')]
     #[\PCIT\Framework\Attributes\Middleware('Beta')]
     public function beta(Request $request)
     {

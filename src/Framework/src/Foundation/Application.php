@@ -157,7 +157,7 @@ class Application extends Container
     // 绑定实例
     public function instance($abstract, $instance): void
     {
-        if (\is_string($instance) and class_exists($instance)) {
+        if (\is_string($instance) && class_exists($instance)) {
             $instance = new $instance();
         }
 

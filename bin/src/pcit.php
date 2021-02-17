@@ -17,7 +17,7 @@ function getCommandFromDir($cli, $dir)
     $fh = opendir(base_path('app/Console/PCIT/'.$dir));
 
     while ($file = readdir($fh)) {
-        if ('.' === $file or '..' === $file) {
+        if ('.' === $file || '..' === $file) {
             continue;
         }
 
@@ -36,7 +36,7 @@ $fh = opendir(base_path('app/Console/PCIT'));
 
 if ($fh) {
     while (false !== ($file = readdir($fh))) {
-        if ('.' === $file or '..' === $file or 'PCITCommand.php' === $file or 'Repo' === $file) {
+        if ('.' === $file || '..' === $file || 'PCITCommand.php' === $file || 'Repo' === $file) {
             continue;
         }
 

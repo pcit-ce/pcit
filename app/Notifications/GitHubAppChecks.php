@@ -97,7 +97,7 @@ class GitHubAppChecks
             'This Repository CI/CD Powered By [PCIT](https://github.com/pcit-ce/pcit)';
 
         $text = $text ??
-            (new Queued($build_key_id, $config, null, 'PHP', PHP_OS))
+            (new Queued($build_key_id, $config, null, 'PHP', \PHP_OS))
                 ->markdown();
 
         $run_data = new RunData(

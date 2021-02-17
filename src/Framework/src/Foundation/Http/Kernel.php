@@ -91,8 +91,10 @@ class Kernel
 
             case 'integer':
                 return \Response::make((string) $response);
+
             case 'float':
                 return \Response::make((string) $response);
+
             case 'string':
                 return \Response::make((string) $response);
         }

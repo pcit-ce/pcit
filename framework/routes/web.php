@@ -265,4 +265,4 @@ Route::get('sse/client', 'Demo\SSE\SSEController@client');
 // get github app detail
 // Route::get('api/github/app', 'GitHub\Detail');
 
-Route::get('api/v1.0', /* @deprecated */fn () => []);
+Route::get('api/v1.0', /* @deprecated */ fn () => []);

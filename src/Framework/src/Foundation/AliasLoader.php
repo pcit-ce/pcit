@@ -9,7 +9,7 @@ class AliasLoader
     public static function load(?array $alias): void
     {
         foreach ($alias as $key => $value) {
-            if (!class_exists($value) or class_exists($key)) {
+            if (!class_exists($value) || class_exists($key)) {
                 continue;
             }
             class_alias($value, $key);

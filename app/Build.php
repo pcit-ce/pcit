@@ -238,7 +238,7 @@ EOF;
 
         $result = DB::select($sql, [$build_key_id], true);
 
-        if (!$result or !json_decode($result)) {
+        if (!$result || !json_decode($result)) {
             return '';
         }
 

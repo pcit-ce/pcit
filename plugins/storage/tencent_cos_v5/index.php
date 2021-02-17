@@ -8,7 +8,7 @@ require __DIR__.'/vendor/autoload.php';
 
 $core = new Core();
 
-$prefix = getenv('INPUT_PREFIX') ? getenv('INPUT_PREFIX').DIRECTORY_SEPARATOR : false;
+$prefix = getenv('INPUT_PREFIX') ? getenv('INPUT_PREFIX').\DIRECTORY_SEPARATOR : false;
 
 try {
     $cosClient = new Qcloud\Cos\Client([

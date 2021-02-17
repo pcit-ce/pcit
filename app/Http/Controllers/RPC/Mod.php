@@ -13,7 +13,7 @@ use PCIT\Framework\Http\Request;
  */
 class Mod
 {
-    #[Route('post','rpc')]
+    #[Route('post', 'rpc')]
     public function __invoke(Request $request, RPC $rpc)
     {
         $content = $request->getContent();

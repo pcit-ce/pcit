@@ -39,7 +39,7 @@ class WebhooksClient implements WebhooksClientInterface
 
         $obj = json_decode($json);
 
-        if (null === $obj or $obj->message ?? false) {
+        if (null === $obj || $obj->message ?? false) {
             throw new Exception('Project Not Found', 404);
         }
 

@@ -137,7 +137,7 @@ class PCIT extends Container
     {
         $name = $name ?: 'github';
 
-        if ((!$access_token) and ($git = $this->gits[$name] ?? false)) {
+        if ((!$access_token) && ($git = $this->gits[$name] ?? false)) {
             return $git;
         }
 

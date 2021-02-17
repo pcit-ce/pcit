@@ -51,8 +51,8 @@ class Kernel
         if (!static::$curl) {
             $curl = new Curl();
 
-            $curl->setOpt(CURLOPT_SSL_VERIFYPEER, 0);
-            $curl->setOpt(CURLOPT_SSL_VERIFYHOST, 0);
+            $curl->setOpt(\CURLOPT_SSL_VERIFYPEER, 0);
+            $curl->setOpt(\CURLOPT_SSL_VERIFYHOST, 0);
 
             static::$curl = $curl;
         }

@@ -19,7 +19,7 @@ class PCITCommand
 
     public static function getConfigFileName()
     {
-        if ('WINNT' === PHP_OS) {
+        if ('WINNT' === \PHP_OS) {
             $home = getenv('USERPROFILE');
         } else {
             $home = exec('echo $HOME');

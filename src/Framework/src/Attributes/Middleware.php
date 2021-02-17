@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PCIT\Framework\Attributes;
 
-#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_METHOD)]
+#[Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_METHOD)]
 class Middleware
 {
     public function __construct($middleware)

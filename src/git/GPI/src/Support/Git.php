@@ -57,6 +57,7 @@ class Git
                 }
 
                 break;
+
             case 'coding':
                 $team = config('git.coding.oauth.team');
                 $url = 'https://e.coding.net/'.$team.'/'.$username.'/'.$repo;
@@ -66,6 +67,7 @@ class Git
                 }
 
                 break;
+
             case 'gitee':
                 $url = 'https://gitee.com/'.$repo_full_name;
 
@@ -74,6 +76,7 @@ class Git
                 }
 
                 break;
+
             case 'github':
                 $url = 'https://github.com/'.$repo_full_name;
 
@@ -82,6 +85,7 @@ class Git
                 }
 
                 break;
+
             default:
                 throw new Exception('Not Support', 500);
         }
@@ -103,6 +107,7 @@ class Git
                 $url = $base_url.'/pulls/'.$pull_id;
 
                 break;
+
             default:
                 $url = $base_url.'/pull/'.$pull_id;
         }
@@ -124,6 +129,7 @@ class Git
                 $url = $base_url.'/topic/'.$issue_id;
 
                 break;
+
             default:
                 $url = $base_url.'/issues/'.$issue_id;
         }
@@ -167,6 +173,7 @@ class Git
                 $url = 'https://raw.githubusercontent.com/'.$repo_full_name.'/'.$commit_id.'/'.$file_name;
 
                 break;
+
             default:
                 $url = self::getUrl($type, $repo_full_name).'/raw/'.$commit_id.'/'.$file_name;
         }
@@ -186,6 +193,7 @@ class Git
                 $class_name = 'GitHub';
 
                 break;
+
             default:
                 $class_name = ucfirst($git_type);
         }

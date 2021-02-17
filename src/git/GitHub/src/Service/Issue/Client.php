@@ -225,7 +225,7 @@ class Client extends ClientCommon implements ClientInterface
             return;
         }
 
-        if ('zh' !== $lang or null === $title) {
+        if ('zh' !== $lang || null === $title) {
             return;
         }
 

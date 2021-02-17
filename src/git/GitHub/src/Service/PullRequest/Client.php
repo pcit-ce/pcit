@@ -192,14 +192,17 @@ class Client
                 $merge_method = 'merge';
 
                 break;
+
             case 2:
                 $merge_method = 'squash';
 
                 break;
+
             case 3:
                 $merge_method = 'rebase';
 
                 break;
+
             default:
                 $merge_method = 'merge';
         }

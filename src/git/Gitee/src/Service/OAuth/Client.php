@@ -36,7 +36,7 @@ class Client extends GitHubClient implements OAuthInterface
 
     public function getLoginUrl(?string $state): string
     {
-        if (!($this->clientId and $this->clientSecret and $this->callbackUrl)) {
+        if (!($this->clientId && $this->clientSecret && $this->callbackUrl)) {
             return '';
         }
 

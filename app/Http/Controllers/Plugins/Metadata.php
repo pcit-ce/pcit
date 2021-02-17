@@ -14,7 +14,7 @@ class Metadata
     {
         $plugin_metadata_path = base_path('config/plugin.metadata.json');
 
-        if (file_exists($plugin_metadata_path) and \PHP_SAPI !== 'cli') {
+        if (file_exists($plugin_metadata_path) && \PHP_SAPI !== 'cli') {
             return \Response::make(file_get_contents($plugin_metadata_path), 200, [
                 'Content-type' => 'application/json',
             ]);
