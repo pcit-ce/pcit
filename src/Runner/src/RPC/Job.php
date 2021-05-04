@@ -19,5 +19,5 @@ namespace PCIT\Runner\RPC;
  */
 class Job extends Kernel
 {
-    const NAMESPACE = 'App';
+    public const NAMESPACE = 'App';
 }

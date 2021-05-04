@@ -37,7 +37,7 @@
   "php.suggest.basic": false,
   "intelephense.diagnostics.enable": false,
   "psalm.phpExecutablePath": "C:\\php-pre\\php.exe",
-  "intelephense.environment.phpVersion": "8.0.2",
+  "intelephense.environment.phpVersion": "8.0.5",
   "intelephense.stubs": [
     "PDO",
     "redis",

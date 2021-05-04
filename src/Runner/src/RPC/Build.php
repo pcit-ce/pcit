@@ -9,5 +9,5 @@ namespace PCIT\Runner\RPC;
  */
 class Build extends Kernel
 {
-    const NAMESPACE = 'App';
+    public const NAMESPACE = 'App';
 }

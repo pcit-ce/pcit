@@ -6,9 +6,9 @@ namespace PCIT\Support;
 
 class Job
 {
-    const JOB_STATUS_FAILURE = 'failure';
+    public const JOB_STATUS_FAILURE = 'failure';
 
-    const JOB_STATUS_SUCCESS = 'success';
+    public const JOB_STATUS_SUCCESS = 'success';
 
-    const JOB_STATUS_CHANGED = 'changed';
+    public const JOB_STATUS_CHANGED = 'changed';
 }

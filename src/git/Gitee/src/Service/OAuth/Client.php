@@ -10,13 +10,13 @@ use PCIT\GPI\Service\OAuth\OAuthInterface;
 
 class Client extends GitHubClient implements OAuthInterface
 {
-    const TYPE = 'gitee';
+    public const TYPE = 'gitee';
 
-    const API_URL = 'https://gitee.com/api/v5';
+    public const API_URL = 'https://gitee.com/api/v5';
 
-    const URL = 'https://gitee.com/oauth/authorize?';
+    public const URL = 'https://gitee.com/oauth/authorize?';
 
-    const POST_URL = 'https://gitee.com/oauth/token?';
+    public const POST_URL = 'https://gitee.com/oauth/token?';
 
     public $clientId;
 

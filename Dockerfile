@@ -4,7 +4,7 @@
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
 
 # ARG PHP_VERSION=7.4.12
-# ARG PHP_VERSION=8.0.0beta1
+# ARG PHP_VERSION=8.0.5
 ARG PHP_VERSION=nightly
 ARG NODE_VERSION=15.5.0
 ARG USERNAME=khs1994

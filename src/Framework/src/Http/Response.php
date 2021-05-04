@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class Response extends BaseResponse
 {
-    const HTTP_CODE = [
+    public const HTTP_CODE = [
         200,
         204,
 

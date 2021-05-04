@@ -9,7 +9,7 @@ use Curl\Curl;
 
 class Kernel
 {
-    const NAMESPACE = '';
+    public const NAMESPACE = '';
 
     /** @var Curl */
     public static $curl;

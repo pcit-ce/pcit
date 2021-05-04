@@ -10,13 +10,13 @@ use PCIT\GPI\Service\OAuth\OAuthInterface;
 
 class Client implements OAuthInterface
 {
-    const TYPE = 'github';
+    public const TYPE = 'github';
 
-    const API_URL = 'https://api.github.com';
+    public const API_URL = 'https://api.github.com';
 
-    const URL = 'https://github.com/login/oauth/authorize?';
+    public const URL = 'https://github.com/login/oauth/authorize?';
 
-    const POST_URL = 'https://github.com/login/oauth/access_token?';
+    public const POST_URL = 'https://github.com/login/oauth/access_token?';
 
     private $clientId;
 

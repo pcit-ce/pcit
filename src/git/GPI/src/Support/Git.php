@@ -8,17 +8,17 @@ use Exception;
 
 class Git
 {
-    const SUPPORT_ALIYUN = 'aliyun';
+    public const SUPPORT_ALIYUN = 'aliyun';
 
-    const SUPPORT_CODING = 'coding';
+    public const SUPPORT_CODING = 'coding';
 
-    const SUPPORT_GITEE = 'gitee';
+    public const SUPPORT_GITEE = 'gitee';
 
-    const SUPPORT_GITHUB = 'github';
+    public const SUPPORT_GITHUB = 'github';
 
-    const SUPPORT_GOGS = 'gogs';
+    public const SUPPORT_GOGS = 'gogs';
 
-    const SUPPORT_GIT_ARRAY = [
+    public const SUPPORT_GIT_ARRAY = [
         'aliyun',
         'coding',
         'gitee',

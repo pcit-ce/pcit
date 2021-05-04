@@ -14,5 +14,5 @@ namespace PCIT\Runner\RPC;
  */
 class Cache extends Kernel
 {
-    const NAMESPACE = '';
+    public const NAMESPACE = '';
 }

@@ -27,8 +27,8 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
     ->ignoreVCS(true);
 
-return PhpCsFixer\Config::create()
-    ->setRules([
+$config = new PhpCsFixer\Config();
+return $config->setRules([
       '@Symfony' => true,
       '@Symfony:risky'=> true,
       '@PhpCsFixer' => true,
@@ -51,7 +51,7 @@ return PhpCsFixer\Config::create()
       'compact_nullable_typehint' => true,
       'php_unit_method_casing' => false,
       'php_unit_internal_class' => false,
-      'php_unit_ordered_covers' => false,
+      'phpdoc_order_by_value' => false,
       'php_unit_test_class_requires_covers' => false,
       'escape_implicit_backslashes' => false,
       'explicit_indirect_variable'=> false,

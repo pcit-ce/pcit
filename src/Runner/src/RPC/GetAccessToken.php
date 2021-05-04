@@ -9,5 +9,5 @@ namespace PCIT\Runner\RPC;
  */
 class GetAccessToken extends Kernel
 {
-    const NAMESPACE = 'App';
+    public const NAMESPACE = 'App';
 }
